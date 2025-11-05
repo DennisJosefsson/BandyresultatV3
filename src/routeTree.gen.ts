@@ -10,33 +10,90 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TeamsIndexRouteImport } from './routes/teams/index'
+import { Route as SeasonsIndexRouteImport } from './routes/seasons/index'
+import { Route as MaratonIndexRouteImport } from './routes/maraton/index'
+import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
+import { Route as AboutIndexRouteImport } from './routes/about/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TeamsIndexRoute = TeamsIndexRouteImport.update({
+  id: '/teams/',
+  path: '/teams/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SeasonsIndexRoute = SeasonsIndexRouteImport.update({
+  id: '/seasons/',
+  path: '/seasons/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MaratonIndexRoute = MaratonIndexRouteImport.update({
+  id: '/maraton/',
+  path: '/maraton/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardIndexRoute = DashboardIndexRouteImport.update({
+  id: '/dashboard/',
+  path: '/dashboard/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutIndexRoute = AboutIndexRouteImport.update({
+  id: '/about/',
+  path: '/about/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutIndexRoute
+  '/dashboard': typeof DashboardIndexRoute
+  '/maraton': typeof MaratonIndexRoute
+  '/seasons': typeof SeasonsIndexRoute
+  '/teams': typeof TeamsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutIndexRoute
+  '/dashboard': typeof DashboardIndexRoute
+  '/maraton': typeof MaratonIndexRoute
+  '/seasons': typeof SeasonsIndexRoute
+  '/teams': typeof TeamsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about/': typeof AboutIndexRoute
+  '/dashboard/': typeof DashboardIndexRoute
+  '/maraton/': typeof MaratonIndexRoute
+  '/seasons/': typeof SeasonsIndexRoute
+  '/teams/': typeof TeamsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/about' | '/dashboard' | '/maraton' | '/seasons' | '/teams'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/about' | '/dashboard' | '/maraton' | '/seasons' | '/teams'
+  id:
+    | '__root__'
+    | '/'
+    | '/about/'
+    | '/dashboard/'
+    | '/maraton/'
+    | '/seasons/'
+    | '/teams/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutIndexRoute: typeof AboutIndexRoute
+  DashboardIndexRoute: typeof DashboardIndexRoute
+  MaratonIndexRoute: typeof MaratonIndexRoute
+  SeasonsIndexRoute: typeof SeasonsIndexRoute
+  TeamsIndexRoute: typeof TeamsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +105,51 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/teams/': {
+      id: '/teams/'
+      path: '/teams'
+      fullPath: '/teams'
+      preLoaderRoute: typeof TeamsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/seasons/': {
+      id: '/seasons/'
+      path: '/seasons'
+      fullPath: '/seasons'
+      preLoaderRoute: typeof SeasonsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/maraton/': {
+      id: '/maraton/'
+      path: '/maraton'
+      fullPath: '/maraton'
+      preLoaderRoute: typeof MaratonIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about/': {
+      id: '/about/'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutIndexRoute: AboutIndexRoute,
+  DashboardIndexRoute: DashboardIndexRoute,
+  MaratonIndexRoute: MaratonIndexRoute,
+  SeasonsIndexRoute: SeasonsIndexRoute,
+  TeamsIndexRoute: TeamsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -13,12 +13,15 @@ import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 
 import appCss from '../styles.css?url'
 
+import Header from '@/components/Header/Header'
 import { FavTeamsProvider } from '@/lib/contexts/favTeamsContext'
-import GenderContextProvider from '@/lib/contexts/genderContext'
 import { ThemeProvider } from '@/lib/contexts/themeContext'
 import { getFavTeamsServerFn } from '@/lib/favTeams'
 import { getThemeServerFn } from '@/lib/theme'
 import type { QueryClient } from '@tanstack/react-query'
+import { z } from 'zod'
+
+const searchWomen = z.object({ women: z.boolean().catch(false) })
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -93,37 +96,36 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
     const theme = await getThemeServerFn()
     return { favTeams, theme }
   },
+  validateSearch: searchWomen,
   shellComponent: RootDocument,
 })
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   const { favTeams, theme } = Route.useLoaderData()
   return (
-    <html lang="en">
+    <html className={theme} lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
       <body>
         <ClerkProvider>
           <ThemeProvider theme={theme}>
-            <GenderContextProvider>
-              <FavTeamsProvider favTeams={favTeams}>
-                {/* <Header /> */}
-                {children}
-                <TanStackDevtools
-                  config={{
-                    position: 'bottom-right',
-                  }}
-                  plugins={[
-                    {
-                      name: 'Tanstack Router',
-                      render: <TanStackRouterDevtoolsPanel />,
-                    },
-                    TanStackQueryDevtools,
-                  ]}
-                />
-              </FavTeamsProvider>
-            </GenderContextProvider>
+            <FavTeamsProvider favTeams={favTeams}>
+              <Header />
+              {children}
+              <TanStackDevtools
+                config={{
+                  position: 'bottom-right',
+                }}
+                plugins={[
+                  {
+                    name: 'Tanstack Router',
+                    render: <TanStackRouterDevtoolsPanel />,
+                  },
+                  TanStackQueryDevtools,
+                ]}
+              />
+            </FavTeamsProvider>
           </ThemeProvider>
         </ClerkProvider>
 
