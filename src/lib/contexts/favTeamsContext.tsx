@@ -1,23 +1,31 @@
-import { ReactNode, useEffect, useReducer } from 'react'
-import { favTeamsReducer, initializer } from '../reducers/favTeamsReducer'
-import { TeamPreferenceContext } from './contexts'
+import { setFavTeamsServerFn, type T as FavTeam } from '@/lib/favTeams'
+import { useRouter } from '@tanstack/react-router'
+import { createContext, use, type PropsWithChildren } from 'react'
 
-const FavTeamsContextProvider = ({ children }: { children: ReactNode }) => {
-  const [favTeams, favTeamsDispatch] = useReducer(
-    favTeamsReducer,
-    [],
-    initializer,
-  )
+type FavTeamContextVal = {
+  favTeams: FavTeam
+  setFavTeams: (val: FavTeam) => void
+}
+type Props = PropsWithChildren<{ favTeams: FavTeam }>
 
-  useEffect(() => {
-    localStorage.setItem('favTeams', JSON.stringify(favTeams))
-  }, [favTeams])
+const FavTeamContext = createContext<FavTeamContextVal | null>(null)
+
+export function FavTeamsProvider({ children, favTeams }: Props) {
+  const router = useRouter()
+
+  function setFavTeams(val: FavTeam) {
+    setFavTeamsServerFn({ data: val }).then(() => router.invalidate())
+  }
 
   return (
-    <TeamPreferenceContext.Provider value={{ favTeams, favTeamsDispatch }}>
+    <FavTeamContext value={{ favTeams, setFavTeams }}>
       {children}
-    </TeamPreferenceContext.Provider>
+    </FavTeamContext>
   )
 }
 
-export default FavTeamsContextProvider
+export function useFavTeam() {
+  const val = use(FavTeamContext)
+  if (!val) throw new Error('useFavTeam called outside of FavTeamProvider!')
+  return val
+}

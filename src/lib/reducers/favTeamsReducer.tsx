@@ -3,11 +3,8 @@ import { FavTeamsActionType, TeamPreference } from '../contexts/contexts'
 const initialState: TeamPreference = []
 
 export const initializer = (initialValue = initialState) => {
-  const storedFavTeams = localStorage.getItem('favTeams')
-  if (!storedFavTeams) return initialValue
-  const parsed = JSON.parse(storedFavTeams)
-  if (!parsed) return initialValue
-  return parsed
+  if (!initialValue) return initialState
+  return initialValue
 }
 
 export const favTeamsReducer = (

@@ -1,0 +1,16 @@
+import { createServerFn } from '@tanstack/react-start'
+import { getCookie, setCookie } from '@tanstack/react-start/server'
+import * as z from 'zod'
+
+const favTeamsValidator = z.array(z.coerce.number()).optional()
+export type T = z.infer<typeof favTeamsValidator>
+const storageKey = 'favTeams'
+
+export const getFavTeamsServerFn = createServerFn().handler(async () => {
+  const favTeams = getCookie(storageKey)
+  return favTeamsValidator.parse(favTeams)
+})
+
+export const setFavTeamsServerFn = createServerFn({ method: 'POST' })
+  .inputValidator(favTeamsValidator)
+  .handler(async ({ data }) => setCookie(storageKey, JSON.stringify(data)))
