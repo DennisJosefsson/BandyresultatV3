@@ -7,6 +7,7 @@ import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import { useAuth } from '@clerk/clerk-react'
 import { useMediaQuery } from 'usehooks-ts'
 import ModeToggle from './ModeToggle'
 
@@ -14,6 +15,8 @@ const Header = () => {
   const [open, setOpen] = useState<boolean>(false)
 
   const matches = useMediaQuery('(min-width: 430px)')
+  const { orgRole } = useAuth()
+  const isAdmin = orgRole === 'org:admin'
 
   return (
     <header className="sticky top-0 z-1 mb-4 flex h-16 flex-row items-center justify-between gap-4 border-b bg-background px-2 font-poppins text-foreground dark:bg-slate-950 dark:text-slate-50 md:px-6">
@@ -55,14 +58,15 @@ const Header = () => {
             >
               Maratontabeller
             </Link>
-
-            <Link
-              to="/dashboard"
-              search={(prev) => ({ women: prev.women })}
-              className="transition-colors text-foreground hover:text-foreground"
-            >
-              Dashboard
-            </Link>
+            {isAdmin && (
+              <Link
+                to="/dashboard"
+                search={(prev) => ({ women: prev.women })}
+                className="transition-colors text-foreground hover:text-foreground"
+              >
+                Dashboard
+              </Link>
+            )}
 
             <Link
               to="/about"
@@ -129,15 +133,16 @@ const Header = () => {
               >
                 Maratontabeller
               </Link>
-
-              <Link
-                to="/dashboard"
-                search={(prev) => ({ women: prev.women })}
-                className="hover:text-foreground"
-                onClick={() => (open ? setOpen(false) : setOpen(true))}
-              >
-                Dashboard
-              </Link>
+              {isAdmin && (
+                <Link
+                  to="/dashboard"
+                  search={(prev) => ({ women: prev.women })}
+                  className="hover:text-foreground"
+                  onClick={() => (open ? setOpen(false) : setOpen(true))}
+                >
+                  Dashboard
+                </Link>
+              )}
 
               <Link
                 to="/about"

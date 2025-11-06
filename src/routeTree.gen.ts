@@ -8,6 +8,8 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
+import { createFileRoute } from '@tanstack/react-router'
+
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TeamsIndexRouteImport } from './routes/teams/index'
@@ -17,11 +19,20 @@ import { Route as MaratonIndexRouteImport } from './routes/maraton/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as AboutIndexRouteImport } from './routes/about/index'
 
+const UnauthorizedIndexLazyRouteImport = createFileRoute('/unauthorized/')()
+
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const UnauthorizedIndexLazyRoute = UnauthorizedIndexLazyRouteImport.update({
+  id: '/unauthorized/',
+  path: '/unauthorized/',
+  getParentRoute: () => rootRouteImport,
+} as any).lazy(() =>
+  import('./routes/unauthorized/index.lazy').then((d) => d.Route),
+)
 const TeamsIndexRoute = TeamsIndexRouteImport.update({
   id: '/teams/',
   path: '/teams/',
@@ -61,6 +72,7 @@ export interface FileRoutesByFullPath {
   '/search': typeof SearchIndexRoute
   '/seasons': typeof SeasonsIndexRoute
   '/teams': typeof TeamsIndexRoute
+  '/unauthorized': typeof UnauthorizedIndexLazyRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -70,6 +82,7 @@ export interface FileRoutesByTo {
   '/search': typeof SearchIndexRoute
   '/seasons': typeof SeasonsIndexRoute
   '/teams': typeof TeamsIndexRoute
+  '/unauthorized': typeof UnauthorizedIndexLazyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -80,6 +93,7 @@ export interface FileRoutesById {
   '/search/': typeof SearchIndexRoute
   '/seasons/': typeof SeasonsIndexRoute
   '/teams/': typeof TeamsIndexRoute
+  '/unauthorized/': typeof UnauthorizedIndexLazyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -91,6 +105,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/seasons'
     | '/teams'
+    | '/unauthorized'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -100,6 +115,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/seasons'
     | '/teams'
+    | '/unauthorized'
   id:
     | '__root__'
     | '/'
@@ -109,6 +125,7 @@ export interface FileRouteTypes {
     | '/search/'
     | '/seasons/'
     | '/teams/'
+    | '/unauthorized/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -119,6 +136,7 @@ export interface RootRouteChildren {
   SearchIndexRoute: typeof SearchIndexRoute
   SeasonsIndexRoute: typeof SeasonsIndexRoute
   TeamsIndexRoute: typeof TeamsIndexRoute
+  UnauthorizedIndexLazyRoute: typeof UnauthorizedIndexLazyRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -128,6 +146,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/unauthorized/': {
+      id: '/unauthorized/'
+      path: '/unauthorized'
+      fullPath: '/unauthorized'
+      preLoaderRoute: typeof UnauthorizedIndexLazyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/teams/': {
@@ -183,16 +208,18 @@ const rootRouteChildren: RootRouteChildren = {
   SearchIndexRoute: SearchIndexRoute,
   SeasonsIndexRoute: SeasonsIndexRoute,
   TeamsIndexRoute: TeamsIndexRoute,
+  UnauthorizedIndexLazyRoute: UnauthorizedIndexLazyRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
 
 import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
+import type { startInstance } from './start.ts'
 declare module '@tanstack/react-start' {
   interface Register {
     ssr: true
     router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
   }
 }
