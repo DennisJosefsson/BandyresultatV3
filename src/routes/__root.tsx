@@ -19,9 +19,6 @@ import { ThemeProvider } from '@/lib/contexts/themeContext'
 import { getFavTeamsServerFn } from '@/lib/favTeams'
 import { getThemeServerFn } from '@/lib/theme'
 import type { QueryClient } from '@tanstack/react-query'
-import { z } from 'zod'
-
-const searchWomen = z.object({ women: z.boolean().catch(false) })
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -96,7 +93,10 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
     const theme = await getThemeServerFn()
     return { favTeams, theme }
   },
-  validateSearch: searchWomen,
+  notFoundComponent() {
+    return <div>Något gick fel</div>
+  },
+
   shellComponent: RootDocument,
 })
 

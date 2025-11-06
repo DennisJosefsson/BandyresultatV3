@@ -20,7 +20,9 @@ const Header = () => {
       <div className="flex flex-row items-center justify-between gap-8">
         <div>
           <h1 className="text-sm xs:text-base font-bold uppercase -[0.2rem] text-primary md:text-2xl lg:text-4xl xl:pl-0 2xl:text-5xl">
-            <Link to="/">Bandyresultat</Link>
+            <Link to="/" search={(prev) => ({ women: prev.women ?? false })}>
+              Bandyresultat
+            </Link>
           </h1>
         </div>
         <div>
@@ -39,13 +41,13 @@ const Header = () => {
             >
               Lag
             </Link>
-            {/* <Link
+            <Link
               to="/search"
-              search={(prev)=>({women:prev.women})}
+              search={(prev) => ({ women: prev.women })}
               className="transition-colors text-foreground hover:text-foreground"
             >
               Sök
-            </Link> */}
+            </Link>
             <Link
               to="/maraton"
               search={(prev) => ({ women: prev.women })}
@@ -88,6 +90,7 @@ const Header = () => {
             <nav className="grid gap-6 text-lg font-semibold tracking-wider">
               <Link
                 to="/"
+                search={(prev) => ({ women: prev.women ?? false })}
                 className="hover:text-foreground"
                 onClick={() => (open ? setOpen(false) : setOpen(true))}
               >
@@ -110,14 +113,14 @@ const Header = () => {
               >
                 Lag
               </Link>
-              {/* <Link
+              <Link
                 to="/search"
-                search={(prev)=>({women:prev.women})}
+                search={(prev) => ({ women: prev.women })}
                 className="hover:text-foreground"
                 onClick={() => (open ? setOpen(false) : setOpen(true))}
               >
                 Sök
-              </Link> */}
+              </Link>
               <Link
                 to="/maraton"
                 search={(prev) => ({ women: prev.women })}

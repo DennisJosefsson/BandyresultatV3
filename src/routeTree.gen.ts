@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TeamsIndexRouteImport } from './routes/teams/index'
 import { Route as SeasonsIndexRouteImport } from './routes/seasons/index'
+import { Route as SearchIndexRouteImport } from './routes/search/index'
 import { Route as MaratonIndexRouteImport } from './routes/maraton/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as AboutIndexRouteImport } from './routes/about/index'
@@ -29,6 +30,11 @@ const TeamsIndexRoute = TeamsIndexRouteImport.update({
 const SeasonsIndexRoute = SeasonsIndexRouteImport.update({
   id: '/seasons/',
   path: '/seasons/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SearchIndexRoute = SearchIndexRouteImport.update({
+  id: '/search/',
+  path: '/search/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MaratonIndexRoute = MaratonIndexRouteImport.update({
@@ -52,6 +58,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutIndexRoute
   '/dashboard': typeof DashboardIndexRoute
   '/maraton': typeof MaratonIndexRoute
+  '/search': typeof SearchIndexRoute
   '/seasons': typeof SeasonsIndexRoute
   '/teams': typeof TeamsIndexRoute
 }
@@ -60,6 +67,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutIndexRoute
   '/dashboard': typeof DashboardIndexRoute
   '/maraton': typeof MaratonIndexRoute
+  '/search': typeof SearchIndexRoute
   '/seasons': typeof SeasonsIndexRoute
   '/teams': typeof TeamsIndexRoute
 }
@@ -69,20 +77,36 @@ export interface FileRoutesById {
   '/about/': typeof AboutIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/maraton/': typeof MaratonIndexRoute
+  '/search/': typeof SearchIndexRoute
   '/seasons/': typeof SeasonsIndexRoute
   '/teams/': typeof TeamsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/dashboard' | '/maraton' | '/seasons' | '/teams'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/dashboard'
+    | '/maraton'
+    | '/search'
+    | '/seasons'
+    | '/teams'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/dashboard' | '/maraton' | '/seasons' | '/teams'
+  to:
+    | '/'
+    | '/about'
+    | '/dashboard'
+    | '/maraton'
+    | '/search'
+    | '/seasons'
+    | '/teams'
   id:
     | '__root__'
     | '/'
     | '/about/'
     | '/dashboard/'
     | '/maraton/'
+    | '/search/'
     | '/seasons/'
     | '/teams/'
   fileRoutesById: FileRoutesById
@@ -92,6 +116,7 @@ export interface RootRouteChildren {
   AboutIndexRoute: typeof AboutIndexRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
   MaratonIndexRoute: typeof MaratonIndexRoute
+  SearchIndexRoute: typeof SearchIndexRoute
   SeasonsIndexRoute: typeof SeasonsIndexRoute
   TeamsIndexRoute: typeof TeamsIndexRoute
 }
@@ -117,6 +142,13 @@ declare module '@tanstack/react-router' {
       path: '/seasons'
       fullPath: '/seasons'
       preLoaderRoute: typeof SeasonsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/search/': {
+      id: '/search/'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/maraton/': {
@@ -148,6 +180,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutIndexRoute: AboutIndexRoute,
   DashboardIndexRoute: DashboardIndexRoute,
   MaratonIndexRoute: MaratonIndexRoute,
+  SearchIndexRoute: SearchIndexRoute,
   SeasonsIndexRoute: SeasonsIndexRoute,
   TeamsIndexRoute: TeamsIndexRoute,
 }

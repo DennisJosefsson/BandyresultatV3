@@ -1,12 +1,18 @@
 import {
-  GoogleOneTap,
   SignedIn,
   SignedOut,
+  SignInButton,
   UserButton,
 } from '@clerk/clerk-react'
 import { createFileRoute } from '@tanstack/react-router'
+import { z } from 'zod'
 
-export const Route = createFileRoute('/')({ component: App })
+const searchWomen = z.object({ women: z.boolean().catch(false) })
+
+export const Route = createFileRoute('/')({
+  component: App,
+  validateSearch: searchWomen,
+})
 
 function App() {
   return (
@@ -36,8 +42,7 @@ function App() {
               <UserButton />
             </SignedIn>
             <SignedOut>
-              {/* <SignInButton mode="modal" /> */}
-              <GoogleOneTap />
+              <SignInButton mode="modal" />
             </SignedOut>
           </div>
         </div>
