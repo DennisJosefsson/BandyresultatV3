@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 
-//import ClerkHeader from '../../integrations/clerk/header-user.tsx'
+import ClerkHeader from '../../integrations/clerk/header-user.tsx'
 
 import { Menu } from 'lucide-react'
 import { useState } from 'react'
@@ -74,7 +74,7 @@ const Header = () => {
           </nav>
         </div>
       </div>
-      <div className="flex flex-row gap-2">
+      <div className="flex flex-row gap-2 items-center">
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild>
             <Button
@@ -150,8 +150,7 @@ const Header = () => {
             </nav>
           </SheetContent>
         </Sheet>
-
-        {/* <ClerkHeader /> */}
+        <ClerkHeader />
         <ModeToggle />
       </div>
     </header>

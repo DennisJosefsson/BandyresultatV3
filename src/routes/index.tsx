@@ -1,9 +1,3 @@
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  UserButton,
-} from '@clerk/clerk-react'
 import { createFileRoute } from '@tanstack/react-router'
 import { z } from 'zod'
 
@@ -37,14 +31,6 @@ function App() {
           <h2 className="mb-4 text-sm font-bold sm:text-base lg:text-2xl">
             Samlade resultat från de högsta serierna - 1907 och framåt
           </h2>
-          <div>
-            <SignedIn>
-              <UserButton />
-            </SignedIn>
-            <SignedOut>
-              <SignInButton mode="modal" />
-            </SignedOut>
-          </div>
         </div>
       </div>
     </div>

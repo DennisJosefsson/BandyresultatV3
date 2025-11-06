@@ -1,9 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
-@layer clerk;
+
 @import 'tailwindcss';
 @import 'tw-animate-css';
-
+@import '@clerk/themes/shadcn.css';
+@layer clerk;
 @custom-variant dark (&:is(.dark *));
 
 body {

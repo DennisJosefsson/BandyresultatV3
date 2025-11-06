@@ -1,4 +1,6 @@
 import { ClerkProvider } from '@clerk/clerk-react'
+import { svSE } from '@clerk/localizations'
+import { dark, shadcn } from '@clerk/themes'
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 if (!PUBLISHABLE_KEY) {
@@ -16,7 +18,9 @@ export default function AppClerkProvider({
       afterSignOutUrl="/"
       appearance={{
         cssLayerName: 'clerk',
+        theme: [dark, shadcn],
       }}
+      localization={svSE}
     >
       {children}
     </ClerkProvider>
