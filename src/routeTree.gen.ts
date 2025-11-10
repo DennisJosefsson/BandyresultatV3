@@ -19,6 +19,7 @@ import { Route as LayoutSearchIndexRouteImport } from './routes/_layout/search/i
 import { Route as LayoutMaratonIndexRouteImport } from './routes/_layout/maraton/index'
 import { Route as LayoutDashboardIndexRouteImport } from './routes/_layout/dashboard/index'
 import { Route as LayoutAboutIndexRouteImport } from './routes/_layout/about/index'
+import { Route as ApiSeasonsPageRouteImport } from './routes/api/seasons/$page'
 
 const LayoutUnauthorizedIndexLazyRouteImport = createFileRoute(
   '/_layout/unauthorized/',
@@ -71,9 +72,15 @@ const LayoutAboutIndexRoute = LayoutAboutIndexRouteImport.update({
   path: '/about/',
   getParentRoute: () => LayoutRoute,
 } as any)
+const ApiSeasonsPageRoute = ApiSeasonsPageRouteImport.update({
+  id: '/api/seasons/$page',
+  path: '/api/seasons/$page',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof LayoutIndexRoute
+  '/api/seasons/$page': typeof ApiSeasonsPageRoute
   '/about': typeof LayoutAboutIndexRoute
   '/dashboard': typeof LayoutDashboardIndexRoute
   '/maraton': typeof LayoutMaratonIndexRoute
@@ -84,6 +91,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof LayoutIndexRoute
+  '/api/seasons/$page': typeof ApiSeasonsPageRoute
   '/about': typeof LayoutAboutIndexRoute
   '/dashboard': typeof LayoutDashboardIndexRoute
   '/maraton': typeof LayoutMaratonIndexRoute
@@ -96,6 +104,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_layout': typeof LayoutRouteWithChildren
   '/_layout/': typeof LayoutIndexRoute
+  '/api/seasons/$page': typeof ApiSeasonsPageRoute
   '/_layout/about/': typeof LayoutAboutIndexRoute
   '/_layout/dashboard/': typeof LayoutDashboardIndexRoute
   '/_layout/maraton/': typeof LayoutMaratonIndexRoute
@@ -108,6 +117,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/api/seasons/$page'
     | '/about'
     | '/dashboard'
     | '/maraton'
@@ -118,6 +128,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/api/seasons/$page'
     | '/about'
     | '/dashboard'
     | '/maraton'
@@ -129,6 +140,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_layout'
     | '/_layout/'
+    | '/api/seasons/$page'
     | '/_layout/about/'
     | '/_layout/dashboard/'
     | '/_layout/maraton/'
@@ -140,6 +152,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   LayoutRoute: typeof LayoutRouteWithChildren
+  ApiSeasonsPageRoute: typeof ApiSeasonsPageRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -207,6 +220,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutAboutIndexRouteImport
       parentRoute: typeof LayoutRoute
     }
+    '/api/seasons/$page': {
+      id: '/api/seasons/$page'
+      path: '/api/seasons/$page'
+      fullPath: '/api/seasons/$page'
+      preLoaderRoute: typeof ApiSeasonsPageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -237,6 +257,7 @@ const LayoutRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   LayoutRoute: LayoutRouteWithChildren,
+  ApiSeasonsPageRoute: ApiSeasonsPageRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
