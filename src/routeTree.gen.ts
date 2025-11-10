@@ -11,89 +11,98 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as TeamsIndexRouteImport } from './routes/teams/index'
-import { Route as SeasonsIndexRouteImport } from './routes/seasons/index'
-import { Route as SearchIndexRouteImport } from './routes/search/index'
-import { Route as MaratonIndexRouteImport } from './routes/maraton/index'
-import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
-import { Route as AboutIndexRouteImport } from './routes/about/index'
+import { Route as LayoutRouteImport } from './routes/_layout'
+import { Route as LayoutIndexRouteImport } from './routes/_layout/index'
+import { Route as LayoutTeamsIndexRouteImport } from './routes/_layout/teams/index'
+import { Route as LayoutSeasonsIndexRouteImport } from './routes/_layout/seasons/index'
+import { Route as LayoutSearchIndexRouteImport } from './routes/_layout/search/index'
+import { Route as LayoutMaratonIndexRouteImport } from './routes/_layout/maraton/index'
+import { Route as LayoutDashboardIndexRouteImport } from './routes/_layout/dashboard/index'
+import { Route as LayoutAboutIndexRouteImport } from './routes/_layout/about/index'
 
-const UnauthorizedIndexLazyRouteImport = createFileRoute('/unauthorized/')()
+const LayoutUnauthorizedIndexLazyRouteImport = createFileRoute(
+  '/_layout/unauthorized/',
+)()
 
-const IndexRoute = IndexRouteImport.update({
+const LayoutRoute = LayoutRouteImport.update({
+  id: '/_layout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LayoutIndexRoute = LayoutIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => LayoutRoute,
 } as any)
-const UnauthorizedIndexLazyRoute = UnauthorizedIndexLazyRouteImport.update({
-  id: '/unauthorized/',
-  path: '/unauthorized/',
-  getParentRoute: () => rootRouteImport,
-} as any).lazy(() =>
-  import('./routes/unauthorized/index.lazy').then((d) => d.Route),
-)
-const TeamsIndexRoute = TeamsIndexRouteImport.update({
+const LayoutUnauthorizedIndexLazyRoute =
+  LayoutUnauthorizedIndexLazyRouteImport.update({
+    id: '/unauthorized/',
+    path: '/unauthorized/',
+    getParentRoute: () => LayoutRoute,
+  } as any).lazy(() =>
+    import('./routes/_layout/unauthorized/index.lazy').then((d) => d.Route),
+  )
+const LayoutTeamsIndexRoute = LayoutTeamsIndexRouteImport.update({
   id: '/teams/',
   path: '/teams/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => LayoutRoute,
 } as any)
-const SeasonsIndexRoute = SeasonsIndexRouteImport.update({
+const LayoutSeasonsIndexRoute = LayoutSeasonsIndexRouteImport.update({
   id: '/seasons/',
   path: '/seasons/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => LayoutRoute,
 } as any)
-const SearchIndexRoute = SearchIndexRouteImport.update({
+const LayoutSearchIndexRoute = LayoutSearchIndexRouteImport.update({
   id: '/search/',
   path: '/search/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => LayoutRoute,
 } as any)
-const MaratonIndexRoute = MaratonIndexRouteImport.update({
+const LayoutMaratonIndexRoute = LayoutMaratonIndexRouteImport.update({
   id: '/maraton/',
   path: '/maraton/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => LayoutRoute,
 } as any)
-const DashboardIndexRoute = DashboardIndexRouteImport.update({
+const LayoutDashboardIndexRoute = LayoutDashboardIndexRouteImport.update({
   id: '/dashboard/',
   path: '/dashboard/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => LayoutRoute,
 } as any)
-const AboutIndexRoute = AboutIndexRouteImport.update({
+const LayoutAboutIndexRoute = LayoutAboutIndexRouteImport.update({
   id: '/about/',
   path: '/about/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => LayoutRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/about': typeof AboutIndexRoute
-  '/dashboard': typeof DashboardIndexRoute
-  '/maraton': typeof MaratonIndexRoute
-  '/search': typeof SearchIndexRoute
-  '/seasons': typeof SeasonsIndexRoute
-  '/teams': typeof TeamsIndexRoute
-  '/unauthorized': typeof UnauthorizedIndexLazyRoute
+  '/': typeof LayoutIndexRoute
+  '/about': typeof LayoutAboutIndexRoute
+  '/dashboard': typeof LayoutDashboardIndexRoute
+  '/maraton': typeof LayoutMaratonIndexRoute
+  '/search': typeof LayoutSearchIndexRoute
+  '/seasons': typeof LayoutSeasonsIndexRoute
+  '/teams': typeof LayoutTeamsIndexRoute
+  '/unauthorized': typeof LayoutUnauthorizedIndexLazyRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/about': typeof AboutIndexRoute
-  '/dashboard': typeof DashboardIndexRoute
-  '/maraton': typeof MaratonIndexRoute
-  '/search': typeof SearchIndexRoute
-  '/seasons': typeof SeasonsIndexRoute
-  '/teams': typeof TeamsIndexRoute
-  '/unauthorized': typeof UnauthorizedIndexLazyRoute
+  '/': typeof LayoutIndexRoute
+  '/about': typeof LayoutAboutIndexRoute
+  '/dashboard': typeof LayoutDashboardIndexRoute
+  '/maraton': typeof LayoutMaratonIndexRoute
+  '/search': typeof LayoutSearchIndexRoute
+  '/seasons': typeof LayoutSeasonsIndexRoute
+  '/teams': typeof LayoutTeamsIndexRoute
+  '/unauthorized': typeof LayoutUnauthorizedIndexLazyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/about/': typeof AboutIndexRoute
-  '/dashboard/': typeof DashboardIndexRoute
-  '/maraton/': typeof MaratonIndexRoute
-  '/search/': typeof SearchIndexRoute
-  '/seasons/': typeof SeasonsIndexRoute
-  '/teams/': typeof TeamsIndexRoute
-  '/unauthorized/': typeof UnauthorizedIndexLazyRoute
+  '/_layout': typeof LayoutRouteWithChildren
+  '/_layout/': typeof LayoutIndexRoute
+  '/_layout/about/': typeof LayoutAboutIndexRoute
+  '/_layout/dashboard/': typeof LayoutDashboardIndexRoute
+  '/_layout/maraton/': typeof LayoutMaratonIndexRoute
+  '/_layout/search/': typeof LayoutSearchIndexRoute
+  '/_layout/seasons/': typeof LayoutSeasonsIndexRoute
+  '/_layout/teams/': typeof LayoutTeamsIndexRoute
+  '/_layout/unauthorized/': typeof LayoutUnauthorizedIndexLazyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -118,97 +127,116 @@ export interface FileRouteTypes {
     | '/unauthorized'
   id:
     | '__root__'
-    | '/'
-    | '/about/'
-    | '/dashboard/'
-    | '/maraton/'
-    | '/search/'
-    | '/seasons/'
-    | '/teams/'
-    | '/unauthorized/'
+    | '/_layout'
+    | '/_layout/'
+    | '/_layout/about/'
+    | '/_layout/dashboard/'
+    | '/_layout/maraton/'
+    | '/_layout/search/'
+    | '/_layout/seasons/'
+    | '/_layout/teams/'
+    | '/_layout/unauthorized/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AboutIndexRoute: typeof AboutIndexRoute
-  DashboardIndexRoute: typeof DashboardIndexRoute
-  MaratonIndexRoute: typeof MaratonIndexRoute
-  SearchIndexRoute: typeof SearchIndexRoute
-  SeasonsIndexRoute: typeof SeasonsIndexRoute
-  TeamsIndexRoute: typeof TeamsIndexRoute
-  UnauthorizedIndexLazyRoute: typeof UnauthorizedIndexLazyRoute
+  LayoutRoute: typeof LayoutRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/_layout': {
+      id: '/_layout'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof LayoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_layout/': {
+      id: '/_layout/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof LayoutIndexRouteImport
+      parentRoute: typeof LayoutRoute
     }
-    '/unauthorized/': {
-      id: '/unauthorized/'
+    '/_layout/unauthorized/': {
+      id: '/_layout/unauthorized/'
       path: '/unauthorized'
       fullPath: '/unauthorized'
-      preLoaderRoute: typeof UnauthorizedIndexLazyRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof LayoutUnauthorizedIndexLazyRouteImport
+      parentRoute: typeof LayoutRoute
     }
-    '/teams/': {
-      id: '/teams/'
+    '/_layout/teams/': {
+      id: '/_layout/teams/'
       path: '/teams'
       fullPath: '/teams'
-      preLoaderRoute: typeof TeamsIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof LayoutTeamsIndexRouteImport
+      parentRoute: typeof LayoutRoute
     }
-    '/seasons/': {
-      id: '/seasons/'
+    '/_layout/seasons/': {
+      id: '/_layout/seasons/'
       path: '/seasons'
       fullPath: '/seasons'
-      preLoaderRoute: typeof SeasonsIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof LayoutSeasonsIndexRouteImport
+      parentRoute: typeof LayoutRoute
     }
-    '/search/': {
-      id: '/search/'
+    '/_layout/search/': {
+      id: '/_layout/search/'
       path: '/search'
       fullPath: '/search'
-      preLoaderRoute: typeof SearchIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof LayoutSearchIndexRouteImport
+      parentRoute: typeof LayoutRoute
     }
-    '/maraton/': {
-      id: '/maraton/'
+    '/_layout/maraton/': {
+      id: '/_layout/maraton/'
       path: '/maraton'
       fullPath: '/maraton'
-      preLoaderRoute: typeof MaratonIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof LayoutMaratonIndexRouteImport
+      parentRoute: typeof LayoutRoute
     }
-    '/dashboard/': {
-      id: '/dashboard/'
+    '/_layout/dashboard/': {
+      id: '/_layout/dashboard/'
       path: '/dashboard'
       fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof LayoutDashboardIndexRouteImport
+      parentRoute: typeof LayoutRoute
     }
-    '/about/': {
-      id: '/about/'
+    '/_layout/about/': {
+      id: '/_layout/about/'
       path: '/about'
       fullPath: '/about'
-      preLoaderRoute: typeof AboutIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof LayoutAboutIndexRouteImport
+      parentRoute: typeof LayoutRoute
     }
   }
 }
 
+interface LayoutRouteChildren {
+  LayoutIndexRoute: typeof LayoutIndexRoute
+  LayoutAboutIndexRoute: typeof LayoutAboutIndexRoute
+  LayoutDashboardIndexRoute: typeof LayoutDashboardIndexRoute
+  LayoutMaratonIndexRoute: typeof LayoutMaratonIndexRoute
+  LayoutSearchIndexRoute: typeof LayoutSearchIndexRoute
+  LayoutSeasonsIndexRoute: typeof LayoutSeasonsIndexRoute
+  LayoutTeamsIndexRoute: typeof LayoutTeamsIndexRoute
+  LayoutUnauthorizedIndexLazyRoute: typeof LayoutUnauthorizedIndexLazyRoute
+}
+
+const LayoutRouteChildren: LayoutRouteChildren = {
+  LayoutIndexRoute: LayoutIndexRoute,
+  LayoutAboutIndexRoute: LayoutAboutIndexRoute,
+  LayoutDashboardIndexRoute: LayoutDashboardIndexRoute,
+  LayoutMaratonIndexRoute: LayoutMaratonIndexRoute,
+  LayoutSearchIndexRoute: LayoutSearchIndexRoute,
+  LayoutSeasonsIndexRoute: LayoutSeasonsIndexRoute,
+  LayoutTeamsIndexRoute: LayoutTeamsIndexRoute,
+  LayoutUnauthorizedIndexLazyRoute: LayoutUnauthorizedIndexLazyRoute,
+}
+
+const LayoutRouteWithChildren =
+  LayoutRoute._addFileChildren(LayoutRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  AboutIndexRoute: AboutIndexRoute,
-  DashboardIndexRoute: DashboardIndexRoute,
-  MaratonIndexRoute: MaratonIndexRoute,
-  SearchIndexRoute: SearchIndexRoute,
-  SeasonsIndexRoute: SeasonsIndexRoute,
-  TeamsIndexRoute: TeamsIndexRoute,
-  UnauthorizedIndexLazyRoute: UnauthorizedIndexLazyRoute,
+  LayoutRoute: LayoutRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

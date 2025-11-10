@@ -1,6 +1,6 @@
 import { createLazyFileRoute } from '@tanstack/react-router'
 
-export const Route = createLazyFileRoute('/unauthorized/')({
+export const Route = createLazyFileRoute('/_layout/unauthorized/')({
   component: RouteComponent,
 })
 

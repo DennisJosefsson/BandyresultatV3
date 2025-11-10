@@ -13,7 +13,7 @@ const authStateFn = createServerFn({ method: 'GET' }).handler(async () => {
   }
 })
 
-export const Route = createFileRoute('/dashboard/')({
+export const Route = createFileRoute('/_layout/dashboard/')({
   beforeLoad: () => authStateFn(),
   component: RouteComponent,
 })

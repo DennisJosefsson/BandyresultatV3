@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router'
+import { Link, useSearch } from '@tanstack/react-router'
 
 import ClerkHeader from '../../integrations/clerk/header-user.tsx'
 
@@ -13,7 +13,10 @@ import ModeToggle from './ModeToggle'
 
 const Header = () => {
   const [open, setOpen] = useState<boolean>(false)
-
+  const women = useSearch({
+    from: '/_layout',
+    select: (search) => search.women,
+  })
   const matches = useMediaQuery('(min-width: 430px)')
   const { orgRole } = useAuth()
   const isAdmin = orgRole === 'org:admin'
@@ -23,7 +26,7 @@ const Header = () => {
       <div className="flex flex-row items-center justify-between gap-8">
         <div>
           <h1 className="text-sm xs:text-base font-bold uppercase -[0.2rem] text-primary md:text-2xl lg:text-4xl xl:pl-0 2xl:text-5xl">
-            <Link to="/" search={(prev) => ({ women: prev.women ?? false })}>
+            <Link to="/" search={{ women }}>
               Bandyresultat
             </Link>
           </h1>
@@ -32,28 +35,28 @@ const Header = () => {
           <nav className="flex-col hidden gap-6 text-lg font-semibold tracking-wider lg:flex lg:flex-row lg:items-center lg:gap-6 lg:text-base 2xl:text-lg lg:ml-20 xl:ml-40">
             <Link
               to="/seasons"
-              search={(prev) => ({ women: prev.women })}
+              search={{ women }}
               className="transition-colors text-foreground hover:text-foreground"
             >
               Säsonger
             </Link>
             <Link
               to="/teams"
-              search={(prev) => ({ women: prev.women })}
+              search={{ women }}
               className="transition-colors text-foreground hover:text-foreground"
             >
               Lag
             </Link>
             <Link
               to="/search"
-              search={(prev) => ({ women: prev.women })}
+              search={{ women }}
               className="transition-colors text-foreground hover:text-foreground"
             >
               Sök
             </Link>
             <Link
               to="/maraton"
-              search={(prev) => ({ women: prev.women })}
+              search={{ women }}
               className="transition-colors text-foreground hover:text-foreground"
             >
               Maratontabeller
@@ -61,7 +64,7 @@ const Header = () => {
             {isAdmin && (
               <Link
                 to="/dashboard"
-                search={(prev) => ({ women: prev.women })}
+                search={{ women }}
                 className="transition-colors text-foreground hover:text-foreground"
               >
                 Dashboard
@@ -70,7 +73,7 @@ const Header = () => {
 
             <Link
               to="/about"
-              search={(prev) => ({ women: prev.women })}
+              search={{ women }}
               className="transition-colors text-foreground hover:text-foreground"
             >
               Om sidan
@@ -103,7 +106,7 @@ const Header = () => {
 
               <Link
                 to="/seasons"
-                search={(prev) => ({ women: prev.women })}
+                search={{ women }}
                 className="hover:text-foreground"
                 onClick={() => (open ? setOpen(false) : setOpen(true))}
               >
@@ -111,7 +114,7 @@ const Header = () => {
               </Link>
               <Link
                 to="/teams"
-                search={(prev) => ({ women: prev.women })}
+                search={{ women }}
                 className="hover:text-foreground"
                 onClick={() => (open ? setOpen(false) : setOpen(true))}
               >
@@ -119,7 +122,7 @@ const Header = () => {
               </Link>
               <Link
                 to="/search"
-                search={(prev) => ({ women: prev.women })}
+                search={{ women }}
                 className="hover:text-foreground"
                 onClick={() => (open ? setOpen(false) : setOpen(true))}
               >
@@ -127,7 +130,7 @@ const Header = () => {
               </Link>
               <Link
                 to="/maraton"
-                search={(prev) => ({ women: prev.women })}
+                search={{ women }}
                 className="hover:text-foreground"
                 onClick={() => (open ? setOpen(false) : setOpen(true))}
               >
@@ -136,7 +139,7 @@ const Header = () => {
               {isAdmin && (
                 <Link
                   to="/dashboard"
-                  search={(prev) => ({ women: prev.women })}
+                  search={{ women }}
                   className="hover:text-foreground"
                   onClick={() => (open ? setOpen(false) : setOpen(true))}
                 >
@@ -146,7 +149,7 @@ const Header = () => {
 
               <Link
                 to="/about"
-                search={(prev) => ({ women: prev.women })}
+                search={{ women }}
                 className="hover:text-foreground"
                 onClick={() => (open ? setOpen(false) : setOpen(true))}
               >

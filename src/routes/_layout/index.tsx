@@ -1,11 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { z } from 'zod'
 
-const searchWomen = z.object({ women: z.boolean().catch(false) })
-
-export const Route = createFileRoute('/')({
+export const Route = createFileRoute('/_layout/')({
   component: App,
-  validateSearch: searchWomen,
 })
 
 function App() {

@@ -1,11 +1,12 @@
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import {
   HeadContent,
+  Link,
+  Outlet,
   Scripts,
   createRootRouteWithContext,
 } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-//import Header from '../components/Header'
 
 import ClerkProvider from '../integrations/clerk/provider'
 
@@ -13,6 +14,7 @@ import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 
 import appCss from '../styles.css?url'
 
+import DefaultNotFound from '@/components/ErrorComponents/DefaultNotFound'
 import Header from '@/components/Header/Header'
 import { FavTeamsProvider } from '@/lib/contexts/favTeamsContext'
 import { ThemeProvider } from '@/lib/contexts/themeContext'
@@ -93,14 +95,12 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
     const theme = await getThemeServerFn()
     return { favTeams, theme }
   },
-  notFoundComponent() {
-    return <div>Något gick fel</div>
-  },
-
+  notFoundComponent: DefaultNotFound,
+  errorComponent: ErrorComponent,
   shellComponent: RootDocument,
 })
 
-function RootDocument({ children }: { children: React.ReactNode }) {
+function RootDocument() {
   const { favTeams, theme } = Route.useLoaderData()
   return (
     <html className={theme} lang="en" suppressHydrationWarning>
@@ -111,8 +111,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <ClerkProvider>
           <ThemeProvider theme={theme}>
             <FavTeamsProvider favTeams={favTeams}>
-              <Header />
-              {children}
+              <Outlet />
               <TanStackDevtools
                 config={{
                   position: 'bottom-right',
@@ -132,5 +131,22 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <Scripts />
       </body>
     </html>
+  )
+}
+
+function ErrorComponent() {
+  return (
+    <>
+      <Header />
+      <div className="flex flex-row justify-center items-center mt-10">
+        <p>
+          Något gick tyvärr fel,tillbaka till{' '}
+          <Link to="/" search={{ women: false }} className="underline">
+            förstasidan
+          </Link>
+          .
+        </p>
+      </div>
+    </>
   )
 }
