@@ -14,7 +14,7 @@ export const Route = createFileRoute('/_layout')({
   component: RouteComponent,
   validateSearch: zodValidator(searchWomen),
   search: {
-    middlewares: [retainSearchParams(true)],
+    middlewares: [retainSearchParams(['women'])],
   },
 })
 
