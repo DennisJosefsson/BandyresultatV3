@@ -2,7 +2,7 @@ import { createServerFn } from '@tanstack/react-start'
 import { getCookie, setCookie } from '@tanstack/react-start/server'
 import * as z from 'zod'
 
-const favTeamsValidator = z.array(z.coerce.number()).optional()
+const favTeamsValidator = z.array(z.coerce.number()).catch([])
 export type T = z.infer<typeof favTeamsValidator>
 const storageKey = 'favTeams'
 
