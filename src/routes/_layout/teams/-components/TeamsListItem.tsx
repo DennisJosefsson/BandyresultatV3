@@ -24,8 +24,6 @@ const TeamsListItem = ({
   //     select: (search) => search.women,
   //   })
 
-  if (team.teamId === null) return null
-
   return (
     <div className="has-data-[state=checked]:font-bold flex flex-row items-center justify-between space-x-3 space-y-0 rounded bg-muted p-2 text-sm dark:bg-muted/50 md:text-base 2xl:text-lg">
       <span className={cn('w-32 peer-data-[state=checked]:underline')}>
