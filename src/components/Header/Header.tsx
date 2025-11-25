@@ -14,7 +14,7 @@ import ModeToggle from './ModeToggle'
 const Header = () => {
   const [open, setOpen] = useState<boolean>(false)
   const women = useSearch({
-    from: '/_layout',
+    from: '__root__',
     select: (search) => search.women,
   })
   const matches = useMediaQuery('(min-width: 430px)')
@@ -97,7 +97,7 @@ const Header = () => {
             <nav className="grid gap-6 text-lg font-semibold tracking-wider">
               <Link
                 to="/"
-                search={(prev) => ({ women: prev.women ?? false })}
+                search={{ women }}
                 className="hover:text-foreground"
                 onClick={() => (open ? setOpen(false) : setOpen(true))}
               >

@@ -3,7 +3,7 @@ import Header from '../Header/Header'
 
 const DefaultNotFound = () => {
   const women = useSearch({
-    from: '/_layout',
+    from: '__root__',
     select: (search) => search.women,
   })
   const isRoot = useMatch({
