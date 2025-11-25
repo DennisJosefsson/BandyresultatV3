@@ -32,8 +32,8 @@ export const teams = pgTable(
     shortName: varchar('short_name', { length: 255 }).notNull(),
     lat: real(),
     long: real(),
-    countyId: integer('county_id'),
-    municipalityId: integer('municipality_id'),
+    countyId: integer('county_id').notNull(),
+    municipalityId: integer('municipality_id').notNull(),
   },
   (table) => [
     foreignKey({
