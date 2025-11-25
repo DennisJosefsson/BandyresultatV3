@@ -5,6 +5,7 @@ import {
   Outlet,
   Scripts,
   createRootRouteWithContext,
+  retainSearchParams,
 } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 
@@ -25,6 +26,11 @@ import type { QueryClient } from '@tanstack/react-query'
 interface MyRouterContext {
   queryClient: QueryClient
 }
+
+import { zodValidator } from '@tanstack/zod-adapter'
+import { z } from 'zod'
+
+const searchWomen = z.object({ women: z.boolean().catch(false) })
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   head: () => ({
@@ -90,6 +96,10 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       },
     ],
   }),
+  validateSearch: zodValidator(searchWomen),
+  search: {
+    middlewares: [retainSearchParams(['women'])],
+  },
   loader: async () => {
     const favTeams = await getFavTeamsServerFn()
     const theme = await getThemeServerFn()

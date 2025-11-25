@@ -1,21 +1,8 @@
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import Header from '@/components/Header/Header'
-import {
-  CatchBoundary,
-  createFileRoute,
-  Outlet,
-  retainSearchParams,
-} from '@tanstack/react-router'
-import { zodValidator } from '@tanstack/zod-adapter'
-import { z } from 'zod'
-
-const searchWomen = z.object({ women: z.boolean().catch(false) })
+import { CatchBoundary, createFileRoute, Outlet } from '@tanstack/react-router'
 export const Route = createFileRoute('/_layout')({
   component: RouteComponent,
-  validateSearch: zodValidator(searchWomen),
-  search: {
-    middlewares: [retainSearchParams(['women'])],
-  },
 })
 
 function RouteComponent() {
