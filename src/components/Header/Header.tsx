@@ -22,42 +22,42 @@ const Header = () => {
   const isAdmin = orgRole === 'org:admin'
 
   return (
-    <header className="sticky top-0 z-1 mb-4 flex h-16 flex-row items-center justify-between gap-4 border-b bg-background px-2 font-poppins text-foreground dark:bg-slate-950 dark:text-slate-50 md:px-6">
+    <header className="bg-background font-poppins text-foreground sticky top-0 z-1 mb-4 flex h-16 flex-row items-center justify-between gap-4 border-b px-2 md:px-6 dark:bg-slate-950 dark:text-slate-50">
       <div className="flex flex-row items-center justify-between gap-8">
         <div>
-          <h1 className="text-sm xs:text-base font-bold uppercase -[0.2rem] text-primary md:text-2xl lg:text-4xl xl:pl-0 2xl:text-5xl">
+          <h1 className="xs:text-base -[0.2rem] text-primary text-sm font-bold uppercase md:text-2xl lg:text-4xl xl:pl-0 2xl:text-5xl">
             <Link to="/" search={{ women }}>
               Bandyresultat
             </Link>
           </h1>
         </div>
         <div>
-          <nav className="flex-col hidden gap-6 text-lg font-semibold tracking-wider lg:flex lg:flex-row lg:items-center lg:gap-6 lg:text-base 2xl:text-lg lg:ml-20 xl:ml-40">
+          <nav className="hidden flex-col gap-6 text-lg font-semibold tracking-wider lg:ml-20 lg:flex lg:flex-row lg:items-center lg:gap-6 lg:text-base xl:ml-40 2xl:text-lg">
             <Link
               to="/seasons"
               search={{ women, page: 1 }}
-              className="transition-colors text-foreground hover:text-foreground"
+              className="text-foreground hover:text-foreground transition-colors"
             >
               Säsonger
             </Link>
             <Link
               to="/teams"
               search={{ women }}
-              className="transition-colors text-foreground hover:text-foreground"
+              className="text-foreground hover:text-foreground transition-colors"
             >
               Lag
             </Link>
             <Link
               to="/search"
               search={{ women }}
-              className="transition-colors text-foreground hover:text-foreground"
+              className="text-foreground hover:text-foreground transition-colors"
             >
               Sök
             </Link>
             <Link
               to="/maraton"
               search={{ women }}
-              className="transition-colors text-foreground hover:text-foreground"
+              className="text-foreground hover:text-foreground transition-colors"
             >
               Maratontabeller
             </Link>
@@ -65,7 +65,7 @@ const Header = () => {
               <Link
                 to="/dashboard"
                 search={{ women }}
-                className="transition-colors text-foreground hover:text-foreground"
+                className="text-foreground hover:text-foreground transition-colors"
               >
                 Dashboard
               </Link>
@@ -74,14 +74,14 @@ const Header = () => {
             <Link
               to="/about"
               search={{ women }}
-              className="transition-colors text-foreground hover:text-foreground"
+              className="text-foreground hover:text-foreground transition-colors"
             >
               Om sidan
             </Link>
           </nav>
         </div>
       </div>
-      <div className="flex flex-row gap-2 items-center">
+      <div className="flex flex-row items-center gap-2">
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild>
             <Button
@@ -89,7 +89,7 @@ const Header = () => {
               size={matches ? 'icon' : 'smallicon'}
               className="shrink-0 lg:hidden"
             >
-              <Menu className="w-5 h-5" />
+              <Menu className="h-5 w-5" />
               <span className="sr-only">Öppnar och stänger menyn.</span>
             </Button>
           </SheetTrigger>
@@ -159,7 +159,9 @@ const Header = () => {
           </SheetContent>
         </Sheet>
         <ClerkHeader />
-        <ModeToggle />
+        <div>
+          <ModeToggle />
+        </div>
       </div>
     </header>
   )
