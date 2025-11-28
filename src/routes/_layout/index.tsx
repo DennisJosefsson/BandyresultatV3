@@ -24,7 +24,7 @@ function App() {
           </h1>
         </div>
         <div className="w-[280px] pl-2 md:w-[500px] lg:w-full">
-          <h2 className="mb-4 text-sm font-bold sm:text-base lg:text-2xl">
+          <h2 className="mb-4 text-sm text-primary font-bold sm:text-base lg:text-2xl">
             Samlade resultat från de högsta serierna - 1907 och framåt
           </h2>
         </div>
