@@ -2,7 +2,7 @@ import { Link, useSearch } from '@tanstack/react-router'
 
 import ClerkHeader from '../../integrations/clerk/header-user.tsx'
 
-import { Menu } from 'lucide-react'
+import { LoaderPinwheelIcon, Menu } from 'lucide-react'
 import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -18,7 +18,7 @@ const Header = () => {
     select: (search) => search.women,
   })
   const matches = useMediaQuery('(min-width: 430px)')
-  const { orgRole } = useAuth()
+  const { isLoaded, orgRole } = useAuth()
   const isAdmin = orgRole === 'org:admin'
 
   return (
@@ -82,86 +82,100 @@ const Header = () => {
         </div>
       </div>
       <div className="flex flex-row items-center gap-2">
-        <Sheet open={open} onOpenChange={setOpen}>
-          <SheetTrigger asChild>
-            <Button
-              variant="outline"
-              size={matches ? 'icon' : 'smallicon'}
-              className="shrink-0 lg:hidden"
-            >
-              <Menu className="h-5 w-5" />
-              <span className="sr-only">Öppnar och stänger menyn.</span>
-            </Button>
-          </SheetTrigger>
-          <SheetContent>
-            <nav className="grid gap-6 text-lg font-semibold tracking-wider">
-              <Link
-                to="/"
-                search={{ women }}
-                className="hover:text-foreground"
-                onClick={() => (open ? setOpen(false) : setOpen(true))}
+        <div>
+          <Sheet open={open} onOpenChange={setOpen}>
+            <SheetTrigger asChild>
+              <Button
+                variant="outline"
+                size={matches ? 'icon' : 'smallicon'}
+                className="lg:hidden"
               >
-                Hem
-              </Link>
-
-              <Link
-                to="/seasons"
-                search={{ women, page: 1 }}
-                className="hover:text-foreground"
-                onClick={() => (open ? setOpen(false) : setOpen(true))}
-              >
-                Säsonger
-              </Link>
-              <Link
-                to="/teams"
-                search={{ women }}
-                className="hover:text-foreground"
-                onClick={() => (open ? setOpen(false) : setOpen(true))}
-              >
-                Lag
-              </Link>
-              <Link
-                to="/search"
-                search={{ women }}
-                className="hover:text-foreground"
-                onClick={() => (open ? setOpen(false) : setOpen(true))}
-              >
-                Sök
-              </Link>
-              <Link
-                to="/maraton"
-                search={{ women }}
-                className="hover:text-foreground"
-                onClick={() => (open ? setOpen(false) : setOpen(true))}
-              >
-                Maratontabeller
-              </Link>
-              {isAdmin && (
+                <Menu className="h-5 w-5" />
+                <span className="sr-only">Öppnar och stänger menyn.</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent>
+              <nav className="mt-12 grid justify-items-center gap-6 text-lg font-semibold tracking-wider">
                 <Link
-                  to="/dashboard"
+                  to="/"
                   search={{ women }}
                   className="hover:text-foreground"
                   onClick={() => (open ? setOpen(false) : setOpen(true))}
                 >
-                  Dashboard
+                  Hem
                 </Link>
-              )}
 
-              <Link
-                to="/about"
-                search={{ women }}
-                className="hover:text-foreground"
-                onClick={() => (open ? setOpen(false) : setOpen(true))}
-              >
-                Om sidan
-              </Link>
-            </nav>
-          </SheetContent>
-        </Sheet>
-        <ClerkHeader />
-        <div>
-          <ModeToggle />
+                <Link
+                  to="/seasons"
+                  search={{ women, page: 1 }}
+                  className="hover:text-foreground"
+                  onClick={() => (open ? setOpen(false) : setOpen(true))}
+                >
+                  Säsonger
+                </Link>
+                <Link
+                  to="/teams"
+                  search={{ women }}
+                  className="hover:text-foreground"
+                  onClick={() => (open ? setOpen(false) : setOpen(true))}
+                >
+                  Lag
+                </Link>
+                <Link
+                  to="/search"
+                  search={{ women }}
+                  className="hover:text-foreground"
+                  onClick={() => (open ? setOpen(false) : setOpen(true))}
+                >
+                  Sök
+                </Link>
+                <Link
+                  to="/maraton"
+                  search={{ women }}
+                  className="hover:text-foreground"
+                  onClick={() => (open ? setOpen(false) : setOpen(true))}
+                >
+                  Maratontabeller
+                </Link>
+                {isAdmin && (
+                  <Link
+                    to="/dashboard"
+                    search={{ women }}
+                    className="hover:text-foreground"
+                    onClick={() => (open ? setOpen(false) : setOpen(true))}
+                  >
+                    Dashboard
+                  </Link>
+                )}
+
+                <Link
+                  to="/about"
+                  search={{ women }}
+                  className="hover:text-foreground"
+                  onClick={() => (open ? setOpen(false) : setOpen(true))}
+                >
+                  Om sidan
+                </Link>
+              </nav>
+            </SheetContent>
+          </Sheet>
         </div>
+
+        {isLoaded && (
+          <>
+            <ClerkHeader />
+            <div>
+              <ModeToggle />
+            </div>
+          </>
+        )}
+        {!isLoaded && (
+          <div>
+            <Button variant="outline" size={matches ? 'icon' : 'smallicon'}>
+              <LoaderPinwheelIcon className="size-[1.2rem] animate-spin" />
+            </Button>
+          </div>
+        )}
       </div>
     </header>
   )

@@ -19,6 +19,12 @@ export default function AppClerkProvider({
       appearance={{
         cssLayerName: 'clerk',
         theme: [dark, shadcn],
+        elements: {
+          userButtonAvatarBox: {
+            width: '1.125rem',
+            height: '1.125rem',
+          },
+        },
       }}
       localization={svSE}
     >
