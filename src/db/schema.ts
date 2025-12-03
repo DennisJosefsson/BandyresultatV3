@@ -64,7 +64,7 @@ export const games = pgTable(
   'games',
   {
     gameId: serial('game_id').primaryKey().notNull(),
-    date: date(),
+    date: date().notNull(),
     seasonId: integer('season_id').notNull(),
     homeTeamId: integer('home_team_id'),
     awayTeamId: integer('away_team_id'),
