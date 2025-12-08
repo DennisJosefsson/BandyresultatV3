@@ -3,6 +3,7 @@ import CompareRequestError from '@/lib/middlewares/errors/CompareRequestError'
 import { notFound } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
 
+import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import { zd } from '@/lib/zod'
 import {
   getAllDbSeasons,
@@ -35,11 +36,15 @@ export const compareTeams = createServerFn({ method: 'POST' })
     })
     const parsedData = parseCompareRequest(data, season)
     if (!parsedData.success) {
-      const pretty = zd.prettifyError(parsedData.error)
-      throw new CompareRequestError({ message: pretty })
+      const errorStrings = parsedData.error.issues
+        .map((error) => error.message)
+        .join(', ')
+      // const pretty = zd.prettifyError(parsedData.error)
+      throw new CompareRequestError({ message: errorStrings })
     }
     return parsedData.data
   })
+  .middleware([errorMiddleware])
   .handler(async ({ data }) => {
     const { startSeason, endSeason, teamArray, categoryArray } = await data
 
