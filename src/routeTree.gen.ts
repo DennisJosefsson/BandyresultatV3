@@ -22,6 +22,9 @@ import { Route as LayoutDashboardIndexRouteImport } from './routes/_layout/dashb
 import { Route as LayoutAboutIndexRouteImport } from './routes/_layout/about/index'
 import { Route as LayoutTeamsSelectionRouteImport } from './routes/_layout/teams/selection'
 import { Route as LayoutTeamsCompareRouteImport } from './routes/_layout/teams/compare'
+import { Route as LayoutTeamTeamIdRouteImport } from './routes/_layout/team/$teamId'
+import { Route as LayoutTeamTeamIdIndexRouteImport } from './routes/_layout/team/$teamId/index'
+import { Route as LayoutTeamTeamIdSeasonsRouteImport } from './routes/_layout/team/$teamId/seasons'
 
 const LayoutUnauthorizedIndexLazyRouteImport = createFileRoute(
   '/_layout/unauthorized/',
@@ -97,10 +100,26 @@ const LayoutTeamsCompareRoute = LayoutTeamsCompareRouteImport.update({
   path: '/compare',
   getParentRoute: () => LayoutTeamsRoute,
 } as any)
+const LayoutTeamTeamIdRoute = LayoutTeamTeamIdRouteImport.update({
+  id: '/team/$teamId',
+  path: '/team/$teamId',
+  getParentRoute: () => LayoutRoute,
+} as any)
+const LayoutTeamTeamIdIndexRoute = LayoutTeamTeamIdIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => LayoutTeamTeamIdRoute,
+} as any)
+const LayoutTeamTeamIdSeasonsRoute = LayoutTeamTeamIdSeasonsRouteImport.update({
+  id: '/seasons',
+  path: '/seasons',
+  getParentRoute: () => LayoutTeamTeamIdRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/teams': typeof LayoutTeamsRouteWithChildren
   '/': typeof LayoutIndexRoute
+  '/team/$teamId': typeof LayoutTeamTeamIdRouteWithChildren
   '/teams/compare': typeof LayoutTeamsCompareRoute
   '/teams/selection': typeof LayoutTeamsSelectionRoute
   '/teams/map': typeof LayoutTeamsMapLazyRoute
@@ -111,6 +130,8 @@ export interface FileRoutesByFullPath {
   '/seasons': typeof LayoutSeasonsIndexRoute
   '/teams/': typeof LayoutTeamsIndexRoute
   '/unauthorized': typeof LayoutUnauthorizedIndexLazyRoute
+  '/team/$teamId/seasons': typeof LayoutTeamTeamIdSeasonsRoute
+  '/team/$teamId/': typeof LayoutTeamTeamIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof LayoutIndexRoute
@@ -124,12 +145,15 @@ export interface FileRoutesByTo {
   '/seasons': typeof LayoutSeasonsIndexRoute
   '/teams': typeof LayoutTeamsIndexRoute
   '/unauthorized': typeof LayoutUnauthorizedIndexLazyRoute
+  '/team/$teamId/seasons': typeof LayoutTeamTeamIdSeasonsRoute
+  '/team/$teamId': typeof LayoutTeamTeamIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_layout': typeof LayoutRouteWithChildren
   '/_layout/teams': typeof LayoutTeamsRouteWithChildren
   '/_layout/': typeof LayoutIndexRoute
+  '/_layout/team/$teamId': typeof LayoutTeamTeamIdRouteWithChildren
   '/_layout/teams/compare': typeof LayoutTeamsCompareRoute
   '/_layout/teams/selection': typeof LayoutTeamsSelectionRoute
   '/_layout/teams/map': typeof LayoutTeamsMapLazyRoute
@@ -140,12 +164,15 @@ export interface FileRoutesById {
   '/_layout/seasons/': typeof LayoutSeasonsIndexRoute
   '/_layout/teams/': typeof LayoutTeamsIndexRoute
   '/_layout/unauthorized/': typeof LayoutUnauthorizedIndexLazyRoute
+  '/_layout/team/$teamId/seasons': typeof LayoutTeamTeamIdSeasonsRoute
+  '/_layout/team/$teamId/': typeof LayoutTeamTeamIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/teams'
     | '/'
+    | '/team/$teamId'
     | '/teams/compare'
     | '/teams/selection'
     | '/teams/map'
@@ -156,6 +183,8 @@ export interface FileRouteTypes {
     | '/seasons'
     | '/teams/'
     | '/unauthorized'
+    | '/team/$teamId/seasons'
+    | '/team/$teamId/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -169,11 +198,14 @@ export interface FileRouteTypes {
     | '/seasons'
     | '/teams'
     | '/unauthorized'
+    | '/team/$teamId/seasons'
+    | '/team/$teamId'
   id:
     | '__root__'
     | '/_layout'
     | '/_layout/teams'
     | '/_layout/'
+    | '/_layout/team/$teamId'
     | '/_layout/teams/compare'
     | '/_layout/teams/selection'
     | '/_layout/teams/map'
@@ -184,6 +216,8 @@ export interface FileRouteTypes {
     | '/_layout/seasons/'
     | '/_layout/teams/'
     | '/_layout/unauthorized/'
+    | '/_layout/team/$teamId/seasons'
+    | '/_layout/team/$teamId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -283,6 +317,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutTeamsCompareRouteImport
       parentRoute: typeof LayoutTeamsRoute
     }
+    '/_layout/team/$teamId': {
+      id: '/_layout/team/$teamId'
+      path: '/team/$teamId'
+      fullPath: '/team/$teamId'
+      preLoaderRoute: typeof LayoutTeamTeamIdRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/team/$teamId/': {
+      id: '/_layout/team/$teamId/'
+      path: '/'
+      fullPath: '/team/$teamId/'
+      preLoaderRoute: typeof LayoutTeamTeamIdIndexRouteImport
+      parentRoute: typeof LayoutTeamTeamIdRoute
+    }
+    '/_layout/team/$teamId/seasons': {
+      id: '/_layout/team/$teamId/seasons'
+      path: '/seasons'
+      fullPath: '/team/$teamId/seasons'
+      preLoaderRoute: typeof LayoutTeamTeamIdSeasonsRouteImport
+      parentRoute: typeof LayoutTeamTeamIdRoute
+    }
   }
 }
 
@@ -304,9 +359,23 @@ const LayoutTeamsRouteWithChildren = LayoutTeamsRoute._addFileChildren(
   LayoutTeamsRouteChildren,
 )
 
+interface LayoutTeamTeamIdRouteChildren {
+  LayoutTeamTeamIdSeasonsRoute: typeof LayoutTeamTeamIdSeasonsRoute
+  LayoutTeamTeamIdIndexRoute: typeof LayoutTeamTeamIdIndexRoute
+}
+
+const LayoutTeamTeamIdRouteChildren: LayoutTeamTeamIdRouteChildren = {
+  LayoutTeamTeamIdSeasonsRoute: LayoutTeamTeamIdSeasonsRoute,
+  LayoutTeamTeamIdIndexRoute: LayoutTeamTeamIdIndexRoute,
+}
+
+const LayoutTeamTeamIdRouteWithChildren =
+  LayoutTeamTeamIdRoute._addFileChildren(LayoutTeamTeamIdRouteChildren)
+
 interface LayoutRouteChildren {
   LayoutTeamsRoute: typeof LayoutTeamsRouteWithChildren
   LayoutIndexRoute: typeof LayoutIndexRoute
+  LayoutTeamTeamIdRoute: typeof LayoutTeamTeamIdRouteWithChildren
   LayoutAboutIndexRoute: typeof LayoutAboutIndexRoute
   LayoutDashboardIndexRoute: typeof LayoutDashboardIndexRoute
   LayoutMaratonIndexRoute: typeof LayoutMaratonIndexRoute
@@ -318,6 +387,7 @@ interface LayoutRouteChildren {
 const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutTeamsRoute: LayoutTeamsRouteWithChildren,
   LayoutIndexRoute: LayoutIndexRoute,
+  LayoutTeamTeamIdRoute: LayoutTeamTeamIdRouteWithChildren,
   LayoutAboutIndexRoute: LayoutAboutIndexRoute,
   LayoutDashboardIndexRoute: LayoutDashboardIndexRoute,
   LayoutMaratonIndexRoute: LayoutMaratonIndexRoute,
