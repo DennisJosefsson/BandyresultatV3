@@ -24,7 +24,7 @@ export const teams = pgTable(
   {
     teamId: serial('team_id').primaryKey().notNull(),
     name: varchar().notNull(),
-    city: varchar({ length: 255 }),
+    city: varchar({ length: 255 }).notNull(),
     women: boolean().default(false),
     createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }),
     updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }),
@@ -217,8 +217,8 @@ export const tables = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }),
     updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }),
     women: boolean().default(false),
-    group: varchar().default('elitserien'),
-    category: varchar(),
+    group: varchar().default('elitserien').notNull(),
+    category: varchar().notNull(),
     serieId: integer('serie_id'),
   },
   (table) => [
