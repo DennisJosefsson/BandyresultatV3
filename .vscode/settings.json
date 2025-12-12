@@ -11,5 +11,5 @@
   "files.associations": {
    "css": "tailwindcss"
   },
-  "typescript.preferences.autoImportFileExcludePatterns": ["@radix*"]
+  "typescript.preferences.autoImportFileExcludePatterns": ["@radix*","drizzle-orm/gel-core","drizzle-orm/mysql-core","drizzle-orm/sqlite-core","drizzle-orm/singlestore-core"]
 }
