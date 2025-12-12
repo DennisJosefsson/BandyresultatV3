@@ -1,22 +1,19 @@
-//import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/button'
 import { CardHeader, CardTitle } from '@/components/ui/card'
-// import useTeampreferenceContext from '@/lib/hooks/contextHooks/useFavTeamsContext'
-// import {
-//   addToFavTeams,
-//   removeFromFavTeams,
-// } from '@/lib/reducers/favTeamsReducer'
+import { useFavTeam } from '@/lib/contexts/favTeamsContext'
 
 import { getRouteApi, Link } from '@tanstack/react-router'
-//import { useMediaQuery } from 'usehooks-ts'
+import { useMediaQuery } from 'usehooks-ts'
 
 const route = getRouteApi('/_layout/team/$teamId')
 
 const TeamHeader = () => {
   const team = route.useLoaderData({ select: (data) => data.team })
-  //const teamId = route.useParams({ select: (params) => params.teamId })
+  const teamId = route.useParams({ select: (params) => params.teamId })
   const women = route.useSearch({ select: (s) => s.women })
-  //const matches = useMediaQuery('(min-width: 430px)')
-  //const { favTeams, favTeamsDispatch } = useTeampreferenceContext()
+  const matches = useMediaQuery('(min-width: 430px)')
+  const { favTeams, setFavTeams } = useFavTeam()
+  console.log(favTeams)
   //   const { origin } = getOrigin()
   //   const navigate = useNavigate()
 
@@ -25,13 +22,15 @@ const TeamHeader = () => {
   //     resetOrigin()
   //   }
 
-  // const add = () => {
-  //   favTeamsDispatch(addToFavTeams(teamId))
-  // }
+  const add = () => {
+    if (!favTeams.includes(teamId)) {
+      setFavTeams([...favTeams.concat(teamId)])
+    }
+  }
 
-  // const remove = () => {
-  //   favTeamsDispatch(removeFromFavTeams(teamId))
-  // }
+  const remove = () => {
+    setFavTeams([...favTeams.filter((team) => team !== teamId)])
+  }
 
   return (
     <CardHeader className="p-1 md:p-6">
@@ -69,7 +68,7 @@ const TeamHeader = () => {
             </Button>
           ) : null} */}
 
-          {/* {favTeams.includes(teamId) && (
+          {favTeams.includes(teamId) && (
             <Button onClick={remove} size={matches ? 'sm' : 'xxs'}>
               Ta bort favorit
             </Button>
@@ -78,7 +77,7 @@ const TeamHeader = () => {
             <Button onClick={add} size={matches ? 'sm' : 'xxs'}>
               Favoritlag
             </Button>
-          )} */}
+          )}
         </div>
       </div>
     </CardHeader>

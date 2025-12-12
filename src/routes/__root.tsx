@@ -148,7 +148,7 @@ function ErrorComponent() {
   return (
     <>
       <Header />
-      <div className="flex flex-row justify-center items-center mt-10">
+      <div className="mt-10 flex flex-row items-center justify-center">
         <p>
           Något gick tyvärr fel,tillbaka till{' '}
           <Link to="/" search={{ women: false }} className="underline">

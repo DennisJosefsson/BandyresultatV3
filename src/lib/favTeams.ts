@@ -8,7 +8,8 @@ const storageKey = 'favTeams'
 
 export const getFavTeamsServerFn = createServerFn().handler(async () => {
   const favTeams = getCookie(storageKey)
-  return favTeamsValidator.parse(favTeams)
+  if (!favTeams) return []
+  return favTeamsValidator.parse(JSON.parse(favTeams))
 })
 
 export const setFavTeamsServerFn = createServerFn({ method: 'POST' })
