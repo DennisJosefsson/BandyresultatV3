@@ -25,6 +25,7 @@ import { Route as LayoutTeamsCompareRouteImport } from './routes/_layout/teams/c
 import { Route as LayoutTeamTeamIdRouteImport } from './routes/_layout/team/$teamId'
 import { Route as LayoutTeamTeamIdIndexRouteImport } from './routes/_layout/team/$teamId/index'
 import { Route as LayoutTeamTeamIdSeasonsRouteImport } from './routes/_layout/team/$teamId/seasons'
+import { Route as LayoutTeamTeamIdSeasonIdRouteImport } from './routes/_layout/team/$teamId/$seasonId'
 
 const LayoutUnauthorizedIndexLazyRouteImport = createFileRoute(
   '/_layout/unauthorized/',
@@ -115,6 +116,12 @@ const LayoutTeamTeamIdSeasonsRoute = LayoutTeamTeamIdSeasonsRouteImport.update({
   path: '/seasons',
   getParentRoute: () => LayoutTeamTeamIdRoute,
 } as any)
+const LayoutTeamTeamIdSeasonIdRoute =
+  LayoutTeamTeamIdSeasonIdRouteImport.update({
+    id: '/$seasonId',
+    path: '/$seasonId',
+    getParentRoute: () => LayoutTeamTeamIdRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/teams': typeof LayoutTeamsRouteWithChildren
@@ -130,6 +137,7 @@ export interface FileRoutesByFullPath {
   '/seasons': typeof LayoutSeasonsIndexRoute
   '/teams/': typeof LayoutTeamsIndexRoute
   '/unauthorized': typeof LayoutUnauthorizedIndexLazyRoute
+  '/team/$teamId/$seasonId': typeof LayoutTeamTeamIdSeasonIdRoute
   '/team/$teamId/seasons': typeof LayoutTeamTeamIdSeasonsRoute
   '/team/$teamId/': typeof LayoutTeamTeamIdIndexRoute
 }
@@ -145,6 +153,7 @@ export interface FileRoutesByTo {
   '/seasons': typeof LayoutSeasonsIndexRoute
   '/teams': typeof LayoutTeamsIndexRoute
   '/unauthorized': typeof LayoutUnauthorizedIndexLazyRoute
+  '/team/$teamId/$seasonId': typeof LayoutTeamTeamIdSeasonIdRoute
   '/team/$teamId/seasons': typeof LayoutTeamTeamIdSeasonsRoute
   '/team/$teamId': typeof LayoutTeamTeamIdIndexRoute
 }
@@ -164,6 +173,7 @@ export interface FileRoutesById {
   '/_layout/seasons/': typeof LayoutSeasonsIndexRoute
   '/_layout/teams/': typeof LayoutTeamsIndexRoute
   '/_layout/unauthorized/': typeof LayoutUnauthorizedIndexLazyRoute
+  '/_layout/team/$teamId/$seasonId': typeof LayoutTeamTeamIdSeasonIdRoute
   '/_layout/team/$teamId/seasons': typeof LayoutTeamTeamIdSeasonsRoute
   '/_layout/team/$teamId/': typeof LayoutTeamTeamIdIndexRoute
 }
@@ -183,6 +193,7 @@ export interface FileRouteTypes {
     | '/seasons'
     | '/teams/'
     | '/unauthorized'
+    | '/team/$teamId/$seasonId'
     | '/team/$teamId/seasons'
     | '/team/$teamId/'
   fileRoutesByTo: FileRoutesByTo
@@ -198,6 +209,7 @@ export interface FileRouteTypes {
     | '/seasons'
     | '/teams'
     | '/unauthorized'
+    | '/team/$teamId/$seasonId'
     | '/team/$teamId/seasons'
     | '/team/$teamId'
   id:
@@ -216,6 +228,7 @@ export interface FileRouteTypes {
     | '/_layout/seasons/'
     | '/_layout/teams/'
     | '/_layout/unauthorized/'
+    | '/_layout/team/$teamId/$seasonId'
     | '/_layout/team/$teamId/seasons'
     | '/_layout/team/$teamId/'
   fileRoutesById: FileRoutesById
@@ -338,6 +351,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutTeamTeamIdSeasonsRouteImport
       parentRoute: typeof LayoutTeamTeamIdRoute
     }
+    '/_layout/team/$teamId/$seasonId': {
+      id: '/_layout/team/$teamId/$seasonId'
+      path: '/$seasonId'
+      fullPath: '/team/$teamId/$seasonId'
+      preLoaderRoute: typeof LayoutTeamTeamIdSeasonIdRouteImport
+      parentRoute: typeof LayoutTeamTeamIdRoute
+    }
   }
 }
 
@@ -360,11 +380,13 @@ const LayoutTeamsRouteWithChildren = LayoutTeamsRoute._addFileChildren(
 )
 
 interface LayoutTeamTeamIdRouteChildren {
+  LayoutTeamTeamIdSeasonIdRoute: typeof LayoutTeamTeamIdSeasonIdRoute
   LayoutTeamTeamIdSeasonsRoute: typeof LayoutTeamTeamIdSeasonsRoute
   LayoutTeamTeamIdIndexRoute: typeof LayoutTeamTeamIdIndexRoute
 }
 
 const LayoutTeamTeamIdRouteChildren: LayoutTeamTeamIdRouteChildren = {
+  LayoutTeamTeamIdSeasonIdRoute: LayoutTeamTeamIdSeasonIdRoute,
   LayoutTeamTeamIdSeasonsRoute: LayoutTeamTeamIdSeasonsRoute,
   LayoutTeamTeamIdIndexRoute: LayoutTeamTeamIdIndexRoute,
 }
