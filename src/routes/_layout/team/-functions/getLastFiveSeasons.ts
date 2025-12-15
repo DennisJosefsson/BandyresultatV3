@@ -1,6 +1,6 @@
 import { db } from '@/db'
 import { seasons, series, tables, teamgames, teamseasons } from '@/db/schema'
-import { sortOrder } from '@/lib/constants'
+import { sortOrder } from '@/lib/utils/constants'
 import { and, asc, count, desc, eq, inArray, SQL, sql, sum } from 'drizzle-orm'
 
 type FiveSeasonTableItem = {

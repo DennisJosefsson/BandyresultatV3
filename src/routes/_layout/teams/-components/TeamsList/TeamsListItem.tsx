@@ -1,5 +1,5 @@
 import { Checkbox, CheckedState } from '@/components/ui/checkbox'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/utils'
 import { Link } from '@tanstack/react-router'
 
 type Team = {

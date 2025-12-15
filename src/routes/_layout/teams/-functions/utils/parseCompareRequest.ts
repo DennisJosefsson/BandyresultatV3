@@ -1,5 +1,5 @@
 import { seasons } from '@/db/schema'
-import { zd } from '@/lib/zod'
+import { zd } from '@/lib/utils/zod'
 
 type Season = typeof seasons.$inferSelect
 

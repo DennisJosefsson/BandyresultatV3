@@ -25,7 +25,7 @@ export const teams = pgTable(
     teamId: serial('team_id').primaryKey().notNull(),
     name: varchar().notNull(),
     city: varchar({ length: 255 }).notNull(),
-    women: boolean().default(false),
+    women: boolean().default(false).notNull(),
     createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }),
     updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }),
     casualName: varchar('casual_name', { length: 255 }).notNull(),

@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody } from '@/components/ui/table'
-import { groupConstant } from '@/lib/constants'
+import { groupConstant } from '@/lib/utils/constants'
 import { getRouteApi } from '@tanstack/react-router'
 
 import { filterOpposition } from '../../-functions/utils/filterOpposition'

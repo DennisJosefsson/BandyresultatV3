@@ -1,6 +1,6 @@
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import Loading from '@/components/Loading/Loading'
-import { zd } from '@/lib/zod'
+import { zd } from '@/lib/utils/zod'
 import {
   CatchBoundary,
   createFileRoute,
