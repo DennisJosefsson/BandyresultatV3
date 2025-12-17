@@ -7,6 +7,9 @@ export function catchError(error: unknown) {
   if (error instanceof ZodError) {
     const errorString = error.issues.map((e) => e.message).join(', ')
     throw new ZodParsingError({ message: errorString })
+  } else if (error instanceof TypeError) {
+    console.error(error)
+    throw error
   }
   const { message, constraint, query } = getDbErrorMessage(error)
   if (message !== 'Other error') {
@@ -20,6 +23,7 @@ export function catchError(error: unknown) {
       },
     })
   } else {
+    console.error(error)
     throw new Error('An error occured')
   }
 }
