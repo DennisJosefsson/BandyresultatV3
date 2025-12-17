@@ -13,7 +13,7 @@ const TeamHeader = () => {
   const women = route.useSearch({ select: (s) => s.women })
   const matches = useMediaQuery('(min-width: 430px)')
   const { favTeams, setFavTeams } = useFavTeam()
-  console.log(favTeams)
+
   //   const { origin } = getOrigin()
   //   const navigate = useNavigate()
 
