@@ -1,7 +1,7 @@
 import { db } from '@/db'
 import { series, tables, teamgames } from '@/db/schema'
-import { groupConstant, sortOrder } from '@/lib/constants'
-import { zd } from '@/lib/zod'
+import { groupConstant, sortOrder } from '@/lib/utils/constants'
+import { zd } from '@/lib/utils/zod'
 import { and, count, desc, eq, inArray, SQL, sql, sum } from 'drizzle-orm'
 
 type SingleTeamTableItem = {

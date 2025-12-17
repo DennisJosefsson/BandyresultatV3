@@ -9,7 +9,7 @@ import {
   teamseasons,
   teamseries,
 } from '@/db/schema'
-import { zd } from '@/lib/zod'
+import { zd } from '@/lib/utils/zod'
 import {
   and,
   asc,
