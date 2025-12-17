@@ -1,5 +1,4 @@
 import { getRouteApi } from '@tanstack/react-router'
-import StaticTableList from './Tables/StaticTableList'
 import TableList from './Tables/TableList'
 
 const route = getRouteApi('/_layout/team/$teamId/$seasonId')
@@ -15,7 +14,7 @@ const SeasonTables = () => {
 
   if (tables.length + staticTables.length === 0) {
     return (
-      <div className="flex flex-row justify-center mt-2 font-semibold">
+      <div className="mt-2 flex flex-row justify-center font-semibold">
         Inga tabeller än denna säsong.
       </div>
     )
@@ -27,17 +26,7 @@ const SeasonTables = () => {
         <TableList tableArray={tables} casualName={casualName} />
       ) : null}
       {staticTables.length > 0 ? (
-        <div>
-          {staticTables.map((tableObject) => {
-            return (
-              <StaticTableList
-                key={tableObject.group}
-                casualName={casualName}
-                tableObject={tableObject}
-              />
-            )
-          })}
-        </div>
+        <TableList casualName={casualName} tableArray={staticTables} />
       ) : null}
     </div>
   )

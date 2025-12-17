@@ -7,7 +7,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 
-import { seasonTable } from '@/lib/types/tables/seasonTable'
+import { TeamTable } from '@/lib/types/table'
 import { cn } from '@/lib/utils/utils'
 import {
   flexRender,
@@ -18,11 +18,10 @@ import {
 } from '@tanstack/react-table'
 import { useEffect, useState } from 'react'
 import { useMediaQuery } from 'usehooks-ts'
-import { z } from 'zod'
 import { columns, hideColumns, showColumns } from './columns'
 
 interface DataTableProps {
-  data: z.infer<typeof seasonTable>[]
+  data: TeamTable[]
   casualName: string
   serieStructure: number[] | null | undefined
 }
@@ -83,7 +82,7 @@ const DataTable = ({ data, serieStructure, casualName }: DataTableProps) => {
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 )
@@ -103,8 +102,8 @@ const DataTable = ({ data, serieStructure, casualName }: DataTableProps) => {
                     ? 'font-bold italic'
                     : null,
                   serieStructure?.includes(index + 1)
-                    ? 'border-b-2 border-foreground'
-                    : null
+                    ? 'border-foreground border-b-2'
+                    : null,
                 )}
               >
                 <TableCell
@@ -121,7 +120,7 @@ const DataTable = ({ data, serieStructure, casualName }: DataTableProps) => {
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   )

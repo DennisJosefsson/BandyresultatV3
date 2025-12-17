@@ -1,33 +1,26 @@
 import { Button } from '@/components/ui/button'
-
+import { TeamTable } from '@/lib/types/table'
 import { createColumnHelper } from '@tanstack/react-table'
-
-import { staticTable } from '@/lib/types/tables/seasonTable'
-import {
-  ArrowDownIcon,
-  ArrowUpIcon,
-  CaretSortIcon,
-} from '@radix-ui/react-icons'
-import { z } from 'zod'
+import { ArrowDownIcon, ArrowUpIcon, ChevronsUpDownIcon } from 'lucide-react'
 
 export const showColumns = {
-  draw: true,
-  scoredGoals: true,
-  concededGoals: true,
+  totalDraws: true,
+  totalGoalsScored: true,
+  totalGoalsConceded: true,
 }
 
 export const hideColumns = {
-  draw: false,
-  scoredGoals: false,
-  concededGoals: false,
+  totalDraws: false,
+  totalGoalsScored: false,
+  totalGoalsConceded: false,
 }
 
-const columnHelper = createColumnHelper<z.infer<typeof staticTable>>()
+const columnHelper = createColumnHelper<TeamTable>()
 
 export const columns = [
   columnHelper.accessor('team.casualName' as const, {
     header: () => (
-      <div className="w-6 truncate text-left sm:w-24 text-[10px] lg:w-32 lg:text-sm">
+      <div className="w-6 truncate text-left text-[10px] sm:w-24 lg:w-32 lg:text-sm">
         Lag
       </div>
     ),
@@ -52,13 +45,13 @@ export const columns = [
           ) : column.getIsSorted() === 'asc' ? (
             <ArrowUpIcon className="ml-2 h-4 w-4" />
           ) : (
-            <CaretSortIcon className="ml-2 h-4 w-4" />
+            <ChevronsUpDownIcon className="ml-2 h-4 w-4" />
           )}
         </Button>
       </div>
     ),
     cell: ({ row }) => (
-      <div className="text-center tabular-nums text-[10px] lg:text-sm xl:text-base 2xl:text-lg">
+      <div className="text-center text-[10px] tabular-nums lg:text-sm xl:text-base 2xl:text-lg">
         {row.getValue('totalGames')}
       </div>
     ),
@@ -79,13 +72,13 @@ export const columns = [
           ) : column.getIsSorted() === 'asc' ? (
             <ArrowUpIcon className="ml-2 h-4 w-4" />
           ) : (
-            <CaretSortIcon className="ml-2 h-4 w-4" />
+            <ChevronsUpDownIcon className="ml-2 h-4 w-4" />
           )}
         </Button>
       </div>
     ),
     cell: ({ row }) => (
-      <div className="text-center tabular-nums text-[10px] lg:text-sm xl:text-base 2xl:text-lg">
+      <div className="text-center text-[10px] tabular-nums lg:text-sm xl:text-base 2xl:text-lg">
         {row.getValue('totalWins')}
       </div>
     ),
@@ -93,7 +86,7 @@ export const columns = [
   }),
   columnHelper.accessor('totalDraws' as const, {
     header: ({ column }) => (
-      <div className="text-center text-[10px] lg:text-sm ">
+      <div className="text-center text-[10px] lg:text-sm">
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
@@ -106,13 +99,13 @@ export const columns = [
           ) : column.getIsSorted() === 'asc' ? (
             <ArrowUpIcon className="ml-2 h-4 w-4" />
           ) : (
-            <CaretSortIcon className="ml-2 h-4 w-4" />
+            <ChevronsUpDownIcon className="ml-2 h-4 w-4" />
           )}
         </Button>
       </div>
     ),
     cell: ({ row }) => (
-      <div className="text-center tabular-nums text-[10px] lg:text-sm xl:text-base 2xl:text-lg">
+      <div className="text-center text-[10px] tabular-nums lg:text-sm xl:text-base 2xl:text-lg">
         {row.getValue('totalDraws')}
       </div>
     ),
@@ -133,13 +126,13 @@ export const columns = [
           ) : column.getIsSorted() === 'asc' ? (
             <ArrowUpIcon className="ml-2 h-4 w-4" />
           ) : (
-            <CaretSortIcon className="ml-2 h-4 w-4" />
+            <ChevronsUpDownIcon className="ml-2 h-4 w-4" />
           )}
         </Button>
       </div>
     ),
     cell: ({ row }) => (
-      <div className="text-center tabular-nums text-[10px] lg:text-sm xl:text-base 2xl:text-lg">
+      <div className="text-center text-[10px] tabular-nums lg:text-sm xl:text-base 2xl:text-lg">
         {row.getValue('totalLost')}
       </div>
     ),
@@ -160,13 +153,13 @@ export const columns = [
           ) : column.getIsSorted() === 'asc' ? (
             <ArrowUpIcon className="ml-2 h-4 w-4" />
           ) : (
-            <CaretSortIcon className="ml-2 h-4 w-4" />
+            <ChevronsUpDownIcon className="ml-2 h-4 w-4" />
           )}
         </Button>
       </div>
     ),
     cell: ({ row }) => (
-      <div className="text-center tabular-nums text-[10px] lg:text-sm xl:text-base 2xl:text-lg">
+      <div className="text-center text-[10px] tabular-nums lg:text-sm xl:text-base 2xl:text-lg">
         {row.getValue('totalGoalsScored')}
       </div>
     ),
@@ -187,13 +180,13 @@ export const columns = [
           ) : column.getIsSorted() === 'asc' ? (
             <ArrowUpIcon className="ml-2 h-4 w-4" />
           ) : (
-            <CaretSortIcon className="ml-2 h-4 w-4" />
+            <ChevronsUpDownIcon className="ml-2 h-4 w-4" />
           )}
         </Button>
       </div>
     ),
     cell: ({ row }) => (
-      <div className="text-center tabular-nums text-[10px] lg:text-sm xl:text-base 2xl:text-lg">
+      <div className="text-center text-[10px] tabular-nums lg:text-sm xl:text-base 2xl:text-lg">
         {row.getValue('totalGoalsConceded')}
       </div>
     ),
@@ -214,13 +207,13 @@ export const columns = [
           ) : column.getIsSorted() === 'asc' ? (
             <ArrowUpIcon className="ml-2 h-4 w-4" />
           ) : (
-            <CaretSortIcon className="ml-2 h-4 w-4" />
+            <ChevronsUpDownIcon className="ml-2 h-4 w-4" />
           )}
         </Button>
       </div>
     ),
     cell: ({ row }) => (
-      <div className="text-center tabular-nums text-[10px] lg:text-sm xl:text-base 2xl:text-lg">
+      <div className="text-center text-[10px] tabular-nums lg:text-sm xl:text-base 2xl:text-lg">
         {row.getValue('totalGoalDifference')}
       </div>
     ),
@@ -241,17 +234,16 @@ export const columns = [
           ) : column.getIsSorted() === 'asc' ? (
             <ArrowUpIcon className="ml-2 h-4 w-4" />
           ) : (
-            <CaretSortIcon className="ml-2 h-4 w-4" />
+            <ChevronsUpDownIcon className="ml-2 h-4 w-4" />
           )}
         </Button>
       </div>
     ),
     cell: ({ row }) => (
-      <div className="text-center tabular-nums text-[10px] lg:text-sm xl:text-base 2xl:text-lg">
+      <div className="text-center text-[10px] tabular-nums lg:text-sm xl:text-base 2xl:text-lg">
         {row.getValue('totalPoints')}
       </div>
     ),
     maxSize: 16,
   }),
 ]
-

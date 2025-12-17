@@ -13,7 +13,7 @@ const SingleTeamSeason = () => {
   return (
     <CardContent className="p-1 md:p-6">
       <div className="flex flex-col gap-2">
-        <div className="flex flex-row justify-between items-center">
+        <div className="flex flex-row items-center justify-between">
           <Link
             from="/team/$teamId/$seasonId"
             to="/team/$teamId/$seasonId"
@@ -21,17 +21,17 @@ const SingleTeamSeason = () => {
             params={(prev) => ({
               ...prev,
               seasonId:
-                season.previousSeason?.seasonId ?? season.lastSeason.seasonId,
+                season.previousSeason?.seasonId ?? season.lastSeason?.seasonId,
             })}
           >
             <Button variant="ghost" aria-label="Gå till föregående säsong">
-              <div className="inline-flex gap-1 items-center">
+              <div className="inline-flex items-center gap-1">
                 <ChevronLeftIcon className="h-4 w-4" />
                 <span className="hidden sm:block">Föregående</span>
               </div>
             </Button>
           </Link>
-          <h4 className="font-semibold text-sm md:text-lg">
+          <h4 className="text-sm font-semibold md:text-lg">
             {season.seasonYear}
           </h4>
           <Link
@@ -41,11 +41,11 @@ const SingleTeamSeason = () => {
             params={(prev) => ({
               ...prev,
               seasonId:
-                season.nextSeason?.seasonId ?? season.firstSeason.seasonId,
+                season.nextSeason?.seasonId ?? season.firstSeason?.seasonId,
             })}
           >
             <Button variant="ghost" aria-label="Gå till nästa säsong">
-              <div className="inline-flex gap-1 items-center">
+              <div className="inline-flex items-center gap-1">
                 <span className="hidden sm:block">Nästa</span>
                 <ChevronRightIcon className="h-4 w-4" />
               </div>
@@ -56,20 +56,20 @@ const SingleTeamSeason = () => {
           <Tabs defaultValue="tables">
             <TabsList>
               <TabsTrigger
-                className="text-[10px] md:text-sm truncate"
+                className="truncate text-[10px] md:text-sm"
                 value="tables"
               >
                 Tabeller
               </TabsTrigger>
               <TabsTrigger
-                className="text-[10px] md:text-sm truncate"
+                className="truncate text-[10px] md:text-sm"
                 value="games"
               >
                 Matcher
               </TabsTrigger>
 
               <TabsTrigger
-                className="text-[10px] md:text-sm truncate"
+                className="truncate text-[10px] md:text-sm"
                 value="upcoming"
               >
                 Ospelade matcher
