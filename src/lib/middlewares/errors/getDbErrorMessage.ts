@@ -64,6 +64,10 @@ const PostgresErrorHandlers: Record<string, ErrorHandler> = {
       'Transaction serialization failure. Please retry the transaction as it could not be completed due to concurrent modifications.',
     constraint: null,
   }),
+  '42883': (error) => ({
+    message: error.message,
+    constraint: error.column ?? null,
+  }),
   default: (error) => ({
     message: `A database error occurred: ${error.message}`,
     constraint: null,
@@ -85,6 +89,7 @@ export function getDbErrorMessage(error: unknown): {
     error.cause instanceof DatabaseError
   ) {
     const originalError = error.cause
+
     const handler = PostgresErrorHandlers[originalError.code ?? 'default']
     const query = error.query
 
