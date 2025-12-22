@@ -18,6 +18,9 @@ const config = defineConfig({
       },
     }),
   ],
+  optimizeDeps: {
+    include: ['cookie'],
+  },
 })
 
 export default config
