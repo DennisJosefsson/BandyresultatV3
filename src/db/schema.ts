@@ -1,6 +1,7 @@
 import { relations, sql } from 'drizzle-orm'
 import {
   boolean,
+  customType,
   date,
   foreignKey,
   integer,
@@ -176,6 +177,14 @@ export const seasons = pgTable('seasons', {
   seasonStructure: varchar('season_structure'),
 })
 
+const decimalNumber = customType<{ data: number }>({
+  dataType() {
+    return 'decimal(2, 1)'
+  },
+  fromDriver(value) {
+    return Number(value)
+  },
+})
 export const series = pgTable(
   'series',
   {
@@ -187,7 +196,7 @@ export const series = pgTable(
     seasonId: integer('season_id').notNull(),
     bonusPoints: varchar('bonus_points'),
     comment: text(),
-    level: smallint().notNull(),
+    level: decimalNumber().notNull(),
   },
   (table) => [
     foreignKey({
