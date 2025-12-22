@@ -23,9 +23,19 @@ import { Route as LayoutAboutIndexRouteImport } from './routes/_layout/about/ind
 import { Route as LayoutTeamsSelectionRouteImport } from './routes/_layout/teams/selection'
 import { Route as LayoutTeamsCompareRouteImport } from './routes/_layout/teams/compare'
 import { Route as LayoutTeamTeamIdRouteImport } from './routes/_layout/team/$teamId'
+import { Route as LayoutSeasonYearRouteImport } from './routes/_layout/season/$year'
 import { Route as LayoutTeamTeamIdIndexRouteImport } from './routes/_layout/team/$teamId/index'
 import { Route as LayoutTeamTeamIdSeasonsRouteImport } from './routes/_layout/team/$teamId/seasons'
 import { Route as LayoutTeamTeamIdSeasonIdRouteImport } from './routes/_layout/team/$teamId/$seasonId'
+import { Route as LayoutSeasonYearChar123GroupChar125RouteImport } from './routes/_layout/season/$year/{-$group}'
+import { Route as LayoutSeasonYearPlayoffIndexRouteImport } from './routes/_layout/season/$year/playoff/index'
+import { Route as LayoutSeasonYearChar123GroupChar125TablesRouteImport } from './routes/_layout/season/$year/{-$group}/tables'
+import { Route as LayoutSeasonYearChar123GroupChar125StatsRouteImport } from './routes/_layout/season/$year/{-$group}/stats'
+import { Route as LayoutSeasonYearChar123GroupChar125IntervalRouteImport } from './routes/_layout/season/$year/{-$group}/interval'
+import { Route as LayoutSeasonYearChar123GroupChar125GamesRouteImport } from './routes/_layout/season/$year/{-$group}/games'
+import { Route as LayoutSeasonYearChar123GroupChar125DevelopmentRouteImport } from './routes/_layout/season/$year/{-$group}/development'
+import { Route as LayoutSeasonYearPlayoffStatsRouteImport } from './routes/_layout/season/$year/playoff/stats'
+import { Route as LayoutSeasonYearChar123GroupChar125TablesChar123HomeawayChar125RouteImport } from './routes/_layout/season/$year/{-$group}/tables/{-$homeaway}'
 
 const LayoutUnauthorizedIndexLazyRouteImport = createFileRoute(
   '/_layout/unauthorized/',
@@ -106,6 +116,11 @@ const LayoutTeamTeamIdRoute = LayoutTeamTeamIdRouteImport.update({
   path: '/team/$teamId',
   getParentRoute: () => LayoutRoute,
 } as any)
+const LayoutSeasonYearRoute = LayoutSeasonYearRouteImport.update({
+  id: '/season/$year',
+  path: '/season/$year',
+  getParentRoute: () => LayoutRoute,
+} as any)
 const LayoutTeamTeamIdIndexRoute = LayoutTeamTeamIdIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -122,10 +137,67 @@ const LayoutTeamTeamIdSeasonIdRoute =
     path: '/$seasonId',
     getParentRoute: () => LayoutTeamTeamIdRoute,
   } as any)
+const LayoutSeasonYearChar123GroupChar125Route =
+  LayoutSeasonYearChar123GroupChar125RouteImport.update({
+    id: '/{-$group}',
+    path: '/{-$group}',
+    getParentRoute: () => LayoutSeasonYearRoute,
+  } as any)
+const LayoutSeasonYearPlayoffIndexRoute =
+  LayoutSeasonYearPlayoffIndexRouteImport.update({
+    id: '/playoff/',
+    path: '/playoff/',
+    getParentRoute: () => LayoutSeasonYearRoute,
+  } as any)
+const LayoutSeasonYearChar123GroupChar125TablesRoute =
+  LayoutSeasonYearChar123GroupChar125TablesRouteImport.update({
+    id: '/tables',
+    path: '/tables',
+    getParentRoute: () => LayoutSeasonYearChar123GroupChar125Route,
+  } as any)
+const LayoutSeasonYearChar123GroupChar125StatsRoute =
+  LayoutSeasonYearChar123GroupChar125StatsRouteImport.update({
+    id: '/stats',
+    path: '/stats',
+    getParentRoute: () => LayoutSeasonYearChar123GroupChar125Route,
+  } as any)
+const LayoutSeasonYearChar123GroupChar125IntervalRoute =
+  LayoutSeasonYearChar123GroupChar125IntervalRouteImport.update({
+    id: '/interval',
+    path: '/interval',
+    getParentRoute: () => LayoutSeasonYearChar123GroupChar125Route,
+  } as any)
+const LayoutSeasonYearChar123GroupChar125GamesRoute =
+  LayoutSeasonYearChar123GroupChar125GamesRouteImport.update({
+    id: '/games',
+    path: '/games',
+    getParentRoute: () => LayoutSeasonYearChar123GroupChar125Route,
+  } as any)
+const LayoutSeasonYearChar123GroupChar125DevelopmentRoute =
+  LayoutSeasonYearChar123GroupChar125DevelopmentRouteImport.update({
+    id: '/development',
+    path: '/development',
+    getParentRoute: () => LayoutSeasonYearChar123GroupChar125Route,
+  } as any)
+const LayoutSeasonYearPlayoffStatsRoute =
+  LayoutSeasonYearPlayoffStatsRouteImport.update({
+    id: '/playoff/stats',
+    path: '/playoff/stats',
+    getParentRoute: () => LayoutSeasonYearRoute,
+  } as any)
+const LayoutSeasonYearChar123GroupChar125TablesChar123HomeawayChar125Route =
+  LayoutSeasonYearChar123GroupChar125TablesChar123HomeawayChar125RouteImport.update(
+    {
+      id: '/{-$homeaway}',
+      path: '/{-$homeaway}',
+      getParentRoute: () => LayoutSeasonYearChar123GroupChar125TablesRoute,
+    } as any,
+  )
 
 export interface FileRoutesByFullPath {
   '/teams': typeof LayoutTeamsRouteWithChildren
   '/': typeof LayoutIndexRoute
+  '/season/$year': typeof LayoutSeasonYearRouteWithChildren
   '/team/$teamId': typeof LayoutTeamTeamIdRouteWithChildren
   '/teams/compare': typeof LayoutTeamsCompareRoute
   '/teams/selection': typeof LayoutTeamsSelectionRoute
@@ -137,12 +209,22 @@ export interface FileRoutesByFullPath {
   '/seasons': typeof LayoutSeasonsIndexRoute
   '/teams/': typeof LayoutTeamsIndexRoute
   '/unauthorized': typeof LayoutUnauthorizedIndexLazyRoute
+  '/season/$year/{-$group}': typeof LayoutSeasonYearChar123GroupChar125RouteWithChildren
   '/team/$teamId/$seasonId': typeof LayoutTeamTeamIdSeasonIdRoute
   '/team/$teamId/seasons': typeof LayoutTeamTeamIdSeasonsRoute
   '/team/$teamId/': typeof LayoutTeamTeamIdIndexRoute
+  '/season/$year/playoff/stats': typeof LayoutSeasonYearPlayoffStatsRoute
+  '/season/$year/{-$group}/development': typeof LayoutSeasonYearChar123GroupChar125DevelopmentRoute
+  '/season/$year/{-$group}/games': typeof LayoutSeasonYearChar123GroupChar125GamesRoute
+  '/season/$year/{-$group}/interval': typeof LayoutSeasonYearChar123GroupChar125IntervalRoute
+  '/season/$year/{-$group}/stats': typeof LayoutSeasonYearChar123GroupChar125StatsRoute
+  '/season/$year/{-$group}/tables': typeof LayoutSeasonYearChar123GroupChar125TablesRouteWithChildren
+  '/season/$year/playoff': typeof LayoutSeasonYearPlayoffIndexRoute
+  '/season/$year/{-$group}/tables/{-$homeaway}': typeof LayoutSeasonYearChar123GroupChar125TablesChar123HomeawayChar125Route
 }
 export interface FileRoutesByTo {
   '/': typeof LayoutIndexRoute
+  '/season/$year': typeof LayoutSeasonYearRouteWithChildren
   '/teams/compare': typeof LayoutTeamsCompareRoute
   '/teams/selection': typeof LayoutTeamsSelectionRoute
   '/teams/map': typeof LayoutTeamsMapLazyRoute
@@ -153,15 +235,25 @@ export interface FileRoutesByTo {
   '/seasons': typeof LayoutSeasonsIndexRoute
   '/teams': typeof LayoutTeamsIndexRoute
   '/unauthorized': typeof LayoutUnauthorizedIndexLazyRoute
+  '/season/$year/{-$group}': typeof LayoutSeasonYearChar123GroupChar125RouteWithChildren
   '/team/$teamId/$seasonId': typeof LayoutTeamTeamIdSeasonIdRoute
   '/team/$teamId/seasons': typeof LayoutTeamTeamIdSeasonsRoute
   '/team/$teamId': typeof LayoutTeamTeamIdIndexRoute
+  '/season/$year/playoff/stats': typeof LayoutSeasonYearPlayoffStatsRoute
+  '/season/$year/{-$group}/development': typeof LayoutSeasonYearChar123GroupChar125DevelopmentRoute
+  '/season/$year/{-$group}/games': typeof LayoutSeasonYearChar123GroupChar125GamesRoute
+  '/season/$year/{-$group}/interval': typeof LayoutSeasonYearChar123GroupChar125IntervalRoute
+  '/season/$year/{-$group}/stats': typeof LayoutSeasonYearChar123GroupChar125StatsRoute
+  '/season/$year/{-$group}/tables': typeof LayoutSeasonYearChar123GroupChar125TablesRouteWithChildren
+  '/season/$year/playoff': typeof LayoutSeasonYearPlayoffIndexRoute
+  '/season/$year/{-$group}/tables/{-$homeaway}': typeof LayoutSeasonYearChar123GroupChar125TablesChar123HomeawayChar125Route
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_layout': typeof LayoutRouteWithChildren
   '/_layout/teams': typeof LayoutTeamsRouteWithChildren
   '/_layout/': typeof LayoutIndexRoute
+  '/_layout/season/$year': typeof LayoutSeasonYearRouteWithChildren
   '/_layout/team/$teamId': typeof LayoutTeamTeamIdRouteWithChildren
   '/_layout/teams/compare': typeof LayoutTeamsCompareRoute
   '/_layout/teams/selection': typeof LayoutTeamsSelectionRoute
@@ -173,15 +265,25 @@ export interface FileRoutesById {
   '/_layout/seasons/': typeof LayoutSeasonsIndexRoute
   '/_layout/teams/': typeof LayoutTeamsIndexRoute
   '/_layout/unauthorized/': typeof LayoutUnauthorizedIndexLazyRoute
+  '/_layout/season/$year/{-$group}': typeof LayoutSeasonYearChar123GroupChar125RouteWithChildren
   '/_layout/team/$teamId/$seasonId': typeof LayoutTeamTeamIdSeasonIdRoute
   '/_layout/team/$teamId/seasons': typeof LayoutTeamTeamIdSeasonsRoute
   '/_layout/team/$teamId/': typeof LayoutTeamTeamIdIndexRoute
+  '/_layout/season/$year/playoff/stats': typeof LayoutSeasonYearPlayoffStatsRoute
+  '/_layout/season/$year/{-$group}/development': typeof LayoutSeasonYearChar123GroupChar125DevelopmentRoute
+  '/_layout/season/$year/{-$group}/games': typeof LayoutSeasonYearChar123GroupChar125GamesRoute
+  '/_layout/season/$year/{-$group}/interval': typeof LayoutSeasonYearChar123GroupChar125IntervalRoute
+  '/_layout/season/$year/{-$group}/stats': typeof LayoutSeasonYearChar123GroupChar125StatsRoute
+  '/_layout/season/$year/{-$group}/tables': typeof LayoutSeasonYearChar123GroupChar125TablesRouteWithChildren
+  '/_layout/season/$year/playoff/': typeof LayoutSeasonYearPlayoffIndexRoute
+  '/_layout/season/$year/{-$group}/tables/{-$homeaway}': typeof LayoutSeasonYearChar123GroupChar125TablesChar123HomeawayChar125Route
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/teams'
     | '/'
+    | '/season/$year'
     | '/team/$teamId'
     | '/teams/compare'
     | '/teams/selection'
@@ -193,12 +295,22 @@ export interface FileRouteTypes {
     | '/seasons'
     | '/teams/'
     | '/unauthorized'
+    | '/season/$year/{-$group}'
     | '/team/$teamId/$seasonId'
     | '/team/$teamId/seasons'
     | '/team/$teamId/'
+    | '/season/$year/playoff/stats'
+    | '/season/$year/{-$group}/development'
+    | '/season/$year/{-$group}/games'
+    | '/season/$year/{-$group}/interval'
+    | '/season/$year/{-$group}/stats'
+    | '/season/$year/{-$group}/tables'
+    | '/season/$year/playoff'
+    | '/season/$year/{-$group}/tables/{-$homeaway}'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/season/$year'
     | '/teams/compare'
     | '/teams/selection'
     | '/teams/map'
@@ -209,14 +321,24 @@ export interface FileRouteTypes {
     | '/seasons'
     | '/teams'
     | '/unauthorized'
+    | '/season/$year/{-$group}'
     | '/team/$teamId/$seasonId'
     | '/team/$teamId/seasons'
     | '/team/$teamId'
+    | '/season/$year/playoff/stats'
+    | '/season/$year/{-$group}/development'
+    | '/season/$year/{-$group}/games'
+    | '/season/$year/{-$group}/interval'
+    | '/season/$year/{-$group}/stats'
+    | '/season/$year/{-$group}/tables'
+    | '/season/$year/playoff'
+    | '/season/$year/{-$group}/tables/{-$homeaway}'
   id:
     | '__root__'
     | '/_layout'
     | '/_layout/teams'
     | '/_layout/'
+    | '/_layout/season/$year'
     | '/_layout/team/$teamId'
     | '/_layout/teams/compare'
     | '/_layout/teams/selection'
@@ -228,9 +350,18 @@ export interface FileRouteTypes {
     | '/_layout/seasons/'
     | '/_layout/teams/'
     | '/_layout/unauthorized/'
+    | '/_layout/season/$year/{-$group}'
     | '/_layout/team/$teamId/$seasonId'
     | '/_layout/team/$teamId/seasons'
     | '/_layout/team/$teamId/'
+    | '/_layout/season/$year/playoff/stats'
+    | '/_layout/season/$year/{-$group}/development'
+    | '/_layout/season/$year/{-$group}/games'
+    | '/_layout/season/$year/{-$group}/interval'
+    | '/_layout/season/$year/{-$group}/stats'
+    | '/_layout/season/$year/{-$group}/tables'
+    | '/_layout/season/$year/playoff/'
+    | '/_layout/season/$year/{-$group}/tables/{-$homeaway}'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -337,6 +468,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutTeamTeamIdRouteImport
       parentRoute: typeof LayoutRoute
     }
+    '/_layout/season/$year': {
+      id: '/_layout/season/$year'
+      path: '/season/$year'
+      fullPath: '/season/$year'
+      preLoaderRoute: typeof LayoutSeasonYearRouteImport
+      parentRoute: typeof LayoutRoute
+    }
     '/_layout/team/$teamId/': {
       id: '/_layout/team/$teamId/'
       path: '/'
@@ -357,6 +495,69 @@ declare module '@tanstack/react-router' {
       fullPath: '/team/$teamId/$seasonId'
       preLoaderRoute: typeof LayoutTeamTeamIdSeasonIdRouteImport
       parentRoute: typeof LayoutTeamTeamIdRoute
+    }
+    '/_layout/season/$year/{-$group}': {
+      id: '/_layout/season/$year/{-$group}'
+      path: '/{-$group}'
+      fullPath: '/season/$year/{-$group}'
+      preLoaderRoute: typeof LayoutSeasonYearChar123GroupChar125RouteImport
+      parentRoute: typeof LayoutSeasonYearRoute
+    }
+    '/_layout/season/$year/playoff/': {
+      id: '/_layout/season/$year/playoff/'
+      path: '/playoff'
+      fullPath: '/season/$year/playoff'
+      preLoaderRoute: typeof LayoutSeasonYearPlayoffIndexRouteImport
+      parentRoute: typeof LayoutSeasonYearRoute
+    }
+    '/_layout/season/$year/{-$group}/tables': {
+      id: '/_layout/season/$year/{-$group}/tables'
+      path: '/tables'
+      fullPath: '/season/$year/{-$group}/tables'
+      preLoaderRoute: typeof LayoutSeasonYearChar123GroupChar125TablesRouteImport
+      parentRoute: typeof LayoutSeasonYearChar123GroupChar125Route
+    }
+    '/_layout/season/$year/{-$group}/stats': {
+      id: '/_layout/season/$year/{-$group}/stats'
+      path: '/stats'
+      fullPath: '/season/$year/{-$group}/stats'
+      preLoaderRoute: typeof LayoutSeasonYearChar123GroupChar125StatsRouteImport
+      parentRoute: typeof LayoutSeasonYearChar123GroupChar125Route
+    }
+    '/_layout/season/$year/{-$group}/interval': {
+      id: '/_layout/season/$year/{-$group}/interval'
+      path: '/interval'
+      fullPath: '/season/$year/{-$group}/interval'
+      preLoaderRoute: typeof LayoutSeasonYearChar123GroupChar125IntervalRouteImport
+      parentRoute: typeof LayoutSeasonYearChar123GroupChar125Route
+    }
+    '/_layout/season/$year/{-$group}/games': {
+      id: '/_layout/season/$year/{-$group}/games'
+      path: '/games'
+      fullPath: '/season/$year/{-$group}/games'
+      preLoaderRoute: typeof LayoutSeasonYearChar123GroupChar125GamesRouteImport
+      parentRoute: typeof LayoutSeasonYearChar123GroupChar125Route
+    }
+    '/_layout/season/$year/{-$group}/development': {
+      id: '/_layout/season/$year/{-$group}/development'
+      path: '/development'
+      fullPath: '/season/$year/{-$group}/development'
+      preLoaderRoute: typeof LayoutSeasonYearChar123GroupChar125DevelopmentRouteImport
+      parentRoute: typeof LayoutSeasonYearChar123GroupChar125Route
+    }
+    '/_layout/season/$year/playoff/stats': {
+      id: '/_layout/season/$year/playoff/stats'
+      path: '/playoff/stats'
+      fullPath: '/season/$year/playoff/stats'
+      preLoaderRoute: typeof LayoutSeasonYearPlayoffStatsRouteImport
+      parentRoute: typeof LayoutSeasonYearRoute
+    }
+    '/_layout/season/$year/{-$group}/tables/{-$homeaway}': {
+      id: '/_layout/season/$year/{-$group}/tables/{-$homeaway}'
+      path: '/{-$homeaway}'
+      fullPath: '/season/$year/{-$group}/tables/{-$homeaway}'
+      preLoaderRoute: typeof LayoutSeasonYearChar123GroupChar125TablesChar123HomeawayChar125RouteImport
+      parentRoute: typeof LayoutSeasonYearChar123GroupChar125TablesRoute
     }
   }
 }
@@ -379,6 +580,64 @@ const LayoutTeamsRouteWithChildren = LayoutTeamsRoute._addFileChildren(
   LayoutTeamsRouteChildren,
 )
 
+interface LayoutSeasonYearChar123GroupChar125TablesRouteChildren {
+  LayoutSeasonYearChar123GroupChar125TablesChar123HomeawayChar125Route: typeof LayoutSeasonYearChar123GroupChar125TablesChar123HomeawayChar125Route
+}
+
+const LayoutSeasonYearChar123GroupChar125TablesRouteChildren: LayoutSeasonYearChar123GroupChar125TablesRouteChildren =
+  {
+    LayoutSeasonYearChar123GroupChar125TablesChar123HomeawayChar125Route:
+      LayoutSeasonYearChar123GroupChar125TablesChar123HomeawayChar125Route,
+  }
+
+const LayoutSeasonYearChar123GroupChar125TablesRouteWithChildren =
+  LayoutSeasonYearChar123GroupChar125TablesRoute._addFileChildren(
+    LayoutSeasonYearChar123GroupChar125TablesRouteChildren,
+  )
+
+interface LayoutSeasonYearChar123GroupChar125RouteChildren {
+  LayoutSeasonYearChar123GroupChar125DevelopmentRoute: typeof LayoutSeasonYearChar123GroupChar125DevelopmentRoute
+  LayoutSeasonYearChar123GroupChar125GamesRoute: typeof LayoutSeasonYearChar123GroupChar125GamesRoute
+  LayoutSeasonYearChar123GroupChar125IntervalRoute: typeof LayoutSeasonYearChar123GroupChar125IntervalRoute
+  LayoutSeasonYearChar123GroupChar125StatsRoute: typeof LayoutSeasonYearChar123GroupChar125StatsRoute
+  LayoutSeasonYearChar123GroupChar125TablesRoute: typeof LayoutSeasonYearChar123GroupChar125TablesRouteWithChildren
+}
+
+const LayoutSeasonYearChar123GroupChar125RouteChildren: LayoutSeasonYearChar123GroupChar125RouteChildren =
+  {
+    LayoutSeasonYearChar123GroupChar125DevelopmentRoute:
+      LayoutSeasonYearChar123GroupChar125DevelopmentRoute,
+    LayoutSeasonYearChar123GroupChar125GamesRoute:
+      LayoutSeasonYearChar123GroupChar125GamesRoute,
+    LayoutSeasonYearChar123GroupChar125IntervalRoute:
+      LayoutSeasonYearChar123GroupChar125IntervalRoute,
+    LayoutSeasonYearChar123GroupChar125StatsRoute:
+      LayoutSeasonYearChar123GroupChar125StatsRoute,
+    LayoutSeasonYearChar123GroupChar125TablesRoute:
+      LayoutSeasonYearChar123GroupChar125TablesRouteWithChildren,
+  }
+
+const LayoutSeasonYearChar123GroupChar125RouteWithChildren =
+  LayoutSeasonYearChar123GroupChar125Route._addFileChildren(
+    LayoutSeasonYearChar123GroupChar125RouteChildren,
+  )
+
+interface LayoutSeasonYearRouteChildren {
+  LayoutSeasonYearChar123GroupChar125Route: typeof LayoutSeasonYearChar123GroupChar125RouteWithChildren
+  LayoutSeasonYearPlayoffStatsRoute: typeof LayoutSeasonYearPlayoffStatsRoute
+  LayoutSeasonYearPlayoffIndexRoute: typeof LayoutSeasonYearPlayoffIndexRoute
+}
+
+const LayoutSeasonYearRouteChildren: LayoutSeasonYearRouteChildren = {
+  LayoutSeasonYearChar123GroupChar125Route:
+    LayoutSeasonYearChar123GroupChar125RouteWithChildren,
+  LayoutSeasonYearPlayoffStatsRoute: LayoutSeasonYearPlayoffStatsRoute,
+  LayoutSeasonYearPlayoffIndexRoute: LayoutSeasonYearPlayoffIndexRoute,
+}
+
+const LayoutSeasonYearRouteWithChildren =
+  LayoutSeasonYearRoute._addFileChildren(LayoutSeasonYearRouteChildren)
+
 interface LayoutTeamTeamIdRouteChildren {
   LayoutTeamTeamIdSeasonIdRoute: typeof LayoutTeamTeamIdSeasonIdRoute
   LayoutTeamTeamIdSeasonsRoute: typeof LayoutTeamTeamIdSeasonsRoute
@@ -397,6 +656,7 @@ const LayoutTeamTeamIdRouteWithChildren =
 interface LayoutRouteChildren {
   LayoutTeamsRoute: typeof LayoutTeamsRouteWithChildren
   LayoutIndexRoute: typeof LayoutIndexRoute
+  LayoutSeasonYearRoute: typeof LayoutSeasonYearRouteWithChildren
   LayoutTeamTeamIdRoute: typeof LayoutTeamTeamIdRouteWithChildren
   LayoutAboutIndexRoute: typeof LayoutAboutIndexRoute
   LayoutDashboardIndexRoute: typeof LayoutDashboardIndexRoute
@@ -409,6 +669,7 @@ interface LayoutRouteChildren {
 const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutTeamsRoute: LayoutTeamsRouteWithChildren,
   LayoutIndexRoute: LayoutIndexRoute,
+  LayoutSeasonYearRoute: LayoutSeasonYearRouteWithChildren,
   LayoutTeamTeamIdRoute: LayoutTeamTeamIdRouteWithChildren,
   LayoutAboutIndexRoute: LayoutAboutIndexRoute,
   LayoutDashboardIndexRoute: LayoutDashboardIndexRoute,
