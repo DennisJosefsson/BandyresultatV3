@@ -26,13 +26,22 @@ export type Game = {
   }
 }
 
-export type GroupGames = {
+export type GameGroupBase<T> = {
   group: string
   name: string
-  comment: string
+  comment: string | null
   level: number
   dates: {
     date: string
-    games: Game[]
+    games: T
   }[]
+}
+
+export type GroupGames = GameGroupBase<Game[]>
+
+export type Games = {
+  played: GameGroupBase<Omit<Game, 'season'>[]>
+  unplayed: GameGroupBase<Omit<Game, 'season'>[]>
+  playedLength: number
+  unplayedLength: number
 }
