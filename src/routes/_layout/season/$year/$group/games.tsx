@@ -3,7 +3,7 @@ import { createFileRoute, notFound } from '@tanstack/react-router'
 import { SeasonGames } from '../-components/SeasonGames'
 import { getGames } from '../-functions/getGames'
 
-export const Route = createFileRoute('/_layout/season/$year/{-$group}/games')({
+export const Route = createFileRoute('/_layout/season/$year/$group/games')({
   loaderDeps: ({ search: { women } }) => ({ women }),
   loader: async ({ deps, params }) => {
     if (!params.group) throw notFound()
