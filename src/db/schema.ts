@@ -1,5 +1,6 @@
 import { relations, sql } from 'drizzle-orm'
 import {
+  AnyPgColumn,
   boolean,
   customType,
   date,
@@ -197,6 +198,11 @@ export const series = pgTable(
     bonusPoints: varchar('bonus_points'),
     comment: text(),
     level: decimalNumber().notNull(),
+    hasMix: boolean('has_mix'),
+    parentSerieId: integer('parent_serie_id').references(
+      (): AnyPgColumn => series.serieId,
+    ),
+    hasStatic: boolean('has_static').default(false),
   },
   (table) => [
     foreignKey({
@@ -375,6 +381,7 @@ export const teamseries = pgTable(
     teamseriesId: serial('teamseries_id').primaryKey().notNull(),
     teamId: integer('team_id').notNull(),
     serieId: integer('serie_id').notNull(),
+    bonusPoints: integer('bonus_points'),
   },
   (table) => [
     foreignKey({
