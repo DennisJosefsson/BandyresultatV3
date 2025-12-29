@@ -1,56 +1,65 @@
 import { TabBarInline } from '@/components/TabBar/TabBar'
 import { Button } from '@/components/ui/button'
-import { Link, useNavigate, useSearch } from '@tanstack/react-router'
-import { CalendarIcon, ListIcon, MarsIcon, VenusIcon } from 'lucide-react'
+import { getRouteApi, Link, useParams, useSearch } from '@tanstack/react-router'
+import {
+  CalendarIcon,
+  ListIcon,
+  MarsIcon,
+  TrophyIcon,
+  VenusIcon,
+} from 'lucide-react'
 
 import { useMediaQuery } from 'usehooks-ts'
 
+const route = getRouteApi('/_layout/season/$year')
+
 const SeasonTabBar = () => {
   const matches = useMediaQuery('(min-width: 840px)')
-  const navigate = useNavigate()
+  //const navigate = useNavigate()
   const women = useSearch({
     from: '/_layout',
     select: (search) => search.women,
   })
-
+  const params = useParams({ strict: false })
   //   const pathname = useLocation({
   //     select: (location) => location.pathname,
   //   })
+  const data = route.useLoaderData()
 
+  const groupFromData = data.length > 0 ? data[0].group : 'elitserien'
+
+  const group = params.group ? params.group : groupFromData
+  const table = params.table ?? 'all'
   const seasonTabBarObject = {
     gender: (
-      <Button
-        onClick={() =>
-          navigate({
-            to: '.',
-            search: { women: !women },
-            params: (prev) => ({ ...prev }),
-            replace: false,
-          })
-        }
-        size={matches ? 'default' : 'xs'}
+      <Link
+        to="."
+        params={(prev) => ({ ...prev })}
+        search={(prev) => ({ ...prev, women: !women })}
       >
-        {women ? (
-          matches ? (
-            'Herrar'
+        <Button size={matches ? 'default' : 'xs'}>
+          {women ? (
+            matches ? (
+              'Herrar'
+            ) : (
+              <MarsIcon />
+            )
+          ) : matches ? (
+            'Damer'
           ) : (
-            <MarsIcon />
-          )
-        ) : matches ? (
-          'Damer'
-        ) : (
-          <VenusIcon />
-        )}
-      </Button>
+            <VenusIcon />
+          )}
+        </Button>
+      </Link>
     ),
     tabBarArray: [
       {
         tab: (
           <Link
             from="/season/$year"
-            to="/season/$year/{-$group}/games"
-            params={(prev) => ({ ...prev })}
-            search={(prev) => ({ ...prev })}
+            to="/season/$year/$group/games"
+            params={(prev) => ({ year: prev.year, group: group })}
+            search={{ women }}
             activeOptions={{ includeSearch: false }}
           >
             {({ isActive }) => {
@@ -72,8 +81,8 @@ const SeasonTabBar = () => {
         tab: (
           <Link
             from="/season/$year"
-            to="/season/$year/{-$group}/tables"
-            params={(prev) => ({ ...prev })}
+            to="/season/$year/$group/tables/$table"
+            params={(prev) => ({ year: prev.year, group, table })}
             search={(prev) => ({ ...prev })}
             activeOptions={{ includeSearch: false }}
           >
@@ -92,30 +101,30 @@ const SeasonTabBar = () => {
 
         tabName: 'tables',
       },
-      //   {
-      //     tab: (
-      //       <Link
-      //         from="/season/$year"
-      //         to="/season/$year/playoff"
-      //         params={{ year: year }}
-      //         search={(prev) => ({ ...prev })}
-      //         activeOptions={{ includeSearch: false }}
-      //       >
-      //         {({ isActive }) => {
-      //           return (
-      //             <Button
-      //               variant={isActive ? 'default' : 'outline'}
-      //               size={matches ? 'default' : 'xs'}
-      //             >
-      //               {matches ? 'Slutspel' : <TrophyIcon />}
-      //             </Button>
-      //           )
-      //         }}
-      //       </Link>
-      //     ),
+      {
+        tab: (
+          <Link
+            from="/season/$year"
+            to="/season/$year/playoff"
+            params={(prev) => ({ year: prev.year })}
+            search={(prev) => ({ ...prev })}
+            activeOptions={{ includeSearch: false }}
+          >
+            {({ isActive }) => {
+              return (
+                <Button
+                  variant={isActive ? 'default' : 'outline'}
+                  size={matches ? 'default' : 'xs'}
+                >
+                  {matches ? 'Slutspel' : <TrophyIcon />}
+                </Button>
+              )
+            }}
+          </Link>
+        ),
 
-      //     tabName: 'playoff',
-      //   },
+        tabName: 'playoff',
+      },
       //   {
       //     tab: (
       //       <Link

@@ -20,7 +20,9 @@ const SeasonHeader = () => {
   return (
     <div className="mb-1 flex items-center justify-center gap-10 pt-2 sm:mb-2 xl:mb-4">
       <Link
-        to="."
+        to={
+          year >= firstSeason + 1 && year < 1931 ? '/season/$year/playoff' : '.'
+        }
         search={(prev) => ({ ...prev })}
         params={{
           year: year === firstSeason ? lastSeason : year - 1,
@@ -35,7 +37,7 @@ const SeasonHeader = () => {
         {year > 1963 ? `${year - 1}/${year}` : `${year}`}
       </span>
       <Link
-        to="."
+        to={year === lastSeason || year < 1931 ? '/season/$year/playoff' : '.'}
         search={{ women }}
         params={{
           year: year === lastSeason ? firstSeason : year + 1,
