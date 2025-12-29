@@ -1,7 +1,7 @@
 import { getRouteApi } from '@tanstack/react-router'
 import GamesList from './Games/GamesList'
 
-const route = getRouteApi('/_layout/season/$year/{-$group}/games')
+const route = getRouteApi('/_layout/season/$year/$group/games')
 
 export const SeasonGames = () => {
   const games = route.useLoaderData({ select: (s) => s.games })

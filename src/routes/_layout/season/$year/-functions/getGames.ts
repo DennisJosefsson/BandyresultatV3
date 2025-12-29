@@ -6,7 +6,7 @@ import { seasonIdCheck } from '@/lib/utils/utils'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
 import { zodValidator } from '@tanstack/zod-adapter'
-import { and, eq, getTableColumns, SQL } from 'drizzle-orm'
+import { and, asc, eq, getTableColumns, inArray, SQL } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
 import { sortGames } from './gameSortFunction'
 
@@ -67,9 +67,10 @@ export const getGames = createServerFn({ method: 'GET' })
         and(
           eq(seasons.year, seasonYear),
           eq(games.women, women),
-          eq(games.group, group),
+          inArray(games.group, [group, 'mix']),
         ),
       )
+      .orderBy(asc(games.date))
 
     if (!gamesArray || gamesArray.length === 0) {
       return { status: 404, message: 'Inga matcher än denna säsong.' }

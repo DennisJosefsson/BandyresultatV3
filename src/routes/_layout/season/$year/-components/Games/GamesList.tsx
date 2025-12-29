@@ -8,7 +8,7 @@ type GameListProps = {
   title: string
 }
 
-const route = getRouteApi('/_layout/season/$year/{-$group}/games')
+const route = getRouteApi('/_layout/season/$year/$group/games')
 
 const GamesList = ({ group, title }: GameListProps) => {
   const year = route.useParams({
@@ -31,7 +31,7 @@ const GamesList = ({ group, title }: GameListProps) => {
               {group.name}
             </h3>
             <Link
-              from="/season/$year/{-$group}/games"
+              from="/season/$year/$group/games"
               params={{ year: year, group: group.group }}
               hash={group.group}
               search={(prev) => ({ ...prev })}
@@ -57,7 +57,7 @@ const GamesList = ({ group, title }: GameListProps) => {
                         <Date>{date.date}</Date>
                       </h3>
                       <Link
-                        from="/season/$year/{-$group}/games"
+                        from="/season/$year/$group/games"
                         params={{ year: year, group: group.group }}
                         hash={`${group.group}-${date.date}`}
                         search={(prev) => ({ ...prev })}

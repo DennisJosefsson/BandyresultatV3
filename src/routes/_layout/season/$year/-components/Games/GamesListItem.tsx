@@ -11,7 +11,7 @@ type GamesListItemProps = {
 
 const GamesListItem = ({ game }: GamesListItemProps) => {
   const { favTeams } = useFavTeam()
-  const navigate = useNavigate({ from: '/season/$year/{-$group}/games' })
+  const navigate = useNavigate({ from: '/season/$year/$group/games' })
   const matches = useMediaQuery('(min-width: 768px)')
 
   const onClickHandler = () => {
