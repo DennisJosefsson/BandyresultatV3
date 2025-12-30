@@ -1,5 +1,6 @@
 import { zd } from '@/lib/utils/zod'
 import { createFileRoute, notFound, redirect } from '@tanstack/react-router'
+import SeasonTables from '../../-components/SeasonTables'
 import { getTables } from '../../-functions/getTables'
 
 export const Route = createFileRoute(
@@ -37,20 +38,26 @@ export const Route = createFileRoute(
     })
     if (!data) throw new Error('Missing data')
     if (data.status === 404) {
-      throw notFound({ data: data.message })
+      throw notFound({
+        data: data.message,
+        routeId: '/_layout/season/$year/$group/',
+      })
     }
     return data
   },
-  component: RouteComponent,
+  component: SeasonTables,
+  notFoundComponent(props) {
+    if (props.data && typeof props.data === 'string') {
+      return (
+        <div className="mt-4 flex flex-row justify-center">
+          <p>{props.data}</p>
+        </div>
+      )
+    }
+    return (
+      <div className="mt-4 flex flex-row justify-center">
+        <p>Något gick tyvärr fel.</p>
+      </div>
+    )
+  },
 })
-
-function RouteComponent() {
-  const data = Route.useLoaderData()
-  if (data.tables.length === 0) return <div>Ingen data</div>
-  return (
-    <div>
-      {data.tables[0].team.name} {data.tables[0].totalGames} matcher{' '}
-      {data.tables[0].totalPoints} poäng
-    </div>
-  )
-}
