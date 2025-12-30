@@ -107,6 +107,11 @@ export const getUnionedTables = async ({ serie, table }: FunctionProps) => {
             inArray(teamgames.teamId, teamArray),
             eq(teamgames.serieId, serie.parentSerieId),
             eq(teamgames.played, true),
+            table === 'home'
+              ? eq(teamgames.homeGame, true)
+              : table === 'away'
+                ? eq(teamgames.homeGame, false)
+                : undefined,
           ),
         )
         .groupBy(teamgames.teamId)
@@ -138,7 +143,15 @@ export const getUnionedTables = async ({ serie, table }: FunctionProps) => {
     })
     .from(teamgames)
     .where(
-      and(eq(teamgames.serieId, serie.serieId), eq(teamgames.played, true)),
+      and(
+        eq(teamgames.serieId, serie.serieId),
+        eq(teamgames.played, true),
+        table === 'home'
+          ? eq(teamgames.homeGame, true)
+          : table === 'away'
+            ? eq(teamgames.homeGame, false)
+            : undefined,
+      ),
     )
     .groupBy(teamgames.teamId)
 
@@ -173,6 +186,11 @@ export const getUnionedTables = async ({ serie, table }: FunctionProps) => {
         eq(teamgames.seasonId, serie.seasonId),
         eq(teamgames.played, true),
         inArray(teamgames.teamId, teamArray),
+        table === 'home'
+          ? eq(teamgames.homeGame, true)
+          : table === 'away'
+            ? eq(teamgames.homeGame, false)
+            : undefined,
       ),
     )
     .groupBy(teamgames.teamId)
@@ -233,69 +251,3 @@ export const getUnionedTables = async ({ serie, table }: FunctionProps) => {
 
   return result
 }
-
-// export const getSingleTable = async ({ serie }: FunctionProps) => {
-//   const result = await db
-
-//     .select({
-//       teamId: teamgames.teamId,
-//       totalGames: count(teamgames.teamGameId).as('total_games'),
-//       totalPoints: sql<number>`sum(teamgames.points) + teamseries.bonus_points`
-//         .mapWith(Number)
-//         .as('total_points'),
-//       totalGoalsScored: sum(teamgames.goalsScored)
-//         .mapWith(Number)
-//         .as('total_goals_scored') as unknown as SQL<number>,
-//       totalGoalsConceded: sum(teamgames.goalsConceded)
-//         .mapWith(Number)
-//         .as('total_goals_conceded') as unknown as SQL<number>,
-//       totalGoalDifference: sum(teamgames.goalDifference)
-//         .mapWith(Number)
-//         .as('total_goal_difference') as unknown as SQL<number>,
-//       totalWins: sql<number>`cast(count(*) filter (where win) as int)`.as(
-//         'totalWins',
-//       ),
-//       totalDraws: sql<number>`cast(count(*) filter (where draw) as int)`.as(
-//         'totalDraws',
-//       ),
-//       totalLost: sql<number>`cast(count(*) filter (where lost) as int)`.as(
-//         'totalLost',
-//       ),
-//       team: {
-//         teamId: teams.teamId,
-//         name: teams.name,
-//         shortName: teams.shortName,
-//         casualName: teams.casualName,
-//       } as unknown as SQL<{
-//         teamId: number
-//         name: string
-//         shortName: string
-//         casualName: string
-//       }>,
-//     })
-//     .from(teamgames)
-//     .leftJoin(teams, eq(teamgames.teamId, teams.teamId))
-//     .leftJoin(
-//       teamseries,
-//       and(
-//         eq(teamgames.teamId, teamseries.teamId),
-//         eq(teamgames.serieId, teamseries.serieId),
-//       ),
-//     )
-//     .where(eq(teamgames.serieId, serie.serieId))
-//     .groupBy(
-//       teamgames.teamId,
-//       teams.teamId,
-//       teams.name,
-//       teams.shortName,
-//       teams.casualName,
-//       teamseries.bonusPoints,
-//     )
-//     .orderBy(
-//       desc(sql`total_points`),
-//       desc(sql`total_goal_difference`),
-//       desc(sql`total_goals_scored`),
-//     )
-
-//   return result
-// }
