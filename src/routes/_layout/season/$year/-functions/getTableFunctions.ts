@@ -36,7 +36,7 @@ export const getUnionedTables = async ({ serie, table }: FunctionProps) => {
       .leftJoin(teams, eq(tables.teamId, teams.teamId))
       .where(eq(tables.serieId, serie.serieId))
       .orderBy(asc(tables.position))
-
+    serie.comment = 'Serien har ej tabeller för hemma-/bortamatcher.'
     return result
   }
 
