@@ -18,20 +18,16 @@ export const Route = createFileRoute('/_layout/season/$year/$group/games')({
   component: SeasonGames,
   pendingComponent: () => <Loading page="seasonGamesList" />,
   notFoundComponent(props) {
-    if (
-      typeof props === 'object' &&
-      props.data &&
-      typeof props.data === 'string'
-    ) {
+    if (props.data && typeof props.data === 'string') {
       return (
-        <div className="mt-2 flex flex-row justify-center">
+        <div className="mt-4 flex flex-row justify-center">
           <p>{props.data}</p>
         </div>
       )
     }
     return (
-      <div className="mt-2 flex flex-row justify-center">
-        <p>Något gick fel.</p>
+      <div className="mt-4 flex flex-row justify-center">
+        <p>Något gick tyvärr fel.</p>
       </div>
     )
   },
