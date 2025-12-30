@@ -59,19 +59,46 @@ function Season() {
 
   if (data.status === 204) {
     return (
-      <div className="font-inter text-foreground mx-auto mt-4 grid place-items-center py-5 text-sm font-bold md:text-base">
-        <p className="mx-10 text-center">
-          Första säsongen för damernas högsta serie var{' '}
-          <Link
-            to={'/season/$year'}
-            params={{ year: 1973 }}
-            search={{ women: true }}
-            className="font-bold"
-          >
-            1972/73
-          </Link>
-          .
-        </p>
+      <div className="font-inter text-foreground flex min-h-screen flex-col px-2">
+        <Card className="mb-2">
+          <CardContent className="max-w-full">
+            <SeasonHeader />
+            <SeasonTabBar />
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="mt-2 min-h-screen p-2">
+            <CatchBoundary
+              getResetKey={() => 'reset'}
+              onCatch={(error) => {
+                console.error(error)
+              }}
+              errorComponent={({ error, reset }) => (
+                <SimpleErrorComponent
+                  id="Enskild säsong"
+                  error={error}
+                  reset={reset}
+                />
+              )}
+            >
+              <div className="font-inter text-foreground mx-auto mt-4 grid place-items-center py-5 text-sm font-bold md:text-base">
+                <p className="mx-10 text-center">
+                  Första säsongen för damernas högsta serie var{' '}
+                  <Link
+                    to={'/season/$year'}
+                    params={{ year: 1973 }}
+                    search={{ women: true }}
+                    className="font-bold"
+                  >
+                    1972/73
+                  </Link>
+                  .
+                </p>
+              </div>
+            </CatchBoundary>
+          </CardContent>
+        </Card>
       </div>
     )
   }
