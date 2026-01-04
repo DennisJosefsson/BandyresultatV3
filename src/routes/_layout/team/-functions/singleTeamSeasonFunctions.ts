@@ -85,7 +85,7 @@ export const getTeamSeasonStaticTables = async ({
   const seriesData = await db
     .select({
       name: series.serieName,
-      group: series.serieGroupCode,
+      group: series.group,
       comment: series.comment,
       serieStructure: series.serieStructure,
       level: series.level,
@@ -94,7 +94,7 @@ export const getTeamSeasonStaticTables = async ({
     .leftJoin(seasons, eq(seasons.seasonId, series.seasonId))
     .where(
       and(
-        inArray(series.serieGroupCode, groupArray),
+        inArray(series.group, groupArray),
         eq(seasons.year, seasonYear),
         eq(seasons.women, women),
       ),
@@ -245,7 +245,7 @@ export const getTeamSeasonTables = async ({
   const seriesData = await db
     .select({
       name: series.serieName,
-      group: series.serieGroupCode,
+      group: series.group,
       comment: series.comment,
       serieStructure: series.serieStructure,
       level: series.level,
@@ -256,7 +256,7 @@ export const getTeamSeasonTables = async ({
     .leftJoin(seasons, eq(seasons.seasonId, series.seasonId))
     .where(
       and(
-        inArray(series.serieGroupCode, groupArray),
+        inArray(series.group, groupArray),
         eq(seasons.year, seasonYear),
         eq(seasons.women, women),
       ),
@@ -363,8 +363,8 @@ export const getTeamSeasonTables = async ({
 type GetSeasonGamesProps = {
   gamesArray: Game[]
   seriesArray: {
-    serieCategory: string
-    serieGroupCode: string
+    category: string
+    group: string
     comment: string | null
     name: string
     level: number
@@ -389,7 +389,7 @@ export const getSeasonGames = ({
 }: GetSeasonGamesProps) => {
   const seriesData = seriesArray.map((serie) => {
     return {
-      group: serie.serieGroupCode,
+      group: serie.group,
       comment: serie.comment,
       name: serie.name,
       level: serie.level,

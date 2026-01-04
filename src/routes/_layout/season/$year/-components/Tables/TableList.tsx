@@ -23,7 +23,7 @@ const TableList = () => {
   return (
     <div className="mb-6">
       <div
-        id={data.serie.serieGroupCode}
+        id={data.serie.group}
         className="group mb-0.5 flex flex-row items-center gap-1"
       >
         <h2 className="text-sm font-bold tracking-wide lg:text-base xl:text-xl">

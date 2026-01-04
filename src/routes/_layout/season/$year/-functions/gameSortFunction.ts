@@ -50,7 +50,7 @@ const gameSortFunction = ({
   })
 
   return {
-    group: serie.serieGroupCode,
+    group: serie.group,
     name: serie.serieName,
     comment: serie.comment,
     level: serie.level,

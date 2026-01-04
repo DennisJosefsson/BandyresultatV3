@@ -29,7 +29,7 @@ export const getGroups = createServerFn({ method: 'GET' })
     if (!seasonYear) throw new Error('Error!')
     const groups = await db
       .select({
-        group: series.serieGroupCode,
+        group: series.group,
         name: series.serieName,
         serieId: series.serieId,
       })
@@ -39,11 +39,11 @@ export const getGroups = createServerFn({ method: 'GET' })
         and(
           eq(seasons.year, seasonYear),
           eq(seasons.women, women),
-          inArray(series.serieCategory, ['regular', 'qualification']),
-          ne(series.serieGroupCode, 'mix'),
+          inArray(series.category, ['regular', 'qualification']),
+          ne(series.group, 'mix'),
         ),
       )
-      .orderBy(asc(series.level), asc(series.serieCategory))
+      .orderBy(asc(series.level), asc(series.category))
     return {
       status: 200,
       groups: groups.sort(

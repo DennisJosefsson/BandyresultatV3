@@ -124,8 +124,8 @@ export const getSingleTeamSeason = createServerFn({ method: 'GET' })
 
       const seriesForTeam = await db
         .select({
-          serieCategory: series.serieCategory,
-          serieGroupCode: series.serieGroupCode,
+          category: series.category,
+          group: series.group,
           comment: series.comment,
           name: series.serieName,
           level: series.level,
@@ -138,9 +138,9 @@ export const getSingleTeamSeason = createServerFn({ method: 'GET' })
 
       const tableSeriesArray = seriesForTeam
         .filter((serie) =>
-          ['regular', 'qualification'].includes(serie.serieCategory),
+          ['regular', 'qualification'].includes(serie.category),
         )
-        .map((serie) => serie.serieGroupCode)
+        .map((serie) => serie.group)
 
       const staticTables = await getTeamSeasonStaticTables({
         seasonYear,

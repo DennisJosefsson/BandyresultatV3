@@ -32,7 +32,7 @@ export const validateGroup = createServerFn({ method: 'GET' })
         .leftJoin(seasons, eq(seasons.seasonId, series.seasonId))
         .where(
           and(
-            eq(series.serieGroupCode, group),
+            eq(series.group, group),
             eq(seasons.women, women),
             eq(seasons.year, seasonYear),
           ),

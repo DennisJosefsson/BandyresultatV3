@@ -18,7 +18,7 @@ export const getPaginatedSeasons = createServerFn({ method: 'GET' })
           seasonId: series.seasonId,
           year: seasons.year,
           women: seasons.women,
-          group: series.serieGroupCode,
+          group: series.group,
           rankedGroup:
             sql<number>`rank() over (partition by series.season_id, seasons.women order by series.serie_group_code)`
               .mapWith(Number)
@@ -26,7 +26,7 @@ export const getPaginatedSeasons = createServerFn({ method: 'GET' })
         })
         .from(series)
         .leftJoin(seasons, eq(seasons.seasonId, series.seasonId))
-        .where(and(eq(series.level, 1), eq(series.serieCategory, 'regular'))),
+        .where(and(eq(series.level, 1), eq(series.category, 'regular'))),
     )
 
     const groups = await db

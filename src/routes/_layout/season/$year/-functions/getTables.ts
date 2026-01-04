@@ -66,7 +66,7 @@ export const getTables = createServerFn({ method: 'GET' })
             and(
               eq(seasons.women, women),
               eq(seasons.year, seasonYear),
-              eq(series.serieGroupCode, group),
+              eq(series.group, group),
             ),
           )
           .then((res) => {

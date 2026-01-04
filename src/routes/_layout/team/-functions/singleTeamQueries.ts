@@ -130,7 +130,7 @@ export const getStrings = async ({ team, allSeasons }: GetStringsProps) => {
       and(
         eq(teamseries.teamId, TEAMID),
         eq(series.level, 1),
-        eq(series.serieCategory, 'regular'),
+        eq(series.category, 'regular'),
       ),
     )
 
@@ -149,14 +149,14 @@ export const getStrings = async ({ team, allSeasons }: GetStringsProps) => {
         eq(teamseries.teamId, TEAMID),
         eq(series.level, 1),
         or(
-          inArray(series.serieCategory, [
+          inArray(series.category, [
             'regular',
             'eigth',
             'quarter',
             'semi',
             'final',
           ]),
-          inArray(series.serieGroupCode, ['SlutspelA', 'SlutspelB']),
+          inArray(series.group, ['SlutspelA', 'SlutspelB']),
         ),
       ),
     )
@@ -180,14 +180,14 @@ export const getStrings = async ({ team, allSeasons }: GetStringsProps) => {
         eq(teamseries.teamId, TEAMID),
         eq(series.level, 1),
         or(
-          inArray(series.serieCategory, [
+          inArray(series.category, [
             'regular',
             'eigth',
             'quarter',
             'semi',
             'final',
           ]),
-          inArray(series.serieGroupCode, ['SlutspelA', 'SlutspelB']),
+          inArray(series.group, ['SlutspelA', 'SlutspelB']),
         ),
       ),
     )
