@@ -190,8 +190,8 @@ export const series = pgTable(
   'series',
   {
     serieId: serial('serie_id').primaryKey().notNull(),
-    serieGroupCode: varchar('serie_group_code').notNull(),
-    serieCategory: varchar('serie_category').notNull(),
+    group: varchar('serie_group_code').notNull(),
+    category: varchar('serie_category').notNull(),
     serieName: varchar('serie_name').notNull(),
     serieStructure: integer('serie_structure').array(),
     seasonId: integer('season_id').notNull(),
@@ -203,6 +203,8 @@ export const series = pgTable(
       (): AnyPgColumn => series.serieId,
     ),
     hasStatic: boolean('has_static').default(false),
+    hasParent: boolean('has_parent').default(false),
+    allParentGmes: boolean('all_parent_games').default(false),
   },
   (table) => [
     foreignKey({
@@ -392,6 +394,27 @@ export const teamseries = pgTable(
   ],
 )
 
+export const parentchildseries = pgTable(
+  'parentchildseries',
+  {
+    id: serial('id').primaryKey().notNull(),
+    parentId: integer('parent_id').notNull(),
+    childId: integer('child_id').notNull(),
+  },
+  (table) => [
+    foreignKey({
+      columns: [table.parentId],
+      foreignColumns: [series.serieId],
+      name: 'parentchildseries_parent_id_fkey',
+    }),
+    foreignKey({
+      columns: [table.childId],
+      foreignColumns: [series.serieId],
+      name: 'parentchildseries_child_id_fkey',
+    }),
+  ],
+)
+
 export const users = pgTable('users', {
   userId: serial('user_id').primaryKey().notNull(),
   userName: text('user_name').notNull(),
@@ -570,3 +593,19 @@ export const teamgamesRelations = relations(teamgames, ({ one }) => ({
     relationName: 'team',
   }),
 }))
+
+export const parentchildseriesRelations = relations(
+  parentchildseries,
+  ({ one }) => ({
+    parent: one(series, {
+      fields: [parentchildseries.parentId],
+      references: [series.serieId],
+      relationName: 'parent',
+    }),
+    child: one(series, {
+      fields: [parentchildseries.parentId],
+      references: [series.serieId],
+      relationName: 'child',
+    }),
+  }),
+)
