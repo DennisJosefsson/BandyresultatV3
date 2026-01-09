@@ -1,11 +1,63 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { zd } from '@/lib/utils/zod'
+import { createFileRoute, Navigate, notFound } from '@tanstack/react-router'
+import { zodValidator } from '@tanstack/zod-adapter'
+import RangeData from '../-components/Interval/RangeData'
+import { getDevData } from '../-functions/getDevData'
+const searchParams = zd.object({
+  start: zd.int().nonnegative().catch(0),
+  end: zd.int().nonnegative().optional(),
+})
+export const Route = createFileRoute('/_layout/season/$year/$group/interval')({
+  validateSearch: zodValidator(searchParams),
+  loaderDeps: ({ search: { women } }) => ({ women }),
+  loader: async ({ params, deps }) => {
+    const data = await getDevData({
+      data: { group: params.group, year: params.year, women: deps.women },
+    })
+    if (!data) throw new Error('Missing data')
+    if (data.status === 404) {
+      throw notFound({
+        data: data.message,
+        routeId: '/_layout/season/$year/$group/',
+      })
+    }
 
-export const Route = createFileRoute(
-  '/_layout/season/$year/$group/interval',
-)({
+    return data
+  },
   component: RouteComponent,
+  notFoundComponent(props) {
+    if (props.data && typeof props.data === 'string') {
+      return (
+        <div className="mt-4 flex flex-row justify-center">
+          <p>{props.data}</p>
+        </div>
+      )
+    }
+    return (
+      <div className="mt-4 flex flex-row justify-center">
+        <p>Något gick tyvärr fel.</p>
+      </div>
+    )
+  },
 })
 
 function RouteComponent() {
-  return <div>Hello "/_layout/season/$year/-$group/interval"!</div>
+  const data = Route.useLoaderData()
+  const start = Route.useSearch({ select: (s) => s.start })
+  const end = Route.useSearch({ select: (s) => s.end })
+  if (
+    (end && end >= data.dates.length) ||
+    start >= data.dates.length ||
+    (end && start >= end)
+  ) {
+    return (
+      <Navigate
+        to="."
+        params={(prev) => ({ ...prev })}
+        search={(prev) => ({ ...prev, start: 0, end: data.dates.length - 1 })}
+      />
+    )
+  }
+
+  return <RangeData />
 }
