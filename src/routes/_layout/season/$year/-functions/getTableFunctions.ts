@@ -1,5 +1,12 @@
 import { db } from '@/db'
-import { series, tables, teamgames, teams, teamseries } from '@/db/schema'
+import {
+  parentchildseries,
+  series,
+  tables,
+  teamgames,
+  teams,
+  teamseries,
+} from '@/db/schema'
 import { and, asc, count, desc, eq, inArray, SQL, sql, sum } from 'drizzle-orm'
 import { unionAll } from 'drizzle-orm/pg-core'
 
@@ -76,7 +83,7 @@ export const getUnionedTables = async ({ serie, table }: FunctionProps) => {
       ),
     )
 
-  const parentSerie = serie.parentSerieId
+  const parentSerie = serie.hasParent
     ? db
         .select({
           teamId: teamgames.teamId,
@@ -105,7 +112,16 @@ export const getUnionedTables = async ({ serie, table }: FunctionProps) => {
         .where(
           and(
             inArray(teamgames.teamId, teamArray),
-            eq(teamgames.serieId, serie.parentSerieId),
+            serie.allParentGmes
+              ? undefined
+              : inArray(teamgames.opponentId, teamArray),
+            inArray(
+              teamgames.serieId,
+              db
+                .select({ parentId: parentchildseries.parentId })
+                .from(parentchildseries)
+                .where(eq(parentchildseries.childId, serie.serieId)),
+            ),
             eq(teamgames.played, true),
             table === 'home'
               ? eq(teamgames.homeGame, true)
