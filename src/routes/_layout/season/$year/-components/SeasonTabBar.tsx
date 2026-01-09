@@ -3,6 +3,8 @@ import { Button } from '@/components/ui/button'
 import { getRouteApi, Link, useParams, useSearch } from '@tanstack/react-router'
 import {
   CalendarIcon,
+  ChartLineIcon,
+  ChevronsLeftRightEllipsisIcon,
   ListIcon,
   MarsIcon,
   TrophyIcon,
@@ -26,7 +28,12 @@ const SeasonTabBar = () => {
   //   })
   const data = route.useLoaderData()
 
-  const groupFromData = data.length > 0 ? data[0].group : 'elitserien'
+  const groupFromData =
+    data.status === 204
+      ? 'elitserien'
+      : data.groups.length > 0
+        ? data.groups[0].group
+        : 'elitserien'
 
   const group = params.group ? params.group : groupFromData
   const table = params.table ?? 'all'
@@ -125,54 +132,54 @@ const SeasonTabBar = () => {
 
         tabName: 'playoff',
       },
-      //   {
-      //     tab: (
-      //       <Link
-      //         from="/season/$year"
-      //         to="/season/$year/development"
-      //         params={{ year: year }}
-      //         search={(prev) => ({ ...prev })}
-      //         activeOptions={{ includeSearch: false }}
-      //       >
-      //         {({ isActive }) => {
-      //           return (
-      //             <Button
-      //               variant={isActive ? 'default' : 'outline'}
-      //               size={matches ? 'default' : 'xs'}
-      //             >
-      //               {matches ? 'Utveckling' : <DevIcon />}
-      //             </Button>
-      //           )
-      //         }}
-      //       </Link>
-      //     ),
+      {
+        tab: (
+          <Link
+            from="/season/$year"
+            to="/season/$year/$group/development"
+            params={(prev) => ({ year: prev.year, group })}
+            search={(prev) => ({ ...prev, index: 0 })}
+            activeOptions={{ includeSearch: false }}
+          >
+            {({ isActive }) => {
+              return (
+                <Button
+                  variant={isActive ? 'default' : 'outline'}
+                  size={matches ? 'default' : 'xs'}
+                >
+                  {matches ? 'Utveckling' : <ChartLineIcon />}
+                </Button>
+              )
+            }}
+          </Link>
+        ),
 
-      //     tabName: 'development',
-      //   },
-      //   {
-      //     tab: (
-      //       <Link
-      //         from="/season/$year"
-      //         to="/season/$year/interval"
-      //         params={{ year: year }}
-      //         search={(prev) => ({ ...prev })}
-      //         activeOptions={{ includeSearch: false }}
-      //       >
-      //         {({ isActive }) => {
-      //           return (
-      //             <Button
-      //               variant={isActive ? 'default' : 'outline'}
-      //               size={matches ? 'default' : 'xs'}
-      //             >
-      //               {matches ? 'Intervall' : <ChevronsLeftRightEllipsis />}
-      //             </Button>
-      //           )
-      //         }}
-      //       </Link>
-      //     ),
+        tabName: 'development',
+      },
+      {
+        tab: (
+          <Link
+            from="/season/$year"
+            to="/season/$year/$group/interval"
+            params={(prev) => ({ year: prev.year, group })}
+            search={(prev) => ({ ...prev, start: 0 })}
+            activeOptions={{ includeSearch: false }}
+          >
+            {({ isActive }) => {
+              return (
+                <Button
+                  variant={isActive ? 'default' : 'outline'}
+                  size={matches ? 'default' : 'xs'}
+                >
+                  {matches ? 'Intervall' : <ChevronsLeftRightEllipsisIcon />}
+                </Button>
+              )
+            }}
+          </Link>
+        ),
 
-      //     tabName: 'interval',
-      //   },
+        tabName: 'interval',
+      },
       //   {
       //     tab: (
       //       <Link
