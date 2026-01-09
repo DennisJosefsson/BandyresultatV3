@@ -32,3 +32,11 @@ export type GroupTable = {
   level: number
   tables: TeamTable[]
 }
+
+export type DevDataTableItem = Omit<TeamTable, 'season' | 'women' | 'group'> & {
+  position: number
+  date: string
+}
+export type ReturnDevDataTableItem = DevDataTableItem & {
+  arrowDirection: 'up' | 'down' | null
+}
