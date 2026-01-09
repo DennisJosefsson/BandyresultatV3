@@ -126,7 +126,7 @@ function Season() {
                 <Link
                   to="."
                   params={(prev) => ({ ...prev, group: item.group })}
-                  search={(prev) => ({ ...prev })}
+                  search={(prev) => ({ women: prev.women })}
                 >
                   {item.name}
                 </Link>
@@ -194,7 +194,7 @@ function GroupSelection() {
                   from="/season/$year"
                   to="/season/$year/$group"
                   params={(prev) => ({ year: prev.year, group: item.group })}
-                  search={(prev) => ({ ...prev })}
+                  search={(prev) => ({ women: prev.women })}
                 >
                   {item.name}
                 </Link>
