@@ -30,10 +30,12 @@ export const getUnionedTables = async ({ serie, table }: FunctionProps) => {
         totalGoalDifference: tables.goalDifference,
         totalPoints: tables.points,
         team: {
+          teamId: teams.teamId,
           name: teams.name,
           shortName: teams.shortName,
           casualName: teams.casualName,
         } as unknown as SQL<{
+          teamId: number
           name: string
           shortName: string
           casualName: string
