@@ -415,6 +415,26 @@ export const parentchildseries = pgTable(
   ],
 )
 
+export const playoffseason = pgTable(
+  'playoffseason',
+  {
+    playoffSeasonId: serial('playoff_season_id').primaryKey().notNull(),
+    seasonId: integer('season_id').notNull(),
+    women: boolean().default(false),
+    playoffAsSeries: boolean('playoff_as_series').default(false),
+    hasEight: boolean('has_eight').default(false),
+    hasQuarter: boolean('has_quarter').default(false),
+    uefaSorting: boolean('uefa_sorting').default(false),
+  },
+  (table) => [
+    foreignKey({
+      columns: [table.seasonId],
+      foreignColumns: [seasons.seasonId],
+      name: 'playoffseason_season_id_fkey',
+    }),
+  ],
+)
+
 export const users = pgTable('users', {
   userId: serial('user_id').primaryKey().notNull(),
   userName: text('user_name').notNull(),
