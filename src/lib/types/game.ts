@@ -45,3 +45,12 @@ export type Games = {
   playedLength: number
   unplayedLength: number
 }
+
+export type PlayoffGames = {
+  
+  played: GameGroupBase<Omit<Game, 'season'>[]>[]
+  unplayed: GameGroupBase<Omit<Game, 'season'>[]>[]
+  playedLength: number
+  unplayedLength: number
+
+}
