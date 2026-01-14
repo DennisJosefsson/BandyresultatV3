@@ -1,37 +1,48 @@
-import { Link, useSearch } from '@tanstack/react-router'
+import { Link, useRouter, useSearch } from '@tanstack/react-router'
+import { Label } from '../ui/label'
+import { SidebarTrigger } from '../ui/sidebar'
+import { Switch } from '../ui/switch'
 
 import ClerkHeader from '../../integrations/clerk/header-user.tsx'
 
-import { LoaderPinwheelIcon, Menu } from 'lucide-react'
-import { useState } from 'react'
+import { LoaderPinwheelIcon } from 'lucide-react'
+// import { useState } from 'react'
 
-import { Button } from '@/components/ui/button'
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+// import { Button } from '@/components/ui/button'
+// import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { useAuth } from '@clerk/clerk-react'
 import { useMediaQuery } from 'usehooks-ts'
+import { Button } from '../ui/button.tsx'
 import ModeToggle from './ModeToggle'
 
 const Header = () => {
-  const [open, setOpen] = useState<boolean>(false)
+  // const [open, setOpen] = useState<boolean>(false)
+  const navigate = useRouter().navigate
   const women = useSearch({
     from: '__root__',
     select: (search) => search.women,
   })
   const matches = useMediaQuery('(min-width: 430px)')
-  const { isLoaded, orgRole } = useAuth()
-  const isAdmin = orgRole === 'org:admin'
+  const { isLoaded } = useAuth()
+  // const isAdmin = orgRole === 'org:admin'
+
+  const updateWomen = () => {
+    navigate({ to: '.', search: (prev) => ({ ...prev, women: !prev.women }) })
+  }
 
   return (
-    <header className="bg-background font-poppins text-foreground sticky top-0 z-1 mb-4 flex h-16 flex-row items-center justify-between gap-4 border-b px-2 md:px-6 dark:bg-slate-950 dark:text-slate-50">
+    <header className="bg-background font-poppins text-foreground sticky top-0 z-1 mb-4 flex h-12 flex-row items-center justify-between gap-4 border-b px-2 md:px-6 dark:bg-slate-950 dark:text-slate-50">
       <div className="flex flex-row items-center justify-between gap-8">
+        <SidebarTrigger />
         <div>
-          <h1 className="xs:text-base -[0.2rem] text-primary text-sm font-bold uppercase md:text-2xl lg:text-4xl xl:pl-0 2xl:text-5xl">
+          <h1 className="xs:text-base -[0.2rem] text-primary text-sm font-bold uppercase md:text-2xl xl:pl-0 2xl:text-5xl">
             <Link to="/" search={{ women }}>
               Bandyresultat
             </Link>
           </h1>
         </div>
-        <div>
+
+        {/* <div>
           <nav className="hidden flex-col gap-6 text-lg font-semibold tracking-wider lg:ml-20 lg:flex lg:flex-row lg:items-center lg:gap-6 lg:text-base xl:ml-40 2xl:text-lg">
             <Link
               to="/seasons"
@@ -79,10 +90,10 @@ const Header = () => {
               Om sidan
             </Link>
           </nav>
-        </div>
+        </div> */}
       </div>
-      <div className="flex flex-row items-center gap-2">
-        <div>
+      <div className="flex flex-row items-center gap-6">
+        {/* <div>
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
               <Button
@@ -159,8 +170,16 @@ const Header = () => {
               </nav>
             </SheetContent>
           </Sheet>
+        </div> */}
+        <div className="flex w-full items-center space-x-2">
+          <Switch
+            id="women"
+            defaultChecked={women}
+            checked={women}
+            onCheckedChange={updateWomen}
+          />
+          <Label htmlFor="women">{women ? 'Herrar' : 'Damer'}</Label>
         </div>
-
         {isLoaded && (
           <>
             <ClerkHeader />
