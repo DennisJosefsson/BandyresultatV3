@@ -59,6 +59,7 @@ export const sortOrder = [
   'semi',
   'quarter',
   'eight',
+  'playoffseries',
   'regular',
   'qualification',
   'Totalt',
@@ -127,4 +128,36 @@ export const groupConstant: GroupConstant = {
   hemma: 'Hemma',
   borta: 'Borta',
   oavgjort: 'Oavgjort',
+}
+
+type ColStarts = {
+  [key: string]: string
+}
+
+export const semiColStarts: ColStarts = {
+  S1: 'lg:col-start-2',
+  S2: 'lg:col-start-4',
+}
+export const quarterColStarts: ColStarts = {
+  Q1: 'lg:col-start-1',
+  Q2: 'lg:col-start-2',
+  Q3: 'lg:col-start-3',
+  Q4: 'lg:col-start-4',
+}
+
+export const quarterColStartsTwoQuarter = {
+  Q1: 'lg:col-start-2',
+  Q2: 'lg:col-start-4',
+}
+
+export const eightColStarts = {
+  E1: 'lg:col-start-2',
+  E2: 'lg:col-start-4',
+}
+
+export const eightColStartsFourTeams = {
+  E1: 'lg:col-start-1',
+  E2: 'lg:col-start-2',
+  E3: 'lg:col-start-3',
+  E4: 'lg:col-start-4',
 }
