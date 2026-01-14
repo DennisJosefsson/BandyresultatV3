@@ -61,10 +61,12 @@ export const getTeamSeasonStaticTables = async ({
         seasonId: seasons.seasonId,
       } as unknown as SQL<{ year: string; seasonId: number }>,
       team: {
+        teamId: teams.teamId,
         name: teams.name,
         shortName: teams.shortName,
         casualName: teams.casualName,
       } as unknown as SQL<{
+        teamId: number
         name: string
         shortName: string
         casualName: string
@@ -173,10 +175,12 @@ export const getTeamSeasonTables = async ({
         seasonId: seasons.seasonId,
       } as unknown as SQL<{ year: string; seasonId: number }>,
       team: {
+        teamId: teams.teamId,
         name: teams.name,
         shortName: teams.shortName,
         casualName: teams.casualName,
       } as unknown as SQL<{
+        teamId: number
         name: string
         shortName: string
         casualName: string

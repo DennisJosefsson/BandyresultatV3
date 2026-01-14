@@ -7,6 +7,7 @@ export type Base = {
     seasonId: number
   }
   team: {
+    teamId: number
     name: string
     shortName: string
     casualName: string
@@ -39,4 +40,34 @@ export type DevDataTableItem = Omit<TeamTable, 'season' | 'women' | 'group'> & {
 }
 export type ReturnDevDataTableItem = DevDataTableItem & {
   arrowDirection: 'up' | 'down' | null
+}
+
+export type PlayoffTable = Omit<TeamTable, 'women' | 'season'> & {
+  awayGoals: number
+}
+
+export type GroupPlayoffTable = {
+  group: string
+  result: string
+  homeTeam: {
+    teamId: number
+    name: string
+    shortName: string
+    casualName: string
+  }
+  awayTeam: {
+    teamId: number
+    name: string
+    shortName: string
+    casualName: string
+  }
+  tables: PlayoffTable[]
+}
+
+export type PlayoffSeriesTable = {
+  group: string
+  tables: PlayoffTable[]
+  comment: string | null
+  serieStructure: number[] | null
+  name: string
 }

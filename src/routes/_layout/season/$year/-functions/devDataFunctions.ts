@@ -201,10 +201,12 @@ export const getDevelopmentData = async ({ serie }: FunctionProps) => {
       totalGoalDifference: cte.totalGoalDifference,
       totalPoints: cte.totalPoints,
       team: {
+        teamId: teams.teamId,
         name: teams.name,
         shortName: teams.shortName,
         casualName: teams.casualName,
       } as unknown as SQL<{
+        teamId: number
         name: string
         shortName: string
         casualName: string
@@ -229,10 +231,12 @@ export const getDevelopmentData = async ({ serie }: FunctionProps) => {
       totalGoalDifference: startTable.totalGoalDifference,
       totalPoints: startTable.totalPoints,
       team: {
+        teamId: teams.teamId,
         name: teams.name,
         shortName: teams.shortName,
         casualName: teams.casualName,
       } as unknown as SQL<{
+        teamId: number
         name: string
         shortName: string
         casualName: string
