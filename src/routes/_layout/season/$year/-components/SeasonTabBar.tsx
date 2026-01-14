@@ -112,7 +112,7 @@ const SeasonTabBar = () => {
         tab: (
           <Link
             from="/season/$year"
-            to="/season/$year/playoff"
+            to="/season/$year/playoff/table"
             params={(prev) => ({ year: prev.year })}
             search={(prev) => ({ ...prev })}
             activeOptions={{ includeSearch: false }}
