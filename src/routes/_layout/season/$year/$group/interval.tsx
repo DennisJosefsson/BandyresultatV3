@@ -45,6 +45,7 @@ function RouteComponent() {
   const data = Route.useLoaderData()
   const start = Route.useSearch({ select: (s) => s.start })
   const end = Route.useSearch({ select: (s) => s.end })
+
   if (
     (end && end >= data.dates.length) ||
     start >= data.dates.length ||
