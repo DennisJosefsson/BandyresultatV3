@@ -83,6 +83,10 @@ export const getDevData = createServerFn({ method: 'GET' })
 
       const results = await getDevelopmentData({ serie })
 
+      if (results.dates.length === 0) {
+        return { status: 404, message: 'Inga matcher har spelats.' }
+      }
+
       return {
         status: 200,
         ...results,
