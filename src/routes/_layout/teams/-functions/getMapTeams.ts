@@ -1,5 +1,5 @@
 import { db } from '@/db'
-import { county, teams } from '@/db/schema'
+import { MapTeam } from '@/lib/types/team'
 import { createServerFn } from '@tanstack/react-start'
 import { zodValidator } from '@tanstack/zod-adapter'
 import { asc, sql } from 'drizzle-orm'
@@ -7,12 +7,8 @@ import { z } from 'zod'
 
 const women = z.boolean()
 
-type MapTeams = typeof teams.$inferSelect & {
-  county: typeof county.$inferSelect
-}
-
 type SortedTeamGroups = {
-  [key: string]: (typeof teams.$inferSelect)[]
+  [key: string]: MapTeam[]
 }
 
 export const getMapTeams = createServerFn({ method: 'GET' })
@@ -23,6 +19,7 @@ export const getMapTeams = createServerFn({ method: 'GET' })
         and(eq(teams.women, women), ne(teams.teamId, 176)),
       with: {
         county: true,
+        municipality: true,
       },
       orderBy: [asc(sql`casual_name collate "se-SE-x-icu"`)],
     })
@@ -32,7 +29,7 @@ export const getMapTeams = createServerFn({ method: 'GET' })
     return sortedTeams
   })
 
-function sortMapTeams(teamArray: MapTeams[]) {
+function sortMapTeams(teamArray: MapTeam[]) {
   const sortCounties = teamArray.reduce((groups, team) => {
     if (!groups[team.county.name]) {
       groups[team.county.name] = []

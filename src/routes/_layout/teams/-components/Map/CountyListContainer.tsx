@@ -7,8 +7,10 @@ import {
   DrawerFooter,
   DrawerTrigger,
 } from '@/components/ui/drawer'
-import { LatLng, Map as MapType } from 'leaflet'
-import { Dispatch, SetStateAction, useState } from 'react'
+//import { LatLng, Map as MapType } from 'leaflet'
+import { MapRef } from '@/components/ui/map'
+import { LngLatLike } from 'maplibre-gl'
+import { Dispatch, RefObject, SetStateAction, useState } from 'react'
 import { useMediaQuery } from 'usehooks-ts'
 import CountyList from './CountyList'
 
@@ -18,21 +20,21 @@ type County = {
 
 type CountyArray = {
   county: string
-  center: LatLng
+  center: LngLatLike
 }
 
 type CountyListContainerProp = {
   countyArray: CountyArray[]
   counties: County[]
   setCounties: Dispatch<SetStateAction<County[]>>
-  map: MapType | null
+  mapRef: RefObject<MapRef | null>
 }
 
 const CountyListContainer = ({
   countyArray,
   counties,
   setCounties,
-  map,
+  mapRef,
 }: CountyListContainerProp) => {
   const matches = useMediaQuery('(min-width: 768px)')
   const matchesSmall = useMediaQuery('(min-width: 430px)')
@@ -40,12 +42,12 @@ const CountyListContainer = ({
   return (
     <div>
       {matches ? (
-        <Card className="p-2 w-64">
+        <Card className="w-64 p-2">
           <CountyList
             countyArray={countyArray}
             setCounties={setCounties}
             counties={counties}
-            map={map}
+            mapRef={mapRef}
           />
         </Card>
       ) : (
@@ -63,7 +65,7 @@ const CountyListContainer = ({
                   countyArray={countyArray}
                   setCounties={setCounties}
                   counties={counties}
-                  map={map}
+                  mapRef={mapRef}
                 />
               </div>
 

@@ -20,6 +20,7 @@ import { Route as LayoutSearchIndexRouteImport } from './routes/_layout/search/i
 import { Route as LayoutDashboardIndexRouteImport } from './routes/_layout/dashboard/index'
 import { Route as LayoutAboutIndexRouteImport } from './routes/_layout/about/index'
 import { Route as LayoutTeamsSelectionRouteImport } from './routes/_layout/teams/selection'
+import { Route as LayoutTeamsMapRouteImport } from './routes/_layout/teams/map'
 import { Route as LayoutTeamsCompareRouteImport } from './routes/_layout/teams/compare'
 import { Route as LayoutTeamTeamIdRouteImport } from './routes/_layout/team/$teamId'
 import { Route as LayoutSeasonYearRouteImport } from './routes/_layout/season/$year'
@@ -49,7 +50,6 @@ import { Route as LayoutSeasonYearGroupTablesTableRouteImport } from './routes/_
 const LayoutUnauthorizedIndexLazyRouteImport = createFileRoute(
   '/_layout/unauthorized/',
 )()
-const LayoutTeamsMapLazyRouteImport = createFileRoute('/_layout/teams/map')()
 
 const LayoutRoute = LayoutRouteImport.update({
   id: '/_layout',
@@ -98,16 +98,14 @@ const LayoutAboutIndexRoute = LayoutAboutIndexRouteImport.update({
   path: '/about/',
   getParentRoute: () => LayoutRoute,
 } as any)
-const LayoutTeamsMapLazyRoute = LayoutTeamsMapLazyRouteImport.update({
-  id: '/map',
-  path: '/map',
-  getParentRoute: () => LayoutTeamsRoute,
-} as any).lazy(() =>
-  import('./routes/_layout/teams/map.lazy').then((d) => d.Route),
-)
 const LayoutTeamsSelectionRoute = LayoutTeamsSelectionRouteImport.update({
   id: '/selection',
   path: '/selection',
+  getParentRoute: () => LayoutTeamsRoute,
+} as any)
+const LayoutTeamsMapRoute = LayoutTeamsMapRouteImport.update({
+  id: '/map',
+  path: '/map',
   getParentRoute: () => LayoutTeamsRoute,
 } as any)
 const LayoutTeamsCompareRoute = LayoutTeamsCompareRouteImport.update({
@@ -261,8 +259,8 @@ export interface FileRoutesByFullPath {
   '/season/$year': typeof LayoutSeasonYearRouteWithChildren
   '/team/$teamId': typeof LayoutTeamTeamIdRouteWithChildren
   '/teams/compare': typeof LayoutTeamsCompareRoute
+  '/teams/map': typeof LayoutTeamsMapRoute
   '/teams/selection': typeof LayoutTeamsSelectionRoute
-  '/teams/map': typeof LayoutTeamsMapLazyRoute
   '/about': typeof LayoutAboutIndexRoute
   '/dashboard': typeof LayoutDashboardIndexRoute
   '/search': typeof LayoutSearchIndexRoute
@@ -296,8 +294,8 @@ export interface FileRoutesByTo {
   '/maraton/table': typeof LayoutMaratonTableRouteWithChildren
   '/season/$year': typeof LayoutSeasonYearRouteWithChildren
   '/teams/compare': typeof LayoutTeamsCompareRoute
+  '/teams/map': typeof LayoutTeamsMapRoute
   '/teams/selection': typeof LayoutTeamsSelectionRoute
-  '/teams/map': typeof LayoutTeamsMapLazyRoute
   '/about': typeof LayoutAboutIndexRoute
   '/dashboard': typeof LayoutDashboardIndexRoute
   '/search': typeof LayoutSearchIndexRoute
@@ -335,8 +333,8 @@ export interface FileRoutesById {
   '/_layout/season/$year': typeof LayoutSeasonYearRouteWithChildren
   '/_layout/team/$teamId': typeof LayoutTeamTeamIdRouteWithChildren
   '/_layout/teams/compare': typeof LayoutTeamsCompareRoute
+  '/_layout/teams/map': typeof LayoutTeamsMapRoute
   '/_layout/teams/selection': typeof LayoutTeamsSelectionRoute
-  '/_layout/teams/map': typeof LayoutTeamsMapLazyRoute
   '/_layout/about/': typeof LayoutAboutIndexRoute
   '/_layout/dashboard/': typeof LayoutDashboardIndexRoute
   '/_layout/search/': typeof LayoutSearchIndexRoute
@@ -374,8 +372,8 @@ export interface FileRouteTypes {
     | '/season/$year'
     | '/team/$teamId'
     | '/teams/compare'
-    | '/teams/selection'
     | '/teams/map'
+    | '/teams/selection'
     | '/about'
     | '/dashboard'
     | '/search'
@@ -409,8 +407,8 @@ export interface FileRouteTypes {
     | '/maraton/table'
     | '/season/$year'
     | '/teams/compare'
-    | '/teams/selection'
     | '/teams/map'
+    | '/teams/selection'
     | '/about'
     | '/dashboard'
     | '/search'
@@ -447,8 +445,8 @@ export interface FileRouteTypes {
     | '/_layout/season/$year'
     | '/_layout/team/$teamId'
     | '/_layout/teams/compare'
-    | '/_layout/teams/selection'
     | '/_layout/teams/map'
+    | '/_layout/teams/selection'
     | '/_layout/about/'
     | '/_layout/dashboard/'
     | '/_layout/search/'
@@ -547,18 +545,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutAboutIndexRouteImport
       parentRoute: typeof LayoutRoute
     }
-    '/_layout/teams/map': {
-      id: '/_layout/teams/map'
-      path: '/map'
-      fullPath: '/teams/map'
-      preLoaderRoute: typeof LayoutTeamsMapLazyRouteImport
-      parentRoute: typeof LayoutTeamsRoute
-    }
     '/_layout/teams/selection': {
       id: '/_layout/teams/selection'
       path: '/selection'
       fullPath: '/teams/selection'
       preLoaderRoute: typeof LayoutTeamsSelectionRouteImport
+      parentRoute: typeof LayoutTeamsRoute
+    }
+    '/_layout/teams/map': {
+      id: '/_layout/teams/map'
+      path: '/map'
+      fullPath: '/teams/map'
+      preLoaderRoute: typeof LayoutTeamsMapRouteImport
       parentRoute: typeof LayoutTeamsRoute
     }
     '/_layout/teams/compare': {
@@ -741,15 +739,15 @@ declare module '@tanstack/react-router' {
 
 interface LayoutTeamsRouteChildren {
   LayoutTeamsCompareRoute: typeof LayoutTeamsCompareRoute
+  LayoutTeamsMapRoute: typeof LayoutTeamsMapRoute
   LayoutTeamsSelectionRoute: typeof LayoutTeamsSelectionRoute
-  LayoutTeamsMapLazyRoute: typeof LayoutTeamsMapLazyRoute
   LayoutTeamsIndexRoute: typeof LayoutTeamsIndexRoute
 }
 
 const LayoutTeamsRouteChildren: LayoutTeamsRouteChildren = {
   LayoutTeamsCompareRoute: LayoutTeamsCompareRoute,
+  LayoutTeamsMapRoute: LayoutTeamsMapRoute,
   LayoutTeamsSelectionRoute: LayoutTeamsSelectionRoute,
-  LayoutTeamsMapLazyRoute: LayoutTeamsMapLazyRoute,
   LayoutTeamsIndexRoute: LayoutTeamsIndexRoute,
 }
 

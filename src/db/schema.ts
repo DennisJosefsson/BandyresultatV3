@@ -32,10 +32,10 @@ export const teams = pgTable(
     updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }),
     casualName: varchar('casual_name', { length: 255 }).notNull(),
     shortName: varchar('short_name', { length: 255 }).notNull(),
-    lat: real(),
-    long: real(),
+    lat: real().notNull(),
+    long: real().notNull(),
     countyId: integer('county_id').notNull(),
-    municipalityId: integer('municipality_id').notNull(),
+    municipalityId: integer('municipality_id'),
   },
   (table) => [
     foreignKey({

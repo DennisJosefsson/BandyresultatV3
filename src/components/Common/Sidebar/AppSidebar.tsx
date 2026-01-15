@@ -151,6 +151,7 @@ const AppSidebar = () => {
                   search={{ women }}
                   className="text-foreground hover:text-foreground transition-colors"
                   activeProps={{ className: `font-bold` }}
+                  onClick={() => openTeams(true)}
                 >
                   <span>
                     <ShieldUserIcon className="size-4" />

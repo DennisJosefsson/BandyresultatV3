@@ -1,59 +1,59 @@
-import { Checkbox, CheckedState } from '@/components/ui/checkbox'
-//import { setOrigin } from '@/lib/zustand/linkOrigin/linkOriginStore'
-//import { Link, useLocation, useSearch } from '@tanstack/react-router'
-import { Marker, Popup } from 'react-leaflet'
-
-type Team = {
-  teamId: number | null
-  casualName: string
-}
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import {
+  MapMarker,
+  MarkerContent,
+  MarkerPopup,
+  MarkerTooltip,
+} from '@/components/ui/map'
+import { MapTeam } from '@/lib/types/team'
+import { Link } from '@tanstack/react-router'
+import { ExternalLinkIcon } from 'lucide-react'
 
 type MapItemProps = {
-  team: Team
-  selectedTeams: number[]
-  position: [number, number]
-  onCheckedChange: (checked: CheckedState, teamId: number) => void
+  team: MapTeam
+  latitude: number
+  longitude: number
 }
 
-const MapItem = ({
-  team,
-  position,
-  selectedTeams,
-  onCheckedChange,
-}: MapItemProps) => {
-  // const women = useSearch({
-  //   from: '/_layout',
-  //   select: (search) => search.women,
-  // })
-  // const pathName = useLocation().pathname
-
-  if (team.teamId === null) return null
-
+function MapItem({ team, latitude, longitude }: MapItemProps) {
   return (
-    <Marker key={team.teamId} position={position}>
-      <Popup>
-        <div className="flex flex-row items-center justify-between gap-2 p-2 font-semibold">
-          {/* <Link
-            to="/team/$teamId"
-            params={{
-              teamId: team.teamId,
-            }}
-            search={{ women }}
-            onClick={() => setOrigin(`${pathName}?women=${women}`)}
-          > */}
-          {team.casualName}
-          {/* </Link> */}
+    <MapMarker latitude={latitude} longitude={longitude}>
+      <MarkerContent>
+        <div className="size-4 rounded-full border-2 border-orange-500 bg-orange-500 opacity-75 shadow-lg" />
+      </MarkerContent>
+      <MarkerTooltip>{team.name}</MarkerTooltip>
+      <MarkerPopup className="w-100">
+        <Card className="w-full">
+          <CardHeader className="text-lg font-bold">{team.name}</CardHeader>
+          <CardContent>
+            <div className="space-y-1">
+              <p className="text-foreground text-base font-medium">
+                {team.city}
+              </p>
+              <p className="text-foreground text-base font-medium">
+                {team.municipality ? `Kommun: ${team.municipality.name}` : null}
+              </p>
+              <p className="text-foreground text-base font-medium">
+                Län: {team.county.name}
+              </p>
+            </div>
 
-          <Checkbox
-            name="teamArray"
-            checked={selectedTeams.includes(team.teamId)}
-            onCheckedChange={(checked) =>
-              team.teamId && onCheckedChange(checked, team.teamId)
-            }
-          />
-        </div>
-      </Popup>
-    </Marker>
+            <Link
+              from="/teams/map"
+              to="/team/$teamId"
+              params={{ teamId: team.teamId }}
+              search={(prev) => ({ women: prev.women })}
+              className="flex flex-row items-center justify-start gap-2"
+            >
+              <span>
+                <ExternalLinkIcon className="size-4" />
+              </span>
+              <span>Lagsidan</span>
+            </Link>
+          </CardContent>
+        </Card>
+      </MarkerPopup>
+    </MapMarker>
   )
 }
 

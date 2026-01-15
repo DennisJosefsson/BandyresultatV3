@@ -1,6 +1,7 @@
 import { Checkbox, CheckedState } from '@/components/ui/checkbox'
-import { LatLng, LatLngTuple, Map as MapType } from 'leaflet'
-import { Dispatch, SetStateAction } from 'react'
+import { MapRef } from '@/components/ui/map'
+import { LngLatLike } from 'maplibre-gl'
+import { Dispatch, RefObject, SetStateAction } from 'react'
 
 type County = {
   county: string
@@ -8,29 +9,29 @@ type County = {
 
 type CountyArray = {
   county: string
-  center: LatLng
+  center: LngLatLike
 }
 
 type CountyListProp = {
   countyArray: CountyArray[]
   counties: County[]
   setCounties: Dispatch<SetStateAction<County[]>>
-  map: MapType | null
+  mapRef: RefObject<MapRef | null>
 }
 
 const CountyList = ({
   countyArray,
   counties,
   setCounties,
-  map,
+  mapRef,
 }: CountyListProp) => {
-  if (!map) return null
+  if (!mapRef) return null
   const onCheckedChange = (checked: CheckedState, county: County) => {
     if (checked) {
       setCounties((prev) => [...prev, county])
     } else {
       setCounties((prev) =>
-        prev.filter((name) => name.county !== county.county)
+        prev.filter((name) => name.county !== county.county),
       )
     }
   }
@@ -40,7 +41,7 @@ const CountyList = ({
       setCounties(
         countyArray.map((item) => {
           return { county: item.county }
-        })
+        }),
       )
     } else {
       setCounties([])
@@ -54,16 +55,16 @@ const CountyList = ({
     return true
   }
 
-  const onClick = (center: LatLng | LatLngTuple, zoom: number = 7.5) => {
-    map?.setView(center, zoom)
+  const onClick = (center: LngLatLike, zoom: number = 7.5) => {
+    mapRef.current?.easeTo({ center, zoom })
   }
 
   return (
-    <div className="grid grid-cols-2 gap-2 md:gap-0 md:flex md:flex-col">
-      <div className="xs:max-w-48 md:max-w-96 flex flex-row justify-between mb-2 text-[10px] md:text-sm xl:text-base 2xl:text-lg text-primary items-center">
+    <div className="grid grid-cols-2 gap-2 md:flex md:flex-col md:gap-0">
+      <div className="xs:max-w-48 text-primary mb-2 flex flex-row items-center justify-between text-[10px] md:max-w-96 md:text-sm xl:text-base 2xl:text-lg">
         <span
-          className="truncate cursor-pointer"
-          onClick={() => onClick([62, 15] as LatLngTuple, 4)}
+          className="cursor-pointer truncate"
+          onClick={() => onClick([15, 62] as LngLatLike, 4)}
         >
           Alla
         </span>
@@ -77,10 +78,10 @@ const CountyList = ({
         return (
           <div
             key={county.county}
-            className="xs:max-w-48 md:max-w-96 flex flex-row justify-between mb-2 text-primary items-center text-[10px] md:text-sm xl:text-base 2xl:text-lg"
+            className="xs:max-w-48 text-primary mb-2 flex flex-row items-center justify-between text-[10px] md:max-w-96 md:text-sm xl:text-base 2xl:text-lg"
           >
             <span
-              className="truncate cursor-pointer"
+              className="cursor-pointer truncate"
               onClick={() => onClick(county.center)}
             >
               {county.county}

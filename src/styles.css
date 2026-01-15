@@ -132,7 +132,6 @@ code {
     --radius-4xl: calc(var(--radius) + 16px);
 }
 
-
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -143,10 +142,13 @@ code {
   html {
     @apply font-sans;
     }
+  .maplibregl-popup-content {
+    @apply bg-transparent! shadow-none! p-0! rounded-none!;
+  }
+  .maplibregl-popup-tip {
+    @apply hidden!;
+  }
 }
-
-
-
 
 * {
   scrollbar-width: thin;
