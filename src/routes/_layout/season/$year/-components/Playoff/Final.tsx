@@ -6,7 +6,7 @@ const route = getRouteApi('/_layout/season/$year/playoff/table')
 
 const Final = () => {
   const finalGames = route.useLoaderData({ select: (s) => s.finalGames })
-  console.log(finalGames)
+
   if (finalGames.length === 0) return <NilFinalComponent />
 
   return (

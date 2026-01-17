@@ -29,7 +29,6 @@ export function SeasonSidebar() {
   const params = useParams({ strict: false })
 
   const data = route.useLoaderData()
-  console.log(data)
 
   if (data === undefined || data.status === 204 || data.groups.length === 0) {
     return <Navigate to="." params={{ group: 'elitserien' }} />
