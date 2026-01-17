@@ -18,7 +18,7 @@ export const Route = createFileRoute('/_layout/season/$year/$group/stats')({
     return data
   },
   component: RouteComponent,
-  pendingComponent: () => <Loading page="seasonGamesList" />,
+  pendingComponent: () => <Loading page="seasonStats" />,
   notFoundComponent(props) {
     if (props.data && typeof props.data === 'string') {
       return (
