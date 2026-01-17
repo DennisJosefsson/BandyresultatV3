@@ -72,7 +72,7 @@ export const getAllTeamsSeasons = async (teamId: number) => {
 type Team = typeof teams.$inferSelect & {
   county: typeof county.$inferSelect
 } & {
-  municipality: typeof municipality.$inferSelect
+  municipality: typeof municipality.$inferSelect | null
 } & {
   teamseasons: {
     qualification: boolean | null
