@@ -75,7 +75,11 @@ export const getDevData = createServerFn({ method: 'GET' })
           else return undefined
         })
 
-      if (!serie) return { status: 404, message: 'Serien finns inte.' }
+      if (!serie)
+        return {
+          status: 404,
+          message: `Ingen ${women ? 'dam' : 'herr'}serie med detta namn det här året. Välj en ny i listan.`,
+        }
 
       if (serie.hasStatic) {
         return { status: 404, message: 'Serien har enbart sluttabell.' }

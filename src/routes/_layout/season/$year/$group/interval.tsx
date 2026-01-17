@@ -1,6 +1,7 @@
 import { zd } from '@/lib/utils/zod'
 import { createFileRoute, Navigate, notFound } from '@tanstack/react-router'
 import { zodValidator } from '@tanstack/zod-adapter'
+import GroupListForErrorComponent from '../-components/GroupListForErrorComponent'
 import RangeData from '../-components/Interval/RangeData'
 import { getDevData } from '../-functions/getDevData'
 const searchParams = zd.object({
@@ -28,8 +29,14 @@ export const Route = createFileRoute('/_layout/season/$year/$group/interval')({
   notFoundComponent(props) {
     if (props.data && typeof props.data === 'string') {
       return (
-        <div className="mt-4 flex flex-row justify-center">
-          <p>{props.data}</p>
+        <div className="mt-4 flex flex-col justify-center text-sm">
+          <div className="mb-4 flex flex-row justify-center">
+            <p>{props.data}</p>
+          </div>
+
+          {props.data.includes('Välj en ny i listan') ? (
+            <GroupListForErrorComponent />
+          ) : null}
         </div>
       )
     }

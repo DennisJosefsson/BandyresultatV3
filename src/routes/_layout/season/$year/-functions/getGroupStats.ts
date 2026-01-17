@@ -69,7 +69,11 @@ export const getGroupStats = createServerFn({ method: 'GET' })
             else return undefined
           })
 
-        if (!serie) return { status: 404, message: 'Serien finns inte.' }
+        if (!serie)
+          return {
+            status: 404,
+            message: `Ingen ${women ? 'dam' : 'herr'}serie med detta namn det här året. Välj en ny i listan.`,
+          }
 
         const gameCount = await db.$count(
           games,

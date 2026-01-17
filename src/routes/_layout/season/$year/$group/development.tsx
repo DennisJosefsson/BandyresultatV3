@@ -2,6 +2,7 @@ import { zd } from '@/lib/utils/zod'
 import { createFileRoute, Navigate, notFound } from '@tanstack/react-router'
 import { zodValidator } from '@tanstack/zod-adapter'
 import DevelopmentData from '../-components/Development/DevelopmentData'
+import GroupListForErrorComponent from '../-components/GroupListForErrorComponent'
 import { getDevData } from '../-functions/getDevData'
 
 const searchParams = zd.object({ index: zd.int().catch(0) })
@@ -29,8 +30,14 @@ export const Route = createFileRoute(
   notFoundComponent(props) {
     if (props.data && typeof props.data === 'string') {
       return (
-        <div className="mt-4 flex flex-row justify-center">
-          <p>{props.data}</p>
+        <div className="mt-4 flex flex-col justify-center text-sm">
+          <div className="mb-4 flex flex-row justify-center">
+            <p>{props.data}</p>
+          </div>
+
+          {props.data.includes('Välj en ny i listan') ? (
+            <GroupListForErrorComponent />
+          ) : null}
         </div>
       )
     }
