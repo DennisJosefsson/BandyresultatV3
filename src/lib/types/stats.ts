@@ -48,7 +48,7 @@ export type MaxMinDiffAndGoals = {
 
 export type Stats = {
   status: 200
-  serie: Serie | undefined
+  serie?: Serie | undefined
   gameCount: number
   goalData: GoalData
   homeGoalData: GoalData
