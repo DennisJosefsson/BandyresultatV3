@@ -13,8 +13,8 @@ const StatsComponent = ({ stats }: StatsProps) => {
     <div className="grid grid-cols-1 gap-20 lg:grid-cols-2">
       <GoalData goalData={stats} />
       <GameData gameData={stats} />
-      <StreakStats streakData={stats} />
       <GoalStats goalData={stats} />
+      <StreakStats streakData={stats} />
     </div>
   )
 }
