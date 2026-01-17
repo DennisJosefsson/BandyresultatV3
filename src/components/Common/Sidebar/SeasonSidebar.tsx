@@ -29,9 +29,9 @@ export function SeasonSidebar() {
   const params = useParams({ strict: false })
 
   const data = route.useLoaderData()
-
+  console.log(data)
   const groupFromData =
-    data.status === 204
+    data.status && data.status === 204
       ? 'elitserien'
       : data.groups.length > 0
         ? data.groups[0].group
