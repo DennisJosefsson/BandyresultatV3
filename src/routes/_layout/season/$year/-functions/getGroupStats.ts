@@ -36,7 +36,7 @@ export const getGroupStats = createServerFn({ method: 'GET' })
           return {
             status: 404,
             message:
-              'Inga slutspelsmatcher denna säsong, statistiken finns under slutspel.',
+              'Enbart slutspelsmatcher denna säsong, statistiken finns under slutspel.',
           }
         }
 
