@@ -6,7 +6,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from '@/components/ui/sidebar'
-import { getRouteApi, Link, useParams } from '@tanstack/react-router'
+import { getRouteApi, Link, Navigate, useParams } from '@tanstack/react-router'
 import {
   CalendarIcon,
   ChartLineIcon,
@@ -30,12 +30,11 @@ export function SeasonSidebar() {
 
   const data = route.useLoaderData()
   console.log(data)
-  const groupFromData =
-    data.status && data.status === 204
-      ? 'elitserien'
-      : data.groups.length > 0
-        ? data.groups[0].group
-        : 'elitserien'
+
+  if (data === undefined || data.status === 204 || data.groups.length === 0) {
+    return <Navigate to="." params={{ group: 'elitserien' }} />
+  }
+  const groupFromData = data.groups[0].group
 
   const group = params.group ?? groupFromData
 
