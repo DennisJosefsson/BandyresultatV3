@@ -212,6 +212,19 @@ export function DefaultSeasonSidebar({
               </Link>
             </SidebarMenuSubButton>
           </SidebarMenuSubItem>
+          <SidebarMenuSubItem>
+            <SidebarMenuSubButton asChild>
+              <Link
+                to="/season/$year/playoff/map"
+                params={{ year }}
+                search={{ women }}
+                activeOptions={{ includeSearch: false }}
+                activeProps={{ className: `font-bold` }}
+              >
+                <span>Karta</span>
+              </Link>
+            </SidebarMenuSubButton>
+          </SidebarMenuSubItem>
         </SidebarMenuSub>
       </SidebarMenuSubItem>
       <SidebarMenuSubItem>
