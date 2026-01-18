@@ -54,7 +54,7 @@ const SeasonsList = () => {
                 </div>
                 <div className="rounded-md px-2 py-1 text-center xl:p-0">
                   <Link
-                    to="/season/$year/playoff"
+                    to="/season/$year/playoff/table"
                     params={{
                       year: year,
                     }}
@@ -82,7 +82,7 @@ const SeasonsList = () => {
                 </div>
                 <div className="rounded-md px-2 py-1 text-center xl:p-0">
                   <Link
-                    to="/season/$year/playoff"
+                    to="/season/$year/playoff/table"
                     params={{
                       year: year,
                     }}
