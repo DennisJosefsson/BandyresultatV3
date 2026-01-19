@@ -357,7 +357,9 @@ async function getStreak({ serie, threshold, streak }: StreakFunctionProps) {
         db
           .select({
             teamId: teamgames.teamId,
-            result: teamgames.win,
+            win: teamgames.win,
+            draw: teamgames.draw,
+            lost: teamgames.lost,
             date: teamgames.date,
             value: sql<number>`case when win = true then 1 else 0 end`.as(
               'value',
@@ -377,7 +379,9 @@ async function getStreak({ serie, threshold, streak }: StreakFunctionProps) {
         db
           .select({
             teamId: teamgames.teamId,
-            result: teamgames.draw,
+            win: teamgames.win,
+            draw: teamgames.draw,
+            lost: teamgames.lost,
             date: teamgames.date,
             value: sql<number>`case when draw = true then 1 else 0 end`.as(
               'value',
@@ -397,7 +401,9 @@ async function getStreak({ serie, threshold, streak }: StreakFunctionProps) {
         db
           .select({
             teamId: teamgames.teamId,
-            result: teamgames.lost,
+            win: teamgames.win,
+            draw: teamgames.draw,
+            lost: teamgames.lost,
             date: teamgames.date,
             value: sql<number>`case when lost = true then 1 else 0 end`.as(
               'value',
@@ -417,7 +423,9 @@ async function getStreak({ serie, threshold, streak }: StreakFunctionProps) {
         db
           .select({
             teamId: teamgames.teamId,
-            result: teamgames.win,
+            win: teamgames.win,
+            draw: teamgames.draw,
+            lost: teamgames.lost,
             date: teamgames.date,
             value: sql<number>`case when win = false then 1 else 0 end`.as(
               'value',
@@ -437,7 +445,9 @@ async function getStreak({ serie, threshold, streak }: StreakFunctionProps) {
         db
           .select({
             teamId: teamgames.teamId,
-            result: teamgames.lost,
+            win: teamgames.win,
+            draw: teamgames.draw,
+            lost: teamgames.lost,
             date: teamgames.date,
             value: sql<number>`case when lost = false then 1 else 0 end`.as(
               'value',
@@ -461,7 +471,9 @@ async function getStreak({ serie, threshold, streak }: StreakFunctionProps) {
       .with(values)
       .select({
         teamId: values.teamId,
-        result: values.result,
+        win: values.win,
+        draw: values.draw,
+        lost: values.lost,
         date: values.date,
         sumResults:
           sql<number>`sum(values.value) over(partition by team order by date)`.as(
@@ -475,23 +487,38 @@ async function getStreak({ serie, threshold, streak }: StreakFunctionProps) {
       .from(values),
   )
 
+  let whereQuery
+  switch (streak) {
+    case 'winStreak':
+      whereQuery = eq(summed_values.win, true)
+      break
+    case 'drawStreak':
+      whereQuery = eq(summed_values.draw, true)
+      break
+    case 'losingStreak':
+      whereQuery = eq(summed_values.lost, true)
+      break
+    case 'noWinStreak':
+      whereQuery = eq(summed_values.win, false)
+      break
+    case 'unbeatenStreak':
+      whereQuery = eq(summed_values.lost, false)
+      break
+    default:
+      throw new Error('Felaktig funktionsanrop, whereQuery')
+  }
+
   const grouped_results = db.$with('grouped_results').as(
     db
       .with(summed_values)
       .select({
         teamId: summed_values.teamId,
-        result: summed_values.result,
         date: summed_values.date,
         sumResults: summed_values.sumResults,
         grouped: sql<number>`round - sum_results`.as('grouped'),
       })
       .from(summed_values)
-      .where(
-        eq(
-          summed_values.result,
-          streak === 'unbeatenStreak' || 'noWinStreak' ? false : true,
-        ),
-      ),
+      .where(whereQuery),
   )
 
   const group_array = db.$with('group_array').as(
