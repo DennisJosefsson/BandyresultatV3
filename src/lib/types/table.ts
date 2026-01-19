@@ -34,6 +34,10 @@ export type GroupTable = {
   tables: TeamTable[]
 }
 
+export type MaratonTable = Omit<TeamTable, 'season' | 'women' | 'group'> & {
+  seasons: number
+}
+
 export type DevDataTableItem = Omit<TeamTable, 'season' | 'women' | 'group'> & {
   position: number
   date: string
