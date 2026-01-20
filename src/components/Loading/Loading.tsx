@@ -41,9 +41,10 @@ type SkeletonType =
   | 'search'
   | 'singleTeamTable'
   | 'interval'
+  | 'default'
 
 type LoadingProps = {
-  page?: SkeletonType
+  page: SkeletonType
 }
 
 const Loading = ({ page }: LoadingProps) => {
@@ -108,6 +109,9 @@ const Loading = ({ page }: LoadingProps) => {
       break
     case 'interval':
       content = <IntervalSkeleton />
+      break
+    case 'default':
+      content = <Spinner />
       break
     default:
       content = <Spinner />
