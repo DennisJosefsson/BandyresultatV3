@@ -1,9 +1,16 @@
 import { createFileRoute } from '@tanstack/react-router'
+import Conceded from '../-components/Records/PointsGoalsEtc/Conceded'
+import { getConcededRecords } from '../-functions/getConcededRecords'
 
 export const Route = createFileRoute('/_layout/maraton/records/conceded')({
-  component: RouteComponent,
-})
+  loaderDeps: ({ search: { women } }) => ({ women }),
+  loader: async ({ deps }) => {
+    const data = await getConcededRecords({
+      data: { women: deps.women },
+    })
+    if (!data) throw new Error('Missing data')
 
-function RouteComponent() {
-  return <div>Hello "/_layout/maraton/records/conceded"!</div>
-}
+    return data.conceded
+  },
+  component: Conceded,
+})

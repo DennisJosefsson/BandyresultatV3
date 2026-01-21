@@ -1,9 +1,16 @@
 import { createFileRoute } from '@tanstack/react-router'
+import Points from '../-components/Records/PointsGoalsEtc/Points'
+import { getPointRecords } from '../-functions/getPointRecords'
 
 export const Route = createFileRoute('/_layout/maraton/records/points')({
-  component: RouteComponent,
-})
+  loaderDeps: ({ search: { women } }) => ({ women }),
+  loader: async ({ deps }) => {
+    const data = await getPointRecords({
+      data: { women: deps.women },
+    })
+    if (!data) throw new Error('Missing data')
 
-function RouteComponent() {
-  return <div>Hello "/_layout/maraton/records/points"!</div>
-}
+    return data.points
+  },
+  component: Points,
+})

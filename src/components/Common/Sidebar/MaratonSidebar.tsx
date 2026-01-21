@@ -72,7 +72,7 @@ export function MaratonSidebar() {
             <SidebarMenuSubItem>
               <SidebarMenuSubButton asChild>
                 <Link
-                  to="/maraton/records"
+                  to="/maraton/records/stats"
                   search={{ women }}
                   activeOptions={{ includeSearch: false }}
                   activeProps={{ className: `font-bold` }}
