@@ -1,7 +1,6 @@
 import AppSidebar from '@/components/Common/Sidebar/AppSidebar'
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import Header from '@/components/Header/Header'
-import { Card } from '@/components/ui/card'
 // import Header from '@/components/Header/Header'
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 import { CatchBoundary, createFileRoute, Outlet } from '@tanstack/react-router'
@@ -17,19 +16,19 @@ function RouteComponent() {
         <div className="bg-background text-foreground flex w-full flex-col">
           <Header />
 
-          <Card className="m-2 p-2">
-            <CatchBoundary
-              getResetKey={() => 'reset'}
-              onCatch={(error) => {
-                console.error(error)
-              }}
-              errorComponent={({ error, reset }) => (
-                <SimpleErrorComponent id="layout" error={error} reset={reset} />
-              )}
-            >
+          <CatchBoundary
+            getResetKey={() => 'reset'}
+            onCatch={(error) => {
+              console.error(error)
+            }}
+            errorComponent={({ error, reset }) => (
+              <SimpleErrorComponent id="layout" error={error} reset={reset} />
+            )}
+          >
+            <div className="m-2">
               <Outlet />
-            </CatchBoundary>
-          </Card>
+            </div>
+          </CatchBoundary>
         </div>
       </SidebarInset>
     </SidebarProvider>

@@ -30,7 +30,7 @@ const GamesListItem = ({ game }: GamesListItemProps) => {
     <div className="flex w-full flex-row items-center gap-1">
       <div
         id={game.gameId?.toString()}
-        className="bg-muted dark:bg-muted/50 mb-1 flex w-full flex-row items-center justify-between gap-1 rounded-sm px-1 py-0.5 text-[10px] transition-colors md:px-2 md:text-sm xl:mb-2 xl:w-xl xl:text-base 2xl:w-176 2xl:text-lg dark:hover:bg-slate-800/50"
+        className="mb-1 flex w-full flex-row items-center justify-between gap-1 rounded-sm px-1 py-0.5 text-[10px] transition-colors md:px-2 md:text-sm xl:mb-2 xl:w-xl xl:text-base 2xl:w-176 2xl:text-lg"
       >
         <span
           className={cn(

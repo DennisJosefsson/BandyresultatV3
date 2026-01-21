@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
 import {
   Drawer,
   DrawerClose,
@@ -42,14 +41,14 @@ const CountyListContainer = ({
   return (
     <div>
       {matches ? (
-        <Card className="w-64 p-2">
+        <div className="p-2">
           <CountyList
             countyArray={countyArray}
             setCounties={setCounties}
             counties={counties}
             mapRef={mapRef}
           />
-        </Card>
+        </div>
       ) : (
         <div>
           <Drawer open={open} onOpenChange={setOpen}>

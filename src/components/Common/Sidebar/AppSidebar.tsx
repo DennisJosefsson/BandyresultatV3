@@ -96,7 +96,19 @@ const AppSidebar = () => {
   }
 
   return (
-    <Sidebar className="font-poppins mt-12" collapsible="icon">
+    <Sidebar className="font-poppins" collapsible="icon">
+      {/* <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem className="flex flex-row items-center gap-2">
+            <div className="bg-sidebar text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+              <span className="font-extrabold">B</span>
+            </div>
+            <div>
+              <span className="text-base">Bandyresultat</span>
+            </div>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader> */}
       <SidebarContent>
         <SidebarMenu>
           <Collapsible

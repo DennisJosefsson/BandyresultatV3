@@ -22,7 +22,7 @@ const SeasonsList = () => {
             return (
               <div
                 key={season.seasonId}
-                className="bg-muted dark:bg-muted/50 flex flex-row items-center justify-between px-2 py-1 text-sm lg:text-base 2xl:text-lg"
+                className="grid grid-cols-4 px-2 py-1 text-sm lg:text-base 2xl:text-lg"
               >
                 <div className="w-28 font-semibold">{season.year}</div>
                 <div className="rounded-md px-2 py-1 text-center xl:p-0">
@@ -71,7 +71,7 @@ const SeasonsList = () => {
             return (
               <div
                 key={season.seasonId}
-                className="bg-muted dark:bg-muted/50 flex flex-row items-center justify-between px-2 py-1 text-sm lg:text-base 2xl:text-lg"
+                className="grid grid-cols-4 px-2 py-1 text-sm lg:text-base 2xl:text-lg"
               >
                 <div className="w-28 font-semibold">{season.year}</div>
                 <div className="text-foreground/20 rounded-md px-2 py-1 text-center xl:p-0">
@@ -99,7 +99,7 @@ const SeasonsList = () => {
           return (
             <div
               key={season.seasonId}
-              className="bg-muted dark:bg-muted/50 flex flex-row items-center justify-between px-2 py-1 text-sm lg:text-base 2xl:text-lg"
+              className="grid grid-cols-4 px-2 py-1 text-sm lg:text-base 2xl:text-lg"
             >
               <div className="w-28 font-semibold">{season.year}</div>
               <div className="rounded-md px-2 py-1 text-center xl:p-0">

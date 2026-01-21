@@ -1,5 +1,4 @@
 import Date from '@/components/Common/Date'
-import { Card } from '@/components/ui/card'
 import { useLoaderData } from '@tanstack/react-router'
 import StreakCard from './StreakCard'
 
@@ -7,7 +6,7 @@ const Streaks = () => {
   const data = useLoaderData({ from: '/_layout/maraton/records/streaks' })
   return (
     <div>
-      <div className="grid grid-cols-1 gap-2 lg:grid-cols-2 xl:grid-cols-3">
+      <div className="grid grid-cols-1 gap-20 lg:grid-cols-2 xl:grid-cols-3">
         <StreakCard
           streak={data.unbeatenStreak}
           title="Matcher i rad utan förlust"
@@ -33,8 +32,8 @@ const Streaks = () => {
           <div>
             {data.currInoffChamps.games.map((team, index) => {
               return (
-                <Card
-                  className="mb-1 flex flex-row items-center justify-between p-1 text-[10px] md:mb-2 md:p-2 md:text-sm"
+                <div
+                  className="mb-1 flex max-w-100 flex-row items-center justify-between p-1 text-[10px] md:mb-2 md:p-2 md:text-sm"
                   key={`${team.team.name}-${Math.random()}`}
                 >
                   <span className="mr-4 w-8 text-right text-base font-bold tabular-nums md:text-2xl">
@@ -59,7 +58,7 @@ const Streaks = () => {
                       </span>
                     </div>
                   </div>
-                </Card>
+                </div>
               )
             })}
           </div>
