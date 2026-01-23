@@ -14,6 +14,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as LayoutRouteImport } from './routes/_layout'
 import { Route as LayoutIndexRouteImport } from './routes/_layout/index'
 import { Route as LayoutTeamsRouteImport } from './routes/_layout/teams'
+import { Route as LayoutSearchRouteImport } from './routes/_layout/search'
 import { Route as LayoutTeamsIndexRouteImport } from './routes/_layout/teams/index'
 import { Route as LayoutSeasonsIndexRouteImport } from './routes/_layout/seasons/index'
 import { Route as LayoutSearchIndexRouteImport } from './routes/_layout/search/index'
@@ -66,6 +67,11 @@ const LayoutTeamsRoute = LayoutTeamsRouteImport.update({
   path: '/teams',
   getParentRoute: () => LayoutRoute,
 } as any)
+const LayoutSearchRoute = LayoutSearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => LayoutRoute,
+} as any)
 const LayoutUnauthorizedIndexLazyRoute =
   LayoutUnauthorizedIndexLazyRouteImport.update({
     id: '/unauthorized/',
@@ -85,9 +91,9 @@ const LayoutSeasonsIndexRoute = LayoutSeasonsIndexRouteImport.update({
   getParentRoute: () => LayoutRoute,
 } as any)
 const LayoutSearchIndexRoute = LayoutSearchIndexRouteImport.update({
-  id: '/search/',
-  path: '/search/',
-  getParentRoute: () => LayoutRoute,
+  id: '/',
+  path: '/',
+  getParentRoute: () => LayoutSearchRoute,
 } as any)
 const LayoutDashboardIndexRoute = LayoutDashboardIndexRouteImport.update({
   id: '/dashboard/',
@@ -260,6 +266,7 @@ const LayoutSeasonYearGroupTablesTableRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
+  '/search': typeof LayoutSearchRouteWithChildren
   '/teams': typeof LayoutTeamsRouteWithChildren
   '/': typeof LayoutIndexRoute
   '/maraton/table': typeof LayoutMaratonTableRouteWithChildren
@@ -270,7 +277,7 @@ export interface FileRoutesByFullPath {
   '/teams/selection': typeof LayoutTeamsSelectionRoute
   '/about': typeof LayoutAboutIndexRoute
   '/dashboard': typeof LayoutDashboardIndexRoute
-  '/search': typeof LayoutSearchIndexRoute
+  '/search/': typeof LayoutSearchIndexRoute
   '/seasons': typeof LayoutSeasonsIndexRoute
   '/teams/': typeof LayoutTeamsIndexRoute
   '/unauthorized': typeof LayoutUnauthorizedIndexLazyRoute
@@ -336,6 +343,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_layout': typeof LayoutRouteWithChildren
+  '/_layout/search': typeof LayoutSearchRouteWithChildren
   '/_layout/teams': typeof LayoutTeamsRouteWithChildren
   '/_layout/': typeof LayoutIndexRoute
   '/_layout/maraton/table': typeof LayoutMaratonTableRouteWithChildren
@@ -376,6 +384,7 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/search'
     | '/teams'
     | '/'
     | '/maraton/table'
@@ -386,7 +395,7 @@ export interface FileRouteTypes {
     | '/teams/selection'
     | '/about'
     | '/dashboard'
-    | '/search'
+    | '/search/'
     | '/seasons'
     | '/teams/'
     | '/unauthorized'
@@ -451,6 +460,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/_layout'
+    | '/_layout/search'
     | '/_layout/teams'
     | '/_layout/'
     | '/_layout/maraton/table'
@@ -516,6 +526,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutTeamsRouteImport
       parentRoute: typeof LayoutRoute
     }
+    '/_layout/search': {
+      id: '/_layout/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof LayoutSearchRouteImport
+      parentRoute: typeof LayoutRoute
+    }
     '/_layout/unauthorized/': {
       id: '/_layout/unauthorized/'
       path: '/unauthorized'
@@ -539,10 +556,10 @@ declare module '@tanstack/react-router' {
     }
     '/_layout/search/': {
       id: '/_layout/search/'
-      path: '/search'
-      fullPath: '/search'
+      path: '/'
+      fullPath: '/search/'
       preLoaderRoute: typeof LayoutSearchIndexRouteImport
-      parentRoute: typeof LayoutRoute
+      parentRoute: typeof LayoutSearchRoute
     }
     '/_layout/dashboard/': {
       id: '/_layout/dashboard/'
@@ -757,6 +774,18 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface LayoutSearchRouteChildren {
+  LayoutSearchIndexRoute: typeof LayoutSearchIndexRoute
+}
+
+const LayoutSearchRouteChildren: LayoutSearchRouteChildren = {
+  LayoutSearchIndexRoute: LayoutSearchIndexRoute,
+}
+
+const LayoutSearchRouteWithChildren = LayoutSearchRoute._addFileChildren(
+  LayoutSearchRouteChildren,
+)
+
 interface LayoutTeamsRouteChildren {
   LayoutTeamsCompareRoute: typeof LayoutTeamsCompareRoute
   LayoutTeamsMapRoute: typeof LayoutTeamsMapRoute
@@ -863,6 +892,7 @@ const LayoutTeamTeamIdRouteWithChildren =
   LayoutTeamTeamIdRoute._addFileChildren(LayoutTeamTeamIdRouteChildren)
 
 interface LayoutRouteChildren {
+  LayoutSearchRoute: typeof LayoutSearchRouteWithChildren
   LayoutTeamsRoute: typeof LayoutTeamsRouteWithChildren
   LayoutIndexRoute: typeof LayoutIndexRoute
   LayoutMaratonTableRoute: typeof LayoutMaratonTableRouteWithChildren
@@ -870,7 +900,6 @@ interface LayoutRouteChildren {
   LayoutTeamTeamIdRoute: typeof LayoutTeamTeamIdRouteWithChildren
   LayoutAboutIndexRoute: typeof LayoutAboutIndexRoute
   LayoutDashboardIndexRoute: typeof LayoutDashboardIndexRoute
-  LayoutSearchIndexRoute: typeof LayoutSearchIndexRoute
   LayoutSeasonsIndexRoute: typeof LayoutSeasonsIndexRoute
   LayoutUnauthorizedIndexLazyRoute: typeof LayoutUnauthorizedIndexLazyRoute
   LayoutMaratonRecordsConcededRoute: typeof LayoutMaratonRecordsConcededRoute
@@ -881,6 +910,7 @@ interface LayoutRouteChildren {
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
+  LayoutSearchRoute: LayoutSearchRouteWithChildren,
   LayoutTeamsRoute: LayoutTeamsRouteWithChildren,
   LayoutIndexRoute: LayoutIndexRoute,
   LayoutMaratonTableRoute: LayoutMaratonTableRouteWithChildren,
@@ -888,7 +918,6 @@ const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutTeamTeamIdRoute: LayoutTeamTeamIdRouteWithChildren,
   LayoutAboutIndexRoute: LayoutAboutIndexRoute,
   LayoutDashboardIndexRoute: LayoutDashboardIndexRoute,
-  LayoutSearchIndexRoute: LayoutSearchIndexRoute,
   LayoutSeasonsIndexRoute: LayoutSeasonsIndexRoute,
   LayoutUnauthorizedIndexLazyRoute: LayoutUnauthorizedIndexLazyRoute,
   LayoutMaratonRecordsConcededRoute: LayoutMaratonRecordsConcededRoute,
