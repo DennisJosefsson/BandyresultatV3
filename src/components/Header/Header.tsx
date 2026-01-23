@@ -1,16 +1,12 @@
-import { useRouter, useSearch } from '@tanstack/react-router'
+import { Link, useRouter, useSearch } from '@tanstack/react-router'
 import { Label } from '../ui/label'
 import { SidebarTrigger } from '../ui/sidebar'
 import { Switch } from '../ui/switch'
 
 import ClerkHeader from '../../integrations/clerk/header-user.tsx'
 
-import { LoaderPinwheelIcon } from 'lucide-react'
-// import { useState } from 'react'
-
-// import { Button } from '@/components/ui/button'
-// import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { useAuth } from '@clerk/clerk-react'
+import { LoaderPinwheelIcon } from 'lucide-react'
 import { useMediaQuery } from 'usehooks-ts'
 import { Button } from '../ui/button.tsx'
 import ModeToggle from './ModeToggle'
@@ -24,10 +20,17 @@ const Header = () => {
   })
   const matches = useMediaQuery('(min-width: 430px)')
   const { isLoaded } = useAuth()
-  // const isAdmin = orgRole === 'org:admin'
 
   const updateWomen = () => {
-    navigate({ to: '.', search: (prev) => ({ ...prev, women: !prev.women }) })
+    navigate({
+      to: '.',
+      search: (prev) => ({
+        ...prev,
+        women: !prev.women,
+        teamId: undefined,
+        opponentId: undefined,
+      }),
+    })
   }
 
   return (
@@ -35,6 +38,11 @@ const Header = () => {
       <SidebarTrigger />
 
       <div className="mr-2 flex flex-row items-center gap-6">
+        <div>
+          <Link to="/" search={{ women }}>
+            <span className="text-lg font-bold">Bandyresultat</span>
+          </Link>
+        </div>
         <div className="flex w-full items-center space-x-2">
           <Switch
             id="women"
