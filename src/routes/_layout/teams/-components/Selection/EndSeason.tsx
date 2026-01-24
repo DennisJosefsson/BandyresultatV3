@@ -65,7 +65,7 @@ const EndSeason = () => {
             <SelectContent>
               <List
                 rowComponent={RenderItem}
-                rowHeight={16}
+                rowHeight={40}
                 rowCount={teams.length}
                 listRef={listRef}
                 rowProps={{ teams }}

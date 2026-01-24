@@ -67,8 +67,8 @@ const StartSeason = () => {
             <SelectContent onCloseAutoFocus={(e) => e.preventDefault()}>
               <List
                 rowComponent={RenderItem}
-                rowHeight={250}
-                rowCount={12}
+                rowHeight={40}
+                rowCount={teams.length}
                 listRef={listRef}
                 rowProps={{ teams }}
               />
