@@ -1,16 +1,77 @@
 import { db } from '@/db'
+import { games, seasons, series, teams } from '@/db/schema'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import { createServerFn } from '@tanstack/react-start'
-import { asc, sql } from 'drizzle-orm'
+import { and, asc, desc, eq, inArray, notInArray, sql } from 'drizzle-orm'
 
 export const getSearchTeams = createServerFn({ method: 'GET' })
   .middleware([errorMiddleware])
   .handler(async () => {
-    const teams = await db.query.teams.findMany({
-      columns: { teamId: true, name: true, casualName: true, women: true },
-      where: (teams, { ne }) => ne(teams.teamId, 176),
-      orderBy: [asc(sql`casual_name collate "se-SE-x-icu"`)],
-    })
+    const firstDivTeams = await db
+      .select({
+        teamId: teams.teamId,
+        name: teams.name,
+        casualName: teams.casualName,
+        women: teams.women,
+      })
+      .from(teams)
+      .where(
+        inArray(
+          teams.teamId,
+          db
+            .selectDistinctOn([games.homeTeamId], { teamId: games.homeTeamId })
+            .from(games)
+            .leftJoin(series, eq(games.serieId, series.serieId))
+            .where(
+              and(
+                eq(series.level, 1.0),
+                inArray(
+                  games.seasonId,
+                  db
+                    .select({ seasonId: seasons.seasonId })
+                    .from(seasons)
+                    .orderBy(desc(seasons.seasonId))
+                    .limit(2),
+                ),
+              ),
+            ),
+        ),
+      )
+      .orderBy(asc(sql`casual_name collate "se-SE-x-icu"`))
 
-    return teams
+    const allTeams = await db
+      .select({
+        teamId: teams.teamId,
+        name: teams.name,
+        casualName: teams.casualName,
+        women: teams.women,
+      })
+      .from(teams)
+      .where(
+        notInArray(
+          teams.teamId,
+          db
+            .selectDistinctOn([games.homeTeamId], { teamId: games.homeTeamId })
+            .from(games)
+            .leftJoin(series, eq(games.serieId, series.serieId))
+            .where(
+              and(
+                eq(series.level, 1.0),
+                inArray(
+                  games.seasonId,
+                  db
+                    .select({ seasonId: seasons.seasonId })
+                    .from(seasons)
+                    .orderBy(desc(seasons.seasonId))
+                    .limit(2),
+                ),
+              ),
+            ),
+        ),
+      )
+      .orderBy(asc(sql`casual_name collate "se-SE-x-icu"`))
+
+    const teamArray = [...firstDivTeams, ...allTeams]
+
+    return teamArray
   })
