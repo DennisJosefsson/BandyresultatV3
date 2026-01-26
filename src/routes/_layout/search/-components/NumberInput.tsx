@@ -20,7 +20,7 @@ const NumberInput = ({ field, label, placeholder }: NumberInputProps) => {
     select: (search) => search[field],
   })
   const [input, setInput] = useState(searchField?.toString() ?? '')
-  const [debouncedValue, setValue] = useDebounceValue(input, 500)
+  const [debouncedValue, setValue] = useDebounceValue(input, 250)
   const navigate = useNavigate({ from: '/search' })
 
   useEffect(() => {
