@@ -1,23 +1,9 @@
-//import { auth } from '@clerk/tanstack-react-start/server'
 import { createFileRoute } from '@tanstack/react-router'
-//import { createServerFn } from '@tanstack/react-start'
-
-// const authStateFn = createServerFn({ method: 'GET' }).handler(async () => {
-//   // const { orgRole } = await auth()
-//   // const isAdmin = orgRole === 'org:admin'
-
-//   if (!isAdmin) {
-//     throw redirect({
-//       to: '/unauthorized',
-//     })
-//   }
-// })
 
 export const Route = createFileRoute('/_layout/dashboard/')({
-  //beforeLoad: () => authStateFn(),
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  return <div>Hello "/dashboard/"!</div>
+  return <div className="grid grid-cols-2"></div>
 }

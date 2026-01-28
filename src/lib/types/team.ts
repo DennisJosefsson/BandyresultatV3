@@ -10,3 +10,5 @@ export type TeamBase = Pick<
 export type MapTeam = Team & {
   county: typeof county.$inferSelect
 } & { municipality: typeof municipality.$inferSelect | null }
+
+export type TeamBaseWithTeamGameId = TeamBase & { teamGameId: number }

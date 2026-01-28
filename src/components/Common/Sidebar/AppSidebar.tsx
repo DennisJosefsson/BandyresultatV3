@@ -242,7 +242,7 @@ const AppSidebar = () => {
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
-
+          {/* <SignedIn> */}
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
               <Link
@@ -258,6 +258,7 @@ const AppSidebar = () => {
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
+          {/* </SignedIn> */}
         </SidebarMenu>
       </SidebarContent>
     </Sidebar>

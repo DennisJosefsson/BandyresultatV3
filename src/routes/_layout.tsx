@@ -1,9 +1,9 @@
 import AppSidebar from '@/components/Common/Sidebar/AppSidebar'
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import Header from '@/components/Header/Header'
-// import Header from '@/components/Header/Header'
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 import { CatchBoundary, createFileRoute, Outlet } from '@tanstack/react-router'
+import { Toaster } from 'sonner'
 export const Route = createFileRoute('/_layout')({
   component: RouteComponent,
 })
@@ -29,6 +29,7 @@ function RouteComponent() {
               <Outlet />
             </div>
           </CatchBoundary>
+          <Toaster richColors />
         </div>
       </SidebarInset>
     </SidebarProvider>
