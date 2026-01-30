@@ -8,9 +8,4 @@ export const Route = createFileRoute('/_layout/dashboard/season/$seasonId')({
     }),
     stringify: ({ seasonId }) => ({ seasonId: `${seasonId}` }),
   },
-  component: RouteComponent,
 })
-
-function RouteComponent() {
-  return <div>Hello "/_layout/dashboard/season/$seasonId"!</div>
-}

@@ -11,7 +11,7 @@ function RouteComponent() {
   return (
     <>
       <div className="fixed inset-y-40 z-50 m-2 flex items-center justify-center overflow-x-hidden outline-none focus:outline-none">
-        <div className="fixed inset-2 mx-auto my-6 w-auto max-w-3xl">
+        <div className="fixed inset-2 mx-auto my-40 w-auto max-w-3xl">
           <DateUpdateForm />
         </div>
       </div>

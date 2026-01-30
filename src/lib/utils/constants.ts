@@ -23,6 +23,8 @@ export const sortOrder = [
   'AllsvUpp',
   'DamAllsvNorrForts',
   'DamAllsvSydForts',
+  'AllsvNorrDam',
+  'AllsvDamSyd',
   'DamAllsvNorr',
   'DamAllsvMitt',
   'DamAllsvSyd',

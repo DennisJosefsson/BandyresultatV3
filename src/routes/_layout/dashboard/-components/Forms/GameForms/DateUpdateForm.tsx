@@ -19,12 +19,8 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from '@/components/ui/input-group'
-import { zd } from '@/lib/utils/zod'
-import { useForm } from '@tanstack/react-form'
-import { useMutation } from '@tanstack/react-query'
-import { getRouteApi, useRouter } from '@tanstack/react-router'
-import { toast } from 'sonner'
-import { updateDate } from '../../../-functions/GameFunctions.ts/updateDate'
+import { getRouteApi } from '@tanstack/react-router'
+import { useGameDateForm } from '../../../-hooks/useGameDateForm'
 
 const route = getRouteApi('/_layout/dashboard/games/$today/$gameId')
 
@@ -34,50 +30,16 @@ const currDate = new Date().toLocaleDateString('se-SV', {
   day: '2-digit',
 })
 
-type Data =
-  | {
-      status: 404
-      message: string
-    }
-  | {
-      status: 200
-      message: string
-    }
-  | undefined
-
-const submitGameResult = zd.object({
-  gameId: zd.number().int().positive(),
-  date: zd.iso.date({ message: 'Fel datumformat.' }),
-  homeTeamGameId: zd.number().int().positive(),
-  awayTeamGameId: zd.number().int().positive(),
-})
-
 const ResultUpdateForm = () => {
   const game = route.useLoaderData()
-  const router = useRouter()
+
   const today = route.useParams({ select: (s) => s.today })
   const women = route.useSearch({
     select: (search) => search.women,
   })
 
   const navigate = route.useNavigate()
-
-  const mutation = useMutation({
-    mutationFn: updateDate,
-    onSuccess: (data) => onSuccessSubmit(data),
-    onError: (error) => onErrorFunction(error),
-  })
-
-  const form = useForm({
-    defaultValues: {
-      gameId: game.gameId,
-      date: game.date,
-      homeTeamGameId: game.home.teamGameId,
-      awayTeamGameId: game.away.teamGameId,
-    },
-    validators: { onSubmit: submitGameResult, onBlur: submitGameResult },
-    onSubmit: ({ value }) => mutation.mutateAsync({ data: value }),
-  })
+  const form = useGameDateForm()
 
   const close = () => {
     navigate({
@@ -85,27 +47,6 @@ const ResultUpdateForm = () => {
       search: { women },
       params: { today },
     })
-  }
-
-  const onSuccessSubmit = (data: Data) => {
-    router.invalidate({
-      filter: (route) => route.routeId === '/_layout/dashboard/games/$today',
-    })
-    if (!data) {
-      toast.success('Okänt fel.')
-    } else {
-      toast.success(data.message)
-    }
-
-    close()
-  }
-
-  const onErrorFunction = (error: unknown) => {
-    if (error instanceof Error) {
-      toast.error(error.message)
-    } else {
-      toast.error('Något gick fel.')
-    }
   }
 
   const buttonClick = () => {
@@ -147,6 +88,7 @@ const ResultUpdateForm = () => {
                         onChange={(e) => field.handleChange(e.target.value)}
                         placeholder="T.ex. 2025-12-26"
                         aria-invalid={isInvalid}
+                        autoFocus
                       />
                       <InputGroupAddon align="inline-end">
                         <InputGroupButton
