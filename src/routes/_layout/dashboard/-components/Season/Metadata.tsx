@@ -6,7 +6,6 @@ import { getRouteApi } from '@tanstack/react-router'
 const route = getRouteApi('/_layout/dashboard/season/$seasonId/')
 
 const Metadata = () => {
-  //   const navigate = route.useNavigate()
   const women = route.useSearch({ select: (search) => search.women })
   const seasonId = route.useParams({ select: (s) => s.seasonId })
   const metadata = route.useLoaderData({ select: (search) => search.metadata })
