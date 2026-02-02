@@ -205,7 +205,7 @@ export const series = pgTable(
     ),
     hasStatic: boolean('has_static').default(false),
     hasParent: boolean('has_parent').default(false),
-    allParentGmes: boolean('all_parent_games').default(false),
+    allParentGames: boolean('all_parent_games').default(false),
   },
   (table) => [
     foreignKey({
