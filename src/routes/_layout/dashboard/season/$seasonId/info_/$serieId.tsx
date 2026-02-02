@@ -1,11 +1,13 @@
+import { zd } from '@/lib/utils/zod'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute(
   '/_layout/dashboard/season/$seasonId/info_/$serieId',
 )({
-  component: RouteComponent,
+  params: {
+    parse: (params) => ({
+      serieId: zd.number().int().parse(Number(params.serieId)),
+    }),
+    stringify: ({ serieId }) => ({ serieId: `${serieId}` }),
+  },
 })
-
-function RouteComponent() {
-  return <div>Hello "/_layout/dashboard/season/$seasonId/info_/$serieId"!</div>
-}

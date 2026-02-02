@@ -7,23 +7,22 @@ const route = getRouteApi('/_layout/dashboard/season/$seasonId/')
 
 const Series = () => {
   const series = route.useLoaderData({ select: (s) => s.series })
+  const seasonId = route.useParams({ select: (s) => s.seasonId })
+  const women = route.useSearch({ select: (s) => s.women })
 
   return (
     <Card>
       <CardHeader>
         <div className="flex flex-row items-center justify-between">
           <CardTitle className="xl:text-lg">Serier</CardTitle>
-          <Button
-          // onClick={() => {
-          //   navigate({
-          //     to: '/dashboard/season/$seasonId/newseries',
-          //     params: { seasonId: seasonId },
-          //     search: { women: women },
-          //   })
-          // }}
-          // size="sm"
-          >
-            Lägg till serie
+          <Button asChild>
+            <route.Link
+              to="info/newSerie"
+              params={{ seasonId }}
+              search={{ women }}
+            >
+              Lägg till serie
+            </route.Link>
           </Button>
         </div>
       </CardHeader>
@@ -75,21 +74,17 @@ const Series = () => {
                         Info
                       </Button>
                       {/* </Link> */}
-                      <Button
-                        // onClick={() => {
-                        //   navigate({
-                        //     to: '/dashboard/season/$seasonId/games/$serieId/edit',
-                        //     params: {
-                        //       seasonId: seasonId,
-                        //       serieId: serie.serieId,
-                        //     },
-                        //     search: { women: women },
-                        //   })
-                        // }}
-                        size="sm"
-                        variant="outline"
-                      >
-                        Ändra
+                      <Button asChild size="sm" variant="outline">
+                        <route.Link
+                          to="/dashboard/season/$seasonId/info/$serieId/edit"
+                          params={{
+                            seasonId: seasonId,
+                            serieId: serie.serieId,
+                          }}
+                          search={{ women }}
+                        >
+                          Ändra
+                        </route.Link>
                       </Button>
                     </div>
                   </div>
