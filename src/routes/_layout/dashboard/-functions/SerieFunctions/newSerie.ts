@@ -17,7 +17,11 @@ export const newSerieInput = createServerFn({ method: 'POST' })
         .returning()
         .then((res) => res[0])
 
-      return { status: 200, message: `Ny serie ${newSerie.serieName} inlagd.` }
+      return {
+        status: 200,
+        message: `Ny serie ${newSerie.serieName} inlagd.`,
+        serieId: newSerie.serieId,
+      }
     } catch (error) {
       catchError(error)
     }

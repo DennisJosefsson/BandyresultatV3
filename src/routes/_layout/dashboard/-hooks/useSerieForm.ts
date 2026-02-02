@@ -6,7 +6,7 @@ import { useNavigate, useRouter, useSearch } from '@tanstack/react-router'
 import { toast } from 'sonner'
 import { newSerieInput } from '../-functions/SerieFunctions/newSerie'
 
-type Data = { status: 200; message: string } | undefined
+type Data = { status: 200; message: string; serieId: number } | undefined
 
 export const useNewSerieForm = ({ seasonId }: { seasonId: number }) => {
   const router = useRouter()
@@ -44,12 +44,16 @@ export const useNewSerieForm = ({ seasonId }: { seasonId: number }) => {
       toast.success('Okänt fel.')
     } else {
       toast.success(data.message)
+      router.invalidate({
+        filter: (route) =>
+          route.routeId === '/_layout/dashboard/season/$seasonId',
+      })
+      navigate({
+        to: '/dashboard/season/$seasonId/info/$serieId/edit',
+        search: { women },
+        params: { serieId: data.serieId },
+      })
     }
-    router.invalidate({
-      filter: (route) =>
-        route.routeId === '/_layout/dashboard/season/$seasonId',
-    })
-    navigate({ to: '/dashboard/season/$seasonId', search: { women } })
   }
 
   const onMutationError = (error: unknown) => {
