@@ -5,8 +5,8 @@ import { Card, CardContent, CardFooter } from '../ui/card'
 type ConfirmDialogProps = {
   dialogRef: RefObject<HTMLDialogElement | null>
   confirmTitle: string
-  confirmButtonText: string
-  closeButtonText: string
+  confirmButtonText?: string
+  closeButtonText?: string
   onClose: () => void
   confirmFunction: () => void
 }
@@ -16,8 +16,8 @@ const ConfirmDialog = ({
   onClose,
   confirmFunction,
   confirmTitle,
-  confirmButtonText,
-  closeButtonText,
+  confirmButtonText = 'Ja, ta bort',
+  closeButtonText = 'Nej,stäng',
 }: ConfirmDialogProps) => {
   return (
     <dialog ref={dialogRef} className="backdrop:bg-accent/50" onClose={onClose}>
