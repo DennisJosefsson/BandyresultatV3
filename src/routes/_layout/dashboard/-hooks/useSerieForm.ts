@@ -6,7 +6,7 @@ import { useNavigate, useRouter, useSearch } from '@tanstack/react-router'
 import { toast } from 'sonner'
 import { newSerieInput } from '../-functions/SerieFunctions/newSerie'
 
-type Data = { status: 200; message: string; serieId: number } | undefined
+type Data = Awaited<ReturnType<typeof newSerieInput>>
 
 export const useNewSerieForm = ({ seasonId }: { seasonId: number }) => {
   const router = useRouter()
