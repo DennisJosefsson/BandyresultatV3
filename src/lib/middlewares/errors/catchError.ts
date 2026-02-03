@@ -22,8 +22,11 @@ export function catchError(error: unknown) {
         constraint: constraint ?? 'Constraint not defined',
       },
     })
+  } else if (error instanceof Error) {
+    console.error(error)
+    throw new Error(error.message)
   } else {
     console.error(error)
-    throw new Error('An error occured')
+    throw new Error('Något gick fel.')
   }
 }
