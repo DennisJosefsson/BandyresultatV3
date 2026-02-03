@@ -5,13 +5,6 @@ import { CatchBoundary, createFileRoute, Outlet } from '@tanstack/react-router'
 import SeasonHeader from './$year/-components/SeasonHeader'
 import { getGroups } from './$year/-functions/getGroups'
 
-const getMaxYear = () => {
-  const year = new Date().getFullYear()
-  const month = new Date().getMonth()
-  if (month > 4) return year + 1
-  return year
-}
-
 const yearParser = zd.object({
   year: zd.number().int().min(1907),
 })
@@ -20,13 +13,7 @@ export const Route = createFileRoute('/_layout/season/$year')({
   loaderDeps: ({ search: { women } }) => ({ women }),
   params: {
     parse: (params) => ({
-      year: zd
-        .number()
-        .int()
-        .min(1907)
-        .max(getMaxYear())
-        .catch(getMaxYear())
-        .parse(Number(params.year)),
+      year: zd.number().int().min(1907).parse(Number(params.year)),
     }),
     stringify: ({ year }) => ({
       year: `${year}`,
@@ -45,116 +32,6 @@ export const Route = createFileRoute('/_layout/season/$year')({
 })
 
 function Season() {
-  // const data = Route.useLoaderData()
-  // const matches = useChildMatches()
-  // const playoffRoute = matches.some(
-  //   (route) => route.routeId === '/_layout/season/$year/playoff',
-  // )
-
-  // if (data.status === 204) {
-  //   return (
-  //     <div className="font-inter text-foreground flex min-h-screen flex-col px-2">
-  //       <Card className="mb-2">
-  //         <CardContent className="max-w-full">
-  //           <SeasonHeader />
-  //           <SeasonTabBar />
-  //         </CardContent>
-  //       </Card>
-
-  //       <Card>
-  //         <CardContent className="mt-2 min-h-screen p-2">
-  //           <CatchBoundary
-  //             getResetKey={() => 'reset'}
-  //             onCatch={(error) => {
-  //               console.error(error)
-  //             }}
-  //             errorComponent={({ error, reset }) => (
-  //               <SimpleErrorComponent
-  //                 id="Enskild säsong"
-  //                 error={error}
-  //                 reset={reset}
-  //               />
-  //             )}
-  //           >
-  //             <div className="font-inter text-foreground mx-auto mt-4 grid place-items-center py-5 text-sm font-bold md:text-base">
-  //               <p className="mx-10 text-center">
-  //                 Första säsongen för damernas högsta serie var{' '}
-  //                 <Link
-  //                   to={'/season/$year'}
-  //                   params={{ year: 1973 }}
-  //                   search={{ women: true }}
-  //                   className="font-bold"
-  //                 >
-  //                   1972/73
-  //                 </Link>
-  //                 .
-  //               </p>
-  //             </div>
-  //           </CatchBoundary>
-  //         </CardContent>
-  //       </Card>
-  //     </div>
-  //   )
-  // }
-
-  // if (matches.length === 0) {
-  //   return <GroupSelection />
-  // }
-
-  // return (
-  //   <div className="font-inter text-foreground flex min-h-screen flex-col px-2">
-  //     <Card className="mb-2">
-  //       <CardContent className="max-w-full">
-  //         <SeasonHeader />
-  //         <SeasonTabBar />
-  //       </CardContent>
-  //     </Card>
-  //     {!playoffRoute && (
-  //       <ScrollArea
-  //         className="mb-2 h-16 w-full rounded-md border whitespace-nowrap"
-  //         type="auto"
-  //       >
-  //         <div className="flex w-max justify-center space-x-16 p-4">
-  //           {data.groups.map((item) => {
-  //             return (
-  //               <div className="w-full text-nowrap" key={item.group}>
-  //                 <Link
-  //                   to="."
-  //                   params={(prev) => ({ ...prev, group: item.group })}
-  //                   search={(prev) => ({ women: prev.women })}
-  //                 >
-  //                   {item.name}
-  //                 </Link>
-  //               </div>
-  //             )
-  //           })}
-  //         </div>
-  //         <ScrollBar orientation="horizontal" />
-  //       </ScrollArea>
-  //     )}
-
-  //     <Card>
-  //       <CardContent className="mt-2 min-h-screen p-2">
-  //         <CatchBoundary
-  //           getResetKey={() => 'reset'}
-  //           onCatch={(error) => {
-  //             console.error(error)
-  //           }}
-  //           errorComponent={({ error, reset }) => (
-  //             <SimpleErrorComponent
-  //               id="Enskild säsong"
-  //               error={error}
-  //               reset={reset}
-  //             />
-  //           )}
-  //         >
-  //           <Outlet />
-  //         </CatchBoundary>
-  //       </CardContent>
-  //     </Card>
-  //   </div>
-  // )
-
   return (
     <div className="flex flex-col gap-2">
       <SeasonHeader />
