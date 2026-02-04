@@ -1,9 +1,14 @@
 import { createFileRoute } from '@tanstack/react-router'
+import TeamsList from '../-components/Team/TeamsList'
+import { getAllTeams } from '../-functions/TeamFunctions/getAllTeams'
 
 export const Route = createFileRoute('/_layout/dashboard/teams/')({
-  component: RouteComponent,
-})
+  loader: async () => {
+    const teams = await getAllTeams()
+    if (!teams) throw new Error('Missing data')
 
-function RouteComponent() {
-  return <div>Hello "/_layout/dashboard/teams/"!</div>
-}
+    return teams
+  },
+
+  component: TeamsList,
+})

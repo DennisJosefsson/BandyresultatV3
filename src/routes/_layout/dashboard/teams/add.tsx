@@ -1,9 +1,14 @@
 import { createFileRoute } from '@tanstack/react-router'
+import AddTeam from '../-components/Forms/TeamForms/AddTeam'
+import { getCountiesForTeamForm } from '../-functions/TeamFunctions/getCountriesForTeamForm'
 
 export const Route = createFileRoute('/_layout/dashboard/teams/add')({
-  component: RouteComponent,
-})
+  loader: async () => {
+    const counties = await getCountiesForTeamForm()
+    if (!counties) throw new Error('Missing data')
 
-function RouteComponent() {
-  return <div>Hello "/_layout/dashboard/teams/add"!</div>
-}
+    return counties
+  },
+
+  component: AddTeam,
+})

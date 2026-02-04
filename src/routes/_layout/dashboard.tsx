@@ -43,6 +43,17 @@ function RouteComponent() {
                 Säsonger
               </Link>
             </TabsTrigger>
+            <TabsTrigger value="newSeason" asChild>
+              <Link
+                from={Route.fullPath}
+                to="/dashboard/newseason"
+                search={(prev) => ({ women: prev.women })}
+                activeProps={{ 'data-state': 'active' }}
+                activeOptions={{ includeSearch: false, exact: true }}
+              >
+                Generera ny säsong
+              </Link>
+            </TabsTrigger>
             {womenSeason ? (
               <TabsTrigger value="seasons" asChild>
                 <Link
@@ -120,15 +131,27 @@ function RouteComponent() {
                 Dagens matcher {`[${data.todaysUnplayedGamesCount}]`}
               </Link>
             </TabsTrigger>
-            <TabsTrigger value="newSeason" asChild>
+
+            <TabsTrigger value="teamslist" asChild>
               <Link
                 from={Route.fullPath}
-                to="/dashboard/newseason"
+                to="/dashboard/teams"
                 search={(prev) => ({ women: prev.women })}
                 activeProps={{ 'data-state': 'active' }}
                 activeOptions={{ includeSearch: false, exact: true }}
               >
-                Generera ny säsong
+                Laglista
+              </Link>
+            </TabsTrigger>
+            <TabsTrigger value="newTeam" asChild>
+              <Link
+                from={Route.fullPath}
+                to="/dashboard/teams/add"
+                search={(prev) => ({ women: prev.women })}
+                activeProps={{ 'data-state': 'active' }}
+                activeOptions={{ includeSearch: false, exact: true }}
+              >
+                Lägg till lag
               </Link>
             </TabsTrigger>
           </TabsList>
