@@ -1,3 +1,5 @@
+import { zd } from '../utils/zod'
+
 export type Game = {
   gameId: number
   homeTeamId: number
@@ -47,10 +49,27 @@ export type Games = {
 }
 
 export type PlayoffGames = {
-  
   played: GameGroupBase<Omit<Game, 'season'>[]>[]
   unplayed: GameGroupBase<Omit<Game, 'season'>[]>[]
   playedLength: number
   unplayedLength: number
-
 }
+
+export const generatedGameObject = zd.object({
+  homeName: zd.string(),
+  awayName: zd.string(),
+  homeTeamId: zd.number().positive().int(),
+  awayTeamId: zd.number().positive().int(),
+  date: zd.iso.date(),
+  group: zd.string(),
+  category: zd.string(),
+  played: zd.boolean(),
+  playoff: zd.boolean(),
+  women: zd.boolean(),
+  serieId: zd.number().positive().int(),
+  seasonId: zd.number().positive().int(),
+})
+
+export const generatedGameObjectArray = zd.object({
+  gameArray: zd.array(generatedGameObject),
+})
