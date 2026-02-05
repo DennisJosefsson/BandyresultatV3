@@ -87,7 +87,7 @@ export const games = pgTable(
     penalties: boolean().default(false),
     group: varchar().default('elitserien').notNull(),
     mix: boolean().default(false),
-    serieId: integer('serie_id'),
+    serieId: integer('serie_id').notNull(),
     played: boolean(),
   },
   (table) => [
