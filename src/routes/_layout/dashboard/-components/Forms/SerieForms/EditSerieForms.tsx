@@ -32,6 +32,14 @@ const EditSerieForms = () => {
             </route.Link>
           </Button>
           <Button asChild>
+            <route.Link
+              to="/dashboard/season/$seasonId/info/$serieId/edit/singlegame"
+              search={(prev) => ({ women: prev.women })}
+            >
+              Lägg till match
+            </route.Link>
+          </Button>
+          <Button asChild>
             <route.Link to="." search={(prev) => ({ women: prev.women })}>
               Tillbaka
             </route.Link>
