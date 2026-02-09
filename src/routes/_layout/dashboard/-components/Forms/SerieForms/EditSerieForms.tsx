@@ -38,6 +38,14 @@ const EditSerieForms = () => {
           </Button>
           <Button asChild>
             <route.Link
+              to="/dashboard/season/$seasonId/info/$serieId/edit/games"
+              search={(prev) => ({ women: prev.women })}
+            >
+              Matcher
+            </route.Link>
+          </Button>
+          <Button asChild>
+            <route.Link
               to="/dashboard/season/$seasonId/info/$serieId/edit/generateschedule"
               search={(prev) => ({ women: prev.women })}
             >
@@ -50,6 +58,14 @@ const EditSerieForms = () => {
               search={(prev) => ({ women: prev.women })}
             >
               Lägg till match
+            </route.Link>
+          </Button>
+          <Button asChild>
+            <route.Link
+              to="/dashboard/season/$seasonId/info/$serieId/edit/addGames"
+              search={(prev) => ({ women: prev.women })}
+            >
+              Lägg till matcher
             </route.Link>
           </Button>
           <Button asChild>
