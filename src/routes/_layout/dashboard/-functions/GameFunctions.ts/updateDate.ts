@@ -44,7 +44,6 @@ export const updateDate = createServerFn({ method: 'POST' })
         updatedHomeTeamGame.length === 0 ||
         updatedAwayTeamGame.length === 0
       ) {
-        console.log('Här är vi nu')
         return { status: 404, message: 'Teamgames saknas.' }
       }
 
