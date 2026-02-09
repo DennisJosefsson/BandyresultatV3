@@ -50,30 +50,19 @@ const Series = () => {
                   >
                     <div className="xl:text-lg">{serie.serieName}</div>
                     <div className="flex flex-row gap-1">
-                      {/* <Link
-                        to="/dashboard/season/$seasonId/games/$serieId"
-                        search={{ women: women }}
-                        params={{
-                          seasonId: seasonId,
-                          serieId: serie.serieId,
-                        }}
-                      > */}
-                      <Button size="sm" variant="outline">
-                        Matcher
+                      <Button size="sm" variant="outline" asChild>
+                        <route.Link
+                          to="/dashboard/season/$seasonId/info/$serieId/edit/games"
+                          params={{
+                            seasonId: seasonId,
+                            serieId: serie.serieId,
+                          }}
+                          search={{ women }}
+                        >
+                          Matcher
+                        </route.Link>
                       </Button>
-                      {/* </Link>
-                      <Link
-                        to="/dashboard/season/$seasonId/info/$serieId"
-                        search={{ women: women }}
-                        params={{
-                          seasonId: seasonId,
-                          serieId: serie.serieId,
-                        }}
-                      > */}
-                      <Button size="sm" variant="outline">
-                        Info
-                      </Button>
-                      {/* </Link> */}
+
                       <Button asChild size="sm" variant="outline">
                         <route.Link
                           to="/dashboard/season/$seasonId/info/$serieId/edit"
