@@ -25,6 +25,7 @@ export const newSeriesObject = zd.object({
   hasStatic: zd.boolean().default(false).optional(),
   hasParent: zd.boolean().default(false).optional(),
   allParentGames: zd.boolean().default(false).optional(),
+  uefaSorting: zd.boolean().default(false).optional(),
 })
 
 export const editSeriesObject = zd.object({
@@ -40,6 +41,7 @@ export const editSeriesObject = zd.object({
   hasStatic: zd.boolean().default(false).optional(),
   hasParent: zd.boolean().default(false).optional(),
   allParentGames: zd.boolean().default(false).optional(),
+  uefaSorting: zd.boolean().default(false).optional(),
 })
 
 export const newParentSerieObject = zd.object({

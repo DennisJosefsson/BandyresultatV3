@@ -265,7 +265,7 @@ const EditSerie = () => {
                 )
               }}
             />
-            <div className="grid grid-cols-4 gap-2">
+            <div className="grid grid-cols-5 gap-2">
               <form.Field
                 name="hasMix"
                 children={(field) => {
@@ -377,6 +377,36 @@ const EditSerie = () => {
                           className="font-normal"
                         >
                           allParentGames
+                        </FieldLabel>
+                      </Field>
+                      {isInvalid && (
+                        <FieldError errors={field.state.meta.errors} />
+                      )}
+                    </Field>
+                  )
+                }}
+              />
+              <form.Field
+                name="uefaSorting"
+                children={(field) => {
+                  const isInvalid =
+                    field.state.meta.isTouched && !field.state.meta.isValid
+                  return (
+                    <Field data-invalid={isInvalid}>
+                      <Field orientation="horizontal" data-invalid={isInvalid}>
+                        <Checkbox
+                          id={field.name}
+                          name={field.name}
+                          checked={field.state.value}
+                          onCheckedChange={(checked) =>
+                            field.handleChange(checked === true)
+                          }
+                        />
+                        <FieldLabel
+                          htmlFor={field.name}
+                          className="font-normal"
+                        >
+                          UEFA-sortering
                         </FieldLabel>
                       </Field>
                       {isInvalid && (

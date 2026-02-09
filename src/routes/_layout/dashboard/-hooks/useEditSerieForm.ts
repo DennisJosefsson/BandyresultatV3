@@ -33,8 +33,9 @@ export const useEditSerieForm = () => {
     level: serie.level,
     hasMix: serie.hasMix ?? false,
     hasParent: serie.hasParent ?? false,
-    allParentGames: serie.allParentGmes ?? false,
+    allParentGames: serie.allParentGames ?? false,
     hasStatic: serie.hasStatic ?? false,
+    uefaSorting: serie.uefaSorting ?? false,
   }
   const form = useForm({
     validators: { onBlur: editSeriesObject, onSubmit: editSeriesObject },
