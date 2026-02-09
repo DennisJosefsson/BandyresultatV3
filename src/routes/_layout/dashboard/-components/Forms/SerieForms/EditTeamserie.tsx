@@ -33,7 +33,11 @@ const EditTeamSerie = () => {
   const teamArray = route
     .useLoaderData({ select: (s) => s.teamsInSerie })
     .map((team) => {
-      return { teamseriesId: team.teamseriesId, teamName: team.team.casualName }
+      return {
+        teamseriesId: team.teamseriesId,
+        teamName: team.team.casualName,
+        teamId: team.team.teamId,
+      }
     })
   const mutation = deleteTeamserieMutation(teamserieDialogRef)
   const openDialog = (id: number) => {
@@ -85,7 +89,8 @@ const EditTeamSerie = () => {
                       <FieldLegend variant="label">
                         <div className="flex flex-row items-center gap-2">
                           <span className="w-40 text-sm">Lag</span>
-                          <div className="w-40">Bonuspoäng</div>
+                          <span className="w-40 text-sm">TeamId</span>
+                          <div className="w-40 text-sm">Bonuspoäng</div>
                         </div>
                       </FieldLegend>
                       <FieldGroup className="gap-4">
@@ -97,6 +102,9 @@ const EditTeamSerie = () => {
                               const currTeamName = teamArray.find(
                                 (t) => t.teamseriesId === team.teamseriesId,
                               )?.teamName
+                              const currTeamId = teamArray.find(
+                                (t) => t.teamseriesId === team.teamseriesId,
+                              )?.teamId
                               const isSubFieldInvalid =
                                 subField.state.meta.isTouched &&
                                 !subField.state.meta.isValid
@@ -109,6 +117,9 @@ const EditTeamSerie = () => {
                                     <div className="flex flex-row items-center gap-2">
                                       <span className="w-40 text-sm">
                                         {currTeamName}
+                                      </span>
+                                      <span className="w-40 text-sm">
+                                        {currTeamId}
                                       </span>
                                       <div className="w-40">
                                         <InputGroup>
