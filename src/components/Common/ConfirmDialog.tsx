@@ -25,7 +25,9 @@ const ConfirmDialog = ({
         <div className="fixed inset-2 mx-auto my-60 h-50 w-80">
           <Card>
             <CardContent className="mb-8 flex flex-row justify-center">
-              <span className="text-base font-bold">{confirmTitle}</span>
+              <span className="text-center text-base font-bold">
+                {confirmTitle}
+              </span>
             </CardContent>
             <CardFooter className="flex flex-row justify-between">
               <Button onClick={() => dialogRef.current?.close()} autoFocus>
