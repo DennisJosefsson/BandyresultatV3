@@ -249,7 +249,7 @@ const EditSerie = () => {
                               }}
                             />
                             <FieldLabel
-                              htmlFor={`form-tanstack-checkbox-${item.value}`}
+                              htmlFor={`serieStructure-${item.value}`}
                               className="font-normal"
                             >
                               {item.label}
