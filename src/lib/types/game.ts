@@ -56,8 +56,8 @@ export type PlayoffGames = {
 }
 
 export const generatedGameObject = zd.object({
-  homeName: zd.string(),
-  awayName: zd.string(),
+  homeName: zd.string().optional(),
+  awayName: zd.string().optional(),
   homeTeamId: zd.number().positive().int(),
   awayTeamId: zd.number().positive().int(),
   date: zd.iso.date(),
@@ -73,3 +73,13 @@ export const generatedGameObject = zd.object({
 export const generatedGameObjectArray = zd.object({
   gameArray: zd.array(generatedGameObject),
 })
+
+export const bulkGameFileParser = zd.array(
+  zd.object({
+    date: zd.string(),
+    homeTeamId: zd.number().positive().int(),
+    awayTeamId: zd.number().positive().int(),
+  }),
+)
+
+export type BulkGameFileParser = zd.infer<typeof bulkGameFileParser>
