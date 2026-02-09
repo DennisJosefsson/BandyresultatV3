@@ -26,12 +26,16 @@ export const getSerieForEdit = createServerFn({ method: 'GET' })
   )
   .handler(async ({ data: { seasonId, serieId } }) => {
     try {
-      const serie = await db
-        .select()
-        .from(series)
-        .where(eq(series.serieId, serieId))
+      const serie = await db.query.series.findFirst({
+        where: (series, { eq }) => eq(series.serieId, serieId),
+        with: {
+          season: {
+            columns: { women: true },
+          },
+        },
+      })
 
-      if (serie.length === 0) throw new Error('Serie saknas')
+      if (!serie) throw new Error('Serien finns inte.')
 
       const getSeries = await db
         .select({
@@ -87,7 +91,7 @@ export const getSerieForEdit = createServerFn({ method: 'GET' })
       return {
         status: 200,
         series: getSeries,
-        serie: serie[0],
+        serie: serie,
         parentSeries,
         teamsInSerie,
         teamsInSeason,
