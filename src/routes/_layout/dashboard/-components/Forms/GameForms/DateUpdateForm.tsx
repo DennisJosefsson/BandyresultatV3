@@ -30,7 +30,7 @@ const currDate = new Date().toLocaleDateString('se-SV', {
   day: '2-digit',
 })
 
-const ResultUpdateForm = () => {
+const DateUpdateForm = () => {
   const game = route.useLoaderData()
 
   const today = route.useParams({ select: (s) => s.today })
@@ -126,4 +126,4 @@ const ResultUpdateForm = () => {
   )
 }
 
-export default ResultUpdateForm
+export default DateUpdateForm
