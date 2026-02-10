@@ -29,6 +29,7 @@ import {
 } from 'lucide-react'
 import { useState } from 'react'
 import { MaratonSidebar } from './MaratonSidebar'
+import { SearchSidebar } from './SeearchSidebar'
 import { TeamSidebar } from './TeamSidebar'
 
 const AppSidebar = () => {
@@ -46,7 +47,7 @@ const AppSidebar = () => {
 
   const maratonRoute = useMatches().some((m) => m.routeId.includes('maraton'))
   const teamsRoute = useMatches().some((m) => m.routeId.includes('/teams'))
-
+  const searchRoute = useMatches().some((m) => m.routeId.includes('/search'))
   const defaultOpen = maratonRoute
     ? 'maraton'
     : seasonRoute || seasonListRoute
@@ -56,7 +57,7 @@ const AppSidebar = () => {
         : null
 
   const [openCollapse, setOpenCollapse] = useState<
-    'season' | 'maraton' | 'teams' | null
+    'season' | 'maraton' | 'teams' | 'search' | null
   >(defaultOpen)
 
   const { lastSeason } = useGetFirstAndLastSeason()
@@ -92,6 +93,16 @@ const AppSidebar = () => {
       setOpenCollapse(null)
     } else {
       setOpenCollapse('teams')
+    }
+  }
+
+  const openSearch = (fromLink: boolean) => {
+    if (openCollapse === 'search' && searchRoute && fromLink) {
+      return
+    } else if (openCollapse === 'search' && searchRoute) {
+      setOpenCollapse(null)
+    } else {
+      setOpenCollapse('search')
     }
   }
 
@@ -181,21 +192,36 @@ const AppSidebar = () => {
               </CollapsibleContent>
             </SidebarMenuItem>
           </Collapsible>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link
-                to="/search"
-                search={{ women }}
-                className="text-foreground hover:text-foreground transition-colors"
-                activeProps={{ className: `font-bold` }}
-              >
-                <span>
-                  <SearchIcon className="size-4" />
-                </span>
-                <span className="text-base">Sök</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+          <Collapsible
+            open={openCollapse === 'search'}
+            onOpenChange={() => openSearch(false)}
+            className="group/collapsible"
+          >
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild>
+                <Link
+                  to="/search"
+                  search={{ women }}
+                  className="text-foreground hover:text-foreground transition-colors"
+                  activeProps={{ className: `font-bold` }}
+                >
+                  <span>
+                    <SearchIcon className="size-4" />
+                  </span>
+                  <span className="text-base">Sök</span>
+                </Link>
+              </SidebarMenuButton>
+              <CollapsibleTrigger asChild>
+                <SidebarMenuAction>
+                  <ChevronDown className="ml-auto h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
+                </SidebarMenuAction>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <SearchSidebar />
+              </CollapsibleContent>
+            </SidebarMenuItem>
+          </Collapsible>
+
           <Collapsible
             open={openCollapse === 'maraton'}
             onOpenChange={() => openMaraton(false)}

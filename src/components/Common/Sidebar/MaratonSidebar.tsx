@@ -132,6 +132,25 @@ export function MaratonSidebar() {
           </SidebarMenuSub>
         </SidebarGroupContent>
       </SidebarGroup>
+      <SidebarGroup>
+        <SidebarGroupLabel>Övrigt</SidebarGroupLabel>
+        <SidebarGroupContent>
+          <SidebarMenuSub>
+            <SidebarMenuSubItem>
+              <SidebarMenuSubButton asChild>
+                <Link
+                  to="/maraton/help"
+                  search={{ women }}
+                  activeOptions={{ includeSearch: false }}
+                  activeProps={{ className: `font-bold` }}
+                >
+                  <span>Hjälp</span>
+                </Link>
+              </SidebarMenuSubButton>
+            </SidebarMenuSubItem>
+          </SidebarMenuSub>
+        </SidebarGroupContent>
+      </SidebarGroup>
     </>
   )
 }
