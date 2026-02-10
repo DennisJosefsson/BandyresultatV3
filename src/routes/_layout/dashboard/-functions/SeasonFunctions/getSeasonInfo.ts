@@ -43,6 +43,10 @@ export const getSeasonInfo = createServerFn({ method: 'GET' })
         where: (seasons, { eq }) => eq(seasons.seasonId, seasonId),
       })
 
+      const playoffSeasonData = await db.query.playoffseason.findFirst({
+        where: (playoffseason, { eq }) => eq(playoffseason.seasonId, seasonId),
+      })
+
       if (!metadata) {
         throw new Error('Metadata saknas')
       }
@@ -59,7 +63,17 @@ export const getSeasonInfo = createServerFn({ method: 'GET' })
         throw new Error('Säsong saknas')
       }
 
-      return { metadata, teams: teamSeasons, series: seasonSeries, season }
+      if (!playoffSeasonData) {
+        throw new Error('Säsong saknas')
+      }
+
+      return {
+        metadata,
+        teams: teamSeasons,
+        series: seasonSeries,
+        season,
+        playoffSeason: playoffSeasonData,
+      }
     } catch (error) {
       catchError(error)
     }

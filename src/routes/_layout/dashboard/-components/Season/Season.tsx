@@ -1,5 +1,6 @@
 import { getRouteApi } from '@tanstack/react-router'
 import Metadata from './Metadata'
+import PlayoffSeason from './PlayoffSeason'
 import Series from './Series'
 import TeamSeason from './TeamSeason'
 
@@ -16,7 +17,10 @@ const Season = () => {
       <div className="grid grid-cols-3 gap-2">
         <TeamSeason />
         <Series />
-        <Metadata />
+        <div className="flex flex-col gap-2">
+          <Metadata />
+          <PlayoffSeason />
+        </div>
       </div>
     </div>
   )
