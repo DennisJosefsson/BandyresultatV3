@@ -1,9 +1,40 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import Markdown from 'react-markdown'
+import about from '@/assets/markdown/about.md'
 
 export const Route = createFileRoute('/_layout/about/')({
-  component: RouteComponent,
+  component: About,
 })
 
-function RouteComponent() {
-  return <div>Hello "/about/"!</div>
+function About() {
+  return (
+    <div className="text-foreground w-full p-2">
+      <Card className="w-full">
+        <CardHeader>
+          <CardTitle>Om det här projektet</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col gap-2">
+            <p className="text-xs md:text-base">
+              OBS! Lista över förändringar på sidan finns{' '}
+              <Link
+                from="/about"
+                to="/about/changelog"
+                search={(prev) => ({ ...prev })}
+                className="underline"
+              >
+                här
+              </Link>
+              .
+            </p>
+
+            <article className="prose prose-xs sm:prose-sm md:prose-base text-foreground dark:prose-invert">
+              <Markdown>{about}</Markdown>
+            </article>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  )
 }

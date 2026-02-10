@@ -1,0 +1,8 @@
+**2024-11-07**
+
+Eftersom detta är första notisen här så blir det en längre lista med förändringar som kommit under hösten.
+
+1. Det går att välja om man vill se sidan i mörk eller ljust färgschema genom att klicka på solen/månen (beroende på nuvarande inställning) uppe i högra hörnet. "System" innebär att din dators grundinställning väljs, och det är den som väljs automatiskt. Informationen sparas i din webbläsare.
+2. Jag har börjat lägga in resultat och tabeller från lägre divisioner, just nu från Allsvenskan och Division 1. Förhoppningen är att kunna lägga in resultat från tidigare säsonger (det beror helt och hållet på hur tidskrävande det är), prioritet just nu är få in tabellerna. Om det finns resultat/tabeller från lägre divisioner så finns de länkade högst upp på säsongens tabell- eller matchsida. Dock så ingår inte de resultaten i säsongsstatistiken, den baseras fortfarande enbart på resultaten från högsta serien. Samma sak gäller också maratontabellen.
+3. Där det finns matchresultat så kan man nu också se tabeller mellan ett visst datumintervall, varje säsong har menyalternativet Intervall där man får välja vilken tabell man vill se och sedan justera datumintervallet. Det är tills vidare en betaversion, men jag förväntar mig inga större förändringar i funktionen.
+4. Lagstatistiken har utökats med information om största vinster, förluster, gjorda mål, etc. Den större förändringen är att man också kan hitta varje lags tabeller och matcher uppdelade per säsong. Högst upp på lagsidan kan man välja antingen Statistik eller Säsonger, det sistnämnda visar alla säsonger laget har i databasen och därifrån kan man klicka sig vidare till den säsong man vill se.
