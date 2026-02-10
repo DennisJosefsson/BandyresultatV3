@@ -1,5 +1,5 @@
 import GenerateSchedule from '@/routes/_layout/dashboard/-components/Games/GenerateSchedule'
-import { generateSchedule } from '@/routes/_layout/dashboard/-functions/GameFunctions.ts/generateSchedule'
+import { generateSchedule } from '@/routes/_layout/dashboard/-functions/GameFunctions/generateSchedule'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute(

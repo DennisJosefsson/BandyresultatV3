@@ -1,5 +1,5 @@
 import AddSingleGameForm from '@/routes/_layout/dashboard/-components/Forms/GameForms/AddSingleGameForm'
-import { getSerieDataForSingleGame } from '@/routes/_layout/dashboard/-functions/GameFunctions.ts/getSerieDataForSingleGame'
+import { getSerieDataForSingleGame } from '@/routes/_layout/dashboard/-functions/GameFunctions/getSerieDataForSingleGame'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute(

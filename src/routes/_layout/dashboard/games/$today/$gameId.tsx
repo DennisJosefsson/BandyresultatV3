@@ -1,6 +1,6 @@
 import { createFileRoute, Outlet } from '@tanstack/react-router'
 import z from 'zod'
-import { getSingleGame } from '../../-functions/GameFunctions.ts/getSingleGame'
+import { getSingleGame } from '../../-functions/GameFunctions/getSingleGame'
 
 export const Route = createFileRoute('/_layout/dashboard/games/$today/$gameId')(
   {
