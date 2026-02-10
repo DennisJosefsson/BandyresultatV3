@@ -6,14 +6,16 @@ import { getRouteApi, useRouter } from '@tanstack/react-router'
 import { toast } from 'sonner'
 import { updateResult } from '../-functions/GameFunctions/updateResult'
 
-const route = getRouteApi('/_layout/dashboard/games/$today/$gameId')
+const route = getRouteApi(
+  '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/$gameId',
+)
 
 type Data = Awaited<ReturnType<typeof updateResult>>
 
-export const useGameResultForm = () => {
+export const useEditGameForm = () => {
   const game = route.useLoaderData()
   const router = useRouter()
-  const today = route.useParams({ select: (s) => s.today })
+
   const women = route.useSearch({
     select: (search) => search.women,
   })
@@ -50,15 +52,16 @@ export const useGameResultForm = () => {
 
   const close = () => {
     navigate({
-      to: '/dashboard/games/$today',
+      to: '/dashboard/season/$seasonId/info/$serieId/edit/games',
       search: { women },
-      params: { today },
     })
   }
 
   const onSuccessSubmit = (data: Data) => {
     router.invalidate({
-      filter: (route) => route.routeId === '/_layout/dashboard/games/$today',
+      filter: (route) =>
+        route.routeId ===
+        '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/games',
     })
     if (!data) {
       toast.success('Okänt fel.')

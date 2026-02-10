@@ -4,7 +4,7 @@ import { revalidateLogic, useForm } from '@tanstack/react-form'
 import { useMutation } from '@tanstack/react-query'
 import { getRouteApi } from '@tanstack/react-router'
 import { toast } from 'sonner'
-import { insertFromGeneratedSchedule } from '../-functions/GameFunctions.ts/insertFromGeneratedSchedule'
+import { insertFromGeneratedSchedule } from '../-functions/GameFunctions/insertFromGeneratedSchedule'
 
 const route = getRouteApi(
   '/_layout/dashboard/season/$seasonId/info_/$serieId/edit',

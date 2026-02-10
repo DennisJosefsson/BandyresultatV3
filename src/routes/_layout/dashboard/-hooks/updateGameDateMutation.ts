@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 import { getRouteApi, useRouter } from '@tanstack/react-router'
 import { toast } from 'sonner'
-import { updateDate } from '../-functions/GameFunctions.ts/updateDate'
+import { updateDate } from '../-functions/GameFunctions/updateDate'
 
 const route = getRouteApi('/_layout/dashboard/games/$today/$gameId')
 

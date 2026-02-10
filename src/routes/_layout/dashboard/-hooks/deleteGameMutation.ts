@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query'
 import { useRouter } from '@tanstack/react-router'
 import { RefObject } from 'react'
 import { toast } from 'sonner'
-import { deleteGame } from '../-functions/GameFunctions.ts/deleteGame'
+import { deleteGame } from '../-functions/GameFunctions/deleteGame'
 
 type Data = Awaited<ReturnType<typeof deleteGame>>
 

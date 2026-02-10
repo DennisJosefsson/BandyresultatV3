@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query'
 import { getRouteApi } from '@tanstack/react-router'
 import { toast } from 'sonner'
 import { parseNewGameWithResult } from '../-functions/dataParsers/parseGameResults'
-import { addSingleGame } from '../-functions/GameFunctions.ts/addSingleGame'
+import { addSingleGame } from '../-functions/GameFunctions/addSingleGame'
 
 const route = getRouteApi(
   '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/singlegame',
