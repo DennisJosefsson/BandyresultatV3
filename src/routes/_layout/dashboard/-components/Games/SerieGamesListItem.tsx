@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Game } from '@/lib/types/game'
+import { getRouteApi } from '@tanstack/react-router'
 import { useMediaQuery } from 'usehooks-ts'
 
 type GamesListItemProps = {
@@ -7,11 +8,13 @@ type GamesListItemProps = {
   openDialog: (id: number) => void
 }
 
-// const route = getRouteApi('/_layout/dashboard/season/$seasonId/info_/$serieId/edit/games')
+const route = getRouteApi(
+  '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/games',
+)
 
 const GamesListItem = ({ game, openDialog }: GamesListItemProps) => {
   const matches768 = useMediaQuery('(min-width: 768px)')
-
+  const women = route.useSearch({ select: (s) => s.women })
   return (
     <div className="w-full">
       <div
@@ -30,7 +33,15 @@ const GamesListItem = ({ game, openDialog }: GamesListItemProps) => {
         </span>
 
         <span>
-          <Button size={matches768 ? 'default' : 'textxxs'}>Ändra</Button>
+          <Button size={matches768 ? 'default' : 'textxxs'} asChild>
+            <route.Link
+              to="/dashboard/season/$seasonId/info/$serieId/edit/$gameId"
+              params={{ gameId: game.gameId }}
+              search={{ women }}
+            >
+              Ändra
+            </route.Link>
+          </Button>
         </span>
         <span>
           <Button

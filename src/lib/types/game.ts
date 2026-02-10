@@ -83,3 +83,28 @@ export const bulkGameFileParser = zd.array(
 )
 
 export type BulkGameFileParser = zd.infer<typeof bulkGameFileParser>
+
+export const submitGameResult = zd.object({
+  gameId: zd.number().int().positive(),
+  homeTeamId: zd.number().int().positive(),
+  awayTeamId: zd.number().int().positive(),
+  result: zd
+    .string()
+    .regex(/^\d{1,2}-\d{1,2}$/, { message: 'Fel resultatformat.' }),
+  halftimeResult: zd
+    .string()
+    .regex(/^\d{1,2}-\d{1,2}$/, { message: 'Fel resultatformat, halvtid.' })
+    .or(zd.literal('')),
+  otResult: zd
+    .string()
+    .regex(/^\d{1,2}-\d{1,2}$/, {
+      message: 'Fel resultatformat, övertid eller straffar.',
+    })
+    .or(zd.literal('')),
+  date: zd.iso.date({ message: 'Fel datumformat.' }),
+  extraTime: zd.boolean(),
+  penalties: zd.boolean(),
+  women: zd.boolean(),
+  homeTeamGameId: zd.number().int().positive(),
+  awayTeamGameId: zd.number().int().positive(),
+})
