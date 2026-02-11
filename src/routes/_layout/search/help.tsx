@@ -6,15 +6,15 @@ export const Route = createFileRoute('/_layout/search/help')({
   head: () => ({
     meta: [
       {
-        title: 'Bandyresultat - Om sidan',
+        title: 'Bandyresultat - Sökhjälp',
       },
       {
         name: 'description',
-        content: 'Information om bandyresultat.se',
+        content: 'Information om söktjänsten bandyresultat.se',
       },
       {
         property: 'og:title',
-        content: 'Bandyresultat - Om sidan',
+        content: 'Bandyresultat - Sök - Hjälp',
       },
       {
         property: 'og:type',
@@ -22,7 +22,7 @@ export const Route = createFileRoute('/_layout/search/help')({
       },
       {
         property: 'og:url',
-        content: 'https://www.bandyresultat.se/about',
+        content: 'https://www.bandyresultat.se/search/help',
       },
       {
         property: 'og:image',
