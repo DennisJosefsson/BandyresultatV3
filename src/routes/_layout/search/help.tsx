@@ -2,11 +2,11 @@ import { createFileRoute } from '@tanstack/react-router'
 import SearchHelp from './-components/SearchHelp'
 
 export const Route = createFileRoute('/_layout/search/help')({
-  staticData: { breadcrumb: 'Sök - hjälp' },
+  staticData: { breadcrumb: 'Hjälp' },
   head: () => ({
     meta: [
       {
-        title: 'Bandyresultat - Sökhjälp',
+        title: 'Bandyresultat - Sök - Hjälp',
       },
       {
         name: 'description',

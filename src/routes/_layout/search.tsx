@@ -5,6 +5,7 @@ import { zodValidator } from '@tanstack/zod-adapter'
 import { getSearchTeams } from './search/-functions/getSearchTeams'
 
 export const Route = createFileRoute('/_layout/search')({
+  staticData: { breadcrumb: 'Sök' },
   validateSearch: zodValidator(clientSearchParams),
   loader: () => getSearchTeams(),
   component: RouteComponent,
