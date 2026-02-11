@@ -5,7 +5,9 @@ import RenderMaxMinGoalsCard from './RenderMaxMinGoalsCard'
 const route = getRouteApi('/_layout/maraton/records/scored')
 
 const Scored = () => {
-  const { gamesMaxGoals, gamesMinGoals, count, ...rest } = route.useLoaderData()
+  const { gamesMaxGoals, gamesMinGoals, count, ...rest } = route.useLoaderData({
+    select: (s) => s.scored,
+  })
   return (
     <div className="mt-3 flex flex-col gap-2">
       <div className="grid-cols1 grid gap-2 lg:grid-cols-2">

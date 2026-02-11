@@ -20,7 +20,38 @@ export const Route = createFileRoute('/_layout/maraton/table/$maratonTable')({
     })
     if (!data) throw new Error('Missing data')
 
-    return data.tables
+    return data
   },
+  staticData: {
+    breadcrumb: (match) => match.loaderData.breadCrumb,
+  },
+  head: ({ loaderData }) => ({
+    meta: [
+      {
+        title: loaderData?.meta.title,
+      },
+      {
+        name: 'description',
+        content: 'Information om maratontabeller.',
+      },
+      {
+        property: 'og:title',
+        content: loaderData?.meta.title,
+      },
+      {
+        property: 'og:type',
+        content: 'website',
+      },
+      {
+        property: 'og:url',
+        content: loaderData?.meta.url,
+      },
+      {
+        property: 'og:image',
+        content:
+          'https://github.com/DennisJosefsson/WebsiteImages/blob/main/bandyresultat.jpg?raw=true',
+      },
+    ],
+  }),
   component: MaratonTable,
 })

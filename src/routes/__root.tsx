@@ -7,7 +7,10 @@ import {
   createRootRouteWithContext,
   retainSearchParams,
 } from '@tanstack/react-router'
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
+import {
+  TanStackRouterDevtools,
+  TanStackRouterDevtoolsPanel,
+} from '@tanstack/react-router-devtools'
 
 import ClerkProvider from '../integrations/clerk/provider'
 
@@ -33,6 +36,9 @@ import { z } from 'zod'
 const searchWomen = z.object({ women: z.boolean().catch(false) })
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
+  staticData: {
+    breadcrumb: 'Bandyresultat',
+  },
   head: () => ({
     meta: [
       {
@@ -122,6 +128,7 @@ function RootDocument() {
           <ThemeProvider theme={theme}>
             <FavTeamsProvider favTeams={favTeams}>
               <Outlet />
+              <TanStackRouterDevtools />
               <TanStackDevtools
                 config={{
                   position: 'bottom-right',

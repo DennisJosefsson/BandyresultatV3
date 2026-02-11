@@ -1,4 +1,4 @@
-import { Link, useRouter, useSearch } from '@tanstack/react-router'
+import { useRouter, useSearch } from '@tanstack/react-router'
 import { Label } from '../ui/label'
 import { SidebarTrigger } from '../ui/sidebar'
 import { Switch } from '../ui/switch'
@@ -9,6 +9,7 @@ import { useAuth } from '@clerk/clerk-react'
 import { LoaderPinwheelIcon } from 'lucide-react'
 import { useMediaQuery } from 'usehooks-ts'
 import { Button } from '../ui/button.tsx'
+import { RouterBreadcrumb } from './Breadcrumb.tsx'
 import ModeToggle from './ModeToggle'
 
 const Header = () => {
@@ -35,14 +36,11 @@ const Header = () => {
 
   return (
     <header className="flex h-16 shrink-0 items-center justify-between gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
-      <SidebarTrigger />
-
+      <div className="flex flex-row items-center gap-4">
+        <SidebarTrigger />
+        <RouterBreadcrumb />
+      </div>
       <div className="mr-2 flex flex-row items-center gap-6">
-        <div>
-          <Link to="/" search={{ women }}>
-            <span className="text-lg font-bold">Bandyresultat</span>
-          </Link>
-        </div>
         <div className="flex w-full items-center space-x-2">
           <Switch
             id="women"

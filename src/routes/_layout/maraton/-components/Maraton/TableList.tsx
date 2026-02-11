@@ -5,7 +5,7 @@ import DataTable from './DataTable'
 const route = getRouteApi('/_layout/maraton/table/$maratonTable')
 
 const TableList = () => {
-  const tables = route.useLoaderData()
+  const tables = route.useLoaderData({ select: (s) => s.tables })
 
   const teamObject = tables.reduce(
     (o, key) => ({ ...o, [key.team.casualName]: key.teamId }),

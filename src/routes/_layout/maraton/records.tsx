@@ -1,19 +1,19 @@
 import { createFileRoute, Outlet } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/_layout/maraton/table')({
-  staticData: { breadcrumb: 'Maratontabeller' },
+export const Route = createFileRoute('/_layout/maraton/records')({
+  staticData: { breadcrumb: 'Rekord' },
   head: () => ({
     meta: [
       {
-        title: 'Bandyresultat - Maratontabeller',
+        title: 'Bandyresultat - Rekord',
       },
       {
         name: 'description',
-        content: 'Maratontabeller för Elitserien i bandy, damer och herrar.',
+        content: 'Rekord för Elitserien i bandy, damer och herrar.',
       },
       {
         property: 'og:title',
-        content: 'Bandyresultat - Maratontabeller',
+        content: 'Bandyresultat - Rekord',
       },
       {
         property: 'og:type',
@@ -21,7 +21,7 @@ export const Route = createFileRoute('/_layout/maraton/table')({
       },
       {
         property: 'og:url',
-        content: 'https://www.bandyresultat.se/maraton/',
+        content: 'https://www.bandyresultat.se/maraton/records',
       },
       {
         property: 'og:image',
