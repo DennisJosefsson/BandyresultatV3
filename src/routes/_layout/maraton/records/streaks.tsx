@@ -28,6 +28,10 @@ export const Route = createFileRoute('/_layout/maraton/records/streaks')({
         content: loaderData?.meta.description,
       },
       {
+        property: 'og:description',
+        content: loaderData?.meta.description,
+      },
+      {
         property: 'og:title',
         content: loaderData?.meta.title,
       },

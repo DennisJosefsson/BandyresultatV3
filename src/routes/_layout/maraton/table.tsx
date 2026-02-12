@@ -12,6 +12,10 @@ export const Route = createFileRoute('/_layout/maraton/table')({
         content: 'Maratontabeller för Elitserien i bandy, damer och herrar.',
       },
       {
+        property: 'og:description',
+        content: 'Maratontabeller för Elitserien i bandy, damer och herrar.',
+      },
+      {
         property: 'og:title',
         content: 'Bandyresultat - Maratontabeller',
       },

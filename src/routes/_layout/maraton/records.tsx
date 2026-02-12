@@ -12,6 +12,10 @@ export const Route = createFileRoute('/_layout/maraton/records')({
         content: 'Rekord för Elitserien i bandy, damer och herrar.',
       },
       {
+        property: 'og:description',
+        content: 'Rekord för Elitserien i bandy, damer och herrar.',
+      },
+      {
         property: 'og:title',
         content: 'Bandyresultat - Rekord',
       },

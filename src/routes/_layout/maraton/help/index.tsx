@@ -13,6 +13,10 @@ export const Route = createFileRoute('/_layout/maraton/help/')({
         content: 'Information om maratontabeller.',
       },
       {
+        property: 'og:description',
+        content: 'Information om maratontabeller.',
+      },
+      {
         property: 'og:title',
         content: 'Bandyresultat - Maratontabeller - Hjälp',
       },

@@ -1,4 +1,6 @@
-import { Link, useLoaderData, useSearch } from '@tanstack/react-router'
+import { getRouteApi, useLoaderData, useSearch } from '@tanstack/react-router'
+
+const route = getRouteApi('/_layout/seasons/')
 
 const SeasonsList = () => {
   const women = useSearch({
@@ -24,10 +26,18 @@ const SeasonsList = () => {
                 key={season.seasonId}
                 className="grid grid-cols-4 px-2 py-1 text-sm lg:text-base 2xl:text-lg"
               >
-                <div className="w-28 font-semibold">{season.year}</div>
+                <div className="w-28 font-semibold">
+                  <route.Link
+                    to="/seasons/$year"
+                    search={(prev) => ({ women: prev.women })}
+                    params={{ year }}
+                  >
+                    {season.year}
+                  </route.Link>
+                </div>
                 <div className="rounded-md px-2 py-1 text-center xl:p-0">
-                  <Link
-                    to="/season/$year/$group/tables/$table"
+                  <route.Link
+                    to="/seasons/$year/$group/tables/$table"
                     params={{
                       year: year,
                       group: season.womensGroup,
@@ -37,11 +47,11 @@ const SeasonsList = () => {
                     className="hover:text-primary font-medium tabular-nums hover:font-bold lg:font-normal"
                   >
                     Tabeller
-                  </Link>
+                  </route.Link>
                 </div>
                 <div className="rounded-md px-2 py-1 text-center xl:p-0">
-                  <Link
-                    to="/season/$year/$group/games"
+                  <route.Link
+                    to="/seasons/$year/$group/games"
                     params={{
                       year: year,
                       group: season.womensGroup,
@@ -50,11 +60,11 @@ const SeasonsList = () => {
                     className="hover:text-primary font-medium hover:font-bold lg:font-normal"
                   >
                     Matcher
-                  </Link>
+                  </route.Link>
                 </div>
                 <div className="rounded-md px-2 py-1 text-center xl:p-0">
-                  <Link
-                    to="/season/$year/playoff/table"
+                  <route.Link
+                    to="/seasons/$year/playoff/table"
                     params={{
                       year: year,
                     }}
@@ -62,7 +72,7 @@ const SeasonsList = () => {
                     className="hover:text-primary font-medium hover:font-bold lg:font-normal"
                   >
                     Slutspel
-                  </Link>
+                  </route.Link>
                 </div>
               </div>
             )
@@ -73,7 +83,15 @@ const SeasonsList = () => {
                 key={season.seasonId}
                 className="grid grid-cols-4 px-2 py-1 text-sm lg:text-base 2xl:text-lg"
               >
-                <div className="w-28 font-semibold">{season.year}</div>
+                <div className="w-28 font-semibold">
+                  <route.Link
+                    to="/seasons/$year"
+                    search={(prev) => ({ women: prev.women })}
+                    params={{ year }}
+                  >
+                    {season.year}
+                  </route.Link>
+                </div>
                 <div className="text-foreground/20 rounded-md px-2 py-1 text-center xl:p-0">
                   Tabeller
                 </div>
@@ -81,8 +99,8 @@ const SeasonsList = () => {
                   Matcher
                 </div>
                 <div className="rounded-md px-2 py-1 text-center xl:p-0">
-                  <Link
-                    to="/season/$year/playoff/table"
+                  <route.Link
+                    to="/seasons/$year/playoff/table"
                     params={{
                       year: year,
                     }}
@@ -90,7 +108,7 @@ const SeasonsList = () => {
                     className="hover:text-primary font-medium hover:font-bold lg:font-normal"
                   >
                     Slutspel
-                  </Link>
+                  </route.Link>
                 </div>
               </div>
             )
@@ -101,10 +119,18 @@ const SeasonsList = () => {
               key={season.seasonId}
               className="grid grid-cols-4 px-2 py-1 text-sm lg:text-base 2xl:text-lg"
             >
-              <div className="w-28 font-semibold">{season.year}</div>
+              <div className="w-28 font-semibold">
+                <route.Link
+                  to="/seasons/$year"
+                  search={(prev) => ({ women: prev.women })}
+                  params={{ year }}
+                >
+                  {season.year}
+                </route.Link>
+              </div>
               <div className="rounded-md px-2 py-1 text-center xl:p-0">
-                <Link
-                  to="/season/$year/$group/tables/$table"
+                <route.Link
+                  to="/seasons/$year/$group/tables/$table"
                   params={{
                     year: year,
                     group: season.mensGroup,
@@ -114,11 +140,11 @@ const SeasonsList = () => {
                   className="hover:text-primary font-medium tabular-nums hover:font-bold lg:font-normal"
                 >
                   Tabeller
-                </Link>
+                </route.Link>
               </div>
               <div className="rounded-md px-2 py-1 text-center xl:p-0">
-                <Link
-                  to="/season/$year/$group/games"
+                <route.Link
+                  to="/seasons/$year/$group/games"
                   params={{
                     year: year,
                     group: season.mensGroup,
@@ -127,11 +153,11 @@ const SeasonsList = () => {
                   className="hover:text-primary font-medium hover:font-bold lg:font-normal"
                 >
                   Matcher
-                </Link>
+                </route.Link>
               </div>
               <div className="rounded-md px-2 py-1 text-center xl:p-0">
-                <Link
-                  to="/season/$year/playoff/table"
+                <route.Link
+                  to="/seasons/$year/playoff/table"
                   params={{
                     year: year,
                   }}
@@ -139,7 +165,7 @@ const SeasonsList = () => {
                   className="hover:text-primary font-medium hover:font-bold lg:font-normal"
                 >
                   Slutspel
-                </Link>
+                </route.Link>
               </div>
             </div>
           )

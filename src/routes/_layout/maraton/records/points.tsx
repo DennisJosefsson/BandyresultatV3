@@ -25,6 +25,10 @@ export const Route = createFileRoute('/_layout/maraton/records/points')({
         content: loaderData?.meta.description,
       },
       {
+        property: 'og:description',
+        content: loaderData?.meta.description,
+      },
+      {
         property: 'og:title',
         content: loaderData?.meta.title,
       },

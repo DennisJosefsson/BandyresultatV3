@@ -11,7 +11,7 @@ export const Route = createFileRoute('/_layout/about/changelog')({
         title: 'Bandyresultat - Changelog',
       },
       {
-        name: 'description',
+        property: 'og:description',
         content: 'Nyheter på bandyresultat.se',
       },
       {

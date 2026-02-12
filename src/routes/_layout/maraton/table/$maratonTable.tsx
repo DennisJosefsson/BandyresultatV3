@@ -35,6 +35,10 @@ export const Route = createFileRoute('/_layout/maraton/table/$maratonTable')({
         content: 'Information om maratontabeller.',
       },
       {
+        property: 'og:description',
+        content: 'Information om maratontabeller.',
+      },
+      {
         property: 'og:title',
         content: loaderData?.meta.title,
       },

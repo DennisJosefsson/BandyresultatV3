@@ -15,6 +15,10 @@ export const Route = createFileRoute('/_layout/about/')({
         content: 'Information om bandyresultat.se',
       },
       {
+        property: 'og:description',
+        content: 'Information om bandyresultat.se',
+      },
+      {
         property: 'og:title',
         content: 'Bandyresultat - Om sidan',
       },

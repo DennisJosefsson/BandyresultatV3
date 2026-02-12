@@ -13,6 +13,10 @@ export const Route = createFileRoute('/_layout/search/')({
         content: 'Sök resultat från bandymatcher.',
       },
       {
+        property: 'og:description',
+        content: 'Sök resultat från bandymatcher.',
+      },
+      {
         property: 'og:title',
         content: 'Bandyresultat - Sök',
       },
