@@ -2,6 +2,7 @@ import { SignIn } from '@clerk/clerk-react'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_layout/login/')({
+  staticData: { breadcrumb: 'Inloggning' },
   component: RouteComponent,
 })
 

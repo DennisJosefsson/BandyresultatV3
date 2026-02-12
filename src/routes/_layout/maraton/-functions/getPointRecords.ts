@@ -10,6 +10,8 @@ type RecordStreakReturn =
   | {
       status: 200
       points: RecordDataArrays
+      breadCrumb: string
+      meta: { title: string; url: string; description: string }
     }
   | undefined
 
@@ -25,7 +27,16 @@ export const getPointRecords = createServerFn({ method: 'GET' })
   .handler(async ({ data: { women } }): Promise<RecordStreakReturn> => {
     try {
       const pointsData = await getPointData({ women })
-      return { status: 200, points: { ...pointsData } }
+      const breadCrumb = `Poäng ${women === true ? 'Damer' : 'Herrar'}`
+      const title = `Bandyresultat - Poängrekord - ${women === true ? 'Damer' : 'Herrar'}`
+      const url = `https://bandyresultat.se/maraton/records/points?women=${women}`
+      const description = `Poängrekord i bandyns Elitserie för ${women ? 'damer' : 'herrar'}`
+      const meta = {
+        title,
+        url,
+        description,
+      }
+      return { status: 200, points: { ...pointsData }, breadCrumb, meta }
     } catch (error) {
       catchError(error)
     }

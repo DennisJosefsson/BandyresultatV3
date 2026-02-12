@@ -6,6 +6,39 @@ import SeasonsPagination from './-components/SeasonsPagination'
 import { getPaginatedSeasons, page } from './-functions/getPaginatedSeasons'
 
 export const Route = createFileRoute('/_layout/seasons/')({
+  staticData: { breadcrumb: 'Säsonger' },
+  head: () => ({
+    meta: [
+      {
+        title: 'Bandyresultat - Säsonger',
+      },
+      {
+        name: 'description',
+        content: 'Lista över bandysäsonger.',
+      },
+      {
+        property: 'og:description',
+        content: 'Lista över bandysäsonger.',
+      },
+      {
+        property: 'og:title',
+        content: 'Bandyresultat - Säsonger',
+      },
+      {
+        property: 'og:type',
+        content: 'website',
+      },
+      {
+        property: 'og:url',
+        content: 'https://www.bandyresultat.se/seasons',
+      },
+      {
+        property: 'og:image',
+        content:
+          'https://github.com/DennisJosefsson/WebsiteImages/blob/main/bandyresultat.jpg?raw=true',
+      },
+    ],
+  }),
   validateSearch: z.object({ page }),
   loaderDeps: ({ search: { page } }) => ({ page }),
   loader: async ({ deps }) => {

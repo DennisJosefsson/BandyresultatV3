@@ -1,9 +1,11 @@
 import Date from '@/components/Common/Date'
-import { useLoaderData } from '@tanstack/react-router'
+import { getRouteApi } from '@tanstack/react-router'
 import StreakCard from './StreakCard'
 
+const route = getRouteApi('/_layout/maraton/records/streaks')
+
 const Streaks = () => {
-  const data = useLoaderData({ from: '/_layout/maraton/records/streaks' })
+  const data = route.useLoaderData({ select: (s) => s.streaks })
   return (
     <div>
       <div className="grid grid-cols-1 gap-20 lg:grid-cols-2 xl:grid-cols-3">

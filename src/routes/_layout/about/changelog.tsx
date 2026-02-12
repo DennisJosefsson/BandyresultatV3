@@ -4,6 +4,35 @@ import { createFileRoute } from '@tanstack/react-router'
 import Markdown from 'react-markdown'
 
 export const Route = createFileRoute('/_layout/about/changelog')({
+  staticData: { breadcrumb: 'Changelog' },
+  head: () => ({
+    meta: [
+      {
+        title: 'Bandyresultat - Changelog',
+      },
+      {
+        property: 'og:description',
+        content: 'Nyheter på bandyresultat.se',
+      },
+      {
+        property: 'og:title',
+        content: 'Bandyresultat - Changelog',
+      },
+      {
+        property: 'og:type',
+        content: 'website',
+      },
+      {
+        property: 'og:url',
+        content: 'https://www.bandyresultat.se/about/changelog',
+      },
+      {
+        property: 'og:image',
+        content:
+          'https://github.com/DennisJosefsson/WebsiteImages/blob/main/bandyresultat.jpg?raw=true',
+      },
+    ],
+  }),
   component: Changelog,
 })
 

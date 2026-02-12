@@ -4,6 +4,7 @@ import * as TanstackQuery from './integrations/tanstack-query/root-provider'
 
 // Import the generated route tree
 import DefaultNotFound from './components/ErrorComponents/DefaultNotFound'
+import { BreadcrumbValue } from './components/Header/Breadcrumb'
 import { routeTree } from './routeTree.gen'
 
 // Create a new router instance
@@ -28,4 +29,10 @@ export const getRouter = () => {
   setupRouterSsrQueryIntegration({ router, queryClient: rqContext.queryClient })
 
   return router
+}
+
+declare module '@tanstack/react-router' {
+  interface StaticDataRouteOption {
+    breadcrumb?: BreadcrumbValue
+  }
 }

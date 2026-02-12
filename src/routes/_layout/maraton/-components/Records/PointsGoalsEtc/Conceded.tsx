@@ -4,7 +4,7 @@ import PointsGoals from './PointsGoals'
 const route = getRouteApi('/_layout/maraton/records/conceded')
 
 const Conceded = () => {
-  const conceded = route.useLoaderData()
+  const conceded = route.useLoaderData({ select: (s) => s.conceded })
   return <PointsGoals data={conceded} stat="conceded" />
 }
 

@@ -16,9 +16,9 @@ import {
   MapIcon,
   TrophyIcon,
 } from 'lucide-react'
-import { useGetFirstAndLastSeason } from '../../../routes/_layout/season/$year/-hooks/useGetFirstAndLastSeason'
+import { useGetFirstAndLastSeason } from '../../../routes/_layout/seasons/$year/-hooks/useGetFirstAndLastSeason'
 
-const route = getRouteApi('/_layout/season/$year')
+const route = getRouteApi('/_layout/seasons/$year')
 
 export function SeasonSidebar() {
   const women = route.useSearch({
@@ -84,7 +84,7 @@ export function DefaultSeasonSidebar({
       <SidebarMenuSubItem>
         <SidebarMenuSubButton asChild>
           <Link
-            to="/season/$year/$group/games"
+            to="/seasons/$year/$group/games"
             params={{ year, group }}
             search={{ women }}
             activeOptions={{ includeSearch: false }}
@@ -100,7 +100,7 @@ export function DefaultSeasonSidebar({
       <SidebarMenuSubItem>
         <SidebarMenuSubButton asChild>
           <Link
-            to="/season/$year/$group/tables/$table"
+            to="/seasons/$year/$group/tables/$table"
             params={{
               year,
               group,
@@ -120,7 +120,7 @@ export function DefaultSeasonSidebar({
           <SidebarMenuSubItem>
             <SidebarMenuSubButton asChild>
               <Link
-                to="/season/$year/$group/tables/$table"
+                to="/seasons/$year/$group/tables/$table"
                 params={{
                   year: year,
                   group,
@@ -137,7 +137,7 @@ export function DefaultSeasonSidebar({
           <SidebarMenuSubItem>
             <SidebarMenuSubButton asChild>
               <Link
-                to="/season/$year/$group/tables/$table"
+                to="/seasons/$year/$group/tables/$table"
                 params={{
                   year,
                   group,
@@ -154,7 +154,7 @@ export function DefaultSeasonSidebar({
           <SidebarMenuSubItem>
             <SidebarMenuSubButton asChild>
               <Link
-                to="/season/$year/$group/tables/$table"
+                to="/seasons/$year/$group/tables/$table"
                 params={{
                   year,
                   group,
@@ -173,7 +173,7 @@ export function DefaultSeasonSidebar({
       <SidebarMenuSubItem>
         <SidebarMenuSubButton asChild>
           <Link
-            to="/season/$year/playoff/table"
+            to="/seasons/$year/playoff/table"
             params={{ year }}
             search={{ women }}
             activeOptions={{ includeSearch: false }}
@@ -189,7 +189,7 @@ export function DefaultSeasonSidebar({
           <SidebarMenuSubItem>
             <SidebarMenuSubButton asChild>
               <Link
-                to="/season/$year/playoff/games"
+                to="/seasons/$year/playoff/games"
                 params={{ year }}
                 search={{ women }}
                 activeOptions={{ includeSearch: false }}
@@ -202,7 +202,7 @@ export function DefaultSeasonSidebar({
           <SidebarMenuSubItem>
             <SidebarMenuSubButton asChild>
               <Link
-                to="/season/$year/playoff/stats"
+                to="/seasons/$year/playoff/stats"
                 params={{ year }}
                 search={{ women }}
                 activeOptions={{ includeSearch: false }}
@@ -215,7 +215,7 @@ export function DefaultSeasonSidebar({
           <SidebarMenuSubItem>
             <SidebarMenuSubButton asChild>
               <Link
-                to="/season/$year/playoff/map"
+                to="/seasons/$year/playoff/map"
                 params={{ year }}
                 search={{ women }}
                 activeOptions={{ includeSearch: false }}
@@ -230,7 +230,7 @@ export function DefaultSeasonSidebar({
       <SidebarMenuSubItem>
         <SidebarMenuSubButton asChild>
           <Link
-            to="/season/$year/$group/development"
+            to="/seasons/$year/$group/development"
             params={{ year, group }}
             search={{ women, index: 0 }}
             activeOptions={{ includeSearch: false }}
@@ -246,7 +246,7 @@ export function DefaultSeasonSidebar({
       <SidebarMenuSubItem>
         <SidebarMenuSubButton asChild>
           <Link
-            to="/season/$year/$group/interval"
+            to="/seasons/$year/$group/interval"
             params={{ year, group }}
             search={{ women, start: 0 }}
             activeOptions={{ includeSearch: false }}
@@ -262,7 +262,7 @@ export function DefaultSeasonSidebar({
       <SidebarMenuSubItem>
         <SidebarMenuSubButton asChild>
           <Link
-            to="/season/$year/$group/stats"
+            to="/seasons/$year/$group/stats"
             params={{ year, group }}
             search={{ women }}
             activeOptions={{ includeSearch: false }}
@@ -278,7 +278,7 @@ export function DefaultSeasonSidebar({
       <SidebarMenuSubItem>
         <SidebarMenuSubButton asChild>
           <Link
-            to="/season/$year/$group/map"
+            to="/seasons/$year/$group/map"
             params={{ year, group }}
             search={{ women }}
             activeOptions={{ includeSearch: false }}

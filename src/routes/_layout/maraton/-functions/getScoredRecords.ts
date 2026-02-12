@@ -10,6 +10,8 @@ type RecordStreakReturn =
   | {
       status: 200
       scored: GoalRecordDataArrays
+      breadCrumb: string
+      meta: { title: string; url: string; description: string }
     }
   | undefined
 
@@ -25,7 +27,16 @@ export const getScoredRecords = createServerFn({ method: 'GET' })
   .handler(async ({ data: { women } }): Promise<RecordStreakReturn> => {
     try {
       const scoredData = await getScoredData({ women })
-      return { status: 200, scored: { ...scoredData } }
+      const breadCrumb = `Gjorda mål ${women === true ? 'Damer' : 'Herrar'}`
+      const title = `Bandyresultat - Rekord gjorda mål - ${women === true ? 'Damer' : 'Herrar'}`
+      const url = `https://bandyresultat.se/maraton/records/scored?women=${women}`
+      const description = `Rekord i antalet gjorda mål i bandyns Elitserie för ${women ? 'damer' : 'herrar'}`
+      const meta = {
+        title,
+        url,
+        description,
+      }
+      return { status: 200, scored: { ...scoredData }, breadCrumb, meta }
     } catch (error) {
       catchError(error)
     }

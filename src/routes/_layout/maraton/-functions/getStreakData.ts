@@ -1,6 +1,6 @@
 import { db } from '@/db'
 import { series, teamgames, teams } from '@/db/schema'
-import { and, asc, desc, eq, lte, sql, SQL } from 'drizzle-orm'
+import { and, asc, desc, eq, lt, sql, SQL } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
 
 const team = alias(teams, 'team')
@@ -128,7 +128,7 @@ async function getStreak({ women, streak }: StreakFunctionProps) {
           .where(
             and(
               eq(teamgames.played, true),
-              lte(series.level, 1.5),
+              lt(series.level, 2),
               eq(teamgames.women, women),
             ),
           ),
@@ -152,7 +152,7 @@ async function getStreak({ women, streak }: StreakFunctionProps) {
           .where(
             and(
               eq(teamgames.played, true),
-              lte(series.level, 1.5),
+              lt(series.level, 2),
               eq(teamgames.women, women),
             ),
           ),
@@ -176,7 +176,7 @@ async function getStreak({ women, streak }: StreakFunctionProps) {
           .where(
             and(
               eq(teamgames.played, true),
-              lte(series.level, 1.5),
+              lt(series.level, 2),
               eq(teamgames.women, women),
             ),
           ),
@@ -200,7 +200,7 @@ async function getStreak({ women, streak }: StreakFunctionProps) {
           .where(
             and(
               eq(teamgames.played, true),
-              lte(series.level, 1.5),
+              lt(series.level, 2),
               eq(teamgames.women, women),
             ),
           ),
@@ -224,7 +224,7 @@ async function getStreak({ women, streak }: StreakFunctionProps) {
           .where(
             and(
               eq(teamgames.played, true),
-              lte(series.level, 1.5),
+              lt(series.level, 2),
               eq(teamgames.women, women),
             ),
           ),

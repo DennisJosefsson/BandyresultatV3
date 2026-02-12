@@ -1,9 +1,42 @@
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+import about from '@/assets/markdown/about.md'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import Markdown from 'react-markdown'
-import about from '@/assets/markdown/about.md'
 
 export const Route = createFileRoute('/_layout/about/')({
+  staticData: { breadcrumb: 'Om sidan' },
+  head: () => ({
+    meta: [
+      {
+        title: 'Bandyresultat - Om sidan',
+      },
+      {
+        name: 'description',
+        content: 'Information om bandyresultat.se',
+      },
+      {
+        property: 'og:description',
+        content: 'Information om bandyresultat.se',
+      },
+      {
+        property: 'og:title',
+        content: 'Bandyresultat - Om sidan',
+      },
+      {
+        property: 'og:type',
+        content: 'website',
+      },
+      {
+        property: 'og:url',
+        content: 'https://www.bandyresultat.se/about',
+      },
+      {
+        property: 'og:image',
+        content:
+          'https://github.com/DennisJosefsson/WebsiteImages/blob/main/bandyresultat.jpg?raw=true',
+      },
+    ],
+  }),
   component: About,
 })
 

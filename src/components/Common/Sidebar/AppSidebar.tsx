@@ -15,7 +15,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
-import { useGetFirstAndLastSeason } from '@/routes/_layout/season/$year/-hooks/useGetFirstAndLastSeason'
+import { useGetFirstAndLastSeason } from '@/routes/_layout/seasons/$year/-hooks/useGetFirstAndLastSeason'
 
 import { Link, useMatches, useSearch } from '@tanstack/react-router'
 import {
@@ -38,7 +38,7 @@ const AppSidebar = () => {
     select: (search) => search.women,
   })
   const seasonRoute = useMatches().some(
-    (m) => m.routeId === '/_layout/season/$year',
+    (m) => m.routeId === '/_layout/seasons/$year',
   )
 
   const seasonListRoute = useMatches().some(

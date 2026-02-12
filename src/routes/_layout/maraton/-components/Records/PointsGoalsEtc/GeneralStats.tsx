@@ -4,7 +4,7 @@ import RenderGeneralStatsCard from './RenderGeneralStatsCard'
 const route = getRouteApi('/_layout/maraton/records/stats')
 
 const GeneralStats = () => {
-  const stats = route.useLoaderData()
+  const stats = route.useLoaderData({ select: (s) => s.generalStats })
   const women = route.useSearch({ select: (s) => s.women })
 
   if (!women) {
