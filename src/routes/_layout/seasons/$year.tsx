@@ -1,7 +1,12 @@
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import Loading from '@/components/Loading/Loading'
 import { zd } from '@/lib/utils/zod'
-import { CatchBoundary, createFileRoute, Outlet } from '@tanstack/react-router'
+import {
+  CatchBoundary,
+  createFileRoute,
+  Outlet,
+  useChildMatches,
+} from '@tanstack/react-router'
 import { getGroups } from './$year/-functions/getGroups'
 
 const yearParser = zd.object({
@@ -64,6 +69,17 @@ export const Route = createFileRoute('/_layout/seasons/$year')({
 })
 
 function Season() {
+  const childMatches = useChildMatches()
+  if (childMatches.length === 0) {
+    return (
+      <div className="m-4 flex flex-col gap-4">
+        <div className="flex flex-row justify-center">
+          <h3 className="text-base font-semibold">Välj grupp</h3>
+        </div>
+        <GroupList />
+      </div>
+    )
+  }
   return (
     <div className="flex flex-col gap-2">
       <CatchBoundary
@@ -98,5 +114,31 @@ function NotFound() {
 
   return (
     <div className="flex flex-row justify-center">Den länken finns inte.</div>
+  )
+}
+
+function GroupList() {
+  const data = Route.useLoaderData()
+  const year = Route.useParams({ select: (s) => s.year })
+  const women = Route.useSearch({ select: (s) => s.women })
+  if (data.status === 204) return null
+
+  return (
+    <div className="grid grid-cols-2 gap-16 xl:grid-cols-6">
+      {data.groups.map((group) => {
+        return (
+          <Route.Link
+            key={group.serieId.toString()}
+            to="/seasons/$year/$group"
+            params={{ group: group.group, year: year }}
+            search={{ women: women }}
+          >
+            <div className="flex w-full flex-row items-center justify-center gap-8 border px-4 py-2">
+              <span className="font-semibold">{group.name}</span>
+            </div>
+          </Route.Link>
+        )
+      })}
+    </div>
   )
 }

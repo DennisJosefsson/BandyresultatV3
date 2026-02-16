@@ -15,7 +15,12 @@ export const Route = createFileRoute('/_layout/seasons/$year/$group/interval')({
   loaderDeps: ({ search: { women } }) => ({ women }),
   loader: async ({ params, deps }) => {
     const data = await getDevData({
-      data: { group: params.group, year: params.year, women: deps.women },
+      data: {
+        group: params.group,
+        year: params.year,
+        women: deps.women,
+        origin: 'interval',
+      },
     })
     if (!data) throw new Error('Missing data')
     if (data.status === 404) {
@@ -48,6 +53,35 @@ export const Route = createFileRoute('/_layout/seasons/$year/$group/interval')({
       </div>
     )
   },
+  staticData: { breadcrumb: (match) => match.loaderData.breadCrumb },
+  head: ({ loaderData }) => ({
+    meta: [
+      {
+        title: loaderData?.meta.title,
+      },
+      {
+        property: 'og:description',
+        content: loaderData?.meta.description,
+      },
+      {
+        property: 'og:title',
+        content: loaderData?.meta.title,
+      },
+      {
+        property: 'og:type',
+        content: 'website',
+      },
+      {
+        property: 'og:url',
+        content: loaderData?.meta.url,
+      },
+      {
+        property: 'og:image',
+        content:
+          'https://github.com/DennisJosefsson/WebsiteImages/blob/main/bandyresultat.jpg?raw=true',
+      },
+    ],
+  }),
 })
 
 function RouteComponent() {

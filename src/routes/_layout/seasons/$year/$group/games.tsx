@@ -38,4 +38,33 @@ export const Route = createFileRoute('/_layout/seasons/$year/$group/games')({
       </div>
     )
   },
+  staticData: { breadcrumb: (match) => match.loaderData.breadCrumb },
+  head: ({ loaderData }) => ({
+    meta: [
+      {
+        title: loaderData?.meta.title,
+      },
+      {
+        property: 'og:description',
+        content: loaderData?.meta.description,
+      },
+      {
+        property: 'og:title',
+        content: loaderData?.meta.title,
+      },
+      {
+        property: 'og:type',
+        content: 'website',
+      },
+      {
+        property: 'og:url',
+        content: loaderData?.meta.url,
+      },
+      {
+        property: 'og:image',
+        content:
+          'https://github.com/DennisJosefsson/WebsiteImages/blob/main/bandyresultat.jpg?raw=true',
+      },
+    ],
+  }),
 })

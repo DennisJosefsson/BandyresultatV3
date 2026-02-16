@@ -2,6 +2,7 @@ import { db } from '@/db'
 import { seasons, series } from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
+import { Meta } from '@/lib/types/meta'
 import { Serie } from '@/lib/types/serie'
 import { TeamTable } from '@/lib/types/table'
 import { seasonIdCheck } from '@/lib/utils/utils'
@@ -16,10 +17,14 @@ type TablesReturn =
       status: 200
       tables: Omit<TeamTable, 'women' | 'group' | 'season'>[]
       serie: Serie
+      breadCrumb: string
+      meta: Meta
     }
   | {
       status: 404
       message: string
+      breadCrumb: string
+      meta: Meta
     }
   | undefined
 
@@ -38,10 +43,35 @@ export const getTables = createServerFn({ method: 'GET' })
   .handler(
     async ({ data: { group, year, women, table } }): Promise<TablesReturn> => {
       try {
+        const seasonYear = seasonIdCheck.parse(year)
+        const breadCrumb =
+          table === 'all'
+            ? 'Tabell'
+            : table === 'home'
+              ? 'Hemmatabell'
+              : 'Bortatabell'
+        const title = `Bandyresultat - ${breadCrumb} - ${group} - ${women === true ? 'Damer' : 'Herrar'} ${seasonYear!}`
+        const url = `https://bandyresultat.se/seasons/${year}/${group}/tables/${table}?women=${women}`
+        const description = `Serietabeller ${group} ${seasonYear} ${women ? 'damer' : 'herrar'}`
+        const meta = {
+          title,
+          url,
+          description,
+        }
+        if (!seasonYear) {
+          return {
+            status: 404,
+            message: 'Säsongen finns inte.',
+            breadCrumb: 'Tabell',
+            meta,
+          }
+        }
         if (year < 1930) {
           return {
             status: 404,
             message: 'Inga serietabeller för den här säsongen',
+            breadCrumb: 'Tabell',
+            meta,
           }
         }
 
@@ -49,11 +79,9 @@ export const getTables = createServerFn({ method: 'GET' })
           return {
             status: 404,
             message: 'Damernas första säsong var 1972/1973.',
+            breadCrumb: 'Tabell',
+            meta,
           }
-        }
-        const seasonYear = seasonIdCheck.parse(year)
-        if (!seasonYear) {
-          return { status: 404, message: 'Säsongen finns inte.' }
         }
 
         const serie = await db
@@ -78,11 +106,13 @@ export const getTables = createServerFn({ method: 'GET' })
           return {
             status: 404,
             message: `Ingen ${women ? 'dam' : 'herr'}serie med detta namn det här året. Välj en ny i listan.`,
+            breadCrumb,
+            meta,
           }
 
         const results = await getUnionedTables({ serie, table })
 
-        return { status: 200, tables: results, serie }
+        return { status: 200, tables: results, serie, breadCrumb, meta }
       } catch (error) {
         catchError(error)
       }

@@ -1,6 +1,7 @@
 import { db } from '@/db'
 import { seasons, series } from '@/db/schema'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
+import { Meta } from '@/lib/types/meta'
 import { seasonIdCheck } from '@/lib/utils/utils'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
@@ -10,8 +11,10 @@ import { and, eq, getTableColumns } from 'drizzle-orm'
 type ValidateGroupReturn =
   | {
       status: 404
+      breadCrumb: string
+      meta: Meta
     }
-  | { status: 200 }
+  | { status: 200; breadCrumb: string; serieName: string; meta: Meta }
 
 export const validateGroup = createServerFn({ method: 'GET' })
   .middleware([errorMiddleware])
@@ -24,6 +27,16 @@ export const validateGroup = createServerFn({ method: 'GET' })
     async ({ data: { group, year, women } }): Promise<ValidateGroupReturn> => {
       const seasonYear = seasonIdCheck.parse(year)
       if (!seasonYear) throw new Error('Säsongen finns inte.')
+
+      const title = `Bandyresultat - ${group} - ${women === true ? 'Damer' : 'Herrar'} ${seasonYear!}`
+      const url = `https://bandyresultat.se/seasons/${year}/${group}?women=${women}`
+      const description = `Serien ${group} ${seasonYear} ${women ? 'damer' : 'herrar'}`
+      const meta = {
+        title,
+        url,
+        description,
+      }
+
       const serie = await db
         .select({
           ...getTableColumns(series),
@@ -42,7 +55,12 @@ export const validateGroup = createServerFn({ method: 'GET' })
           else return undefined
         })
 
-      if (!serie) return { status: 404 }
-      return { status: 200 }
+      if (!serie) return { status: 404, breadCrumb: 'Grupp', meta }
+      return {
+        status: 200,
+        breadCrumb: serie.serieName,
+        serieName: serie.serieName,
+        meta,
+      }
     },
   )

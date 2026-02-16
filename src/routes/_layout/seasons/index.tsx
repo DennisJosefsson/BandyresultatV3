@@ -6,7 +6,6 @@ import SeasonsPagination from './-components/SeasonsPagination'
 import { getPaginatedSeasons, page } from './-functions/getPaginatedSeasons'
 
 export const Route = createFileRoute('/_layout/seasons/')({
-  staticData: { breadcrumb: 'Säsonger' },
   head: () => ({
     meta: [
       {

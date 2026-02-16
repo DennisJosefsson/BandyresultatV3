@@ -10,6 +10,7 @@ import {
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import { County } from '@/lib/types/county'
+import { Meta } from '@/lib/types/meta'
 import { Municipality } from '@/lib/types/municipality'
 import { Team } from '@/lib/types/team'
 import { seasonIdCheck } from '@/lib/utils/utils'
@@ -22,10 +23,14 @@ type TeamsForGroupMapReturn =
   | {
       status: 404
       message: string
+      breadCrumb: string
+      meta: Meta
     }
   | {
       status: 200
       teams: { team: Team; county: County; municipality: Municipality }[]
+      breadCrumb: string
+      meta: Meta
     }
   | undefined
 
@@ -41,11 +46,23 @@ export const getTeamsForGroupMap = createServerFn({ method: 'GET' })
       data: { group, year, women },
     }): Promise<TeamsForGroupMapReturn> => {
       try {
+        const seasonYear = seasonIdCheck.parse(year)
+        const breadCrumb = 'Karta'
+        const title = `Bandyresultat - Karta - ${group} - ${women === true ? 'Damer' : 'Herrar'} ${seasonYear!}`
+        const url = `https://bandyresultat.se/seasons/${year}/${group}/map?women=${women}`
+        const description = `Karta ${group} ${seasonYear} ${women ? 'damer' : 'herrar'}`
+        const meta = {
+          title,
+          url,
+          description,
+        }
         if (year < 1930) {
           return {
             status: 404,
             message:
               'Enbart slutspelsmatcher denna säsong, kartan finns under slutspel.',
+            breadCrumb,
+            meta,
           }
         }
 
@@ -53,11 +70,18 @@ export const getTeamsForGroupMap = createServerFn({ method: 'GET' })
           return {
             status: 404,
             message: 'Damernas första säsong var 1972/1973.',
+            breadCrumb,
+            meta,
           }
         }
-        const seasonYear = seasonIdCheck.parse(year)
+
         if (!seasonYear) {
-          return { status: 404, message: 'Säsongen finns inte.' }
+          return {
+            status: 404,
+            message: 'Säsongen finns inte.',
+            breadCrumb,
+            meta,
+          }
         }
 
         const serie = await db
@@ -82,6 +106,8 @@ export const getTeamsForGroupMap = createServerFn({ method: 'GET' })
           return {
             status: 404,
             message: `Ingen ${women ? 'dam' : 'herr'}serie med detta namn det här året. Välj en ny i listan.`,
+            breadCrumb,
+            meta,
           }
 
         const teamArray = await db
@@ -101,7 +127,7 @@ export const getTeamsForGroupMap = createServerFn({ method: 'GET' })
           .leftJoin(county, eq(teams.countyId, county.countyId))
           .where(eq(teamseries.serieId, serie.serieId))
 
-        return { status: 200, teams: teamArray }
+        return { status: 200, teams: teamArray, breadCrumb, meta }
       } catch (error) {
         catchError(error)
       }

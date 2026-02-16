@@ -2,6 +2,7 @@ import { db } from '@/db'
 import { games, seasons, series } from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
+import { Meta } from '@/lib/types/meta'
 import { Stats } from '@/lib/types/stats'
 import { seasonIdCheck } from '@/lib/utils/utils'
 import { zd } from '@/lib/utils/zod'
@@ -14,8 +15,10 @@ type GroupStatsReturn =
   | {
       status: 404
       message: string
+      breadCrumb: string
+      meta: Meta
     }
-  | Stats
+  | (Stats & { breadCrumb: string; meta: Meta })
   | undefined
 
 export const getGroupStats = createServerFn({ method: 'GET' })
@@ -32,11 +35,23 @@ export const getGroupStats = createServerFn({ method: 'GET' })
   .handler(
     async ({ data: { group, year, women } }): Promise<GroupStatsReturn> => {
       try {
+        const seasonYear = seasonIdCheck.parse(year)
+        const breadCrumb = 'Statistik'
+        const title = `Bandyresultat - Statistik - ${group} - ${women === true ? 'Damer' : 'Herrar'} ${seasonYear!}`
+        const url = `https://bandyresultat.se/seasons/${year}/${group}/stats?women=${women}`
+        const description = `Statistik ${group} ${seasonYear} ${women ? 'damer' : 'herrar'}`
+        const meta = {
+          title,
+          url,
+          description,
+        }
         if (year < 1930) {
           return {
             status: 404,
             message:
               'Enbart slutspelsmatcher denna säsong, statistiken finns under slutspel.',
+            breadCrumb,
+            meta,
           }
         }
 
@@ -44,11 +59,18 @@ export const getGroupStats = createServerFn({ method: 'GET' })
           return {
             status: 404,
             message: 'Damernas första säsong var 1972/1973.',
+            breadCrumb,
+            meta,
           }
         }
-        const seasonYear = seasonIdCheck.parse(year)
+
         if (!seasonYear) {
-          return { status: 404, message: 'Säsongen finns inte.' }
+          return {
+            status: 404,
+            message: 'Säsongen finns inte.',
+            breadCrumb,
+            meta,
+          }
         }
 
         const serie = await db
@@ -73,6 +95,8 @@ export const getGroupStats = createServerFn({ method: 'GET' })
           return {
             status: 404,
             message: `Ingen ${women ? 'dam' : 'herr'}serie med detta namn det här året. Välj en ny i listan.`,
+            breadCrumb,
+            meta,
           }
 
         const gameCount = await db.$count(
@@ -84,6 +108,8 @@ export const getGroupStats = createServerFn({ method: 'GET' })
           return {
             status: 404,
             message: 'Serien har enbart sluttabell, ingen matchdata.',
+            breadCrumb,
+            meta,
           }
         }
 
@@ -91,12 +117,14 @@ export const getGroupStats = createServerFn({ method: 'GET' })
           return {
             status: 404,
             message: 'Serien har inga spelade matcher.',
+            breadCrumb,
+            meta,
           }
         }
 
         const data = await getGroupStatsData({ serie })
 
-        return { status: 200, serie, gameCount, ...data }
+        return { status: 200, serie, gameCount, ...data, breadCrumb, meta }
       } catch (error) {
         catchError(error)
       }
