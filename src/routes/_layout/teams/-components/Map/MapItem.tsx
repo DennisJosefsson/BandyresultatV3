@@ -40,7 +40,7 @@ function MapItem({ team, latitude, longitude }: MapItemProps) {
 
             <Link
               from="/teams/map"
-              to="/team/$teamId"
+              to="/teams/$teamId"
               params={{ teamId: team.teamId }}
               search={(prev) => ({ women: prev.women })}
               className="flex flex-row items-center justify-start gap-2"

@@ -2,7 +2,7 @@ import { Game } from '@/lib/types/game'
 import { cn } from '@/lib/utils/utils'
 import { getRouteApi } from '@tanstack/react-router'
 
-const route = getRouteApi('/_layout/team/$teamId/$seasonId')
+const route = getRouteApi('/_layout/teams/$teamId/$seasonId')
 
 type GamesListItemProps = {
   game: Game

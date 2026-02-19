@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { getRouteApi } from '@tanstack/react-router'
-const route = getRouteApi('/_layout/team/$teamId')
+const route = getRouteApi('/_layout/teams/$teamId')
 
 const TeamSeasonCuriosities = () => {
   const playoffStreak = route.useLoaderData({

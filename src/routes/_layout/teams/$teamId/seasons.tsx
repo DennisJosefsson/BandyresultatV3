@@ -7,9 +7,9 @@ import {
 import { CardContent } from '@/components/ui/card'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useState } from 'react'
-import { getTeamSeasons } from '../-functions/teamSeasons'
+import { getTeamSeasons } from './-functions/teamSeasons'
 
-export const Route = createFileRoute('/_layout/team/$teamId/seasons')({
+export const Route = createFileRoute('/_layout/teams/$teamId/seasons')({
   loader: async ({ params }) => {
     const data = await getTeamSeasons({ data: params.teamId })
     if (!data) {
@@ -18,6 +18,39 @@ export const Route = createFileRoute('/_layout/team/$teamId/seasons')({
     return data
   },
   component: Seasons,
+  staticData: { breadcrumb: 'Säsonger' },
+  head: ({ loaderData }) => ({
+    meta: [
+      {
+        title: loaderData?.meta.title,
+      },
+      {
+        name: 'description',
+        content: loaderData?.meta.description,
+      },
+      {
+        property: 'og:description',
+        content: loaderData?.meta.description,
+      },
+      {
+        property: 'og:title',
+        content: loaderData?.meta.title,
+      },
+      {
+        property: 'og:type',
+        content: 'website',
+      },
+      {
+        property: 'og:url',
+        content: loaderData?.meta.url,
+      },
+      {
+        property: 'og:image',
+        content:
+          'https://github.com/DennisJosefsson/WebsiteImages/blob/main/bandyresultat.jpg?raw=true',
+      },
+    ],
+  }),
 })
 
 function Seasons() {
@@ -41,8 +74,8 @@ function Seasons() {
                 return (
                   <Link
                     key={season.seasonId}
-                    from="/team/$teamId/seasons"
-                    to="/team/$teamId/$seasonId"
+                    from="/teams/$teamId/seasons"
+                    to="/teams/$teamId/$seasonId"
                     params={{ seasonId: season.seasonId }}
                     search={(prev) => ({ ...prev })}
                   >
@@ -69,8 +102,8 @@ function Seasons() {
                   return (
                     <Link
                       key={season.seasonId}
-                      from="/team/$teamId/seasons"
-                      to="/team/$teamId/$seasonId"
+                      from="/teams/$teamId/seasons"
+                      to="/teams/$teamId/$seasonId"
                       params={{ seasonId: season.seasonId }}
                       search={(prev) => ({ ...prev })}
                     >

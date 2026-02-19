@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button'
 import { useFavTeam } from '@/lib/contexts/favTeamsContext'
 import { Game } from '@/lib/types/game'
 import { cn } from '@/lib/utils/utils'
-import { useNavigate } from '@tanstack/react-router'
+import { useLocation, useNavigate } from '@tanstack/react-router'
 import { useMediaQuery } from 'usehooks-ts'
 
 type GamesListItemProps = {
@@ -14,6 +14,8 @@ const GamesListItem = ({ game }: GamesListItemProps) => {
   const navigate = useNavigate({ from: '/seasons/$year/$group/games' })
   const matches = useMediaQuery('(min-width: 768px)')
 
+  const origin = useLocation().pathname
+
   const onClickHandler = () => {
     navigate({
       to: '/teams/compare',
@@ -21,6 +23,7 @@ const GamesListItem = ({ game }: GamesListItemProps) => {
         ...prev,
         teamArray: [game.homeTeamId, game.awayTeamId],
       }),
+      state: { origin: origin },
     })
   }
 

@@ -6,7 +6,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
 import GamesList from './Games/GamesList'
 import SeasonTables from './SeasonTables'
 
-const route = getRouteApi('/_layout/team/$teamId/$seasonId')
+const route = getRouteApi('/_layout/teams/$teamId/$seasonId')
 
 const SingleTeamSeason = () => {
   const season = route.useLoaderData()
@@ -15,8 +15,8 @@ const SingleTeamSeason = () => {
       <div className="flex flex-col gap-2">
         <div className="flex flex-row items-center justify-between">
           <Link
-            from="/team/$teamId/$seasonId"
-            to="/team/$teamId/$seasonId"
+            from="/teams/$teamId/$seasonId"
+            to="/teams/$teamId/$seasonId"
             search={(prev) => ({ ...prev })}
             params={(prev) => ({
               ...prev,
@@ -35,8 +35,8 @@ const SingleTeamSeason = () => {
             {season.seasonYear}
           </h4>
           <Link
-            from="/team/$teamId/$seasonId"
-            to="/team/$teamId/$seasonId"
+            from="/teams/$teamId/$seasonId"
+            to="/teams/$teamId/$seasonId"
             search={(prev) => ({ ...prev })}
             params={(prev) => ({
               ...prev,

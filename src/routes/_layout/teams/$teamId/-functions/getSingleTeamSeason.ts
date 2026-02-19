@@ -163,6 +163,11 @@ export const getSingleTeamSeason = createServerFn({ method: 'GET' })
         seasonId: season.seasonId,
       })
 
+      const breadCrumb = season.year
+      const title = `Bandyresultat - ${team.name} - ${season.year}`
+      const description = `Information om ${team.name} ${season.year}`
+      const url = `https://bandyresultat.se/teams/${team.teamId}/${seasonYear}?women=${team.women}`
+
       return {
         staticTables,
         tables: getTables,
@@ -172,6 +177,8 @@ export const getSingleTeamSeason = createServerFn({ method: 'GET' })
         seasonYear,
         series: seriesForTeam,
         ...seasonObjects,
+        breadCrumb,
+        meta: { title, description, url },
       }
     } catch (error) {
       catchError(error)

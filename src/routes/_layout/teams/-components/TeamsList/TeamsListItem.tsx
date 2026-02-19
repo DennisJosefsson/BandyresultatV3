@@ -30,7 +30,7 @@ const TeamsListItem = ({
       <span className={cn('w-32 peer-data-[state=checked]:underline')}>
         <Link
           from="/teams"
-          to="/team/$teamId"
+          to="/teams/$teamId"
           params={{ teamId: team.teamId }}
           search={(prev) => ({ ...prev })}
         >

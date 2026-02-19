@@ -7,10 +7,10 @@ import {
   Link,
   Outlet,
 } from '@tanstack/react-router'
-import TeamHeader from './-components/TeamHeader'
-import { getSingleTeam } from './-functions/getSingleTeam'
+import TeamHeader from './$teamId/-components/TeamHeader'
+import { getSingleTeam } from './$teamId/-functions/getSingleTeam'
 
-export const Route = createFileRoute('/_layout/team/$teamId')({
+export const Route = createFileRoute('/_layout/teams/$teamId')({
   params: {
     parse: (params) => ({
       teamId: zd.number().int().parse(Number(params.teamId)),
@@ -26,6 +26,41 @@ export const Route = createFileRoute('/_layout/team/$teamId')({
   component: SingleTeam,
   pendingComponent: () => <Loading page="singleTeam" />,
   notFoundComponent: NotFound,
+  staticData: {
+    breadcrumb: (match) => match.loaderData.breadCrumb,
+  },
+  head: ({ loaderData }) => ({
+    meta: [
+      {
+        title: loaderData?.meta.title,
+      },
+      {
+        name: 'description',
+        content: loaderData?.meta.description,
+      },
+      {
+        property: 'og:description',
+        content: loaderData?.meta.description,
+      },
+      {
+        property: 'og:title',
+        content: loaderData?.meta.title,
+      },
+      {
+        property: 'og:type',
+        content: 'website',
+      },
+      {
+        property: 'og:url',
+        content: loaderData?.meta.url,
+      },
+      {
+        property: 'og:image',
+        content:
+          'https://github.com/DennisJosefsson/WebsiteImages/blob/main/bandyresultat.jpg?raw=true',
+      },
+    ],
+  }),
 })
 
 function SingleTeam() {

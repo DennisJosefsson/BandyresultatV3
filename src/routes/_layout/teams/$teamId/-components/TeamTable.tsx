@@ -4,13 +4,13 @@ import { getRouteApi } from '@tanstack/react-router'
 import TeamTableHeader from './TableComponents/TableHeader'
 import TeamTableRow from './TableComponents/TeamTableDataRow'
 
-const route = getRouteApi('/_layout/team/$teamId')
+const route = getRouteApi('/_layout/teams/$teamId')
 
 const TeamTable = () => {
   const tables = route.useLoaderData({ select: (data) => data.tables })
   if (tables.length === 0) {
     return (
-      <div className="flex flex-row justify-center mt-4">
+      <div className="mt-4 flex flex-row justify-center">
         <h2 className="text-xs font-bold md:text-sm">
           Tyvärr saknas tabelldata för detta lag.
         </h2>
@@ -21,7 +21,7 @@ const TeamTable = () => {
     <div className="mb-6">
       {tables.map((level) => {
         return (
-          <Card key={level.level} className="mb-2 sm:mb-4 md:mb-6 p-1 md:p-2">
+          <Card key={level.level} className="mb-2 p-1 sm:mb-4 md:mb-6 md:p-2">
             <CardHeader className="p-1 md:p-2">
               <CardTitle className="text-[10px] md:text-sm lg:text-base xl:text-lg">
                 {level.levelName}

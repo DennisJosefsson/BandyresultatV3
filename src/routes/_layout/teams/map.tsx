@@ -13,6 +13,7 @@ export const Route = createFileRoute('/_layout/teams/map')({
     return data
   },
   pendingComponent: () => <Loading page="seasonMap" />,
+  staticData: { breadcrumb: 'Karta' },
 })
 
 function MapComponent() {

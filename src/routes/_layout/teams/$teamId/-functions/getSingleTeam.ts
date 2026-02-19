@@ -45,6 +45,16 @@ export const getSingleTeam = createServerFn({ method: 'GET' })
 
       const fiveSeasons = await getLastFiveSeasons({ teamId })
 
+      const breadCrumb = `${team.name}`
+      const title = `Bandyresultat - ${team.name} - ${team.women === true ? 'Damer' : 'Herrar'}`
+      const url = `https://bandyresultat.se/teams/${team.teamId}?women=${team.women}`
+      const description = `Information om ${team.name} ${team.women ? 'damer' : 'herrar'}`
+      const meta = {
+        title,
+        url,
+        description,
+      }
+
       return {
         team,
         tables,
@@ -52,6 +62,8 @@ export const getSingleTeam = createServerFn({ method: 'GET' })
         streaks,
         stats,
         fiveSeasons,
+        breadCrumb,
+        meta,
       }
     } catch (error) {
       catchError(error)

@@ -13,6 +13,14 @@ export const getTeamSeasons = createServerFn({ method: 'GET' })
   .middleware([errorMiddleware])
   .handler(async ({ data: teamId }) => {
     try {
+      const team = await db.query.teams.findFirst({
+        where: (teams, { eq }) => eq(teams.teamId, teamId),
+      })
+      if (!team) throw new Error('Lag finns ej')
+      const breadCrumb = 'Säsonger'
+      const title = `Bandyresultat - ${team.name} - Säsonger`
+      const description = `Säsongslista för ${team.name}`
+      const url = `https://bandyresultat.se/teams/${team.teamId}/seasons?women=${team.women}`
       const teamSeasons = await db
         .select({
           year: seasons.year as unknown as SQL<string>,
@@ -41,9 +49,16 @@ export const getTeamSeasons = createServerFn({ method: 'GET' })
         return {
           seasons: head,
           rest: copy,
+          breadCrumb,
+          meta: { description, title, url },
         }
       } else {
-        return { seasons: teamSeasons, rest: [] }
+        return {
+          seasons: teamSeasons,
+          rest: [],
+          breadCrumb,
+          meta: { description, title, url },
+        }
       }
     } catch (error) {
       catchError(error)

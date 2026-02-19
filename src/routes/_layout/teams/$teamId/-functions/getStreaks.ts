@@ -513,7 +513,12 @@ const getPlayoffStreak = async ({ teamId }: { teamId: number }) => {
         and(
           eq(teamgames.teamId, teamId),
           or(
-            inArray(teamgames.category, ['quarter', 'semi', 'final']),
+            inArray(teamgames.category, [
+              'playoffseries',
+              'quarter',
+              'semi',
+              'final',
+            ]),
             inArray(teamgames.group, ['SlutspelA', 'SlutspelB']),
           ),
         ),

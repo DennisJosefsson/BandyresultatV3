@@ -1,7 +1,7 @@
 import { getRouteApi } from '@tanstack/react-router'
 import GameStatComponent from './GameStatComponent'
 
-const route = getRouteApi('/_layout/team/$teamId')
+const route = getRouteApi('/_layout/teams/$teamId')
 
 const GameStats = () => {
   const gameStats = route.useLoaderData({ select: (data) => data.stats })
