@@ -1,10 +1,11 @@
 import { db } from '@/db'
-import CompareRequestError from '@/lib/middlewares/errors/CompareRequestError'
 import { notFound } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
 
+import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import { zd } from '@/lib/utils/zod'
+import { ZodError } from 'zod'
 import {
   getAllDbSeasons,
   getAllGamesTables,
@@ -23,106 +24,134 @@ import {
   compareSortLevelFunction,
 } from './utils/compareSortFunctions'
 import getCompareHeaderText from './utils/getCompareHeaderText'
-import { parseCompareRequest } from './utils/parseCompareRequest'
 
 export const compareTeams = createServerFn({ method: 'POST' })
-  .inputValidator(async (data: unknown) => {
-    const { women } = zd
-      .object({ women: zd.boolean().catch(false) })
-      .parse(data)
-    const season = await db.query.seasons.findFirst({
-      where: (seasons, { eq }) => eq(seasons.women, women),
-      orderBy: (seasons, { desc }) => desc(seasons.seasonId),
-    })
-    const parsedData = parseCompareRequest(data, season)
-    if (!parsedData.success) {
-      const errorStrings = parsedData.error.issues
-        .map((error) => error.message)
-        .join(', ')
-      // const pretty = zd.prettifyError(parsedData.error)
-      throw new CompareRequestError({ message: errorStrings })
-    }
-    return parsedData.data
-  })
+  .inputValidator(
+    zd.object({
+      teamArray: zd.array(zd.number().int().positive()).optional(),
+
+      women: zd.boolean(),
+    }),
+  )
   .middleware([errorMiddleware])
   .handler(async ({ data }) => {
-    const { startSeason, endSeason, teamArray, categoryArray } = await data
+    try {
+      const { teamArray, women } = data
 
-    const seasonNames = await db.query.seasons.findMany({
-      where: (seasons, { inArray }) =>
-        inArray(seasons.seasonId, [startSeason, endSeason]),
-    })
+      if (!teamArray) {
+        const breadCrumb = `H2H`
+        const title = `Bandyresultat - ${breadCrumb}`
+        const description = ``
+        const url = `https://bandyresultat.se/teams/compare?women=${data.women}`
 
-    const compareTeams = await db.query.teams.findMany({
-      where: (teams, { inArray }) => inArray(teams.teamId, teamArray),
-    })
+        return {
+          message: 'Lag måste väljas',
+          breadCrumb,
+          meta: { title, description, url },
+          status: 400,
+        }
+      }
 
-    const catTables = await getCatTables({
-      teamArray,
-      categoryArray,
-      startSeason,
-      endSeason,
-    })
+      if (teamArray.length !== 2) {
+        const breadCrumb = `H2H`
+        const title = `Bandyresultat - ${breadCrumb}`
+        const description = ``
+        const url = `https://bandyresultat.se/teams/compare?women=${data.women}`
 
-    if (!getCatTables || getCatTables.length === 0) {
-      throw notFound()
-    }
+        return {
+          message: 'Välj två lag.',
+          breadCrumb,
+          meta: { title, description, url },
+          status: 400,
+        }
+      }
 
-    const categoryData = compareSortLevelFunction(catTables)
+      const compareTeams = await db.query.teams.findMany({
+        where: (teams, { inArray }) => inArray(teams.teamId, teamArray),
+      })
 
-    const allData = await getAllGamesTables({
-      teamArray,
-      categoryArray,
-      startSeason,
-      endSeason,
-    })
+      const catTables = await getCatTables({
+        teamArray,
+      })
 
-    const gameCount = allData.length
+      if (!getCatTables || getCatTables.length === 0) {
+        throw notFound()
+      }
 
-    const sortedData = compareAllTeamData(allData)
+      const categoryData = compareSortLevelFunction(catTables)
 
-    const golds = await getGolds(teamArray)
+      const allData = await getAllGamesTables({
+        teamArray,
+      })
 
-    const playoffs = await getPlayoffs(teamArray)
+      const gameCount = allData.length
 
-    const allPlayoffs = await getAllPlayoffs(teamArray)
+      const sortedData = compareAllTeamData(allData)
 
-    const firstDivisionSeasonsSince1931 =
-      await getFirstDivisionSeasonsSince1931(teamArray)
+      const golds = await getGolds(teamArray)
 
-    const allDbSeasons = await getAllDbSeasons(teamArray)
+      const playoffs = await getPlayoffs(teamArray)
 
-    const firstDivisionSeasons = await getFirstDivisionSeasons(teamArray)
+      const allPlayoffs = await getAllPlayoffs(teamArray)
 
-    const { firstGames, latestGames } = await getFirstAndLastGames(teamArray)
+      const firstDivisionSeasonsSince1931 =
+        await getFirstDivisionSeasonsSince1931(teamArray)
 
-    const latestHomeWin = await getLatestHomeWin(teamArray)
-    const latestAwayWin = await getLatestAwayWin(teamArray)
+      const allDbSeasons = await getAllDbSeasons(teamArray)
 
-    const compareHeaderText = getCompareHeaderText({
-      seasonNames,
-      teams: compareTeams,
-      gameCount,
-      categoryArray,
-    })
+      const firstDivisionSeasons = await getFirstDivisionSeasons(teamArray)
 
-    return {
-      seasonNames,
-      compareTeams,
-      categoryData,
-      allData,
-      sortedData,
-      gameCount,
-      golds,
-      playoffs,
-      allPlayoffs,
-      firstDivisionSeasonsSince1931,
-      allDbSeasons,
-      firstDivisionSeasons,
-      firstGames,
-      latestGames,
-      latestHomeWin,
-      latestAwayWin,
-      compareHeaderText,
+      const { firstGames, latestGames } = await getFirstAndLastGames(teamArray)
+
+      const latestHomeWin = await getLatestHomeWin(teamArray)
+      const latestAwayWin = await getLatestAwayWin(teamArray)
+
+      const breadCrumb = `H2H:  ${compareTeams.map((team) => team.name).join(' - ')}`
+      const title = `Bandyresultat - ${breadCrumb}`
+      const description = `Möten mellan ${compareTeams.map((team) => team.name).join(' och ')}`
+      const url = `https://bandyresultat.se/teams/compare?women=${women}&teamArray=[${compareTeams.map((team) => team.teamId).join(',')}]`
+
+      const compareHeaderText = getCompareHeaderText({
+        teams: compareTeams,
+        gameCount,
+      })
+
+      return {
+        compareTeams,
+        categoryData,
+        allData,
+        sortedData,
+        gameCount,
+        golds,
+        playoffs,
+        allPlayoffs,
+        firstDivisionSeasonsSince1931,
+        allDbSeasons,
+        firstDivisionSeasons,
+        firstGames,
+        latestGames,
+        latestHomeWin,
+        latestAwayWin,
+        compareHeaderText,
+        breadCrumb,
+        meta: { description, url, title },
+        status: 200,
+      }
+    } catch (error) {
+      if (error instanceof ZodError) {
+        const breadCrumb = `H2H`
+        const title = `Bandyresultat - ${breadCrumb}`
+        const description = ``
+        const url = `https://bandyresultat.se/teams/compare?women=${data.women}`
+        const errorString = error.issues.map((issue) => issue.message).join(',')
+        return {
+          message: errorString,
+          breadCrumb,
+          meta: { title, description, url },
+          status: 400,
+        }
+      } else {
+        catchError(error)
+      }
     }
   })

@@ -2,10 +2,10 @@ import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorCompon
 import { zd } from '@/lib/utils/zod'
 import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
 
-import SingleTeamSeason from '../-components/SeasonComponents/SingleTeamSeason'
-import { getSingleTeamSeason } from '../-functions/getSingleTeamSeason'
+import SingleTeamSeason from './-components/SeasonComponents/SingleTeamSeason'
+import { getSingleTeamSeason } from './-functions/getSingleTeamSeason'
 
-export const Route = createFileRoute('/_layout/team/$teamId/$seasonId')({
+export const Route = createFileRoute('/_layout/teams/$teamId/$seasonId')({
   params: {
     parse: (params) => ({
       seasonId: zd.number().int().parse(Number(params.seasonId)),
@@ -23,6 +23,39 @@ export const Route = createFileRoute('/_layout/team/$teamId/$seasonId')({
     return data
   },
   component: Season,
+  staticData: { breadcrumb: (match) => match.loaderData.seasonYear },
+  head: ({ loaderData }) => ({
+    meta: [
+      {
+        title: loaderData?.meta.title,
+      },
+      {
+        name: 'description',
+        content: loaderData?.meta.description,
+      },
+      {
+        property: 'og:description',
+        content: loaderData?.meta.description,
+      },
+      {
+        property: 'og:title',
+        content: loaderData?.meta.title,
+      },
+      {
+        property: 'og:type',
+        content: 'website',
+      },
+      {
+        property: 'og:url',
+        content: loaderData?.meta.url,
+      },
+      {
+        property: 'og:image',
+        content:
+          'https://github.com/DennisJosefsson/WebsiteImages/blob/main/bandyresultat.jpg?raw=true',
+      },
+    ],
+  }),
 })
 
 function Season() {

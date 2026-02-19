@@ -2,7 +2,7 @@ import { ReactNode } from 'react'
 
 export type TabBarObject = {
   help?: ReactNode
-  gender: ReactNode
+
   tabBarArray: {
     tab: ReactNode
     tabName: string
@@ -17,12 +17,11 @@ export const TabBarInline = ({
 }) => {
   return (
     <div>
-      <div className="flex flex-row items-center justify-between gap-1 xs:mb-2 md:gap-2">
+      <div className="xs:mb-2 flex flex-row items-center justify-between gap-1 md:gap-2">
         {tabBarObject.tabBarArray.map((currTab) => {
           return <div key={currTab.tabName}>{currTab.tab}</div>
         })}
         {tabBarObject.help ? tabBarObject.help : null}
-        {tabBarObject.gender}
       </div>
     </div>
   )
@@ -35,7 +34,7 @@ export const TabBarDivided = ({
 }) => {
   return (
     <div>
-      <div className="flex flex-row items-center justify-between gap-1 xs:mb-2 md:gap-2 md:text-lg">
+      <div className="xs:mb-2 flex flex-row items-center justify-between gap-1 md:gap-2 md:text-lg">
         <div className="flex flex-row gap-1 md:gap-2">
           {tabBarObject.tabBarArray.map((currTab) => {
             return <div key={currTab.tabName}>{currTab.tab}</div>
@@ -43,7 +42,6 @@ export const TabBarDivided = ({
         </div>
         <div className="flex flex-row gap-1 md:gap-2">
           {tabBarObject.help ? tabBarObject.help : null}
-          {tabBarObject.gender}
         </div>
       </div>
     </div>

@@ -1,7 +1,7 @@
 import { getRouteApi } from '@tanstack/react-router'
 import TableList from './Tables/TableList'
 
-const route = getRouteApi('/_layout/team/$teamId/$seasonId')
+const route = getRouteApi('/_layout/teams/$teamId/$seasonId')
 
 const SeasonTables = () => {
   const tables = route.useLoaderData({ select: (data) => data.tables })

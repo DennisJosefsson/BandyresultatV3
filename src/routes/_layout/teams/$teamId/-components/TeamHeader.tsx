@@ -5,7 +5,7 @@ import { useFavTeam } from '@/lib/contexts/favTeamsContext'
 import { getRouteApi, Link } from '@tanstack/react-router'
 import { useMediaQuery } from 'usehooks-ts'
 
-const route = getRouteApi('/_layout/team/$teamId')
+const route = getRouteApi('/_layout/teams/$teamId')
 
 const TeamHeader = () => {
   const team = route.useLoaderData({ select: (data) => data.team })
@@ -40,7 +40,7 @@ const TeamHeader = () => {
           <div className="flex flex-row gap-2">
             <span>[ </span>
             <Link
-              to="/team/$teamId"
+              to="/teams/$teamId"
               params={{ teamId: team.teamId }}
               search={{ women }}
               activeOptions={{ exact: true }}
@@ -50,7 +50,7 @@ const TeamHeader = () => {
             </Link>
             <span> | </span>
             <Link
-              to="/team/$teamId/seasons"
+              to="/teams/$teamId/seasons"
               params={{ teamId: team.teamId }}
               search={{ women }}
               className="font-normal"

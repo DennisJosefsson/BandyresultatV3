@@ -1,7 +1,7 @@
 import { getRouteApi } from '@tanstack/react-router'
 import StreakComponent from './StreakComponent'
 
-const route = getRouteApi('/_layout/team/$teamId')
+const route = getRouteApi('/_layout/teams/$teamId')
 
 const Streaks = () => {
   const streaks = route.useLoaderData({ select: (data) => data.streaks })

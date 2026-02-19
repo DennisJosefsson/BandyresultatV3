@@ -45,7 +45,7 @@ function MapItem({ team, latitude, longitude }: MapItemProps) {
             </div>
 
             <route.Link
-              to="/team/$teamId"
+              to="/teams/$teamId"
               params={{ teamId: team.team.teamId }}
               search={(prev) => ({ women: prev.women })}
               className="flex flex-row items-center justify-start gap-2"

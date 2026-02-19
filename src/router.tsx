@@ -35,4 +35,7 @@ declare module '@tanstack/react-router' {
   interface StaticDataRouteOption {
     breadcrumb?: BreadcrumbValue
   }
+  interface HistoryState {
+    origin?: string
+  }
 }

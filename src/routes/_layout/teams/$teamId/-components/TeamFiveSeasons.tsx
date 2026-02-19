@@ -1,7 +1,7 @@
 import { getRouteApi } from '@tanstack/react-router'
 import FiveSeasonTeamTable from './FiveSeasonTeamTable'
 
-const route = getRouteApi('/_layout/team/$teamId')
+const route = getRouteApi('/_layout/teams/$teamId')
 
 const TeamFiveSeasonsTables = () => {
   const fiveSeasonArray = route.useLoaderData({

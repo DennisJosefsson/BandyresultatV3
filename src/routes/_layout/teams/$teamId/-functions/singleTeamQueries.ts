@@ -232,10 +232,19 @@ export const getStrings = async ({ team, allSeasons }: GetStringsProps) => {
       else return result[0].count
     })
   const finalWins = await db
-    .select({ seasonId: teamgames.seasonId, year: seasons.year })
+    .selectDistinctOn([teamgames.seasonId], {
+      seasonId: teamgames.seasonId,
+      year: seasons.year,
+    })
     .from(teamgames)
     .leftJoin(seasons, eq(seasons.seasonId, teamgames.seasonId))
-    .where(eq(teamgames.win, true))
+    .where(
+      and(
+        eq(teamgames.teamId, TEAMID),
+        eq(teamgames.category, 'final'),
+        eq(teamgames.win, true),
+      ),
+    )
 
   const finalsAndWinsString = getFinalsAndWinsString({
     teamName: team.casualName,
@@ -369,6 +378,7 @@ function getFinalsAndWinsString({
   const finals = finalCount
   const golds = finalWinCount
   let winString = ''
+
   winString += finalWins.reduce(
     (str, winYear) => `${str}, ${winYear.year ? winYear.year.slice(0, 4) : ''}`,
     '',

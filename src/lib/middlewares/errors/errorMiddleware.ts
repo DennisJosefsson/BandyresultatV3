@@ -1,5 +1,4 @@
 import { createMiddleware } from '@tanstack/react-start'
-import CompareRequestError from './CompareRequestError'
 import DbError from './DbError'
 import ZodParsingError from './ZodParsingError'
 
@@ -10,10 +9,7 @@ export const errorMiddleware = createMiddleware({ type: 'function' }).server(
       return result
     } catch (error) {
       if (error) {
-        if (error instanceof CompareRequestError) {
-          console.error('Compare request error!', error.message)
-          throw error
-        } else if (error instanceof ZodParsingError) {
+        if (error instanceof ZodParsingError) {
           console.error('Zod parsing error', error.message)
           throw error
         } else if (error instanceof DbError) {

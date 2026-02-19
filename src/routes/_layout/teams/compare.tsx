@@ -1,7 +1,6 @@
 import Loading from '@/components/Loading/Loading'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import CompareRequestError from '@/lib/middlewares/errors/CompareRequestError'
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import AllData from './-components/Compare/AllData'
 import CompareHeader from './-components/Compare/CompareHeader'
 import CompareStats from './-components/Compare/CompareStats'
@@ -10,13 +9,69 @@ import { compareTeams } from './-functions/compare'
 
 export const Route = createFileRoute('/_layout/teams/compare')({
   loaderDeps: ({ search: searchDeps }) => searchDeps,
-  loader: async ({ deps }) => compareTeams({ data: deps }),
+  loader: async ({ deps }) => {
+    const data = await compareTeams({ data: deps })
+    if (!data) throw new Error('Missing data')
+
+    return data
+  },
   component: RouteComponent,
   errorComponent: ({ error }) => <ErrorComponent error={error} />,
   pendingComponent: () => <Loading page="compare" />,
+
+  staticData: {
+    breadcrumb: (match) => {
+      if (match.loaderData.breadCrumb === undefined) return 'H2H'
+      else return match.loaderData.breadCrumb
+    },
+  },
+  head: ({ loaderData }) => ({
+    meta: [
+      {
+        title: loaderData?.meta.title ?? 'Bandyresultat - H2H: Fel',
+      },
+      {
+        name: 'description',
+        content: loaderData?.meta.description ?? 'Bandyresultat - H2H: Fel',
+      },
+      {
+        property: 'og:description',
+        content: loaderData?.meta.description ?? 'Bandyresultat - H2H: Fel',
+      },
+      {
+        property: 'og:title',
+        content: loaderData?.meta.title ?? 'Bandyresultat - H2H: Fel',
+      },
+      {
+        property: 'og:type',
+        content: 'website',
+      },
+      {
+        property: 'og:url',
+        content:
+          loaderData?.meta.url ?? 'https://bandyresultat.se/teams/compare',
+      },
+      {
+        property: 'og:image',
+        content:
+          'https://github.com/DennisJosefsson/WebsiteImages/blob/main/bandyresultat.jpg?raw=true',
+      },
+    ],
+  }),
 })
 
 function RouteComponent() {
+  const data = Route.useLoaderData()
+  if (data.status === 400) {
+    return (
+      <div className="font-inter mt-2 flex flex-row items-center justify-center">
+        <p className="text-center text-base font-semibold">
+          {data.message ?? 'Något gick fel.'}
+          <br />
+        </p>
+      </div>
+    )
+  }
   return (
     <div className="mt-2">
       <CompareHeader />
@@ -47,31 +102,12 @@ function RouteComponent() {
 }
 
 function ErrorComponent({ error }: { error: unknown }) {
-  const compareObject = Route.useSearch()
-
-  if (error && error instanceof CompareRequestError) {
+  if (error && error instanceof Error) {
     return (
       <div className="font-inter mt-2 flex flex-row items-center justify-center">
-        <p className="text-center">
+        <p className="text-center text-base font-semibold">
           {error.message ?? 'Något gick fel.'}
           <br />
-          Gå till{' '}
-          <Link
-            to="/teams"
-            search={compareObject}
-            className="font-semibold text-blue-700 underline"
-          >
-            laglistan
-          </Link>{' '}
-          eller ändra{' '}
-          <Link
-            to="/teams/selection"
-            search={compareObject}
-            className="font-semibold text-blue-700 underline"
-          >
-            sökval
-          </Link>
-          .
         </p>
       </div>
     )

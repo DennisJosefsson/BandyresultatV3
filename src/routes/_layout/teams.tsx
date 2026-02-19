@@ -9,9 +9,6 @@ import { getTeams } from './teams/-functions/getTeams'
 const searchParams = z.object({
   women: z.boolean(),
   teamArray: z.array(z.number()).optional(),
-  categoryArray: z.array(z.string()).optional(),
-  startSeason: z.number().optional(),
-  endSeason: z.number().optional(),
 })
 
 export const Route = createFileRoute('/_layout/teams')({
@@ -19,11 +16,12 @@ export const Route = createFileRoute('/_layout/teams')({
   loaderDeps: ({ search: { women } }) => ({ women }),
   loader: async ({ deps }) => await getTeams({ data: deps.women }),
   component: TeamsHeader,
+  staticData: { breadcrumb: 'Lag' },
 })
 
 function TeamsHeader() {
   return (
-    <div className="mb-2 min-h-screen px-1 font-inter text-foreground">
+    <div className="font-inter text-foreground mb-2 min-h-screen px-1">
       <Card>
         <CardContent className="p-2 md:p-4">
           <TeamsTabBar />

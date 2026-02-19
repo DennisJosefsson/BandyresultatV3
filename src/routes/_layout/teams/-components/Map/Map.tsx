@@ -1,6 +1,7 @@
 import { Card } from '@/components/ui/card'
 import { Map as MapCn, MapControls, MapRef } from '@/components/ui/map'
-import { calcBoundsFromCoordinates } from '@/routes/_layout/team/-functions/calcLongLatBounds'
+
+import { calcBoundsFromCoordinates } from '@/routes/_layout/teams/$teamId/-functions/calcLongLatBounds'
 import { getRouteApi } from '@tanstack/react-router'
 import { useEffect, useRef, useState } from 'react'
 import CountyListContainer from './CountyListContainer'

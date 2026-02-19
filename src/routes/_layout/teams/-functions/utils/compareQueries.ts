@@ -12,7 +12,6 @@ import {
   gte,
   inArray,
   lt,
-  lte,
   ne,
   or,
   SQL,
@@ -27,9 +26,6 @@ const s1 = alias(series, 's1')
 
 type GetCatTables = {
   teamArray: number[]
-  categoryArray: string[]
-  endSeason: number
-  startSeason: number
 }
 
 type Team = {
@@ -39,12 +35,7 @@ type Team = {
   casualName: string
 }
 
-export const getCatTables = ({
-  teamArray,
-  categoryArray,
-  endSeason,
-  startSeason,
-}: GetCatTables) =>
+export const getCatTables = ({ teamArray }: GetCatTables) =>
   db
     .select({
       teamId: teamgames.teamId,
@@ -98,9 +89,7 @@ export const getCatTables = ({
       and(
         inArray(teamgames.teamId, teamArray),
         inArray(teamgames.opponentId, teamArray),
-        inArray(teamgames.category, categoryArray),
-        gte(teamgames.seasonId, startSeason),
-        lte(teamgames.seasonId, endSeason),
+
         eq(teamgames.played, true),
       ),
     )
@@ -120,12 +109,7 @@ export const getCatTables = ({
     )
     .orderBy(desc(teamgames.teamId))
 
-export const getAllGamesTables = ({
-  teamArray,
-  categoryArray,
-  endSeason,
-  startSeason,
-}: GetCatTables) =>
+export const getAllGamesTables = ({ teamArray }: GetCatTables) =>
   db
     .select({
       teamId: teamgames.teamId,
@@ -174,9 +158,7 @@ export const getAllGamesTables = ({
       and(
         inArray(teamgames.teamId, teamArray),
         inArray(teamgames.opponentId, teamArray),
-        inArray(teamgames.category, categoryArray),
-        gte(teamgames.seasonId, startSeason),
-        lte(teamgames.seasonId, endSeason),
+
         eq(teamgames.played, true),
       ),
     )
