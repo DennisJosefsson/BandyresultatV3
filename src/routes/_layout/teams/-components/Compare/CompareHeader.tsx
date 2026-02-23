@@ -10,7 +10,7 @@ const Buttons = ({ length }: { length: number }) => {
   const navigate = useNavigate()
 
   const copyLink = useLocation({
-    select: (location) => location.url.href,
+    select: (location) => location.href,
   })
 
   const origin = useLocation().state.origin

@@ -10,6 +10,8 @@ export type Game = {
   result: string | null
   halftimeResult: string | null
   played: boolean | null
+  penalties: boolean | null
+  extraTime: boolean | null
   home: {
     teamId: number
     name: string

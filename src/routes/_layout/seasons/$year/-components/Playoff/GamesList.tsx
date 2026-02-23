@@ -2,7 +2,8 @@ import Date from '@/components/Common/Date'
 import { Game, GameGroupBase } from '@/lib/types/game'
 import { getRouteApi, Link } from '@tanstack/react-router'
 import { LinkIcon } from 'lucide-react'
-import GamesListItem from './GamesListItem'
+import { columns } from './columns'
+import DataTable from './DataTable'
 
 type GameListProps = {
   gamesArray: GameGroupBase<Omit<Game, 'season'>[]>[]
@@ -25,7 +26,7 @@ const GamesList = ({ gamesArray }: GameListProps) => {
                 id={group.group}
                 className="group mb-0.5 flex flex-row items-center gap-1"
               >
-                <h3 className="text-primary text-[10px] font-semibold tracking-wide md:text-xs xl:text-sm 2xl:text-base">
+                <h3 className="text-primary text-[10px] font-bold tracking-wide md:text-xs xl:text-sm 2xl:text-base">
                   {group.name}
                 </h3>
                 <Link
@@ -44,12 +45,20 @@ const GamesList = ({ gamesArray }: GameListProps) => {
               )}
               <div>
                 {group.dates.map((date) => {
+                  const teamObject = date.games.reduce(
+                    (o, key) => ({
+                      ...o,
+                      [key.home.casualName]: key.homeTeamId,
+                      [key.away.casualName]: key.awayTeamId,
+                    }),
+                    {},
+                  )
                   return (
-                    <div key={date.date}>
+                    <div key={date.date} className="mb-4">
                       {date.date !== 'null' && (
                         <div className="group mb-0.5 flex flex-row items-center gap-1">
                           <h3
-                            className="text-[0.75rem] tracking-wide md:text-sm xl:text-base 2xl:text-lg"
+                            className="text-[0.75rem] font-semibold tracking-wide md:text-sm xl:text-base 2xl:text-lg"
                             id={`${group.group}-${date.date}`}
                           >
                             <Date>{date.date}</Date>
@@ -64,9 +73,14 @@ const GamesList = ({ gamesArray }: GameListProps) => {
                           </Link>
                         </div>
                       )}
-                      {date.games.map((game) => {
+                      <DataTable
+                        teamObject={teamObject}
+                        columns={columns}
+                        data={date.games}
+                      />
+                      {/* {date.games.map((game) => {
                         return <GamesListItem key={game.gameId} game={game} />
-                      })}
+                      })} */}
                     </div>
                   )
                 })}

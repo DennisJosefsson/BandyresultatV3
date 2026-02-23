@@ -72,7 +72,7 @@ export const getDevelopmentData = async ({ serie }: FunctionProps) => {
           .where(
             and(
               inArray(teamgames.teamId, teamArray),
-              serie.allParentGmes
+              serie.allParentGames
                 ? undefined
                 : inArray(teamgames.opponentId, teamArray),
               inArray(
@@ -94,9 +94,10 @@ export const getDevelopmentData = async ({ serie }: FunctionProps) => {
             teamId: teamgames.teamId,
             position: sql`0`.mapWith(Number).as('position'),
             totalGames: sql`0`.mapWith(Number).as('total_games'),
-            totalPoints: sql<number>`teamseries.bonus_points`
-              .mapWith(Number)
-              .as('total_points'),
+            totalPoints:
+              sql<number>`case when teamseries.bonus_points is null then 0 else teamseries.bonus_points end`
+                .mapWith(Number)
+                .as('total_points'),
             totalGoalsScored: sql`0`.mapWith(Number).as('total_goals_scored'),
             totalGoalsConceded: sql`0`
               .mapWith(Number)

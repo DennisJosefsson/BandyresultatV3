@@ -24,7 +24,7 @@ const RangeData = () => {
   if (!currTable) return null
 
   return (
-    <div className="mt-4 flex flex-col gap-4">
+    <div className="m-4 flex flex-col gap-4">
       <div className="xs:text-[10px] flex flex-row justify-between text-[8px] sm:text-xs lg:text-base">
         <span className="w-24">{currTable.startDate}</span>
         <span className="font-semibold">{serie.serieName}</span>

@@ -15,7 +15,7 @@ export const SeasonGames = () => {
   }
 
   return (
-    <div className="mx-1 mt-2 grid grid-cols-1 lg:grid-cols-2 lg:gap-1 xl:mx-0">
+    <div className="mx-1 mt-2 grid grid-cols-1 lg:grid-cols-2 lg:gap-20 xl:mx-0">
       {games['playedLength'] > 0 ? (
         <GamesList group={games.played} title="Spelade" />
       ) : null}
