@@ -1,10 +1,12 @@
+import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import Loading from '@/components/Loading/Loading'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { createFileRoute } from '@tanstack/react-router'
+import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
 import AllData from './-components/Compare/AllData'
 import CompareHeader from './-components/Compare/CompareHeader'
 import CompareStats from './-components/Compare/CompareStats'
 import DetailedData from './-components/Compare/DetailedData'
+import TeamsList from './-components/TeamsList/TeamsList'
 import { compareTeams } from './-functions/compare'
 
 export const Route = createFileRoute('/_layout/teams/compare')({
@@ -61,6 +63,22 @@ export const Route = createFileRoute('/_layout/teams/compare')({
 })
 
 function RouteComponent() {
+  return (
+    <CatchBoundary
+      getResetKey={() => 'reset'}
+      onCatch={(error) => {
+        console.error(error)
+      }}
+      errorComponent={({ error, reset }) => (
+        <SimpleErrorComponent id="compare" error={error} reset={reset} />
+      )}
+    >
+      <Compare />
+    </CatchBoundary>
+  )
+}
+
+function Compare() {
   const data = Route.useLoaderData()
   if (data.status === 400) {
     return (
@@ -119,3 +137,5 @@ function ErrorComponent({ error }: { error: unknown }) {
     </div>
   )
 }
+
+;<TeamsList />

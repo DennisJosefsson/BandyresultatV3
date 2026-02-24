@@ -22,7 +22,7 @@ export const Route = createFileRoute('/_layout/teams/$teamId/$seasonId')({
 
     return data
   },
-  component: Season,
+  component: RouteComponent,
   staticData: { breadcrumb: (match) => match.loaderData.seasonYear },
   head: ({ loaderData }) => ({
     meta: [
@@ -57,6 +57,22 @@ export const Route = createFileRoute('/_layout/teams/$teamId/$seasonId')({
     ],
   }),
 })
+
+function RouteComponent() {
+  return (
+    <CatchBoundary
+      getResetKey={() => 'reset'}
+      onCatch={(error) => {
+        console.error(error)
+      }}
+      errorComponent={({ error, reset }) => (
+        <SimpleErrorComponent id="season" error={error} reset={reset} />
+      )}
+    >
+      <Season />
+    </CatchBoundary>
+  )
+}
 
 function Season() {
   return (

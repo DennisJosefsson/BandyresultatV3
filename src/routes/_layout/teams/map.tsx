@@ -1,8 +1,9 @@
 import Loading from '@/components/Loading/Loading'
-import { createFileRoute } from '@tanstack/react-router'
+import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
 import { getMapTeams } from './-functions/getMapTeams'
 // import { lazy } from 'react'
 // const NewMap = lazy(async () => await import('./-components/Map/Map'))
+import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import Map from './-components/Map/Map'
 
 export const Route = createFileRoute('/_layout/teams/map')({
@@ -17,5 +18,17 @@ export const Route = createFileRoute('/_layout/teams/map')({
 })
 
 function MapComponent() {
-  return <Map />
+  return (
+    <CatchBoundary
+      getResetKey={() => 'reset'}
+      onCatch={(error) => {
+        console.error(error)
+      }}
+      errorComponent={({ error, reset }) => (
+        <SimpleErrorComponent id="teamsmap" error={error} reset={reset} />
+      )}
+    >
+      <Map />
+    </CatchBoundary>
+  )
 }

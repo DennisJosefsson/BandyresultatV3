@@ -1,4 +1,6 @@
+import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import {
+  CatchBoundary,
   createFileRoute,
   notFound,
   Outlet,
@@ -78,6 +80,26 @@ export const Route = createFileRoute('/_layout/seasons/$year/$group/')({
 })
 
 function RouteComponent() {
+  return (
+    <CatchBoundary
+      getResetKey={() => 'reset'}
+      onCatch={(error) => {
+        console.error(error)
+      }}
+      errorComponent={({ error, reset }) => (
+        <SimpleErrorComponent
+          id="groupIndexRoute"
+          error={error}
+          reset={reset}
+        />
+      )}
+    >
+      <IndexRoute />
+    </CatchBoundary>
+  )
+}
+
+function IndexRoute() {
   const matches = useChildMatches()
 
   if (matches.length === 0) {

@@ -1,4 +1,5 @@
-import { createFileRoute } from '@tanstack/react-router'
+import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
+import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
 import Points from '../-components/Records/PointsGoalsEtc/Points'
 import { getPointRecords } from '../-functions/getPointRecords'
 
@@ -47,5 +48,21 @@ export const Route = createFileRoute('/_layout/maraton/records/points')({
       },
     ],
   }),
-  component: Points,
+  component: RouteComponent,
 })
+
+function RouteComponent() {
+  return (
+    <CatchBoundary
+      getResetKey={() => 'reset'}
+      onCatch={(error) => {
+        console.error(error)
+      }}
+      errorComponent={({ error, reset }) => (
+        <SimpleErrorComponent id="points" error={error} reset={reset} />
+      )}
+    >
+      <Points />
+    </CatchBoundary>
+  )
+}

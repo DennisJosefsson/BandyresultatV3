@@ -1,4 +1,5 @@
-import { createFileRoute } from '@tanstack/react-router'
+import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
+import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
 import Conceded from '../-components/Records/PointsGoalsEtc/Conceded'
 import { getConcededRecords } from '../-functions/getConcededRecords'
 
@@ -47,5 +48,21 @@ export const Route = createFileRoute('/_layout/maraton/records/conceded')({
       },
     ],
   }),
-  component: Conceded,
+  component: RouteComponent,
 })
+
+function RouteComponent() {
+  return (
+    <CatchBoundary
+      getResetKey={() => 'reset'}
+      onCatch={(error) => {
+        console.error(error)
+      }}
+      errorComponent={({ error, reset }) => (
+        <SimpleErrorComponent id="conceded" error={error} reset={reset} />
+      )}
+    >
+      <Conceded />
+    </CatchBoundary>
+  )
+}

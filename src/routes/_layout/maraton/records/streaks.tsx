@@ -1,5 +1,6 @@
+import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import Loading from '@/components/Loading/Loading'
-import { createFileRoute } from '@tanstack/react-router'
+import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
 import Streaks from '../-components/Records/Streaks/Streaks'
 import { getStreakRecords } from '../-functions/getStreakRecords'
 
@@ -13,7 +14,7 @@ export const Route = createFileRoute('/_layout/maraton/records/streaks')({
 
     return data
   },
-  component: Streaks,
+  component: RouteComponent,
 
   staticData: {
     breadcrumb: (match) => match.loaderData.breadCrumb,
@@ -52,3 +53,19 @@ export const Route = createFileRoute('/_layout/maraton/records/streaks')({
   }),
   pendingComponent: () => <Loading page="streaks" />,
 })
+
+function RouteComponent() {
+  return (
+    <CatchBoundary
+      getResetKey={() => 'reset'}
+      onCatch={(error) => {
+        console.error(error)
+      }}
+      errorComponent={({ error, reset }) => (
+        <SimpleErrorComponent id="streaks" error={error} reset={reset} />
+      )}
+    >
+      <Streaks />
+    </CatchBoundary>
+  )
+}

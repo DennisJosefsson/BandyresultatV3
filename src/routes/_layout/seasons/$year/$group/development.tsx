@@ -1,5 +1,11 @@
+import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import { zd } from '@/lib/utils/zod'
-import { createFileRoute, Navigate, notFound } from '@tanstack/react-router'
+import {
+  CatchBoundary,
+  createFileRoute,
+  Navigate,
+  notFound,
+} from '@tanstack/react-router'
 import { zodValidator } from '@tanstack/zod-adapter'
 import DevelopmentData from '../-components/Development/DevelopmentData'
 import GroupListForErrorComponent from '../-components/GroupListForErrorComponent'
@@ -31,7 +37,7 @@ export const Route = createFileRoute(
 
     return data
   },
-  component: Routecomponent,
+  component: RouteComponent,
   notFoundComponent(props) {
     if (props.data && typeof props.data === 'string') {
       return (
@@ -83,7 +89,23 @@ export const Route = createFileRoute(
   }),
 })
 
-function Routecomponent() {
+function RouteComponent() {
+  return (
+    <CatchBoundary
+      getResetKey={() => 'reset'}
+      onCatch={(error) => {
+        console.error(error)
+      }}
+      errorComponent={({ error, reset }) => (
+        <SimpleErrorComponent id="development" error={error} reset={reset} />
+      )}
+    >
+      <Development />
+    </CatchBoundary>
+  )
+}
+
+function Development() {
   const data = Route.useLoaderData()
   const index = Route.useSearch({ select: (s) => s.index })
   if (index >= data.dates.length) {

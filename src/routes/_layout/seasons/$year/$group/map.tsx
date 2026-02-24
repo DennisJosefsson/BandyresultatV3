@@ -1,5 +1,10 @@
+import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import Loading from '@/components/Loading/Loading'
-import { createFileRoute, notFound } from '@tanstack/react-router'
+import {
+  CatchBoundary,
+  createFileRoute,
+  notFound,
+} from '@tanstack/react-router'
 import GroupListForErrorComponent from '../-components/GroupListForErrorComponent'
 import GroupMap from '../-components/Maps/GroupMap'
 import { getTeamsForGroupMap } from '../-functions/getTeamsForGroupMap'
@@ -71,5 +76,17 @@ export const Route = createFileRoute('/_layout/seasons/$year/$group/map')({
 })
 
 function RouteComponent() {
-  return <GroupMap />
+  return (
+    <CatchBoundary
+      getResetKey={() => 'reset'}
+      onCatch={(error) => {
+        console.error(error)
+      }}
+      errorComponent={({ error, reset }) => (
+        <SimpleErrorComponent id="groupmap" error={error} reset={reset} />
+      )}
+    >
+      <GroupMap />
+    </CatchBoundary>
+  )
 }

@@ -1,5 +1,10 @@
+import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import Loading from '@/components/Loading/Loading'
-import { createFileRoute, notFound } from '@tanstack/react-router'
+import {
+  CatchBoundary,
+  createFileRoute,
+  notFound,
+} from '@tanstack/react-router'
 import GroupListForErrorComponent from '../-components/GroupListForErrorComponent'
 import { SeasonGames } from '../-components/SeasonGames'
 import { getGames } from '../-functions/getGames'
@@ -16,7 +21,7 @@ export const Route = createFileRoute('/_layout/seasons/$year/$group/games')({
     }
     return data
   },
-  component: SeasonGames,
+  component: RouteComponent,
   pendingComponent: () => <Loading page="seasonGamesList" />,
   notFoundComponent(props) {
     if (props.data && typeof props.data === 'string') {
@@ -68,3 +73,19 @@ export const Route = createFileRoute('/_layout/seasons/$year/$group/games')({
     ],
   }),
 })
+
+function RouteComponent() {
+  return (
+    <CatchBoundary
+      getResetKey={() => 'reset'}
+      onCatch={(error) => {
+        console.error(error)
+      }}
+      errorComponent={({ error, reset }) => (
+        <SimpleErrorComponent id="seasonGames" error={error} reset={reset} />
+      )}
+    >
+      <SeasonGames />
+    </CatchBoundary>
+  )
+}

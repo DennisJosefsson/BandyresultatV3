@@ -1,5 +1,11 @@
+import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import { zd } from '@/lib/utils/zod'
-import { createFileRoute, Navigate, notFound } from '@tanstack/react-router'
+import {
+  CatchBoundary,
+  createFileRoute,
+  Navigate,
+  notFound,
+} from '@tanstack/react-router'
 import { zodValidator } from '@tanstack/zod-adapter'
 import GroupListForErrorComponent from '../-components/GroupListForErrorComponent'
 import RangeData from '../-components/Interval/RangeData'
@@ -85,6 +91,22 @@ export const Route = createFileRoute('/_layout/seasons/$year/$group/interval')({
 })
 
 function RouteComponent() {
+  return (
+    <CatchBoundary
+      getResetKey={() => 'reset'}
+      onCatch={(error) => {
+        console.error(error)
+      }}
+      errorComponent={({ error, reset }) => (
+        <SimpleErrorComponent id="interval" error={error} reset={reset} />
+      )}
+    >
+      <Interval />
+    </CatchBoundary>
+  )
+}
+
+function Interval() {
   const data = Route.useLoaderData()
   const start = Route.useSearch({ select: (s) => s.start })
   const end = Route.useSearch({ select: (s) => s.end })

@@ -1,3 +1,4 @@
+import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import {
   Accordion,
   AccordionContent,
@@ -5,7 +6,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion'
 import { CardContent } from '@/components/ui/card'
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { CatchBoundary, createFileRoute, Link } from '@tanstack/react-router'
 import { useState } from 'react'
 import { getTeamSeasons } from './-functions/teamSeasons'
 
@@ -17,7 +18,7 @@ export const Route = createFileRoute('/_layout/teams/$teamId/seasons')({
     }
     return data
   },
-  component: Seasons,
+  component: RouteComponent,
   staticData: { breadcrumb: 'Säsonger' },
   head: ({ loaderData }) => ({
     meta: [
@@ -52,6 +53,22 @@ export const Route = createFileRoute('/_layout/teams/$teamId/seasons')({
     ],
   }),
 })
+
+function RouteComponent() {
+  return (
+    <CatchBoundary
+      getResetKey={() => 'reset'}
+      onCatch={(error) => {
+        console.error(error)
+      }}
+      errorComponent={({ error, reset }) => (
+        <SimpleErrorComponent id="seasons" error={error} reset={reset} />
+      )}
+    >
+      <Seasons />
+    </CatchBoundary>
+  )
+}
 
 function Seasons() {
   const [open, setOpen] = useState('seasons')

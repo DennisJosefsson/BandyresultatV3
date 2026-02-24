@@ -1,5 +1,11 @@
+import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import { zd } from '@/lib/utils/zod'
-import { createFileRoute, notFound, redirect } from '@tanstack/react-router'
+import {
+  CatchBoundary,
+  createFileRoute,
+  notFound,
+  redirect,
+} from '@tanstack/react-router'
 import GroupListForErrorComponent from '../../-components/GroupListForErrorComponent'
 import SeasonTables from '../../-components/SeasonTables'
 import { getTables } from '../../-functions/getTables'
@@ -46,7 +52,7 @@ export const Route = createFileRoute(
     }
     return data
   },
-  component: SeasonTables,
+  component: RouteComponent,
   notFoundComponent(props) {
     if (props.data && typeof props.data === 'string') {
       return (
@@ -97,3 +103,19 @@ export const Route = createFileRoute(
     ],
   }),
 })
+
+function RouteComponent() {
+  return (
+    <CatchBoundary
+      getResetKey={() => 'reset'}
+      onCatch={(error) => {
+        console.error(error)
+      }}
+      errorComponent={({ error, reset }) => (
+        <SimpleErrorComponent id="seasonTables" error={error} reset={reset} />
+      )}
+    >
+      <SeasonTables />
+    </CatchBoundary>
+  )
+}

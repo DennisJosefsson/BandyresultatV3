@@ -1,5 +1,10 @@
+import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import Loading from '@/components/Loading/Loading'
-import { createFileRoute, notFound } from '@tanstack/react-router'
+import {
+  CatchBoundary,
+  createFileRoute,
+  notFound,
+} from '@tanstack/react-router'
 import GroupListForErrorComponent from '../-components/GroupListForErrorComponent'
 import StatsComponent from '../-components/Stats/Stats'
 import { getGroupStats } from '../-functions/getGroupStats'
@@ -71,6 +76,22 @@ export const Route = createFileRoute('/_layout/seasons/$year/$group/stats')({
 })
 
 function RouteComponent() {
+  return (
+    <CatchBoundary
+      getResetKey={() => 'reset'}
+      onCatch={(error) => {
+        console.error(error)
+      }}
+      errorComponent={({ error, reset }) => (
+        <SimpleErrorComponent id="stats" error={error} reset={reset} />
+      )}
+    >
+      <Stats />
+    </CatchBoundary>
+  )
+}
+
+function Stats() {
   const data = Route.useLoaderData()
   return <StatsComponent stats={data} />
 }

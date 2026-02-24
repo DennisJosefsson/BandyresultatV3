@@ -1,5 +1,6 @@
+import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import { zd } from '@/lib/utils/zod'
-import { createFileRoute } from '@tanstack/react-router'
+import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
 import MaratonTable from '../-components/Maraton/MaratonTables'
 import { getMaratonTables } from '../-functions/getMaratonTable'
 
@@ -57,5 +58,21 @@ export const Route = createFileRoute('/_layout/maraton/table/$maratonTable')({
       },
     ],
   }),
-  component: MaratonTable,
+  component: RouteComponent,
 })
+
+function RouteComponent() {
+  return (
+    <CatchBoundary
+      getResetKey={() => 'reset'}
+      onCatch={(error) => {
+        console.error(error)
+      }}
+      errorComponent={({ error, reset }) => (
+        <SimpleErrorComponent id="maratonTable" error={error} reset={reset} />
+      )}
+    >
+      <MaratonTable />
+    </CatchBoundary>
+  )
+}
