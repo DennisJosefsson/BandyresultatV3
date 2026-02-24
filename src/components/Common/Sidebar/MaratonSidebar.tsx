@@ -5,11 +5,15 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
+  useSidebar,
 } from '@/components/ui/sidebar'
 import { Link, useSearch } from '@tanstack/react-router'
 
 export function MaratonSidebar() {
   const women = useSearch({ from: '__root__', select: (s) => s.women })
+  const { open } = useSidebar()
+
+  if (!open) return null
   return (
     <>
       <SidebarGroup>

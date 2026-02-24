@@ -5,6 +5,7 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
+  useSidebar,
 } from '@/components/ui/sidebar'
 import { getRouteApi, Link, Navigate, useParams } from '@tanstack/react-router'
 import {
@@ -24,6 +25,7 @@ export function SeasonSidebar() {
   const women = route.useSearch({
     select: (search) => search.women,
   })
+  const { open } = useSidebar()
 
   const { lastSeason } = useGetFirstAndLastSeason()
   const params = useParams({ strict: false })
@@ -38,7 +40,7 @@ export function SeasonSidebar() {
   const group = params.group ?? groupFromData
 
   const year = params.year ?? lastSeason
-
+  if (!open) return null
   return (
     <>
       <DefaultSeasonSidebar year={year} women={women} group={group} />

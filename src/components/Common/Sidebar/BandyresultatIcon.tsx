@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils/utils'
 
-const BandyresultatIcon = ({ className }: { className: string }) => {
+const BandyresultatIcon = ({ className }: { className?: string }) => {
   return (
     <svg className={cn('fill-current', className)} viewBox="0 0 60 60">
       <path

@@ -2,16 +2,11 @@ import {
   DefaultSeasonSidebar,
   SeasonSidebar,
 } from '@/components/Common/Sidebar/SeasonSidebar'
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '@/components/ui/collapsible'
+import { Collapsible, CollapsibleContent } from '@/components/ui/collapsible'
 import {
   Sidebar,
   SidebarContent,
   SidebarMenu,
-  SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
@@ -20,7 +15,6 @@ import { useGetFirstAndLastSeason } from '@/routes/_layout/seasons/$year/-hooks/
 import { Link, useMatches, useSearch } from '@tanstack/react-router'
 import {
   CalendarSearchIcon,
-  ChevronDown,
   InfoIcon,
   LayoutDashboardIcon,
   SearchIcon,
@@ -107,19 +101,10 @@ const AppSidebar = () => {
   }
 
   return (
-    <Sidebar className="font-poppins" collapsible="icon">
-      {/* <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem className="flex flex-row items-center gap-2">
-            <div className="bg-sidebar text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-              <span className="font-extrabold">B</span>
-            </div>
-            <div>
-              <span className="text-base">Bandyresultat</span>
-            </div>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarHeader> */}
+    <Sidebar
+      className="font-poppins top-(--header-height) h-[calc(100svh-var(--header-height))]!"
+      collapsible="icon"
+    >
       <SidebarContent>
         <SidebarMenu>
           <Collapsible
@@ -144,11 +129,11 @@ const AppSidebar = () => {
                 </Link>
               </SidebarMenuButton>
 
-              <CollapsibleTrigger asChild>
+              {/* <CollapsibleTrigger asChild>
                 <SidebarMenuAction>
                   <ChevronDown className="ml-auto h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
                 </SidebarMenuAction>
-              </CollapsibleTrigger>
+              </CollapsibleTrigger> */}
 
               <CollapsibleContent>
                 {!seasonRoute && (
@@ -182,11 +167,11 @@ const AppSidebar = () => {
                   <span className="text-base">Lag</span>
                 </Link>
               </SidebarMenuButton>
-              <CollapsibleTrigger asChild>
+              {/* <CollapsibleTrigger asChild>
                 <SidebarMenuAction>
                   <ChevronDown className="ml-auto h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
                 </SidebarMenuAction>
-              </CollapsibleTrigger>
+              </CollapsibleTrigger> */}
               <CollapsibleContent>
                 <TeamSidebar />
               </CollapsibleContent>
@@ -211,11 +196,11 @@ const AppSidebar = () => {
                   <span className="text-base">Sök</span>
                 </Link>
               </SidebarMenuButton>
-              <CollapsibleTrigger asChild>
+              {/* <CollapsibleTrigger asChild>
                 <SidebarMenuAction>
                   <ChevronDown className="ml-auto h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
                 </SidebarMenuAction>
-              </CollapsibleTrigger>
+              </CollapsibleTrigger> */}
               <CollapsibleContent>
                 <SearchSidebar />
               </CollapsibleContent>
@@ -243,11 +228,11 @@ const AppSidebar = () => {
                   <span className="text-base">Maratontabeller</span>
                 </Link>
               </SidebarMenuButton>
-              <CollapsibleTrigger asChild>
+              {/* <CollapsibleTrigger asChild>
                 <SidebarMenuAction>
                   <ChevronDown className="ml-auto h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
                 </SidebarMenuAction>
-              </CollapsibleTrigger>
+              </CollapsibleTrigger> */}
               <CollapsibleContent>
                 <MaratonSidebar />
               </CollapsibleContent>
