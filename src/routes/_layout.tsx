@@ -18,7 +18,7 @@ function RouteComponent() {
           <AppSidebar />
           <SidebarInset>
             <div className="px-2">
-              <Card className="h-screen">
+              <Card className="min-h-screen">
                 <CatchBoundary
                   getResetKey={() => 'reset'}
                   onCatch={(error) => {
