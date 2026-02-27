@@ -1,4 +1,5 @@
 import { zd } from '../utils/zod'
+import { TeamBaseWithTeamGameId } from './team'
 
 export type Game = {
   gameId: number
@@ -9,6 +10,7 @@ export type Game = {
   category: string
   result: string | null
   halftimeResult: string | null
+  otResult: string | null
   played: boolean | null
   penalties: boolean | null
   extraTime: boolean | null
@@ -28,6 +30,35 @@ export type Game = {
     seasonId: number
     year: string
   }
+}
+
+export type InlineEditGame = {
+    home: TeamBaseWithTeamGameId;
+    away: TeamBaseWithTeamGameId;
+    gameId: number;
+    date: string;
+    seasonId: number;
+    homeTeamId: number;
+    awayTeamId: number;
+    women: boolean;
+    result: string | null;
+    otResult: string | null;
+    homeGoal: number | null;
+    awayGoal: number | null;
+    round: number | null;
+    category: string;
+    createdAt: string | null;
+    updatedAt: string | null;
+    halftimeResult: string | null;
+    halftimeHomeGoal: number | null;
+    halftimeAwayGoal: number | null;
+    playoff: boolean | null;
+    extraTime: boolean | null;
+    penalties: boolean | null;
+    group: string;
+    mix: boolean | null;
+    serieId: number;
+    played: boolean | null;
 }
 
 export type GameGroupBase<T> = {
