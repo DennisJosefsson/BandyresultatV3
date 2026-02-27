@@ -52,9 +52,9 @@ function About() {
             <p className="text-xs md:text-base">
               OBS! Lista över förändringar på sidan finns{' '}
               <Link
-                from="/about"
+                from="/about/"
                 to="/about/changelog"
-                search={(prev) => ({ ...prev })}
+                search={(prev) => ({ women: prev.women })}
                 className="underline"
               >
                 här
