@@ -1,3 +1,5 @@
+import { zd } from '../utils/zod'
+
 export type Base = {
   group: string
   teamId: number
@@ -29,9 +31,9 @@ export type GroupTable = {
   group: string
   name: string
   comment: string
-  serieStructure: number[]
+  serieStructure: Array<number>
   level: number
-  tables: TeamTable[]
+  tables: Array<TeamTable>
 }
 
 export type MaratonTable = Omit<TeamTable, 'season' | 'women' | 'group'> & {
@@ -65,13 +67,56 @@ export type GroupPlayoffTable = {
     shortName: string
     casualName: string
   }
-  tables: PlayoffTable[]
+  tables: Array<PlayoffTable>
 }
 
 export type PlayoffSeriesTable = {
   group: string
-  tables: PlayoffTable[]
+  tables: Array<PlayoffTable>
   comment: string | null
-  serieStructure: number[] | null
+  serieStructure: Array<number> | null
   name: string
 }
+
+export const newStaticTable = zd.object({
+  teamName: zd.string(),
+  teamId: zd.number(),
+  seasonId: zd.number(),
+  games: zd.number(),
+  position: zd.number(),
+  won: zd.number(),
+  draw: zd.number(),
+  lost: zd.number(),
+  scoredGoals: zd.number(),
+  concededGoals: zd.number(),
+  goalDifference: zd.number(),
+  points: zd.number(),
+  qualification: zd.boolean(),
+  women: zd.boolean(),
+  group: zd.string(),
+  category: zd.string(),
+  serieId: zd.number(),
+})
+
+export const newStaticTableArray = zd.object({
+  tableArray: zd.array(newStaticTable),
+})
+
+export const editStaticTable = zd.object({
+  tableId: zd.number(),
+  teamId: zd.number(),
+  teamName: zd.string(),
+  games: zd.number(),
+  position: zd.number(),
+  won: zd.number(),
+  draw: zd.number(),
+  lost: zd.number(),
+  scoredGoals: zd.number(),
+  concededGoals: zd.number(),
+  goalDifference: zd.number(),
+  points: zd.number(),
+})
+
+export const editStaticTableArray = zd.object({
+  tableArray: zd.array(editStaticTable),
+})

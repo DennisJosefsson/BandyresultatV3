@@ -10,6 +10,9 @@ const route = getRouteApi(
 )
 
 const EditSerieForms = () => {
+  const data = route.useLoaderData()
+
+  const disabled = data.teamsInSerie.length === 0
   return (
     <div className="flex flex-col gap-4">
       <EditSerie />
@@ -36,36 +39,58 @@ const EditSerieForms = () => {
               Redigera ParentId
             </route.Link>
           </Button>
-          <Button asChild>
+          <Button asChild disabled={disabled}>
             <route.Link
               to="/dashboard/season/$seasonId/info/$serieId/edit/games"
               search={(prev) => ({ women: prev.women })}
+              disabled={disabled}
             >
               Matcher
             </route.Link>
           </Button>
-          <Button asChild>
+          <Button asChild disabled={disabled}>
             <route.Link
               to="/dashboard/season/$seasonId/info/$serieId/edit/generateschedule"
               search={(prev) => ({ women: prev.women })}
+              disabled={disabled}
             >
               Generera spelschema
             </route.Link>
           </Button>
-          <Button asChild>
+          <Button asChild disabled={disabled}>
             <route.Link
               to="/dashboard/season/$seasonId/info/$serieId/edit/singlegame"
               search={(prev) => ({ women: prev.women })}
+              disabled={disabled}
             >
               Lägg till match
             </route.Link>
           </Button>
-          <Button asChild>
+          <Button asChild disabled={disabled}>
             <route.Link
               to="/dashboard/season/$seasonId/info/$serieId/edit/addGames"
               search={(prev) => ({ women: prev.women })}
+              disabled={disabled}
             >
               Lägg till matcher
+            </route.Link>
+          </Button>
+          <Button asChild disabled={disabled}>
+            <route.Link
+              to="/dashboard/season/$seasonId/info/$serieId/edit/addTable"
+              search={(prev) => ({ women: prev.women })}
+              disabled={disabled}
+            >
+              Lägg till tabell
+            </route.Link>
+          </Button>
+          <Button asChild disabled={disabled}>
+            <route.Link
+              to="/dashboard/season/$seasonId/info/$serieId/edit/editTable"
+              search={(prev) => ({ women: prev.women })}
+              disabled={disabled}
+            >
+              Ändra tabell
             </route.Link>
           </Button>
           <Button asChild>
