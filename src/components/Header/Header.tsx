@@ -1,14 +1,13 @@
+import { useAuth } from '@clerk/clerk-react'
 import { useRouter, useSearch } from '@tanstack/react-router'
+import { LoaderPinwheelIcon, SidebarIcon } from 'lucide-react'
+import { useMediaQuery } from 'usehooks-ts'
+
+import ClerkHeader from '../../integrations/clerk/header-user.tsx'
+import { Button } from '../ui/button.tsx'
 import { Label } from '../ui/label'
 import { useSidebar } from '../ui/sidebar'
 import { Switch } from '../ui/switch'
-
-import ClerkHeader from '../../integrations/clerk/header-user.tsx'
-
-import { useAuth } from '@clerk/clerk-react'
-import { LoaderPinwheelIcon, SidebarIcon } from 'lucide-react'
-import { useMediaQuery } from 'usehooks-ts'
-import { Button } from '../ui/button.tsx'
 import { RouterBreadcrumb } from './Breadcrumb.tsx'
 import ModeToggle from './ModeToggle'
 

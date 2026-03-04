@@ -1,12 +1,14 @@
+import { createServerFn } from '@tanstack/react-start'
+import { zodValidator } from '@tanstack/zod-adapter'
+import type { SQL} from 'drizzle-orm';
+import { asc, eq, getTableColumns, sql } from 'drizzle-orm'
+
 import { db } from '@/db'
 import { teams, teamseasons } from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import { TeamBase } from '@/lib/types/team'
+import type { TeamBase } from '@/lib/types/team'
 import { zd } from '@/lib/utils/zod'
-import { createServerFn } from '@tanstack/react-start'
-import { zodValidator } from '@tanstack/zod-adapter'
-import { asc, eq, getTableColumns, SQL, sql } from 'drizzle-orm'
 
 export const getTeamsForTeamseasonAddition = createServerFn({ method: 'GET' })
   .middleware([errorMiddleware])

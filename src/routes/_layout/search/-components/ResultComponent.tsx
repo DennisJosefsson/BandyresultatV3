@@ -1,10 +1,14 @@
 import Date from '@/components/Common/Date'
 import { useFavTeam } from '@/lib/contexts/favTeamsContext'
-import { SearchResult } from '@/lib/types/search'
+import type { SearchResult } from '@/lib/types/search'
 
-type ResultComponentProps = { gameArray: SearchResult[] }
+type ResultComponentProps = {
+  gameArray: Array<SearchResult>
+}
 
-const ResultComponent = ({ gameArray }: ResultComponentProps) => {
+const ResultComponent = ({
+  gameArray,
+}: ResultComponentProps) => {
   const { favTeams } = useFavTeam()
 
   return (
@@ -23,7 +27,9 @@ const ResultComponent = ({ gameArray }: ResultComponentProps) => {
                 <span className="w-32 md:w-48">
                   <span
                     className={
-                      favTeams.includes(game.home.teamId) ? 'font-bold' : ''
+                      favTeams.includes(game.home.teamId)
+                        ? 'font-bold'
+                        : ''
                     }
                   >
                     {game.home.casualName}
@@ -31,7 +37,9 @@ const ResultComponent = ({ gameArray }: ResultComponentProps) => {
                   -
                   <span
                     className={
-                      favTeams.includes(game.away.teamId) ? 'font-bold' : ''
+                      favTeams.includes(game.away.teamId)
+                        ? 'font-bold'
+                        : ''
                     }
                   >
                     {game.away.casualName}
@@ -52,7 +60,9 @@ const ResultComponent = ({ gameArray }: ResultComponentProps) => {
                 <span>
                   <Date>{game.date}</Date>
                 </span>
-                {game.qualificationGame && <span className="ml-1">(K)</span>}
+                {game.qualificationGame && (
+                  <span className="ml-1">(K)</span>
+                )}
               </div>
             </div>
           </div>

@@ -1,16 +1,24 @@
-import { db } from '@/db'
-import { seasons, series } from '@/db/schema'
 import { createServerFn } from '@tanstack/react-start'
 import { zodValidator } from '@tanstack/zod-adapter'
 import { and, asc, eq, sql } from 'drizzle-orm'
 import { z } from 'zod'
 
-export const page = z.number().catch(1)
+import { db } from '@/db'
+import { seasons, series } from '@/db/schema'
 
-export const getPaginatedSeasons = createServerFn({ method: 'GET' })
-  .inputValidator(zodValidator(page))
+export const parsePage = z.number().optional().catch(1)
+
+export const getPaginatedSeasons = createServerFn({
+  method: 'GET',
+})
+  .inputValidator(zodValidator(parsePage))
   .handler(async ({ data }) => {
-    const count = await db.$count(seasons, eq(seasons.women, false))
+    const count = await db.$count(
+      seasons,
+      eq(seasons.women, false),
+    )
+
+    const page = data ?? 1
 
     const ranked = db.$with('ranked').as(
       db
@@ -25,8 +33,16 @@ export const getPaginatedSeasons = createServerFn({ method: 'GET' })
               .as('ranked_group'),
         })
         .from(series)
-        .leftJoin(seasons, eq(seasons.seasonId, series.seasonId))
-        .where(and(eq(series.level, 1), eq(series.category, 'regular'))),
+        .leftJoin(
+          seasons,
+          eq(seasons.seasonId, series.seasonId),
+        )
+        .where(
+          and(
+            eq(series.level, 1),
+            eq(series.category, 'regular'),
+          ),
+        ),
     )
 
     const groups = await db
@@ -38,10 +54,12 @@ export const getPaginatedSeasons = createServerFn({ method: 'GET' })
 
     const pagSeasons = await db.query.seasons.findMany({
       columns: { seasonId: true, year: true },
-      where: (seasons, { eq }) => eq(seasons.women, false),
-      offset: (data - 1) * 12,
+      where: (seasonsSchema, { eq: equal }) =>
+        equal(seasonsSchema.women, false),
+      offset: (page - 1) * 12,
       limit: 12,
-      orderBy: (seasons, { desc }) => desc(seasons.seasonId),
+      orderBy: (seasonsSchema, { desc }) =>
+        desc(seasonsSchema.seasonId),
     })
 
     const combinedSeasons = pagSeasons.map((s) => {

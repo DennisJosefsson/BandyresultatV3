@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from '@tanstack/react-router'
 import { toast } from 'sonner'
+
 import { addTeamToSerie } from '../-functions/SerieFunctions/addTeamToSerie'
 
 type Data = { status: 200; message: string } | undefined

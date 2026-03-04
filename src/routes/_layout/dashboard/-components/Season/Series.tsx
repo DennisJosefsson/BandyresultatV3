@@ -1,7 +1,8 @@
+import { getRouteApi } from '@tanstack/react-router'
+
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { sortOrder } from '@/lib/utils/constants'
-import { getRouteApi } from '@tanstack/react-router'
 
 const route = getRouteApi('/_layout/dashboard/season/$seasonId/')
 

@@ -1,13 +1,14 @@
-import { CheckedState } from '@radix-ui/react-checkbox'
+import type { CheckedState } from '@radix-ui/react-checkbox'
 import { useLoaderData, useNavigate, useSearch } from '@tanstack/react-router'
 import { useCallback, useState } from 'react'
+
 import FilterComponent from './FilterComponent'
 import TeamsListItem from './TeamsListItem'
 
 const TeamsList = () => {
   const [teamFilter, setTeamFilter] = useState<string>('')
   const { teamArray } = useSearch({ from: '/_layout/teams/' })
-  const [selectedTeams, setSelectedTeams] = useState<number[]>(teamArray ?? [])
+  const [selectedTeams, setSelectedTeams] = useState<Array<number>>(teamArray ?? [])
   const data = useLoaderData({ from: '/_layout/teams' })
 
   const navigate = useNavigate({ from: '/teams/' })
@@ -55,7 +56,7 @@ const TeamsList = () => {
   return (
     <div>
       <FilterComponent teamFilter={teamFilter} setTeamFilter={setTeamFilter} />
-      <div className="grid grid-cols-1 pt-2 gap-x-8 gap-y-2 lg:grid-cols-3 2xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-x-8 gap-y-2 pt-2 lg:grid-cols-3 2xl:grid-cols-4">
         {teams.map((team) => {
           return (
             <TeamsListItem

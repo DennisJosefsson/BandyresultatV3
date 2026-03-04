@@ -1,4 +1,5 @@
-import { createContext, Dispatch } from 'react'
+import type { Dispatch } from 'react';
+import { createContext } from 'react'
 
 export type Theme = 'dark' | 'light' | 'system'
 export type ThemeProviderProps = {
@@ -18,7 +19,7 @@ const initialState: ThemeProviderState = {
 }
 
 export type GenderType = boolean
-export type TeamPreference = number[]
+export type TeamPreference = Array<number>
 
 export type GenderActionType =
   | { type: 'TOGGLE' }

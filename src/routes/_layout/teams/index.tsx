@@ -1,6 +1,8 @@
+import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
+
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import Loading from '@/components/Loading/Loading'
-import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
+
 import TeamsList from './-components/TeamsList/TeamsList'
 
 export const Route = createFileRoute('/_layout/teams/')({

@@ -1,5 +1,7 @@
-import { Slider } from '@/components/ui/slider'
 import { getRouteApi } from '@tanstack/react-router'
+
+import { Slider } from '@/components/ui/slider'
+
 import { getCurrentIntervalTable } from '../../-functions/getCurrentIntervalTable'
 import IntervalTable from './IntervalTable'
 
@@ -14,7 +16,7 @@ const RangeData = () => {
   const end = route.useSearch({ select: (s) => s.end })
   const range = [start, end ?? dates.length - 1]
 
-  const valueChange = (value: number[]) => {
+  const valueChange = (value: Array<number>) => {
     navigate({
       search: (prev) => ({ ...prev, start: value[0], end: value[1] }),
     })

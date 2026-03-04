@@ -1,8 +1,8 @@
 import Date from '@/components/Common/Date'
-import { StreakData } from '@/lib/types/stats'
+import type { StreakData } from '@/lib/types/stats'
 
 type StreakStatsCard = {
-  streak: StreakData[]
+  streak: Array<StreakData>
   title: string
 }
 

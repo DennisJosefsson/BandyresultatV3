@@ -75,7 +75,9 @@ import { Route as LayoutDashboardSeasonSeasonIdInfoSerieIdEditSinglegameRouteImp
 import { Route as LayoutDashboardSeasonSeasonIdInfoSerieIdEditNewParentIdRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/$serieId/edit/newParentId'
 import { Route as LayoutDashboardSeasonSeasonIdInfoSerieIdEditGeneratescheduleRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/$serieId/edit/generateschedule'
 import { Route as LayoutDashboardSeasonSeasonIdInfoSerieIdEditGamesRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/$serieId/edit/games'
+import { Route as LayoutDashboardSeasonSeasonIdInfoSerieIdEditEditTableRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/$serieId/edit/editTable'
 import { Route as LayoutDashboardSeasonSeasonIdInfoSerieIdEditEditParentIdRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/$serieId/edit/editParentId'
+import { Route as LayoutDashboardSeasonSeasonIdInfoSerieIdEditAddTableRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/$serieId/edit/addTable'
 import { Route as LayoutDashboardSeasonSeasonIdInfoSerieIdEditAddGamesRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/$serieId/edit/addGames'
 import { Route as LayoutDashboardSeasonSeasonIdInfoSerieIdEditGameIdRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/$serieId/edit/$gameId'
 
@@ -452,10 +454,22 @@ const LayoutDashboardSeasonSeasonIdInfoSerieIdEditGamesRoute =
     path: '/games',
     getParentRoute: () => LayoutDashboardSeasonSeasonIdInfoSerieIdEditRoute,
   } as any)
+const LayoutDashboardSeasonSeasonIdInfoSerieIdEditEditTableRoute =
+  LayoutDashboardSeasonSeasonIdInfoSerieIdEditEditTableRouteImport.update({
+    id: '/editTable',
+    path: '/editTable',
+    getParentRoute: () => LayoutDashboardSeasonSeasonIdInfoSerieIdEditRoute,
+  } as any)
 const LayoutDashboardSeasonSeasonIdInfoSerieIdEditEditParentIdRoute =
   LayoutDashboardSeasonSeasonIdInfoSerieIdEditEditParentIdRouteImport.update({
     id: '/editParentId',
     path: '/editParentId',
+    getParentRoute: () => LayoutDashboardSeasonSeasonIdInfoSerieIdEditRoute,
+  } as any)
+const LayoutDashboardSeasonSeasonIdInfoSerieIdEditAddTableRoute =
+  LayoutDashboardSeasonSeasonIdInfoSerieIdEditAddTableRouteImport.update({
+    id: '/addTable',
+    path: '/addTable',
     getParentRoute: () => LayoutDashboardSeasonSeasonIdInfoSerieIdEditRoute,
   } as any)
 const LayoutDashboardSeasonSeasonIdInfoSerieIdEditAddGamesRoute =
@@ -533,7 +547,9 @@ export interface FileRoutesByFullPath {
   '/dashboard/season/$seasonId/info/$serieId/edit': typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditRouteWithChildren
   '/dashboard/season/$seasonId/info/$serieId/edit/$gameId': typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditGameIdRoute
   '/dashboard/season/$seasonId/info/$serieId/edit/addGames': typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditAddGamesRoute
+  '/dashboard/season/$seasonId/info/$serieId/edit/addTable': typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditAddTableRoute
   '/dashboard/season/$seasonId/info/$serieId/edit/editParentId': typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditEditParentIdRoute
+  '/dashboard/season/$seasonId/info/$serieId/edit/editTable': typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditEditTableRoute
   '/dashboard/season/$seasonId/info/$serieId/edit/games': typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditGamesRoute
   '/dashboard/season/$seasonId/info/$serieId/edit/generateschedule': typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditGeneratescheduleRoute
   '/dashboard/season/$seasonId/info/$serieId/edit/newParentId': typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditNewParentIdRoute
@@ -595,7 +611,9 @@ export interface FileRoutesByTo {
   '/dashboard/season/$seasonId/info/$serieId/edit': typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditRouteWithChildren
   '/dashboard/season/$seasonId/info/$serieId/edit/$gameId': typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditGameIdRoute
   '/dashboard/season/$seasonId/info/$serieId/edit/addGames': typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditAddGamesRoute
+  '/dashboard/season/$seasonId/info/$serieId/edit/addTable': typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditAddTableRoute
   '/dashboard/season/$seasonId/info/$serieId/edit/editParentId': typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditEditParentIdRoute
+  '/dashboard/season/$seasonId/info/$serieId/edit/editTable': typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditEditTableRoute
   '/dashboard/season/$seasonId/info/$serieId/edit/games': typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditGamesRoute
   '/dashboard/season/$seasonId/info/$serieId/edit/generateschedule': typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditGeneratescheduleRoute
   '/dashboard/season/$seasonId/info/$serieId/edit/newParentId': typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditNewParentIdRoute
@@ -666,7 +684,9 @@ export interface FileRoutesById {
   '/_layout/dashboard/season/$seasonId/info_/$serieId/edit': typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditRouteWithChildren
   '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/$gameId': typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditGameIdRoute
   '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/addGames': typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditAddGamesRoute
+  '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/addTable': typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditAddTableRoute
   '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/editParentId': typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditEditParentIdRoute
+  '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/editTable': typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditEditTableRoute
   '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/games': typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditGamesRoute
   '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/generateschedule': typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditGeneratescheduleRoute
   '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/newParentId': typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditNewParentIdRoute
@@ -737,7 +757,9 @@ export interface FileRouteTypes {
     | '/dashboard/season/$seasonId/info/$serieId/edit'
     | '/dashboard/season/$seasonId/info/$serieId/edit/$gameId'
     | '/dashboard/season/$seasonId/info/$serieId/edit/addGames'
+    | '/dashboard/season/$seasonId/info/$serieId/edit/addTable'
     | '/dashboard/season/$seasonId/info/$serieId/edit/editParentId'
+    | '/dashboard/season/$seasonId/info/$serieId/edit/editTable'
     | '/dashboard/season/$seasonId/info/$serieId/edit/games'
     | '/dashboard/season/$seasonId/info/$serieId/edit/generateschedule'
     | '/dashboard/season/$seasonId/info/$serieId/edit/newParentId'
@@ -799,7 +821,9 @@ export interface FileRouteTypes {
     | '/dashboard/season/$seasonId/info/$serieId/edit'
     | '/dashboard/season/$seasonId/info/$serieId/edit/$gameId'
     | '/dashboard/season/$seasonId/info/$serieId/edit/addGames'
+    | '/dashboard/season/$seasonId/info/$serieId/edit/addTable'
     | '/dashboard/season/$seasonId/info/$serieId/edit/editParentId'
+    | '/dashboard/season/$seasonId/info/$serieId/edit/editTable'
     | '/dashboard/season/$seasonId/info/$serieId/edit/games'
     | '/dashboard/season/$seasonId/info/$serieId/edit/generateschedule'
     | '/dashboard/season/$seasonId/info/$serieId/edit/newParentId'
@@ -869,7 +893,9 @@ export interface FileRouteTypes {
     | '/_layout/dashboard/season/$seasonId/info_/$serieId/edit'
     | '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/$gameId'
     | '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/addGames'
+    | '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/addTable'
     | '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/editParentId'
+    | '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/editTable'
     | '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/games'
     | '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/generateschedule'
     | '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/newParentId'
@@ -1338,11 +1364,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditGamesRouteImport
       parentRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditRoute
     }
+    '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/editTable': {
+      id: '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/editTable'
+      path: '/editTable'
+      fullPath: '/dashboard/season/$seasonId/info/$serieId/edit/editTable'
+      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditEditTableRouteImport
+      parentRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditRoute
+    }
     '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/editParentId': {
       id: '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/editParentId'
       path: '/editParentId'
       fullPath: '/dashboard/season/$seasonId/info/$serieId/edit/editParentId'
       preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditEditParentIdRouteImport
+      parentRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditRoute
+    }
+    '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/addTable': {
+      id: '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/addTable'
+      path: '/addTable'
+      fullPath: '/dashboard/season/$seasonId/info/$serieId/edit/addTable'
+      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditAddTableRouteImport
       parentRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditRoute
     }
     '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/addGames': {
@@ -1365,7 +1405,9 @@ declare module '@tanstack/react-router' {
 interface LayoutDashboardSeasonSeasonIdInfoSerieIdEditRouteChildren {
   LayoutDashboardSeasonSeasonIdInfoSerieIdEditGameIdRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditGameIdRoute
   LayoutDashboardSeasonSeasonIdInfoSerieIdEditAddGamesRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditAddGamesRoute
+  LayoutDashboardSeasonSeasonIdInfoSerieIdEditAddTableRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditAddTableRoute
   LayoutDashboardSeasonSeasonIdInfoSerieIdEditEditParentIdRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditEditParentIdRoute
+  LayoutDashboardSeasonSeasonIdInfoSerieIdEditEditTableRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditEditTableRoute
   LayoutDashboardSeasonSeasonIdInfoSerieIdEditGamesRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditGamesRoute
   LayoutDashboardSeasonSeasonIdInfoSerieIdEditGeneratescheduleRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditGeneratescheduleRoute
   LayoutDashboardSeasonSeasonIdInfoSerieIdEditNewParentIdRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieIdEditNewParentIdRoute
@@ -1378,8 +1420,12 @@ const LayoutDashboardSeasonSeasonIdInfoSerieIdEditRouteChildren: LayoutDashboard
       LayoutDashboardSeasonSeasonIdInfoSerieIdEditGameIdRoute,
     LayoutDashboardSeasonSeasonIdInfoSerieIdEditAddGamesRoute:
       LayoutDashboardSeasonSeasonIdInfoSerieIdEditAddGamesRoute,
+    LayoutDashboardSeasonSeasonIdInfoSerieIdEditAddTableRoute:
+      LayoutDashboardSeasonSeasonIdInfoSerieIdEditAddTableRoute,
     LayoutDashboardSeasonSeasonIdInfoSerieIdEditEditParentIdRoute:
       LayoutDashboardSeasonSeasonIdInfoSerieIdEditEditParentIdRoute,
+    LayoutDashboardSeasonSeasonIdInfoSerieIdEditEditTableRoute:
+      LayoutDashboardSeasonSeasonIdInfoSerieIdEditEditTableRoute,
     LayoutDashboardSeasonSeasonIdInfoSerieIdEditGamesRoute:
       LayoutDashboardSeasonSeasonIdInfoSerieIdEditGamesRoute,
     LayoutDashboardSeasonSeasonIdInfoSerieIdEditGeneratescheduleRoute:

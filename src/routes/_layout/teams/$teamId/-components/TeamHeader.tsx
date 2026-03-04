@@ -1,15 +1,19 @@
+import { Link, getRouteApi } from '@tanstack/react-router'
+import { useMediaQuery } from 'usehooks-ts'
+
 import { Button } from '@/components/ui/button'
 import { CardHeader, CardTitle } from '@/components/ui/card'
 import { useFavTeam } from '@/lib/contexts/favTeamsContext'
 
-import { getRouteApi, Link } from '@tanstack/react-router'
-import { useMediaQuery } from 'usehooks-ts'
-
 const route = getRouteApi('/_layout/teams/$teamId')
 
 const TeamHeader = () => {
-  const team = route.useLoaderData({ select: (data) => data.team })
-  const teamId = route.useParams({ select: (params) => params.teamId })
+  const team = route.useLoaderData({
+    select: (data) => data.team,
+  })
+  const teamId = route.useParams({
+    select: (params) => params.teamId,
+  })
   const women = route.useSearch({ select: (s) => s.women })
   const matches = useMediaQuery('(min-width: 430px)')
   const { favTeams, setFavTeams } = useFavTeam()
@@ -29,7 +33,7 @@ const TeamHeader = () => {
   }
 
   const remove = () => {
-    setFavTeams([...favTeams.filter((team) => team !== teamId)])
+    setFavTeams([...favTeams.filter((id) => id !== teamId)])
   }
 
   return (
@@ -69,12 +73,18 @@ const TeamHeader = () => {
           ) : null} */}
 
           {favTeams.includes(teamId) && (
-            <Button onClick={remove} size={matches ? 'sm' : 'xxs'}>
+            <Button
+              onClick={remove}
+              size={matches ? 'sm' : 'xxs'}
+            >
               Ta bort favorit
             </Button>
           )}
           {!favTeams.includes(teamId) && (
-            <Button onClick={add} size={matches ? 'sm' : 'xxs'}>
+            <Button
+              onClick={add}
+              size={matches ? 'sm' : 'xxs'}
+            >
               Favoritlag
             </Button>
           )}

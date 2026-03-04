@@ -1,48 +1,71 @@
+import {
+  CatchBoundary,
+  createFileRoute,
+} from '@tanstack/react-router'
+
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import Loading from '@/components/Loading/Loading'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/components/ui/tabs'
+
 import AllData from './-components/Compare/AllData'
 import CompareHeader from './-components/Compare/CompareHeader'
 import CompareStats from './-components/Compare/CompareStats'
 import DetailedData from './-components/Compare/DetailedData'
 import TeamsList from './-components/TeamsList/TeamsList'
-import { compareTeams } from './-functions/compare'
+import { getCompareTeams } from './-functions/compare'
 
-export const Route = createFileRoute('/_layout/teams/compare')({
+export const Route = createFileRoute(
+  '/_layout/teams/compare',
+)({
   loaderDeps: ({ search: searchDeps }) => searchDeps,
   loader: async ({ deps }) => {
-    const data = await compareTeams({ data: deps })
+    const data = await getCompareTeams({ data: deps })
     if (!data) throw new Error('Missing data')
 
     return data
   },
   component: RouteComponent,
-  errorComponent: ({ error }) => <ErrorComponent error={error} />,
+  errorComponent: ({ error }) => (
+    <ErrorComponent error={error} />
+  ),
   pendingComponent: () => <Loading page="compare" />,
 
   staticData: {
     breadcrumb: (match) => {
-      if (match.loaderData.breadCrumb === undefined) return 'H2H'
+      if (match.loaderData.breadCrumb === undefined)
+        return 'H2H'
       else return match.loaderData.breadCrumb
     },
   },
   head: ({ loaderData }) => ({
     meta: [
       {
-        title: loaderData?.meta.title ?? 'Bandyresultat - H2H: Fel',
+        title:
+          loaderData?.meta.title ??
+          'Bandyresultat - H2H: Fel',
       },
       {
         name: 'description',
-        content: loaderData?.meta.description ?? 'Bandyresultat - H2H: Fel',
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - H2H: Fel',
       },
       {
         property: 'og:description',
-        content: loaderData?.meta.description ?? 'Bandyresultat - H2H: Fel',
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - H2H: Fel',
       },
       {
         property: 'og:title',
-        content: loaderData?.meta.title ?? 'Bandyresultat - H2H: Fel',
+        content:
+          loaderData?.meta.title ??
+          'Bandyresultat - H2H: Fel',
       },
       {
         property: 'og:type',
@@ -51,7 +74,8 @@ export const Route = createFileRoute('/_layout/teams/compare')({
       {
         property: 'og:url',
         content:
-          loaderData?.meta.url ?? 'https://bandyresultat.se/teams/compare',
+          loaderData?.meta.url ??
+          'https://bandyresultat.se/teams/compare',
       },
       {
         property: 'og:image',
@@ -70,7 +94,11 @@ function RouteComponent() {
         console.error(error)
       }}
       errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent id="compare" error={error} reset={reset} />
+        <SimpleErrorComponent
+          id="compare"
+          error={error}
+          reset={reset}
+        />
       )}
     >
       <Compare />
@@ -96,13 +124,22 @@ function Compare() {
       <div>
         <Tabs defaultValue="tables">
           <TabsList>
-            <TabsTrigger value="tables" className="text-[10px] md:text-sm">
+            <TabsTrigger
+              value="tables"
+              className="text-[10px] md:text-sm"
+            >
               Tabeller
             </TabsTrigger>
-            <TabsTrigger value="games" className="text-[10px] md:text-sm">
+            <TabsTrigger
+              value="games"
+              className="text-[10px] md:text-sm"
+            >
               Matcher
             </TabsTrigger>
-            <TabsTrigger value="stats" className="text-[10px] md:text-sm">
+            <TabsTrigger
+              value="stats"
+              className="text-[10px] md:text-sm"
+            >
               Statistik
             </TabsTrigger>
           </TabsList>

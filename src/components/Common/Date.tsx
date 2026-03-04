@@ -14,9 +14,7 @@ const Date = ({
   }
 
   return (
-    <span className={className}>
-      {dayjs(children).format('D MMMM YYYY')}
-    </span>
+    <span className={className}>{dayjs(children).format('D MMMM YYYY')}</span>
   )
 }
 

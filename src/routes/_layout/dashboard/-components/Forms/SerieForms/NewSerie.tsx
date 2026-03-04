@@ -1,3 +1,5 @@
+import { getRouteApi } from '@tanstack/react-router'
+
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -19,9 +21,10 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import { categoryEnum, newSeriesObject } from '@/lib/types/serie'
-import { zd } from '@/lib/utils/zod'
-import { getRouteApi } from '@tanstack/react-router'
+import type { newSeriesObject } from '@/lib/types/serie';
+import { categoryEnum } from '@/lib/types/serie'
+import type { zd } from '@/lib/utils/zod'
+
 import { useNewSerieForm } from '../../../-hooks/useSerieForm'
 
 const route = getRouteApi('/_layout/dashboard/season/$seasonId/info_/newSerie')
@@ -38,7 +41,7 @@ type CategoryArray = {
   label: string
 }
 
-const categoryArray: CategoryArray[] = [
+const categoryArray: Array<CategoryArray> = [
   { value: 'qualification', label: 'Kval' },
   { value: 'regular', label: 'Grundserie' },
   { value: 'playoffseries', label: 'Slutspelsserie' },

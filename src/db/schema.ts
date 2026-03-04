@@ -1,6 +1,7 @@
 import { relations, sql } from 'drizzle-orm'
+import type {
+  AnyPgColumn} from 'drizzle-orm/pg-core';
 import {
-  AnyPgColumn,
   boolean,
   customType,
   date,

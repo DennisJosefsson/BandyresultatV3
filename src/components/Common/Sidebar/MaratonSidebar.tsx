@@ -1,3 +1,5 @@
+import { Link, useSearch } from '@tanstack/react-router'
+
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -7,7 +9,6 @@ import {
   SidebarMenuSubItem,
   useSidebar,
 } from '@/components/ui/sidebar'
-import { Link, useSearch } from '@tanstack/react-router'
 
 export function MaratonSidebar() {
   const women = useSearch({ from: '__root__', select: (s) => s.women })

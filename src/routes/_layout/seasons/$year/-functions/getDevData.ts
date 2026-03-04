@@ -1,25 +1,33 @@
+import { createServerFn } from '@tanstack/react-start'
+import { zodValidator } from '@tanstack/zod-adapter'
+import { and, eq, getTableColumns } from 'drizzle-orm'
+
 import { db } from '@/db'
 import { seasons, series } from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import { Game } from '@/lib/types/game'
-import { Meta } from '@/lib/types/meta'
-import { Serie } from '@/lib/types/serie'
-import { ReturnDevDataTableItem } from '@/lib/types/table'
+import type { Game } from '@/lib/types/game'
+import type { Meta } from '@/lib/types/meta'
+import type { Serie } from '@/lib/types/serie'
+import type { ReturnDevDataTableItem } from '@/lib/types/table'
 import { seasonIdCheck } from '@/lib/utils/utils'
 import { zd } from '@/lib/utils/zod'
-import { createServerFn } from '@tanstack/react-start'
-import { zodValidator } from '@tanstack/zod-adapter'
-import { and, eq, getTableColumns } from 'drizzle-orm'
+
 import { getDevelopmentData } from './devDataFunctions'
 
 type DevDataReturn =
   | {
       status: 200
-      tables: { date: string; table: ReturnDevDataTableItem[] }[]
-      games: { date: string; games: Omit<Game, 'season'>[] }[]
+      tables: Array<{
+        date: string
+        table: Array<ReturnDevDataTableItem>
+      }>
+      games: Array<{
+        date: string
+        games: Array<Omit<Game, 'season'>>
+      }>
       serie: Serie
-      dates: string[]
+      dates: Array<string>
       breadCrumb: string
       meta: Meta
     }
@@ -49,7 +57,10 @@ export const getDevData = createServerFn({ method: 'GET' })
     }): Promise<DevDataReturn> => {
       try {
         const seasonYear = seasonIdCheck.parse(year)
-        const breadCrumb = origin === 'development' ? 'Utveckling' : 'Intervall'
+        const breadCrumb =
+          origin === 'development'
+            ? 'Utveckling'
+            : 'Intervall'
 
         const title =
           origin === 'development'
@@ -71,7 +82,8 @@ export const getDevData = createServerFn({ method: 'GET' })
         if (year < 1930) {
           return {
             status: 404,
-            message: 'Inga serietabeller för den här säsongen',
+            message:
+              'Inga serietabeller för den här säsongen',
             breadCrumb,
             meta,
           }
@@ -80,7 +92,8 @@ export const getDevData = createServerFn({ method: 'GET' })
         if (year < 1973 && women) {
           return {
             status: 404,
-            message: 'Damernas första säsong var 1972/1973.',
+            message:
+              'Damernas första säsong var 1972/1973.',
             breadCrumb,
             meta,
           }
@@ -100,7 +113,10 @@ export const getDevData = createServerFn({ method: 'GET' })
             ...getTableColumns(series),
           })
           .from(series)
-          .leftJoin(seasons, eq(seasons.seasonId, series.seasonId))
+          .leftJoin(
+            seasons,
+            eq(seasons.seasonId, series.seasonId),
+          )
           .where(
             and(
               eq(seasons.women, women),

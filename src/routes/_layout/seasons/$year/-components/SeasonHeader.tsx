@@ -1,7 +1,7 @@
-import { Button } from '@/components/ui/button'
-
 import { Link, useParams, useSearch } from '@tanstack/react-router'
 import { ArrowLeftIcon, ArrowRightIcon } from 'lucide-react'
+
+import { Button } from '@/components/ui/button'
 
 import { useGetFirstAndLastSeason } from '../-hooks/useGetFirstAndLastSeason'
 

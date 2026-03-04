@@ -1,13 +1,24 @@
-import { CompareCatTable, CompareCatTableItem } from './compareQueries'
+import type {
+  CompareCatTable,
+  CompareCatTableItem,
+} from './compareQueries'
 
-export const filterOpposition = (array: CompareCatTable) => {
-  const tempArray: string[] = []
+export const filterOpposition = (
+  array: CompareCatTable,
+) => {
+  const tempArray: Array<string> = []
 
   const callback = (item: CompareCatTableItem) => {
-    if (tempArray.includes(item.team.casualName + item.opponent.casualName)) {
+    if (
+      tempArray.includes(
+        item.team.casualName + item.opponent.casualName,
+      )
+    ) {
       return false
     } else {
-      tempArray.push(item.opponent.casualName + item.team.casualName)
+      tempArray.push(
+        item.opponent.casualName + item.team.casualName,
+      )
       return true
     }
   }

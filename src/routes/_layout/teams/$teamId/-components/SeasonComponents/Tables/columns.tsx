@@ -1,7 +1,8 @@
-import { Button } from '@/components/ui/button'
-import { TeamTable } from '@/lib/types/table'
 import { createColumnHelper } from '@tanstack/react-table'
 import { ArrowDownIcon, ArrowUpIcon, ChevronsUpDownIcon } from 'lucide-react'
+
+import { Button } from '@/components/ui/button'
+import type { TeamTable } from '@/lib/types/table'
 
 export const showColumns = {
   totalDraws: true,

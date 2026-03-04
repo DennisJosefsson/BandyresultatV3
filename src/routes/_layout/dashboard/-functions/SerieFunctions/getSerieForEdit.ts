@@ -8,13 +8,24 @@ import {
 } from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import { TeamBase } from '@/lib/types/team'
+import type { TeamBase } from '@/lib/types/team'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
 import { zodValidator } from '@tanstack/zod-adapter'
-import { and, asc, desc, eq, getTableColumns, ne, SQL, sql } from 'drizzle-orm'
+import type { SQL } from 'drizzle-orm'
+import {
+  and,
+  asc,
+  desc,
+  eq,
+  getTableColumns,
+  ne,
+  sql,
+} from 'drizzle-orm'
 
-export const getSerieForEdit = createServerFn({ method: 'GET' })
+export const getSerieForEdit = createServerFn({
+  method: 'GET',
+})
   .middleware([errorMiddleware])
   .inputValidator(
     zodValidator(
@@ -27,7 +38,8 @@ export const getSerieForEdit = createServerFn({ method: 'GET' })
   .handler(async ({ data: { seasonId, serieId } }) => {
     try {
       const serie = await db.query.series.findFirst({
-        where: (series, { eq }) => eq(series.serieId, serieId),
+        where: (seriesSchema, { eq: equal }) =>
+          equal(seriesSchema.serieId, serieId),
         with: {
           season: {
             columns: { women: true },
@@ -43,7 +55,12 @@ export const getSerieForEdit = createServerFn({ method: 'GET' })
           label: series.serieName,
         })
         .from(series)
-        .where(and(eq(series.seasonId, seasonId), ne(series.serieId, serieId)))
+        .where(
+          and(
+            eq(series.seasonId, seasonId),
+            ne(series.serieId, serieId),
+          ),
+        )
         .orderBy(desc(series.level))
 
       const parentSeries = await db
@@ -52,10 +69,16 @@ export const getSerieForEdit = createServerFn({ method: 'GET' })
           parent: {
             serieId: series.serieId,
             serieName: series.serieName,
-          } as unknown as SQL<{ serieId: number; serieName: string }>,
+          } as unknown as SQL<{
+            serieId: number
+            serieName: string
+          }>,
         })
         .from(parentchildseries)
-        .leftJoin(series, eq(parentchildseries.parentId, series.serieId))
+        .leftJoin(
+          series,
+          eq(parentchildseries.parentId, series.serieId),
+        )
         .where(eq(parentchildseries.childId, serieId))
 
       const teamsInSerie = await db
@@ -69,9 +92,14 @@ export const getSerieForEdit = createServerFn({ method: 'GET' })
           } as unknown as SQL<TeamBase>,
         })
         .from(teamseries)
-        .leftJoin(teams, eq(teams.teamId, teamseries.teamId))
+        .leftJoin(
+          teams,
+          eq(teams.teamId, teamseries.teamId),
+        )
         .where(eq(teamseries.serieId, serieId))
-        .orderBy(asc(sql`teams.casual_name collate "se-SE-x-icu"`))
+        .orderBy(
+          asc(sql`teams.casual_name collate "se-SE-x-icu"`),
+        )
 
       const teamsInSeason = await db
         .select({
@@ -84,9 +112,14 @@ export const getSerieForEdit = createServerFn({ method: 'GET' })
           } as unknown as SQL<TeamBase>,
         })
         .from(teamseasons)
-        .leftJoin(teams, eq(teams.teamId, teamseasons.teamId))
+        .leftJoin(
+          teams,
+          eq(teams.teamId, teamseasons.teamId),
+        )
         .where(eq(teamseasons.seasonId, seasonId))
-        .orderBy(asc(sql`teams.casual_name collate "se-SE-x-icu"`))
+        .orderBy(
+          asc(sql`teams.casual_name collate "se-SE-x-icu"`),
+        )
 
       return {
         status: 200,

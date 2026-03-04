@@ -1,15 +1,21 @@
-import Date from '@/components/Common/Date'
-import { Game, GameGroupBase } from '@/lib/types/game'
-import { getRouteApi, Link } from '@tanstack/react-router'
+import { Link, getRouteApi } from '@tanstack/react-router'
 import { LinkIcon } from 'lucide-react'
+
+import Date from '@/components/Common/Date'
+import type { Game, GameGroupBase } from '@/lib/types/game'
+
 import { columns } from './columns'
 import DataTable from './DataTable'
 
 type GameListProps = {
-  gamesArray: GameGroupBase<Omit<Game, 'season'>[]>[]
+  gamesArray: Array<
+    GameGroupBase<Array<Omit<Game, 'season'>>>
+  >
 }
 
-const route = getRouteApi('/_layout/seasons/$year/playoff/games')
+const route = getRouteApi(
+  '/_layout/seasons/$year/playoff/games',
+)
 
 const GamesList = ({ gamesArray }: GameListProps) => {
   const year = route.useParams({
@@ -21,7 +27,10 @@ const GamesList = ({ gamesArray }: GameListProps) => {
       <div>
         {gamesArray.map((group) => {
           return (
-            <div key={group.group} className="mb-6">
+            <div
+              key={group.group}
+              className="mb-6"
+            >
               <div
                 id={group.group}
                 className="group mb-0.5 flex flex-row items-center gap-1"
@@ -54,7 +63,10 @@ const GamesList = ({ gamesArray }: GameListProps) => {
                     {},
                   )
                   return (
-                    <div key={date.date} className="mb-4">
+                    <div
+                      key={date.date}
+                      className="mb-4"
+                    >
                       {date.date !== 'null' && (
                         <div className="group mb-0.5 flex flex-row items-center gap-1">
                           <h3

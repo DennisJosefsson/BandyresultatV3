@@ -1,3 +1,8 @@
+import {
+  useNavigate,
+  useSearch,
+} from '@tanstack/react-router'
+
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -7,22 +12,33 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { SearchParamsFields, SearchResult } from '@/lib/types/search'
-import { useNavigate, useSearch } from '@tanstack/react-router'
+import type {
+  SearchParamsFields,
+  SearchResult,
+} from '@/lib/types/search'
 type SearchErrorProps = {
   searchResult:
     | {
         status: 404
         message: string
       }
-    | { status: 400; message: string; paths: SearchParamsFields[] }
-    | { status: 200; searchResult: SearchResult[] }
+    | {
+        status: 400
+        message: string
+        paths: Array<SearchParamsFields>
+      }
+    | { status: 200; searchResult: Array<SearchResult> }
   reset: () => void
 }
 
-const SearchError = ({ searchResult, reset }: SearchErrorProps) => {
+const SearchError = ({
+  searchResult,
+  reset,
+}: SearchErrorProps) => {
   const navigate = useNavigate({ from: '/search' })
-  const searchFields = useSearch({ from: '/_layout/search' })
+  const searchFields = useSearch({
+    from: '/_layout/search',
+  })
 
   const resetFn = () => {
     if (searchResult.status === 400) {
@@ -31,7 +47,12 @@ const SearchError = ({ searchResult, reset }: SearchErrorProps) => {
       if (Array.isArray(fields)) {
         fields.forEach((field) => {
           if (searchFields[field] !== undefined) {
-            navigate({ search: (prev) => ({ ...prev, [field]: undefined }) })
+            navigate({
+              search: (prev) => ({
+                ...prev,
+                [field]: undefined,
+              }),
+            })
           }
         })
       }

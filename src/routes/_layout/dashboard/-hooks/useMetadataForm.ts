@@ -1,11 +1,18 @@
-import { metadataObject } from '@/lib/types/metadata'
 import { useForm } from '@tanstack/react-form'
 import { useMutation } from '@tanstack/react-query'
-import { getRouteApi, useRouter } from '@tanstack/react-router'
+import {
+  getRouteApi,
+  useRouter,
+} from '@tanstack/react-router'
 import { toast } from 'sonner'
+
+import { metadataObject } from '@/lib/types/metadata'
+
 import { updateMetadata } from '../-functions/SeasonFunctions/updateMetadata'
 
-const route = getRouteApi('/_layout/dashboard/season/$seasonId/metadata/')
+const route = getRouteApi(
+  '/_layout/dashboard/season/$seasonId/metadata/',
+)
 
 type Data =
   | {
@@ -20,7 +27,9 @@ export const useMetadataForm = () => {
   })
   const navigate = route.useNavigate()
   const router = useRouter()
-  const seasonId = route.useParams({ select: (s) => s.seasonId })
+  const seasonId = route.useParams({
+    select: (s) => s.seasonId,
+  })
   const women = route.useSearch({
     select: (search) => search.women,
   })
@@ -43,8 +52,12 @@ export const useMetadataForm = () => {
       finalDate: rest?.finalDate ?? '',
       comment: rest?.comment ?? '',
     },
-    validators: { onBlur: metadataObject, onSubmit: metadataObject },
-    onSubmit: ({ value }) => mutation.mutateAsync({ data: value }),
+    validators: {
+      onBlur: metadataObject,
+      onSubmit: metadataObject,
+    },
+    onSubmit: ({ value }) =>
+      mutation.mutateAsync({ data: value }),
   })
 
   const returnToSeason = () => {
@@ -57,7 +70,8 @@ export const useMetadataForm = () => {
 
   const onSuccessSubmit = (data: Data) => {
     router.invalidate({
-      filter: (route) => route.routeId === '/_layout/dashboard/games/$today',
+      filter: (r) =>
+        r.routeId === '/_layout/dashboard/games/$today',
     })
     if (!data) {
       toast.success('Okänt fel.')

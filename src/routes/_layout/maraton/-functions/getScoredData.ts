@@ -1,6 +1,4 @@
-import { db } from '@/db'
-import { seasons, series, teamgames, teams } from '@/db/schema'
-import { TeamBase } from '@/lib/types/team'
+import type { SQL } from 'drizzle-orm'
 import {
   and,
   asc,
@@ -11,12 +9,24 @@ import {
   gt,
   gte,
   ne,
-  SQL,
   sql,
 } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
 
-export async function getScoredData({ women }: { women: boolean }) {
+import { db } from '@/db'
+import {
+  seasons,
+  series,
+  teamgames,
+  teams,
+} from '@/db/schema'
+import type { TeamBase } from '@/lib/types/team'
+
+export async function getScoredData({
+  women,
+}: {
+  women: boolean
+}) {
   const averageScoredMax = await db
     .select({
       data: sql`round(avg(teamgames.goals_scored),2)`
@@ -33,7 +43,10 @@ export async function getScoredData({ women }: { women: boolean }) {
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
-    .leftJoin(seasons, eq(teamgames.seasonId, seasons.seasonId))
+    .leftJoin(
+      seasons,
+      eq(teamgames.seasonId, seasons.seasonId),
+    )
     .where(
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
@@ -47,7 +60,9 @@ export async function getScoredData({ women }: { women: boolean }) {
     .having(gte(count(teamgames.teamGameId), 10))
     .orderBy(
       desc(
-        sql`round(avg(teamgames.goals_scored),2)`.mapWith(Number).as('data'),
+        sql`round(avg(teamgames.goals_scored),2)`
+          .mapWith(Number)
+          .as('data'),
       ),
     )
     .limit(10)
@@ -59,8 +74,11 @@ export async function getScoredData({ women }: { women: boolean }) {
         return {
           ...item,
           position:
-            index !== 0 && filteredResult[index - 1].data === item.data
-              ? filteredResult.find((res) => res.data === item.data)?.position
+            index !== 0 &&
+            filteredResult[index - 1].data === item.data
+              ? filteredResult.find(
+                  (r) => r.data === item.data,
+                )?.position
               : item.position,
         }
       })
@@ -82,7 +100,10 @@ export async function getScoredData({ women }: { women: boolean }) {
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
-    .leftJoin(seasons, eq(teamgames.seasonId, seasons.seasonId))
+    .leftJoin(
+      seasons,
+      eq(teamgames.seasonId, seasons.seasonId),
+    )
     .where(
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
@@ -97,7 +118,9 @@ export async function getScoredData({ women }: { women: boolean }) {
     .having(gte(count(teamgames.teamGameId), 5))
     .orderBy(
       desc(
-        sql`round(avg(teamgames.goals_scored),2)`.mapWith(Number).as('data'),
+        sql`round(avg(teamgames.goals_scored),2)`
+          .mapWith(Number)
+          .as('data'),
       ),
     )
     .limit(10)
@@ -109,8 +132,11 @@ export async function getScoredData({ women }: { women: boolean }) {
         return {
           ...item,
           position:
-            index !== 0 && filteredResult[index - 1].data === item.data
-              ? filteredResult.find((res) => res.data === item.data)?.position
+            index !== 0 &&
+            filteredResult[index - 1].data === item.data
+              ? filteredResult.find(
+                  (r) => r.data === item.data,
+                )?.position
               : item.position,
         }
       })
@@ -132,7 +158,10 @@ export async function getScoredData({ women }: { women: boolean }) {
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
-    .leftJoin(seasons, eq(teamgames.seasonId, seasons.seasonId))
+    .leftJoin(
+      seasons,
+      eq(teamgames.seasonId, seasons.seasonId),
+    )
     .where(
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
@@ -147,7 +176,9 @@ export async function getScoredData({ women }: { women: boolean }) {
     .having(gte(count(teamgames.teamGameId), 5))
     .orderBy(
       desc(
-        sql`round(avg(teamgames.goals_scored),2)`.mapWith(Number).as('data'),
+        sql`round(avg(teamgames.goals_scored),2)`
+          .mapWith(Number)
+          .as('data'),
       ),
     )
     .limit(10)
@@ -159,8 +190,11 @@ export async function getScoredData({ women }: { women: boolean }) {
         return {
           ...item,
           position:
-            index !== 0 && filteredResult[index - 1].data === item.data
-              ? filteredResult.find((res) => res.data === item.data)?.position
+            index !== 0 &&
+            filteredResult[index - 1].data === item.data
+              ? filteredResult.find(
+                  (r) => r.data === item.data,
+                )?.position
               : item.position,
         }
       })
@@ -182,7 +216,10 @@ export async function getScoredData({ women }: { women: boolean }) {
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
-    .leftJoin(seasons, eq(teamgames.seasonId, seasons.seasonId))
+    .leftJoin(
+      seasons,
+      eq(teamgames.seasonId, seasons.seasonId),
+    )
     .where(
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
@@ -195,7 +232,11 @@ export async function getScoredData({ women }: { women: boolean }) {
     .groupBy(teams.teamId, seasons.year)
     .having(gte(count(teamgames.teamGameId), 10))
     .orderBy(
-      asc(sql`round(avg(teamgames.goals_scored),2)`.mapWith(Number).as('data')),
+      asc(
+        sql`round(avg(teamgames.goals_scored),2)`
+          .mapWith(Number)
+          .as('data'),
+      ),
     )
     .limit(10)
     .then((res) => {
@@ -206,8 +247,11 @@ export async function getScoredData({ women }: { women: boolean }) {
         return {
           ...item,
           position:
-            index !== 0 && filteredResult[index - 1].data === item.data
-              ? filteredResult.find((res) => res.data === item.data)?.position
+            index !== 0 &&
+            filteredResult[index - 1].data === item.data
+              ? filteredResult.find(
+                  (r) => r.data === item.data,
+                )?.position
               : item.position,
         }
       })
@@ -229,7 +273,10 @@ export async function getScoredData({ women }: { women: boolean }) {
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
-    .leftJoin(seasons, eq(teamgames.seasonId, seasons.seasonId))
+    .leftJoin(
+      seasons,
+      eq(teamgames.seasonId, seasons.seasonId),
+    )
     .where(
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
@@ -243,7 +290,11 @@ export async function getScoredData({ women }: { women: boolean }) {
     .groupBy(teams.teamId, seasons.year)
     .having(gte(count(teamgames.teamGameId), 5))
     .orderBy(
-      asc(sql`round(avg(teamgames.goals_scored),2)`.mapWith(Number).as('data')),
+      asc(
+        sql`round(avg(teamgames.goals_scored),2)`
+          .mapWith(Number)
+          .as('data'),
+      ),
     )
     .limit(10)
     .then((res) => {
@@ -254,8 +305,11 @@ export async function getScoredData({ women }: { women: boolean }) {
         return {
           ...item,
           position:
-            index !== 0 && filteredResult[index - 1].data === item.data
-              ? filteredResult.find((res) => res.data === item.data)?.position
+            index !== 0 &&
+            filteredResult[index - 1].data === item.data
+              ? filteredResult.find(
+                  (r) => r.data === item.data,
+                )?.position
               : item.position,
         }
       })
@@ -277,7 +331,10 @@ export async function getScoredData({ women }: { women: boolean }) {
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
-    .leftJoin(seasons, eq(teamgames.seasonId, seasons.seasonId))
+    .leftJoin(
+      seasons,
+      eq(teamgames.seasonId, seasons.seasonId),
+    )
     .where(
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
@@ -291,7 +348,11 @@ export async function getScoredData({ women }: { women: boolean }) {
     .groupBy(teams.teamId, seasons.year)
     .having(gte(count(teamgames.teamGameId), 5))
     .orderBy(
-      asc(sql`round(avg(teamgames.goals_scored),2)`.mapWith(Number).as('data')),
+      asc(
+        sql`round(avg(teamgames.goals_scored),2)`
+          .mapWith(Number)
+          .as('data'),
+      ),
     )
     .limit(10)
     .then((res) => {
@@ -302,8 +363,11 @@ export async function getScoredData({ women }: { women: boolean }) {
         return {
           ...item,
           position:
-            index !== 0 && filteredResult[index - 1].data === item.data
-              ? filteredResult.find((res) => res.data === item.data)?.position
+            index !== 0 &&
+            filteredResult[index - 1].data === item.data
+              ? filteredResult.find(
+                  (r) => r.data === item.data,
+                )?.position
               : item.position,
         }
       })
@@ -311,7 +375,9 @@ export async function getScoredData({ women }: { women: boolean }) {
 
   const sumScoredMax = await db
     .select({
-      data: sql`sum(teamgames.goals_scored)`.mapWith(Number).as('data'),
+      data: sql`sum(teamgames.goals_scored)`
+        .mapWith(Number)
+        .as('data'),
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
@@ -323,7 +389,10 @@ export async function getScoredData({ women }: { women: boolean }) {
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
-    .leftJoin(seasons, eq(teamgames.seasonId, seasons.seasonId))
+    .leftJoin(
+      seasons,
+      eq(teamgames.seasonId, seasons.seasonId),
+    )
     .where(
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
@@ -335,7 +404,13 @@ export async function getScoredData({ women }: { women: boolean }) {
     )
     .groupBy(teams.teamId, seasons.year)
     .having(gte(count(teamgames.teamGameId), 10))
-    .orderBy(desc(sql`sum(teamgames.goals_scored)`.mapWith(Number).as('data')))
+    .orderBy(
+      desc(
+        sql`sum(teamgames.goals_scored)`
+          .mapWith(Number)
+          .as('data'),
+      ),
+    )
     .limit(10)
     .then((res) => {
       const filteredResult = res.map((item, index) => {
@@ -345,8 +420,11 @@ export async function getScoredData({ women }: { women: boolean }) {
         return {
           ...item,
           position:
-            index !== 0 && filteredResult[index - 1].data === item.data
-              ? filteredResult.find((res) => res.data === item.data)?.position
+            index !== 0 &&
+            filteredResult[index - 1].data === item.data
+              ? filteredResult.find(
+                  (r) => r.data === item.data,
+                )?.position
               : item.position,
         }
       })
@@ -354,7 +432,9 @@ export async function getScoredData({ women }: { women: boolean }) {
 
   const sumScoredMaxHome = await db
     .select({
-      data: sql`sum(teamgames.goals_scored)`.mapWith(Number).as('data'),
+      data: sql`sum(teamgames.goals_scored)`
+        .mapWith(Number)
+        .as('data'),
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
@@ -366,7 +446,10 @@ export async function getScoredData({ women }: { women: boolean }) {
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
-    .leftJoin(seasons, eq(teamgames.seasonId, seasons.seasonId))
+    .leftJoin(
+      seasons,
+      eq(teamgames.seasonId, seasons.seasonId),
+    )
     .where(
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
@@ -379,7 +462,13 @@ export async function getScoredData({ women }: { women: boolean }) {
     )
     .groupBy(teams.teamId, seasons.year)
     .having(gte(count(teamgames.teamGameId), 5))
-    .orderBy(desc(sql`sum(teamgames.goals_scored)`.mapWith(Number).as('data')))
+    .orderBy(
+      desc(
+        sql`sum(teamgames.goals_scored)`
+          .mapWith(Number)
+          .as('data'),
+      ),
+    )
     .limit(10)
     .then((res) => {
       const filteredResult = res.map((item, index) => {
@@ -389,8 +478,11 @@ export async function getScoredData({ women }: { women: boolean }) {
         return {
           ...item,
           position:
-            index !== 0 && filteredResult[index - 1].data === item.data
-              ? filteredResult.find((res) => res.data === item.data)?.position
+            index !== 0 &&
+            filteredResult[index - 1].data === item.data
+              ? filteredResult.find(
+                  (r) => r.data === item.data,
+                )?.position
               : item.position,
         }
       })
@@ -398,7 +490,9 @@ export async function getScoredData({ women }: { women: boolean }) {
 
   const sumScoredMaxAway = await db
     .select({
-      data: sql`sum(teamgames.goals_scored)`.mapWith(Number).as('data'),
+      data: sql`sum(teamgames.goals_scored)`
+        .mapWith(Number)
+        .as('data'),
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
@@ -410,7 +504,10 @@ export async function getScoredData({ women }: { women: boolean }) {
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
-    .leftJoin(seasons, eq(teamgames.seasonId, seasons.seasonId))
+    .leftJoin(
+      seasons,
+      eq(teamgames.seasonId, seasons.seasonId),
+    )
     .where(
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
@@ -423,7 +520,13 @@ export async function getScoredData({ women }: { women: boolean }) {
     )
     .groupBy(teams.teamId, seasons.year)
     .having(gte(count(teamgames.teamGameId), 5))
-    .orderBy(desc(sql`sum(teamgames.goals_scored)`.mapWith(Number).as('data')))
+    .orderBy(
+      desc(
+        sql`sum(teamgames.goals_scored)`
+          .mapWith(Number)
+          .as('data'),
+      ),
+    )
     .limit(10)
     .then((res) => {
       const filteredResult = res.map((item, index) => {
@@ -433,8 +536,11 @@ export async function getScoredData({ women }: { women: boolean }) {
         return {
           ...item,
           position:
-            index !== 0 && filteredResult[index - 1].data === item.data
-              ? filteredResult.find((res) => res.data === item.data)?.position
+            index !== 0 &&
+            filteredResult[index - 1].data === item.data
+              ? filteredResult.find(
+                  (r) => r.data === item.data,
+                )?.position
               : item.position,
         }
       })
@@ -442,7 +548,9 @@ export async function getScoredData({ women }: { women: boolean }) {
 
   const sumScoredMin = await db
     .select({
-      data: sql`sum(teamgames.goals_scored)`.mapWith(Number).as('data'),
+      data: sql`sum(teamgames.goals_scored)`
+        .mapWith(Number)
+        .as('data'),
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
@@ -454,7 +562,10 @@ export async function getScoredData({ women }: { women: boolean }) {
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
-    .leftJoin(seasons, eq(teamgames.seasonId, seasons.seasonId))
+    .leftJoin(
+      seasons,
+      eq(teamgames.seasonId, seasons.seasonId),
+    )
     .where(
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
@@ -466,7 +577,13 @@ export async function getScoredData({ women }: { women: boolean }) {
     )
     .groupBy(teams.teamId, seasons.year)
     .having(gte(count(teamgames.teamGameId), 10))
-    .orderBy(asc(sql`sum(teamgames.goals_scored)`.mapWith(Number).as('data')))
+    .orderBy(
+      asc(
+        sql`sum(teamgames.goals_scored)`
+          .mapWith(Number)
+          .as('data'),
+      ),
+    )
     .limit(10)
     .then((res) => {
       const filteredResult = res.map((item, index) => {
@@ -476,8 +593,11 @@ export async function getScoredData({ women }: { women: boolean }) {
         return {
           ...item,
           position:
-            index !== 0 && filteredResult[index - 1].data === item.data
-              ? filteredResult.find((res) => res.data === item.data)?.position
+            index !== 0 &&
+            filteredResult[index - 1].data === item.data
+              ? filteredResult.find(
+                  (r) => r.data === item.data,
+                )?.position
               : item.position,
         }
       })
@@ -485,7 +605,9 @@ export async function getScoredData({ women }: { women: boolean }) {
 
   const sumScoredMinHome = await db
     .select({
-      data: sql`sum(teamgames.goals_scored)`.mapWith(Number).as('data'),
+      data: sql`sum(teamgames.goals_scored)`
+        .mapWith(Number)
+        .as('data'),
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
@@ -497,7 +619,10 @@ export async function getScoredData({ women }: { women: boolean }) {
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
-    .leftJoin(seasons, eq(teamgames.seasonId, seasons.seasonId))
+    .leftJoin(
+      seasons,
+      eq(teamgames.seasonId, seasons.seasonId),
+    )
     .where(
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
@@ -510,7 +635,13 @@ export async function getScoredData({ women }: { women: boolean }) {
     )
     .groupBy(teams.teamId, seasons.year)
     .having(gte(count(teamgames.teamGameId), 5))
-    .orderBy(asc(sql`sum(teamgames.goals_scored)`.mapWith(Number).as('data')))
+    .orderBy(
+      asc(
+        sql`sum(teamgames.goals_scored)`
+          .mapWith(Number)
+          .as('data'),
+      ),
+    )
     .limit(10)
     .then((res) => {
       const filteredResult = res.map((item, index) => {
@@ -520,8 +651,11 @@ export async function getScoredData({ women }: { women: boolean }) {
         return {
           ...item,
           position:
-            index !== 0 && filteredResult[index - 1].data === item.data
-              ? filteredResult.find((res) => res.data === item.data)?.position
+            index !== 0 &&
+            filteredResult[index - 1].data === item.data
+              ? filteredResult.find(
+                  (r) => r.data === item.data,
+                )?.position
               : item.position,
         }
       })
@@ -529,7 +663,9 @@ export async function getScoredData({ women }: { women: boolean }) {
 
   const sumScoredMinAway = await db
     .select({
-      data: sql`sum(teamgames.goals_scored)`.mapWith(Number).as('data'),
+      data: sql`sum(teamgames.goals_scored)`
+        .mapWith(Number)
+        .as('data'),
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
@@ -541,7 +677,10 @@ export async function getScoredData({ women }: { women: boolean }) {
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
-    .leftJoin(seasons, eq(teamgames.seasonId, seasons.seasonId))
+    .leftJoin(
+      seasons,
+      eq(teamgames.seasonId, seasons.seasonId),
+    )
     .where(
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
@@ -554,7 +693,13 @@ export async function getScoredData({ women }: { women: boolean }) {
     )
     .groupBy(teams.teamId, seasons.year)
     .having(gte(count(teamgames.teamGameId), 5))
-    .orderBy(asc(sql`sum(teamgames.goals_scored)`.mapWith(Number).as('data')))
+    .orderBy(
+      asc(
+        sql`sum(teamgames.goals_scored)`
+          .mapWith(Number)
+          .as('data'),
+      ),
+    )
     .limit(10)
     .then((res) => {
       const filteredResult = res.map((item, index) => {
@@ -564,8 +709,11 @@ export async function getScoredData({ women }: { women: boolean }) {
         return {
           ...item,
           position:
-            index !== 0 && filteredResult[index - 1].data === item.data
-              ? filteredResult.find((res) => res.data === item.data)?.position
+            index !== 0 &&
+            filteredResult[index - 1].data === item.data
+              ? filteredResult.find(
+                  (r) => r.data === item.data,
+                )?.position
               : item.position,
         }
       })
@@ -593,8 +741,14 @@ export async function getScoredData({ women }: { women: boolean }) {
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(team, eq(team.teamId, teamgames.teamId))
-    .leftJoin(opponent, eq(opponent.teamId, teamgames.opponentId))
-    .leftJoin(seasons, eq(teamgames.seasonId, seasons.seasonId))
+    .leftJoin(
+      opponent,
+      eq(opponent.teamId, teamgames.opponentId),
+    )
+    .leftJoin(
+      seasons,
+      eq(teamgames.seasonId, seasons.seasonId),
+    )
     .where(
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
@@ -605,7 +759,10 @@ export async function getScoredData({ women }: { women: boolean }) {
         eq(teamgames.homeGame, true),
       ),
     )
-    .orderBy(desc(teamgames.totalGoals), desc(teamgames.date))
+    .orderBy(
+      desc(teamgames.totalGoals),
+      desc(teamgames.date),
+    )
     .limit(10)
     .then((res) => {
       const filteredResult = res.map((item, index) => {
@@ -621,8 +778,11 @@ export async function getScoredData({ women }: { women: boolean }) {
         return {
           ...item,
           position:
-            index !== 0 && filteredResult[index - 1].goals === item.goals
-              ? filteredResult.find((res) => res.goals === item.goals)?.position
+            index !== 0 &&
+            filteredResult[index - 1].goals === item.goals
+              ? filteredResult.find(
+                  (r) => r.goals === item.goals,
+                )?.position
               : item.position,
         }
       })
@@ -647,8 +807,14 @@ export async function getScoredData({ women }: { women: boolean }) {
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(team, eq(team.teamId, teamgames.teamId))
-    .leftJoin(opponent, eq(opponent.teamId, teamgames.opponentId))
-    .leftJoin(seasons, eq(teamgames.seasonId, seasons.seasonId))
+    .leftJoin(
+      opponent,
+      eq(opponent.teamId, teamgames.opponentId),
+    )
+    .leftJoin(
+      seasons,
+      eq(teamgames.seasonId, seasons.seasonId),
+    )
     .where(
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
@@ -659,7 +825,10 @@ export async function getScoredData({ women }: { women: boolean }) {
         eq(teamgames.homeGame, true),
       ),
     )
-    .orderBy(asc(teamgames.totalGoals), desc(teamgames.date))
+    .orderBy(
+      asc(teamgames.totalGoals),
+      desc(teamgames.date),
+    )
     .limit(10)
     .then((res) => {
       const filteredResult = res.map((item, index) => {
@@ -675,16 +844,21 @@ export async function getScoredData({ women }: { women: boolean }) {
         return {
           ...item,
           position:
-            index !== 0 && filteredResult[index - 1].goals === item.goals
-              ? filteredResult.find((res) => res.goals === item.goals)?.position
+            index !== 0 &&
+            filteredResult[index - 1].goals === item.goals
+              ? filteredResult.find(
+                  (r) => r.goals === item.goals,
+                )?.position
               : item.position,
         }
       })
     })
 
-  const lastMaxGoal = gamesMaxGoals[gamesMaxGoals.length - 1].goals!
+  const lastMaxGoal =
+    gamesMaxGoals[gamesMaxGoals.length - 1].goals!
 
-  const lastMinGoal = gamesMinGoals[gamesMaxGoals.length - 1].goals!
+  const lastMinGoal =
+    gamesMinGoals[gamesMaxGoals.length - 1].goals!
 
   const maxGoalCount = await db
     .select({ count: count(teamgames.gameId) })

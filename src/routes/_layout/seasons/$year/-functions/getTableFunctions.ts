@@ -1,21 +1,35 @@
+import type { SQL } from 'drizzle-orm'
+import {
+  and,
+  asc,
+  count,
+  desc,
+  eq,
+  inArray,
+  sql,
+  sum,
+} from 'drizzle-orm'
+import { unionAll } from 'drizzle-orm/pg-core'
+
 import { db } from '@/db'
+import type { series } from '@/db/schema'
 import {
   parentchildseries,
-  series,
   tables,
   teamgames,
   teams,
   teamseries,
 } from '@/db/schema'
-import { and, asc, count, desc, eq, inArray, SQL, sql, sum } from 'drizzle-orm'
-import { unionAll } from 'drizzle-orm/pg-core'
 
 type FunctionProps = {
   serie: typeof series.$inferSelect
   table: 'all' | 'home' | 'away'
 }
 
-export const getUnionedTables = async ({ serie, table }: FunctionProps) => {
+export const getUnionedTables = async ({
+  serie,
+  table,
+}: FunctionProps) => {
   if (serie.hasStatic) {
     const result = await db
       .select({
@@ -45,7 +59,8 @@ export const getUnionedTables = async ({ serie, table }: FunctionProps) => {
       .leftJoin(teams, eq(tables.teamId, teams.teamId))
       .where(eq(tables.serieId, serie.serieId))
       .orderBy(asc(tables.position))
-    serie.comment = 'Serien har ej tabeller för hemma-/bortamatcher.'
+    serie.comment =
+      'Serien har ej tabeller för hemma-/bortamatcher.'
     return result
   }
 
@@ -63,9 +78,15 @@ export const getUnionedTables = async ({ serie, table }: FunctionProps) => {
         table === 'all'
           ? teamseries.bonusPoints
           : sql`0`.mapWith(Number).as('total_points'),
-      totalGoalsScored: sql`0`.mapWith(Number).as('total_goals_scored'),
-      totalGoalsConceded: sql`0`.mapWith(Number).as('total_goals_conceded'),
-      totalGoalDifference: sql`0`.mapWith(Number).as('total_goal_difference'),
+      totalGoalsScored: sql`0`
+        .mapWith(Number)
+        .as('total_goals_scored'),
+      totalGoalsConceded: sql`0`
+        .mapWith(Number)
+        .as('total_goals_conceded'),
+      totalGoalDifference: sql`0`
+        .mapWith(Number)
+        .as('total_goal_difference'),
       totalWins: sql`0`.mapWith(Number).as('total_wins'),
       totalDraws: sql`0`.mapWith(Number).as('total_draws'),
       totalLost: sql`0`.mapWith(Number).as('total_lost'),
@@ -89,40 +110,60 @@ export const getUnionedTables = async ({ serie, table }: FunctionProps) => {
     ? db
         .select({
           teamId: teamgames.teamId,
-          totalGames: count(teamgames.teamGameId).as('total_games'),
-          totalPoints: sum(teamgames.points).mapWith(Number).as('total_points'),
+          totalGames: count(teamgames.teamGameId).as(
+            'total_games',
+          ),
+          totalPoints: sum(teamgames.points)
+            .mapWith(Number)
+            .as('total_points'),
           totalGoalsScored: sum(teamgames.goalsScored)
             .mapWith(Number)
-            .as('total_goals_scored') as unknown as SQL<number>,
+            .as(
+              'total_goals_scored',
+            ) as unknown as SQL<number>,
           totalGoalsConceded: sum(teamgames.goalsConceded)
             .mapWith(Number)
-            .as('total_goals_conceded') as unknown as SQL<number>,
+            .as(
+              'total_goals_conceded',
+            ) as unknown as SQL<number>,
           totalGoalDifference: sum(teamgames.goalDifference)
             .mapWith(Number)
-            .as('total_goal_difference') as unknown as SQL<number>,
-          totalWins: sql<number>`cast(count(*) filter (where win) as int)`.as(
-            'totalWins',
-          ),
-          totalDraws: sql<number>`cast(count(*) filter (where draw) as int)`.as(
-            'totalDraws',
-          ),
-          totalLost: sql<number>`cast(count(*) filter (where lost) as int)`.as(
-            'totalLost',
-          ),
+            .as(
+              'total_goal_difference',
+            ) as unknown as SQL<number>,
+          totalWins:
+            sql<number>`cast(count(*) filter (where win) as int)`.as(
+              'totalWins',
+            ),
+          totalDraws:
+            sql<number>`cast(count(*) filter (where draw) as int)`.as(
+              'totalDraws',
+            ),
+          totalLost:
+            sql<number>`cast(count(*) filter (where lost) as int)`.as(
+              'totalLost',
+            ),
         })
         .from(teamgames)
         .where(
           and(
             inArray(teamgames.teamId, teamArray),
-            serie.allParentGmes
+            serie.allParentGames
               ? undefined
               : inArray(teamgames.opponentId, teamArray),
             inArray(
               teamgames.serieId,
               db
-                .select({ parentId: parentchildseries.parentId })
+                .select({
+                  parentId: parentchildseries.parentId,
+                })
                 .from(parentchildseries)
-                .where(eq(parentchildseries.childId, serie.serieId)),
+                .where(
+                  eq(
+                    parentchildseries.childId,
+                    serie.serieId,
+                  ),
+                ),
             ),
             eq(teamgames.played, true),
             table === 'home'
@@ -138,26 +179,37 @@ export const getUnionedTables = async ({ serie, table }: FunctionProps) => {
   const mainSerie = db
     .select({
       teamId: teamgames.teamId,
-      totalGames: count(teamgames.teamGameId).as('total_games'),
-      totalPoints: sum(teamgames.points).mapWith(Number).as('total_points'),
+      totalGames: count(teamgames.teamGameId).as(
+        'total_games',
+      ),
+      totalPoints: sum(teamgames.points)
+        .mapWith(Number)
+        .as('total_points'),
       totalGoalsScored: sum(teamgames.goalsScored)
         .mapWith(Number)
         .as('total_goals_scored') as unknown as SQL<number>,
       totalGoalsConceded: sum(teamgames.goalsConceded)
         .mapWith(Number)
-        .as('total_goals_conceded') as unknown as SQL<number>,
+        .as(
+          'total_goals_conceded',
+        ) as unknown as SQL<number>,
       totalGoalDifference: sum(teamgames.goalDifference)
         .mapWith(Number)
-        .as('total_goal_difference') as unknown as SQL<number>,
-      totalWins: sql<number>`cast(count(*) filter (where win) as int)`.as(
-        'totalWins',
-      ),
-      totalDraws: sql<number>`cast(count(*) filter (where draw) as int)`.as(
-        'totalDraws',
-      ),
-      totalLost: sql<number>`cast(count(*) filter (where lost) as int)`.as(
-        'totalLost',
-      ),
+        .as(
+          'total_goal_difference',
+        ) as unknown as SQL<number>,
+      totalWins:
+        sql<number>`cast(count(*) filter (where win) as int)`.as(
+          'totalWins',
+        ),
+      totalDraws:
+        sql<number>`cast(count(*) filter (where draw) as int)`.as(
+          'totalDraws',
+        ),
+      totalLost:
+        sql<number>`cast(count(*) filter (where lost) as int)`.as(
+          'totalLost',
+        ),
     })
     .from(teamgames)
     .where(
@@ -176,26 +228,37 @@ export const getUnionedTables = async ({ serie, table }: FunctionProps) => {
   const mixSerie = db
     .select({
       teamId: teamgames.teamId,
-      totalGames: count(teamgames.teamGameId).as('total_games'),
-      totalPoints: sum(teamgames.points).mapWith(Number).as('total_points'),
+      totalGames: count(teamgames.teamGameId).as(
+        'total_games',
+      ),
+      totalPoints: sum(teamgames.points)
+        .mapWith(Number)
+        .as('total_points'),
       totalGoalsScored: sum(teamgames.goalsScored)
         .mapWith(Number)
         .as('total_goals_scored') as unknown as SQL<number>,
       totalGoalsConceded: sum(teamgames.goalsConceded)
         .mapWith(Number)
-        .as('total_goals_conceded') as unknown as SQL<number>,
+        .as(
+          'total_goals_conceded',
+        ) as unknown as SQL<number>,
       totalGoalDifference: sum(teamgames.goalDifference)
         .mapWith(Number)
-        .as('total_goal_difference') as unknown as SQL<number>,
-      totalWins: sql<number>`cast(count(*) filter (where win) as int)`.as(
-        'totalWins',
-      ),
-      totalDraws: sql<number>`cast(count(*) filter (where draw) as int)`.as(
-        'totalDraws',
-      ),
-      totalLost: sql<number>`cast(count(*) filter (where lost) as int)`.as(
-        'totalLost',
-      ),
+        .as(
+          'total_goal_difference',
+        ) as unknown as SQL<number>,
+      totalWins:
+        sql<number>`cast(count(*) filter (where win) as int)`.as(
+          'totalWins',
+        ),
+      totalDraws:
+        sql<number>`cast(count(*) filter (where draw) as int)`.as(
+          'totalDraws',
+        ),
+      totalLost:
+        sql<number>`cast(count(*) filter (where lost) as int)`.as(
+          'totalLost',
+        ),
     })
     .from(teamgames)
     .where(
@@ -216,14 +279,25 @@ export const getUnionedTables = async ({ serie, table }: FunctionProps) => {
   const unionQuery = parentSerie
     ? db
         .$with('union_query')
-        .as(unionAll(startTable, parentSerie, mainSerie, mixSerie))
-    : db.$with('union_query').as(unionAll(startTable, mainSerie, mixSerie))
+        .as(
+          unionAll(
+            startTable,
+            parentSerie,
+            mainSerie,
+            mixSerie,
+          ),
+        )
+    : db
+        .$with('union_query')
+        .as(unionAll(startTable, mainSerie, mixSerie))
 
   const result = await db
     .with(unionQuery)
     .select({
       teamId: unionQuery.teamId,
-      totalGames: sum(unionQuery.totalGames).mapWith(Number).as('total_games'),
+      totalGames: sum(unionQuery.totalGames)
+        .mapWith(Number)
+        .as('total_games'),
       totalPoints: sum(unionQuery.totalPoints)
         .mapWith(Number)
         .as('total_points'),
@@ -232,13 +306,25 @@ export const getUnionedTables = async ({ serie, table }: FunctionProps) => {
         .as('total_goals_scored') as unknown as SQL<number>,
       totalGoalsConceded: sum(unionQuery.totalGoalsConceded)
         .mapWith(Number)
-        .as('total_goals_conceded') as unknown as SQL<number>,
-      totalGoalDifference: sum(unionQuery.totalGoalDifference)
+        .as(
+          'total_goals_conceded',
+        ) as unknown as SQL<number>,
+      totalGoalDifference: sum(
+        unionQuery.totalGoalDifference,
+      )
         .mapWith(Number)
-        .as('total_goal_difference') as unknown as SQL<number>,
-      totalWins: sum(unionQuery.totalWins).mapWith(Number).as('total_wins'),
-      totalDraws: sum(unionQuery.totalDraws).mapWith(Number).as('total_draws'),
-      totalLost: sum(unionQuery.totalLost).mapWith(Number).as('total_lost'),
+        .as(
+          'total_goal_difference',
+        ) as unknown as SQL<number>,
+      totalWins: sum(unionQuery.totalWins)
+        .mapWith(Number)
+        .as('total_wins'),
+      totalDraws: sum(unionQuery.totalDraws)
+        .mapWith(Number)
+        .as('total_draws'),
+      totalLost: sum(unionQuery.totalLost)
+        .mapWith(Number)
+        .as('total_lost'),
       team: {
         teamId: teams.teamId,
         name: teams.name,

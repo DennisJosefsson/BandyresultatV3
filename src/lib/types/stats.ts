@@ -1,4 +1,4 @@
-import { Serie } from './serie'
+import type { Serie } from './serie'
 
 export type GoalData = {
   goalsScoredTotal: number
@@ -43,7 +43,7 @@ export type MaxMinGoals = {
 
 export type MaxMinDiffAndGoals = {
   value: number
-  games: MaxMinGoals[]
+  games: Array<MaxMinGoals>
 }
 
 export type Stats = {
@@ -56,11 +56,11 @@ export type Stats = {
   homeGameData: GameData
   awayGameData: GameData
   drawData: DrawData
-  winStreak: StreakData[]
-  losingStreak: StreakData[]
-  drawStreak: StreakData[]
-  noWinStreak: StreakData[]
-  unbeatenStreak: StreakData[]
+  winStreak: Array<StreakData>
+  losingStreak: Array<StreakData>
+  drawStreak: Array<StreakData>
+  noWinStreak: Array<StreakData>
+  unbeatenStreak: Array<StreakData>
   maxGoals: MaxMinDiffAndGoals
   minGoals: MaxMinDiffAndGoals
   maxDiff: MaxMinDiffAndGoals

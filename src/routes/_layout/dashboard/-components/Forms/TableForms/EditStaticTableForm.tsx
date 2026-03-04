@@ -1,3 +1,5 @@
+import { getRouteApi } from '@tanstack/react-router'
+
 import { Button } from '@/components/ui/button'
 import {
   Field,
@@ -13,7 +15,7 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from '@/components/ui/input-group'
-import { getRouteApi } from '@tanstack/react-router'
+
 import { editStaticTableForm } from '../../../-hooks/editStaticTableForm'
 const route = getRouteApi(
   '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/editTable',

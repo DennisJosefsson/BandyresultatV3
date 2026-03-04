@@ -1,4 +1,5 @@
 import { getRouteApi } from '@tanstack/react-router'
+
 import PointsGoals from './PointsGoals'
 
 const route = getRouteApi('/_layout/maraton/records/points')

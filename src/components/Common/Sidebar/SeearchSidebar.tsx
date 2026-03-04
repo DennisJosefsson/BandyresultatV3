@@ -1,10 +1,11 @@
+import { Link, useSearch } from '@tanstack/react-router'
+
 import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
   useSidebar,
 } from '@/components/ui/sidebar'
-import { Link, useSearch } from '@tanstack/react-router'
 
 export function SearchSidebar() {
   const women = useSearch({ from: '__root__', select: (s) => s.women })

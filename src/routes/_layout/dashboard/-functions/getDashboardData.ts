@@ -1,8 +1,8 @@
-import { db } from '@/db'
-import { games, seasons } from '@/db/schema'
-
 import { createServerFn } from '@tanstack/react-start'
 import { and, desc, eq, getTableColumns, lt } from 'drizzle-orm'
+
+import { db } from '@/db'
+import { games, seasons } from '@/db/schema'
 
 export const getDashboardData = createServerFn({ method: 'GET' }).handler(
   async () => {

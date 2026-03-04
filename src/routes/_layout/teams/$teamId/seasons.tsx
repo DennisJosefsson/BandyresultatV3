@@ -1,3 +1,6 @@
+import { CatchBoundary, Link, createFileRoute } from '@tanstack/react-router'
+import { useState } from 'react'
+
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import {
   Accordion,
@@ -6,8 +9,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion'
 import { CardContent } from '@/components/ui/card'
-import { CatchBoundary, createFileRoute, Link } from '@tanstack/react-router'
-import { useState } from 'react'
+
 import { getTeamSeasons } from './-functions/teamSeasons'
 
 export const Route = createFileRoute('/_layout/teams/$teamId/seasons')({

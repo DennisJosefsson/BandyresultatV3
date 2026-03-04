@@ -1,7 +1,7 @@
-import { teams } from '@/db/schema'
+import type { teams } from '@/db/schema'
 
 type GetCompareHeaderText = {
-  teams: (typeof teams.$inferSelect)[]
+  teams: Array<typeof teams.$inferSelect>
   gameCount: number
 }
 
@@ -9,10 +9,13 @@ const getCompareHeaderText = ({
   teams,
   gameCount,
 }: GetCompareHeaderText): string => {
-  const teamStringArray = [...new Set(teams.map((team) => team.casualName))]
+  const teamStringArray = [
+    ...new Set(teams.map((team) => team.casualName)),
+  ]
 
   const lastTeam = teamStringArray.pop()
-  const teamString = teamStringArray.join(', ') + ' och ' + lastTeam
+  const teamString =
+    teamStringArray.join(', ') + ' och ' + lastTeam
 
   let compareHeaderText = ''
 

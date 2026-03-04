@@ -1,21 +1,23 @@
+import { createServerFn } from '@tanstack/react-start'
+import { zodValidator } from '@tanstack/zod-adapter'
+import { and, eq, getTableColumns } from 'drizzle-orm'
+
 import { db } from '@/db'
 import { seasons, series } from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import { Meta } from '@/lib/types/meta'
-import { Serie } from '@/lib/types/serie'
-import { TeamTable } from '@/lib/types/table'
+import type { Meta } from '@/lib/types/meta'
+import type { Serie } from '@/lib/types/serie'
+import type { TeamTable } from '@/lib/types/table'
 import { seasonIdCheck } from '@/lib/utils/utils'
 import { zd } from '@/lib/utils/zod'
-import { createServerFn } from '@tanstack/react-start'
-import { zodValidator } from '@tanstack/zod-adapter'
-import { and, eq, getTableColumns } from 'drizzle-orm'
+
 import { getUnionedTables } from './getTableFunctions'
 
 type TablesReturn =
   | {
       status: 200
-      tables: Omit<TeamTable, 'women' | 'group' | 'season'>[]
+      tables: Array<Omit<TeamTable, 'women' | 'group' | 'season'>>
       serie: Serie
       breadCrumb: string
       meta: Meta

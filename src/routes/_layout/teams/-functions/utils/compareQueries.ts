@@ -1,7 +1,5 @@
-import { db } from '@/db'
-import { games, series, teamgames, teams } from '@/db/schema'
-import { Unpacked } from '@/lib/types/unpacked'
-
+import type {
+  SQL} from 'drizzle-orm';
 import {
   and,
   asc,
@@ -14,18 +12,21 @@ import {
   lt,
   ne,
   or,
-  SQL,
   sql,
   sum,
 } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
+
+import { db } from '@/db'
+import { games, series, teamgames, teams } from '@/db/schema'
+import type { Unpacked } from '@/lib/types/unpacked'
 
 const team = alias(teams, 'team')
 const opponent = alias(teams, 'opponent')
 const s1 = alias(series, 's1')
 
 type GetCatTables = {
-  teamArray: number[]
+  teamArray: Array<number>
 }
 
 type Team = {
@@ -176,7 +177,7 @@ export const getAllGamesTables = ({ teamArray }: GetCatTables) =>
     )
     .orderBy(desc(teamgames.teamId))
 
-export const getFirstAndLastGames = async (teamArray: number[]) => {
+export const getFirstAndLastGames = async (teamArray: Array<number>) => {
   const first_games = db.$with('first_games').as(
     db
       .select({
@@ -248,7 +249,7 @@ export const getFirstAndLastGames = async (teamArray: number[]) => {
   return { firstGames, latestGames }
 }
 
-export const getLatestHomeWin = async (teamArray: number[]) => {
+export const getLatestHomeWin = async (teamArray: Array<number>) => {
   const latest_home_win = db.$with('latest_home_win').as(
     db
       .select({
@@ -302,7 +303,7 @@ export const getLatestHomeWin = async (teamArray: number[]) => {
   return latestHomeWin
 }
 
-export const getLatestAwayWin = async (teamArray: number[]) => {
+export const getLatestAwayWin = async (teamArray: Array<number>) => {
   const latest_away_win = db.$with('latest_away_win').as(
     db
       .select({
@@ -366,7 +367,7 @@ const getTime = (date?: Date): number => {
   return date != null ? date.getTime() : 0
 }
 
-export const getGolds = (teamArray: number[]) =>
+export const getGolds = (teamArray: Array<number>) =>
   db
     .select({
       teamId: teamgames.teamId,
@@ -388,7 +389,7 @@ export const getGolds = (teamArray: number[]) =>
     .groupBy(teams.casualName, teams.name, teamgames.teamId)
     .orderBy(desc(sql`gold`))
 
-export const getPlayoffs = (teamArray: number[]) =>
+export const getPlayoffs = (teamArray: Array<number>) =>
   db
     .select({
       teamId: teamgames.teamId,
@@ -413,7 +414,7 @@ export const getPlayoffs = (teamArray: number[]) =>
     .groupBy(teams.casualName, teams.name, teamgames.teamId)
     .orderBy(desc(sql`playoffs`))
 
-export const getAllPlayoffs = (teamArray: number[]) =>
+export const getAllPlayoffs = (teamArray: Array<number>) =>
   db
     .select({
       teamId: teamgames.teamId,
@@ -437,7 +438,7 @@ export const getAllPlayoffs = (teamArray: number[]) =>
     .groupBy(teams.casualName, teams.name, teamgames.teamId)
     .orderBy(desc(sql`playoffs`))
 
-export const getFirstDivisionSeasonsSince1931 = (teamArray: number[]) =>
+export const getFirstDivisionSeasonsSince1931 = (teamArray: Array<number>) =>
   db
     .select({
       teamId: teamgames.teamId,
@@ -461,7 +462,7 @@ export const getFirstDivisionSeasonsSince1931 = (teamArray: number[]) =>
     .groupBy(teams.casualName, teams.name, teamgames.teamId)
     .orderBy(desc(sql`seasons`))
 
-export const getAllDbSeasons = (teamArray: number[]) =>
+export const getAllDbSeasons = (teamArray: Array<number>) =>
   db
     .select({
       teamId: teamgames.teamId,
@@ -478,7 +479,7 @@ export const getAllDbSeasons = (teamArray: number[]) =>
     .groupBy(teams.casualName, teams.name, teamgames.teamId)
     .orderBy(desc(sql`seasons`))
 
-export const getFirstDivisionSeasons = (teamArray: number[]) =>
+export const getFirstDivisionSeasons = (teamArray: Array<number>) =>
   db
     .select({
       teamId: teamgames.teamId,

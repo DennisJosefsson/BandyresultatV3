@@ -1,10 +1,13 @@
+import { createServerFn } from '@tanstack/react-start'
+
 import { db } from '@/db'
 import { county } from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import { createServerFn } from '@tanstack/react-start'
 
-export const getCountiesForTeamForm = createServerFn({ method: 'GET' })
+export const getCountiesForTeamForm = createServerFn({
+  method: 'GET',
+})
   .middleware([errorMiddleware])
   .handler(async () => {
     try {
@@ -12,8 +15,8 @@ export const getCountiesForTeamForm = createServerFn({ method: 'GET' })
         .select()
         .from(county)
         .then((res) =>
-          res.map((county) => {
-            return { value: county.countyId, label: county.name }
+          res.map((c) => {
+            return { value: c.countyId, label: c.name }
           }),
         )
       return { status: 200, counties: countyList }

@@ -1,17 +1,19 @@
+import {
+  CatchBoundary,
+  Link,
+  Outlet,
+  createFileRoute,
+  useLocation,
+} from '@tanstack/react-router'
+
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { cn } from '@/lib/utils/utils'
-import {
-  CatchBoundary,
-  createFileRoute,
-  Link,
-  Outlet,
-  useLocation,
-} from '@tanstack/react-router'
+
 import { getDashboardData } from './dashboard/-functions/getDashboardData'
 
 export const Route = createFileRoute('/_layout/dashboard')({
-  //beforeLoad: () => authStateFn(),
+  // beforeLoad: () => authStateFn(),
   loader: () => getDashboardData(),
   component: RouteComponent,
 })

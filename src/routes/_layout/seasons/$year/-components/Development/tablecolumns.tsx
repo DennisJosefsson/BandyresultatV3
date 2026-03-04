@@ -1,7 +1,7 @@
-import { ColumnDef } from '@tanstack/react-table'
-
-import { ReturnDevDataTableItem } from '@/lib/types/table'
+import type { ColumnDef } from '@tanstack/react-table'
 import { ArrowDownRightIcon, ArrowUpRightIcon } from 'lucide-react'
+
+import type { ReturnDevDataTableItem } from '@/lib/types/table'
 
 const DirectionArrow = ({ direction }: { direction: 'up' | 'down' | null }) => {
   if (direction === null) {
@@ -19,7 +19,7 @@ const DirectionArrow = ({ direction }: { direction: 'up' | 'down' | null }) => {
   return null
 }
 
-export const columns: ColumnDef<ReturnDevDataTableItem>[] = [
+export const columns: Array<ColumnDef<ReturnDevDataTableItem>> = [
   {
     accessorKey: 'position',
     header: () => <div className="text-center text-[10px] lg:text-sm">Pos</div>,

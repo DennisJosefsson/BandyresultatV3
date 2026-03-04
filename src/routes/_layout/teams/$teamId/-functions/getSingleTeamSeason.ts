@@ -1,3 +1,10 @@
+import { notFound } from '@tanstack/react-router'
+import { createServerFn } from '@tanstack/react-start'
+import { zodValidator } from '@tanstack/zod-adapter'
+import type { SQL } from 'drizzle-orm'
+import { and, desc, eq, or } from 'drizzle-orm'
+import { alias } from 'drizzle-orm/pg-core'
+
 import { db } from '@/db'
 import {
   games,
@@ -11,11 +18,7 @@ import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import { seasonIdCheck } from '@/lib/utils/utils'
 import { zd } from '@/lib/utils/zod'
-import { notFound } from '@tanstack/react-router'
-import { createServerFn } from '@tanstack/react-start'
-import { zodValidator } from '@tanstack/zod-adapter'
-import { and, desc, eq, or, SQL } from 'drizzle-orm'
-import { alias } from 'drizzle-orm/pg-core'
+
 import {
   getSeasonGames,
   getSeasons,
@@ -26,15 +29,23 @@ import {
 const home = alias(teams, 'home')
 const away = alias(teams, 'away')
 
-export const getSingleTeamSeason = createServerFn({ method: 'GET' })
+export const getSingleTeamSeason = createServerFn({
+  method: 'GET',
+})
   .inputValidator(
-    zodValidator(zd.object({ teamId: zd.number(), seasonId: zd.number() })),
+    zodValidator(
+      zd.object({
+        teamId: zd.number(),
+        seasonId: zd.number(),
+      }),
+    ),
   )
   .middleware([errorMiddleware])
   .handler(async ({ data: { teamId, seasonId } }) => {
     try {
       const team = await db.query.teams.findFirst({
-        where: (teams, { eq }) => eq(teams.teamId, teamId),
+        where: (teamsSchema, { eq: equal }) =>
+          equal(teamsSchema.teamId, teamId),
       })
 
       if (!team) {
@@ -47,18 +58,26 @@ export const getSingleTeamSeason = createServerFn({ method: 'GET' })
       }
 
       const season = await db.query.seasons.findFirst({
-        where: (seasons, { eq, and }) =>
-          and(eq(seasons.women, team.women), eq(seasons.year, seasonYear)),
+        where: (seasonsSchema, { eq: equal, and: AND }) =>
+          AND(
+            equal(seasonsSchema.women, team.women),
+            equal(seasonsSchema.year, seasonYear),
+          ),
       })
 
       if (!season) {
-        throw notFound({ data: 'Finns ingen sådan säsong.' })
+        throw notFound({
+          data: 'Finns ingen sådan säsong.',
+        })
       }
 
       const teamSeason = db
         .select()
         .from(teamseasons)
-        .leftJoin(seasons, eq(seasons.seasonId, teamseasons.seasonId))
+        .leftJoin(
+          seasons,
+          eq(seasons.seasonId, teamseasons.seasonId),
+        )
         .where(
           and(
             eq(teamseasons.teamId, team.teamId),
@@ -67,7 +86,9 @@ export const getSingleTeamSeason = createServerFn({ method: 'GET' })
         )
 
       if (!teamSeason) {
-        throw notFound({ data: 'Laget har ingen sådan säsong.' })
+        throw notFound({
+          data: 'Laget har ingen sådan säsong.',
+        })
       }
 
       const gamesForTeam = await db
@@ -81,6 +102,9 @@ export const getSingleTeamSeason = createServerFn({ method: 'GET' })
           result: games.result,
           halftimeResult: games.halftimeResult,
           played: games.played,
+          otResult: games.otResult,
+          penalties: games.penalties,
+          extraTime: games.extraTime,
           home: {
             teamId: home.teamId,
             name: home.name,
@@ -106,12 +130,18 @@ export const getSingleTeamSeason = createServerFn({ method: 'GET' })
           season: {
             seasonId: seasons.seasonId,
             year: seasons.year,
-          } as unknown as SQL<{ seasonId: number; year: string }>,
+          } as unknown as SQL<{
+            seasonId: number
+            year: string
+          }>,
         })
         .from(games)
         .leftJoin(home, eq(home.teamId, games.homeTeamId))
         .leftJoin(away, eq(away.teamId, games.awayTeamId))
-        .leftJoin(seasons, eq(seasons.seasonId, games.seasonId))
+        .leftJoin(
+          seasons,
+          eq(seasons.seasonId, games.seasonId),
+        )
         .where(
           or(
             eq(games.homeTeamId, team.teamId),
@@ -131,14 +161,30 @@ export const getSingleTeamSeason = createServerFn({ method: 'GET' })
           level: series.level,
         })
         .from(series)
-        .leftJoin(seasons, eq(seasons.seasonId, series.seasonId))
-        .leftJoin(teamseries, eq(teamseries.serieId, series.serieId))
-        .leftJoin(teams, eq(teamseries.teamId, teams.teamId))
-        .where(and(eq(teams.teamId, team.teamId), eq(seasons.year, seasonYear)))
+        .leftJoin(
+          seasons,
+          eq(seasons.seasonId, series.seasonId),
+        )
+        .leftJoin(
+          teamseries,
+          eq(teamseries.serieId, series.serieId),
+        )
+        .leftJoin(
+          teams,
+          eq(teamseries.teamId, teams.teamId),
+        )
+        .where(
+          and(
+            eq(teams.teamId, team.teamId),
+            eq(seasons.year, seasonYear),
+          ),
+        )
 
       const tableSeriesArray = seriesForTeam
         .filter((serie) =>
-          ['regular', 'qualification'].includes(serie.category),
+          ['regular', 'qualification'].includes(
+            serie.category,
+          ),
         )
         .map((serie) => serie.group)
 

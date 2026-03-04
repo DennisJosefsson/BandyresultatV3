@@ -1,11 +1,13 @@
+import { createServerFn } from '@tanstack/react-start'
+import { zodValidator } from '@tanstack/zod-adapter'
+import type { SQL} from 'drizzle-orm';
+import { inArray, sql } from 'drizzle-orm'
+
 import { db } from '@/db'
 import { teamseries } from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import { editTeamSeriesArray } from '@/lib/types/serie'
-import { createServerFn } from '@tanstack/react-start'
-import { zodValidator } from '@tanstack/zod-adapter'
-import { inArray, SQL, sql } from 'drizzle-orm'
 
 export const editTeamSerie = createServerFn({ method: 'POST' })
   .middleware([errorMiddleware])
@@ -16,8 +18,8 @@ export const editTeamSerie = createServerFn({ method: 'POST' })
         throw new Error('TeamserieArray måste ha data.')
       }
 
-      const sqlChunks: SQL[] = []
-      const ids: number[] = []
+      const sqlChunks: Array<SQL> = []
+      const ids: Array<number> = []
       sqlChunks.push(sql`(case`)
 
       for (const input of teamserie) {

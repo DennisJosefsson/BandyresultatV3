@@ -1,6 +1,6 @@
 import { LngLat, LngLatBounds } from 'maplibre-gl'
 
-function getSWCoordinates(coordinatesCollection: [number, number][]) {
+function getSWCoordinates(coordinatesCollection: Array<[number, number]>) {
   const lowestLng = Math.min(
     ...coordinatesCollection.map((coordinates) => coordinates[0]),
   )
@@ -11,7 +11,7 @@ function getSWCoordinates(coordinatesCollection: [number, number][]) {
   return [lowestLng, lowestLat]
 }
 
-function getNECoordinates(coordinatesCollection: [number, number][]) {
+function getNECoordinates(coordinatesCollection: Array<[number, number]>) {
   const highestLng = Math.max(
     ...coordinatesCollection.map((coordinates) => coordinates[0]),
   )
@@ -23,7 +23,7 @@ function getNECoordinates(coordinatesCollection: [number, number][]) {
 }
 
 export function calcBoundsFromCoordinates(
-  coordinatesCollection: [number, number][],
+  coordinatesCollection: Array<[number, number]>,
 ) {
   const swCoords = getSWCoordinates(coordinatesCollection)
   const neCoords = getNECoordinates(coordinatesCollection)

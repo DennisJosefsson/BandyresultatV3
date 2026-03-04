@@ -1,11 +1,12 @@
-import { db } from '@/db'
 import { notFound } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
+import { ZodError } from 'zod'
 
+import { db } from '@/db'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import { zd } from '@/lib/utils/zod'
-import { ZodError } from 'zod'
+
 import {
   getAllDbSeasons,
   getAllGamesTables,
@@ -25,10 +26,14 @@ import {
 } from './utils/compareSortFunctions'
 import getCompareHeaderText from './utils/getCompareHeaderText'
 
-export const compareTeams = createServerFn({ method: 'POST' })
+export const getCompareTeams = createServerFn({
+  method: 'POST',
+})
   .inputValidator(
     zd.object({
-      teamArray: zd.array(zd.number().int().positive()).optional(),
+      teamArray: zd
+        .array(zd.number().int().positive())
+        .optional(),
 
       women: zd.boolean(),
     }),
@@ -67,7 +72,8 @@ export const compareTeams = createServerFn({ method: 'POST' })
       }
 
       const compareTeams = await db.query.teams.findMany({
-        where: (teams, { inArray }) => inArray(teams.teamId, teamArray),
+        where: (teams, { inArray }) =>
+          inArray(teams.teamId, teamArray),
       })
 
       const catTables = await getCatTables({
@@ -78,7 +84,8 @@ export const compareTeams = createServerFn({ method: 'POST' })
         throw notFound()
       }
 
-      const categoryData = compareSortLevelFunction(catTables)
+      const categoryData =
+        compareSortLevelFunction(catTables)
 
       const allData = await getAllGamesTables({
         teamArray,
@@ -99,12 +106,16 @@ export const compareTeams = createServerFn({ method: 'POST' })
 
       const allDbSeasons = await getAllDbSeasons(teamArray)
 
-      const firstDivisionSeasons = await getFirstDivisionSeasons(teamArray)
+      const firstDivisionSeasons =
+        await getFirstDivisionSeasons(teamArray)
 
-      const { firstGames, latestGames } = await getFirstAndLastGames(teamArray)
+      const { firstGames, latestGames } =
+        await getFirstAndLastGames(teamArray)
 
-      const latestHomeWin = await getLatestHomeWin(teamArray)
-      const latestAwayWin = await getLatestAwayWin(teamArray)
+      const latestHomeWin =
+        await getLatestHomeWin(teamArray)
+      const latestAwayWin =
+        await getLatestAwayWin(teamArray)
 
       const breadCrumb = `H2H:  ${compareTeams.map((team) => team.name).join(' - ')}`
       const title = `Bandyresultat - ${breadCrumb}`
@@ -143,7 +154,9 @@ export const compareTeams = createServerFn({ method: 'POST' })
         const title = `Bandyresultat - ${breadCrumb}`
         const description = ``
         const url = `https://bandyresultat.se/teams/compare?women=${data.women}`
-        const errorString = error.issues.map((issue) => issue.message).join(',')
+        const errorString = error.issues
+          .map((issue) => issue.message)
+          .join(',')
         return {
           message: errorString,
           breadCrumb,

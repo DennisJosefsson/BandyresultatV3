@@ -1,9 +1,11 @@
-import { generatedGameObjectArray } from '@/lib/types/game'
-import { zd } from '@/lib/utils/zod'
 import { revalidateLogic, useForm } from '@tanstack/react-form'
 import { useMutation } from '@tanstack/react-query'
 import { getRouteApi } from '@tanstack/react-router'
 import { toast } from 'sonner'
+
+import { generatedGameObjectArray } from '@/lib/types/game'
+import type { zd } from '@/lib/utils/zod'
+
 import { insertFromGeneratedSchedule } from '../-functions/GameFunctions/insertFromGeneratedSchedule'
 
 const route = getRouteApi(

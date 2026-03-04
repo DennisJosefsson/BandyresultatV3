@@ -1,12 +1,14 @@
-import Date from '@/components/Common/Date'
-import { Game, GameGroupBase } from '@/lib/types/game'
 import { getRouteApi } from '@tanstack/react-router'
 import { LinkIcon } from 'lucide-react'
-//import GamesListItem from './GamesListItem'
-import DataTable from './DataTable'
+
+import Date from '@/components/Common/Date'
+import type { Game, GameGroupBase } from '@/lib/types/game'
+
 import { columns } from './columns'
+// import GamesListItem from './GamesListItem'
+import DataTable from './DataTable'
 type GameListProps = {
-  group: GameGroupBase<Omit<Game, 'season'>[]>
+  group: GameGroupBase<Array<Omit<Game, 'season'>>>
   title: string
 }
 

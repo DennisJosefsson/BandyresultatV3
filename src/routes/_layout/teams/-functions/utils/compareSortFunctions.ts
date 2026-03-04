@@ -1,4 +1,4 @@
-import {
+import type {
   AllGamesTable,
   AllGamesTableItem,
   CompareCatTable,
@@ -24,7 +24,9 @@ const levelName: LevelName = {
   '5': 'Femte divisionen',
 }
 
-export const compareSortLevelFunction = (gamesArray: CompareCatTable) => {
+export const compareSortLevelFunction = (
+  gamesArray: CompareCatTable,
+) => {
   const sortLevels = gamesArray.reduce((levels, table) => {
     if (!levels[table.serie.level]) {
       levels[table.serie.level] = []
@@ -33,45 +35,62 @@ export const compareSortLevelFunction = (gamesArray: CompareCatTable) => {
     return levels
   }, {} as SortedCompareCategoryTables)
 
-  const sortedLevels = Object.keys(sortLevels).map((level) => {
-    return {
-      level,
-      categories: sortLevels[level],
-    }
-  })
-
-  const sortLevelsAndTables = sortedLevels.map((levelObject) => {
-    const sortCats = levelObject.categories.reduce((category, table) => {
-      if (!category[table.category]) {
-        category[table.category] = []
-      }
-      category[table.category].push(table)
-      return category
-    }, {} as SortedTables)
-
-    const sortedTables = Object.keys(sortCats).map((cat) => {
+  const sortedLevels = Object.keys(sortLevels).map(
+    (level) => {
       return {
-        category: cat,
-        tables: sortCats[cat],
+        level,
+        categories: sortLevels[level],
       }
-    })
-    return {
-      level: levelObject['level'],
-      levelName: levelName[levelObject['level']],
-      tables: sortedTables,
-    }
-  })
+    },
+  )
+
+  const sortLevelsAndTables = sortedLevels.map(
+    (levelObject) => {
+      const sortCats = levelObject.categories.reduce(
+        (category, table) => {
+          if (!category[table.category]) {
+            category[table.category] = []
+          }
+          category[table.category].push(table)
+          return category
+        },
+        {} as SortedTables,
+      )
+
+      const sortedTables = Object.keys(sortCats).map(
+        (cat) => {
+          return {
+            category: cat,
+            tables: sortCats[cat],
+          }
+        },
+      )
+      return {
+        level: levelObject['level'],
+        levelName: levelName[levelObject['level']],
+        tables: sortedTables,
+      }
+    },
+  )
 
   return sortLevelsAndTables.sort(
     (a, b) => parseInt(a.level) - parseInt(b.level),
   )
 }
 
-export const compareAllTeamData = (allDataArray: AllGamesTable) => {
-  const newArray: Omit<AllGamesTableItem, 'opponentId' | 'opponent'>[] = []
+export const compareAllTeamData = (
+  allDataArray: AllGamesTable,
+) => {
+  const newArray: Array<
+    Omit<AllGamesTableItem, 'opponentId' | 'opponent'>
+  > = []
 
   allDataArray.forEach((team) => {
-    if (!newArray.find((teamItem) => team.teamId === teamItem.teamId)) {
+    if (
+      !newArray.find(
+        (teamItem) => team.teamId === teamItem.teamId,
+      )
+    ) {
       newArray.push({
         teamId: team.teamId,
         team: {
@@ -97,9 +116,12 @@ export const compareAllTeamData = (allDataArray: AllGamesTable) => {
     newArray[teamIndex].totalWins += team.totalWins
     newArray[teamIndex].totalDraws += team.totalDraws
     newArray[teamIndex].totalLost += team.totalLost
-    newArray[teamIndex].totalGoalsScored += team.totalGoalsScored
-    newArray[teamIndex].totalGoalsConceded += team.totalGoalsConceded
-    newArray[teamIndex].totalGoalDifference += team.totalGoalDifference
+    newArray[teamIndex].totalGoalsScored +=
+      team.totalGoalsScored
+    newArray[teamIndex].totalGoalsConceded +=
+      team.totalGoalsConceded
+    newArray[teamIndex].totalGoalDifference +=
+      team.totalGoalDifference
     newArray[teamIndex].totalPoints += team.totalPoints
   })
 

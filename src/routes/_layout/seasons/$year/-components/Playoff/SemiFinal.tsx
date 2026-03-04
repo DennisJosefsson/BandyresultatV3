@@ -1,5 +1,6 @@
-import { semiColStarts } from '@/lib/utils/constants'
 import { getRouteApi } from '@tanstack/react-router'
+
+import { semiColStarts } from '@/lib/utils/constants'
 
 import DefaultComponent from './DefaultComponent'
 

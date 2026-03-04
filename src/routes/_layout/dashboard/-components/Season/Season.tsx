@@ -1,4 +1,5 @@
 import { getRouteApi } from '@tanstack/react-router'
+
 import Metadata from './Metadata'
 import PlayoffSeason from './PlayoffSeason'
 import Series from './Series'

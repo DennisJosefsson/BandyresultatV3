@@ -2,13 +2,13 @@ import Date from '@/components/Common/Date'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 type LatestWinsProps = {
-  latestWins: {
+  latestWins: Array<{
     gameId: number
     result: string | null
     homeName: string | null
     awayName: string | null
     date: string
-  }[]
+  }>
   title: string
 }
 

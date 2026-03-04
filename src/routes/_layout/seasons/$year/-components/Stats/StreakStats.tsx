@@ -1,4 +1,5 @@
-import { Stats } from '@/lib/types/stats'
+import type { Stats } from '@/lib/types/stats'
+
 import StreakStatsCard from './StreakStatsCard'
 
 type StreakStatsProps = {

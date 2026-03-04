@@ -1,5 +1,7 @@
-import { TabsContent } from '@/components/ui/tabs'
 import { getRouteApi } from '@tanstack/react-router'
+
+import { TabsContent } from '@/components/ui/tabs'
+
 import FirstGames from './CompareStatsSubComponents/FirstGames'
 import Golds from './CompareStatsSubComponents/Golds'
 import LatestGames from './CompareStatsSubComponents/LatestGames'
@@ -10,14 +12,22 @@ import Seasons from './CompareStatsSubComponents/Seasons'
 const route = getRouteApi('/_layout/teams/compare')
 
 const CompareStats = () => {
-  const { latestHomeWin, latestAwayWin } = route.useLoaderData()
+  const data = route.useLoaderData()
+
+  if (data.status === 400) return null
 
   return (
     <>
       <TabsContent value="games">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <LatestWins latestWins={latestHomeWin} title="Senaste hemmavinsten" />
-          <LatestWins latestWins={latestAwayWin} title="Senaste bortavinsten" />
+          <LatestWins
+            latestWins={data.latestHomeWin}
+            title="Senaste hemmavinsten"
+          />
+          <LatestWins
+            latestWins={data.latestAwayWin}
+            title="Senaste bortavinsten"
+          />
           <FirstGames />
           <LatestGames />
         </div>

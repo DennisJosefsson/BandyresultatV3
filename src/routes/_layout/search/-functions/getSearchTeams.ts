@@ -1,8 +1,9 @@
+import { createServerFn } from '@tanstack/react-start'
+import { and, asc, desc, eq, inArray, notInArray, sql } from 'drizzle-orm'
+
 import { db } from '@/db'
 import { games, seasons, series, teams } from '@/db/schema'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import { createServerFn } from '@tanstack/react-start'
-import { and, asc, desc, eq, inArray, notInArray, sql } from 'drizzle-orm'
 
 export const getSearchTeams = createServerFn({ method: 'GET' })
   .middleware([errorMiddleware])

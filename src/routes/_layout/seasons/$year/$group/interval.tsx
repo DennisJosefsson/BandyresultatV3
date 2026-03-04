@@ -1,12 +1,14 @@
-import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
-import { zd } from '@/lib/utils/zod'
 import {
   CatchBoundary,
-  createFileRoute,
   Navigate,
+  createFileRoute,
   notFound,
 } from '@tanstack/react-router'
 import { zodValidator } from '@tanstack/zod-adapter'
+
+import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
+import { zd } from '@/lib/utils/zod'
+
 import GroupListForErrorComponent from '../-components/GroupListForErrorComponent'
 import RangeData from '../-components/Interval/RangeData'
 import { getDevData } from '../-functions/getDevData'

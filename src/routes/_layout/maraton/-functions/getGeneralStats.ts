@@ -1,9 +1,11 @@
-import { catchError } from '@/lib/middlewares/errors/catchError'
-import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import { GeneratStats } from '@/lib/types/records'
-import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
 import { zodValidator } from '@tanstack/zod-adapter'
+
+import { catchError } from '@/lib/middlewares/errors/catchError'
+import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
+import type { GeneratStats } from '@/lib/types/records'
+import { zd } from '@/lib/utils/zod'
+
 import { getGeneralStatsData } from './getGeneralStatsData'
 
 type RecordStreakReturn =

@@ -1,9 +1,14 @@
-import { Card } from '@/components/ui/card'
-import { Map as MapCn, MapControls, MapRef } from '@/components/ui/map'
-
-import { calcBoundsFromCoordinates } from '@/routes/_layout/teams/$teamId/-functions/calcLongLatBounds'
 import { getRouteApi } from '@tanstack/react-router'
 import { useEffect, useRef, useState } from 'react'
+
+import { Card } from '@/components/ui/card'
+import type { MapRef } from '@/components/ui/map'
+import {
+  Map as MapCn,
+  MapControls,
+} from '@/components/ui/map'
+import { calcBoundsFromCoordinates } from '@/routes/_layout/teams/$teamId/-functions/calcLongLatBounds'
+
 import CountyListContainer from './CountyListContainer'
 import MapItem from './MapItem'
 
@@ -15,13 +20,15 @@ const route = getRouteApi('/_layout/teams/map')
 
 const Map = () => {
   const mapRef = useRef<MapRef>(null)
-  const [counties, setCounties] = useState<County[]>([])
+  const [counties, setCounties] = useState<Array<County>>(
+    [],
+  )
 
   const teams = route.useLoaderData()
 
   const countyArray = teams.map((team) => {
     const bounds = calcBoundsFromCoordinates(
-      team.teams.map((team) => [team.long, team.lat]),
+      team.teams.map((t) => [t.long, t.lat]),
     )
     return {
       county: team.county,
@@ -52,7 +59,12 @@ const Map = () => {
 
           <div>
             <Card className="xs:max-w-[360px] h-[400px] w-screen max-w-[280px] p-2 sm:h-160 sm:max-w-xl xl:max-w-4xl">
-              <MapCn ref={mapRef} center={[15, 62]} zoom={4} fadeDuration={0}>
+              <MapCn
+                ref={mapRef}
+                center={[15, 62]}
+                zoom={4}
+                fadeDuration={0}
+              >
                 {teams
                   .filter((team) =>
                     counties

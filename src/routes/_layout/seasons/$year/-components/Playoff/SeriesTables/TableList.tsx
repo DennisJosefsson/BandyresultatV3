@@ -1,4 +1,5 @@
-import { PlayoffSeriesTable } from '@/lib/types/table'
+import type { PlayoffSeriesTable } from '@/lib/types/table'
+
 import { columns } from './columns'
 import DataTable from './DataTable'
 

@@ -1,5 +1,11 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { getRouteApi } from '@tanstack/react-router'
+
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 const route = getRouteApi('/_layout/teams/compare')
 
 const Seasons = () => {
@@ -8,8 +14,8 @@ const Seasons = () => {
       return state.women
     },
   })
-  const { allDbSeasons, firstDivisionSeasons, firstDivisionSeasonsSince1931 } =
-    route.useLoaderData()
+  const data = route.useLoaderData()
+  if (data.status === 400) return null
   return (
     <>
       <Card className="mt-2 w-full">
@@ -20,7 +26,7 @@ const Seasons = () => {
         </CardHeader>
         <CardContent className="w-full p-1 pt-0 text-xs xl:text-sm 2xl:text-base">
           <div className="mb-2">
-            {allDbSeasons.map((team) => {
+            {data.allDbSeasons.map((team) => {
               return (
                 <div
                   key={team.teamId}
@@ -28,7 +34,9 @@ const Seasons = () => {
                 >
                   <div className="flex flex-row justify-between">
                     <div>{team.team.casualName}</div>
-                    <div className="text-right">{team.seasons}</div>
+                    <div className="text-right">
+                      {team.seasons}
+                    </div>
                   </div>
                 </div>
               )
@@ -44,7 +52,7 @@ const Seasons = () => {
         </CardHeader>
         <CardContent className="w-full p-1 pt-0 text-xs xl:text-sm 2xl:text-base">
           <div className="mb-2">
-            {firstDivisionSeasons.map((team) => {
+            {data.firstDivisionSeasons.map((team) => {
               return (
                 <div
                   key={team.teamId}
@@ -52,7 +60,9 @@ const Seasons = () => {
                 >
                   <div className="flex flex-row justify-between">
                     <div>{team.team.casualName}</div>
-                    <div className="text-right">{team.seasons}</div>
+                    <div className="text-right">
+                      {team.seasons}
+                    </div>
                   </div>
                 </div>
               )
@@ -70,19 +80,23 @@ const Seasons = () => {
             </CardHeader>
             <CardContent className="w-full p-1 pt-0 text-[10px] sm:text-sm">
               <div className="mb-2">
-                {firstDivisionSeasonsSince1931.map((team) => {
-                  return (
-                    <div
-                      key={team.teamId}
-                      className="bg-muted-foreground/20 my-2 flex w-full flex-col rounded px-3 py-1"
-                    >
-                      <div className="flex flex-row justify-between">
-                        <div>{team.team.casualName}</div>
-                        <div className="text-right">{team.seasons}</div>
+                {data.firstDivisionSeasonsSince1931.map(
+                  (team) => {
+                    return (
+                      <div
+                        key={team.teamId}
+                        className="bg-muted-foreground/20 my-2 flex w-full flex-col rounded px-3 py-1"
+                      >
+                        <div className="flex flex-row justify-between">
+                          <div>{team.team.casualName}</div>
+                          <div className="text-right">
+                            {team.seasons}
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  )
-                })}
+                    )
+                  },
+                )}
               </div>
             </CardContent>
           </Card>

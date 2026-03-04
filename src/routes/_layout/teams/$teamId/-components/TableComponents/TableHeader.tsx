@@ -30,19 +30,19 @@ const TeamTableHeader = () => {
         </TableHead>
         <TableHead
           scope="col"
-          className="hidden px-1 py-1 text-right xs:table-cell text-[10px] md:w-12 md:py-2 lg:text-sm"
+          className="xs:table-cell hidden px-1 py-1 text-right text-[10px] md:w-12 md:py-2 lg:text-sm"
         >
           GM
         </TableHead>
         <TableHead
           scope="col"
-          className="hidden px-1 py-1 text-right xs:table-cell text-[10px] md:w-12 md:py-2 lg:text-sm"
+          className="xs:table-cell hidden px-1 py-1 text-right text-[10px] md:w-12 md:py-2 lg:text-sm"
         >
           IM
         </TableHead>
         <TableHead
           scope="col"
-          className="hidden px-1 py-1 text-right xs:table-cell text-[10px] md:w-12 md:py-2 lg:text-sm"
+          className="xs:table-cell hidden px-1 py-1 text-right text-[10px] md:w-12 md:py-2 lg:text-sm"
         >
           MS
         </TableHead>

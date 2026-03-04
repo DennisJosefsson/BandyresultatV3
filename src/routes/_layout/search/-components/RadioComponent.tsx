@@ -1,14 +1,24 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-
-import { useNavigate, useSearch } from '@tanstack/react-router'
+import {
+  useNavigate,
+  useSearch,
+} from '@tanstack/react-router'
 import { useState } from 'react'
 
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { SearchParamsFields } from '@/lib/types/search'
+import {
+  RadioGroup,
+  RadioGroupItem,
+} from '@/components/ui/radio-group'
+import type { SearchParamsFields } from '@/lib/types/search'
 
 type RadioComponentProps = {
-  array: { value: string; label: string }[]
+  array: Array<{ value: string; label: string }>
   field: Extract<
     SearchParamsFields,
     'homeGame' | 'selectedGender' | 'gameResult'
@@ -16,14 +26,17 @@ type RadioComponentProps = {
   label: string
 }
 
-const RadioComponent = ({ array, field, label }: RadioComponentProps) => {
+const RadioComponent = ({
+  array,
+  field,
+  label,
+}: RadioComponentProps) => {
   const searchField = useSearch({
     from: '/_layout/search',
     select: (search) => search[field],
   })
-  const [selectedRadio, setSelectedRadio] = useState<string>(
-    searchField ?? 'all',
-  )
+  const [selectedRadio, setSelectedRadio] =
+    useState<string>(searchField ?? 'all')
   const navigate = useNavigate({ from: '/search' })
 
   const handleOnChange = (value: string) => {
@@ -54,8 +67,13 @@ const RadioComponent = ({ array, field, label }: RadioComponentProps) => {
                     key={cat.value}
                     className="flex items-center space-y-0 space-x-3"
                   >
-                    <Label htmlFor={cat.value}>{cat.label}</Label>
-                    <RadioGroupItem value={cat.value} id={cat.value} />
+                    <Label htmlFor={cat.value}>
+                      {cat.label}
+                    </Label>
+                    <RadioGroupItem
+                      value={cat.value}
+                      id={cat.value}
+                    />
                   </div>
                 )
               })}

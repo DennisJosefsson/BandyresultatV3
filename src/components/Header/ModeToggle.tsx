@@ -1,3 +1,6 @@
+import { Moon, Sun } from 'lucide-react'
+import { useMediaQuery } from 'usehooks-ts'
+
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -6,8 +9,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { useTheme } from '@/lib/contexts/themeContext'
-import { Moon, Sun } from 'lucide-react'
-import { useMediaQuery } from 'usehooks-ts'
 
 const ModeToggle = () => {
   const { setTheme } = useTheme()

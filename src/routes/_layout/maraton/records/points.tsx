@@ -1,5 +1,7 @@
-import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
+
+import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
+
 import Points from '../-components/Records/PointsGoalsEtc/Points'
 import { getPointRecords } from '../-functions/getPointRecords'
 

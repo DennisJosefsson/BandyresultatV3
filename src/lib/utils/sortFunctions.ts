@@ -1,20 +1,20 @@
-import { Game } from '../types/game'
-import { Base, TeamTable } from '../types/table'
+import type { Game } from '../types/game'
+import type { Base, TeamTable } from '../types/table'
 import { sortOrder } from './constants'
 
 type SeriesData = {
   name: string
   group: string
   comment: string | null
-  serieStructure: number[] | null
+  serieStructure: Array<number> | null
   level: number
 }
 
-type SortedTableGroups = Record<string, TeamTable[]>
+type SortedTableGroups = Record<string, Array<TeamTable>>
 
 export const tableSortFunction = (
-  tableArray: TeamTable[],
-  seriesData: SeriesData[],
+  tableArray: Array<TeamTable>,
+  seriesData: Array<SeriesData>,
 ) => {
   const groupArray = tableArray.reduce((groups, table) => {
     if (!groups[table.group]) {
@@ -59,9 +59,9 @@ const defaultTable = {
 }
 
 export const leagueTableParser = (
-  teamArray: Base[],
-  tabell: TeamTable[],
-): TeamTable[] => {
+  teamArray: Array<Base>,
+  tabell: Array<TeamTable>,
+): Array<TeamTable> => {
   teamArray.forEach((teamItem) => {
     const tableItemExist = tabell.find(
       (table) =>
@@ -82,16 +82,16 @@ export const leagueTableParser = (
 }
 
 type SortedGameGroups = {
-  [key: string]: Game[]
+  [key: string]: Array<Game>
 }
 
 type SortedDates = {
-  [key: string]: Game[]
+  [key: string]: Array<Game>
 }
 
 export function gameSortFunction(
-  gamesArray: Game[],
-  seriesData: SeriesData[],
+  gamesArray: Array<Game>,
+  seriesData: Array<SeriesData>,
   played = false,
 ) {
   const sortGroups = gamesArray.reduce((groups, game) => {

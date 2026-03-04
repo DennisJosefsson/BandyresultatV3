@@ -1,10 +1,11 @@
-import { Serie } from '@/lib/types/serie'
-import { ReturnDevDataTableItem } from '@/lib/types/table'
-import DataTable from './DataTable'
+import type { Serie } from '@/lib/types/serie'
+import type { ReturnDevDataTableItem } from '@/lib/types/table'
+
 import { columns } from './columns'
+import DataTable from './DataTable'
 
 type IntervalTableProps = {
-  table: ReturnDevDataTableItem[]
+  table: Array<ReturnDevDataTableItem>
 
   serie: Serie
 }

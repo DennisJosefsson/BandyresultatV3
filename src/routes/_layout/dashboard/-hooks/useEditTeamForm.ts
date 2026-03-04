@@ -1,9 +1,14 @@
-import { editTeamObject } from '@/lib/types/team'
-import { zd } from '@/lib/utils/zod'
 import { useForm } from '@tanstack/react-form'
 import { useMutation } from '@tanstack/react-query'
-import { getRouteApi, useRouter } from '@tanstack/react-router'
+import {
+  getRouteApi,
+  useRouter,
+} from '@tanstack/react-router'
 import { toast } from 'sonner'
+
+import { editTeamObject } from '@/lib/types/team'
+import type { zd } from '@/lib/utils/zod'
+
 import { editTeam } from '../-functions/TeamFunctions/editTeam'
 
 type Data = Awaited<ReturnType<typeof editTeam>>
@@ -11,7 +16,9 @@ type Data = Awaited<ReturnType<typeof editTeam>>
 const route = getRouteApi('/_layout/dashboard/team/$teamId')
 
 export const useEditTeamForm = () => {
-  const team = route.useLoaderData({ select: (s) => s.team.team })
+  const team = route.useLoaderData({
+    select: (s) => s.team.team,
+  })
   const router = useRouter()
 
   const mutation = useMutation({
@@ -38,7 +45,8 @@ export const useEditTeamForm = () => {
       onChange: editTeamObject,
       onSubmit: editTeamObject,
     },
-    onSubmit: ({ value }) => mutation.mutateAsync({ data: value }),
+    onSubmit: ({ value }) =>
+      mutation.mutateAsync({ data: value }),
   })
 
   const onMutationSuccess = (data: Data) => {
@@ -47,7 +55,8 @@ export const useEditTeamForm = () => {
     } else {
       toast.success(data.message)
       router.invalidate({
-        filter: (route) => route.routeId === '/_layout/dashboard/teams/',
+        filter: (r) =>
+          r.routeId === '/_layout/dashboard/teams/',
       })
     }
   }

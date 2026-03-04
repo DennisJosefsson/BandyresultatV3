@@ -1,5 +1,7 @@
-import Date from '@/components/Common/Date'
 import { getRouteApi } from '@tanstack/react-router'
+
+import Date from '@/components/Common/Date'
+
 import StreakCard from './StreakCard'
 
 const route = getRouteApi('/_layout/maraton/records/streaks')

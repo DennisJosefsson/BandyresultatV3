@@ -1,15 +1,15 @@
-import { Game } from '@/lib/types/game'
-import { Serie } from '@/lib/types/serie'
+import type { Game } from '@/lib/types/game'
+import type { Serie } from '@/lib/types/serie'
 
 type SortedDates = {
-  [key: string]: Omit<Game, 'season'>[]
+  [key: string]: Array<Omit<Game, 'season'>>
 }
 
 export const sortGames = ({
   gamesArray,
   serie,
 }: {
-  gamesArray: Omit<Game, 'season'>[]
+  gamesArray: Array<Omit<Game, 'season'>>
   serie: Serie
 }) => {
   const playedGames = gamesArray.filter((game) => game.played === true)
@@ -30,7 +30,7 @@ const gameSortFunction = ({
   serie,
   played = false,
 }: {
-  gamesArray: Omit<Game, 'season'>[]
+  gamesArray: Array<Omit<Game, 'season'>>
   serie: Serie
   played?: boolean
 }) => {

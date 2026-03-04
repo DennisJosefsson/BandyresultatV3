@@ -1,6 +1,6 @@
 import { zd } from '../utils/zod'
-import { TeamBase } from './team'
-import { Unpacked } from './unpacked'
+import type { TeamBase } from './team'
+import type { Unpacked } from './unpacked'
 
 export const clientSearchParams = zd.object({
   categoryArray: zd

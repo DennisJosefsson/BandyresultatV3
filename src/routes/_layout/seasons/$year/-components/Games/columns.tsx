@@ -1,8 +1,8 @@
-import { ColumnDef } from '@tanstack/react-table'
+import type { ColumnDef } from '@tanstack/react-table'
 
-import { Game } from '@/lib/types/game'
+import type { Game } from '@/lib/types/game'
 
-export const columns: ColumnDef<Omit<Game, 'season'>>[] = [
+export const columns: Array<ColumnDef<Omit<Game, 'season'>>> = [
   {
     accessorKey: 'home.casualName',
 

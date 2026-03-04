@@ -1,7 +1,8 @@
-import { db } from '@/db'
-import { games, teamgames, teams } from '@/db/schema'
 import { and, eq, max, min } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
+
+import { db } from '@/db'
+import { games, teamgames, teams } from '@/db/schema'
 
 const home = alias(teams, 'home')
 const away = alias(teams, 'away')

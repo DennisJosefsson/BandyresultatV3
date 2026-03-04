@@ -1,3 +1,5 @@
+import { desc, inArray } from 'drizzle-orm'
+
 import { db } from '@/db'
 import {
   metadata,
@@ -6,7 +8,6 @@ import {
   series,
   teamseasons,
 } from '@/db/schema'
-import { desc, inArray } from 'drizzle-orm'
 
 export async function getNewSeasonData() {
   const seasonInfo = await db
@@ -255,7 +256,7 @@ export async function getNewSeasonData() {
 
   await db.insert(series).values(newSeriesArray)
 
-  const playoffSeasonArray: (typeof playoffseason.$inferInsert)[] = [
+  const playoffSeasonArray: Array<typeof playoffseason.$inferInsert> = [
     {
       seasonId: menSeasonId,
       women: false,

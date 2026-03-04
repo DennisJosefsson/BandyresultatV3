@@ -1,3 +1,5 @@
+import { getRouteApi } from '@tanstack/react-router'
+
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
@@ -14,7 +16,7 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from '@/components/ui/input-group'
-import { getRouteApi } from '@tanstack/react-router'
+
 import { useEditGameForm } from '../../../-hooks/useEditGameForm'
 
 const route = getRouteApi(

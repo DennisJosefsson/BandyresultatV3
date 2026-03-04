@@ -1,13 +1,14 @@
+import { useMediaQuery } from 'usehooks-ts'
+
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { useMediaQuery } from 'usehooks-ts'
 
 const SingleTeamSkeleton = () => {
   const matches = useMediaQuery('(min-width: 430px)')
   return (
-    <div className="mt-2 flex min-h-screen flex-col font-inter text-foreground w-full">
+    <div className="font-inter text-foreground mt-2 flex min-h-screen w-full flex-col">
       <CardHeader className="p-1 md:p-6">
         <div className="flex flex-row items-center justify-between">
           <CardTitle>
@@ -38,7 +39,7 @@ const SingleTeamSkeleton = () => {
             </TabsTrigger>
           </TabsList>
           <TabsContent value="tables">
-            <Card className="mb-2 sm:mb-4 md:mb-6 p-1 md:p-6">
+            <Card className="mb-2 p-1 sm:mb-4 md:mb-6 md:p-6">
               <CardHeader className="p-1 md:p-6">
                 <CardTitle className="text-[10px] md:text-sm">
                   <Skeleton className="h-6 w-16" />
@@ -46,11 +47,11 @@ const SingleTeamSkeleton = () => {
               </CardHeader>
               <CardContent className="p-1 md:p-6">
                 {Array.from({ length: 2 }).map((_i, index) => {
-                  return <Skeleton key={index} className="h-9 w-full mb-1" />
+                  return <Skeleton key={index} className="mb-1 h-9 w-full" />
                 })}
               </CardContent>
             </Card>
-            <Card className="mb-2 sm:mb-4 md:mb-6 p-1 md:p-6">
+            <Card className="mb-2 p-1 sm:mb-4 md:mb-6 md:p-6">
               <CardHeader className="p-1 md:p-6">
                 <CardTitle className="text-[10px] md:text-sm">
                   <Skeleton className="h-6 w-16" />
@@ -58,7 +59,7 @@ const SingleTeamSkeleton = () => {
               </CardHeader>
               <CardContent className="p-1 md:p-6">
                 {Array.from({ length: 2 }).map((_i, index) => {
-                  return <Skeleton key={index} className="h-9 w-full mb-1" />
+                  return <Skeleton key={index} className="mb-1 h-9 w-full" />
                 })}
               </CardContent>
             </Card>

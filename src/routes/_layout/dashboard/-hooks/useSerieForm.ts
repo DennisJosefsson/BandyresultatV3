@@ -1,19 +1,32 @@
-import { newSeriesObject } from '@/lib/types/serie'
-import { zd } from '@/lib/utils/zod'
 import { useForm } from '@tanstack/react-form'
 import { useMutation } from '@tanstack/react-query'
-import { useNavigate, useRouter, useSearch } from '@tanstack/react-router'
+import {
+  useNavigate,
+  useRouter,
+  useSearch,
+} from '@tanstack/react-router'
 import { toast } from 'sonner'
+
+import { newSeriesObject } from '@/lib/types/serie'
+import type { zd } from '@/lib/utils/zod'
+
 import { newSerieInput } from '../-functions/SerieFunctions/newSerie'
 
 type Data = Awaited<ReturnType<typeof newSerieInput>>
 
-export const useNewSerieForm = ({ seasonId }: { seasonId: number }) => {
+export const useNewSerieForm = ({
+  seasonId,
+}: {
+  seasonId: number
+}) => {
   const router = useRouter()
   const navigate = useNavigate({
     from: '/dashboard/season/$seasonId/info/newSerie',
   })
-  const women = useSearch({ from: '__root__', select: (s) => s.women })
+  const women = useSearch({
+    from: '__root__',
+    select: (s) => s.women,
+  })
   const mutation = useMutation({
     mutationFn: newSerieInput,
     onSuccess: (data) => onMutationSuccess(data),
@@ -34,9 +47,13 @@ export const useNewSerieForm = ({ seasonId }: { seasonId: number }) => {
     hasStatic: false,
   }
   const form = useForm({
-    validators: { onBlur: newSeriesObject, onSubmit: newSeriesObject },
+    validators: {
+      onBlur: newSeriesObject,
+      onSubmit: newSeriesObject,
+    },
     defaultValues: { ...defaultValues },
-    onSubmit: ({ value }) => mutation.mutateAsync({ data: value }),
+    onSubmit: ({ value }) =>
+      mutation.mutateAsync({ data: value }),
   })
 
   const onMutationSuccess = (data: Data) => {
@@ -46,7 +63,8 @@ export const useNewSerieForm = ({ seasonId }: { seasonId: number }) => {
       toast.success(data.message)
       router.invalidate({
         filter: (route) =>
-          route.routeId === '/_layout/dashboard/season/$seasonId',
+          route.routeId ===
+          '/_layout/dashboard/season/$seasonId',
       })
       navigate({
         to: '/dashboard/season/$seasonId/info/$serieId/edit',

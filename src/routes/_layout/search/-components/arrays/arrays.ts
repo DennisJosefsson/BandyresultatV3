@@ -1,14 +1,14 @@
-import { Categories, OperatorValues } from '@/lib/types/search'
+import type { Categories, OperatorValues } from '@/lib/types/search'
 
-export const orderSelection: { value: OperatorValues; label: string }[] = [
+export const orderSelection: Array<{ value: OperatorValues; label: string }> = [
   { value: 'asc', label: 'Stigande' },
   { value: 'desc', label: 'Fallande' },
 ]
 
-export const orderVariableSelection: {
+export const orderVariableSelection: Array<{
   value: OperatorValues
   label: string
-}[] = [
+}> = [
   { value: 'date', label: 'Datum' },
   { value: 'totalGoals', label: 'Antal mål' },
   { value: 'goalDifference', label: 'Målskillnad' },
@@ -35,13 +35,13 @@ export const gameResultArray = [
   { value: 'draw', label: 'Oavgjort' },
 ]
 
-export const operatorSelection: { value: OperatorValues; label: string }[] = [
+export const operatorSelection: Array<{ value: OperatorValues; label: string }> = [
   { value: 'gte', label: 'Lika eller större än' },
   { value: 'lte', label: 'Lika eller mindre än' },
   { value: 'eq', label: 'Lika' },
 ]
 
-export const categoryArrayValues: { category: Categories; name: string }[] = [
+export const categoryArrayValues: Array<{ category: Categories; name: string }> = [
   { category: 'regular', name: 'Grundserie' },
   { category: 'qualification', name: 'Kvalserie' },
   { category: 'playoffseries', name: 'Slutspelsserie' },

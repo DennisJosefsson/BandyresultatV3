@@ -1,5 +1,7 @@
-import Loading from '@/components/Loading/Loading'
 import { createFileRoute } from '@tanstack/react-router'
+
+import Loading from '@/components/Loading/Loading'
+
 import NewSerie from '../../../-components/Forms/SerieForms/NewSerie'
 import { getSeriesForSeriesForm } from '../../../-functions/SerieFunctions/getSeries'
 

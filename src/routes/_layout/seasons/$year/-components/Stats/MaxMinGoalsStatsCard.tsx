@@ -1,8 +1,8 @@
 import Date from '@/components/Common/Date'
-import { MaxMinGoals } from '@/lib/types/stats'
+import type { MaxMinGoals } from '@/lib/types/stats'
 
 type MaxMinGoalsStatsCardProps = {
-  maxMinGoals: MaxMinGoals[]
+  maxMinGoals: Array<MaxMinGoals>
   title: string
 }
 

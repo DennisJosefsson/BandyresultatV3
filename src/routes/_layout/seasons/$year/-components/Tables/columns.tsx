@@ -1,8 +1,8 @@
-import { Button } from '@/components/ui/button'
-import { ColumnDef } from '@tanstack/react-table'
-
-import { TeamTable } from '@/lib/types/table'
+import type { ColumnDef } from '@tanstack/react-table'
 import { ArrowDownIcon, ArrowUpIcon, ChevronsUpDownIcon } from 'lucide-react'
+
+import { Button } from '@/components/ui/button'
+import type { TeamTable } from '@/lib/types/table'
 
 export const showColumns = {
   totalDraws: true,
@@ -16,9 +16,9 @@ export const hideColumns = {
   totalGoalsConceded: false,
 }
 
-export const columns: ColumnDef<
+export const columns: Array<ColumnDef<
   Omit<TeamTable, 'women' | 'group' | 'season'>
->[] = [
+>> = [
   {
     accessorKey: 'team.casualName',
     header: () => (

@@ -1,7 +1,4 @@
-import { db } from '@/db'
-import { games, playoffseason, series, teamgames, teams } from '@/db/schema'
-import { PlayoffTable } from '@/lib/types/table'
-import { sortOrder } from '@/lib/utils/constants'
+import type { SQL } from 'drizzle-orm'
 import {
   and,
   count,
@@ -9,41 +6,68 @@ import {
   eq,
   getTableColumns,
   inArray,
-  SQL,
   sql,
   sum,
 } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
 
-type FunctionProps = { playoffSeason: typeof playoffseason.$inferSelect }
+import { db } from '@/db'
+import type { playoffseason } from '@/db/schema'
+import {
+  games,
+  series,
+  teamgames,
+  teams,
+} from '@/db/schema'
+import type { PlayoffTable } from '@/lib/types/table'
+import { sortOrder } from '@/lib/utils/constants'
 
-export const getPlayoffTableData = async ({ playoffSeason }: FunctionProps) => {
+type FunctionProps = {
+  playoffSeason: typeof playoffseason.$inferSelect
+}
+
+export const getPlayoffTableData = async ({
+  playoffSeason,
+}: FunctionProps) => {
   const playoffCte = db.$with('playoff_cte').as(
     db
       .select({
         teamId: teamgames.teamId,
         group: teamgames.group,
         category: teamgames.category,
-        totalGames: count(teamgames.teamGameId).as('total_games'),
-        totalPoints: sum(teamgames.points).mapWith(Number).as('total_points'),
+        totalGames: count(teamgames.teamGameId).as(
+          'total_games',
+        ),
+        totalPoints: sum(teamgames.points)
+          .mapWith(Number)
+          .as('total_points'),
         totalGoalsScored: sum(teamgames.goalsScored)
           .mapWith(Number)
-          .as('total_goals_scored') as unknown as SQL<number>,
+          .as(
+            'total_goals_scored',
+          ) as unknown as SQL<number>,
         totalGoalsConceded: sum(teamgames.goalsConceded)
           .mapWith(Number)
-          .as('total_goals_conceded') as unknown as SQL<number>,
+          .as(
+            'total_goals_conceded',
+          ) as unknown as SQL<number>,
         totalGoalDifference: sum(teamgames.goalDifference)
           .mapWith(Number)
-          .as('total_goal_difference') as unknown as SQL<number>,
-        totalWins: sql<number>`cast(count(*) filter (where win) as int)`.as(
-          'totalWins',
-        ),
-        totalDraws: sql<number>`cast(count(*) filter (where draw) as int)`.as(
-          'totalDraws',
-        ),
-        totalLost: sql<number>`cast(count(*) filter (where lost) as int)`.as(
-          'totalLost',
-        ),
+          .as(
+            'total_goal_difference',
+          ) as unknown as SQL<number>,
+        totalWins:
+          sql<number>`cast(count(*) filter (where win) as int)`.as(
+            'totalWins',
+          ),
+        totalDraws:
+          sql<number>`cast(count(*) filter (where draw) as int)`.as(
+            'totalDraws',
+          ),
+        totalLost:
+          sql<number>`cast(count(*) filter (where lost) as int)`.as(
+            'totalLost',
+          ),
         awayGoals:
           sql<number>`sum(case when teamgames.home_game = false then teamgames.goals_scored else null end)`
             .mapWith(Number)
@@ -53,10 +77,18 @@ export const getPlayoffTableData = async ({ playoffSeason }: FunctionProps) => {
       .where(
         and(
           eq(teamgames.seasonId, playoffSeason.seasonId),
-          inArray(teamgames.category, ['eight', 'quarter', 'semi']),
+          inArray(teamgames.category, [
+            'eight',
+            'quarter',
+            'semi',
+          ]),
         ),
       )
-      .groupBy(teamgames.group, teamgames.teamId, teamgames.category),
+      .groupBy(
+        teamgames.group,
+        teamgames.teamId,
+        teamgames.category,
+      ),
   )
 
   const table = await db
@@ -127,7 +159,10 @@ export const getPlayoffTableData = async ({ playoffSeason }: FunctionProps) => {
     .leftJoin(home, eq(games.homeTeamId, home.teamId))
     .leftJoin(away, eq(games.awayTeamId, away.teamId))
     .where(
-      and(eq(games.seasonId, playoffSeason.seasonId), eq(games.group, 'final')),
+      and(
+        eq(games.seasonId, playoffSeason.seasonId),
+        eq(games.group, 'final'),
+      ),
     )
     .orderBy(desc(games.date))
 
@@ -147,25 +182,31 @@ export const getPlayoffTableData = async ({ playoffSeason }: FunctionProps) => {
 
   return {
     finalGames: finalGames,
-    semiTables: semiTables.length > 0 ? semiTables : undefined,
-    quarterTables: quarterTables.length > 0 ? quarterTables : undefined,
-    eightTables: eightTables.length > 0 ? eightTables : undefined,
+    semiTables:
+      semiTables.length > 0 ? semiTables : undefined,
+    quarterTables:
+      quarterTables.length > 0 ? quarterTables : undefined,
+    eightTables:
+      eightTables.length > 0 ? eightTables : undefined,
     playoffSeriesTables: playoffSeriesTable,
   }
 }
 
 type SortPlayoffTables = {
-  tableArray: PlayoffTable[]
+  tableArray: Array<PlayoffTable>
   uefaSorting: boolean | null
 }
 
 type SortedTableGroups = {
-  [key: string]: PlayoffTable[]
+  [key: string]: Array<PlayoffTable>
 }
 
 const eightGroupIds = ['E1', 'E2', 'E3', 'E4']
 
-function sortPlayoffTables({ tableArray, uefaSorting }: SortPlayoffTables) {
+function sortPlayoffTables({
+  tableArray,
+  uefaSorting,
+}: SortPlayoffTables) {
   const groupArray = tableArray.reduce((groups, table) => {
     if (!groups[table.group]) {
       groups[table.group] = []
@@ -174,30 +215,40 @@ function sortPlayoffTables({ tableArray, uefaSorting }: SortPlayoffTables) {
     return groups
   }, {} as SortedTableGroups)
 
-  const sortedTables = Object.keys(groupArray).map((group) => {
-    return {
-      group,
-      tables: groupArray[group],
-    }
-  })
+  const sortedTables = Object.keys(groupArray).map(
+    (group) => {
+      return {
+        group,
+        tables: groupArray[group],
+      }
+    },
+  )
 
   return sortedTables
     .sort((a, b) => {
-      if (sortOrder.indexOf(a.group) > sortOrder.indexOf(b.group)) {
+      if (
+        sortOrder.indexOf(a.group) >
+        sortOrder.indexOf(b.group)
+      ) {
         return 1
-      } else if (sortOrder.indexOf(a.group) < sortOrder.indexOf(b.group)) {
+      } else if (
+        sortOrder.indexOf(a.group) <
+        sortOrder.indexOf(b.group)
+      ) {
         return -1
       } else {
         return 0
       }
     })
     .map((grp) => {
-      const sortedTables =
+      const sortTables =
         eightGroupIds.includes(grp.group) && uefaSorting
           ? grp.tables.sort((a, b) => {
               if (a.totalPoints === b.totalPoints) {
                 if (a.awayGoals === b.awayGoals) {
-                  return b.totalGoalsScored - a.totalGoalsScored
+                  return (
+                    b.totalGoalsScored - a.totalGoalsScored
+                  )
                 }
                 return b.awayGoals - a.awayGoals
               }
@@ -205,20 +256,28 @@ function sortPlayoffTables({ tableArray, uefaSorting }: SortPlayoffTables) {
             })
           : grp.tables.sort((a, b) => {
               if (a.totalPoints === b.totalPoints) {
-                if (b.totalGoalDifference === a.totalGoalDifference) {
-                  return b.totalGoalsScored - a.totalGoalsScored
+                if (
+                  b.totalGoalDifference ===
+                  a.totalGoalDifference
+                ) {
+                  return (
+                    b.totalGoalsScored - a.totalGoalsScored
+                  )
                 }
-                return b.totalGoalDifference - a.totalGoalDifference
+                return (
+                  b.totalGoalDifference -
+                  a.totalGoalDifference
+                )
               }
               return b.totalPoints - a.totalPoints
             })
 
       return {
         group: grp.group,
-        result: `${sortedTables[0].totalWins} - ${sortedTables[1].totalWins}`,
-        homeTeam: sortedTables[0].team,
-        awayTeam: sortedTables[1].team,
-        tables: sortedTables,
+        result: `${sortTables[0].totalWins} - ${sortTables[1].totalWins}`,
+        homeTeam: sortTables[0].team,
+        awayTeam: sortTables[1].team,
+        tables: sortTables,
       }
     })
 }
@@ -230,26 +289,39 @@ async function getPlayoffAsSeriesTable(seasonId: number) {
         teamId: teamgames.teamId,
         group: teamgames.group,
         category: teamgames.category,
-        totalGames: count(teamgames.teamGameId).as('total_games'),
-        totalPoints: sum(teamgames.points).mapWith(Number).as('total_points'),
+        totalGames: count(teamgames.teamGameId).as(
+          'total_games',
+        ),
+        totalPoints: sum(teamgames.points)
+          .mapWith(Number)
+          .as('total_points'),
         totalGoalsScored: sum(teamgames.goalsScored)
           .mapWith(Number)
-          .as('total_goals_scored') as unknown as SQL<number>,
+          .as(
+            'total_goals_scored',
+          ) as unknown as SQL<number>,
         totalGoalsConceded: sum(teamgames.goalsConceded)
           .mapWith(Number)
-          .as('total_goals_conceded') as unknown as SQL<number>,
+          .as(
+            'total_goals_conceded',
+          ) as unknown as SQL<number>,
         totalGoalDifference: sum(teamgames.goalDifference)
           .mapWith(Number)
-          .as('total_goal_difference') as unknown as SQL<number>,
-        totalWins: sql<number>`cast(count(*) filter (where win) as int)`.as(
-          'totalWins',
-        ),
-        totalDraws: sql<number>`cast(count(*) filter (where draw) as int)`.as(
-          'totalDraws',
-        ),
-        totalLost: sql<number>`cast(count(*) filter (where lost) as int)`.as(
-          'totalLost',
-        ),
+          .as(
+            'total_goal_difference',
+          ) as unknown as SQL<number>,
+        totalWins:
+          sql<number>`cast(count(*) filter (where win) as int)`.as(
+            'totalWins',
+          ),
+        totalDraws:
+          sql<number>`cast(count(*) filter (where draw) as int)`.as(
+            'totalDraws',
+          ),
+        totalLost:
+          sql<number>`cast(count(*) filter (where lost) as int)`.as(
+            'totalLost',
+          ),
         awayGoals:
           sql<number>`sum(case when teamgames.home_game = false then teamgames.goals_scored else null end)`
             .mapWith(Number)
@@ -262,7 +334,11 @@ async function getPlayoffAsSeriesTable(seasonId: number) {
           inArray(teamgames.category, ['playoffseries']),
         ),
       )
-      .groupBy(teamgames.group, teamgames.teamId, teamgames.category),
+      .groupBy(
+        teamgames.group,
+        teamgames.teamId,
+        teamgames.category,
+      ),
   )
 
   const table = await db
@@ -299,14 +375,19 @@ async function getPlayoffAsSeriesTable(seasonId: number) {
     .select()
     .from(series)
     .where(
-      and(eq(series.seasonId, seasonId), eq(series.category, 'playoffseries')),
+      and(
+        eq(series.seasonId, seasonId),
+        eq(series.category, 'playoffseries'),
+      ),
     )
 
   const sortedTables = sortPlayoffTables({
     tableArray: table,
     uefaSorting: false,
   }).map((group) => {
-    const seriesObject = seriesData.find((serie) => serie.group === group.group)
+    const seriesObject = seriesData.find(
+      (serie) => serie.group === group.group,
+    )
     if (!seriesObject) {
       throw new Error('Serieobjekt saknas.')
     }

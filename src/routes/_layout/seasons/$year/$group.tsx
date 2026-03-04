@@ -1,8 +1,9 @@
 import {
-  createFileRoute,
   Outlet,
+  createFileRoute,
   useChildMatches,
 } from '@tanstack/react-router'
+
 import { validateGroup } from './-functions/validateGroup'
 
 export const Route = createFileRoute('/_layout/seasons/$year/$group')({

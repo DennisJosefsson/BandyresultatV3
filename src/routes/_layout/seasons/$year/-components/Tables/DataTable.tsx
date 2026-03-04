@@ -1,3 +1,15 @@
+import type {
+  ColumnDef,
+  SortingState} from '@tanstack/react-table';
+import {
+  flexRender,
+  getCoreRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from '@tanstack/react-table'
+import { useEffect, useState } from 'react'
+import { useMediaQuery } from 'usehooks-ts'
+
 import {
   Table,
   TableBody,
@@ -6,23 +18,13 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-
 import { useFavTeam } from '@/lib/contexts/favTeamsContext'
-import {
-  ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  getSortedRowModel,
-  SortingState,
-  useReactTable,
-} from '@tanstack/react-table'
-import { useEffect, useState } from 'react'
-import { useMediaQuery } from 'usehooks-ts'
+
 import { hideColumns, showColumns } from './columns'
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+  columns: Array<ColumnDef<TData, TValue>>
+  data: Array<TData>
   teamObject: {
     [x: string]: number
   }

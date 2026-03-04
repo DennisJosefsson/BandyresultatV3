@@ -1,11 +1,12 @@
+import { createServerFn } from '@tanstack/react-start'
+import { zodValidator } from '@tanstack/zod-adapter'
+import { and, eq } from 'drizzle-orm'
+
 import { db } from '@/db'
 import { metadata, seasons, teams } from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import { metadataObject } from '@/lib/types/metadata'
-import { createServerFn } from '@tanstack/react-start'
-import { zodValidator } from '@tanstack/zod-adapter'
-import { and, eq } from 'drizzle-orm'
 
 export const updateMetadata = createServerFn({ method: 'POST' })
   .middleware([errorMiddleware])

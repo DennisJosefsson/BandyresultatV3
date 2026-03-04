@@ -1,15 +1,17 @@
+import { getRouteApi } from '@tanstack/react-router'
+import Classnames from 'embla-carousel-class-names'
+import { useEffect, useState } from 'react'
+
+import type {
+  CarouselApi} from '@/components/ui/carousel';
 import {
   Carousel,
-  CarouselApi,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel'
 import { cn } from '@/lib/utils/utils'
-import { getRouteApi } from '@tanstack/react-router'
-import Classnames from 'embla-carousel-class-names'
-import { useEffect, useState } from 'react'
 
 const route = getRouteApi('/_layout/seasons/$year/$group/development')
 

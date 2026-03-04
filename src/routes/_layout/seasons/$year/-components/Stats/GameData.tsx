@@ -1,3 +1,5 @@
+import { Label, Pie, PieChart } from 'recharts'
+
 import {
   Card,
   CardContent,
@@ -5,14 +7,14 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import type {
+  ChartConfig} from '@/components/ui/chart';
 import {
-  ChartConfig,
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
 } from '@/components/ui/chart'
-import { Stats } from '@/lib/types/stats'
-import { Label, Pie, PieChart } from 'recharts'
+import type { Stats } from '@/lib/types/stats'
 type GameDataProps = {
   gameData: Pick<
     Stats,

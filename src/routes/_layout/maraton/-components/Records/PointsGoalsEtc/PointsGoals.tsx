@@ -1,4 +1,5 @@
-import { RecordDataArrays } from '@/lib/types/records'
+import type { RecordDataArrays } from '@/lib/types/records'
+
 import RenderPointsGoalsCard from './RenderPointsGoalsCard'
 
 type PointsGoalsProps = {

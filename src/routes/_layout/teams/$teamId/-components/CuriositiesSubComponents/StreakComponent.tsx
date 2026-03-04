@@ -1,7 +1,12 @@
-import Date from '@/components/Common/Date'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import type { ReactNode } from 'react'
 
-import { ReactNode } from 'react'
+import Date from '@/components/Common/Date'
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 
 type Streak = {
   teamId: number
@@ -12,34 +17,41 @@ type Streak = {
   endDate: string
 }
 
-const StreakComponent = ({ children }: { children: ReactNode }) => {
+const StreakComponent = ({
+  children,
+}: {
+  children: ReactNode
+}) => {
   return <Card className="mb-2">{children}</Card>
 }
 
 function Title({ children }: { children: ReactNode }) {
   return (
     <CardHeader className="p-3">
-      <CardTitle className="text-[10px] md:text-sm">{children}</CardTitle>
+      <CardTitle className="text-[10px] md:text-sm">
+        {children}
+      </CardTitle>
     </CardHeader>
   )
 }
 
-function Content({ streak }: { streak: Streak[] }) {
+function Content({ streak }: { streak: Array<Streak> }) {
   if (!streak || streak.length === 0) return null
 
   return (
     <CardContent className="xxs:text-xs text-[10px] lg:mr-0 lg:text-sm">
       <div>
-        {streak.map((streak, index) => {
+        {streak.map((s, index) => {
           return (
             <div
-              key={`${streak.startDate}-${index}`}
+              key={`${s.startDate}-${index}`}
               className="bg-muted-foreground/20 mb-1 flex flex-row justify-between rounded px-3 py-1"
             >
               <div>
-                <Date>{streak.startDate}</Date> - <Date>{streak.endDate}</Date>
+                <Date>{s.startDate}</Date> -{' '}
+                <Date>{s.endDate}</Date>
               </div>
-              <div>{streak.gameCount} matcher</div>
+              <div>{s.gameCount} matcher</div>
             </div>
           )
         })}

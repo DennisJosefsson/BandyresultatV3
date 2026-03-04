@@ -1,8 +1,9 @@
-import { BulkGameFileParser } from '@/lib/types/game'
-import BulkGames from '@/routes/_layout/dashboard/-components/Games/BulkGames'
-import FileInput from '@/routes/_layout/dashboard/-components/Utils/XLSXFileInput'
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
+
+import type { BulkGameFileParser } from '@/lib/types/game'
+import BulkGames from '@/routes/_layout/dashboard/-components/Games/BulkGames'
+import FileInput from '@/routes/_layout/dashboard/-components/Utils/XLSXFileInput'
 
 export const Route = createFileRoute(
   '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/addGames',

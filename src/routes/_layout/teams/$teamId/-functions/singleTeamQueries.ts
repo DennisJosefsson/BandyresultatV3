@@ -1,15 +1,4 @@
-import { db } from '@/db'
-import {
-  county,
-  municipality,
-  seasons,
-  series,
-  teamgames,
-  teams,
-  teamseasons,
-  teamseries,
-} from '@/db/schema'
-import { zd } from '@/lib/utils/zod'
+import type { SQL } from 'drizzle-orm'
 import {
   and,
   asc,
@@ -18,12 +7,27 @@ import {
   eq,
   inArray,
   or,
-  SQL,
 } from 'drizzle-orm'
+
+import { db } from '@/db'
+import type {
+  county,
+  municipality,
+  teams,
+} from '@/db/schema'
+import {
+  seasons,
+  series,
+  teamgames,
+  teamseasons,
+  teamseries,
+} from '@/db/schema'
+import { zd } from '@/lib/utils/zod'
 
 export const getTeam = (teamId: number) =>
   db.query.teams.findFirst({
-    where: (teams, { eq }) => eq(teams.teamId, teamId),
+    where: (teams, { eq: equal }) =>
+      equal(teams.teamId, teamId),
     with: {
       county: true,
       municipality: true,
@@ -44,7 +48,9 @@ export const getTeam = (teamId: number) =>
     },
   })
 
-export const getAllTeamsSeasons = async (teamId: number) => {
+export const getAllTeamsSeasons = async (
+  teamId: number,
+) => {
   const allTeamSeasons = await db
     .select({
       teamId: teamseasons.teamId,
@@ -58,11 +64,17 @@ export const getAllTeamsSeasons = async (teamId: number) => {
       }>,
     })
     .from(teamseasons)
-    .leftJoin(seasons, eq(seasons.seasonId, teamseasons.seasonId))
+    .leftJoin(
+      seasons,
+      eq(seasons.seasonId, teamseasons.seasonId),
+    )
     .where(eq(teamseasons.teamId, teamId))
     .orderBy(asc(teamseasons.seasonId))
 
-  const count = await db.$count(teamseasons, eq(teamseasons.teamId, teamId))
+  const count = await db.$count(
+    teamseasons,
+    eq(teamseasons.teamId, teamId),
+  )
   return {
     count,
     rows: allTeamSeasons,
@@ -74,13 +86,13 @@ type Team = typeof teams.$inferSelect & {
 } & {
   municipality: typeof municipality.$inferSelect | null
 } & {
-  teamseasons: {
+  teamseasons: Array<{
     qualification: boolean | null
     season: {
       year: string
       seasonId: number
     }
-  }[]
+  }>
 }
 
 type AllSeasonRow = Pick<
@@ -95,7 +107,7 @@ type AllSeasonRow = Pick<
 
 type AllSeasons = {
   count: number
-  rows: AllSeasonRow[]
+  rows: Array<AllSeasonRow>
 }
 
 type GetStringsProps = {
@@ -110,22 +122,39 @@ const parseFirstDivSeasons = zd
   })
 
 const parseFirstLatestFirstDivSeason = zd
-  .array(zd.object({ seasonId: zd.coerce.number(), year: zd.string() }))
+  .array(
+    zd.object({
+      seasonId: zd.coerce.number(),
+      year: zd.string(),
+    }),
+  )
   .transform((item) => {
     if (item.length === 0) return null
-    return { seasonId: item[0].seasonId, year: item[0].year }
+    return {
+      seasonId: item[0].seasonId,
+      year: item[0].year,
+    }
   })
 
-export const getStrings = async ({ team, allSeasons }: GetStringsProps) => {
+export const getStrings = async ({
+  team,
+  allSeasons,
+}: GetStringsProps) => {
   const TEAMID = team.teamId
   const qualificationSeasons = await db.$count(
     teamseasons,
-    and(eq(teamseasons.teamId, TEAMID), eq(teamseasons.qualification, true)),
+    and(
+      eq(teamseasons.teamId, TEAMID),
+      eq(teamseasons.qualification, true),
+    ),
   )
   const getFirstDivisionSeasons = await db
     .select({ count: countDistinct(series.seasonId) })
     .from(teamseries)
-    .leftJoin(series, eq(series.serieId, teamseries.serieId))
+    .leftJoin(
+      series,
+      eq(series.serieId, teamseries.serieId),
+    )
     .where(
       and(
         eq(teamseries.teamId, TEAMID),
@@ -134,7 +163,9 @@ export const getStrings = async ({ team, allSeasons }: GetStringsProps) => {
       ),
     )
 
-  const firstDivSeasons = parseFirstDivSeasons.parse(getFirstDivisionSeasons)
+  const firstDivSeasons = parseFirstDivSeasons.parse(
+    getFirstDivisionSeasons,
+  )
 
   const getFirstFirstDivisionSeason = await db
     .select({
@@ -142,8 +173,14 @@ export const getStrings = async ({ team, allSeasons }: GetStringsProps) => {
       seasonId: seasons.seasonId,
     })
     .from(teamseries)
-    .leftJoin(series, eq(series.serieId, teamseries.serieId))
-    .leftJoin(seasons, eq(series.seasonId, seasons.seasonId))
+    .leftJoin(
+      series,
+      eq(series.serieId, teamseries.serieId),
+    )
+    .leftJoin(
+      seasons,
+      eq(series.seasonId, seasons.seasonId),
+    )
     .where(
       and(
         eq(teamseries.teamId, TEAMID),
@@ -163,9 +200,10 @@ export const getStrings = async ({ team, allSeasons }: GetStringsProps) => {
     .orderBy(asc(seasons.seasonId))
     .limit(1)
 
-  const firstFirstDivisionSeason = parseFirstLatestFirstDivSeason.parse(
-    getFirstFirstDivisionSeason,
-  )
+  const firstFirstDivisionSeason =
+    parseFirstLatestFirstDivSeason.parse(
+      getFirstFirstDivisionSeason,
+    )
 
   const getLatestFirstDivisionSeason = await db
     .select({
@@ -173,8 +211,14 @@ export const getStrings = async ({ team, allSeasons }: GetStringsProps) => {
       seasonId: seasons.seasonId,
     })
     .from(teamseries)
-    .leftJoin(series, eq(series.serieId, teamseries.serieId))
-    .leftJoin(seasons, eq(series.seasonId, seasons.seasonId))
+    .leftJoin(
+      series,
+      eq(series.serieId, teamseries.serieId),
+    )
+    .leftJoin(
+      seasons,
+      eq(series.seasonId, seasons.seasonId),
+    )
     .where(
       and(
         eq(teamseries.teamId, TEAMID),
@@ -194,9 +238,10 @@ export const getStrings = async ({ team, allSeasons }: GetStringsProps) => {
     .orderBy(asc(seasons.seasonId))
     .limit(1)
 
-  const latestFirstDivisionSeason = parseFirstLatestFirstDivSeason.parse(
-    getLatestFirstDivisionSeason,
-  )
+  const latestFirstDivisionSeason =
+    parseFirstLatestFirstDivSeason.parse(
+      getLatestFirstDivisionSeason,
+    )
 
   const seasonString = getSeasonStrings({
     teamCity: team.city,
@@ -211,7 +256,12 @@ export const getStrings = async ({ team, allSeasons }: GetStringsProps) => {
   const finalCount = await db
     .select({ count: countDistinct(teamgames.seasonId) })
     .from(teamgames)
-    .where(and(eq(teamgames.teamId, TEAMID), eq(teamgames.category, 'final')))
+    .where(
+      and(
+        eq(teamgames.teamId, TEAMID),
+        eq(teamgames.category, 'final'),
+      ),
+    )
     .then((result) => {
       if (result.length === 0) return 0
       else return result[0].count
@@ -237,7 +287,10 @@ export const getStrings = async ({ team, allSeasons }: GetStringsProps) => {
       year: seasons.year,
     })
     .from(teamgames)
-    .leftJoin(seasons, eq(seasons.seasonId, teamgames.seasonId))
+    .leftJoin(
+      seasons,
+      eq(seasons.seasonId, teamgames.seasonId),
+    )
     .where(
       and(
         eq(teamgames.teamId, TEAMID),
@@ -260,8 +313,15 @@ export const getStrings = async ({ team, allSeasons }: GetStringsProps) => {
       and(
         eq(teamgames.teamId, TEAMID),
         or(
-          inArray(teamgames.category, ['quarter', 'semi', 'final']),
-          inArray(teamgames.group, ['SlutspelA', 'SlutspelB']),
+          inArray(teamgames.category, [
+            'quarter',
+            'semi',
+            'final',
+          ]),
+          inArray(teamgames.group, [
+            'SlutspelA',
+            'SlutspelB',
+          ]),
         ),
       ),
     )
@@ -270,9 +330,14 @@ export const getStrings = async ({ team, allSeasons }: GetStringsProps) => {
       else return result[0].count
     })
 
-  const playoffCountString = getPlayoffCountString(playoffCount)
+  const playoffCountString =
+    getPlayoffCountString(playoffCount)
 
-  return { seasonString, finalsAndWinsString, playoffCountString }
+  return {
+    seasonString,
+    finalsAndWinsString,
+    playoffCountString,
+  }
 }
 
 function getSeasonStrings({
@@ -289,8 +354,12 @@ function getSeasonStrings({
   allSeasons: AllSeasons
   teamName: string
   teamCity: string
-  latestFirstDivisionSeason: zd.infer<typeof parseFirstLatestFirstDivSeason>
-  firstFirstDivisionSeason: zd.infer<typeof parseFirstLatestFirstDivSeason>
+  latestFirstDivisionSeason: zd.infer<
+    typeof parseFirstLatestFirstDivSeason
+  >
+  firstFirstDivisionSeason: zd.infer<
+    typeof parseFirstLatestFirstDivSeason
+  >
 }): string {
   let firstDivString
 
@@ -313,7 +382,8 @@ function getSeasonStrings({
   }
 
   const firstDbSeason = allSeasons.rows[0]
-  const latestDbSeason = allSeasons.rows[allSeasons.rows.length - 1]
+  const latestDbSeason =
+    allSeasons.rows[allSeasons.rows.length - 1]
 
   let allSeasonsString
   if (allSeasons.count === firstDivSeasons) {
@@ -321,9 +391,11 @@ function getSeasonStrings({
       allSeasonsString = `Den säsongen spelades ${firstDbSeason.season.year}.\n`
     } else {
       allSeasonsString = `Första säsongen var ${
-        firstFirstDivisionSeason && firstFirstDivisionSeason.year
+        firstFirstDivisionSeason &&
+        firstFirstDivisionSeason.year
       }, och den senaste ${
-        latestFirstDivisionSeason && latestFirstDivisionSeason.year
+        latestFirstDivisionSeason &&
+        latestFirstDivisionSeason.year
       }.\n`
     }
   } else if (allSeasons.count === 1) {
@@ -332,26 +404,33 @@ function getSeasonStrings({
     allSeasonsString = `Totalt har laget ${allSeasons.count} säsonger i databasen, `
     if (firstDivSeasons === 1) {
       allSeasonsString += `säsongen ${
-        firstFirstDivisionSeason && firstFirstDivisionSeason.year
+        firstFirstDivisionSeason &&
+        firstFirstDivisionSeason.year
       } i högsta serien.\n`
     } else if (
       firstDivSeasons > 1 &&
       firstFirstDivisionSeason &&
       latestFirstDivisionSeason
     ) {
-      if (firstDbSeason.season.seasonId === firstFirstDivisionSeason.seasonId) {
+      if (
+        firstDbSeason.season.seasonId ===
+        firstFirstDivisionSeason.seasonId
+      ) {
         allSeasonsString += `första säsongen i högsta serien spelades ${firstDbSeason.season.year}.\n `
       } else if (
-        firstDbSeason.season.seasonId < firstFirstDivisionSeason.seasonId
+        firstDbSeason.season.seasonId <
+        firstFirstDivisionSeason.seasonId
       ) {
         allSeasonsString += `första säsongen är ${firstDbSeason.season.year} (medan laget debuterade i högsta serien ${firstFirstDivisionSeason.year}).\n `
       }
       if (
-        latestDbSeason.season.seasonId === latestFirstDivisionSeason.seasonId
+        latestDbSeason.season.seasonId ===
+        latestFirstDivisionSeason.seasonId
       ) {
         allSeasonsString += `Senaste säsongen i högsta serien är ${latestDbSeason.season.year}.\n`
       } else if (
-        latestDbSeason.season.seasonId > latestFirstDivisionSeason.seasonId
+        latestDbSeason.season.seasonId >
+        latestFirstDivisionSeason.seasonId
       ) {
         allSeasonsString += `Senaste säsongen i databasen är ${latestDbSeason.season.year}, och senast laget var i högsta serien är säsongen ${latestFirstDivisionSeason.year}.\n`
       }
@@ -371,7 +450,7 @@ function getFinalsAndWinsString({
   finalWinCount,
 }: {
   teamName: string
-  finalWins: { year: string | null }[]
+  finalWins: Array<{ year: string | null }>
   finalCount: number
   finalWinCount: number
 }): string {
@@ -380,12 +459,15 @@ function getFinalsAndWinsString({
   let winString = ''
 
   winString += finalWins.reduce(
-    (str, winYear) => `${str}, ${winYear.year ? winYear.year.slice(0, 4) : ''}`,
+    (str, winYear) =>
+      `${str}, ${winYear.year ? winYear.year.slice(0, 4) : ''}`,
     '',
   )
   if (finals > 0 && golds > 0) {
     return `${teamName} har spelat ${
-      finals === 1 ? 'en finalmatch' : `${finals} finalmatcher`
+      finals === 1
+        ? 'en finalmatch'
+        : `${finals} finalmatcher`
     } och vunnit ${
       golds === 1
         ? `en gång (${winString.slice(2)}).`
@@ -393,14 +475,18 @@ function getFinalsAndWinsString({
     }`
   } else if (finals > 0) {
     return `${teamName} har spelat ${
-      finals === 1 ? 'en finalmatch' : `${finals} finalmatcher`
+      finals === 1
+        ? 'en finalmatch'
+        : `${finals} finalmatcher`
     } men har aldrig vunnit.`
   }
 
   return ''
 }
 
-function getPlayoffCountString(playoffCount: number): string {
+function getPlayoffCountString(
+  playoffCount: number,
+): string {
   if (playoffCount > 1) {
     return `Laget har kvalificerat sig för slutspel ${playoffCount} gånger.`
   } else if (playoffCount === 1) {

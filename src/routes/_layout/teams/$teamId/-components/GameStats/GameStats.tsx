@@ -1,4 +1,5 @@
 import { getRouteApi } from '@tanstack/react-router'
+
 import GameStatComponent from './GameStatComponent'
 
 const route = getRouteApi('/_layout/teams/$teamId')

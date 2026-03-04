@@ -1,13 +1,9 @@
 import {
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
-  useSidebar,
-} from '@/components/ui/sidebar'
-import { getRouteApi, Link, Navigate, useParams } from '@tanstack/react-router'
+  Link,
+  Navigate,
+  getRouteApi,
+  useParams,
+} from '@tanstack/react-router'
 import {
   CalendarIcon,
   ChartLineIcon,
@@ -17,6 +13,17 @@ import {
   MapIcon,
   TrophyIcon,
 } from 'lucide-react'
+
+import {
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
+  useSidebar,
+} from '@/components/ui/sidebar'
+
 import { useGetFirstAndLastSeason } from '../../../routes/_layout/seasons/$year/-hooks/useGetFirstAndLastSeason'
 
 const route = getRouteApi('/_layout/seasons/$year')
@@ -32,8 +39,17 @@ export function SeasonSidebar() {
 
   const data = route.useLoaderData()
 
-  if (data === undefined || data.status === 204 || data.groups.length === 0) {
-    return <Navigate to="." params={{ group: 'elitserien' }} />
+  if (
+    data === undefined ||
+    data.status === 204 ||
+    data.groups.length === 0
+  ) {
+    return (
+      <Navigate
+        to="."
+        params={{ group: 'elitserien' }}
+      />
+    )
   }
   const groupFromData = data.groups[0].group
 
@@ -43,7 +59,11 @@ export function SeasonSidebar() {
   if (!open) return null
   return (
     <>
-      <DefaultSeasonSidebar year={year} women={women} group={group} />
+      <DefaultSeasonSidebar
+        year={year}
+        women={women}
+        group={group}
+      />
       {data.status === 200 && (
         <SidebarGroup>
           <SidebarGroupLabel>Serier</SidebarGroupLabel>
@@ -51,14 +71,23 @@ export function SeasonSidebar() {
             <SidebarMenuSub>
               {data.groups.map((item) => {
                 return (
-                  <SidebarMenuSubItem key={item.serieId.toString()}>
+                  <SidebarMenuSubItem
+                    key={item.serieId.toString()}
+                  >
                     <SidebarMenuSubButton asChild>
                       <Link
                         to="."
-                        params={(prev) => ({ ...prev, group: item.group })}
-                        search={(prev) => ({ women: prev.women })}
+                        params={(prev) => ({
+                          ...prev,
+                          group: item.group,
+                        })}
+                        search={(prev) => ({
+                          women: prev.women,
+                        })}
                       >
-                        <span className="truncate">{item.name}</span>
+                        <span className="truncate">
+                          {item.name}
+                        </span>
                       </Link>
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>

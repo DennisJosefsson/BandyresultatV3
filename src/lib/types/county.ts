@@ -1,3 +1,3 @@
-import { county } from '@/db/schema'
+import type { county } from '@/db/schema'
 
 export type County = typeof county.$inferSelect

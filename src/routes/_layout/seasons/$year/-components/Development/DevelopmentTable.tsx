@@ -1,6 +1,7 @@
 import { getRouteApi } from '@tanstack/react-router'
-import DataTable from './TableDataTable'
+
 import { columns } from './tablecolumns'
+import DataTable from './TableDataTable'
 
 const route = getRouteApi('/_layout/seasons/$year/$group/development')
 

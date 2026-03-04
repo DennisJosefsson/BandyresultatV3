@@ -1,4 +1,9 @@
-import { createFileRoute, Link, LinkProps } from '@tanstack/react-router'
+import type { LinkProps } from '@tanstack/react-router'
+import {
+  Link,
+  createFileRoute,
+} from '@tanstack/react-router'
+
 import { useGetFirstAndLastSeason } from './seasons/$year/-hooks/useGetFirstAndLastSeason'
 
 export const Route = createFileRoute('/_layout/')({
@@ -16,7 +21,8 @@ function App() {
         </div>
         <div className="w-[280px] pl-2 md:w-[500px] lg:w-full">
           <h2 className="text-primary mb-4 text-sm font-bold sm:text-base lg:text-2xl">
-            Samlade resultat från de högsta serierna - 1907 och framåt
+            Samlade resultat från de högsta serierna - 1907
+            och framåt
           </h2>
         </div>
       </div>
@@ -28,7 +34,9 @@ function App() {
 function IndexPageLinks() {
   const { lastSeason } = useGetFirstAndLastSeason()
 
-  const mensLinks: (LinkProps & { key: string; linkName: string })[] = [
+  const mensLinks: Array<
+    LinkProps & { key: string; linkName: string }
+  > = [
     {
       to: '/seasons/$year/$group/games',
       params: { group: 'elitserien', year: lastSeason },
@@ -38,7 +46,11 @@ function IndexPageLinks() {
     },
     {
       to: '/seasons/$year/$group/tables/$table',
-      params: { table: 'all', group: 'elitserien', year: lastSeason },
+      params: {
+        table: 'all',
+        group: 'elitserien',
+        year: lastSeason,
+      },
       search: { women: false },
       key: 'mensTable',
       linkName: 'Tabell',
@@ -51,7 +63,9 @@ function IndexPageLinks() {
       linkName: 'Slutspel',
     },
   ]
-  const womensLinks: (LinkProps & { key: string; linkName: string })[] = [
+  const womensLinks: Array<
+    LinkProps & { key: string; linkName: string }
+  > = [
     {
       to: '/seasons/$year/$group/games',
       params: { group: 'elitserien', year: lastSeason },
@@ -61,7 +75,11 @@ function IndexPageLinks() {
     },
     {
       to: '/seasons/$year/$group/tables/$table',
-      params: { table: 'all', group: 'elitserien', year: lastSeason },
+      params: {
+        table: 'all',
+        group: 'elitserien',
+        year: lastSeason,
+      },
       search: { women: true },
       key: 'womensTable',
       linkName: 'Tabell',
@@ -79,13 +97,22 @@ function IndexPageLinks() {
     <div className="mx-40 grid grid-cols-2 gap-80">
       <div className="border-muted flex flex-col gap-8 border-2 p-10">
         <div className="flex flex-row justify-center">
-          <span className="text-lg font-bold">Elitserien Herrar</span>
+          <span className="text-lg font-bold">
+            Elitserien Herrar
+          </span>
         </div>
         <div className="grid grid-cols-3 gap-8">
           {mensLinks.map((link) => {
             return (
-              <div key={link.key} className="flex flex-row justify-center">
-                <Link to={link.to} params={link.params} search={link.search}>
+              <div
+                key={link.key}
+                className="flex flex-row justify-center"
+              >
+                <Link
+                  to={link.to}
+                  params={link.params}
+                  search={link.search}
+                >
                   <span className="text-base font-semibold">
                     {link.linkName}
                   </span>
@@ -97,13 +124,22 @@ function IndexPageLinks() {
       </div>
       <div className="border-muted flex flex-col gap-8 border-2 p-10">
         <div className="flex flex-row justify-center">
-          <span className="text-lg font-bold">Elitserien Damer</span>
+          <span className="text-lg font-bold">
+            Elitserien Damer
+          </span>
         </div>
         <div className="grid grid-cols-3 gap-8">
           {womensLinks.map((link) => {
             return (
-              <div key={link.key} className="flex flex-row justify-center">
-                <Link to={link.to} params={link.params} search={link.search}>
+              <div
+                key={link.key}
+                className="flex flex-row justify-center"
+              >
+                <Link
+                  to={link.to}
+                  params={link.params}
+                  search={link.search}
+                >
                   <span className="text-base font-semibold">
                     {link.linkName}
                   </span>

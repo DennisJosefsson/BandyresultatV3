@@ -1,3 +1,14 @@
+import { Link, useMatches, useSearch } from '@tanstack/react-router'
+import {
+  CalendarSearchIcon,
+  InfoIcon,
+  LayoutDashboardIcon,
+  SearchIcon,
+  ShieldUserIcon,
+  TableOfContentsIcon,
+} from 'lucide-react'
+import { useState } from 'react'
+
 import {
   DefaultSeasonSidebar,
   SeasonSidebar,
@@ -12,16 +23,6 @@ import {
 } from '@/components/ui/sidebar'
 import { useGetFirstAndLastSeason } from '@/routes/_layout/seasons/$year/-hooks/useGetFirstAndLastSeason'
 
-import { Link, useMatches, useSearch } from '@tanstack/react-router'
-import {
-  CalendarSearchIcon,
-  InfoIcon,
-  LayoutDashboardIcon,
-  SearchIcon,
-  ShieldUserIcon,
-  TableOfContentsIcon,
-} from 'lucide-react'
-import { useState } from 'react'
 import { MaratonSidebar } from './MaratonSidebar'
 import { SearchSidebar } from './SeearchSidebar'
 import { TeamSidebar } from './TeamSidebar'

@@ -1,13 +1,17 @@
+import { createServerFn } from '@tanstack/react-start'
+import { zodValidator } from '@tanstack/zod-adapter'
+import type { SQL } from 'drizzle-orm'
+import { inArray, sql } from 'drizzle-orm'
+
 import { db } from '@/db'
 import { parentchildseries } from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import { editParentSerieObjectArray } from '@/lib/types/serie'
-import { createServerFn } from '@tanstack/react-start'
-import { zodValidator } from '@tanstack/zod-adapter'
-import { inArray, SQL, sql } from 'drizzle-orm'
 
-export const editParentSerieInput = createServerFn({ method: 'POST' })
+export const editParentSerieInput = createServerFn({
+  method: 'POST',
+})
   .middleware([errorMiddleware])
   .inputValidator(zodValidator(editParentSerieObjectArray))
   .handler(async ({ data: { parentSeries } }) => {
@@ -16,8 +20,8 @@ export const editParentSerieInput = createServerFn({ method: 'POST' })
         throw new Error('ParentSeriesArray måste ha data.')
       }
 
-      const sqlChunks: SQL[] = []
-      const ids: number[] = []
+      const sqlChunks: Array<SQL> = []
+      const ids: Array<number> = []
       sqlChunks.push(sql`(case`)
 
       for (const input of parentSeries) {
@@ -28,7 +32,10 @@ export const editParentSerieInput = createServerFn({ method: 'POST' })
       }
 
       sqlChunks.push(sql`end)`)
-      const finalSql: SQL = sql.join(sqlChunks, sql.raw(' '))
+      const finalSql: SQL = sql.join(
+        sqlChunks,
+        sql.raw(' '),
+      )
       await db
         .update(parentchildseries)
         .set({ parentId: finalSql })

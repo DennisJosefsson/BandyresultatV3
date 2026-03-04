@@ -1,7 +1,9 @@
-import ConfirmDialog from '@/components/Common/ConfirmDialog'
-import { Button } from '@/components/ui/button'
 import { createFileRoute } from '@tanstack/react-router'
 import { useRef } from 'react'
+
+import ConfirmDialog from '@/components/Common/ConfirmDialog'
+import { Button } from '@/components/ui/button'
+
 import { newSeasonMutation } from '../-hooks/newSeasonMutation'
 
 export const Route = createFileRoute('/_layout/dashboard/newseason/')({

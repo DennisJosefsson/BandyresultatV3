@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from 'react'
+import type { Dispatch, SetStateAction } from 'react'
 
 import {
   Accordion,
@@ -6,6 +6,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
+
 import OrderFormComponent from './OrderFormComponent'
 import PreferenceFormComponent from './PreferenceFormComponent'
 import ResultFormComponent from './ResultFormComponent'

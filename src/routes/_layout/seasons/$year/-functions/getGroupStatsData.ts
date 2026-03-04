@@ -1,6 +1,5 @@
-import { db } from '@/db'
-import { games, teamgames, teams } from '@/db/schema'
-import { Serie } from '@/lib/types/serie'
+import type {
+  SQL} from 'drizzle-orm';
 import {
   and,
   asc,
@@ -10,11 +9,14 @@ import {
   gt,
   inArray,
   max,
-  SQL,
   sql,
   sum,
 } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
+
+import { db } from '@/db'
+import { games, teamgames, teams } from '@/db/schema'
+import type { Serie } from '@/lib/types/serie'
 
 type GetGroupStatsDataProps = { serie: Serie }
 
@@ -530,7 +532,7 @@ async function getStreak({ serie, threshold, streak }: StreakFunctionProps) {
           sql<number>`mode() within group (order by grouped_results.grouped)`.as(
             'max_count',
           ),
-        dates: sql<string[]>`array_agg(date order by date)`.as('dates'),
+        dates: sql<Array<string>>`array_agg(date order by date)`.as('dates'),
       })
       .from(grouped_results)
       .groupBy(grouped_results.grouped, grouped_results.teamId),

@@ -1,5 +1,5 @@
 import Date from '@/components/Common/Date'
-import { MaxMinGoalGames } from '@/lib/types/records'
+import type { MaxMinGoalGames } from '@/lib/types/records'
 
 const MaxMinGoalsCard = ({
   position,

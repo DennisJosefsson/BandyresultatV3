@@ -1,8 +1,11 @@
-import { Game } from '@/lib/types/game'
-import { cn } from '@/lib/utils/utils'
 import { getRouteApi } from '@tanstack/react-router'
 
-const route = getRouteApi('/_layout/teams/$teamId/$seasonId')
+import type { Game } from '@/lib/types/game'
+import { cn } from '@/lib/utils/utils'
+
+const route = getRouteApi(
+  '/_layout/teams/$teamId/$seasonId',
+)
 
 type GamesListItemProps = {
   game: Game
@@ -41,7 +44,9 @@ const GamesListItem = ({ game }: GamesListItemProps) => {
           {game.away.casualName}
         </span>
 
-        <span className="w-16 text-right tabular-nums">{game.result}</span>
+        <span className="w-16 text-right tabular-nums">
+          {game.result}
+        </span>
 
         {game.halftimeResult && (
           <>

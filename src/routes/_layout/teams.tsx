@@ -1,8 +1,9 @@
+import { CatchBoundary, Outlet, createFileRoute } from '@tanstack/react-router'
+import { z } from 'zod'
+
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import { Card, CardContent } from '@/components/ui/card'
 
-import { CatchBoundary, Outlet, createFileRoute } from '@tanstack/react-router'
-import { z } from 'zod'
 import TeamsTabBar from './teams/-components/TeamsTabBar'
 import { getTeams } from './teams/-functions/getTeams'
 

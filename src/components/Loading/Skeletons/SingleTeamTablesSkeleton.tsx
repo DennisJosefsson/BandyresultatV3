@@ -1,28 +1,29 @@
+import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
+
 import { Button } from '@/components/ui/button'
 import { CardContent } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
 
 const SingleTeamTablesSkeleton = () => {
   return (
-    <div className="mt-2 flex min-h-screen flex-col font-inter text-foreground w-full">
+    <div className="font-inter text-foreground mt-2 flex min-h-screen w-full flex-col">
       <CardContent>
         <div className="flex flex-col gap-2">
           <div className="flex flex-row justify-between">
             <Button variant="ghost" aria-label="Gå till föregående säsong">
-              <div className="inline-flex gap-1 items-center">
+              <div className="inline-flex items-center gap-1">
                 <ChevronLeftIcon className="h-4 w-4" />
                 <span className="hidden sm:block">Föregående</span>
               </div>
             </Button>
 
-            <h4 className="font-semibold text-sm md:text-lg">
+            <h4 className="text-sm font-semibold md:text-lg">
               <Skeleton className="h-6 w-32" />
             </h4>
 
             <Button variant="ghost" aria-label="Gå till nästa säsong">
-              <div className="inline-flex gap-1 items-center">
+              <div className="inline-flex items-center gap-1">
                 <span className="hidden sm:block">Nästa</span>
                 <ChevronRightIcon className="h-4 w-4" />
               </div>
@@ -43,7 +44,7 @@ const SingleTeamTablesSkeleton = () => {
             </TabsList>
             <TabsContent value="tables">
               {Array.from({ length: 10 }).map((_i, index) => {
-                return <Skeleton key={index} className="h-9 w-full mb-1" />
+                return <Skeleton key={index} className="mb-1 h-9 w-full" />
               })}
             </TabsContent>
           </Tabs>

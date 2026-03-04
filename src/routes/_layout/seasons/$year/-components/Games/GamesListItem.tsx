@@ -1,9 +1,10 @@
-import { Button } from '@/components/ui/button'
-import { useFavTeam } from '@/lib/contexts/favTeamsContext'
-import { Game } from '@/lib/types/game'
-import { cn } from '@/lib/utils/utils'
 import { useLocation, useNavigate } from '@tanstack/react-router'
 import { useMediaQuery } from 'usehooks-ts'
+
+import { Button } from '@/components/ui/button'
+import { useFavTeam } from '@/lib/contexts/favTeamsContext'
+import type { Game } from '@/lib/types/game'
+import { cn } from '@/lib/utils/utils'
 
 type GamesListItemProps = {
   game: Omit<Game, 'season'>

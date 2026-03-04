@@ -1,11 +1,23 @@
-import { Button } from '@/components/ui/button'
-import { Link, useLoaderData, useSearch } from '@tanstack/react-router'
-import { ChevronLeftIcon, ChevronRightIcon, EllipsisIcon } from 'lucide-react'
+import {
+  Link,
+  useLoaderData,
+  useSearch,
+} from '@tanstack/react-router'
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  EllipsisIcon,
+} from 'lucide-react'
 import { useMediaQuery } from 'usehooks-ts'
+
+import { Button } from '@/components/ui/button'
 
 const Ellips = () => {
   return (
-    <span aria-hidden className="flex h-9 w-9 items-center justify-center">
+    <span
+      aria-hidden
+      className="flex h-9 w-9 items-center justify-center"
+    >
       <EllipsisIcon className="h-4 w-4" />
       <span className="sr-only">Fler sidor</span>
     </span>
@@ -13,10 +25,10 @@ const Ellips = () => {
 }
 
 const MiddleButtons = ({
-  page,
+  page = 1,
   maxPage,
 }: {
-  page: number
+  page: number | undefined
   maxPage: number
 }) => {
   const matches = useMediaQuery('(min-width: 430px)')
@@ -93,7 +105,10 @@ const MiddleButtons = ({
         <Link
           from="/seasons"
           to="/seasons"
-          search={(prev) => ({ ...prev, page: maxPage - 4 })}
+          search={(prev) => ({
+            ...prev,
+            page: maxPage - 4,
+          })}
         >
           {({ isActive }) => (
             <Button
@@ -108,7 +123,10 @@ const MiddleButtons = ({
         <Link
           from="/seasons"
           to="/seasons"
-          search={(prev) => ({ ...prev, page: maxPage - 3 })}
+          search={(prev) => ({
+            ...prev,
+            page: maxPage - 3,
+          })}
         >
           {({ isActive }) => (
             <Button
@@ -123,7 +141,10 @@ const MiddleButtons = ({
         <Link
           from="/seasons"
           to="/seasons"
-          search={(prev) => ({ ...prev, page: maxPage - 2 })}
+          search={(prev) => ({
+            ...prev,
+            page: maxPage - 2,
+          })}
         >
           {({ isActive }) => (
             <Button
@@ -138,7 +159,10 @@ const MiddleButtons = ({
         <Link
           from="/seasons"
           to="/seasons"
-          search={(prev) => ({ ...prev, page: maxPage - 1 })}
+          search={(prev) => ({
+            ...prev,
+            page: maxPage - 1,
+          })}
         >
           {({ isActive }) => (
             <Button
@@ -220,11 +244,14 @@ const SeasonsPagination = () => {
   const maxPage = Math.ceil(count / 12)
 
   return (
-    <div className="w-full flex flex-row justify-center items-center gap-1">
+    <div className="flex w-full flex-row items-center justify-center gap-1">
       <Link
         from="/seasons"
         to="/seasons"
-        search={(prev) => ({ ...prev, page: prev.page && prev.page - 1 })}
+        search={(prev) => ({
+          ...prev,
+          page: prev.page && prev.page - 1,
+        })}
         disabled={page === 1 ? true : false}
       >
         <Button
@@ -233,9 +260,11 @@ const SeasonsPagination = () => {
           aria-label="Gå till föregående sida"
           aria-disabled={page === 1 ? true : false}
         >
-          <div className="inline-flex gap-1 pl-2.5 items-center">
+          <div className="inline-flex items-center gap-1 pl-2.5">
             <ChevronLeftIcon className="h-4 w-4" />
-            <span className="hidden sm:block">Föregående</span>
+            <span className="hidden sm:block">
+              Föregående
+            </span>
           </div>
         </Button>
       </Link>
@@ -254,7 +283,10 @@ const SeasonsPagination = () => {
           </Button>
         )}
       </Link>
-      <MiddleButtons page={page} maxPage={maxPage} />
+      <MiddleButtons
+        page={page}
+        maxPage={maxPage}
+      />
       <Link
         from="/seasons"
         to="/seasons"
@@ -273,7 +305,10 @@ const SeasonsPagination = () => {
       <Link
         from="/seasons"
         to="/seasons"
-        search={(prev) => ({ ...prev, page: prev.page && prev.page + 1 })}
+        search={(prev) => ({
+          ...prev,
+          page: prev.page && prev.page + 1,
+        })}
         disabled={page === maxPage ? true : false}
       >
         <Button
@@ -282,7 +317,7 @@ const SeasonsPagination = () => {
           aria-label="Gå till nästa sida"
           aria-disabled={page === maxPage ? true : false}
         >
-          <div className="inline-flex gap-1 pr-2.5 items-center">
+          <div className="inline-flex items-center gap-1 pr-2.5">
             <span className="hidden sm:block">Nästa</span>
             <ChevronRightIcon className="h-4 w-4" />
           </div>

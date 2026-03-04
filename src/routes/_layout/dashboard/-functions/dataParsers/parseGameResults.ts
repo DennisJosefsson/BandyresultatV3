@@ -244,7 +244,7 @@ export const parseNewGameWithResult = zd
     women: zd.boolean(),
     penalties: zd.boolean(),
     extraTime: zd.boolean(),
-    playoff:zd.boolean(),
+    playoff: zd.boolean(),
     otResult: zd
       .string()
       .regex(/^\d{1,2}-\d{1,2}$/, { message: 'Fel resultatformat.' })

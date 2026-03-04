@@ -1,8 +1,9 @@
-import { Game, GameGroupBase } from '@/lib/types/game'
+import type { Game, GameGroupBase } from '@/lib/types/game'
+
 import GamesList from './GamesList'
 
 type GamesProps = {
-  games: GameGroupBase<Omit<Game, 'season'>[]>[]
+  games: Array<GameGroupBase<Array<Omit<Game, 'season'>>>>
   title: string
 }
 

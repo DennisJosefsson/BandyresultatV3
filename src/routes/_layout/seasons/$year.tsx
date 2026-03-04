@@ -1,23 +1,31 @@
+import {
+  CatchBoundary,
+  Outlet,
+  createFileRoute,
+  useChildMatches,
+} from '@tanstack/react-router'
+
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import Loading from '@/components/Loading/Loading'
 import { zd } from '@/lib/utils/zod'
-import {
-  CatchBoundary,
-  createFileRoute,
-  Outlet,
-  useChildMatches,
-} from '@tanstack/react-router'
+
 import { getGroups } from './$year/-functions/getGroups'
 
 const yearParser = zd.object({
   year: zd.number().int().min(1907),
 })
 
-export const Route = createFileRoute('/_layout/seasons/$year')({
+export const Route = createFileRoute(
+  '/_layout/seasons/$year',
+)({
   loaderDeps: ({ search: { women } }) => ({ women }),
   params: {
     parse: (params) => ({
-      year: zd.number().int().min(1907).parse(Number(params.year)),
+      year: zd
+        .number()
+        .int()
+        .min(1907)
+        .parse(Number(params.year)),
     }),
     stringify: ({ year }) => ({
       year: `${year}`,
@@ -30,7 +38,9 @@ export const Route = createFileRoute('/_layout/seasons/$year')({
 
     return data
   },
-  staticData: { breadcrumb: (match) => match.loaderData.breadCrumb },
+  staticData: {
+    breadcrumb: (match) => match.loaderData.breadCrumb,
+  },
   head: ({ loaderData }) => ({
     meta: [
       {
@@ -74,7 +84,9 @@ function Season() {
     return (
       <div className="m-4 flex flex-col gap-4">
         <div className="flex flex-row justify-center">
-          <h3 className="text-base font-semibold">Välj grupp</h3>
+          <h3 className="text-base font-semibold">
+            Välj grupp
+          </h3>
         </div>
         <GroupList />
       </div>
@@ -113,7 +125,9 @@ function NotFound() {
   }
 
   return (
-    <div className="flex flex-row justify-center">Den länken finns inte.</div>
+    <div className="flex flex-row justify-center">
+      Den länken finns inte.
+    </div>
   )
 }
 
@@ -134,7 +148,9 @@ function GroupList() {
             search={{ women: women }}
           >
             <div className="flex w-full flex-row items-center justify-center gap-8 border px-4 py-2">
-              <span className="font-semibold">{group.name}</span>
+              <span className="font-semibold">
+                {group.name}
+              </span>
             </div>
           </Route.Link>
         )

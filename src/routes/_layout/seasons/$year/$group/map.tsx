@@ -1,10 +1,12 @@
-import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
-import Loading from '@/components/Loading/Loading'
 import {
   CatchBoundary,
   createFileRoute,
   notFound,
 } from '@tanstack/react-router'
+
+import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
+import Loading from '@/components/Loading/Loading'
+
 import GroupListForErrorComponent from '../-components/GroupListForErrorComponent'
 import GroupMap from '../-components/Maps/GroupMap'
 import { getTeamsForGroupMap } from '../-functions/getTeamsForGroupMap'

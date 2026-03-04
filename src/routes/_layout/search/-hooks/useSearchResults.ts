@@ -1,5 +1,6 @@
 import { useNavigate, useSearch } from '@tanstack/react-router'
 import { useEffect } from 'react'
+
 import useSearchMutation from './useSearchMutation'
 
 export const useSearchResults = () => {

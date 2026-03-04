@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
+
 import SeasonsList from '../-components/Season/SeasonsList'
 import { getAllSeasons } from '../-functions/SeasonFunctions/getAllSeasons'
 

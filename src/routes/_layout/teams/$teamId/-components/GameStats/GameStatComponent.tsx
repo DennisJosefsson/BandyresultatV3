@@ -1,6 +1,7 @@
+import type { ReactNode } from 'react'
+
 import Date from '@/components/Common/Date'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { ReactNode } from 'react'
 
 type StatItem = {
   gameId: number
@@ -22,7 +23,7 @@ function Title({ children }: { children: ReactNode }) {
   )
 }
 
-function Content({ statArray }: { statArray: StatItem[] }) {
+function Content({ statArray }: { statArray: Array<StatItem> }) {
   if (!statArray || statArray.length === 0) return null
 
   return (

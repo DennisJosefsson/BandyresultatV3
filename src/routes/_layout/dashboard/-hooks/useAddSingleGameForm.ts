@@ -1,8 +1,13 @@
-import { zd } from '@/lib/utils/zod'
-import { revalidateLogic, useForm } from '@tanstack/react-form'
+import {
+  revalidateLogic,
+  useForm,
+} from '@tanstack/react-form'
 import { useMutation } from '@tanstack/react-query'
 import { getRouteApi } from '@tanstack/react-router'
 import { toast } from 'sonner'
+
+import type { zd } from '@/lib/utils/zod'
+
 import { parseNewGameWithResult } from '../-functions/dataParsers/parseGameResults'
 import { addSingleGame } from '../-functions/GameFunctions/addSingleGame'
 
@@ -13,9 +18,13 @@ const route = getRouteApi(
 type Data = Awaited<ReturnType<typeof addSingleGame>>
 
 export const useAddSingleGameForm = () => {
-  const serie = route.useLoaderData({ select: (s) => s.serie })
+  const serie = route.useLoaderData({
+    select: (s) => s.serie,
+  })
 
-  const defaultValues: zd.input<typeof parseNewGameWithResult> = {
+  const defaultValues: zd.input<
+    typeof parseNewGameWithResult
+  > = {
     result: '',
     otResult: '',
     halftimeResult: '',
@@ -29,7 +38,9 @@ export const useAddSingleGameForm = () => {
     women: serie.season.women ?? false,
     penalties: false,
     extraTime: false,
-    playoff: ['eight', 'quarter', 'semi', 'final'].includes(serie.category),
+    playoff: ['eight', 'quarter', 'semi', 'final'].includes(
+      serie.category,
+    ),
   }
 
   const mutation = useMutation({
@@ -45,7 +56,8 @@ export const useAddSingleGameForm = () => {
     validators: {
       onDynamic: parseNewGameWithResult,
     },
-    onSubmit: ({ value }) => mutation.mutateAsync({ data: value }),
+    onSubmit: ({ value }) =>
+      mutation.mutateAsync({ data: value }),
   })
 
   const onMutationSuccess = (data: Data) => {

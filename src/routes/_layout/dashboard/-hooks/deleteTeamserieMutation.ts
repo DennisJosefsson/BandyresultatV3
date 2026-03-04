@@ -1,7 +1,8 @@
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from '@tanstack/react-router'
-import { RefObject } from 'react'
+import type { RefObject } from 'react'
 import { toast } from 'sonner'
+
 import { removeTeamFromSerie } from '../-functions/SerieFunctions/removeTeamFromSerie'
 
 type Data = { status: 200; message: string } | undefined

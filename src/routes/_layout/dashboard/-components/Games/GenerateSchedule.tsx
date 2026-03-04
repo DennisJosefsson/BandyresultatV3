@@ -1,3 +1,6 @@
+import { getRouteApi } from '@tanstack/react-router'
+import { XIcon } from 'lucide-react'
+
 import { Button } from '@/components/ui/button'
 import {
   Field,
@@ -14,10 +17,8 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from '@/components/ui/input-group'
-import { getRouteApi } from '@tanstack/react-router'
-import { useGeneratedScheduleForm } from '../../-hooks/useGeneratedScheduleForm'
 
-import { XIcon } from 'lucide-react'
+import { useGeneratedScheduleForm } from '../../-hooks/useGeneratedScheduleForm'
 
 const route = getRouteApi(
   '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/generateschedule',

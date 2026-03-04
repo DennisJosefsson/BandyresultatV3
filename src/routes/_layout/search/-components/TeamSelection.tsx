@@ -1,3 +1,7 @@
+import { useNavigate, useSearch } from '@tanstack/react-router'
+import { CircleXIcon } from 'lucide-react'
+import { List, useListRef } from 'react-window'
+
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import {
@@ -6,10 +10,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { SearchParamsFields } from '@/lib/types/search'
-import { useNavigate, useSearch } from '@tanstack/react-router'
-import { CircleXIcon } from 'lucide-react'
-import { List, useListRef } from 'react-window'
+import type { SearchParamsFields } from '@/lib/types/search'
+
 import { useSearchTeams } from '../-hooks/useSearchTeams'
 import RenderItem from './SelectRenderItem'
 

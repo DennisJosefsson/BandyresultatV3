@@ -1,5 +1,7 @@
-import Loading from '@/components/Loading/Loading'
 import { createFileRoute, notFound } from '@tanstack/react-router'
+
+import Loading from '@/components/Loading/Loading'
+
 import GroupListForErrorComponent from '../-components/GroupListForErrorComponent'
 import PlayoffGames from '../-components/Playoff/PlayoffGames'
 import { getPlayoffGames } from '../-functions/getPlayoffGames'

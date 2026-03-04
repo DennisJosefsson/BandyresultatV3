@@ -1,4 +1,5 @@
 import { Link, rootRouteId, useMatch, useSearch } from '@tanstack/react-router'
+
 import Header from '../Header/Header'
 
 const DefaultNotFound = () => {
@@ -13,7 +14,7 @@ const DefaultNotFound = () => {
   return (
     <>
       {isRoot ? <Header /> : null}
-      <div className="flex flex-row justify-center my-6">
+      <div className="my-6 flex flex-row justify-center">
         <p>
           Glöggen är slut och länken finns inte, dags att ta sig{' '}
           <Link to="/" search={{ women }} className="underline">

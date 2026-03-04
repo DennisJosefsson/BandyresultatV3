@@ -1,4 +1,4 @@
-import { GeneralStatItem } from '@/lib/types/records'
+import type { GeneralStatItem } from '@/lib/types/records'
 
 const GeneralStatsCard = ({ position, team, count }: GeneralStatItem) => {
   return (

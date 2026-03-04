@@ -1,3 +1,7 @@
+import type { AnyRouteMatch} from '@tanstack/react-router';
+import { Link, useMatches } from '@tanstack/react-router'
+import { Fragment } from 'react'
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -6,13 +10,11 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
-import { AnyRouteMatch, Link, useMatches } from '@tanstack/react-router'
-import { Fragment } from 'react'
 
 export type BreadcrumbValue =
   | string
-  | string[]
-  | ((match: AnyRouteMatch) => string | string[])
+  | Array<string>
+  | ((match: AnyRouteMatch) => string | Array<string>)
 
 type ResolvedBreadcrumbItem = {
   path: string
@@ -22,7 +24,7 @@ type ResolvedBreadcrumbItem = {
 export function RouterBreadcrumb() {
   const matches = useMatches()
 
-  const breadcrumbs: ResolvedBreadcrumbItem[] = matches.flatMap((match) => {
+  const breadcrumbs: Array<ResolvedBreadcrumbItem> = matches.flatMap((match) => {
     const staticData = match.staticData
     if (!staticData?.breadcrumb) return []
 

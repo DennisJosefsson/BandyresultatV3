@@ -1,6 +1,7 @@
-import { Button } from '@/components/ui/button'
-import { getRouteApi, Link } from '@tanstack/react-router'
+import { Link, getRouteApi } from '@tanstack/react-router'
 import { useMediaQuery } from 'usehooks-ts'
+
+import { Button } from '@/components/ui/button'
 
 const route = getRouteApi('/_layout/maraton/table/$maratonTable')
 
@@ -22,7 +23,10 @@ const MaratonTablesButtonList = () => {
             to="."
             search={{ women }}
             params={{ maratonTable: 'all' }}
-            activeOptions={{ includeSearch: false, exact: true }}
+            activeOptions={{
+              includeSearch: false,
+              exact: true,
+            }}
           >
             {({ isActive, isTransitioning }) => (
               <Button
@@ -39,7 +43,10 @@ const MaratonTablesButtonList = () => {
             to="."
             search={{ women }}
             params={{ maratonTable: 'home' }}
-            activeOptions={{ includeSearch: false, exact: true }}
+            activeOptions={{
+              includeSearch: false,
+              exact: true,
+            }}
           >
             {({ isActive, isTransitioning }) => (
               <Button
@@ -56,7 +63,10 @@ const MaratonTablesButtonList = () => {
             to="."
             search={{ women }}
             params={{ maratonTable: 'away' }}
-            activeOptions={{ includeSearch: false, exact: true }}
+            activeOptions={{
+              includeSearch: false,
+              exact: true,
+            }}
           >
             {({ isActive, isTransitioning }) => (
               <Button

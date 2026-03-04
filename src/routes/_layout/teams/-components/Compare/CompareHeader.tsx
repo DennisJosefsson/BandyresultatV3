@@ -1,6 +1,7 @@
-import { Button } from '@/components/ui/button'
 import { getRouteApi, useLocation, useNavigate } from '@tanstack/react-router'
 import { useCopyToClipboard, useMediaQuery } from 'usehooks-ts'
+
+import { Button } from '@/components/ui/button'
 
 const Buttons = ({ length }: { length: number }) => {
   const [copiedText, copy] = useCopyToClipboard()

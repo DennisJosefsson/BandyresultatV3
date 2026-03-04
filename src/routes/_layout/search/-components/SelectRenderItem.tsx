@@ -1,5 +1,6 @@
+import type { RowComponentProps } from 'react-window'
+
 import { SelectItem } from '@/components/ui/select'
-import { RowComponentProps } from 'react-window'
 
 type Item = {
   value: number
@@ -10,7 +11,7 @@ const RenderItem = ({
   index,
   style,
   teams,
-}: RowComponentProps<{ teams: Item[] }>) => (
+}: RowComponentProps<{ teams: Array<Item> }>) => (
   <SelectItem
     value={teams[index].value.toString()}
     key={teams[index].value}

@@ -1,3 +1,5 @@
+import { getRouteApi } from '@tanstack/react-router'
+
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -8,7 +10,6 @@ import {
   FieldLabel,
 } from '@/components/ui/field'
 
-import { getRouteApi } from '@tanstack/react-router'
 import { usePlayoffSeasonForm } from '../../../-hooks/usePlayoffSeasonForm'
 
 const route = getRouteApi('/_layout/dashboard/season/$seasonId/playoffseason/')

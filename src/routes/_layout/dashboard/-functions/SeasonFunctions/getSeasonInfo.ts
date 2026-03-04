@@ -1,22 +1,29 @@
+import { createServerFn } from '@tanstack/react-start'
+import { zodValidator } from '@tanstack/zod-adapter'
+import type { SQL } from 'drizzle-orm'
+import { asc, eq, getTableColumns, sql } from 'drizzle-orm'
+
 import { db } from '@/db'
 import { series, teams, teamseasons } from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import { TeamBase } from '@/lib/types/team'
+import type { TeamBase } from '@/lib/types/team'
 import { zd } from '@/lib/utils/zod'
-import { createServerFn } from '@tanstack/react-start'
-import { zodValidator } from '@tanstack/zod-adapter'
-import { asc, eq, getTableColumns, SQL, sql } from 'drizzle-orm'
 
-export const getSeasonInfo = createServerFn({ method: 'GET' })
+export const getSeasonInfo = createServerFn({
+  method: 'GET',
+})
   .middleware([errorMiddleware])
   .inputValidator(
-    zodValidator(zd.object({ seasonId: zd.number().int().positive() })),
+    zodValidator(
+      zd.object({ seasonId: zd.number().int().positive() }),
+    ),
   )
   .handler(async ({ data: { seasonId } }) => {
     try {
       const metadata = await db.query.metadata.findFirst({
-        where: (metadata, { eq }) => eq(metadata.seasonId, seasonId),
+        where: (metadataSchema, { eq: equal }) =>
+          equal(metadataSchema.seasonId, seasonId),
       })
 
       const teamSeasons = await db
@@ -30,9 +37,14 @@ export const getSeasonInfo = createServerFn({ method: 'GET' })
           } as unknown as SQL<TeamBase>,
         })
         .from(teamseasons)
-        .leftJoin(teams, eq(teams.teamId, teamseasons.teamId))
+        .leftJoin(
+          teams,
+          eq(teams.teamId, teamseasons.teamId),
+        )
         .where(eq(teamseasons.seasonId, seasonId))
-        .orderBy(asc(sql`teams.casual_name collate "se-SE-x-icu"`))
+        .orderBy(
+          asc(sql`teams.casual_name collate "se-SE-x-icu"`),
+        )
 
       const seasonSeries = await db
         .select()
@@ -40,12 +52,15 @@ export const getSeasonInfo = createServerFn({ method: 'GET' })
         .where(eq(series.seasonId, seasonId))
 
       const season = await db.query.seasons.findFirst({
-        where: (seasons, { eq }) => eq(seasons.seasonId, seasonId),
+        where: (seasons, { eq: equal }) =>
+          equal(seasons.seasonId, seasonId),
       })
 
-      const playoffSeasonData = await db.query.playoffseason.findFirst({
-        where: (playoffseason, { eq }) => eq(playoffseason.seasonId, seasonId),
-      })
+      const playoffSeasonData =
+        await db.query.playoffseason.findFirst({
+          where: (playoffseason, { eq: equal }) =>
+            equal(playoffseason.seasonId, seasonId),
+        })
 
       if (!metadata) {
         throw new Error('Metadata saknas')

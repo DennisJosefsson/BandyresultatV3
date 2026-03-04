@@ -1,8 +1,9 @@
+import { getRouteApi } from '@tanstack/react-router'
+
 import {
   quarterColStarts,
   quarterColStartsTwoQuarter,
 } from '@/lib/utils/constants'
-import { getRouteApi } from '@tanstack/react-router'
 
 import DefaultComponent from './DefaultComponent'
 

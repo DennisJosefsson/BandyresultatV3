@@ -1,18 +1,32 @@
-import { playoffSeasonObject } from '@/lib/types/playoffseason'
-import { zd } from '@/lib/utils/zod'
-import { revalidateLogic, useForm } from '@tanstack/react-form'
+import {
+  revalidateLogic,
+  useForm,
+} from '@tanstack/react-form'
 import { useMutation } from '@tanstack/react-query'
-import { getRouteApi, useRouter } from '@tanstack/react-router'
+import {
+  getRouteApi,
+  useRouter,
+} from '@tanstack/react-router'
 import { toast } from 'sonner'
+
+import { playoffSeasonObject } from '@/lib/types/playoffseason'
+import type { zd } from '@/lib/utils/zod'
+
 import { updatePlayoffSeason } from '../-functions/SeasonFunctions/updatePlayoffSeason'
 
-const route = getRouteApi('/_layout/dashboard/season/$seasonId/playoffseason/')
+const route = getRouteApi(
+  '/_layout/dashboard/season/$seasonId/playoffseason/',
+)
 
 type Data = Awaited<ReturnType<typeof updatePlayoffSeason>>
 
 export const usePlayoffSeasonForm = () => {
-  const playoffSeason = route.useLoaderData({ select: (s) => s.playoffSeason })
-  const defaultValues: zd.input<typeof playoffSeasonObject> = {
+  const playoffSeason = route.useLoaderData({
+    select: (s) => s.playoffSeason,
+  })
+  const defaultValues: zd.input<
+    typeof playoffSeasonObject
+  > = {
     playoffSeasonId: playoffSeason.playoffSeasonId,
     seasonId: playoffSeason.seasonId,
     women: playoffSeason.women ?? false,
@@ -23,7 +37,9 @@ export const usePlayoffSeasonForm = () => {
   }
   const navigate = route.useNavigate()
   const router = useRouter()
-  const seasonId = route.useParams({ select: (s) => s.seasonId })
+  const seasonId = route.useParams({
+    select: (s) => s.seasonId,
+  })
   const women = route.useSearch({
     select: (search) => search.women,
   })
@@ -38,7 +54,8 @@ export const usePlayoffSeasonForm = () => {
     defaultValues,
     validationLogic: revalidateLogic(),
     validators: { onDynamic: playoffSeasonObject },
-    onSubmit: ({ value }) => mutation.mutateAsync({ data: value }),
+    onSubmit: ({ value }) =>
+      mutation.mutateAsync({ data: value }),
   })
 
   const returnToSeason = () => {
@@ -51,7 +68,8 @@ export const usePlayoffSeasonForm = () => {
 
   const onSuccessSubmit = (data: Data) => {
     router.invalidate({
-      filter: (route) => route.routeId === '/_layout/dashboard/games/$today',
+      filter: (r) =>
+        r.routeId === '/_layout/dashboard/games/$today',
     })
     if (!data) {
       toast.success('Okänt fel.')

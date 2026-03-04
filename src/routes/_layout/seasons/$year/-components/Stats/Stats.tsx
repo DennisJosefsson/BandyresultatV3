@@ -1,4 +1,5 @@
-import { Stats } from '@/lib/types/stats'
+import type { Stats } from '@/lib/types/stats'
+
 import GameData from './GameData'
 import GoalData from './GoalData'
 import GoalStats from './GoalStats'

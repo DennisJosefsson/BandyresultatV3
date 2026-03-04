@@ -1,6 +1,7 @@
 import { Dialog } from '@/components/ui/dialog'
-import { GroupPlayoffTable } from '@/lib/types/table'
+import type { GroupPlayoffTable } from '@/lib/types/table'
 import { groupConstant } from '@/lib/utils/constants'
+
 import PlayoffCard from './PlayoffCard'
 type ColstartsType = {
   [key: string]: string

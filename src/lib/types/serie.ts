@@ -1,4 +1,5 @@
-import { series } from '@/db/schema'
+import type { series } from '@/db/schema'
+
 import { zd } from '../utils/zod'
 
 export type Serie = typeof series.$inferSelect

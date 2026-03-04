@@ -1,6 +1,9 @@
-import { setFavTeamsServerFn, type T as FavTeam } from '@/lib/favTeams'
 import { useRouter } from '@tanstack/react-router'
-import { createContext, use, type PropsWithChildren } from 'react'
+import { createContext, use } from 'react';
+import type { PropsWithChildren } from 'react';
+
+import { setFavTeamsServerFn } from '@/lib/favTeams';
+import type { T as FavTeam } from '@/lib/favTeams';
 
 type FavTeamContextVal = {
   favTeams: FavTeam

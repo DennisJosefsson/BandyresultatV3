@@ -1,5 +1,11 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { getRouteApi } from '@tanstack/react-router'
+
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 const route = getRouteApi('/_layout/teams/compare')
 const Playoffs = () => {
   const women = route.useSearch({
@@ -7,7 +13,8 @@ const Playoffs = () => {
       return state.women
     },
   })
-  const { allPlayoffs, playoffs } = route.useLoaderData()
+  const data = route.useLoaderData()
+  if (data.status === 400) return null
   return (
     <>
       <Card className="mt-2 w-full">
@@ -18,7 +25,7 @@ const Playoffs = () => {
         </CardHeader>
         <CardContent className="w-full p-1 pt-0 text-xs xl:text-sm 2xl:text-base">
           <div className="mb-2">
-            {allPlayoffs.map((team) => {
+            {data.allPlayoffs.map((team) => {
               return (
                 <div
                   key={team.teamId}
@@ -26,7 +33,9 @@ const Playoffs = () => {
                 >
                   <div className="flex flex-row justify-between">
                     <div>{team.team.casualName}</div>
-                    <div className="text-right">{team.playoffs}</div>
+                    <div className="text-right">
+                      {team.playoffs}
+                    </div>
                   </div>
                 </div>
               )
@@ -44,7 +53,7 @@ const Playoffs = () => {
             </CardHeader>
             <CardContent className="w-full p-1 pt-0 text-xs xl:text-sm 2xl:text-base">
               <div className="mb-2">
-                {playoffs.map((team) => {
+                {data.playoffs.map((team) => {
                   return (
                     <div
                       key={team.teamId}
@@ -52,7 +61,9 @@ const Playoffs = () => {
                     >
                       <div className="flex flex-row justify-between">
                         <div>{team.team.casualName}</div>
-                        <div className="text-right">{team.playoffs}</div>
+                        <div className="text-right">
+                          {team.playoffs}
+                        </div>
                       </div>
                     </div>
                   )

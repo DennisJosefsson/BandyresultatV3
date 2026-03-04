@@ -1,4 +1,4 @@
-import { TeamBase } from './team'
+import type { TeamBase } from './team'
 
 export type RecordStreak = {
   position: number | undefined
@@ -19,13 +19,13 @@ export type CurrInoffChamp = {
 export type RecordStreakData = {
   currInoffChamps: {
     count: number
-    games: CurrInoffChamp[]
+    games: Array<CurrInoffChamp>
   }
-  winStreak: RecordStreak[]
-  losingStreak: RecordStreak[]
-  drawStreak: RecordStreak[]
-  noWinStreak: RecordStreak[]
-  unbeatenStreak: RecordStreak[]
+  winStreak: Array<RecordStreak>
+  losingStreak: Array<RecordStreak>
+  drawStreak: Array<RecordStreak>
+  noWinStreak: Array<RecordStreak>
+  unbeatenStreak: Array<RecordStreak>
 }
 
 export type RecordData = {
@@ -44,18 +44,18 @@ export type MaxMinGoalGames = {
 }
 
 export type RecordDataArrays = {
-  averageMax: RecordData[]
-  averageMaxHome: RecordData[]
-  averageMaxAway: RecordData[]
-  averageMin: RecordData[]
-  averageMinHome: RecordData[]
-  averageMinAway: RecordData[]
-  sumMax: RecordData[]
-  sumMaxHome: RecordData[]
-  sumMaxAway: RecordData[]
-  sumMin: RecordData[]
-  sumMinHome: RecordData[]
-  sumMinAway: RecordData[]
+  averageMax: Array<RecordData>
+  averageMaxHome: Array<RecordData>
+  averageMaxAway: Array<RecordData>
+  averageMin: Array<RecordData>
+  averageMinHome: Array<RecordData>
+  averageMinAway: Array<RecordData>
+  sumMax: Array<RecordData>
+  sumMaxHome: Array<RecordData>
+  sumMaxAway: Array<RecordData>
+  sumMin: Array<RecordData>
+  sumMinHome: Array<RecordData>
+  sumMinAway: Array<RecordData>
 }
 
 export type GoalCountObject = {
@@ -66,8 +66,8 @@ export type GoalCountObject = {
 }
 
 export type GoalRecordDataArrays = RecordDataArrays & {
-  gamesMaxGoals: MaxMinGoalGames[]
-  gamesMinGoals: MaxMinGoalGames[]
+  gamesMaxGoals: Array<MaxMinGoalGames>
+  gamesMinGoals: Array<MaxMinGoalGames>
   count: GoalCountObject
 }
 
@@ -78,10 +78,10 @@ export type GeneralStatItem = {
 }
 
 export type GeneratStats = {
-  golds: GeneralStatItem[]
-  finals: GeneralStatItem[]
-  playoffs: GeneralStatItem[]
-  allPlayoffs: GeneralStatItem[]
-  seasons: GeneralStatItem[]
-  allSeasons: GeneralStatItem[]
+  golds: Array<GeneralStatItem>
+  finals: Array<GeneralStatItem>
+  playoffs: Array<GeneralStatItem>
+  allPlayoffs: Array<GeneralStatItem>
+  seasons: Array<GeneralStatItem>
+  allSeasons: Array<GeneralStatItem>
 }

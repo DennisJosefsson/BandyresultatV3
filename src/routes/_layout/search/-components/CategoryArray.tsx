@@ -1,3 +1,6 @@
+import { useNavigate, useSearch } from '@tanstack/react-router'
+import { useCallback, useEffect, useState } from 'react'
+
 import {
   Card,
   CardContent,
@@ -5,11 +8,11 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Checkbox, CheckedState } from '@/components/ui/checkbox'
+import type { CheckedState } from '@/components/ui/checkbox';
+import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
-import { Categories } from '@/lib/types/search'
-import { useNavigate, useSearch } from '@tanstack/react-router'
-import { useCallback, useEffect, useState } from 'react'
+import type { Categories } from '@/lib/types/search'
+
 import { categoryArrayValues } from './arrays/arrays'
 
 const initCategories = [
@@ -20,14 +23,14 @@ const initCategories = [
   'quarter',
   'semi',
   'final',
-] satisfies Categories[]
+] satisfies Array<Categories>
 
 const CategoryArray = () => {
   const categoryArray = useSearch({
     from: '/_layout/search',
     select: (search) => search.categoryArray,
   })
-  const [selectedCategories, setSelectedCategories] = useState<Categories[]>(
+  const [selectedCategories, setSelectedCategories] = useState<Array<Categories>>(
     categoryArray ?? initCategories,
   )
 

@@ -1,6 +1,9 @@
-import { TabBarInline } from '@/components/TabBar/TabBar'
-import { Button } from '@/components/ui/button'
-import { getRouteApi, Link, useParams, useSearch } from '@tanstack/react-router'
+import {
+  Link,
+  getRouteApi,
+  useParams,
+  useSearch,
+} from '@tanstack/react-router'
 import {
   CalendarIcon,
   ChartLineIcon,
@@ -10,22 +13,21 @@ import {
   TrophyIcon,
   VenusIcon,
 } from 'lucide-react'
-
 import { useMediaQuery } from 'usehooks-ts'
+
+import { TabBarInline } from '@/components/TabBar/TabBar'
+import { Button } from '@/components/ui/button'
 
 const route = getRouteApi('/_layout/seasons/$year')
 
 const SeasonTabBar = () => {
   const matches = useMediaQuery('(min-width: 840px)')
-  //const navigate = useNavigate()
+
   const women = useSearch({
     from: '/_layout',
     select: (search) => search.women,
   })
   const params = useParams({ strict: false })
-  //   const pathname = useLocation({
-  //     select: (location) => location.pathname,
-  //   })
   const data = route.useLoaderData()
 
   const groupFromData =
@@ -65,7 +67,10 @@ const SeasonTabBar = () => {
           <Link
             from="/seasons/$year"
             to="/seasons/$year/$group/games"
-            params={(prev) => ({ year: prev.year, group: group })}
+            params={(prev) => ({
+              year: prev.year,
+              group: group,
+            })}
             search={{ women }}
             activeOptions={{ includeSearch: false }}
           >
@@ -89,7 +94,11 @@ const SeasonTabBar = () => {
           <Link
             from="/seasons/$year"
             to="/seasons/$year/$group/tables/$table"
-            params={(prev) => ({ year: prev.year, group, table })}
+            params={(prev) => ({
+              year: prev.year,
+              group,
+              table,
+            })}
             search={(prev) => ({ ...prev })}
             activeOptions={{ includeSearch: false }}
           >
@@ -147,7 +156,11 @@ const SeasonTabBar = () => {
                   variant={isActive ? 'default' : 'outline'}
                   size={matches ? 'default' : 'xs'}
                 >
-                  {matches ? 'Utveckling' : <ChartLineIcon />}
+                  {matches ? (
+                    'Utveckling'
+                  ) : (
+                    <ChartLineIcon />
+                  )}
                 </Button>
               )
             }}
@@ -171,7 +184,11 @@ const SeasonTabBar = () => {
                   variant={isActive ? 'default' : 'outline'}
                   size={matches ? 'default' : 'xs'}
                 >
-                  {matches ? 'Intervall' : <ChevronsLeftRightEllipsisIcon />}
+                  {matches ? (
+                    'Intervall'
+                  ) : (
+                    <ChevronsLeftRightEllipsisIcon />
+                  )}
                 </Button>
               )
             }}

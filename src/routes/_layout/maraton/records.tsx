@@ -1,5 +1,6 @@
+import { CatchBoundary, Outlet, createFileRoute } from '@tanstack/react-router'
+
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
-import { CatchBoundary, createFileRoute, Outlet } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_layout/maraton/records')({
   staticData: { breadcrumb: 'Rekord' },

@@ -1,14 +1,5 @@
-import { db } from '@/db'
-import {
-  games,
-  parentchildseries,
-  series,
-  teamgames,
-  teams,
-  teamseries,
-} from '@/db/schema'
-import { Game } from '@/lib/types/game'
-import { DevDataTableItem, ReturnDevDataTableItem } from '@/lib/types/table'
+import type {
+  SQL} from 'drizzle-orm';
 import {
   and,
   asc,
@@ -18,10 +9,21 @@ import {
   inArray,
   or,
   sql,
-  SQL,
   sum,
 } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
+
+import { db } from '@/db'
+import {
+  games,
+  parentchildseries,
+  series,
+  teamgames,
+  teams,
+  teamseries,
+} from '@/db/schema'
+import type { Game } from '@/lib/types/game'
+import type { DevDataTableItem, ReturnDevDataTableItem } from '@/lib/types/table'
 
 type FunctionProps = {
   serie: typeof series.$inferSelect
@@ -316,30 +318,30 @@ export const getDevelopmentData = async ({ serie }: FunctionProps) => {
   return { games: sortedGames, tables: sortedTables, dates }
 }
 
-type GameDates = string[]
+type GameDates = Array<string>
 
 type TableSortingProps = {
-  startTable: DevDataTableItem[]
-  tableArray: DevDataTableItem[]
+  startTable: Array<DevDataTableItem>
+  tableArray: Array<DevDataTableItem>
   dateArray: GameDates
 }
 
 type IntReturnType = {
   date: string
-  table: DevDataTableItem[]
+  table: Array<DevDataTableItem>
 }
 
 type ReturnType = {
   date: string
-  table: ReturnDevDataTableItem[]
+  table: Array<ReturnDevDataTableItem>
 }
 
 function tableSorting({
   startTable,
   tableArray,
   dateArray,
-}: TableSortingProps): ReturnType[] {
-  const returnArray: IntReturnType[] = []
+}: TableSortingProps): Array<ReturnType> {
+  const returnArray: Array<IntReturnType> = []
   const currTable = new Map<string, DevDataTableItem>()
   startTable.forEach((item) => {
     currTable.set(item.teamId.toString(), item)
@@ -404,11 +406,11 @@ function tableSorting({
 }
 
 type SortGamesProps = {
-  gameArray: Omit<Game, 'season'>[]
+  gameArray: Array<Omit<Game, 'season'>>
 }
 
 type SortedDates = {
-  [key: string]: Omit<Game, 'season'>[]
+  [key: string]: Array<Omit<Game, 'season'>>
 }
 
 function sortGames({ gameArray }: SortGamesProps) {

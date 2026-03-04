@@ -1,6 +1,8 @@
+import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
+
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import Loading from '@/components/Loading/Loading'
-import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
+
 import Streaks from '../-components/Records/Streaks/Streaks'
 import { getStreakRecords } from '../-functions/getStreakRecords'
 

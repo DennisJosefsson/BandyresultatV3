@@ -1,9 +1,13 @@
-import { editParentSerieObjectArray } from '@/lib/types/serie'
-import { zd } from '@/lib/utils/zod'
 import { useForm } from '@tanstack/react-form'
 import { useMutation } from '@tanstack/react-query'
-import { getRouteApi, useRouter } from '@tanstack/react-router'
+import {
+  getRouteApi,
+  useRouter,
+} from '@tanstack/react-router'
 import { toast } from 'sonner'
+
+import { editParentSerieObjectArray } from '@/lib/types/serie'
+import type { zd } from '@/lib/utils/zod'
 
 import { editParentSerieInput } from '../-functions/SerieFunctions/editParentSerie'
 
@@ -15,7 +19,9 @@ type Data = { status: 200; message: string } | undefined
 
 export const useEditParentSerieForm = () => {
   const router = useRouter()
-  const parentSeries = route.useLoaderData({ select: (s) => s.parentSeries })
+  const parentSeries = route.useLoaderData({
+    select: (s) => s.parentSeries,
+  })
 
   const mutation = useMutation({
     mutationFn: editParentSerieInput,
@@ -23,9 +29,15 @@ export const useEditParentSerieForm = () => {
     onError: (error) => onMutationError(error),
   })
 
-  const defaultValues: zd.input<typeof editParentSerieObjectArray> = {
+  const defaultValues: zd.input<
+    typeof editParentSerieObjectArray
+  > = {
     parentSeries: parentSeries.map((s) => {
-      return { parentId: s.parentId, childId: s.childId, id: s.id }
+      return {
+        parentId: s.parentId,
+        childId: s.childId,
+        id: s.id,
+      }
     }),
   }
   const form = useForm({
@@ -34,7 +46,8 @@ export const useEditParentSerieForm = () => {
       onSubmit: editParentSerieObjectArray,
     },
     defaultValues: { ...defaultValues },
-    onSubmit: ({ value }) => mutation.mutateAsync({ data: value }),
+    onSubmit: ({ value }) =>
+      mutation.mutateAsync({ data: value }),
   })
 
   const onMutationSuccess = (data: Data) => {
@@ -44,8 +57,8 @@ export const useEditParentSerieForm = () => {
       toast.success(data.message)
     }
     router.invalidate({
-      filter: (route) =>
-        route.routeId ===
+      filter: (r) =>
+        r.routeId ===
         '/_layout/dashboard/season/$seasonId/info_/$serieId/edit',
     })
   }

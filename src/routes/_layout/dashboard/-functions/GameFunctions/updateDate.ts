@@ -1,10 +1,12 @@
+import { createServerFn } from '@tanstack/react-start'
+import { zodValidator } from '@tanstack/zod-adapter'
+import { eq } from 'drizzle-orm'
+
 import { db } from '@/db'
 import { games, teamgames } from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import { createServerFn } from '@tanstack/react-start'
-import { zodValidator } from '@tanstack/zod-adapter'
-import { eq } from 'drizzle-orm'
+
 import { parseUpdateDate } from '../dataParsers/parseUpdateDate'
 
 export const updateDate = createServerFn({ method: 'POST' })

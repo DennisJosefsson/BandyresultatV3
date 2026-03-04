@@ -1,19 +1,26 @@
+import { createServerFn } from '@tanstack/react-start'
+import type { SQL } from 'drizzle-orm'
+import { eq } from 'drizzle-orm'
+
 import { db } from '@/db'
 import { teams, teamseries } from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import { TeamBase } from '@/lib/types/team'
+import type { TeamBase } from '@/lib/types/team'
 import { zd } from '@/lib/utils/zod'
-import { createServerFn } from '@tanstack/react-start'
-import { eq, SQL } from 'drizzle-orm'
 
-export const getSerieDataForSingleGame = createServerFn({ method: 'GET' })
+export const getSerieDataForSingleGame = createServerFn({
+  method: 'GET',
+})
   .middleware([errorMiddleware])
-  .inputValidator(zd.object({ serieId: zd.number().int().positive() }))
+  .inputValidator(
+    zd.object({ serieId: zd.number().int().positive() }),
+  )
   .handler(async ({ data: { serieId } }) => {
     try {
       const serie = await db.query.series.findFirst({
-        where: (series, { eq }) => eq(series.serieId, serieId),
+        where: (series, { eq: equal }) =>
+          equal(series.serieId, serieId),
         with: {
           season: {
             columns: { women: true },
@@ -33,12 +40,18 @@ export const getSerieDataForSingleGame = createServerFn({ method: 'GET' })
           } as unknown as SQL<TeamBase>,
         })
         .from(teamseries)
-        .leftJoin(teams, eq(teamseries.teamId, teams.teamId))
+        .leftJoin(
+          teams,
+          eq(teamseries.teamId, teams.teamId),
+        )
         .where(eq(teamseries.serieId, serieId))
         .then((res) => {
           const teamArray = res
             .map((team) => {
-              return { value: team.team.teamId, label: team.team.casualName }
+              return {
+                value: team.team.teamId,
+                label: team.team.casualName,
+              }
             })
             .concat({ value: 176, label: 'Ej bestämt' })
 

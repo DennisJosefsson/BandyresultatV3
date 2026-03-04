@@ -1,7 +1,8 @@
-import { Button } from '@/components/ui/button'
-import { Game } from '@/lib/types/game'
 import { getRouteApi } from '@tanstack/react-router'
 import { useMediaQuery } from 'usehooks-ts'
+
+import { Button } from '@/components/ui/button'
+import type { Game } from '@/lib/types/game'
 
 type GamesListItemProps = {
   game: Omit<Game, 'season'>

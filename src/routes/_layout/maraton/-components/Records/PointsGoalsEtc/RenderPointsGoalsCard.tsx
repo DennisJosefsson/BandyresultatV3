@@ -1,8 +1,9 @@
-import { RecordData } from '@/lib/types/records'
+import type { RecordData } from '@/lib/types/records'
+
 import PointsGoalsCard from './PointsGoalsCard'
 
 type RenderPointsGoalsCardProps = {
-  array: RecordData[]
+  array: Array<RecordData>
   stat: string
 }
 

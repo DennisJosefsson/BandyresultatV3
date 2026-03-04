@@ -1,8 +1,8 @@
-import { Button } from '@/components/ui/button'
-import { ColumnDef } from '@tanstack/react-table'
-
-import { MaratonTable } from '@/lib/types/table'
+import type { ColumnDef } from '@tanstack/react-table'
 import { ArrowDownIcon, ArrowUpIcon, ChevronsUpDownIcon } from 'lucide-react'
+
+import { Button } from '@/components/ui/button'
+import type { MaratonTable } from '@/lib/types/table'
 
 export const showColumns = {
   totalDraws: true,
@@ -16,7 +16,7 @@ export const hideColumns = {
   totalGoalsConceded: false,
 }
 
-export const columns: ColumnDef<MaratonTable>[] = [
+export const columns: Array<ColumnDef<MaratonTable>> = [
   {
     accessorKey: 'team.casualName',
     header: () => (

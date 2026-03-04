@@ -1,3 +1,6 @@
+import type { Dispatch, SetStateAction } from 'react'
+import { useMediaQuery } from 'usehooks-ts'
+
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
@@ -14,9 +17,8 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from '@/components/ui/input-group'
-import { InlineEditGame } from '@/lib/types/game'
-import { Dispatch, SetStateAction } from 'react'
-import { useMediaQuery } from 'usehooks-ts'
+import type { InlineEditGame } from '@/lib/types/game'
+
 import { useInledDateEditForm } from '../../-hooks/useInlineDateEditForm'
 import { useInlineEditGameForm } from '../../-hooks/useInlineEditGameForm'
 

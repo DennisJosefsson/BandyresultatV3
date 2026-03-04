@@ -1,7 +1,8 @@
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from '@tanstack/react-router'
-import { RefObject } from 'react'
+import type { RefObject } from 'react'
 import { toast } from 'sonner'
+
 import { deleteTeamSeason } from '../-functions/SeasonFunctions/deleteTeamSeason'
 
 type Data = { status: 200; message: string } | undefined

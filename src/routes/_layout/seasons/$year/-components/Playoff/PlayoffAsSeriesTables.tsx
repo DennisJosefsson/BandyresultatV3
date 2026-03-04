@@ -1,4 +1,5 @@
 import { getRouteApi } from '@tanstack/react-router'
+
 import TableList from './SeriesTables/TableList'
 
 const route = getRouteApi('/_layout/seasons/$year/playoff/table')

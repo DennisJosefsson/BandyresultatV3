@@ -1,5 +1,6 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { getRouteApi } from '@tanstack/react-router'
+
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 const route = getRouteApi('/_layout/teams/$teamId')
 
 const TeamSeasonCuriosities = () => {

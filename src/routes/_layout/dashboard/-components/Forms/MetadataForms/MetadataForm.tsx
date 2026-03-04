@@ -1,3 +1,5 @@
+import { getRouteApi } from '@tanstack/react-router'
+
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -23,14 +25,14 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import { getRouteApi } from '@tanstack/react-router'
+
 import { useMetadataForm } from '../../../-hooks/useMetadataForm'
 const route = getRouteApi('/_layout/dashboard/season/$seasonId/metadata/')
 
-type TeamSelection = {
+type TeamSelection = Array<{
   value: string
   label: string
-}[]
+}>
 
 const currDate = new Date().toLocaleDateString('se-SV', {
   year: 'numeric',

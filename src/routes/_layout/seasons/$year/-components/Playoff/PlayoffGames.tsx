@@ -1,4 +1,5 @@
 import { getRouteApi } from '@tanstack/react-router'
+
 import Games from './Games'
 
 const route = getRouteApi('/_layout/seasons/$year/playoff/games')

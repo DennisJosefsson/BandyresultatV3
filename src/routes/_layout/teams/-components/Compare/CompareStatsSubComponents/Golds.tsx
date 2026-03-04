@@ -1,10 +1,17 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { getRouteApi } from '@tanstack/react-router'
+
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 const route = getRouteApi('/_layout/teams/compare')
 
 const Golds = () => {
-  const { golds } = route.useLoaderData()
-  if (golds.length === 0) return null
+  const data = route.useLoaderData()
+  if (data.status === 400) return null
+  if (data.golds.length === 0) return null
   return (
     <Card className="mt-2 w-full">
       <CardHeader className="p-2">
@@ -14,7 +21,7 @@ const Golds = () => {
       </CardHeader>
       <CardContent className="w-full p-1 pt-0 text-xs xl:text-sm 2xl:text-base">
         <div className="mb-2">
-          {golds.map((team) => {
+          {data.golds.map((team) => {
             return (
               <div
                 key={team.teamId}
@@ -22,7 +29,9 @@ const Golds = () => {
               >
                 <div className="flex flex-row justify-between">
                   <div>{team.team.casualName}</div>
-                  <div className="text-right">{team.guld}</div>
+                  <div className="text-right">
+                    {team.guld}
+                  </div>
                 </div>
               </div>
             )

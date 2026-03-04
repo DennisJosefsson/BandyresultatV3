@@ -1,6 +1,8 @@
+import { getRouteApi } from '@tanstack/react-router'
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody } from '@/components/ui/table'
-import { getRouteApi } from '@tanstack/react-router'
+
 import TeamTableHeader from './TableComponents/TableHeader'
 import TeamTableRow from './TableComponents/TeamTableDataRow'
 

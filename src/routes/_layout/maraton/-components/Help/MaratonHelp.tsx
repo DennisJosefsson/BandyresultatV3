@@ -1,5 +1,6 @@
-import maratonhelp from '@/assets/markdown/maratonhelp.md'
 import Markdown from 'react-markdown'
+
+import maratonhelp from '@/assets/markdown/maratonhelp.md'
 
 const MaratonHelp = () => {
   return (

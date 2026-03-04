@@ -1,3 +1,8 @@
+import { createServerFn } from '@tanstack/react-start'
+import { zodValidator } from '@tanstack/zod-adapter'
+import type { SQL } from 'drizzle-orm';
+import { and, eq, getTableColumns } from 'drizzle-orm'
+
 import { db } from '@/db'
 import {
   county,
@@ -9,15 +14,12 @@ import {
 } from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import { County } from '@/lib/types/county'
-import { Meta } from '@/lib/types/meta'
-import { Municipality } from '@/lib/types/municipality'
-import { Team } from '@/lib/types/team'
+import type { County } from '@/lib/types/county'
+import type { Meta } from '@/lib/types/meta'
+import type { Municipality } from '@/lib/types/municipality'
+import type { Team } from '@/lib/types/team'
 import { seasonIdCheck } from '@/lib/utils/utils'
 import { zd } from '@/lib/utils/zod'
-import { createServerFn } from '@tanstack/react-start'
-import { zodValidator } from '@tanstack/zod-adapter'
-import { and, eq, getTableColumns, SQL } from 'drizzle-orm'
 
 type TeamsForGroupMapReturn =
   | {
@@ -28,7 +30,7 @@ type TeamsForGroupMapReturn =
     }
   | {
       status: 200
-      teams: { team: Team; county: County; municipality: Municipality }[]
+      teams: Array<{ team: Team; county: County; municipality: Municipality }>
       breadCrumb: string
       meta: Meta
     }

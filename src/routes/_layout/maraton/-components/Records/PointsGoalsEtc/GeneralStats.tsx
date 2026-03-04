@@ -1,4 +1,5 @@
 import { getRouteApi } from '@tanstack/react-router'
+
 import RenderGeneralStatsCard from './RenderGeneralStatsCard'
 
 const route = getRouteApi('/_layout/maraton/records/stats')

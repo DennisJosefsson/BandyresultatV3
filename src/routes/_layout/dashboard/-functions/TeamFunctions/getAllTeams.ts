@@ -1,9 +1,10 @@
+import { createServerFn } from '@tanstack/react-start'
+import { asc, sql } from 'drizzle-orm'
+
 import { db } from '@/db'
 import { teams } from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import { createServerFn } from '@tanstack/react-start'
-import { asc, sql } from 'drizzle-orm'
 
 export const getAllTeams = createServerFn({ method: 'GET' })
   .middleware([errorMiddleware])

@@ -1,14 +1,16 @@
+import { createServerFn } from '@tanstack/react-start'
+import { zodValidator } from '@tanstack/zod-adapter'
+import { and, eq, getTableColumns } from 'drizzle-orm'
+
 import { db } from '@/db'
 import { games, seasons, series } from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import { Meta } from '@/lib/types/meta'
-import { Stats } from '@/lib/types/stats'
+import type { Meta } from '@/lib/types/meta'
+import type { Stats } from '@/lib/types/stats'
 import { seasonIdCheck } from '@/lib/utils/utils'
 import { zd } from '@/lib/utils/zod'
-import { createServerFn } from '@tanstack/react-start'
-import { zodValidator } from '@tanstack/zod-adapter'
-import { and, eq, getTableColumns } from 'drizzle-orm'
+
 import { getGroupStatsData } from './getGroupStatsData'
 
 type GroupStatsReturn =

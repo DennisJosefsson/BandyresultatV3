@@ -1,6 +1,8 @@
+import { createServerFn } from '@tanstack/react-start'
+
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import { createServerFn } from '@tanstack/react-start'
+
 import { getNewSeasonData } from './getNewSeasonData'
 
 export const generateNewSeason = createServerFn({ method: 'GET' })

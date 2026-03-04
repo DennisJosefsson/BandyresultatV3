@@ -1,5 +1,6 @@
 import { clerkMiddleware } from '@clerk/tanstack-react-start/server'
 import { createStart } from '@tanstack/react-start'
+
 import { compareRequestErrorAdapter } from './lib/middlewares/errors/CompareRequestError'
 import { dbErrorAdapter } from './lib/middlewares/errors/DbError'
 import { errorMiddleware } from './lib/middlewares/errors/errorMiddleware'

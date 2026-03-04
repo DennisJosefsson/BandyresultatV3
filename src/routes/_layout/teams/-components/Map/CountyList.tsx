@@ -1,7 +1,12 @@
-import { Checkbox, CheckedState } from '@/components/ui/checkbox'
-import { MapRef } from '@/components/ui/map'
-import { LngLatLike } from 'maplibre-gl'
-import { Dispatch, RefObject, SetStateAction } from 'react'
+import type { CheckedState } from '@/components/ui/checkbox'
+import { Checkbox } from '@/components/ui/checkbox'
+import type { MapRef } from '@/components/ui/map'
+import type { LngLatLike } from 'maplibre-gl'
+import type {
+  Dispatch,
+  RefObject,
+  SetStateAction,
+} from 'react'
 
 type County = {
   county: string
@@ -13,9 +18,9 @@ type CountyArray = {
 }
 
 type CountyListProp = {
-  countyArray: CountyArray[]
-  counties: County[]
-  setCounties: Dispatch<SetStateAction<County[]>>
+  countyArray: Array<CountyArray>
+  counties: Array<County>
+  setCounties: Dispatch<SetStateAction<Array<County>>>
   mapRef: RefObject<MapRef | null>
 }
 
@@ -26,12 +31,17 @@ const CountyList = ({
   mapRef,
 }: CountyListProp) => {
   if (!mapRef) return null
-  const onCheckedChange = (checked: CheckedState, county: County) => {
+  const onCheckedChange = (
+    checked: CheckedState,
+    county: County,
+  ) => {
     if (checked) {
       setCounties((prev) => [...prev, county])
     } else {
       setCounties((prev) =>
-        prev.filter((name) => name.county !== county.county),
+        prev.filter(
+          (name) => name.county !== county.county,
+        ),
       )
     }
   }
@@ -49,13 +59,18 @@ const CountyList = ({
   }
 
   const isChecked = (county: string) => {
-    const countyObject = counties.find((item) => item.county === county)
+    const countyObject = counties.find(
+      (item) => item.county === county,
+    )
 
     if (!countyObject) return false
     return true
   }
 
-  const onClick = (center: LngLatLike, zoom: number = 7.5) => {
+  const onClick = (
+    center: LngLatLike,
+    zoom: number = 7.5,
+  ) => {
     mapRef.current?.easeTo({ center, zoom })
   }
 
@@ -89,7 +104,9 @@ const CountyList = ({
             <Checkbox
               name={county.county}
               checked={isChecked(county.county)}
-              onCheckedChange={(checked) => onCheckedChange(checked, county)}
+              onCheckedChange={(checked) =>
+                onCheckedChange(checked, county)
+              }
             />
           </div>
         )

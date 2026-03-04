@@ -1,12 +1,13 @@
-import { Button } from '@/components/ui/button'
 import {
+  SignInButton,
   SignedIn,
   SignedOut,
-  SignInButton,
   UserButton,
 } from '@clerk/clerk-react'
 import { User } from 'lucide-react'
 import { useMediaQuery } from 'usehooks-ts'
+
+import { Button } from '@/components/ui/button'
 
 export default function HeaderUser() {
   const matches = useMediaQuery('(min-width: 430px)')

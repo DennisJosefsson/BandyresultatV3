@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
+
 import TeamsList from '../-components/Team/TeamsList'
 import { getAllTeams } from '../-functions/TeamFunctions/getAllTeams'
 

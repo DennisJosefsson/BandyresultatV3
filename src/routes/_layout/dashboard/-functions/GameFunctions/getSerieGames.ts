@@ -1,12 +1,14 @@
+import { createServerFn } from '@tanstack/react-start'
+import { zodValidator } from '@tanstack/zod-adapter'
+import type { SQL } from 'drizzle-orm';
+import { asc, eq, getTableColumns } from 'drizzle-orm'
+import { alias } from 'drizzle-orm/pg-core'
+
 import { db } from '@/db'
 import { games, seasons, teams } from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import { zd } from '@/lib/utils/zod'
-import { createServerFn } from '@tanstack/react-start'
-import { zodValidator } from '@tanstack/zod-adapter'
-import { asc, eq, getTableColumns, SQL } from 'drizzle-orm'
-import { alias } from 'drizzle-orm/pg-core'
 
 const home = alias(teams, 'home')
 const away = alias(teams, 'away')

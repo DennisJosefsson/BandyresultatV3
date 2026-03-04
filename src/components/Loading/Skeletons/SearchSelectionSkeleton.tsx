@@ -9,7 +9,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 
 const SearchSelectionSkeleton = () => {
   return (
-    <div className="w-full flex flex-col gap-2 m-2">
+    <div className="m-2 flex w-full flex-col gap-2">
       <Card>
         <CardHeader>
           <CardTitle>Matchkategorier</CardTitle>
@@ -23,7 +23,7 @@ const SearchSelectionSkeleton = () => {
           </div>
         </CardContent>
       </Card>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
+      <div className="grid grid-cols-1 gap-2 lg:grid-cols-2">
         <Card>
           <CardHeader>
             <CardTitle>Första säsong</CardTitle>

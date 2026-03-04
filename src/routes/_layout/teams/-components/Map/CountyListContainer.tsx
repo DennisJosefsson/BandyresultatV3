@@ -1,3 +1,8 @@
+import type { LngLatLike } from 'maplibre-gl'
+import type { Dispatch, RefObject, SetStateAction} from 'react';
+import { useState } from 'react'
+import { useMediaQuery } from 'usehooks-ts'
+
 import { Button } from '@/components/ui/button'
 import {
   Drawer,
@@ -6,11 +11,9 @@ import {
   DrawerFooter,
   DrawerTrigger,
 } from '@/components/ui/drawer'
-//import { LatLng, Map as MapType } from 'leaflet'
-import { MapRef } from '@/components/ui/map'
-import { LngLatLike } from 'maplibre-gl'
-import { Dispatch, RefObject, SetStateAction, useState } from 'react'
-import { useMediaQuery } from 'usehooks-ts'
+// import { LatLng, Map as MapType } from 'leaflet'
+import type { MapRef } from '@/components/ui/map'
+
 import CountyList from './CountyList'
 
 type County = {
@@ -23,9 +26,9 @@ type CountyArray = {
 }
 
 type CountyListContainerProp = {
-  countyArray: CountyArray[]
-  counties: County[]
-  setCounties: Dispatch<SetStateAction<County[]>>
+  countyArray: Array<CountyArray>
+  counties: Array<County>
+  setCounties: Dispatch<SetStateAction<Array<County>>>
   mapRef: RefObject<MapRef | null>
 }
 

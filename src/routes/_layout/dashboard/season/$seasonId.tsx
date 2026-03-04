@@ -1,5 +1,6 @@
-import { zd } from '@/lib/utils/zod'
 import { createFileRoute } from '@tanstack/react-router'
+
+import { zd } from '@/lib/utils/zod'
 
 export const Route = createFileRoute('/_layout/dashboard/season/$seasonId')({
   params: {

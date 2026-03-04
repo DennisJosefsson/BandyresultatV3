@@ -1,3 +1,6 @@
+import { getRouteApi } from '@tanstack/react-router'
+import { XIcon } from 'lucide-react'
+
 import { Button } from '@/components/ui/button'
 import {
   Field,
@@ -14,10 +17,8 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from '@/components/ui/input-group'
-import { getRouteApi } from '@tanstack/react-router'
+import type { BulkGameFileParser } from '@/lib/types/game'
 
-import { BulkGameFileParser } from '@/lib/types/game'
-import { XIcon } from 'lucide-react'
 import { useBulkGameForm } from '../../-hooks/useBulkGameForm'
 
 const route = getRouteApi(

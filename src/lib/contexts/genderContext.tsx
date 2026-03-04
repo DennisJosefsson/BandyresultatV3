@@ -1,5 +1,8 @@
-import { ReactNode, useReducer } from 'react'
-import { GenderActionType, GenderContext, GenderType } from './contexts'
+import type { ReactNode} from 'react';
+import { useReducer } from 'react'
+
+import type { GenderActionType, GenderType } from './contexts';
+import { GenderContext } from './contexts'
 
 const genderReducer = (state: GenderType, action: GenderActionType) => {
   switch (action.type) {

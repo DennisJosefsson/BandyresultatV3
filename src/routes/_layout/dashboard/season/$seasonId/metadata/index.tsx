@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
+
 import MetadataForm from '../../../-components/Forms/MetadataForms/MetadataForm'
 import { getSeasonInfo } from '../../../-functions/SeasonFunctions/getSeasonInfo'
 

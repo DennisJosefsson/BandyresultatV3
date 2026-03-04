@@ -1,6 +1,8 @@
+import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
+
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import { zd } from '@/lib/utils/zod'
-import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
+
 import MaratonTable from '../-components/Maraton/MaratonTables'
 import { getMaratonTables } from '../-functions/getMaratonTable'
 

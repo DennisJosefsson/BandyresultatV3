@@ -1,13 +1,8 @@
-import { db } from '@/db'
-import { series, tables, teamgames, teams } from '@/db/schema'
-import { catchError } from '@/lib/middlewares/errors/catchError'
-import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import { MaratonTable } from '@/lib/types/table'
-import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
 import { zodValidator } from '@tanstack/zod-adapter'
+import type {
+  SQL} from 'drizzle-orm';
 import {
-  SQL,
   and,
   asc,
   count,
@@ -19,10 +14,17 @@ import {
 } from 'drizzle-orm'
 import { unionAll } from 'drizzle-orm/pg-core'
 
+import { db } from '@/db'
+import { series, tables, teamgames, teams } from '@/db/schema'
+import { catchError } from '@/lib/middlewares/errors/catchError'
+import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
+import type { MaratonTable } from '@/lib/types/table'
+import { zd } from '@/lib/utils/zod'
+
 type TablesReturn =
   | {
       status: 200
-      tables: MaratonTable[]
+      tables: Array<MaratonTable>
       breadCrumb: string
       meta: { title: string; url: string }
     }

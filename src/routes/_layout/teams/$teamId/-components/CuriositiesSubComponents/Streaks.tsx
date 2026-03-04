@@ -1,4 +1,5 @@
 import { getRouteApi } from '@tanstack/react-router'
+
 import StreakComponent from './StreakComponent'
 
 const route = getRouteApi('/_layout/teams/$teamId')

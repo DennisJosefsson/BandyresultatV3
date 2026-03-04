@@ -1,9 +1,11 @@
+import type { Dispatch, SetStateAction } from 'react'
+import XLSX from 'xlsx'
+
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { bulkGameFileParser, BulkGameFileParser } from '@/lib/types/game'
-import { Dispatch, SetStateAction } from 'react'
-import XLSX from 'xlsx'
+import type { BulkGameFileParser } from '@/lib/types/game';
+import { bulkGameFileParser } from '@/lib/types/game'
 
 const process = (ab: ArrayBuffer) => {
   const wb = XLSX.read(ab)

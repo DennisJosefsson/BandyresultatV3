@@ -1,9 +1,8 @@
-import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import {
   CatchBoundary,
+  Outlet,
   createFileRoute,
   notFound,
-  Outlet,
   useChildMatches,
 } from '@tanstack/react-router'
 import {
@@ -15,6 +14,9 @@ import {
   MapIcon,
   TrophyIcon,
 } from 'lucide-react'
+
+import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
+
 import GroupListForErrorComponent from '../-components/GroupListForErrorComponent'
 import { validateGroup } from '../-functions/validateGroup'
 

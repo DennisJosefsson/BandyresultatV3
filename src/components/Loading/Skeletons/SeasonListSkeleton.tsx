@@ -3,7 +3,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 
 const SeasonListSkeleton = () => {
   return (
-    <div className="mx-auto mb-2 min-h-screen w-full px-1 font-inter text-foreground">
+    <div className="font-inter text-foreground mx-auto mb-2 min-h-screen w-full px-1">
       <Card>
         <CardContent>
           <div className="flex flex-col">

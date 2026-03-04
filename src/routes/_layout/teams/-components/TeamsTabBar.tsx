@@ -1,6 +1,8 @@
-import { TabBarInline } from '@/components/TabBar/TabBar'
-import { Button } from '@/components/ui/button'
-import { Link, useLocation, useSearch } from '@tanstack/react-router'
+import {
+  Link,
+  useLocation,
+  useSearch,
+} from '@tanstack/react-router'
 import {
   CircleQuestionMarkIcon,
   ListIcon,
@@ -9,23 +11,30 @@ import {
 } from 'lucide-react'
 import { useMediaQuery } from 'usehooks-ts'
 
+import { TabBarInline } from '@/components/TabBar/TabBar'
+import { Button } from '@/components/ui/button'
+
 const TeamsTabBar = () => {
   const matches = useMediaQuery('(min-width: 640px)')
   const search = useSearch({ from: '/_layout/teams' })
   const teamArray = useSearch({
     from: '/_layout/teams',
-    select: (search) => search.teamArray,
+    select: (s) => s.teamArray,
   })
 
   const pathName = useLocation().pathname
 
-  const disabled = teamArray ? Boolean(teamArray.length !== 2) : true
+  const disabled = teamArray
+    ? Boolean(teamArray.length !== 2)
+    : true
 
   const teamsTabBarObject = {
     help: (
       <Button
         size={matches ? 'default' : 'icon'}
-        variant={pathName.endsWith('help') ? 'default' : 'outline'}
+        variant={
+          pathName.endsWith('help') ? 'default' : 'outline'
+        }
       >
         {matches ? 'Hjälp' : <CircleQuestionMarkIcon />}
       </Button>
@@ -33,7 +42,10 @@ const TeamsTabBar = () => {
     tabBarArray: [
       {
         tab: (
-          <Link to="/teams" search={search}>
+          <Link
+            to="/teams"
+            search={search}
+          >
             {({ isActive }) => {
               return (
                 <Button
@@ -54,7 +66,10 @@ const TeamsTabBar = () => {
       },
       {
         tab: (
-          <Link to="/teams/map" search={search}>
+          <Link
+            to="/teams/map"
+            search={search}
+          >
             {({ isActive }) => {
               return (
                 <Button
@@ -72,7 +87,11 @@ const TeamsTabBar = () => {
 
       {
         tab: (
-          <Link to="/teams/compare" search={search} disabled={disabled}>
+          <Link
+            to="/teams/compare"
+            search={search}
+            disabled={disabled}
+          >
             {({ isActive }) => {
               return (
                 <Button

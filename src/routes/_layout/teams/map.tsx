@@ -1,10 +1,12 @@
-import Loading from '@/components/Loading/Loading'
 import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
-import { getMapTeams } from './-functions/getMapTeams'
+
 // import { lazy } from 'react'
 // const NewMap = lazy(async () => await import('./-components/Map/Map'))
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
+import Loading from '@/components/Loading/Loading'
+
 import Map from './-components/Map/Map'
+import { getMapTeams } from './-functions/getMapTeams'
 
 export const Route = createFileRoute('/_layout/teams/map')({
   loaderDeps: ({ search: { women } }) => ({ women }),

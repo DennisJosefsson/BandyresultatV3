@@ -1,4 +1,5 @@
-import { RefObject } from 'react'
+import type { RefObject } from 'react'
+
 import { Button } from '../ui/button'
 import { Card, CardContent, CardFooter } from '../ui/card'
 

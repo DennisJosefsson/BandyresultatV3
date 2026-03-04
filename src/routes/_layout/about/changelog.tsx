@@ -1,7 +1,8 @@
-import changelog from '@/assets/markdown/changelog.md'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { createFileRoute } from '@tanstack/react-router'
 import Markdown from 'react-markdown'
+
+import changelog from '@/assets/markdown/changelog.md'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 export const Route = createFileRoute('/_layout/about/changelog')({
   staticData: { breadcrumb: 'Changelog' },

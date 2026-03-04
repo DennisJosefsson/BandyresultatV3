@@ -1,11 +1,13 @@
-import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
-import { zd } from '@/lib/utils/zod'
 import {
   CatchBoundary,
   createFileRoute,
   notFound,
   redirect,
 } from '@tanstack/react-router'
+
+import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
+import { zd } from '@/lib/utils/zod'
+
 import GroupListForErrorComponent from '../../-components/GroupListForErrorComponent'
 import SeasonTables from '../../-components/SeasonTables'
 import { getTables } from '../../-functions/getTables'

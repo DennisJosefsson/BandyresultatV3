@@ -1,11 +1,12 @@
+import { createServerFn } from '@tanstack/react-start'
+import { zodValidator } from '@tanstack/zod-adapter'
+import { eq } from 'drizzle-orm'
+
 import { db } from '@/db'
 import { series, tables } from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import { newStaticTableArray } from '@/lib/types/table'
-import { createServerFn } from '@tanstack/react-start'
-import { zodValidator } from '@tanstack/zod-adapter'
-import { eq } from 'drizzle-orm'
 
 export const addStaticTable = createServerFn({ method: 'POST' })
   .middleware([errorMiddleware])

@@ -1,4 +1,5 @@
 import { useSuspenseQuery } from '@tanstack/react-query'
+
 import { getFirstAndLastSeason } from '../-functions/getFirstAndLastSeasons'
 
 export const useGetFirstAndLastSeason = () => {

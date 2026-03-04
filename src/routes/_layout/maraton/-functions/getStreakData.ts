@@ -1,12 +1,18 @@
+import type { SQL } from 'drizzle-orm'
+import { and, asc, desc, eq, lt, sql } from 'drizzle-orm'
+import { alias } from 'drizzle-orm/pg-core'
+
 import { db } from '@/db'
 import { series, teamgames, teams } from '@/db/schema'
-import { and, asc, desc, eq, lt, sql, SQL } from 'drizzle-orm'
-import { alias } from 'drizzle-orm/pg-core'
 
 const team = alias(teams, 'team')
 const opponent = alias(teams, 'opponent')
 
-export async function getStreakData({ women }: { women: boolean }) {
+export async function getStreakData({
+  women,
+}: {
+  women: boolean
+}) {
   const currInoffChamps = await db
     .select({
       date: teamgames.date,
@@ -37,24 +43,35 @@ export async function getStreakData({ women }: { women: boolean }) {
     })
     .from(teamgames)
     .leftJoin(team, eq(team.teamId, teamgames.teamId))
-    .leftJoin(opponent, eq(opponent.teamId, teamgames.teamId))
-    .where(and(eq(teamgames.women, women), eq(teamgames.currInoffChamp, true)))
+    .leftJoin(
+      opponent,
+      eq(opponent.teamId, teamgames.teamId),
+    )
+    .where(
+      and(
+        eq(teamgames.women, women),
+        eq(teamgames.currInoffChamp, true),
+      ),
+    )
     .orderBy(desc(teamgames.date))
     .limit(10)
     .then((res) =>
-      res.map((team) => {
+      res.map((t) => {
         return {
-          date: team.date,
-          result: `${team.goalsConceded}-${team.goalsConceded}`,
-          team: team.team,
-          opponent: team.opponent,
+          date: t.date,
+          result: `${t.goalsConceded}-${t.goalsConceded}`,
+          team: t.team,
+          opponent: t.opponent,
         }
       }),
     )
 
   const currInoffChampsCount = await db.$count(
     teamgames,
-    and(eq(teamgames.currInoffChamp, true), eq(teamgames.women, women)),
+    and(
+      eq(teamgames.currInoffChamp, true),
+      eq(teamgames.women, women),
+    ),
   )
 
   const currInoffChampsObject = {
@@ -107,7 +124,10 @@ type StreakFunctionProps = {
     | 'unbeatenStreak'
 }
 
-async function getStreak({ women, streak }: StreakFunctionProps) {
+async function getStreak({
+  women,
+  streak,
+}: StreakFunctionProps) {
   let values
   switch (streak) {
     case 'winStreak':
@@ -119,12 +139,16 @@ async function getStreak({ women, streak }: StreakFunctionProps) {
             draw: teamgames.draw,
             lost: teamgames.lost,
             date: teamgames.date,
-            value: sql<number>`case when win = true then 1 else 0 end`.as(
-              'value',
-            ),
+            value:
+              sql<number>`case when win = true then 1 else 0 end`.as(
+                'value',
+              ),
           })
           .from(teamgames)
-          .leftJoin(series, eq(series.serieId, teamgames.serieId))
+          .leftJoin(
+            series,
+            eq(series.serieId, teamgames.serieId),
+          )
           .where(
             and(
               eq(teamgames.played, true),
@@ -143,12 +167,16 @@ async function getStreak({ women, streak }: StreakFunctionProps) {
             draw: teamgames.draw,
             lost: teamgames.lost,
             date: teamgames.date,
-            value: sql<number>`case when draw = true then 1 else 0 end`.as(
-              'value',
-            ),
+            value:
+              sql<number>`case when draw = true then 1 else 0 end`.as(
+                'value',
+              ),
           })
           .from(teamgames)
-          .leftJoin(series, eq(series.serieId, teamgames.serieId))
+          .leftJoin(
+            series,
+            eq(series.serieId, teamgames.serieId),
+          )
           .where(
             and(
               eq(teamgames.played, true),
@@ -167,12 +195,16 @@ async function getStreak({ women, streak }: StreakFunctionProps) {
             draw: teamgames.draw,
             lost: teamgames.lost,
             date: teamgames.date,
-            value: sql<number>`case when lost = true then 1 else 0 end`.as(
-              'value',
-            ),
+            value:
+              sql<number>`case when lost = true then 1 else 0 end`.as(
+                'value',
+              ),
           })
           .from(teamgames)
-          .leftJoin(series, eq(series.serieId, teamgames.serieId))
+          .leftJoin(
+            series,
+            eq(series.serieId, teamgames.serieId),
+          )
           .where(
             and(
               eq(teamgames.played, true),
@@ -191,12 +223,16 @@ async function getStreak({ women, streak }: StreakFunctionProps) {
             draw: teamgames.draw,
             lost: teamgames.lost,
             date: teamgames.date,
-            value: sql<number>`case when win = false then 1 else 0 end`.as(
-              'value',
-            ),
+            value:
+              sql<number>`case when win = false then 1 else 0 end`.as(
+                'value',
+              ),
           })
           .from(teamgames)
-          .leftJoin(series, eq(series.serieId, teamgames.serieId))
+          .leftJoin(
+            series,
+            eq(series.serieId, teamgames.serieId),
+          )
           .where(
             and(
               eq(teamgames.played, true),
@@ -215,12 +251,16 @@ async function getStreak({ women, streak }: StreakFunctionProps) {
             draw: teamgames.draw,
             lost: teamgames.lost,
             date: teamgames.date,
-            value: sql<number>`case when lost = false then 1 else 0 end`.as(
-              'value',
-            ),
+            value:
+              sql<number>`case when lost = false then 1 else 0 end`.as(
+                'value',
+              ),
           })
           .from(teamgames)
-          .leftJoin(series, eq(series.serieId, teamgames.serieId))
+          .leftJoin(
+            series,
+            eq(series.serieId, teamgames.serieId),
+          )
           .where(
             and(
               eq(teamgames.played, true),
@@ -283,7 +323,9 @@ async function getStreak({ women, streak }: StreakFunctionProps) {
         teamId: summed_values.teamId,
         date: summed_values.date,
         sumResults: summed_values.sumResults,
-        grouped: sql<number>`round - sum_results`.as('grouped'),
+        grouped: sql<number>`round - sum_results`.as(
+          'grouped',
+        ),
       })
       .from(summed_values)
       .where(whereQuery),
@@ -298,10 +340,15 @@ async function getStreak({ women, streak }: StreakFunctionProps) {
           sql<number>`mode() within group (order by grouped_results.grouped)`.as(
             'max_count',
           ),
-        dates: sql<string[]>`array_agg(date order by date)`.as('dates'),
+        dates: sql<
+          Array<string>
+        >`array_agg(date order by date)`.as('dates'),
       })
       .from(grouped_results)
-      .groupBy(grouped_results.grouped, grouped_results.teamId),
+      .groupBy(
+        grouped_results.grouped,
+        grouped_results.teamId,
+      ),
   )
 
   const streaks = await db
@@ -309,10 +356,13 @@ async function getStreak({ women, streak }: StreakFunctionProps) {
     .select({
       teamId: group_array.teamId,
       name: teams.name as unknown as SQL<string>,
-      gameCount: sql<number>`array_length(group_array.dates,1)`.as(
-        'game_count',
+      gameCount:
+        sql<number>`array_length(group_array.dates,1)`.as(
+          'game_count',
+        ),
+      startDate: sql<string>`group_array.dates[1]`.as(
+        'start_date',
       ),
-      startDate: sql<string>`group_array.dates[1]`.as('start_date'),
       endDate:
         sql<string>`group_array.dates[array_upper(group_array.dates,1)]`.as(
           'end_date',
@@ -324,7 +374,9 @@ async function getStreak({ women, streak }: StreakFunctionProps) {
     .limit(20)
     .then((res) => {
       const tenthCount =
-        res.length >= 10 ? res[9].gameCount : res[res.length - 1].gameCount
+        res.length >= 10
+          ? res[9].gameCount
+          : res[res.length - 1].gameCount
       const filteredResult = res
         .filter((item) => item.gameCount >= tenthCount)
         .map((item, index) => {
@@ -335,9 +387,11 @@ async function getStreak({ women, streak }: StreakFunctionProps) {
           ...item,
           position:
             index !== 0 &&
-            filteredResult[index - 1].gameCount === item.gameCount
-              ? filteredResult.find((res) => res.gameCount === item.gameCount)
-                  ?.position
+            filteredResult[index - 1].gameCount ===
+              item.gameCount
+              ? filteredResult.find(
+                  (r) => r.gameCount === item.gameCount,
+                )?.position
               : item.position,
         }
       })

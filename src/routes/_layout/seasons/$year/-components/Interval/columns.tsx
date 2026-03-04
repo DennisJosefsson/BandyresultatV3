@@ -1,8 +1,8 @@
-import { ColumnDef } from '@tanstack/react-table'
+import type { ColumnDef } from '@tanstack/react-table'
 
-import { ReturnDevDataTableItem } from '@/lib/types/table'
+import type { ReturnDevDataTableItem } from '@/lib/types/table'
 
-export const columns: ColumnDef<ReturnDevDataTableItem>[] = [
+export const columns: Array<ColumnDef<ReturnDevDataTableItem>> = [
   {
     accessorKey: 'team.casualName',
     header: () => (

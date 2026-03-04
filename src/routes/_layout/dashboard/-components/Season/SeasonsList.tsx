@@ -1,6 +1,7 @@
-import { Input } from '@/components/ui/input'
 import { getRouteApi } from '@tanstack/react-router'
 import { useState } from 'react'
+
+import { Input } from '@/components/ui/input'
 
 const route = getRouteApi('/_layout/dashboard/seasons/')
 

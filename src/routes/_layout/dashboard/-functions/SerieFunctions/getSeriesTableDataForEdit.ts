@@ -1,12 +1,14 @@
+import { createServerFn } from '@tanstack/react-start'
+import { zodValidator } from '@tanstack/zod-adapter'
+import type { SQL } from 'drizzle-orm'
+import { eq } from 'drizzle-orm'
+
 import { db } from '@/db'
 import { tables, teams, teamseries } from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import { TeamBase } from '@/lib/types/team'
+import type { TeamBase } from '@/lib/types/team'
 import { zd } from '@/lib/utils/zod'
-import { createServerFn } from '@tanstack/react-start'
-import { zodValidator } from '@tanstack/zod-adapter'
-import { eq, SQL } from 'drizzle-orm'
 
 const defaultTable = {
   games: 0,
@@ -20,15 +22,20 @@ const defaultTable = {
   points: 0,
 }
 
-export const getSeriesTableDataForEdit = createServerFn({ method: 'GET' })
+export const getSeriesTableDataForEdit = createServerFn({
+  method: 'GET',
+})
   .middleware([errorMiddleware])
   .inputValidator(
-    zodValidator(zd.object({ serieId: zd.number().positive().int() })),
+    zodValidator(
+      zd.object({ serieId: zd.number().positive().int() }),
+    ),
   )
   .handler(async ({ data: { serieId } }) => {
     try {
       const serie = await db.query.series.findFirst({
-        where: (series, { eq }) => eq(series.serieId, serieId),
+        where: (series, { eq: equal }) =>
+          equal(series.serieId, serieId),
         with: {
           season: {
             columns: { women: true },
@@ -49,7 +56,10 @@ export const getSeriesTableDataForEdit = createServerFn({ method: 'GET' })
           } as unknown as SQL<TeamBase>,
         })
         .from(teamseries)
-        .leftJoin(teams, eq(teamseries.teamId, teams.teamId))
+        .leftJoin(
+          teams,
+          eq(teamseries.teamId, teams.teamId),
+        )
         .where(eq(teamseries.serieId, serieId))
 
       if (tableTeams.length === 0) {
@@ -80,7 +90,8 @@ export const getSeriesTableDataForEdit = createServerFn({ method: 'GET' })
           goalDifference: tables.goalDifference,
           points: tables.points,
           teamId: tables.teamId,
-          teamName: teams.casualName as unknown as SQL<string>,
+          teamName:
+            teams.casualName as unknown as SQL<string>,
         })
         .from(tables)
         .leftJoin(teams, eq(tables.teamId, teams.teamId))

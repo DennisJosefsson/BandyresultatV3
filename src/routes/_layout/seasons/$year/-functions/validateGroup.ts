@@ -1,12 +1,13 @@
-import { db } from '@/db'
-import { seasons, series } from '@/db/schema'
-import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import { Meta } from '@/lib/types/meta'
-import { seasonIdCheck } from '@/lib/utils/utils'
-import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
 import { zodValidator } from '@tanstack/zod-adapter'
 import { and, eq, getTableColumns } from 'drizzle-orm'
+
+import { db } from '@/db'
+import { seasons, series } from '@/db/schema'
+import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
+import type { Meta } from '@/lib/types/meta'
+import { seasonIdCheck } from '@/lib/utils/utils'
+import { zd } from '@/lib/utils/zod'
 
 type ValidateGroupReturn =
   | {

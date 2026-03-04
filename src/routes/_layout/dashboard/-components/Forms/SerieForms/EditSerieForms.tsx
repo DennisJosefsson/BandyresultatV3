@@ -1,6 +1,8 @@
+import { Outlet, getRouteApi } from '@tanstack/react-router'
+
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { getRouteApi, Outlet } from '@tanstack/react-router'
+
 import AddTeamToSerie from './AddTeamToSerie'
 import EditSerie from './EditSerie'
 import EditTeamSerie from './EditTeamserie'

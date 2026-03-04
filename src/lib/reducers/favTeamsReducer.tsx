@@ -1,4 +1,4 @@
-import { FavTeamsActionType, TeamPreference } from '../contexts/contexts'
+import type { FavTeamsActionType, TeamPreference } from '../contexts/contexts'
 
 const initialState: TeamPreference = []
 

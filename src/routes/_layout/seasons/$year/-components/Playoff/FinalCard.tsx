@@ -1,5 +1,6 @@
 import Date from '@/components/Common/Date'
-import { Game } from '@/lib/types/game'
+import type { Game } from '@/lib/types/game'
+
 import PlayoffCard from './PlayoffCard'
 type FinalCardProps = {
   game: Omit<Game, 'season'>

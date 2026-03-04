@@ -1,3 +1,17 @@
+import type {
+  SortingState} from '@tanstack/react-table';
+import {
+  flexRender,
+  getCoreRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from '@tanstack/react-table'
+import { useEffect, useState } from 'react'
+import { useMediaQuery } from 'usehooks-ts'
+
+import type { TeamTable } from '@/lib/types/table'
+
+// oxlint-disable no-unused-expressions
 import {
   Table,
   TableBody,
@@ -6,27 +20,25 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-
-import { TeamTable } from '@/lib/types/table'
 import { cn } from '@/lib/utils/utils'
+
 import {
-  flexRender,
-  getCoreRowModel,
-  getSortedRowModel,
-  SortingState,
-  useReactTable,
-} from '@tanstack/react-table'
-import { useEffect, useState } from 'react'
-import { useMediaQuery } from 'usehooks-ts'
-import { columns, hideColumns, showColumns } from './columns'
+  columns,
+  hideColumns,
+  showColumns,
+} from './columns'
 
 interface DataTableProps {
-  data: TeamTable[]
+  data: Array<TeamTable>
   casualName: string
-  serieStructure: number[] | null | undefined
+  serieStructure: Array<number> | null | undefined
 }
 
-const DataTable = ({ data, serieStructure, casualName }: DataTableProps) => {
+const DataTable = ({
+  data,
+  serieStructure,
+  casualName,
+}: DataTableProps) => {
   const matches = useMediaQuery('(min-width: 640px)')
   const [sorting, setSorting] = useState<SortingState>([
     { id: 'totalPoints', desc: true },
@@ -34,7 +46,9 @@ const DataTable = ({ data, serieStructure, casualName }: DataTableProps) => {
     { id: 'totalGoalsScored', desc: true },
     { id: 'team_casualName', desc: false },
   ])
-  const [columnVisibility, setColumnVisibility] = useState({})
+  const [columnVisibility, setColumnVisibility] = useState(
+    {},
+  )
   const table = useReactTable({
     data,
     columns,
@@ -96,9 +110,14 @@ const DataTable = ({ data, serieStructure, casualName }: DataTableProps) => {
             table.getRowModel().rows.map((row, index) => (
               <TableRow
                 key={row.id}
-                data-state={row.getIsSelected() && 'selected'}
+                data-state={
+                  row.getIsSelected() && 'selected'
+                }
                 className={cn(
-                  casualName === getString(row.getValue('team_casualName'))
+                  casualName ===
+                    getString(
+                      row.getValue('team_casualName'),
+                    )
                     ? 'font-bold italic'
                     : null,
                   serieStructure?.includes(index + 1)
@@ -129,7 +148,10 @@ const DataTable = ({ data, serieStructure, casualName }: DataTableProps) => {
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
+              <TableCell
+                colSpan={columns.length}
+                className="h-24 text-center"
+              >
                 Inga resultat.
               </TableCell>
             </TableRow>

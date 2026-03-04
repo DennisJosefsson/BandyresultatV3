@@ -1,27 +1,45 @@
-import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import { getRouteApi } from '@tanstack/react-router'
+import { ExternalLinkIcon } from 'lucide-react'
+
+import {
+  Card,
+  CardContent,
+  CardHeader,
+} from '@/components/ui/card'
 import {
   MapMarker,
   MarkerContent,
   MarkerPopup,
   MarkerTooltip,
 } from '@/components/ui/map'
-import { County } from '@/lib/types/county'
-import { Municipality } from '@/lib/types/municipality'
-import { Team } from '@/lib/types/team'
-import { getRouteApi } from '@tanstack/react-router'
-import { ExternalLinkIcon } from 'lucide-react'
+import type { County } from '@/lib/types/county'
+import type { Municipality } from '@/lib/types/municipality'
+import type { Team } from '@/lib/types/team'
 
 type MapItemProps = {
-  team: { team: Team; county: County; municipality: Municipality }
+  team: {
+    team: Team
+    county: County
+    municipality: Municipality
+  }
   latitude: number
   longitude: number
 }
 
-const route = getRouteApi('/_layout/seasons/$year/playoff/map')
+const route = getRouteApi(
+  '/_layout/seasons/$year/playoff/map',
+)
 
-function MapItem({ team, latitude, longitude }: MapItemProps) {
+function MapItem({
+  team,
+  latitude,
+  longitude,
+}: MapItemProps) {
   return (
-    <MapMarker latitude={latitude} longitude={longitude}>
+    <MapMarker
+      latitude={latitude}
+      longitude={longitude}
+    >
       <MarkerContent>
         <div className="size-4 rounded-full border-2 border-orange-500 bg-orange-500 opacity-75 shadow-lg" />
       </MarkerContent>
@@ -37,7 +55,9 @@ function MapItem({ team, latitude, longitude }: MapItemProps) {
                 {team.team.city}
               </p>
               <p className="text-foreground text-base font-medium">
-                {team.municipality ? `Kommun: ${team.municipality.name}` : null}
+                {team.municipality
+                  ? `Kommun: ${team.municipality.name}`
+                  : null}
               </p>
               <p className="text-foreground text-base font-medium">
                 Län: {team.county.name}

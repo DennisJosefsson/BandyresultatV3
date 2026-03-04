@@ -1,9 +1,17 @@
-import { submitGameResult } from '@/lib/types/game'
-import { zd } from '@/lib/utils/zod'
-import { revalidateLogic, useForm } from '@tanstack/react-form'
+import {
+  revalidateLogic,
+  useForm,
+} from '@tanstack/react-form'
 import { useMutation } from '@tanstack/react-query'
-import { getRouteApi, useRouter } from '@tanstack/react-router'
+import {
+  getRouteApi,
+  useRouter,
+} from '@tanstack/react-router'
 import { toast } from 'sonner'
+
+import { submitGameResult } from '@/lib/types/game'
+import type { zd } from '@/lib/utils/zod'
+
 import { updateResult } from '../-functions/GameFunctions/updateResult'
 
 const route = getRouteApi(
@@ -47,7 +55,8 @@ export const useEditGameForm = () => {
     defaultValues,
     validationLogic: revalidateLogic(),
     validators: { onDynamic: submitGameResult },
-    onSubmit: ({ value }) => mutation.mutateAsync({ data: value }),
+    onSubmit: ({ value }) =>
+      mutation.mutateAsync({ data: value }),
   })
 
   const close = () => {
@@ -59,8 +68,8 @@ export const useEditGameForm = () => {
 
   const onSuccessSubmit = (data: Data) => {
     router.invalidate({
-      filter: (route) =>
-        route.routeId ===
+      filter: (r) =>
+        r.routeId ===
         '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/games',
     })
     if (!data) {

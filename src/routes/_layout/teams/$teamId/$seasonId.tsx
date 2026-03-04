@@ -1,6 +1,7 @@
+import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
+
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import { zd } from '@/lib/utils/zod'
-import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
 
 import SingleTeamSeason from './-components/SeasonComponents/SingleTeamSeason'
 import { getSingleTeamSeason } from './-functions/getSingleTeamSeason'

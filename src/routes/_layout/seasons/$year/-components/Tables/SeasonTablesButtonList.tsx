@@ -1,6 +1,7 @@
-import { Button } from '@/components/ui/button'
-import { getRouteApi, Link } from '@tanstack/react-router'
+import { Link, getRouteApi } from '@tanstack/react-router'
 import { useMediaQuery } from 'usehooks-ts'
+
+import { Button } from '@/components/ui/button'
 
 const route = getRouteApi('/_layout/seasons/$year/$group/tables/$table')
 

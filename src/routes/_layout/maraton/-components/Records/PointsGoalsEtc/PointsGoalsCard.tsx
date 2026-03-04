@@ -1,4 +1,4 @@
-import { RecordData } from '@/lib/types/records'
+import type { RecordData } from '@/lib/types/records'
 
 const PointsGoalsCard = ({ position, data, year, team }: RecordData) => {
   return (

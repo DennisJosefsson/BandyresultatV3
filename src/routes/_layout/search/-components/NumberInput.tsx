@@ -1,9 +1,11 @@
+import { useNavigate, useSearch } from '@tanstack/react-router'
+import type { ChangeEvent} from 'react';
+import { useEffect, useState } from 'react'
+import { useDebounceValue } from 'usehooks-ts'
+
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { SearchParamsFields } from '@/lib/types/search'
-import { useNavigate, useSearch } from '@tanstack/react-router'
-import { ChangeEvent, useEffect, useState } from 'react'
-import { useDebounceValue } from 'usehooks-ts'
+import type { SearchParamsFields } from '@/lib/types/search'
 
 type NumberInputProps = {
   field: Extract<

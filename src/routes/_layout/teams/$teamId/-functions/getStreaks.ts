@@ -1,13 +1,30 @@
+import type { SQL } from 'drizzle-orm'
+import {
+  and,
+  asc,
+  desc,
+  eq,
+  gt,
+  inArray,
+  or,
+  sql,
+} from 'drizzle-orm'
+
 import { db } from '@/db'
 import { seasons, teamgames, teams } from '@/db/schema'
-import { and, asc, desc, eq, gt, inArray, or, SQL, sql } from 'drizzle-orm'
 
-export const getStreaks = async ({ teamId }: { teamId: number }) => {
+export const getStreaks = async ({
+  teamId,
+}: {
+  teamId: number
+}) => {
   const losingStreak = await getLosingStreaks({ teamId })
   const drawStreak = await getDrawStreaks({ teamId })
   const winStreak = await getWinStreaks({ teamId })
   const noWinStreak = await getNoWinStreaks({ teamId })
-  const unbeatenStreak = await getUnbeatenStreaks({ teamId })
+  const unbeatenStreak = await getUnbeatenStreaks({
+    teamId,
+  })
   const playoffStreak = await getPlayoffStreak({ teamId })
   const streakObjectsLength =
     losingStreak.length +
@@ -26,7 +43,11 @@ export const getStreaks = async ({ teamId }: { teamId: number }) => {
   }
 }
 
-const getLosingStreaks = async ({ teamId }: { teamId: number }) => {
+const getLosingStreaks = async ({
+  teamId,
+}: {
+  teamId: number
+}) => {
   const lost_values = db.$with('lost_values').as(
     db
       .select({
@@ -34,33 +55,41 @@ const getLosingStreaks = async ({ teamId }: { teamId: number }) => {
         lost: teamgames.lost,
         date: teamgames.date,
         women: teamgames.women,
-        lostValue: sql<number>`case when lost = true then 1 else 0 end`.as(
-          'lost_value',
-        ),
+        lostValue:
+          sql<number>`case when lost = true then 1 else 0 end`.as(
+            'lost_value',
+          ),
       })
       .from(teamgames)
-      .where(and(eq(teamgames.played, true), eq(teamgames.teamId, teamId))),
+      .where(
+        and(
+          eq(teamgames.played, true),
+          eq(teamgames.teamId, teamId),
+        ),
+      ),
   )
 
-  const summed_lost_values = db.$with('summed_lost_values').as(
-    db
-      .with(lost_values)
-      .select({
-        teamId: lost_values.teamId,
-        lost: lost_values.lost,
-        date: lost_values.date,
-        women: lost_values.women,
-        sumLosts:
-          sql<number>`sum(lost_values.lost_value) over(partition by team order by date)`.as(
-            'sum_losts',
-          ),
-        round:
-          sql<number>`row_number() over (partition by team order by date)`.as(
-            'round',
-          ),
-      })
-      .from(lost_values),
-  )
+  const summed_lost_values = db
+    .$with('summed_lost_values')
+    .as(
+      db
+        .with(lost_values)
+        .select({
+          teamId: lost_values.teamId,
+          lost: lost_values.lost,
+          date: lost_values.date,
+          women: lost_values.women,
+          sumLosts:
+            sql<number>`sum(lost_values.lost_value) over(partition by team order by date)`.as(
+              'sum_losts',
+            ),
+          round:
+            sql<number>`row_number() over (partition by team order by date)`.as(
+              'round',
+            ),
+        })
+        .from(lost_values),
+    )
 
   const grouped_losts = db.$with('grouped_losts').as(
     db
@@ -71,7 +100,9 @@ const getLosingStreaks = async ({ teamId }: { teamId: number }) => {
         date: summed_lost_values.date,
         women: summed_lost_values.women,
         sumLosts: summed_lost_values.sumLosts,
-        grouped: sql<number>`round - sum_losts`.as('grouped'),
+        grouped: sql<number>`round - sum_losts`.as(
+          'grouped',
+        ),
       })
       .from(summed_lost_values)
       .where(eq(summed_lost_values.lost, true)),
@@ -87,7 +118,9 @@ const getLosingStreaks = async ({ teamId }: { teamId: number }) => {
           sql<number>`mode() within group (order by grouped_losts.grouped)`.as(
             'max_count',
           ),
-        dates: sql<string[]>`array_agg(date order by date)`.as('dates'),
+        dates: sql<
+          Array<string>
+        >`array_agg(date order by date)`.as('dates'),
       })
       .from(grouped_losts)
       .groupBy(
@@ -103,10 +136,13 @@ const getLosingStreaks = async ({ teamId }: { teamId: number }) => {
       teamId: group_array.teamId,
       name: teams.name as unknown as SQL<string>,
       women: group_array.women,
-      gameCount: sql<number>`array_length(group_array.dates,1)`.as(
-        'game_count',
+      gameCount:
+        sql<number>`array_length(group_array.dates,1)`.as(
+          'game_count',
+        ),
+      startDate: sql<string>`group_array.dates[1]`.as(
+        'start_date',
       ),
-      startDate: sql<string>`group_array.dates[1]`.as('start_date'),
       endDate:
         sql<string>`group_array.dates[array_upper(group_array.dates,1)]`.as(
           'end_date',
@@ -114,14 +150,20 @@ const getLosingStreaks = async ({ teamId }: { teamId: number }) => {
     })
     .from(group_array)
     .leftJoin(teams, eq(teams.teamId, group_array.teamId))
-    .where(gt(sql<number>`array_length(group_array.dates,1)`, 5))
+    .where(
+      gt(sql<number>`array_length(group_array.dates,1)`, 5),
+    )
     .orderBy(desc(sql`game_count`), asc(sql`start_date`))
     .limit(3)
 
   return streaks
 }
 
-const getDrawStreaks = async ({ teamId }: { teamId: number }) => {
+const getDrawStreaks = async ({
+  teamId,
+}: {
+  teamId: number
+}) => {
   const draw_values = db.$with('draw_values').as(
     db
       .select({
@@ -129,33 +171,41 @@ const getDrawStreaks = async ({ teamId }: { teamId: number }) => {
         draw: teamgames.draw,
         date: teamgames.date,
         women: teamgames.women,
-        drawValue: sql<number>`case when draw = true then 1 else 0 end`.as(
-          'draw_value',
-        ),
+        drawValue:
+          sql<number>`case when draw = true then 1 else 0 end`.as(
+            'draw_value',
+          ),
       })
       .from(teamgames)
-      .where(and(eq(teamgames.played, true), eq(teamgames.teamId, teamId))),
+      .where(
+        and(
+          eq(teamgames.played, true),
+          eq(teamgames.teamId, teamId),
+        ),
+      ),
   )
 
-  const summed_draw_values = db.$with('summed_draw_values').as(
-    db
-      .with(draw_values)
-      .select({
-        teamId: draw_values.teamId,
-        draw: draw_values.draw,
-        date: draw_values.date,
-        women: draw_values.women,
-        sumdraws:
-          sql<number>`sum(draw_values.draw_value) over(partition by team order by date)`.as(
-            'sum_draws',
-          ),
-        round:
-          sql<number>`row_number() over (partition by team order by date)`.as(
-            'round',
-          ),
-      })
-      .from(draw_values),
-  )
+  const summed_draw_values = db
+    .$with('summed_draw_values')
+    .as(
+      db
+        .with(draw_values)
+        .select({
+          teamId: draw_values.teamId,
+          draw: draw_values.draw,
+          date: draw_values.date,
+          women: draw_values.women,
+          sumdraws:
+            sql<number>`sum(draw_values.draw_value) over(partition by team order by date)`.as(
+              'sum_draws',
+            ),
+          round:
+            sql<number>`row_number() over (partition by team order by date)`.as(
+              'round',
+            ),
+        })
+        .from(draw_values),
+    )
 
   const grouped_draws = db.$with('grouped_draws').as(
     db
@@ -166,7 +216,9 @@ const getDrawStreaks = async ({ teamId }: { teamId: number }) => {
         date: summed_draw_values.date,
         women: summed_draw_values.women,
         sumdraws: summed_draw_values.sumdraws,
-        grouped: sql<number>`round - sum_draws`.as('grouped'),
+        grouped: sql<number>`round - sum_draws`.as(
+          'grouped',
+        ),
       })
       .from(summed_draw_values)
       .where(eq(summed_draw_values.draw, true)),
@@ -182,7 +234,9 @@ const getDrawStreaks = async ({ teamId }: { teamId: number }) => {
           sql<number>`mode() within group (order by grouped_draws.grouped)`.as(
             'max_count',
           ),
-        dates: sql<string[]>`array_agg(date order by date)`.as('dates'),
+        dates: sql<
+          Array<string>
+        >`array_agg(date order by date)`.as('dates'),
       })
       .from(grouped_draws)
       .groupBy(
@@ -198,10 +252,13 @@ const getDrawStreaks = async ({ teamId }: { teamId: number }) => {
       teamId: group_array.teamId,
       name: teams.name as unknown as SQL<string>,
       women: group_array.women,
-      gameCount: sql<number>`array_length(group_array.dates,1)`.as(
-        'game_count',
+      gameCount:
+        sql<number>`array_length(group_array.dates,1)`.as(
+          'game_count',
+        ),
+      startDate: sql<string>`group_array.dates[1]`.as(
+        'start_date',
       ),
-      startDate: sql<string>`group_array.dates[1]`.as('start_date'),
       endDate:
         sql<string>`group_array.dates[array_upper(group_array.dates,1)]`.as(
           'end_date',
@@ -209,14 +266,20 @@ const getDrawStreaks = async ({ teamId }: { teamId: number }) => {
     })
     .from(group_array)
     .leftJoin(teams, eq(teams.teamId, group_array.teamId))
-    .where(gt(sql<number>`array_length(group_array.dates,1)`, 2))
+    .where(
+      gt(sql<number>`array_length(group_array.dates,1)`, 2),
+    )
     .orderBy(desc(sql`game_count`), asc(sql`start_date`))
     .limit(3)
 
   return streaks
 }
 
-const getWinStreaks = async ({ teamId }: { teamId: number }) => {
+const getWinStreaks = async ({
+  teamId,
+}: {
+  teamId: number
+}) => {
   const win_values = db.$with('win_values').as(
     db
       .select({
@@ -224,33 +287,41 @@ const getWinStreaks = async ({ teamId }: { teamId: number }) => {
         win: teamgames.win,
         date: teamgames.date,
         women: teamgames.women,
-        winValue: sql<number>`case when win = true then 1 else 0 end`.as(
-          'win_value',
-        ),
+        winValue:
+          sql<number>`case when win = true then 1 else 0 end`.as(
+            'win_value',
+          ),
       })
       .from(teamgames)
-      .where(and(eq(teamgames.played, true), eq(teamgames.teamId, teamId))),
+      .where(
+        and(
+          eq(teamgames.played, true),
+          eq(teamgames.teamId, teamId),
+        ),
+      ),
   )
 
-  const summed_win_values = db.$with('summed_win_values').as(
-    db
-      .with(win_values)
-      .select({
-        teamId: win_values.teamId,
-        win: win_values.win,
-        date: win_values.date,
-        women: win_values.women,
-        sumwins:
-          sql<number>`sum(win_values.win_value) over(partition by team order by date)`.as(
-            'sum_wins',
-          ),
-        round:
-          sql<number>`row_number() over (partition by team order by date)`.as(
-            'round',
-          ),
-      })
-      .from(win_values),
-  )
+  const summed_win_values = db
+    .$with('summed_win_values')
+    .as(
+      db
+        .with(win_values)
+        .select({
+          teamId: win_values.teamId,
+          win: win_values.win,
+          date: win_values.date,
+          women: win_values.women,
+          sumwins:
+            sql<number>`sum(win_values.win_value) over(partition by team order by date)`.as(
+              'sum_wins',
+            ),
+          round:
+            sql<number>`row_number() over (partition by team order by date)`.as(
+              'round',
+            ),
+        })
+        .from(win_values),
+    )
 
   const grouped_wins = db.$with('grouped_wins').as(
     db
@@ -261,7 +332,9 @@ const getWinStreaks = async ({ teamId }: { teamId: number }) => {
         date: summed_win_values.date,
         women: summed_win_values.women,
         sumwins: summed_win_values.sumwins,
-        grouped: sql<number>`round - sum_wins`.as('grouped'),
+        grouped: sql<number>`round - sum_wins`.as(
+          'grouped',
+        ),
       })
       .from(summed_win_values)
       .where(eq(summed_win_values.win, true)),
@@ -277,10 +350,16 @@ const getWinStreaks = async ({ teamId }: { teamId: number }) => {
           sql<number>`mode() within group (order by grouped_wins.grouped)`.as(
             'max_count',
           ),
-        dates: sql<string[]>`array_agg(date order by date)`.as('dates'),
+        dates: sql<
+          Array<string>
+        >`array_agg(date order by date)`.as('dates'),
       })
       .from(grouped_wins)
-      .groupBy(grouped_wins.grouped, grouped_wins.teamId, grouped_wins.women),
+      .groupBy(
+        grouped_wins.grouped,
+        grouped_wins.teamId,
+        grouped_wins.women,
+      ),
   )
 
   const streaks = await db
@@ -289,10 +368,13 @@ const getWinStreaks = async ({ teamId }: { teamId: number }) => {
       teamId: group_array.teamId,
       name: teams.name as unknown as SQL<string>,
       women: group_array.women,
-      gameCount: sql<number>`array_length(group_array.dates,1)`.as(
-        'game_count',
+      gameCount:
+        sql<number>`array_length(group_array.dates,1)`.as(
+          'game_count',
+        ),
+      startDate: sql<string>`group_array.dates[1]`.as(
+        'start_date',
       ),
-      startDate: sql<string>`group_array.dates[1]`.as('start_date'),
       endDate:
         sql<string>`group_array.dates[array_upper(group_array.dates,1)]`.as(
           'end_date',
@@ -300,14 +382,20 @@ const getWinStreaks = async ({ teamId }: { teamId: number }) => {
     })
     .from(group_array)
     .leftJoin(teams, eq(teams.teamId, group_array.teamId))
-    .where(gt(sql<number>`array_length(group_array.dates,1)`, 5))
+    .where(
+      gt(sql<number>`array_length(group_array.dates,1)`, 5),
+    )
     .orderBy(desc(sql`game_count`), asc(sql`start_date`))
     .limit(3)
 
   return streaks
 }
 
-const getNoWinStreaks = async ({ teamId }: { teamId: number }) => {
+const getNoWinStreaks = async ({
+  teamId,
+}: {
+  teamId: number
+}) => {
   const win_values = db.$with('win_values').as(
     db
       .select({
@@ -315,33 +403,41 @@ const getNoWinStreaks = async ({ teamId }: { teamId: number }) => {
         win: teamgames.win,
         date: teamgames.date,
         women: teamgames.women,
-        winValue: sql<number>`case when win = false then 1 else 0 end`.as(
-          'win_value',
-        ),
+        winValue:
+          sql<number>`case when win = false then 1 else 0 end`.as(
+            'win_value',
+          ),
       })
       .from(teamgames)
-      .where(and(eq(teamgames.played, true), eq(teamgames.teamId, teamId))),
+      .where(
+        and(
+          eq(teamgames.played, true),
+          eq(teamgames.teamId, teamId),
+        ),
+      ),
   )
 
-  const summed_win_values = db.$with('summed_win_values').as(
-    db
-      .with(win_values)
-      .select({
-        teamId: win_values.teamId,
-        win: win_values.win,
-        date: win_values.date,
-        women: win_values.women,
-        sumwins:
-          sql<number>`sum(win_values.win_value) over(partition by team order by date)`.as(
-            'sum_wins',
-          ),
-        round:
-          sql<number>`row_number() over (partition by team order by date)`.as(
-            'round',
-          ),
-      })
-      .from(win_values),
-  )
+  const summed_win_values = db
+    .$with('summed_win_values')
+    .as(
+      db
+        .with(win_values)
+        .select({
+          teamId: win_values.teamId,
+          win: win_values.win,
+          date: win_values.date,
+          women: win_values.women,
+          sumwins:
+            sql<number>`sum(win_values.win_value) over(partition by team order by date)`.as(
+              'sum_wins',
+            ),
+          round:
+            sql<number>`row_number() over (partition by team order by date)`.as(
+              'round',
+            ),
+        })
+        .from(win_values),
+    )
 
   const grouped_wins = db.$with('grouped_wins').as(
     db
@@ -352,7 +448,9 @@ const getNoWinStreaks = async ({ teamId }: { teamId: number }) => {
         date: summed_win_values.date,
         women: summed_win_values.women,
         sumwins: summed_win_values.sumwins,
-        grouped: sql<number>`round - sum_wins`.as('grouped'),
+        grouped: sql<number>`round - sum_wins`.as(
+          'grouped',
+        ),
       })
       .from(summed_win_values)
       .where(eq(summed_win_values.win, true)),
@@ -368,10 +466,16 @@ const getNoWinStreaks = async ({ teamId }: { teamId: number }) => {
           sql<number>`mode() within group (order by grouped_wins.grouped)`.as(
             'max_count',
           ),
-        dates: sql<string[]>`array_agg(date order by date)`.as('dates'),
+        dates: sql<
+          Array<string>
+        >`array_agg(date order by date)`.as('dates'),
       })
       .from(grouped_wins)
-      .groupBy(grouped_wins.grouped, grouped_wins.teamId, grouped_wins.women),
+      .groupBy(
+        grouped_wins.grouped,
+        grouped_wins.teamId,
+        grouped_wins.women,
+      ),
   )
 
   const streaks = await db
@@ -380,10 +484,13 @@ const getNoWinStreaks = async ({ teamId }: { teamId: number }) => {
       teamId: group_array.teamId,
       name: teams.name as unknown as SQL<string>,
       women: group_array.women,
-      gameCount: sql<number>`array_length(group_array.dates,1)`.as(
-        'game_count',
+      gameCount:
+        sql<number>`array_length(group_array.dates,1)`.as(
+          'game_count',
+        ),
+      startDate: sql<string>`group_array.dates[1]`.as(
+        'start_date',
       ),
-      startDate: sql<string>`group_array.dates[1]`.as('start_date'),
       endDate:
         sql<string>`group_array.dates[array_upper(group_array.dates,1)]`.as(
           'end_date',
@@ -391,14 +498,20 @@ const getNoWinStreaks = async ({ teamId }: { teamId: number }) => {
     })
     .from(group_array)
     .leftJoin(teams, eq(teams.teamId, group_array.teamId))
-    .where(gt(sql<number>`array_length(group_array.dates,1)`, 5))
+    .where(
+      gt(sql<number>`array_length(group_array.dates,1)`, 5),
+    )
     .orderBy(desc(sql`game_count`), asc(sql`start_date`))
     .limit(3)
 
   return streaks
 }
 
-const getUnbeatenStreaks = async ({ teamId }: { teamId: number }) => {
+const getUnbeatenStreaks = async ({
+  teamId,
+}: {
+  teamId: number
+}) => {
   const lost_values = db.$with('lost_values').as(
     db
       .select({
@@ -406,33 +519,41 @@ const getUnbeatenStreaks = async ({ teamId }: { teamId: number }) => {
         lost: teamgames.lost,
         date: teamgames.date,
         women: teamgames.women,
-        lostValue: sql<number>`case when lost = false then 1 else 0 end`.as(
-          'lost_value',
-        ),
+        lostValue:
+          sql<number>`case when lost = false then 1 else 0 end`.as(
+            'lost_value',
+          ),
       })
       .from(teamgames)
-      .where(and(eq(teamgames.played, true), eq(teamgames.teamId, teamId))),
+      .where(
+        and(
+          eq(teamgames.played, true),
+          eq(teamgames.teamId, teamId),
+        ),
+      ),
   )
 
-  const summed_lost_values = db.$with('summed_lost_values').as(
-    db
-      .with(lost_values)
-      .select({
-        teamId: lost_values.teamId,
-        lost: lost_values.lost,
-        date: lost_values.date,
-        women: lost_values.women,
-        sumLosts:
-          sql<number>`sum(lost_values.lost_value) over(partition by team order by date)`.as(
-            'sum_losts',
-          ),
-        round:
-          sql<number>`row_number() over (partition by team order by date)`.as(
-            'round',
-          ),
-      })
-      .from(lost_values),
-  )
+  const summed_lost_values = db
+    .$with('summed_lost_values')
+    .as(
+      db
+        .with(lost_values)
+        .select({
+          teamId: lost_values.teamId,
+          lost: lost_values.lost,
+          date: lost_values.date,
+          women: lost_values.women,
+          sumLosts:
+            sql<number>`sum(lost_values.lost_value) over(partition by team order by date)`.as(
+              'sum_losts',
+            ),
+          round:
+            sql<number>`row_number() over (partition by team order by date)`.as(
+              'round',
+            ),
+        })
+        .from(lost_values),
+    )
 
   const grouped_losts = db.$with('grouped_losts').as(
     db
@@ -443,7 +564,9 @@ const getUnbeatenStreaks = async ({ teamId }: { teamId: number }) => {
         date: summed_lost_values.date,
         women: summed_lost_values.women,
         sumLosts: summed_lost_values.sumLosts,
-        grouped: sql<number>`round - sum_losts`.as('grouped'),
+        grouped: sql<number>`round - sum_losts`.as(
+          'grouped',
+        ),
       })
       .from(summed_lost_values)
       .where(eq(summed_lost_values.lost, true)),
@@ -459,7 +582,9 @@ const getUnbeatenStreaks = async ({ teamId }: { teamId: number }) => {
           sql<number>`mode() within group (order by grouped_losts.grouped)`.as(
             'max_count',
           ),
-        dates: sql<string[]>`array_agg(date order by date)`.as('dates'),
+        dates: sql<
+          Array<string>
+        >`array_agg(date order by date)`.as('dates'),
       })
       .from(grouped_losts)
       .groupBy(
@@ -475,10 +600,13 @@ const getUnbeatenStreaks = async ({ teamId }: { teamId: number }) => {
       teamId: group_array.teamId,
       name: teams.name as unknown as SQL<string>,
       women: group_array.women,
-      gameCount: sql<number>`array_length(group_array.dates,1)`.as(
-        'game_count',
+      gameCount:
+        sql<number>`array_length(group_array.dates,1)`.as(
+          'game_count',
+        ),
+      startDate: sql<string>`group_array.dates[1]`.as(
+        'start_date',
       ),
-      startDate: sql<string>`group_array.dates[1]`.as('start_date'),
       endDate:
         sql<string>`group_array.dates[array_upper(group_array.dates,1)]`.as(
           'end_date',
@@ -486,18 +614,27 @@ const getUnbeatenStreaks = async ({ teamId }: { teamId: number }) => {
     })
     .from(group_array)
     .leftJoin(teams, eq(teams.teamId, group_array.teamId))
-    .where(gt(sql<number>`array_length(group_array.dates,1)`, 5))
+    .where(
+      gt(sql<number>`array_length(group_array.dates,1)`, 5),
+    )
     .orderBy(desc(sql`game_count`), asc(sql`start_date`))
     .limit(3)
 
   return streaks
 }
 
-const getPlayoffStreak = async ({ teamId }: { teamId: number }) => {
+const getPlayoffStreak = async ({
+  teamId,
+}: {
+  teamId: number
+}) => {
   const season_order = db.$with('season_order').as(
     db
       .select({
-        rowNum: sql<number>`dense_rank() over (order by "year")`.as('row_num'),
+        rowNum:
+          sql<number>`dense_rank() over (order by "year")`.as(
+            'row_num',
+          ),
         seasonId: seasons.seasonId,
         year: seasons.year,
       })
@@ -519,7 +656,10 @@ const getPlayoffStreak = async ({ teamId }: { teamId: number }) => {
               'semi',
               'final',
             ]),
-            inArray(teamgames.group, ['SlutspelA', 'SlutspelB']),
+            inArray(teamgames.group, [
+              'SlutspelA',
+              'SlutspelB',
+            ]),
           ),
         ),
       ),
@@ -530,9 +670,10 @@ const getPlayoffStreak = async ({ teamId }: { teamId: number }) => {
       .with(season_order, playoff_seasons)
       .select({
         rowNum: season_order.rowNum,
-        rowPlayoff: sql<number>`row_number() over (order by row_num)`.as(
-          'row_playoff',
-        ),
+        rowPlayoff:
+          sql<number>`row_number() over (order by row_num)`.as(
+            'row_playoff',
+          ),
         year: season_order.year,
       })
       .from(season_order)
@@ -546,7 +687,9 @@ const getPlayoffStreak = async ({ teamId }: { teamId: number }) => {
     db
       .with(selected_rows)
       .select({
-        grouped: sql<number>`row_num - row_playoff`.as('grouped'),
+        grouped: sql<number>`row_num - row_playoff`.as(
+          'grouped',
+        ),
         year: selected_rows.year,
       })
       .from(selected_rows),
@@ -556,10 +699,13 @@ const getPlayoffStreak = async ({ teamId }: { teamId: number }) => {
     db
       .with(grouped_playoffs)
       .select({
-        maxCount: sql<number>`mode() within group (order by grouped)`.as(
-          'max_count',
+        maxCount:
+          sql<number>`mode() within group (order by grouped)`.as(
+            'max_count',
+          ),
+        years: sql`array_agg("year" order by "year")`.as(
+          'years',
         ),
-        years: sql`array_agg("year" order by "year")`.as('years'),
       })
       .from(grouped_playoffs)
       .groupBy(grouped_playoffs.grouped),
@@ -572,10 +718,17 @@ const getPlayoffStreak = async ({ teamId }: { teamId: number }) => {
         .mapWith(Number)
         .as('streak_length'),
       startYear: sql<string>`years[1]`.as('start_year'),
-      endYear: sql<string>`years[array_upper(years,1)]`.as('end_year'),
+      endYear: sql<string>`years[array_upper(years,1)]`.as(
+        'end_year',
+      ),
     })
     .from(group_array)
-    .where(gt(sql<number>`array_length(years,1)`.mapWith(Number), 6))
+    .where(
+      gt(
+        sql<number>`array_length(years,1)`.mapWith(Number),
+        6,
+      ),
+    )
     .orderBy(desc(sql`streak_length`), asc(sql`start_year`))
 
   return streaks

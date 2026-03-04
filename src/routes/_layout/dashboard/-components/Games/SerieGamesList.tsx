@@ -1,7 +1,9 @@
-import ConfirmDialog from '@/components/Common/ConfirmDialog'
-import { Game } from '@/lib/types/game'
 import { Outlet } from '@tanstack/react-router'
 import { useRef, useState } from 'react'
+
+import ConfirmDialog from '@/components/Common/ConfirmDialog'
+import type { Game } from '@/lib/types/game'
+
 import { deleteGameMutation } from '../../-hooks/deleteGameMutation'
 import SerieGamesListItem from './SerieGamesListItem'
 

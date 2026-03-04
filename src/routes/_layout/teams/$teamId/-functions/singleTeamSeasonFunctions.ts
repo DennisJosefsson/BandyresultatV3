@@ -1,18 +1,5 @@
-import { db } from '@/db'
-import {
-  seasons,
-  series,
-  tables,
-  teamgames,
-  teams,
-  teamseasons,
-} from '@/db/schema'
-import { Game } from '@/lib/types/game'
-import {
-  gameSortFunction,
-  leagueTableParser,
-  tableSortFunction,
-} from '@/lib/utils/sortFunctions'
+import type {
+  SQL} from 'drizzle-orm';
 import {
   and,
   asc,
@@ -26,9 +13,24 @@ import {
   lt,
   notInArray,
   sql,
-  SQL,
   sum,
 } from 'drizzle-orm'
+
+import { db } from '@/db'
+import {
+  seasons,
+  series,
+  tables,
+  teamgames,
+  teams,
+  teamseasons,
+} from '@/db/schema'
+import type { Game } from '@/lib/types/game'
+import {
+  gameSortFunction,
+  leagueTableParser,
+  tableSortFunction,
+} from '@/lib/utils/sortFunctions'
 
 type BonusPoints = {
   [key: string]: number
@@ -41,7 +43,7 @@ export const getTeamSeasonStaticTables = async ({
 }: {
   seasonYear: string
   women: boolean
-  groupArray: string[]
+  groupArray: Array<string>
 }) => {
   const getStaticTables = await db
     .select({
@@ -114,7 +116,7 @@ export const getTeamSeasonTables = async ({
 }: {
   seasonYear: string
   women: boolean
-  groupArray: string[]
+  groupArray: Array<string>
 }) => {
   const getTeamArray = await db
     .selectDistinct({
@@ -365,14 +367,14 @@ export const getTeamSeasonTables = async ({
 }
 
 type GetSeasonGamesProps = {
-  gamesArray: Game[]
-  seriesArray: {
+  gamesArray: Array<Game>
+  seriesArray: Array<{
     category: string
     group: string
     comment: string | null
     name: string
     level: number
-  }[]
+  }>
 }
 
 type SeriesData = {
@@ -380,7 +382,7 @@ type SeriesData = {
   comment: string
   name: string
   level: number
-  serieStructure: number[]
+  serieStructure: Array<number>
 }
 
 const getTime = (date?: Date): number => {
@@ -398,7 +400,7 @@ export const getSeasonGames = ({
       name: serie.name,
       level: serie.level,
     }
-  }) as SeriesData[]
+  }) as Array<SeriesData>
 
   const unsortedPlayedGames = gamesArray
     .filter((game) => game.played === true)

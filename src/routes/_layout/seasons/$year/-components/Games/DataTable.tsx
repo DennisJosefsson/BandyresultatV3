@@ -1,20 +1,21 @@
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table'
-
-import { useFavTeam } from '@/lib/contexts/favTeamsContext'
-import { cn } from '@/lib/utils/utils'
 import { getRouteApi, useLocation } from '@tanstack/react-router'
+import type {
+  ColumnDef} from '@tanstack/react-table';
 import {
-  ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
 import { useMediaQuery } from 'usehooks-ts'
 
+import { Button } from '@/components/ui/button'
+import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table'
+import { useFavTeam } from '@/lib/contexts/favTeamsContext'
+import { cn } from '@/lib/utils/utils'
+
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+  columns: Array<ColumnDef<TData, TValue>>
+  data: Array<TData>
   teamObject: {
     [x: string]: number
   }

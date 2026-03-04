@@ -1,7 +1,13 @@
+import {
+  CatchBoundary,
+  Outlet,
+  createFileRoute,
+} from '@tanstack/react-router'
+import { zodValidator } from '@tanstack/zod-adapter'
+
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import { clientSearchParams } from '@/lib/types/search'
-import { CatchBoundary, createFileRoute, Outlet } from '@tanstack/react-router'
-import { zodValidator } from '@tanstack/zod-adapter'
+
 import { getSearchTeams } from './search/-functions/getSearchTeams'
 
 export const Route = createFileRoute('/_layout/search')({
@@ -20,7 +26,11 @@ function RouteComponent() {
           console.error(error)
         }}
         errorComponent={({ error, reset }) => (
-          <SimpleErrorComponent id="Sök" error={error} reset={reset} />
+          <SimpleErrorComponent
+            id="Sök"
+            error={error}
+            reset={reset}
+          />
         )}
       >
         <Outlet />

@@ -1,6 +1,8 @@
+import { getRouteApi } from '@tanstack/react-router'
+
 import { Card } from '@/components/ui/card'
 import { Map, MapControls } from '@/components/ui/map'
-import { getRouteApi } from '@tanstack/react-router'
+
 import MapItem from './MapItem'
 
 const route = getRouteApi('/_layout/seasons/$year/$group/map')

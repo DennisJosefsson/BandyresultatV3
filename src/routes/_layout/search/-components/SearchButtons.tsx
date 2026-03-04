@@ -1,7 +1,10 @@
-import { Button } from '@/components/ui/button'
+import {
+  useNavigate,
+  useSearch,
+} from '@tanstack/react-router'
+import type { Dispatch, SetStateAction } from 'react'
 
-import { useNavigate, useSearch } from '@tanstack/react-router'
-import { Dispatch, SetStateAction } from 'react'
+import { Button } from '@/components/ui/button'
 
 type SearchButtonsProps = {
   sendSearchRequest: () => void
@@ -12,7 +15,9 @@ const SearchButtons = ({
   sendSearchRequest,
   setOpenAccordion,
 }: SearchButtonsProps) => {
-  const searchParams = useSearch({ from: '/_layout/search' })
+  const searchParams = useSearch({
+    from: '/_layout/search',
+  })
   const navigate = useNavigate({ from: '/search' })
   const handleOnClick = () => {
     sendSearchRequest()

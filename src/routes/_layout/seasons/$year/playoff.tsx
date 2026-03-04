@@ -1,11 +1,12 @@
-import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import {
   CatchBoundary,
-  createFileRoute,
   Link,
   Outlet,
+  createFileRoute,
 } from '@tanstack/react-router'
+
+import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 export const Route = createFileRoute('/_layout/seasons/$year/playoff')({
   staticData: { breadcrumb: 'Slutspel' },

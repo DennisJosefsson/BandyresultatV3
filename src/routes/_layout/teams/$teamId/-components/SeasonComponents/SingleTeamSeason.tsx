@@ -1,12 +1,24 @@
+import { Link, getRouteApi } from '@tanstack/react-router'
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+} from 'lucide-react'
+
 import { Button } from '@/components/ui/button'
 import { CardContent } from '@/components/ui/card'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { getRouteApi, Link } from '@tanstack/react-router'
-import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/components/ui/tabs'
+
 import GamesList from './Games/GamesList'
 import SeasonTables from './SeasonTables'
 
-const route = getRouteApi('/_layout/teams/$teamId/$seasonId')
+const route = getRouteApi(
+  '/_layout/teams/$teamId/$seasonId',
+)
 
 const SingleTeamSeason = () => {
   const season = route.useLoaderData()
@@ -21,13 +33,19 @@ const SingleTeamSeason = () => {
             params={(prev) => ({
               ...prev,
               seasonId:
-                season.previousSeason?.seasonId ?? season.lastSeason?.seasonId,
+                season.previousSeason?.seasonId ??
+                season.lastSeason?.seasonId,
             })}
           >
-            <Button variant="ghost" aria-label="Gå till föregående säsong">
+            <Button
+              variant="ghost"
+              aria-label="Gå till föregående säsong"
+            >
               <div className="inline-flex items-center gap-1">
                 <ChevronLeftIcon className="h-4 w-4" />
-                <span className="hidden sm:block">Föregående</span>
+                <span className="hidden sm:block">
+                  Föregående
+                </span>
               </div>
             </Button>
           </Link>
@@ -41,12 +59,18 @@ const SingleTeamSeason = () => {
             params={(prev) => ({
               ...prev,
               seasonId:
-                season.nextSeason?.seasonId ?? season.firstSeason?.seasonId,
+                season.nextSeason?.seasonId ??
+                season.firstSeason?.seasonId,
             })}
           >
-            <Button variant="ghost" aria-label="Gå till nästa säsong">
+            <Button
+              variant="ghost"
+              aria-label="Gå till nästa säsong"
+            >
               <div className="inline-flex items-center gap-1">
-                <span className="hidden sm:block">Nästa</span>
+                <span className="hidden sm:block">
+                  Nästa
+                </span>
                 <ChevronRightIcon className="h-4 w-4" />
               </div>
             </Button>

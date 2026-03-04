@@ -1,8 +1,10 @@
+import { getRouteApi } from '@tanstack/react-router'
+import { useState } from 'react'
+
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-import { getRouteApi } from '@tanstack/react-router'
-import { useState } from 'react'
+
 import { addTeamToSerieMutation } from '../../../-hooks/addTeamToSerieMutation'
 
 const route = getRouteApi(

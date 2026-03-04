@@ -1,19 +1,24 @@
 import Date from '@/components/Common/Date'
+import type { GroupGames } from '@/lib/types/game'
 
-import { GroupGames } from '@/lib/types/game'
 import GamesListItem from './GamesListItem'
 
 type GameListProps = {
-  gamesArray: GroupGames[]
+  gamesArray: Array<GroupGames>
   tab: string
   hasGames: boolean
 }
 
-const GamesList = ({ gamesArray, tab, hasGames }: GameListProps) => {
+const GamesList = ({
+  gamesArray,
+  tab,
+  hasGames,
+}: GameListProps) => {
   if (!hasGames) {
     return (
       <div className="mt-2 flex flex-row justify-center font-semibold">
-        Inga inlagda matcher denna säsong, men tabell ska finnas.
+        Inga inlagda matcher denna säsong, men tabell ska
+        finnas.
       </div>
     )
   }
@@ -31,7 +36,10 @@ const GamesList = ({ gamesArray, tab, hasGames }: GameListProps) => {
       <div>
         {gamesArray.map((group) => {
           return (
-            <div key={group.group} className="mb-6">
+            <div
+              key={group.group}
+              className="mb-6"
+            >
               <div
                 id={group.group}
                 className="group mb-0.5 flex flex-row items-center gap-1 lg:mb-1 2xl:mb-2"
@@ -60,7 +68,12 @@ const GamesList = ({ gamesArray, tab, hasGames }: GameListProps) => {
                         </div>
                       )}
                       {date.games.map((game) => {
-                        return <GamesListItem key={game.gameId} game={game} />
+                        return (
+                          <GamesListItem
+                            key={game.gameId}
+                            game={game}
+                          />
+                        )
                       })}
                     </div>
                   )

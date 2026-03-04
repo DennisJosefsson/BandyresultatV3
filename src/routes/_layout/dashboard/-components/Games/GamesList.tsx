@@ -1,10 +1,12 @@
-import { InlineEditGame } from '@/lib/types/game'
 import { Outlet } from '@tanstack/react-router'
 import { useState } from 'react'
+
+import type { InlineEditGame } from '@/lib/types/game'
+
 import GamesListItem from './GamesListItem'
 
 type GamesListProps = {
-  games: InlineEditGame[]
+  games: Array<InlineEditGame>
 }
 
 type GameEdit =

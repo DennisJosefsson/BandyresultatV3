@@ -1,10 +1,11 @@
+import { createServerFn } from '@tanstack/react-start'
+import { zodValidator } from '@tanstack/zod-adapter'
+
 import { db } from '@/db'
 import { series } from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import { newSeriesObject } from '@/lib/types/serie'
-import { createServerFn } from '@tanstack/react-start'
-import { zodValidator } from '@tanstack/zod-adapter'
 
 export const newSerieInput = createServerFn({ method: 'POST' })
   .middleware([errorMiddleware])

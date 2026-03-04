@@ -1,5 +1,7 @@
-import { eightColStarts, eightColStartsFourTeams } from '@/lib/utils/constants'
 import { getRouteApi } from '@tanstack/react-router'
+
+import { eightColStarts, eightColStartsFourTeams } from '@/lib/utils/constants'
+
 import DefaultComponent from './DefaultComponent'
 
 const route = getRouteApi('/_layout/seasons/$year/playoff/table')

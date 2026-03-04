@@ -1,5 +1,5 @@
 import { zd } from '../utils/zod'
-import { TeamBaseWithTeamGameId } from './team'
+import type { TeamBaseWithTeamGameId } from './team'
 
 export type Game = {
   gameId: number
@@ -33,32 +33,32 @@ export type Game = {
 }
 
 export type InlineEditGame = {
-    home: TeamBaseWithTeamGameId;
-    away: TeamBaseWithTeamGameId;
-    gameId: number;
-    date: string;
-    seasonId: number;
-    homeTeamId: number;
-    awayTeamId: number;
-    women: boolean;
-    result: string | null;
-    otResult: string | null;
-    homeGoal: number | null;
-    awayGoal: number | null;
-    round: number | null;
-    category: string;
-    createdAt: string | null;
-    updatedAt: string | null;
-    halftimeResult: string | null;
-    halftimeHomeGoal: number | null;
-    halftimeAwayGoal: number | null;
-    playoff: boolean | null;
-    extraTime: boolean | null;
-    penalties: boolean | null;
-    group: string;
-    mix: boolean | null;
-    serieId: number;
-    played: boolean | null;
+  home: TeamBaseWithTeamGameId
+  away: TeamBaseWithTeamGameId
+  gameId: number
+  date: string
+  seasonId: number
+  homeTeamId: number
+  awayTeamId: number
+  women: boolean
+  result: string | null
+  otResult: string | null
+  homeGoal: number | null
+  awayGoal: number | null
+  round: number | null
+  category: string
+  createdAt: string | null
+  updatedAt: string | null
+  halftimeResult: string | null
+  halftimeHomeGoal: number | null
+  halftimeAwayGoal: number | null
+  playoff: boolean | null
+  extraTime: boolean | null
+  penalties: boolean | null
+  group: string
+  mix: boolean | null
+  serieId: number
+  played: boolean | null
 }
 
 export type GameGroupBase<T> = {
@@ -66,24 +66,26 @@ export type GameGroupBase<T> = {
   name: string
   comment: string | null
   level: number
-  dates: {
+  dates: Array<{
     date: string
     games: T
-  }[]
+  }>
 }
 
-export type GroupGames = GameGroupBase<Game[]>
+export type GroupGames = GameGroupBase<Array<Game>>
 
 export type Games = {
-  played: GameGroupBase<Omit<Game, 'season'>[]>
-  unplayed: GameGroupBase<Omit<Game, 'season'>[]>
+  played: GameGroupBase<Array<Omit<Game, 'season'>>>
+  unplayed: GameGroupBase<Array<Omit<Game, 'season'>>>
   playedLength: number
   unplayedLength: number
 }
 
 export type PlayoffGames = {
-  played: GameGroupBase<Omit<Game, 'season'>[]>[]
-  unplayed: GameGroupBase<Omit<Game, 'season'>[]>[]
+  played: Array<GameGroupBase<Array<Omit<Game, 'season'>>>>
+  unplayed: Array<
+    GameGroupBase<Array<Omit<Game, 'season'>>>
+  >
   playedLength: number
   unplayedLength: number
 }
@@ -115,7 +117,9 @@ export const bulkGameFileParser = zd.array(
   }),
 )
 
-export type BulkGameFileParser = zd.infer<typeof bulkGameFileParser>
+export type BulkGameFileParser = zd.infer<
+  typeof bulkGameFileParser
+>
 
 export const submitGameResult = zd.object({
   gameId: zd.number().int().positive(),
@@ -123,15 +127,20 @@ export const submitGameResult = zd.object({
   awayTeamId: zd.number().int().positive(),
   result: zd
     .string()
-    .regex(/^\d{1,2}-\d{1,2}$/, { message: 'Fel resultatformat.' }),
+    .regex(/^\d{1,2}-\d{1,2}$/, {
+      message: 'Fel resultatformat.',
+    }),
   halftimeResult: zd
     .string()
-    .regex(/^\d{1,2}-\d{1,2}$/, { message: 'Fel resultatformat, halvtid.' })
+    .regex(/^\d{1,2}-\d{1,2}$/, {
+      message: 'Fel resultatformat, halvtid.',
+    })
     .or(zd.literal('')),
   otResult: zd
     .string()
     .regex(/^\d{1,2}-\d{1,2}$/, {
-      message: 'Fel resultatformat, övertid eller straffar.',
+      message:
+        'Fel resultatformat, övertid eller straffar.',
     })
     .or(zd.literal('')),
   date: zd.iso.date({ message: 'Fel datumformat.' }),

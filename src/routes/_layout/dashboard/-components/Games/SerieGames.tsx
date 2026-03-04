@@ -1,4 +1,5 @@
-import { getRouteApi, Outlet } from '@tanstack/react-router'
+import { Outlet, getRouteApi } from '@tanstack/react-router'
+
 import SerieGamesList from './SerieGamesList'
 
 const route = getRouteApi(

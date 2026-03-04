@@ -1,7 +1,8 @@
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from '@tanstack/react-router'
-import { RefObject } from 'react'
+import type { RefObject } from 'react'
 import { toast } from 'sonner'
+
 import { generateNewSeason } from '../-functions/SeasonFunctions/generateNewSeason'
 
 type Data = Awaited<ReturnType<typeof generateNewSeason>>

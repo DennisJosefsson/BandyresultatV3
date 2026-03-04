@@ -1,13 +1,13 @@
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 
 export type TabBarObject = {
   help?: ReactNode
 
-  tabBarArray: {
+  tabBarArray: Array<{
     tab: ReactNode
     tabName: string
     conditional?: string | boolean
-  }[]
+  }>
 }
 
 export const TabBarInline = ({

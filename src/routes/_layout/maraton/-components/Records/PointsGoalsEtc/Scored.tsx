@@ -1,4 +1,5 @@
 import { getRouteApi } from '@tanstack/react-router'
+
 import PointsGoals from './PointsGoals'
 import RenderMaxMinGoalsCard from './RenderMaxMinGoalsCard'
 

@@ -1,5 +1,6 @@
-import { db } from '@/db'
 import { createServerFn } from '@tanstack/react-start'
+
+import { db } from '@/db'
 
 export const getFirstAndLastSeason = createServerFn({ method: 'GET' }).handler(
   async () => {
