@@ -5,14 +5,14 @@ import {
 } from '@tanstack/react-router'
 import { Toaster } from 'sonner'
 
+import {
+  SidebarInset,
+  SidebarProvider,
+} from '@/components/base/ui/sidebar'
 import AppSidebar from '@/components/Common/Sidebar/AppSidebar'
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import Header from '@/components/Header/Header'
 import { Card } from '@/components/ui/card'
-import {
-  SidebarInset,
-  SidebarProvider,
-} from '@/components/ui/sidebar'
 export const Route = createFileRoute('/_layout')({
   component: RouteComponent,
 })

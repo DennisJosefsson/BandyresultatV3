@@ -5,38 +5,48 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
   useSidebar,
-} from '@/components/ui/sidebar'
+} from '@/components/base/ui/sidebar'
 
 export function SearchSidebar() {
-  const women = useSearch({ from: '__root__', select: (s) => s.women })
+  const women = useSearch({
+    from: '__root__',
+    select: (s) => s.women,
+  })
   const { open } = useSidebar()
 
   if (!open) return null
   return (
     <SidebarMenuSub>
       <SidebarMenuSubItem>
-        <SidebarMenuSubButton asChild>
-          <Link
-            to="/search"
-            search={{ women }}
-            activeOptions={{ includeSearch: false, exact: true }}
-            activeProps={{ className: `font-bold` }}
-          >
-            <span>Sök</span>
-          </Link>
-        </SidebarMenuSubButton>
+        <SidebarMenuSubButton
+          render={
+            <Link
+              to="/search"
+              search={{ women }}
+              activeOptions={{
+                includeSearch: false,
+                exact: true,
+              }}
+              activeProps={{ className: `font-bold` }}
+            >
+              <span>Sök</span>
+            </Link>
+          }
+        />
       </SidebarMenuSubItem>
       <SidebarMenuSubItem>
-        <SidebarMenuSubButton asChild>
-          <Link
-            to="/search/help"
-            search={{ women }}
-            activeOptions={{ includeSearch: false }}
-            activeProps={{ className: `font-bold` }}
-          >
-            <span>Hjälp</span>
-          </Link>
-        </SidebarMenuSubButton>
+        <SidebarMenuSubButton
+          render={
+            <Link
+              to="/search/help"
+              search={{ women }}
+              activeOptions={{ includeSearch: false }}
+              activeProps={{ className: `font-bold` }}
+            >
+              <span>Hjälp</span>
+            </Link>
+          }
+        />
       </SidebarMenuSubItem>
     </SidebarMenuSub>
   )

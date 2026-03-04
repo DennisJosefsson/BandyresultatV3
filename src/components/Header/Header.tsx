@@ -6,8 +6,8 @@ import { SidebarIcon } from 'lucide-react'
 
 import { Button } from '../base/ui/button.tsx'
 import { Label } from '../base/ui/label'
+import { useSidebar } from '../base/ui/sidebar'
 import { Switch } from '../base/ui/switch'
-import { useSidebar } from '../ui/sidebar'
 import { RouterBreadcrumb } from './Breadcrumb.tsx'
 import ModeToggle from './ModeToggle'
 

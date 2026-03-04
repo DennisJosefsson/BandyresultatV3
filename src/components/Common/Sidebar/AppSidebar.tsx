@@ -21,7 +21,7 @@ import {
 import {
   Collapsible,
   CollapsibleContent,
-} from '@/components/ui/collapsible'
+} from '@/components/base/ui/collapsible'
 import {
   Sidebar,
   SidebarContent,
@@ -29,7 +29,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from '@/components/ui/sidebar'
+} from '@/components/base/ui/sidebar'
 import { useGetFirstAndLastSeason } from '@/routes/_layout/seasons/$year/-hooks/useGetFirstAndLastSeason'
 
 import { SignedIn, SignedOut } from '@clerk/clerk-react'
@@ -145,23 +145,25 @@ const AppSidebar = () => {
             className="group/collapsible"
           >
             <SidebarMenuItem>
-              <SidebarMenuButton asChild>
-                <Link
-                  to="/seasons"
-                  search={{ women, page: 1 }}
-                  className="text-foreground hover:text-foreground transition-colors"
-                  onClick={() => openSeason(true)}
-                  activeProps={{ className: `font-bold` }}
-                >
-                  <span>
-                    <CalendarSearchIcon className="size-4" />
-                  </span>
-                  <span className="text-base">
-                    Säsonger
-                  </span>
-                  <span></span>
-                </Link>
-              </SidebarMenuButton>
+              <SidebarMenuButton
+                render={
+                  <Link
+                    to="/seasons"
+                    search={{ women, page: 1 }}
+                    className="text-foreground hover:text-foreground transition-colors"
+                    onClick={() => openSeason(true)}
+                    activeProps={{ className: `font-bold` }}
+                  >
+                    <span>
+                      <CalendarSearchIcon className="size-4" />
+                    </span>
+                    <span className="text-base">
+                      Säsonger
+                    </span>
+                    <span></span>
+                  </Link>
+                }
+              />
 
               {/* <CollapsibleTrigger asChild>
                 <SidebarMenuAction>
@@ -187,20 +189,23 @@ const AppSidebar = () => {
             className="group/collapsible"
           >
             <SidebarMenuItem>
-              <SidebarMenuButton asChild>
-                <Link
-                  to="/teams"
-                  search={{ women }}
-                  className="text-foreground hover:text-foreground transition-colors"
-                  activeProps={{ className: `font-bold` }}
-                  onClick={() => openTeams(true)}
-                >
-                  <span>
-                    <ShieldUserIcon className="size-4" />
-                  </span>
-                  <span className="text-base">Lag</span>
-                </Link>
-              </SidebarMenuButton>
+              <SidebarMenuButton
+                render={
+                  <Link
+                    to="/teams"
+                    search={{ women }}
+                    className="text-foreground hover:text-foreground transition-colors"
+                    activeProps={{ className: `font-bold` }}
+                    onClick={() => openTeams(true)}
+                  >
+                    <span>
+                      <ShieldUserIcon className="size-4" />
+                    </span>
+                    <span className="text-base">Lag</span>
+                  </Link>
+                }
+              />
+
               {/* <CollapsibleTrigger asChild>
                 <SidebarMenuAction>
                   <ChevronDown className="ml-auto h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
@@ -217,19 +222,22 @@ const AppSidebar = () => {
             className="group/collapsible"
           >
             <SidebarMenuItem>
-              <SidebarMenuButton asChild>
-                <Link
-                  to="/search"
-                  search={{ women }}
-                  className="text-foreground hover:text-foreground transition-colors"
-                  activeProps={{ className: `font-bold` }}
-                >
-                  <span>
-                    <SearchIcon className="size-4" />
-                  </span>
-                  <span className="text-base">Sök</span>
-                </Link>
-              </SidebarMenuButton>
+              <SidebarMenuButton
+                render={
+                  <Link
+                    to="/search"
+                    search={{ women }}
+                    className="text-foreground hover:text-foreground transition-colors"
+                    activeProps={{ className: `font-bold` }}
+                  >
+                    <span>
+                      <SearchIcon className="size-4" />
+                    </span>
+                    <span className="text-base">Sök</span>
+                  </Link>
+                }
+              />
+
               {/* <CollapsibleTrigger asChild>
                 <SidebarMenuAction>
                   <ChevronDown className="ml-auto h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
@@ -247,23 +255,25 @@ const AppSidebar = () => {
             className="group/collapsible"
           >
             <SidebarMenuItem>
-              <SidebarMenuButton asChild>
-                <Link
-                  to="/maraton/table/$maratonTable"
-                  params={{ maratonTable: 'all' }}
-                  search={{ women }}
-                  className="text-foreground hover:text-foreground transition-colors"
-                  activeProps={{ className: `font-bold` }}
-                  onClick={() => openMaraton(true)}
-                >
-                  <span>
-                    <TableOfContentsIcon className="size-4" />
-                  </span>
-                  <span className="text-base">
-                    Maratontabeller
-                  </span>
-                </Link>
-              </SidebarMenuButton>
+              <SidebarMenuButton
+                render={
+                  <Link
+                    to="/maraton/table/$maratonTable"
+                    params={{ maratonTable: 'all' }}
+                    search={{ women }}
+                    className="text-foreground hover:text-foreground transition-colors"
+                    activeProps={{ className: `font-bold` }}
+                    onClick={() => openMaraton(true)}
+                  >
+                    <span>
+                      <TableOfContentsIcon className="size-4" />
+                    </span>
+                    <span className="text-base">
+                      Maratontabeller
+                    </span>
+                  </Link>
+                }
+              />
 
               <CollapsibleContent>
                 <MaratonSidebar />
@@ -271,35 +281,43 @@ const AppSidebar = () => {
             </SidebarMenuItem>
           </Collapsible>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link
-                to="/about"
-                search={{ women }}
-                className="text-foreground hover:text-foreground transition-colors"
-                activeProps={{ className: `font-bold` }}
-              >
-                <span>
-                  <InfoIcon className="size-4" />
-                </span>
-                <span className="text-base">Om sidan</span>
-              </Link>
-            </SidebarMenuButton>
+            <SidebarMenuButton
+              render={
+                <Link
+                  to="/about"
+                  search={{ women }}
+                  className="text-foreground hover:text-foreground transition-colors"
+                  activeProps={{ className: `font-bold` }}
+                >
+                  <span>
+                    <InfoIcon className="size-4" />
+                  </span>
+                  <span className="text-base">
+                    Om sidan
+                  </span>
+                </Link>
+              }
+            />
           </SidebarMenuItem>
           {/* <SignedIn> */}
           <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link
-                to="/dashboard"
-                search={{ women }}
-                className="text-foreground hover:text-foreground transition-colors"
-                activeProps={{ className: `font-bold` }}
-              >
-                <span>
-                  <LayoutDashboardIcon className="size-4" />
-                </span>
-                <span className="text-base">Dashboard</span>
-              </Link>
-            </SidebarMenuButton>
+            <SidebarMenuButton
+              render={
+                <Link
+                  to="/dashboard"
+                  search={{ women }}
+                  className="text-foreground hover:text-foreground transition-colors"
+                  activeProps={{ className: `font-bold` }}
+                >
+                  <span>
+                    <LayoutDashboardIcon className="size-4" />
+                  </span>
+                  <span className="text-base">
+                    Dashboard
+                  </span>
+                </Link>
+              }
+            />
           </SidebarMenuItem>
           {/* </SignedIn> */}
         </SidebarMenu>
@@ -308,43 +326,47 @@ const AppSidebar = () => {
         <SidebarMenu>
           <SidebarMenuItem>
             <SignedIn>
-              <SidebarMenuButton asChild>
-                <Link
-                  to="/logout"
-                  search={{ women }}
-                  className="text-foreground hover:text-foreground transition-colors"
-                  activeProps={{ className: `font-bold` }}
-                >
-                  <div className="flex flex-row gap-2 items-center">
-                    <span>
-                      <User className="size-4" />
-                    </span>
-                    <span className="text-base">
-                      Logga ut
-                    </span>
-                  </div>
-                </Link>
-              </SidebarMenuButton>
+              <SidebarMenuButton
+                render={
+                  <Link
+                    to="/logout"
+                    search={{ women }}
+                    className="text-foreground hover:text-foreground transition-colors"
+                    activeProps={{ className: `font-bold` }}
+                  >
+                    <div className="flex flex-row gap-2 items-center">
+                      <span>
+                        <User className="size-4" />
+                      </span>
+                      <span className="text-base">
+                        Logga ut
+                      </span>
+                    </div>
+                  </Link>
+                }
+              />
             </SignedIn>
 
             <SignedOut>
-              <SidebarMenuButton asChild>
-                <Link
-                  to="/login"
-                  search={{ women }}
-                  className="text-foreground hover:text-foreground transition-colors"
-                  activeProps={{ className: `font-bold` }}
-                >
-                  <div className="flex flex-row gap-2 items-center">
-                    <span>
-                      <User className="size-4" />
-                    </span>
-                    <span className="text-base">
-                      Inloggning
-                    </span>
-                  </div>
-                </Link>
-              </SidebarMenuButton>
+              <SidebarMenuButton
+                render={
+                  <Link
+                    to="/login"
+                    search={{ women }}
+                    className="text-foreground hover:text-foreground transition-colors"
+                    activeProps={{ className: `font-bold` }}
+                  >
+                    <div className="flex flex-row gap-2 items-center">
+                      <span>
+                        <User className="size-4" />
+                      </span>
+                      <span className="text-base">
+                        Inloggning
+                      </span>
+                    </div>
+                  </Link>
+                }
+              />
             </SignedOut>
           </SidebarMenuItem>
         </SidebarMenu>
