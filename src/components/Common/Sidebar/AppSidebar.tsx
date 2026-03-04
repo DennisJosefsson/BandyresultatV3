@@ -134,7 +134,7 @@ const AppSidebar = () => {
 
   return (
     <Sidebar
-      className="font-poppins top-(--header-height) h-[calc(100svh-var(--header-height))]!"
+      className="font-poppins top-(--header-height) h-[calc(100svh-var(--header-height))]! mt-2"
       collapsible="icon"
     >
       <SidebarContent>

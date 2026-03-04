@@ -4,10 +4,10 @@ import {
 } from '@tanstack/react-router'
 import { SidebarIcon } from 'lucide-react'
 
-import { Button } from '../ui/button.tsx'
-import { Label } from '../ui/label'
+import { Button } from '../base/ui/button.tsx'
+import { Label } from '../base/ui/label'
+import { Switch } from '../base/ui/switch'
 import { useSidebar } from '../ui/sidebar'
-import { Switch } from '../ui/switch'
 import { RouterBreadcrumb } from './Breadcrumb.tsx'
 import ModeToggle from './ModeToggle'
 
@@ -34,7 +34,7 @@ const Header = () => {
   }
 
   return (
-    <header className="bg-background sticky top-0 z-50 flex w-full items-center border-b">
+    <header className="bg-primary-foreground sticky top-0 z-50 flex w-full items-center border-b mb-2">
       <div className="flex h-(--header-height) w-full items-center justify-between gap-2">
         <div className="flex flex-row items-center gap-4">
           <Button
@@ -59,22 +59,9 @@ const Header = () => {
               {women ? 'Herrar' : 'Damer'}
             </Label>
           </div>
-          <div>
+          <div className="mx-2">
             <ModeToggle />
           </div>
-          {/* {isLoaded && (
-            <>
-              <ClerkHeader />
-              
-            </>
-          )}
-          {!isLoaded && (
-            <div>
-              <Button variant="outline" size={matches ? 'icon' : 'smallicon'}>
-                <LoaderPinwheelIcon className="size-[1.2rem] animate-spin" />
-              </Button>
-            </div>
-          )} */}
         </div>
       </div>
     </header>
