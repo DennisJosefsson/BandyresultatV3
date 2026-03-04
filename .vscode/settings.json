@@ -9,7 +9,16 @@
     "**/routeTree.gen.ts": true
   },
   "files.associations": {
-   "css": "tailwindcss"
+    "css": "tailwindcss"
   },
-  "typescript.preferences.autoImportFileExcludePatterns": ["@radix*","drizzle-orm/gel-core","drizzle-orm/mysql-core","drizzle-orm/sqlite-core","drizzle-orm/singlestore-core"]
+  "editor.codeActionsOnSave": {
+    "source.fixAll.oxc": "always"
+  },
+  "typescript.preferences.autoImportFileExcludePatterns": [
+    "@radix*",
+    "drizzle-orm/gel-core",
+    "drizzle-orm/mysql-core",
+    "drizzle-orm/sqlite-core",
+    "drizzle-orm/singlestore-core"
+  ]
 }
