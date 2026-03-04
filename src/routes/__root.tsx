@@ -133,7 +133,7 @@ function RootDocument() {
           <ThemeProvider theme={theme}>
             <FavTeamsProvider favTeams={favTeams}>
               <Outlet />
-              <TanStackRouterDevtools />
+              <TanStackRouterDevtools position="bottom-right" />
               <TanStackDevtools
                 config={{
                   position: 'bottom-right',

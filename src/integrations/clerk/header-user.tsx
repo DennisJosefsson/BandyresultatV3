@@ -14,13 +14,13 @@ export default function HeaderUser() {
   return (
     <div>
       <SignedIn>
-        <Button variant="outline" size={matches ? 'icon' : 'smallicon'}>
+        <Button variant="outline" size={matches ? 'icon' : 'smallicon'} asChild>
           <UserButton fallback={<User className="h-[1.2rem] w-[1.2rem]" />} />
         </Button>
       </SignedIn>
       <SignedOut>
         <SignInButton mode="modal" oauthFlow="popup">
-          <Button variant="outline" size={matches ? 'icon' : 'smallicon'}>
+          <Button variant="outline" size={matches ? 'icon' : 'smallicon'} asChild>
             <User className="h-[1.2rem] w-[1.2rem]" />
           </Button>
         </SignInButton>

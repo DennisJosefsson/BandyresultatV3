@@ -1,9 +1,9 @@
-import { useAuth } from '@clerk/clerk-react'
-import { useRouter, useSearch } from '@tanstack/react-router'
-import { LoaderPinwheelIcon, SidebarIcon } from 'lucide-react'
-import { useMediaQuery } from 'usehooks-ts'
+import {
+  useRouter,
+  useSearch,
+} from '@tanstack/react-router'
+import { SidebarIcon } from 'lucide-react'
 
-import ClerkHeader from '../../integrations/clerk/header-user.tsx'
 import { Button } from '../ui/button.tsx'
 import { Label } from '../ui/label'
 import { useSidebar } from '../ui/sidebar'
@@ -18,8 +18,8 @@ const Header = () => {
     from: '__root__',
     select: (search) => search.women,
   })
-  const matches = useMediaQuery('(min-width: 430px)')
-  const { isLoaded } = useAuth()
+  // const matches = useMediaQuery('(min-width: 430px)')
+  // const { isLoaded } = useAuth()
 
   const updateWomen = () => {
     navigate({
@@ -55,14 +55,17 @@ const Header = () => {
               checked={women}
               onCheckedChange={updateWomen}
             />
-            <Label htmlFor="women">{women ? 'Herrar' : 'Damer'}</Label>
+            <Label htmlFor="women">
+              {women ? 'Herrar' : 'Damer'}
+            </Label>
           </div>
-          {isLoaded && (
+          <div>
+            <ModeToggle />
+          </div>
+          {/* {isLoaded && (
             <>
               <ClerkHeader />
-              <div>
-                <ModeToggle />
-              </div>
+              
             </>
           )}
           {!isLoaded && (
@@ -71,7 +74,7 @@ const Header = () => {
                 <LoaderPinwheelIcon className="size-[1.2rem] animate-spin" />
               </Button>
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </header>
