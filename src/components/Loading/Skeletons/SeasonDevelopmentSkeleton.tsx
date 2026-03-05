@@ -1,4 +1,4 @@
-import { Skeleton } from '@/components/ui/skeleton'
+import { Skeleton } from '@/components/base/ui/skeleton'
 
 const SeasonDevelopmentSkeleton = () => {
   return (
@@ -16,7 +16,12 @@ const SeasonDevelopmentSkeleton = () => {
         </div>
         <div className="mt-8">
           {Array.from({ length: 14 }).map((_i, index) => {
-            return <Skeleton key={index} className="mb-1 h-9 w-full" />
+            return (
+              <Skeleton
+                key={index}
+                className="mb-1 h-9 w-full"
+              />
+            )
           })}
         </div>
       </div>

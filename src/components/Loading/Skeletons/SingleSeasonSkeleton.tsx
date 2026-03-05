@@ -1,9 +1,11 @@
 import { ArrowLeftIcon, ArrowRightIcon } from 'lucide-react'
 
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
-// import SeasonTabBar from '../../Season/SeasonTabBar'
+import { Button } from '@/components/base/ui/button'
+import {
+  Card,
+  CardContent,
+} from '@/components/base/ui/card'
+import { Skeleton } from '@/components/base/ui/skeleton'
 
 const SingleSeasonSkeleton = () => {
   return (
@@ -17,7 +19,9 @@ const SingleSeasonSkeleton = () => {
               className="h-3 w-3 lg:h-6 lg:w-6"
             >
               <ArrowLeftIcon className="h-4 w-4" />
-              <span className="sr-only">Tidigare säsong</span>
+              <span className="sr-only">
+                Tidigare säsong
+              </span>
             </Button>
 
             <div className="w-24">

@@ -1,5 +1,5 @@
-import { Button } from '@/components/ui/button'
-import { Skeleton } from '@/components/ui/skeleton'
+import { Button } from '@/components/base/ui/button'
+import { Skeleton } from '@/components/base/ui/skeleton'
 
 const SeasonTableSkeleton = () => {
   return (

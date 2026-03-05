@@ -1,9 +1,19 @@
 import { useMediaQuery } from 'usehooks-ts'
 
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Button } from '@/components/base/ui/button'
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/base/ui/card'
+import { Skeleton } from '@/components/base/ui/skeleton'
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/components/base/ui/tabs'
 
 const SingleTeamSkeleton = () => {
   const matches = useMediaQuery('(min-width: 430px)')
@@ -17,7 +27,9 @@ const SingleTeamSkeleton = () => {
 
           <div>
             <div>
-              <Button size={matches ? 'sm' : 'xxs'}>Favoritlag</Button>
+              <Button size={matches ? 'sm' : 'xxs'}>
+                Favoritlag
+              </Button>
             </div>
           </div>
         </div>
@@ -25,16 +37,28 @@ const SingleTeamSkeleton = () => {
       <CardContent className="p-1 md:p-6">
         <Tabs defaultValue="tables">
           <TabsList>
-            <TabsTrigger className="text-[10px] md:text-sm" value="tables">
+            <TabsTrigger
+              className="text-[10px] md:text-sm"
+              value="tables"
+            >
               Tabeller
             </TabsTrigger>
-            <TabsTrigger className="text-[10px] md:text-sm" value="fiveSeasons">
+            <TabsTrigger
+              className="text-[10px] md:text-sm"
+              value="fiveSeasons"
+            >
               Senaste säsongerna
             </TabsTrigger>
-            <TabsTrigger className="text-[10px] md:text-sm" value="stats">
+            <TabsTrigger
+              className="text-[10px] md:text-sm"
+              value="stats"
+            >
               Statistik
             </TabsTrigger>
-            <TabsTrigger className="text-[10px] md:text-sm" value="chart">
+            <TabsTrigger
+              className="text-[10px] md:text-sm"
+              value="chart"
+            >
               Diagram
             </TabsTrigger>
           </TabsList>
@@ -46,9 +70,16 @@ const SingleTeamSkeleton = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-1 md:p-6">
-                {Array.from({ length: 2 }).map((_i, index) => {
-                  return <Skeleton key={index} className="mb-1 h-9 w-full" />
-                })}
+                {Array.from({ length: 2 }).map(
+                  (_i, index) => {
+                    return (
+                      <Skeleton
+                        key={index}
+                        className="mb-1 h-9 w-full"
+                      />
+                    )
+                  },
+                )}
               </CardContent>
             </Card>
             <Card className="mb-2 p-1 sm:mb-4 md:mb-6 md:p-6">
@@ -58,9 +89,16 @@ const SingleTeamSkeleton = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-1 md:p-6">
-                {Array.from({ length: 2 }).map((_i, index) => {
-                  return <Skeleton key={index} className="mb-1 h-9 w-full" />
-                })}
+                {Array.from({ length: 2 }).map(
+                  (_i, index) => {
+                    return (
+                      <Skeleton
+                        key={index}
+                        className="mb-1 h-9 w-full"
+                      />
+                    )
+                  },
+                )}
               </CardContent>
             </Card>
           </TabsContent>
