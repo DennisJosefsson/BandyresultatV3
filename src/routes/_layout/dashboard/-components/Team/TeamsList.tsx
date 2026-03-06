@@ -1,14 +1,19 @@
 import { getRouteApi } from '@tanstack/react-router'
 import { useState } from 'react'
 
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
+import { Button } from '@/components/base/ui/button'
+import {
+  Card,
+  CardContent,
+} from '@/components/base/ui/card'
+import { Input } from '@/components/base/ui/input'
 
 const route = getRouteApi('/_layout/dashboard/teams/')
 
 const TeamsList = () => {
-  const teams = route.useLoaderData({ select: (s) => s.teams })
+  const teams = route.useLoaderData({
+    select: (s) => s.teams,
+  })
   const [filter, setFilter] = useState('')
 
   const mensTeam = teams
@@ -28,37 +33,51 @@ const TeamsList = () => {
               placeholder="Filter"
               value={filter}
               name="teamFilter"
-              onChange={(event) => setFilter(event.target.value)}
+              onChange={(event) =>
+                setFilter(event.target.value)
+              }
             />
           </div>
           <div className="grid grid-cols-2 gap-x-20">
             <div className="grid grid-cols-4 gap-x-3 gap-y-2 place-self-start">
               {mensTeam.map((team) => {
                 return (
-                  <Button key={team.teamId.toString()} asChild>
-                    <route.Link
-                      to="/dashboard/team/$teamId"
-                      search={(prev) => ({ women: prev.women })}
-                      params={{ teamId: team.teamId }}
-                    >
-                      {team.name}
-                    </route.Link>
-                  </Button>
+                  <Button
+                    nativeButton={false}
+                    key={team.teamId.toString()}
+                    render={
+                      <route.Link
+                        to="/dashboard/team/$teamId"
+                        search={(prev) => ({
+                          women: prev.women,
+                        })}
+                        params={{ teamId: team.teamId }}
+                      >
+                        {team.name}
+                      </route.Link>
+                    }
+                  />
                 )
               })}
             </div>
             <div className="grid grid-cols-4 gap-x-3 gap-y-2 place-self-start">
               {womensTeam.map((team) => {
                 return (
-                  <Button key={team.teamId.toString()} asChild>
-                    <route.Link
-                      to="/dashboard/team/$teamId"
-                      search={(prev) => ({ women: prev.women })}
-                      params={{ teamId: team.teamId }}
-                    >
-                      {team.name}
-                    </route.Link>
-                  </Button>
+                  <Button
+                    nativeButton={false}
+                    key={team.teamId.toString()}
+                    render={
+                      <route.Link
+                        to="/dashboard/team/$teamId"
+                        search={(prev) => ({
+                          women: prev.women,
+                        })}
+                        params={{ teamId: team.teamId }}
+                      >
+                        {team.name}
+                      </route.Link>
+                    }
+                  />
                 )
               })}
             </div>
