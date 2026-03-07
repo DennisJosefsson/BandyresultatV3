@@ -1,19 +1,19 @@
 import { useMediaQuery } from 'usehooks-ts'
 
 import { Button } from '@/components/base/ui/button'
-import { Skeleton } from '@/components/base/ui/skeleton'
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
+} from '@/components/base/ui/card'
+import { Skeleton } from '@/components/base/ui/skeleton'
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from '@/components/ui/tabs'
+} from '@/components/base/ui/tabs'
 
 const CompareSkeleton = () => {
   const matches = useMediaQuery('(min-width: 430px)')
