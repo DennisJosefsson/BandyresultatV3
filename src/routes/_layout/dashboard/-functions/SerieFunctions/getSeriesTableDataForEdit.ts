@@ -97,6 +97,21 @@ export const getSeriesTableDataForEdit = createServerFn({
         .leftJoin(teams, eq(tables.teamId, teams.teamId))
         .where(eq(tables.serieId, serieId))
 
+      if (seriesTable.length === 0) {
+        return {
+          status: 404,
+          message: 'Finns inga tabeller inlagda i serien.',
+          defaultValues: [
+            {
+              tableId: 0,
+              teamId: 176,
+              teamName: 'Inget namn',
+              ...defaultTable,
+            },
+          ],
+        }
+      }
+
       return {
         status: 200,
 

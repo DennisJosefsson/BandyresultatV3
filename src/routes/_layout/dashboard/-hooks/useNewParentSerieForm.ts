@@ -1,4 +1,7 @@
-import { useForm } from '@tanstack/react-form'
+import {
+  revalidateLogic,
+  useForm,
+} from '@tanstack/react-form'
 import { useMutation } from '@tanstack/react-query'
 import {
   getRouteApi,
@@ -36,9 +39,9 @@ export const useNewParentSerieForm = () => {
     parentId: 0,
   }
   const form = useForm({
+    validationLogic: revalidateLogic(),
     validators: {
-      onChange: newParentSerieObject,
-      onSubmit: newParentSerieObject,
+      onDynamic: newParentSerieObject,
     },
     defaultValues: { ...defaultValues },
     onSubmit: ({ value }) =>
@@ -51,6 +54,7 @@ export const useNewParentSerieForm = () => {
     } else {
       toast.success(data.message)
     }
+    form.setFieldValue('parentId', 0)
     router.invalidate({
       filter: (r) =>
         r.routeId === '/_layout/dashboard/season/$seasonId',

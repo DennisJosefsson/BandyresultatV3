@@ -2,8 +2,13 @@ import { getRouteApi } from '@tanstack/react-router'
 import { useRef, useState } from 'react'
 
 import ConfirmDialog from '@/components/Common/ConfirmDialog'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/base/ui/button'
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/base/ui/card'
 import {
   Field,
   FieldContent,
@@ -11,7 +16,7 @@ import {
   FieldGroup,
   FieldLegend,
   FieldSet,
-} from '@/components/ui/field'
+} from '@/components/base/ui/field'
 import {
   Select,
   SelectContent,
@@ -19,7 +24,7 @@ import {
   SelectSeparator,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from '@/components/base/ui/select'
 import { zd } from '@/lib/utils/zod'
 
 import { deleteParentSerieMutation } from '../../../-hooks/useDeleteParentSerieMutation'
@@ -31,10 +36,18 @@ const route = getRouteApi(
 
 const EditParentSerie = () => {
   const dialogRef = useRef<HTMLDialogElement | null>(null)
-  const [parentChildId, setParentChildId] = useState<number | null>(null)
-  const [parentName, setParentName] = useState<string | null>(null)
-  const series = route.useLoaderData({ select: (s) => s.series })
-  const parentSeries = route.useLoaderData({ select: (s) => s.parentSeries })
+  const [parentChildId, setParentChildId] = useState<
+    number | null
+  >(null)
+  const [parentName, setParentName] = useState<
+    string | null
+  >(null)
+  const series = route.useLoaderData({
+    select: (s) => s.series,
+  })
+  const parentSeries = route.useLoaderData({
+    select: (s) => s.parentSeries,
+  })
   const form = useEditParentSerieForm()
   const mutation = deleteParentSerieMutation(dialogRef)
 
@@ -46,6 +59,28 @@ const EditParentSerie = () => {
   const deleteParentChildFunction = () => {
     if (!parentChildId) return
     mutation.mutate({ data: { id: parentChildId } })
+  }
+
+  if (parentSeries.length === 0) {
+    return (
+      <Card>
+        <CardHeader>
+          <div className="flex flex-row items-center justify-between">
+            <div>
+              <CardTitle>Ändra Parentserie</CardTitle>
+            </div>
+          </div>
+        </CardHeader>
+
+        <CardContent>
+          <div className="flex flex-row justify-center">
+            <span className="text-sm font-semibold">
+              Serien har ingen parentSerie.
+            </span>
+          </div>
+        </CardContent>
+      </Card>
+    )
   }
 
   return (
@@ -63,7 +98,10 @@ const EditParentSerie = () => {
               <CardTitle>Ändra Parentserie</CardTitle>
             </div>
             <div className="flex flex-row gap-2">
-              <Button type="submit" form="editParentSerieForm">
+              <Button
+                type="submit"
+                form="editParentSerieForm"
+              >
                 Ändra
               </Button>
             </div>
@@ -79,7 +117,9 @@ const EditParentSerie = () => {
                     key={ps.parent.serieId}
                     className="mb-1 flex flex-row items-center justify-start space-x-5"
                   >
-                    <span className="text-sm">{ps.parent.serieName}</span>
+                    <span className="text-sm">
+                      {ps.parent.serieName}
+                    </span>
 
                     <Button
                       onClick={() => {
@@ -104,73 +144,107 @@ const EditParentSerie = () => {
             }}
           >
             <FieldGroup>
-              <form.Field name="parentSeries" mode="array">
+              <form.Field
+                name="parentSeries"
+                mode="array"
+              >
                 {(field) => {
                   const isInvalid =
-                    field.state.meta.isTouched && !field.state.meta.isValid
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
                   return (
                     <FieldSet className="gap-4">
-                      <FieldLegend variant="label">ParentSeries</FieldLegend>
+                      <FieldLegend variant="label">
+                        ParentSeries
+                      </FieldLegend>
                       <FieldGroup className="gap-4">
-                        {field.state.value.map((_, index) => (
-                          <form.Field
-                            key={index}
-                            name={`parentSeries[${index}].parentId`}
-                            children={(subField) => {
-                              const isSubFieldInvalid =
-                                subField.state.meta.isTouched &&
-                                !subField.state.meta.isValid
-                              return (
-                                <Field
-                                  orientation="horizontal"
-                                  data-invalid={isSubFieldInvalid}
-                                >
-                                  <FieldContent>
-                                    <Select
-                                      name={subField.name}
-                                      value={subField.state.value.toString()}
-                                      onValueChange={(value) =>
-                                        subField.handleChange(
-                                          zd.coerce.number().parse(value),
-                                        )
-                                      }
-                                    >
-                                      <SelectTrigger
-                                        id={subField.name}
-                                        aria-invalid={isInvalid}
-                                        className="w-full min-w-[120px]"
+                        {field.state.value.map(
+                          (_, index) => (
+                            <form.Field
+                              key={index}
+                              name={`parentSeries[${index}].parentId`}
+                              children={(subField) => {
+                                const isSubFieldInvalid =
+                                  subField.state.meta
+                                    .isTouched &&
+                                  !subField.state.meta
+                                    .isValid
+                                return (
+                                  <Field
+                                    orientation="horizontal"
+                                    data-invalid={
+                                      isSubFieldInvalid
+                                    }
+                                  >
+                                    <FieldContent>
+                                      <Select
+                                        name={subField.name}
+                                        value={subField.state.value.toString()}
+                                        onValueChange={(
+                                          value,
+                                        ) =>
+                                          subField.handleChange(
+                                            zd.coerce
+                                              .number()
+                                              .parse(value),
+                                          )
+                                        }
                                       >
-                                        <SelectValue placeholder="Välj" />
-                                      </SelectTrigger>
-                                      <SelectContent position="item-aligned">
-                                        <SelectItem value="auto">
-                                          {subField.state.value}
-                                        </SelectItem>
-                                        <SelectSeparator />
-                                        {series.map((cat) => (
-                                          <SelectItem
-                                            key={cat.value}
-                                            value={cat.value.toString()}
-                                          >
-                                            {cat.label}
+                                        <SelectTrigger
+                                          id={subField.name}
+                                          aria-invalid={
+                                            isInvalid
+                                          }
+                                          className="w-full min-w-[120px]"
+                                        >
+                                          <SelectValue placeholder="Välj" />
+                                        </SelectTrigger>
+                                        <SelectContent
+                                          alignItemWithTrigger={
+                                            true
+                                          }
+                                        >
+                                          <SelectItem value="auto">
+                                            {
+                                              subField.state
+                                                .value
+                                            }
                                           </SelectItem>
-                                        ))}
-                                      </SelectContent>
-                                    </Select>
-                                    {isSubFieldInvalid && (
-                                      <FieldError
-                                        errors={subField.state.meta.errors}
-                                      />
-                                    )}
-                                  </FieldContent>
-                                </Field>
-                              )
-                            }}
-                          />
-                        ))}
+                                          <SelectSeparator />
+                                          {series.map(
+                                            (cat) => (
+                                              <SelectItem
+                                                key={
+                                                  cat.value
+                                                }
+                                                value={cat.value.toString()}
+                                              >
+                                                {cat.label}
+                                              </SelectItem>
+                                            ),
+                                          )}
+                                        </SelectContent>
+                                      </Select>
+                                      {isSubFieldInvalid && (
+                                        <FieldError
+                                          errors={
+                                            subField.state
+                                              .meta.errors
+                                          }
+                                        />
+                                      )}
+                                    </FieldContent>
+                                  </Field>
+                                )
+                              }}
+                            />
+                          ),
+                        )}
                       </FieldGroup>
                       {isInvalid && (
-                        <FieldError errors={field.state.meta.errors} />
+                        <FieldError
+                          errors={field.state.meta.errors}
+                        />
                       )}
                     </FieldSet>
                   )

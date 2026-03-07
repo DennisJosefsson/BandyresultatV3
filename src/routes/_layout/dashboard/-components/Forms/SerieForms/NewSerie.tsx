@@ -1,8 +1,13 @@
 import { getRouteApi } from '@tanstack/react-router'
 
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Checkbox } from '@/components/ui/checkbox'
+import { Button } from '@/components/base/ui/button'
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/base/ui/card'
+import { Checkbox } from '@/components/base/ui/checkbox'
 import {
   Field,
   FieldError,
@@ -10,8 +15,8 @@ import {
   FieldLabel,
   FieldLegend,
   FieldSet,
-} from '@/components/ui/field'
-import { Input } from '@/components/ui/input'
+} from '@/components/base/ui/field'
+import { Input } from '@/components/base/ui/input'
 import {
   Select,
   SelectContent,
@@ -19,15 +24,17 @@ import {
   SelectSeparator,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { Textarea } from '@/components/ui/textarea'
-import type { newSeriesObject } from '@/lib/types/serie';
+} from '@/components/base/ui/select'
+import { Textarea } from '@/components/base/ui/textarea'
+import type { newSeriesObject } from '@/lib/types/serie'
 import { categoryEnum } from '@/lib/types/serie'
 import type { zd } from '@/lib/utils/zod'
 
 import { useNewSerieForm } from '../../../-hooks/useSerieForm'
 
-const route = getRouteApi('/_layout/dashboard/season/$seasonId/info_/newSerie')
+const route = getRouteApi(
+  '/_layout/dashboard/season/$seasonId/info_/newSerie',
+)
 
 const serieStructureArray = Array.from(
   { length: 16 },
@@ -52,7 +59,9 @@ const categoryArray: Array<CategoryArray> = [
 ]
 
 const NewSerie = () => {
-  const seasonId = route.useParams({ select: (s) => s.seasonId })
+  const seasonId = route.useParams({
+    select: (s) => s.seasonId,
+  })
   const women = route.useSearch({ select: (s) => s.women })
   const form = useNewSerieForm({ seasonId })
 
@@ -64,16 +73,23 @@ const NewSerie = () => {
             <CardTitle>Ny serie</CardTitle>
           </div>
           <div className="flex flex-row gap-2">
-            <Button asChild>
-              <route.Link
-                to="/dashboard/season/$seasonId"
-                params={{ seasonId }}
-                search={{ women }}
-              >
-                Tillbaka
-              </route.Link>
-            </Button>
-            <Button type="submit" form="newSerieForm">
+            <Button
+              render={
+                <route.Link
+                  to="/dashboard/season/$seasonId"
+                  params={{ seasonId }}
+                  search={{ women }}
+                >
+                  Tillbaka
+                </route.Link>
+              }
+              nativeButton={false}
+            />
+
+            <Button
+              type="submit"
+              form="newSerieForm"
+            >
               Skicka
             </Button>
           </div>
@@ -94,22 +110,29 @@ const NewSerie = () => {
                 name="serieName"
                 children={(field) => {
                   const isInvalid =
-                    field.state.meta.isTouched && !field.state.meta.isValid
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <FieldLabel htmlFor={field.name}>Serienamn</FieldLabel>
+                      <FieldLabel htmlFor={field.name}>
+                        Serienamn
+                      </FieldLabel>
                       <Input
                         id={field.name}
                         name={field.name}
                         value={field.state.value}
                         onBlur={field.handleBlur}
-                        onChange={(e) => field.handleChange(e.target.value)}
+                        onChange={(e) =>
+                          field.handleChange(e.target.value)
+                        }
                         aria-invalid={isInvalid}
                         placeholder="T.ex. Elitserien"
                         autoComplete="off"
                       />
                       {isInvalid && (
-                        <FieldError errors={field.state.meta.errors} />
+                        <FieldError
+                          errors={field.state.meta.errors}
+                        />
                       )}
                     </Field>
                   )
@@ -119,22 +142,29 @@ const NewSerie = () => {
                 name="group"
                 children={(field) => {
                   const isInvalid =
-                    field.state.meta.isTouched && !field.state.meta.isValid
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <FieldLabel htmlFor={field.name}>Grupp</FieldLabel>
+                      <FieldLabel htmlFor={field.name}>
+                        Grupp
+                      </FieldLabel>
                       <Input
                         id={field.name}
                         name={field.name}
                         value={field.state.value}
                         onBlur={field.handleBlur}
-                        onChange={(e) => field.handleChange(e.target.value)}
+                        onChange={(e) =>
+                          field.handleChange(e.target.value)
+                        }
                         aria-invalid={isInvalid}
                         placeholder="T.ex. Div1Norr"
                         autoComplete="off"
                       />
                       {isInvalid && (
-                        <FieldError errors={field.state.meta.errors} />
+                        <FieldError
+                          errors={field.state.meta.errors}
+                        />
                       )}
                     </Field>
                   )
@@ -144,15 +174,20 @@ const NewSerie = () => {
                 name="category"
                 children={(field) => {
                   const isInvalid =
-                    field.state.meta.isTouched && !field.state.meta.isValid
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <FieldLabel htmlFor={field.name}>Kategori</FieldLabel>
+                      <FieldLabel htmlFor={field.name}>
+                        Kategori
+                      </FieldLabel>
                       <Select
                         name={field.name}
                         value={field.state.value}
                         onValueChange={(value) =>
-                          field.handleChange(categoryEnum.parse(value))
+                          field.handleChange(
+                            categoryEnum.parse(value),
+                          )
                         }
                       >
                         <SelectTrigger
@@ -160,22 +195,39 @@ const NewSerie = () => {
                           aria-invalid={isInvalid}
                           className="min-w-[120px]"
                         >
-                          <SelectValue placeholder="Välj" />
+                          <SelectValue placeholder="Välj">
+                            {categoryArray.find(
+                              (cat) =>
+                                cat.value ===
+                                field.state.value,
+                            )?.label ?? 'Välj'}
+                          </SelectValue>
                         </SelectTrigger>
-                        <SelectContent position="item-aligned">
+                        <SelectContent
+                          alignItemWithTrigger={true}
+                        >
                           <SelectItem value="auto">
-                            {field.state.value}
+                            {categoryArray.find(
+                              (cat) =>
+                                cat.value ===
+                                field.state.value,
+                            )?.label ?? 'Välj'}
                           </SelectItem>
                           <SelectSeparator />
                           {categoryArray.map((cat) => (
-                            <SelectItem key={cat.value} value={cat.value}>
+                            <SelectItem
+                              key={cat.value}
+                              value={cat.value}
+                            >
                               {cat.label}
                             </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
                       {isInvalid && (
-                        <FieldError errors={field.state.meta.errors} />
+                        <FieldError
+                          errors={field.state.meta.errors}
+                        />
                       )}
                     </Field>
                   )
@@ -185,24 +237,31 @@ const NewSerie = () => {
                 name="level"
                 children={(field) => {
                   const isInvalid =
-                    field.state.meta.isTouched && !field.state.meta.isValid
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <FieldLabel htmlFor={field.name}>Level</FieldLabel>
+                      <FieldLabel htmlFor={field.name}>
+                        Level
+                      </FieldLabel>
                       <Input
                         id={field.name}
                         name={field.name}
                         value={field.state.value}
                         onBlur={field.handleBlur}
                         onChange={(e) =>
-                          field.handleChange(Number(e.target.value))
+                          field.handleChange(
+                            Number(e.target.value),
+                          )
                         }
                         aria-invalid={isInvalid}
                         placeholder="T.ex. Västerås"
                         autoComplete="off"
                       />
                       {isInvalid && (
-                        <FieldError errors={field.state.meta.errors} />
+                        <FieldError
+                          errors={field.state.meta.errors}
+                        />
                       )}
                     </Field>
                   )
@@ -215,10 +274,13 @@ const NewSerie = () => {
               mode="array"
               children={(field) => {
                 const isInvalid =
-                  field.state.meta.isTouched && !field.state.meta.isValid
+                  field.state.meta.isTouched &&
+                  !field.state.meta.isValid
                 return (
                   <FieldSet>
-                    <FieldLegend variant="label">Seriestruktur</FieldLegend>
+                    <FieldLegend variant="label">
+                      Seriestruktur
+                    </FieldLegend>
 
                     <FieldGroup data-slot="checkbox-group">
                       <div className="grid grid-cols-8 gap-x-2 gap-y-4">
@@ -234,15 +296,23 @@ const NewSerie = () => {
                               aria-invalid={isInvalid}
                               checked={
                                 field.state.value &&
-                                field.state.value.includes(item.value)
+                                field.state.value.includes(
+                                  item.value,
+                                )
                               }
-                              onCheckedChange={(checked) => {
+                              onCheckedChange={(
+                                checked,
+                              ) => {
                                 if (checked) {
-                                  field.pushValue(item.value)
+                                  field.pushValue(
+                                    item.value,
+                                  )
                                 } else {
                                   const index =
                                     field.state.value &&
-                                    field.state.value.indexOf(item.value)
+                                    field.state.value.indexOf(
+                                      item.value,
+                                    )
                                   if (index && index > -1) {
                                     field.removeValue(index)
                                   }
@@ -260,7 +330,9 @@ const NewSerie = () => {
                       </div>
                     </FieldGroup>
                     {isInvalid && (
-                      <FieldError errors={field.state.meta.errors} />
+                      <FieldError
+                        errors={field.state.meta.errors}
+                      />
                     )}
                   </FieldSet>
                 )
@@ -271,16 +343,22 @@ const NewSerie = () => {
                 name="hasMix"
                 children={(field) => {
                   const isInvalid =
-                    field.state.meta.isTouched && !field.state.meta.isValid
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <Field orientation="horizontal" data-invalid={isInvalid}>
+                      <Field
+                        orientation="horizontal"
+                        data-invalid={isInvalid}
+                      >
                         <Checkbox
                           id={field.name}
                           name={field.name}
                           checked={field.state.value}
                           onCheckedChange={(checked) =>
-                            field.handleChange(checked === true)
+                            field.handleChange(
+                              checked === true,
+                            )
                           }
                         />
                         <FieldLabel
@@ -291,7 +369,9 @@ const NewSerie = () => {
                         </FieldLabel>
                       </Field>
                       {isInvalid && (
-                        <FieldError errors={field.state.meta.errors} />
+                        <FieldError
+                          errors={field.state.meta.errors}
+                        />
                       )}
                     </Field>
                   )
@@ -301,16 +381,22 @@ const NewSerie = () => {
                 name="hasStatic"
                 children={(field) => {
                   const isInvalid =
-                    field.state.meta.isTouched && !field.state.meta.isValid
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <Field orientation="horizontal" data-invalid={isInvalid}>
+                      <Field
+                        orientation="horizontal"
+                        data-invalid={isInvalid}
+                      >
                         <Checkbox
                           id={field.name}
                           name={field.name}
                           checked={field.state.value}
                           onCheckedChange={(checked) =>
-                            field.handleChange(checked === true)
+                            field.handleChange(
+                              checked === true,
+                            )
                           }
                         />
                         <FieldLabel
@@ -321,7 +407,9 @@ const NewSerie = () => {
                         </FieldLabel>
                       </Field>
                       {isInvalid && (
-                        <FieldError errors={field.state.meta.errors} />
+                        <FieldError
+                          errors={field.state.meta.errors}
+                        />
                       )}
                     </Field>
                   )
@@ -331,16 +419,22 @@ const NewSerie = () => {
                 name="hasParent"
                 children={(field) => {
                   const isInvalid =
-                    field.state.meta.isTouched && !field.state.meta.isValid
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <Field orientation="horizontal" data-invalid={isInvalid}>
+                      <Field
+                        orientation="horizontal"
+                        data-invalid={isInvalid}
+                      >
                         <Checkbox
                           id={field.name}
                           name={field.name}
                           checked={field.state.value}
                           onCheckedChange={(checked) =>
-                            field.handleChange(checked === true)
+                            field.handleChange(
+                              checked === true,
+                            )
                           }
                         />
                         <FieldLabel
@@ -351,7 +445,9 @@ const NewSerie = () => {
                         </FieldLabel>
                       </Field>
                       {isInvalid && (
-                        <FieldError errors={field.state.meta.errors} />
+                        <FieldError
+                          errors={field.state.meta.errors}
+                        />
                       )}
                     </Field>
                   )
@@ -361,16 +457,22 @@ const NewSerie = () => {
                 name="allParentGames"
                 children={(field) => {
                   const isInvalid =
-                    field.state.meta.isTouched && !field.state.meta.isValid
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <Field orientation="horizontal" data-invalid={isInvalid}>
+                      <Field
+                        orientation="horizontal"
+                        data-invalid={isInvalid}
+                      >
                         <Checkbox
                           id={field.name}
                           name={field.name}
                           checked={field.state.value}
                           onCheckedChange={(checked) =>
-                            field.handleChange(checked === true)
+                            field.handleChange(
+                              checked === true,
+                            )
                           }
                         />
                         <FieldLabel
@@ -381,7 +483,9 @@ const NewSerie = () => {
                         </FieldLabel>
                       </Field>
                       {isInvalid && (
-                        <FieldError errors={field.state.meta.errors} />
+                        <FieldError
+                          errors={field.state.meta.errors}
+                        />
                       )}
                     </Field>
                   )
@@ -391,16 +495,22 @@ const NewSerie = () => {
                 name="uefaSorting"
                 children={(field) => {
                   const isInvalid =
-                    field.state.meta.isTouched && !field.state.meta.isValid
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <Field orientation="horizontal" data-invalid={isInvalid}>
+                      <Field
+                        orientation="horizontal"
+                        data-invalid={isInvalid}
+                      >
                         <Checkbox
                           id={field.name}
                           name={field.name}
                           checked={field.state.value}
                           onCheckedChange={(checked) =>
-                            field.handleChange(checked === true)
+                            field.handleChange(
+                              checked === true,
+                            )
                           }
                         />
                         <FieldLabel
@@ -411,7 +521,9 @@ const NewSerie = () => {
                         </FieldLabel>
                       </Field>
                       {isInvalid && (
-                        <FieldError errors={field.state.meta.errors} />
+                        <FieldError
+                          errors={field.state.meta.errors}
+                        />
                       )}
                     </Field>
                   )
@@ -423,24 +535,31 @@ const NewSerie = () => {
               name="comment"
               children={(field) => {
                 const isInvalid =
-                  field.state.meta.isTouched && !field.state.meta.isValid
+                  field.state.meta.isTouched &&
+                  !field.state.meta.isValid
                 return (
                   <Field data-invalid={isInvalid}>
-                    <FieldLabel htmlFor={field.name}>Kommentar</FieldLabel>
+                    <FieldLabel htmlFor={field.name}>
+                      Kommentar
+                    </FieldLabel>
 
                     <Textarea
                       id={field.name}
                       name={field.name}
                       value={field.state.value}
                       onBlur={field.handleBlur}
-                      onChange={(e) => field.handleChange(e.target.value)}
+                      onChange={(e) =>
+                        field.handleChange(e.target.value)
+                      }
                       aria-invalid={isInvalid}
                       placeholder="Kommentar..."
                       className="min-h-[120px]"
                     />
 
                     {isInvalid && (
-                      <FieldError errors={field.state.meta.errors} />
+                      <FieldError
+                        errors={field.state.meta.errors}
+                      />
                     )}
                   </Field>
                 )

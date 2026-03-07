@@ -7,7 +7,9 @@ export const Route = createFileRoute(
   '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/addTable',
 )({
   loader: async ({ params: { serieId } }) => {
-    const data = await getSeriesTableData({ data: { serieId } })
+    const data = await getSeriesTableData({
+      data: { serieId },
+    })
     if (!data) throw new Error('Missing data')
 
     return data
@@ -16,6 +18,18 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
+  const data = Route.useLoaderData()
+
+  if (data.status === 400) {
+    return (
+      <div className="flex flex-row justify-center mt-4">
+        <span className="text-sm font-semibold">
+          {data.message}
+        </span>
+      </div>
+    )
+  }
+
   return (
     <div>
       <AddStaticTableForm />

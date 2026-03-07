@@ -1,21 +1,21 @@
 import { getRouteApi } from '@tanstack/react-router'
 
-import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
+import { Button } from '@/components/base/ui/button'
+import { Checkbox } from '@/components/base/ui/checkbox'
 import {
   Field,
   FieldError,
   FieldGroup,
   FieldLabel,
   FieldSet,
-} from '@/components/ui/field'
-import { Input } from '@/components/ui/input'
+} from '@/components/base/ui/field'
+import { Input } from '@/components/base/ui/input'
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupInput,
-} from '@/components/ui/input-group'
+} from '@/components/base/ui/input-group'
 import {
   Select,
   SelectContent,
@@ -23,7 +23,7 @@ import {
   SelectSeparator,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from '@/components/base/ui/select'
 import { zd } from '@/lib/utils/zod'
 
 import { useAddSingleGameForm } from '../../../-hooks/useAddSingleGameForm'
@@ -39,7 +39,9 @@ const currDate = new Date().toLocaleDateString('se-SV', {
 })
 
 const AddSingleGameForm = () => {
-  const teams = route.useLoaderData({ select: (s) => s.teams })
+  const teams = route.useLoaderData({
+    select: (s) => s.teams,
+  })
   const form = useAddSingleGameForm()
 
   const buttonClick = () => {
@@ -50,7 +52,10 @@ const AddSingleGameForm = () => {
   return (
     <div className="flex min-h-100 flex-col gap-2 p-2">
       <div className="flex flex-row justify-end gap-2">
-        <Button type="submit" form="singlenewgameform">
+        <Button
+          type="submit"
+          form="singlenewgameform"
+        >
           Skicka
         </Button>
       </div>
@@ -67,15 +72,20 @@ const AddSingleGameForm = () => {
               name="homeTeamId"
               children={(field) => {
                 const isInvalid =
-                  field.state.meta.isTouched && !field.state.meta.isValid
+                  field.state.meta.isTouched &&
+                  !field.state.meta.isValid
                 return (
                   <Field data-invalid={isInvalid}>
-                    <FieldLabel htmlFor={field.name}>Hemmalag</FieldLabel>
+                    <FieldLabel htmlFor={field.name}>
+                      Hemmalag
+                    </FieldLabel>
                     <Select
                       name={field.name}
                       value={field.state.value.toString()}
                       onValueChange={(value) => {
-                        field.handleChange(zd.coerce.number().parse(value))
+                        field.handleChange(
+                          zd.coerce.number().parse(value),
+                        )
                       }}
                     >
                       <SelectTrigger
@@ -83,11 +93,21 @@ const AddSingleGameForm = () => {
                         aria-invalid={isInvalid}
                         className="w-full min-w-[120px]"
                       >
-                        <SelectValue placeholder="Välj" />
+                        <SelectValue placeholder="Välj">
+                          {teams.find(
+                            (t) =>
+                              t.value === field.state.value,
+                          )?.label ?? 'Välj'}
+                        </SelectValue>
                       </SelectTrigger>
-                      <SelectContent position="item-aligned">
+                      <SelectContent
+                        alignItemWithTrigger={true}
+                      >
                         <SelectItem value="auto">
-                          {field.state.value}
+                          {teams.find(
+                            (t) =>
+                              t.value === field.state.value,
+                          )?.label ?? 'Välj'}
                         </SelectItem>
                         <SelectSeparator />
                         {teams.map((team) => (
@@ -101,7 +121,9 @@ const AddSingleGameForm = () => {
                       </SelectContent>
                     </Select>
                     {isInvalid && (
-                      <FieldError errors={field.state.meta.errors} />
+                      <FieldError
+                        errors={field.state.meta.errors}
+                      />
                     )}
                   </Field>
                 )
@@ -111,15 +133,20 @@ const AddSingleGameForm = () => {
               name="awayTeamId"
               children={(field) => {
                 const isInvalid =
-                  field.state.meta.isTouched && !field.state.meta.isValid
+                  field.state.meta.isTouched &&
+                  !field.state.meta.isValid
                 return (
                   <Field data-invalid={isInvalid}>
-                    <FieldLabel htmlFor={field.name}>Bortalag</FieldLabel>
+                    <FieldLabel htmlFor={field.name}>
+                      Bortalag
+                    </FieldLabel>
                     <Select
                       name={field.name}
                       value={field.state.value.toString()}
                       onValueChange={(value) => {
-                        field.handleChange(zd.coerce.number().parse(value))
+                        field.handleChange(
+                          zd.coerce.number().parse(value),
+                        )
                       }}
                     >
                       <SelectTrigger
@@ -127,11 +154,21 @@ const AddSingleGameForm = () => {
                         aria-invalid={isInvalid}
                         className="w-full min-w-[120px]"
                       >
-                        <SelectValue placeholder="Välj" />
+                        <SelectValue placeholder="Välj">
+                          {teams.find(
+                            (t) =>
+                              t.value === field.state.value,
+                          )?.label ?? 'Välj'}
+                        </SelectValue>
                       </SelectTrigger>
-                      <SelectContent position="item-aligned">
+                      <SelectContent
+                        alignItemWithTrigger={true}
+                      >
                         <SelectItem value="auto">
-                          {field.state.value}
+                          {teams.find(
+                            (t) =>
+                              t.value === field.state.value,
+                          )?.label ?? 'Välj'}
                         </SelectItem>
                         <SelectSeparator />
                         {teams.map((team) => (
@@ -145,7 +182,9 @@ const AddSingleGameForm = () => {
                       </SelectContent>
                     </Select>
                     {isInvalid && (
-                      <FieldError errors={field.state.meta.errors} />
+                      <FieldError
+                        errors={field.state.meta.errors}
+                      />
                     )}
                   </Field>
                 )
@@ -155,23 +194,30 @@ const AddSingleGameForm = () => {
               name="result"
               children={(field) => {
                 const isInvalid =
-                  field.state.meta.isTouched && !field.state.meta.isValid
+                  field.state.meta.isTouched &&
+                  !field.state.meta.isValid
                 return (
                   <Field data-invalid={isInvalid}>
-                    <FieldLabel htmlFor={field.name}>Slutresultat</FieldLabel>
+                    <FieldLabel htmlFor={field.name}>
+                      Slutresultat
+                    </FieldLabel>
                     <Input
                       className="h-9"
                       id={field.name}
                       name={field.name}
                       value={field.state.value}
                       onBlur={field.handleBlur}
-                      onChange={(e) => field.handleChange(e.target.value)}
+                      onChange={(e) =>
+                        field.handleChange(e.target.value)
+                      }
                       aria-invalid={isInvalid}
                       placeholder="T.ex. 5-3"
                       autoComplete="off"
                     />
                     {isInvalid && (
-                      <FieldError errors={field.state.meta.errors} />
+                      <FieldError
+                        errors={field.state.meta.errors}
+                      />
                     )}
                   </Field>
                 )
@@ -181,7 +227,8 @@ const AddSingleGameForm = () => {
               name="halftimeResult"
               children={(field) => {
                 const isInvalid =
-                  field.state.meta.isTouched && !field.state.meta.isValid
+                  field.state.meta.isTouched &&
+                  !field.state.meta.isValid
                 return (
                   <Field data-invalid={isInvalid}>
                     <FieldLabel htmlFor={field.name}>
@@ -194,13 +241,17 @@ const AddSingleGameForm = () => {
                       name={field.name}
                       value={field.state.value}
                       onBlur={field.handleBlur}
-                      onChange={(e) => field.handleChange(e.target.value)}
+                      onChange={(e) =>
+                        field.handleChange(e.target.value)
+                      }
                       placeholder="T.ex. 2-3"
                       aria-invalid={isInvalid}
                     />
 
                     {isInvalid && (
-                      <FieldError errors={field.state.meta.errors} />
+                      <FieldError
+                        errors={field.state.meta.errors}
+                      />
                     )}
                   </Field>
                 )
@@ -210,17 +261,22 @@ const AddSingleGameForm = () => {
               name="date"
               children={(field) => {
                 const isInvalid =
-                  field.state.meta.isTouched && !field.state.meta.isValid
+                  field.state.meta.isTouched &&
+                  !field.state.meta.isValid
                 return (
                   <Field data-invalid={isInvalid}>
-                    <FieldLabel htmlFor={field.name}>Datum</FieldLabel>
+                    <FieldLabel htmlFor={field.name}>
+                      Datum
+                    </FieldLabel>
                     <InputGroup>
                       <InputGroupInput
                         id={field.name}
                         name={field.name}
                         value={field.state.value}
                         onBlur={field.handleBlur}
-                        onChange={(e) => field.handleChange(e.target.value)}
+                        onChange={(e) =>
+                          field.handleChange(e.target.value)
+                        }
                         placeholder="T.ex. 2025-12-26"
                         aria-invalid={isInvalid}
                       />
@@ -234,7 +290,9 @@ const AddSingleGameForm = () => {
                       </InputGroupAddon>
                     </InputGroup>
                     {isInvalid && (
-                      <FieldError errors={field.state.meta.errors} />
+                      <FieldError
+                        errors={field.state.meta.errors}
+                      />
                     )}
                   </Field>
                 )
@@ -244,7 +302,8 @@ const AddSingleGameForm = () => {
               name="otResult"
               children={(field) => {
                 const isInvalid =
-                  field.state.meta.isTouched && !field.state.meta.isValid
+                  field.state.meta.isTouched &&
+                  !field.state.meta.isValid
                 return (
                   <Field data-invalid={isInvalid}>
                     <FieldLabel htmlFor={field.name}>
@@ -257,13 +316,17 @@ const AddSingleGameForm = () => {
                       name={field.name}
                       value={field.state.value}
                       onBlur={field.handleBlur}
-                      onChange={(e) => field.handleChange(e.target.value)}
+                      onChange={(e) =>
+                        field.handleChange(e.target.value)
+                      }
                       placeholder="T.ex. 2-3"
                       aria-invalid={isInvalid}
                     />
 
                     {isInvalid && (
-                      <FieldError errors={field.state.meta.errors} />
+                      <FieldError
+                        errors={field.state.meta.errors}
+                      />
                     )}
                   </Field>
                 )
@@ -275,7 +338,8 @@ const AddSingleGameForm = () => {
                   name="extraTime"
                   children={(field) => {
                     const isInvalid =
-                      field.state.meta.isTouched && !field.state.meta.isValid
+                      field.state.meta.isTouched &&
+                      !field.state.meta.isValid
                     return (
                       <FieldSet>
                         <FieldGroup data-slot="checkbox-group">
@@ -288,7 +352,9 @@ const AddSingleGameForm = () => {
                               name={field.name}
                               checked={field.state.value}
                               onCheckedChange={(checked) =>
-                                field.handleChange(checked === true)
+                                field.handleChange(
+                                  checked === true,
+                                )
                               }
                             />
                             <FieldLabel
@@ -300,7 +366,9 @@ const AddSingleGameForm = () => {
                           </Field>
                         </FieldGroup>
                         {isInvalid && (
-                          <FieldError errors={field.state.meta.errors} />
+                          <FieldError
+                            errors={field.state.meta.errors}
+                          />
                         )}
                       </FieldSet>
                     )
@@ -312,7 +380,8 @@ const AddSingleGameForm = () => {
                   name="penalties"
                   children={(field) => {
                     const isInvalid =
-                      field.state.meta.isTouched && !field.state.meta.isValid
+                      field.state.meta.isTouched &&
+                      !field.state.meta.isValid
                     return (
                       <FieldSet>
                         <FieldGroup data-slot="checkbox-group">
@@ -325,7 +394,9 @@ const AddSingleGameForm = () => {
                               name={field.name}
                               checked={field.state.value}
                               onCheckedChange={(checked) =>
-                                field.handleChange(checked === true)
+                                field.handleChange(
+                                  checked === true,
+                                )
                               }
                             />
                             <FieldLabel
@@ -337,7 +408,9 @@ const AddSingleGameForm = () => {
                           </Field>
                         </FieldGroup>
                         {isInvalid && (
-                          <FieldError errors={field.state.meta.errors} />
+                          <FieldError
+                            errors={field.state.meta.errors}
+                          />
                         )}
                       </FieldSet>
                     )

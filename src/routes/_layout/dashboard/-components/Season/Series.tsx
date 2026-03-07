@@ -1,30 +1,46 @@
 import { getRouteApi } from '@tanstack/react-router'
 
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/base/ui/button'
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/base/ui/card'
 import { sortOrder } from '@/lib/utils/constants'
 
-const route = getRouteApi('/_layout/dashboard/season/$seasonId/')
+const route = getRouteApi(
+  '/_layout/dashboard/season/$seasonId/',
+)
 
 const Series = () => {
-  const series = route.useLoaderData({ select: (s) => s.series })
-  const seasonId = route.useParams({ select: (s) => s.seasonId })
+  const series = route.useLoaderData({
+    select: (s) => s.series,
+  })
+  const seasonId = route.useParams({
+    select: (s) => s.seasonId,
+  })
   const women = route.useSearch({ select: (s) => s.women })
 
   return (
     <Card>
       <CardHeader>
         <div className="flex flex-row items-center justify-between">
-          <CardTitle className="xl:text-lg">Serier</CardTitle>
-          <Button asChild>
-            <route.Link
-              to="info/newSerie"
-              params={{ seasonId }}
-              search={{ women }}
-            >
-              Lägg till serie
-            </route.Link>
-          </Button>
+          <CardTitle className="xl:text-lg">
+            Serier
+          </CardTitle>
+          <Button
+            render={
+              <route.Link
+                to="info/newSerie"
+                params={{ seasonId }}
+                search={{ women }}
+              >
+                Lägg till serie
+              </route.Link>
+            }
+            nativeButton={false}
+          />
         </div>
       </CardHeader>
       <CardContent>
@@ -32,10 +48,14 @@ const Series = () => {
           <div>
             {series
               .sort((a, b) => {
-                if (sortOrder.indexOf(a.group) > sortOrder.indexOf(b.group)) {
+                if (
+                  sortOrder.indexOf(a.group) >
+                  sortOrder.indexOf(b.group)
+                ) {
                   return 1
                 } else if (
-                  sortOrder.indexOf(a.group) < sortOrder.indexOf(b.group)
+                  sortOrder.indexOf(a.group) <
+                  sortOrder.indexOf(b.group)
                 ) {
                   return -1
                 } else {
@@ -49,33 +69,45 @@ const Series = () => {
                     key={serie.serieId}
                     className="mb-1 flex flex-row justify-between"
                   >
-                    <div className="xl:text-lg">{serie.serieName}</div>
+                    <div className="xl:text-lg">
+                      {serie.serieName}
+                    </div>
                     <div className="flex flex-row gap-1">
-                      <Button size="sm" variant="outline" asChild>
-                        <route.Link
-                          to="/dashboard/season/$seasonId/info/$serieId/edit/games"
-                          params={{
-                            seasonId: seasonId,
-                            serieId: serie.serieId,
-                          }}
-                          search={{ women }}
-                        >
-                          Matcher
-                        </route.Link>
-                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        render={
+                          <route.Link
+                            to="/dashboard/season/$seasonId/info/$serieId/edit/games"
+                            params={{
+                              seasonId: seasonId,
+                              serieId: serie.serieId,
+                            }}
+                            search={{ women }}
+                          >
+                            Matcher
+                          </route.Link>
+                        }
+                        nativeButton={false}
+                      />
 
-                      <Button asChild size="sm" variant="outline">
-                        <route.Link
-                          to="/dashboard/season/$seasonId/info/$serieId/edit"
-                          params={{
-                            seasonId: seasonId,
-                            serieId: serie.serieId,
-                          }}
-                          search={{ women }}
-                        >
-                          Ändra
-                        </route.Link>
-                      </Button>
+                      <Button
+                        render={
+                          <route.Link
+                            to="/dashboard/season/$seasonId/info/$serieId/edit"
+                            params={{
+                              seasonId: seasonId,
+                              serieId: serie.serieId,
+                            }}
+                            search={{ women }}
+                          >
+                            Ändra
+                          </route.Link>
+                        }
+                        nativeButton={false}
+                        size="sm"
+                        variant="outline"
+                      />
                     </div>
                   </div>
                 )

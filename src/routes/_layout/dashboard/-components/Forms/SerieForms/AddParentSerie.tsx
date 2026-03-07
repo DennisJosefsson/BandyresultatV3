@@ -1,13 +1,18 @@
 import { getRouteApi } from '@tanstack/react-router'
 
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/base/ui/button'
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/base/ui/card'
 import {
   Field,
   FieldError,
   FieldGroup,
   FieldLabel,
-} from '@/components/ui/field'
+} from '@/components/base/ui/field'
 import {
   Select,
   SelectContent,
@@ -15,7 +20,7 @@ import {
   SelectSeparator,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from '@/components/base/ui/select'
 import { zd } from '@/lib/utils/zod'
 
 import { useNewParentSerieForm } from '../../../-hooks/useNewParentSerieForm'
@@ -25,11 +30,17 @@ const route = getRouteApi(
 )
 
 const AddParentSerie = () => {
-  const series = route.useLoaderData({ select: (s) => s.series })
+  const series = route.useLoaderData({
+    select: (s) => s.series,
+  })
   const parentSeries = route
     .useLoaderData({ select: (s) => s.parentSeries })
     .map((s) => s.parentId)
   const form = useNewParentSerieForm()
+
+  const seriesArray = series.filter(
+    (serie) => !parentSeries.includes(serie.value),
+  )
 
   return (
     <Card>
@@ -39,7 +50,10 @@ const AddParentSerie = () => {
             <CardTitle>Ny Parentserie</CardTitle>
           </div>
           <div className="flex flex-row gap-2">
-            <Button type="submit" form="addParentSerieForm">
+            <Button
+              type="submit"
+              form="addParentSerieForm"
+            >
               Lägg till
             </Button>
           </div>
@@ -59,15 +73,20 @@ const AddParentSerie = () => {
               name="parentId"
               children={(field) => {
                 const isInvalid =
-                  field.state.meta.isTouched && !field.state.meta.isValid
+                  field.state.meta.isTouched &&
+                  !field.state.meta.isValid
                 return (
                   <Field data-invalid={isInvalid}>
-                    <FieldLabel htmlFor={field.name}>ParentSerie</FieldLabel>
+                    <FieldLabel htmlFor={field.name}>
+                      ParentSerie
+                    </FieldLabel>
                     <Select
                       name={field.name}
                       value={field.state.value.toString()}
                       onValueChange={(value) => {
-                        field.handleChange(zd.coerce.number().parse(value))
+                        field.handleChange(
+                          zd.coerce.number().parse(value),
+                        )
                       }}
                     >
                       <SelectTrigger
@@ -75,29 +94,37 @@ const AddParentSerie = () => {
                         aria-invalid={isInvalid}
                         className="w-full min-w-[120px]"
                       >
-                        <SelectValue placeholder="Välj" />
+                        <SelectValue placeholder="Välj">
+                          {seriesArray.find(
+                            (s) =>
+                              s.value === field.state.value,
+                          )?.label ?? 'Välj'}
+                        </SelectValue>
                       </SelectTrigger>
-                      <SelectContent position="item-aligned">
+                      <SelectContent
+                        alignItemWithTrigger={true}
+                      >
                         <SelectItem value="auto">
-                          {field.state.value}
+                          {seriesArray.find(
+                            (s) =>
+                              s.value === field.state.value,
+                          )?.label ?? 'Välj'}
                         </SelectItem>
                         <SelectSeparator />
-                        {series
-                          .filter(
-                            (serie) => !parentSeries.includes(serie.value),
-                          )
-                          .map((cat) => (
-                            <SelectItem
-                              key={cat.value}
-                              value={cat.value.toString()}
-                            >
-                              {cat.label}
-                            </SelectItem>
-                          ))}
+                        {seriesArray.map((cat) => (
+                          <SelectItem
+                            key={cat.value}
+                            value={cat.value.toString()}
+                          >
+                            {cat.label}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     {isInvalid && (
-                      <FieldError errors={field.state.meta.errors} />
+                      <FieldError
+                        errors={field.state.meta.errors}
+                      />
                     )}
                   </Field>
                 )
