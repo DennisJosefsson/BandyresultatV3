@@ -2,22 +2,25 @@ import { getRouteApi } from '@tanstack/react-router'
 import Classnames from 'embla-carousel-class-names'
 import { useEffect, useState } from 'react'
 
-import type {
-  CarouselApi} from '@/components/ui/carousel';
+import type { CarouselApi } from '@/components/base/ui/carousel'
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from '@/components/ui/carousel'
+} from '@/components/base/ui/carousel'
 import { cn } from '@/lib/utils/utils'
 
-const route = getRouteApi('/_layout/seasons/$year/$group/development')
+const route = getRouteApi(
+  '/_layout/seasons/$year/$group/development',
+)
 
 const DevelopmentClicker = () => {
   const navigate = route.useNavigate()
-  const dates = route.useLoaderData({ select: (s) => s.dates })
+  const dates = route.useLoaderData({
+    select: (s) => s.dates,
+  })
   const index = route.useSearch({ select: (s) => s.index })
 
   const [api, setApi] = useState<CarouselApi>()
@@ -27,7 +30,10 @@ const DevelopmentClicker = () => {
     if (!api || !dateApi) return
     api.on('select', () => {
       navigate({
-        search: (prev) => ({ ...prev, index: api.selectedScrollSnap() }),
+        search: (prev) => ({
+          ...prev,
+          index: api.selectedScrollSnap(),
+        }),
       })
       dateApi.scrollTo(api.selectedScrollSnap(), true)
     })
@@ -47,16 +53,18 @@ const DevelopmentClicker = () => {
           plugins={[Classnames()]}
         >
           <CarouselContent className="-ml-1">
-            {Array.from({ length: dates.length }).map((_, arrIndex) => {
-              return (
-                <CarouselItem
-                  key={arrIndex}
-                  className="flex flex-row items-center justify-center p-0 text-[10px] sm:text-xs lg:text-lg"
-                >
-                  Matchdag {arrIndex + 1}
-                </CarouselItem>
-              )
-            })}
+            {Array.from({ length: dates.length }).map(
+              (_, arrIndex) => {
+                return (
+                  <CarouselItem
+                    key={arrIndex}
+                    className="flex flex-row items-center justify-center p-0 text-[10px] sm:text-xs lg:text-lg"
+                  >
+                    Matchdag {arrIndex + 1}
+                  </CarouselItem>
+                )
+              },
+            )}
           </CarouselContent>
           <CarouselPrevious className="h-3 w-3 lg:h-6 lg:w-6" />
           <CarouselNext className="h-3 w-3 lg:h-6 lg:w-6" />
@@ -83,7 +91,9 @@ const DevelopmentClicker = () => {
                     'flex basis-1/3 cursor-pointer flex-row items-center justify-center p-0 text-[8px] md:basis-1/5 md:text-sm [.is-snapped]:font-semibold',
                     { 'basis-full': dates.length < 5 },
                   )}
-                  onClick={() => api && api.scrollTo(arrIndex, true)}
+                  onClick={() =>
+                    api && api.scrollTo(arrIndex, true)
+                  }
                 >
                   {date}
                 </CarouselItem>

@@ -1,9 +1,11 @@
 import { Link, getRouteApi } from '@tanstack/react-router'
 import { useMediaQuery } from 'usehooks-ts'
 
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/base/ui/button'
 
-const route = getRouteApi('/_layout/seasons/$year/$group/tables/$table')
+const route = getRouteApi(
+  '/_layout/seasons/$year/$group/tables/$table',
+)
 
 const SeasonTablesButtonList = () => {
   const matches = useMediaQuery('(min-width: 430px)')
@@ -15,7 +17,9 @@ const SeasonTablesButtonList = () => {
   })
 
   const hasStatic = Boolean(
-    route.useLoaderData({ select: (s) => s.serie.hasStatic }),
+    route.useLoaderData({
+      select: (s) => s.serie.hasStatic,
+    }),
   )
 
   if (year < 1930) return null
@@ -25,18 +29,25 @@ const SeasonTablesButtonList = () => {
         Serietabell {women ? 'Damer' : 'Herrar'}
       </h1>
       <div className="flex flex-row justify-center">
-        <div className="mb-2 grid grid-cols-3 gap-4">
+        <div className="mb-2 flex flex-row w-40 justify-center gap-4">
           <Link
             from="/seasons/$year/$group/tables/$table"
             to="."
             search={{ women }}
             params={(prev) => ({ ...prev, table: 'all' })}
-            activeOptions={{ includeSearch: false, exact: true }}
+            activeOptions={{
+              includeSearch: false,
+              exact: true,
+            }}
           >
             {({ isActive, isTransitioning }) => (
               <Button
                 size={matches ? 'sm' : 'xxs'}
-                variant={isActive || isTransitioning ? 'default' : 'outline'}
+                variant={
+                  isActive || isTransitioning
+                    ? 'default'
+                    : 'outline'
+                }
                 disabled={isTransitioning}
               >
                 Alla
@@ -48,13 +59,20 @@ const SeasonTablesButtonList = () => {
             to="."
             search={{ women }}
             params={(prev) => ({ ...prev, table: 'home' })}
-            activeOptions={{ includeSearch: false, exact: true }}
+            activeOptions={{
+              includeSearch: false,
+              exact: true,
+            }}
             disabled={hasStatic}
           >
             {({ isActive, isTransitioning }) => (
               <Button
                 size={matches ? 'sm' : 'textxxs'}
-                variant={isActive || isTransitioning ? 'default' : 'outline'}
+                variant={
+                  isActive || isTransitioning
+                    ? 'default'
+                    : 'outline'
+                }
                 disabled={isTransitioning || hasStatic}
               >
                 Hemma
@@ -66,13 +84,20 @@ const SeasonTablesButtonList = () => {
             to="."
             search={{ women }}
             params={(prev) => ({ ...prev, table: 'away' })}
-            activeOptions={{ includeSearch: false, exact: true }}
+            activeOptions={{
+              includeSearch: false,
+              exact: true,
+            }}
             disabled={hasStatic}
           >
             {({ isActive, isTransitioning }) => (
               <Button
                 size={matches ? 'sm' : 'textxxs'}
-                variant={isActive || isTransitioning ? 'default' : 'outline'}
+                variant={
+                  isActive || isTransitioning
+                    ? 'default'
+                    : 'outline'
+                }
                 disabled={isTransitioning || hasStatic}
               >
                 Borta

@@ -1,6 +1,8 @@
-import { getRouteApi, useLocation } from '@tanstack/react-router'
-import type {
-  ColumnDef} from '@tanstack/react-table';
+import {
+  getRouteApi,
+  useLocation,
+} from '@tanstack/react-router'
+import type { ColumnDef } from '@tanstack/react-table'
 import {
   flexRender,
   getCoreRowModel,
@@ -8,8 +10,13 @@ import {
 } from '@tanstack/react-table'
 import { useMediaQuery } from 'usehooks-ts'
 
-import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table'
+import { Button } from '@/components/base/ui/button'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+} from '@/components/base/ui/table'
 import { useFavTeam } from '@/lib/contexts/favTeamsContext'
 import { cn } from '@/lib/utils/utils'
 
@@ -21,7 +28,9 @@ interface DataTableProps<TData, TValue> {
   }
 }
 
-const route = getRouteApi('/_layout/seasons/$year/playoff/games')
+const route = getRouteApi(
+  '/_layout/seasons/$year/playoff/games',
+)
 
 const DataTable = <TData, TValue>({
   columns,
@@ -54,14 +63,24 @@ const DataTable = <TData, TValue>({
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
-                data-state={row.getIsSelected() && 'selected'}
+                data-state={
+                  row.getIsSelected() && 'selected'
+                }
                 className={cn(
                   '',
                   favTeams.includes(
-                    teamObject[getString(row.getValue('home_casualName'))],
+                    teamObject[
+                      getString(
+                        row.getValue('home_casualName'),
+                      )
+                    ],
                   ) ||
                     favTeams.includes(
-                      teamObject[getString(row.getValue('away_casualName'))],
+                      teamObject[
+                        getString(
+                          row.getValue('away_casualName'),
+                        )
+                      ],
                     )
                     ? 'font-bold'
                     : undefined,
@@ -69,7 +88,10 @@ const DataTable = <TData, TValue>({
               >
                 {row.getVisibleCells().map((cell) => {
                   return (
-                    <TableCell key={cell.id} className="px-0 py-1">
+                    <TableCell
+                      key={cell.id}
+                      className="px-0 py-1"
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),
@@ -81,34 +103,46 @@ const DataTable = <TData, TValue>({
                   <Button
                     size={matches ? 'sm' : 'xs'}
                     variant="default"
-                    asChild
-                  >
-                    <route.Link
-                      to="/teams/compare"
-                      search={(prev) => ({
-                        ...prev,
-                        teamArray: [
-                          teamObject[
-                            getString(row.getValue('home_casualName'))
+                    render={
+                      <route.Link
+                        to="/teams/compare"
+                        search={(prev) => ({
+                          ...prev,
+                          teamArray: [
+                            teamObject[
+                              getString(
+                                row.getValue(
+                                  'home_casualName',
+                                ),
+                              )
+                            ],
+                            teamObject[
+                              getString(
+                                row.getValue(
+                                  'away_casualName',
+                                ),
+                              )
+                            ],
                           ],
-                          teamObject[
-                            getString(row.getValue('away_casualName'))
-                          ],
-                        ],
-                      })}
-                      state={{ origin: origin }}
-                    >
-                      <span className="text-[10px] md:text-sm xl:text-base 2xl:text-lg">
-                        H2H
-                      </span>
-                    </route.Link>
-                  </Button>
+                        })}
+                        state={{ origin: origin }}
+                      >
+                        <span className="text-[10px] md:text-sm xl:text-base 2xl:text-lg">
+                          H2H
+                        </span>
+                      </route.Link>
+                    }
+                    nativeButton={false}
+                  />
                 </TableCell>
               </TableRow>
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
+              <TableCell
+                colSpan={columns.length}
+                className="h-24 text-center"
+              >
                 Inga matcher.
               </TableCell>
             </TableRow>

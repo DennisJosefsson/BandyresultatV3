@@ -1,7 +1,11 @@
 import type { ColumnDef } from '@tanstack/react-table'
-import { ArrowDownIcon, ArrowUpIcon, ChevronsUpDownIcon } from 'lucide-react'
+import {
+  ArrowDownIcon,
+  ArrowUpIcon,
+  ChevronsUpDownIcon,
+} from 'lucide-react'
 
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/base/ui/button'
 import type { TeamTable } from '@/lib/types/table'
 
 export const showColumns = {
@@ -16,9 +20,9 @@ export const hideColumns = {
   totalGoalsConceded: false,
 }
 
-export const columns: Array<ColumnDef<
-  Omit<TeamTable, 'women' | 'group' | 'season'>
->> = [
+export const columns: Array<
+  ColumnDef<Omit<TeamTable, 'women' | 'group' | 'season'>>
+> = [
   {
     accessorKey: 'team.casualName',
     header: () => (
@@ -38,8 +42,11 @@ export const columns: Array<ColumnDef<
       <div className="text-center text-[10px] lg:text-sm">
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          size="icon"
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
           className="text-[10px] lg:text-sm"
         >
           M
@@ -66,8 +73,11 @@ export const columns: Array<ColumnDef<
       <div className="text-center text-[10px] lg:text-sm">
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          size="icon"
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
           className="text-[10px] lg:text-sm"
         >
           V
@@ -94,8 +104,11 @@ export const columns: Array<ColumnDef<
       <div className="text-center text-[10px] lg:text-sm">
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          size="icon"
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
           className="text-[10px] lg:text-sm"
         >
           O
@@ -122,8 +135,11 @@ export const columns: Array<ColumnDef<
       <div className="text-center text-[10px] lg:text-sm">
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          size="icon"
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
           className="text-[10px] lg:text-sm"
         >
           F
@@ -150,8 +166,11 @@ export const columns: Array<ColumnDef<
       <div className="text-center text-[10px] lg:text-sm">
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          size="icon"
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
           className="text-[10px] lg:text-sm"
         >
           GM
@@ -178,8 +197,11 @@ export const columns: Array<ColumnDef<
       <div className="text-center text-[10px] lg:text-sm">
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          size="icon"
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
           className="text-[10px] lg:text-sm"
         >
           IM
@@ -206,8 +228,11 @@ export const columns: Array<ColumnDef<
       <div className="text-center text-[10px] lg:text-sm">
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          size="icon"
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
           className="text-[10px] lg:text-sm"
         >
           MS
@@ -234,8 +259,11 @@ export const columns: Array<ColumnDef<
       <div className="text-center text-[10px] lg:text-sm">
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          size="icon"
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
           className="text-[10px] lg:text-sm"
         >
           P

@@ -5,7 +5,7 @@ import {
   Card,
   CardContent,
   CardHeader,
-} from '@/components/ui/card'
+} from '@/components/base/ui/card'
 import {
   MapMarker,
   MarkerContent,

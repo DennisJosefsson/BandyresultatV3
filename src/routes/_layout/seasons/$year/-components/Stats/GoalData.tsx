@@ -6,17 +6,19 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
-import type {
-  ChartConfig} from '@/components/ui/chart';
+} from '@/components/base/ui/card'
+import type { ChartConfig } from '@/components/base/ui/chart'
 import {
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
-} from '@/components/ui/chart'
+} from '@/components/base/ui/chart'
 import type { Stats } from '@/lib/types/stats'
 type GoalDataProps = {
-  goalData: Pick<Stats, 'awayGoalData' | 'homeGoalData' | 'goalData' | 'serie'>
+  goalData: Pick<
+    Stats,
+    'awayGoalData' | 'homeGoalData' | 'goalData' | 'serie'
+  >
 }
 
 const GoalData = ({ goalData }: GoalDataProps) => {
@@ -75,7 +77,11 @@ const GoalData = ({ goalData }: GoalDataProps) => {
             >
               <Label
                 content={({ viewBox }) => {
-                  if (viewBox && 'cx' in viewBox && 'cy' in viewBox) {
+                  if (
+                    viewBox &&
+                    'cx' in viewBox &&
+                    'cy' in viewBox
+                  ) {
                     return (
                       <text
                         x={viewBox.cx}

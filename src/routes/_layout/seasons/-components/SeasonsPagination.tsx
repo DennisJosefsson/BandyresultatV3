@@ -8,9 +8,8 @@ import {
   ChevronRightIcon,
   EllipsisIcon,
 } from 'lucide-react'
-import { useMediaQuery } from 'usehooks-ts'
 
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/base/ui/button'
 
 const Ellips = () => {
   return (
@@ -31,7 +30,6 @@ const MiddleButtons = ({
   page: number | undefined
   maxPage: number
 }) => {
-  const matches = useMediaQuery('(min-width: 430px)')
   if (page < 4) {
     return (
       <>
@@ -42,7 +40,7 @@ const MiddleButtons = ({
         >
           {({ isActive }) => (
             <Button
-              size={matches ? 'icon' : 'xs'}
+              className="size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5 xs:size-7 xs:[&_svg:not([class*='size-'])]:size-3.5"
               variant={isActive ? 'outline' : 'ghost'}
               aria-label="Sida 2"
             >
@@ -57,7 +55,7 @@ const MiddleButtons = ({
         >
           {({ isActive }) => (
             <Button
-              size={matches ? 'icon' : 'xs'}
+              className="size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5 xs:size-7 xs:[&_svg:not([class*='size-'])]:size-3.5"
               variant={isActive ? 'outline' : 'ghost'}
               aria-label="Sida 3"
             >
@@ -72,7 +70,7 @@ const MiddleButtons = ({
         >
           {({ isActive }) => (
             <Button
-              size={matches ? 'icon' : 'xs'}
+              className="size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5 xs:size-7 xs:[&_svg:not([class*='size-'])]:size-3.5"
               variant={isActive ? 'outline' : 'ghost'}
               aria-label="Sida 4"
             >
@@ -87,7 +85,7 @@ const MiddleButtons = ({
         >
           {({ isActive }) => (
             <Button
-              size={matches ? 'icon' : 'xs'}
+              className="size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5 xs:size-7 xs:[&_svg:not([class*='size-'])]:size-3.5"
               variant={isActive ? 'outline' : 'ghost'}
               aria-label="Sida 5"
             >
@@ -112,7 +110,7 @@ const MiddleButtons = ({
         >
           {({ isActive }) => (
             <Button
-              size={matches ? 'icon' : 'xs'}
+              className="size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5 xs:size-7 xs:[&_svg:not([class*='size-'])]:size-3.5"
               variant={isActive ? 'outline' : 'ghost'}
               aria-label={`Sida ${maxPage - 4}`}
             >
@@ -130,7 +128,7 @@ const MiddleButtons = ({
         >
           {({ isActive }) => (
             <Button
-              size={matches ? 'icon' : 'xs'}
+              className="size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5 xs:size-7 xs:[&_svg:not([class*='size-'])]:size-3.5"
               variant={isActive ? 'outline' : 'ghost'}
               aria-label={`Sida ${maxPage - 3}`}
             >
@@ -148,7 +146,7 @@ const MiddleButtons = ({
         >
           {({ isActive }) => (
             <Button
-              size={matches ? 'icon' : 'xs'}
+              className="size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5 xs:size-7 xs:[&_svg:not([class*='size-'])]:size-3.5"
               variant={isActive ? 'outline' : 'ghost'}
               aria-label={`Sida ${maxPage - 2}`}
             >
@@ -166,7 +164,7 @@ const MiddleButtons = ({
         >
           {({ isActive }) => (
             <Button
-              size={matches ? 'icon' : 'xs'}
+              className="size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5 xs:size-7 xs:[&_svg:not([class*='size-'])]:size-3.5"
               variant={isActive ? 'outline' : 'ghost'}
               aria-label={`Sida ${maxPage - 1}`}
             >
@@ -187,7 +185,7 @@ const MiddleButtons = ({
         >
           {({ isActive }) => (
             <Button
-              size={matches ? 'icon' : 'xs'}
+              className="size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5 xs:size-7 xs:[&_svg:not([class*='size-'])]:size-3.5"
               variant={isActive ? 'outline' : 'ghost'}
               aria-label={`Sida ${page - 1}`}
             >
@@ -202,7 +200,7 @@ const MiddleButtons = ({
         >
           {({ isActive }) => (
             <Button
-              size={matches ? 'icon' : 'xs'}
+              className="size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5 xs:size-7 xs:[&_svg:not([class*='size-'])]:size-3.5"
               variant={isActive ? 'outline' : 'ghost'}
               aria-label={`Sida ${page}`}
             >
@@ -217,7 +215,7 @@ const MiddleButtons = ({
         >
           {({ isActive }) => (
             <Button
-              size={matches ? 'icon' : 'xs'}
+              className="size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5 xs:size-7 xs:[&_svg:not([class*='size-'])]:size-3.5"
               variant={isActive ? 'outline' : 'ghost'}
               aria-label={`Sida ${page + 1}`}
             >
@@ -232,7 +230,6 @@ const MiddleButtons = ({
 }
 
 const SeasonsPagination = () => {
-  const matches = useMediaQuery('(min-width: 430px)')
   const count = useLoaderData({
     from: '/_layout/seasons/',
     select: (data) => data.count,
@@ -275,7 +272,7 @@ const SeasonsPagination = () => {
       >
         {({ isActive }) => (
           <Button
-            size={matches ? 'icon' : 'xs'}
+            className="size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5 xs:size-7 xs:[&_svg:not([class*='size-'])]:size-3.5"
             variant={isActive ? 'outline' : 'ghost'}
             aria-label="Sida 1"
           >
@@ -294,7 +291,7 @@ const SeasonsPagination = () => {
       >
         {({ isActive }) => (
           <Button
-            size={matches ? 'icon' : 'xs'}
+            className="size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5 xs:size-7 xs:[&_svg:not([class*='size-'])]:size-3.5"
             variant={isActive ? 'outline' : 'ghost'}
             aria-label={`Sida ${maxPage}`}
           >

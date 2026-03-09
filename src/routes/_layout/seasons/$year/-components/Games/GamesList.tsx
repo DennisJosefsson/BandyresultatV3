@@ -5,7 +5,7 @@ import Date from '@/components/Common/Date'
 import type { Game, GameGroupBase } from '@/lib/types/game'
 
 import { columns } from './columns'
-// import GamesListItem from './GamesListItem'
+
 import DataTable from './DataTable'
 type GameListProps = {
   group: GameGroupBase<Array<Omit<Game, 'season'>>>

@@ -1,12 +1,16 @@
-import type {
-  ColumnDef} from '@tanstack/react-table';
+import type { ColumnDef } from '@tanstack/react-table'
 import {
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
 
-import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+} from '@/components/base/ui/table'
 import { useFavTeam } from '@/lib/contexts/favTeamsContext'
 import { cn } from '@/lib/utils/utils'
 
@@ -45,14 +49,24 @@ const GamesDataTable = <TData, TValue>({
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
-                data-state={row.getIsSelected() && 'selected'}
+                data-state={
+                  row.getIsSelected() && 'selected'
+                }
                 className={cn(
                   '',
                   favTeams.includes(
-                    teamObject[getString(row.getValue('home_casualName'))],
+                    teamObject[
+                      getString(
+                        row.getValue('home_casualName'),
+                      )
+                    ],
                   ) ||
                     favTeams.includes(
-                      teamObject[getString(row.getValue('away_casualName'))],
+                      teamObject[
+                        getString(
+                          row.getValue('away_casualName'),
+                        )
+                      ],
                     )
                     ? 'font-bold'
                     : undefined,
@@ -60,7 +74,10 @@ const GamesDataTable = <TData, TValue>({
               >
                 {row.getVisibleCells().map((cell) => {
                   return (
-                    <TableCell key={cell.id} className="px-0 py-1">
+                    <TableCell
+                      key={cell.id}
+                      className="px-0 py-1"
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),
@@ -72,7 +89,10 @@ const GamesDataTable = <TData, TValue>({
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
+              <TableCell
+                colSpan={columns.length}
+                className="h-24 text-center"
+              >
                 Inga matcher.
               </TableCell>
             </TableRow>
