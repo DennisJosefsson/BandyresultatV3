@@ -1,8 +1,7 @@
 import { Link, getRouteApi } from '@tanstack/react-router'
 import { useMediaQuery } from 'usehooks-ts'
 
-import { Button } from '@/components/ui/button'
-import { CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/base/ui/button'
 import { useFavTeam } from '@/lib/contexts/favTeamsContext'
 
 const route = getRouteApi('/_layout/teams/$teamId')
@@ -37,9 +36,9 @@ const TeamHeader = () => {
   }
 
   return (
-    <CardHeader className="p-1 md:p-6">
+    <div className="mb-4">
       <div className="flex flex-row items-center justify-between">
-        <CardTitle className="flex flex-row flex-wrap gap-2 text-xs sm:text-sm md:text-base xl:text-lg">
+        <div className="flex flex-row flex-wrap gap-2 text-xs sm:text-sm md:text-base xl:text-lg">
           <span>{team.name}</span>
           <div className="flex flex-row gap-2">
             <span>[ </span>
@@ -63,7 +62,7 @@ const TeamHeader = () => {
             </Link>
             <span> ]</span>
           </div>
-        </CardTitle>
+        </div>
 
         <div className="flex flex-row items-center gap-1">
           {/* {origin ? (
@@ -90,7 +89,7 @@ const TeamHeader = () => {
           )}
         </div>
       </div>
-    </CardHeader>
+    </div>
   )
 }
 

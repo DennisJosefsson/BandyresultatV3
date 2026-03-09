@@ -88,7 +88,7 @@ function SingleTeam() {
           />
         )}
       >
-        <div className="font-inter text-foreground mt-2 flex min-h-screen flex-col">
+        <div className="font-inter text-foreground mt-6 flex min-h-screen flex-col">
           <TeamHeader />
           <Outlet />
         </div>

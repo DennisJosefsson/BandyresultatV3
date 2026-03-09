@@ -1,7 +1,11 @@
 import { createColumnHelper } from '@tanstack/react-table'
-import { ArrowDownIcon, ArrowUpIcon, ChevronsUpDownIcon } from 'lucide-react'
+import {
+  ArrowDownIcon,
+  ArrowUpIcon,
+  ChevronsUpDownIcon,
+} from 'lucide-react'
 
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/base/ui/button'
 import type { TeamTable } from '@/lib/types/table'
 
 export const showColumns = {
@@ -36,8 +40,11 @@ export const columns = [
       <div className="text-center text-[10px] lg:text-sm">
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          size="icon"
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
           className="text-[10px] lg:text-sm"
         >
           M
@@ -63,8 +70,11 @@ export const columns = [
       <div className="text-center text-[10px] lg:text-sm">
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          size="icon"
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
           className="text-[10px] lg:text-sm"
         >
           V
@@ -90,8 +100,11 @@ export const columns = [
       <div className="text-center text-[10px] lg:text-sm">
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          size="icon"
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
           className="text-[10px] lg:text-sm"
         >
           O
@@ -117,8 +130,11 @@ export const columns = [
       <div className="text-center text-[10px] lg:text-sm">
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          size="icon"
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
           className="text-[10px] lg:text-sm"
         >
           F
@@ -144,8 +160,11 @@ export const columns = [
       <div className="text-center text-[10px] lg:text-sm">
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          size="icon"
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
           className="text-[10px] lg:text-sm"
         >
           GM
@@ -171,8 +190,11 @@ export const columns = [
       <div className="text-center text-[10px] lg:text-sm">
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          size="icon"
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
           className="text-[10px] lg:text-sm"
         >
           IM
@@ -198,8 +220,11 @@ export const columns = [
       <div className="text-center text-[10px] lg:text-sm">
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          size="icon"
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
           className="text-[10px] lg:text-sm"
         >
           MS
@@ -225,8 +250,11 @@ export const columns = [
       <div className="text-center text-[10px] lg:text-sm">
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          size="icon"
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
           className="text-[10px] lg:text-sm"
         >
           P

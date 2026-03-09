@@ -1,7 +1,7 @@
 import { getRouteApi } from '@tanstack/react-router'
 import { useEffect, useRef, useState } from 'react'
 
-import { Card } from '@/components/ui/card'
+import { Card } from '@/components/base/ui/card'
 import type { MapRef } from '@/components/ui/map'
 import {
   Map as MapCn,
@@ -45,54 +45,50 @@ const Map = () => {
   }, [teams])
 
   return (
-    <div>
+    <div className="font-inter text-foreground mx-auto my-6 flex min-h-screen flex-col gap-2 px-1 md:flex-row-reverse md:justify-end md:gap-8 lg:px-0">
+      <div className="md:p-2">
+        <CountyListContainer
+          countyArray={countyArray}
+          setCounties={setCounties}
+          counties={counties}
+          mapRef={mapRef}
+        />
+      </div>
+
       <div>
-        <div className="font-inter text-foreground mx-auto mb-2 flex min-h-screen flex-col gap-2 px-1 md:flex-row-reverse md:justify-end md:gap-8 lg:px-0">
-          <div className="md:p-2">
-            <CountyListContainer
-              countyArray={countyArray}
-              setCounties={setCounties}
-              counties={counties}
-              mapRef={mapRef}
-            />
-          </div>
+        <Card className="xs:max-w-[360px] h-[400px] w-screen max-w-[280px] p-2 sm:h-160 sm:max-w-xl xl:max-w-4xl">
+          <MapCn
+            ref={mapRef}
+            center={[15, 62]}
+            zoom={4}
+            fadeDuration={0}
+          >
+            {teams
+              .filter((team) =>
+                counties
+                  .map((county) => county.county)
+                  .includes(team.county),
+              )
+              .map((county) => {
+                return (
+                  <div key={county.county}>
+                    {county.teams.map((team) => {
+                      return (
+                        <MapItem
+                          latitude={team.lat}
+                          longitude={team.long}
+                          team={team}
+                          key={team.teamId.toString()}
+                        />
+                      )
+                    })}
+                  </div>
+                )
+              })}
 
-          <div>
-            <Card className="xs:max-w-[360px] h-[400px] w-screen max-w-[280px] p-2 sm:h-160 sm:max-w-xl xl:max-w-4xl">
-              <MapCn
-                ref={mapRef}
-                center={[15, 62]}
-                zoom={4}
-                fadeDuration={0}
-              >
-                {teams
-                  .filter((team) =>
-                    counties
-                      .map((county) => county.county)
-                      .includes(team.county),
-                  )
-                  .map((county) => {
-                    return (
-                      <div key={county.county}>
-                        {county.teams.map((team) => {
-                          return (
-                            <MapItem
-                              latitude={team.lat}
-                              longitude={team.long}
-                              team={team}
-                              key={team.teamId.toString()}
-                            />
-                          )
-                        })}
-                      </div>
-                    )
-                  })}
-
-                <MapControls />
-              </MapCn>
-            </Card>
-          </div>
-        </div>
+            <MapControls />
+          </MapCn>
+        </Card>
       </div>
     </div>
   )

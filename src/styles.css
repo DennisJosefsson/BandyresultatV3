@@ -153,6 +153,10 @@ code {
   .maplibregl-popup-tip {
     @apply hidden!;
   }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
 }
 
 * {

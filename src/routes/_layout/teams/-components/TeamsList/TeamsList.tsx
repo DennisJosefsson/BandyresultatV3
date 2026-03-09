@@ -1,4 +1,4 @@
-import type { CheckedState } from '@radix-ui/react-checkbox'
+import type { CheckedState } from '@/components/base/ui/checkbox'
 import { useLoaderData, useNavigate, useSearch } from '@tanstack/react-router'
 import { useCallback, useState } from 'react'
 

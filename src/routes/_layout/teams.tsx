@@ -1,8 +1,15 @@
-import { CatchBoundary, Outlet, createFileRoute } from '@tanstack/react-router'
+import {
+  CatchBoundary,
+  Outlet,
+  createFileRoute,
+} from '@tanstack/react-router'
 import { z } from 'zod'
 
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
-import { Card, CardContent } from '@/components/ui/card'
+import {
+  Card,
+  CardContent,
+} from '@/components/base/ui/card'
 
 import TeamsTabBar from './teams/-components/TeamsTabBar'
 import { getTeams } from './teams/-functions/getTeams'
@@ -15,7 +22,8 @@ const searchParams = z.object({
 export const Route = createFileRoute('/_layout/teams')({
   validateSearch: searchParams,
   loaderDeps: ({ search: { women } }) => ({ women }),
-  loader: async ({ deps }) => await getTeams({ data: deps.women }),
+  loader: async ({ deps }) =>
+    await getTeams({ data: deps.women }),
   component: TeamsHeader,
   staticData: { breadcrumb: 'Lag' },
 })
@@ -24,25 +32,26 @@ function TeamsHeader() {
   return (
     <div className="font-inter text-foreground mb-2 min-h-screen px-1">
       <Card>
-        <CardContent className="p-2 md:p-4">
+        <CardContent>
           <TeamsTabBar />
         </CardContent>
       </Card>
-      <Card className="mt-2">
-        <CardContent className="p-2">
-          <CatchBoundary
-            getResetKey={() => 'reset'}
-            onCatch={(error) => {
-              console.error(error)
-            }}
-            errorComponent={({ error, reset }) => (
-              <SimpleErrorComponent id="teams" error={error} reset={reset} />
-            )}
-          >
-            <Outlet />
-          </CatchBoundary>
-        </CardContent>
-      </Card>
+
+      <CatchBoundary
+        getResetKey={() => 'reset'}
+        onCatch={(error) => {
+          console.error(error)
+        }}
+        errorComponent={({ error, reset }) => (
+          <SimpleErrorComponent
+            id="teams"
+            error={error}
+            reset={reset}
+          />
+        )}
+      >
+        <Outlet />
+      </CatchBoundary>
     </div>
   )
 }

@@ -4,14 +4,13 @@ import {
   ChevronRightIcon,
 } from 'lucide-react'
 
-import { Button } from '@/components/ui/button'
-import { CardContent } from '@/components/ui/card'
+import { Button } from '@/components/base/ui/button'
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from '@/components/ui/tabs'
+} from '@/components/base/ui/tabs'
 
 import GamesList from './Games/GamesList'
 import SeasonTables from './SeasonTables'
@@ -23,7 +22,7 @@ const route = getRouteApi(
 const SingleTeamSeason = () => {
   const season = route.useLoaderData()
   return (
-    <CardContent className="p-1 md:p-6">
+    <div>
       <div className="flex flex-col gap-2">
         <div className="flex flex-row items-center justify-between">
           <Link
@@ -77,23 +76,26 @@ const SingleTeamSeason = () => {
           </Link>
         </div>
         <div>
-          <Tabs defaultValue="tables">
+          <Tabs
+            defaultValue="tables"
+            className="flex flex-col"
+          >
             <TabsList>
               <TabsTrigger
-                className="truncate text-[10px] md:text-sm"
+                className="text-[10px] md:text-sm"
                 value="tables"
               >
                 Tabeller
               </TabsTrigger>
               <TabsTrigger
-                className="truncate text-[10px] md:text-sm"
+                className="text-[10px] md:text-sm"
                 value="games"
               >
                 Matcher
               </TabsTrigger>
 
               <TabsTrigger
-                className="truncate text-[10px] md:text-sm"
+                className="text-[10px] md:text-sm"
                 value="upcoming"
               >
                 Ospelade matcher
@@ -120,7 +122,7 @@ const SingleTeamSeason = () => {
           </Tabs>
         </div>
       </div>
-    </CardContent>
+    </div>
   )
 }
 

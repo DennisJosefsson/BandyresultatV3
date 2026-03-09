@@ -1,5 +1,4 @@
-import type {
-  SortingState} from '@tanstack/react-table';
+import type { SortingState } from '@tanstack/react-table'
 import {
   flexRender,
   getCoreRowModel,
@@ -19,7 +18,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
+} from '@/components/base/ui/table'
 import { cn } from '@/lib/utils/utils'
 
 import {

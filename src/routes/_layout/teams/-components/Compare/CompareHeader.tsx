@@ -1,7 +1,14 @@
-import { getRouteApi, useLocation, useNavigate } from '@tanstack/react-router'
-import { useCopyToClipboard, useMediaQuery } from 'usehooks-ts'
+import {
+  getRouteApi,
+  useLocation,
+  useNavigate,
+} from '@tanstack/react-router'
+import {
+  useCopyToClipboard,
+  useMediaQuery,
+} from 'usehooks-ts'
 
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/base/ui/button'
 
 const Buttons = ({ length }: { length: number }) => {
   const [copiedText, copy] = useCopyToClipboard()
@@ -17,14 +24,19 @@ const Buttons = ({ length }: { length: number }) => {
   const origin = useLocation().state.origin
   const goBack = () => {
     origin &&
-      navigate({ to: origin, search: (prev) => ({ women: prev.women }) })
+      navigate({
+        to: origin,
+        search: (prev) => ({ women: prev.women }),
+      })
   }
 
   return (
     <div className="mb-2 flex flex-row justify-end gap-2 xl:mb-6">
       {origin ? (
         <Button
-          size={matches768 ? 'default' : matches ? 'sm' : 'xxs'}
+          size={
+            matches768 ? 'default' : matches ? 'sm' : 'xxs'
+          }
           onClick={goBack}
         >
           Tillbaka
@@ -33,7 +45,9 @@ const Buttons = ({ length }: { length: number }) => {
       {length > 0 && (
         <Button
           onClick={() => copy(copyLink)}
-          size={matches768 ? 'default' : matches ? 'sm' : 'xxs'}
+          size={
+            matches768 ? 'default' : matches ? 'sm' : 'xxs'
+          }
         >
           {copiedText ? 'Kopierad!' : `Länk`}
         </Button>

@@ -1,6 +1,9 @@
 import { useMediaQuery } from 'usehooks-ts'
 
-import { TableCell, TableRow } from '@/components/ui/table'
+import {
+  TableCell,
+  TableRow,
+} from '@/components/base/ui/table'
 
 interface TableRowData {
   team: {
@@ -34,7 +37,11 @@ const DataTableRow = ({ team }: { team: TableRowData }) => {
           </>
         )}
         {!team.opponent && (
-          <>{!matches ? team.team.shortName : team.team.casualName}</>
+          <>
+            {!matches
+              ? team.team.shortName
+              : team.team.casualName}
+          </>
         )}
       </TableCell>
       <TableCell className="px-1 py-1 text-right text-[10px] tabular-nums md:py-2 lg:text-sm xl:text-base 2xl:text-lg">
