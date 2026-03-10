@@ -1,6 +1,6 @@
 import { getRouteApi } from '@tanstack/react-router'
 
-import { TabsContent } from '@/components/ui/tabs'
+import { TabsContent } from '@/components/base/ui/tabs'
 
 import FirstGames from './CompareStatsSubComponents/FirstGames'
 import Golds from './CompareStatsSubComponents/Golds'

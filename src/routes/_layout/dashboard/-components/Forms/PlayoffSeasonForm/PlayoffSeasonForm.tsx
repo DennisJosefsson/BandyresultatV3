@@ -1,22 +1,31 @@
 import { getRouteApi } from '@tanstack/react-router'
 
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Checkbox } from '@/components/ui/checkbox'
+import { Button } from '@/components/base/ui/button'
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/base/ui/card'
+import { Checkbox } from '@/components/base/ui/checkbox'
 import {
   Field,
   FieldError,
   FieldGroup,
   FieldLabel,
-} from '@/components/ui/field'
+} from '@/components/base/ui/field'
 
 import { usePlayoffSeasonForm } from '../../../-hooks/usePlayoffSeasonForm'
 
-const route = getRouteApi('/_layout/dashboard/season/$seasonId/playoffseason/')
+const route = getRouteApi(
+  '/_layout/dashboard/season/$seasonId/playoffseason/',
+)
 
 const PlayoffSeasonForm = () => {
   const form = usePlayoffSeasonForm()
-  const seasonId = route.useParams({ select: (s) => s.seasonId })
+  const seasonId = route.useParams({
+    select: (s) => s.seasonId,
+  })
   const women = route.useSearch({
     select: (search) => search.women,
   })
@@ -29,16 +38,23 @@ const PlayoffSeasonForm = () => {
             <CardTitle>PlayoffSeason</CardTitle>
           </div>
           <div className="flex flex-row gap-2">
-            <Button asChild>
-              <route.Link
-                to="/dashboard/season/$seasonId"
-                params={{ seasonId }}
-                search={{ women }}
-              >
-                Tillbaka
-              </route.Link>
-            </Button>
-            <Button type="submit" form="playoffseasonForm">
+            <Button
+              render={
+                <route.Link
+                  to="/dashboard/season/$seasonId"
+                  params={{ seasonId }}
+                  search={{ women }}
+                >
+                  Tillbaka
+                </route.Link>
+              }
+              nativeButton={false}
+            />
+
+            <Button
+              type="submit"
+              form="playoffseasonForm"
+            >
               Skicka
             </Button>
           </div>
@@ -59,16 +75,22 @@ const PlayoffSeasonForm = () => {
                 name="hasEight"
                 children={(field) => {
                   const isInvalid =
-                    field.state.meta.isTouched && !field.state.meta.isValid
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <Field orientation="horizontal" data-invalid={isInvalid}>
+                      <Field
+                        orientation="horizontal"
+                        data-invalid={isInvalid}
+                      >
                         <Checkbox
                           id={field.name}
                           name={field.name}
                           checked={field.state.value}
                           onCheckedChange={(checked) =>
-                            field.handleChange(checked === true)
+                            field.handleChange(
+                              checked === true,
+                            )
                           }
                         />
                         <FieldLabel
@@ -79,7 +101,9 @@ const PlayoffSeasonForm = () => {
                         </FieldLabel>
                       </Field>
                       {isInvalid && (
-                        <FieldError errors={field.state.meta.errors} />
+                        <FieldError
+                          errors={field.state.meta.errors}
+                        />
                       )}
                     </Field>
                   )
@@ -89,16 +113,22 @@ const PlayoffSeasonForm = () => {
                 name="hasQuarter"
                 children={(field) => {
                   const isInvalid =
-                    field.state.meta.isTouched && !field.state.meta.isValid
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <Field orientation="horizontal" data-invalid={isInvalid}>
+                      <Field
+                        orientation="horizontal"
+                        data-invalid={isInvalid}
+                      >
                         <Checkbox
                           id={field.name}
                           name={field.name}
                           checked={field.state.value}
                           onCheckedChange={(checked) =>
-                            field.handleChange(checked === true)
+                            field.handleChange(
+                              checked === true,
+                            )
                           }
                         />
                         <FieldLabel
@@ -109,7 +139,9 @@ const PlayoffSeasonForm = () => {
                         </FieldLabel>
                       </Field>
                       {isInvalid && (
-                        <FieldError errors={field.state.meta.errors} />
+                        <FieldError
+                          errors={field.state.meta.errors}
+                        />
                       )}
                     </Field>
                   )
@@ -119,16 +151,22 @@ const PlayoffSeasonForm = () => {
                 name="playoffAsSeries"
                 children={(field) => {
                   const isInvalid =
-                    field.state.meta.isTouched && !field.state.meta.isValid
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <Field orientation="horizontal" data-invalid={isInvalid}>
+                      <Field
+                        orientation="horizontal"
+                        data-invalid={isInvalid}
+                      >
                         <Checkbox
                           id={field.name}
                           name={field.name}
                           checked={field.state.value}
                           onCheckedChange={(checked) =>
-                            field.handleChange(checked === true)
+                            field.handleChange(
+                              checked === true,
+                            )
                           }
                         />
                         <FieldLabel
@@ -139,7 +177,9 @@ const PlayoffSeasonForm = () => {
                         </FieldLabel>
                       </Field>
                       {isInvalid && (
-                        <FieldError errors={field.state.meta.errors} />
+                        <FieldError
+                          errors={field.state.meta.errors}
+                        />
                       )}
                     </Field>
                   )
@@ -149,16 +189,22 @@ const PlayoffSeasonForm = () => {
                 name="uefaSorting"
                 children={(field) => {
                   const isInvalid =
-                    field.state.meta.isTouched && !field.state.meta.isValid
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <Field orientation="horizontal" data-invalid={isInvalid}>
+                      <Field
+                        orientation="horizontal"
+                        data-invalid={isInvalid}
+                      >
                         <Checkbox
                           id={field.name}
                           name={field.name}
                           checked={field.state.value}
                           onCheckedChange={(checked) =>
-                            field.handleChange(checked === true)
+                            field.handleChange(
+                              checked === true,
+                            )
                           }
                         />
                         <FieldLabel
@@ -169,7 +215,9 @@ const PlayoffSeasonForm = () => {
                         </FieldLabel>
                       </Field>
                       {isInvalid && (
-                        <FieldError errors={field.state.meta.errors} />
+                        <FieldError
+                          errors={field.state.meta.errors}
+                        />
                       )}
                     </Field>
                   )

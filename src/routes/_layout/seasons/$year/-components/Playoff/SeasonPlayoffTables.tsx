@@ -6,7 +6,9 @@ import PlayoffAsSeriesTables from './PlayoffAsSeriesTables'
 import QuarterFinal from './QuarterFinal'
 import SemiFinal from './SemiFinal'
 
-const route = getRouteApi('/_layout/seasons/$year/playoff/table')
+const route = getRouteApi(
+  '/_layout/seasons/$year/playoff/table',
+)
 
 const SeasonPlayoffTables = () => {
   const playoffAsSeries = route.useLoaderData({

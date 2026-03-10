@@ -1,4 +1,4 @@
-import type { AnyRouteMatch} from '@tanstack/react-router';
+import type { AnyRouteMatch } from '@tanstack/react-router'
 import { Link, useMatches } from '@tanstack/react-router'
 import { Fragment } from 'react'
 
@@ -9,7 +9,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb'
+} from '@/components/base/ui/breadcrumb'
 
 export type BreadcrumbValue =
   | string
@@ -24,24 +24,25 @@ type ResolvedBreadcrumbItem = {
 export function RouterBreadcrumb() {
   const matches = useMatches()
 
-  const breadcrumbs: Array<ResolvedBreadcrumbItem> = matches.flatMap((match) => {
-    const staticData = match.staticData
-    if (!staticData?.breadcrumb) return []
+  const breadcrumbs: Array<ResolvedBreadcrumbItem> =
+    matches.flatMap((match) => {
+      const staticData = match.staticData
+      if (!staticData?.breadcrumb) return []
 
-    const breadcrumbValue =
-      typeof staticData.breadcrumb === 'function'
-        ? staticData.breadcrumb(match)
-        : staticData.breadcrumb
+      const breadcrumbValue =
+        typeof staticData.breadcrumb === 'function'
+          ? staticData.breadcrumb(match)
+          : staticData.breadcrumb
 
-    const items = Array.isArray(breadcrumbValue)
-      ? breadcrumbValue
-      : [breadcrumbValue]
+      const items = Array.isArray(breadcrumbValue)
+        ? breadcrumbValue
+        : [breadcrumbValue]
 
-    return items.map((item) => ({
-      label: item,
-      path: match.pathname,
-    }))
-  })
+      return items.map((item) => ({
+        label: item,
+        path: match.pathname,
+      }))
+    })
 
   if (breadcrumbs.length === 0) {
     return null
@@ -58,14 +59,20 @@ export function RouterBreadcrumb() {
               <BreadcrumbItem>
                 {isLast ? (
                   <BreadcrumbPage>
-                    <span className="font-semibold">{crumb.label}</span>
+                    <span className="font-semibold">
+                      {crumb.label}
+                    </span>
                   </BreadcrumbPage>
                 ) : (
-                  <BreadcrumbLink asChild>
-                    <Link to={crumb.path}>
-                      <span className="font-semibold">{crumb.label}</span>
-                    </Link>
-                  </BreadcrumbLink>
+                  <BreadcrumbLink
+                    render={
+                      <Link to={crumb.path}>
+                        <span className="font-semibold">
+                          {crumb.label}
+                        </span>
+                      </Link>
+                    }
+                  />
                 )}
               </BreadcrumbItem>
               {!isLast && <BreadcrumbSeparator />}

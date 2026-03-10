@@ -5,7 +5,7 @@ import StringInput from './StringInput'
 
 const ResultFormComponent = () => {
   return (
-    <div className="bg-background mb-2 flex w-[18rem] flex-col rounded lg:w-full">
+    <div className="mb-2 flex w-[18rem] flex-col rounded lg:w-full">
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <div className="flex max-w-[16rem] flex-col lg:col-span-2">
           <StringInput

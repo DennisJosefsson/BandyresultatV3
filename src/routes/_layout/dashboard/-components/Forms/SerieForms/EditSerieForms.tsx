@@ -1,7 +1,7 @@
 import { Outlet, getRouteApi } from '@tanstack/react-router'
 
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
+import { Button } from '@/components/base/ui/button'
+import { Card } from '@/components/base/ui/card'
 
 import AddTeamToSerie from './AddTeamToSerie'
 import EditSerie from './EditSerie'
@@ -25,81 +25,81 @@ const EditSerieForms = () => {
       </div>
       <Card>
         <div className="mb-4 flex flex-row justify-center gap-6">
-          <Button asChild>
-            <route.Link
+          <Button render={<route.Link
               to="/dashboard/season/$seasonId/info/$serieId/edit/newParentId"
               search={(prev) => ({ women: prev.women })}
             >
               Lägg till ParentId
-            </route.Link>
-          </Button>
-          <Button asChild>
-            <route.Link
+            </route.Link>} nativeButton={false}/>
+            
+          
+          <Button render={<route.Link
               to="/dashboard/season/$seasonId/info/$serieId/edit/editParentId"
               search={(prev) => ({ women: prev.women })}
             >
               Redigera ParentId
-            </route.Link>
-          </Button>
-          <Button asChild disabled={disabled}>
-            <route.Link
+            </route.Link>} nativeButton={false}/>
+            
+          
+          <Button render={<route.Link
               to="/dashboard/season/$seasonId/info/$serieId/edit/games"
               search={(prev) => ({ women: prev.women })}
               disabled={disabled}
             >
               Matcher
-            </route.Link>
-          </Button>
-          <Button asChild disabled={disabled}>
-            <route.Link
+            </route.Link>} nativeButton={false} disabled={disabled}/>
+            
+          
+          <Button render={<route.Link
               to="/dashboard/season/$seasonId/info/$serieId/edit/generateschedule"
               search={(prev) => ({ women: prev.women })}
               disabled={disabled}
             >
               Generera spelschema
-            </route.Link>
-          </Button>
-          <Button asChild disabled={disabled}>
-            <route.Link
+            </route.Link>} nativeButton={false} disabled={disabled}/>
+            
+          
+          <Button render={<route.Link
               to="/dashboard/season/$seasonId/info/$serieId/edit/singlegame"
               search={(prev) => ({ women: prev.women })}
               disabled={disabled}
             >
               Lägg till match
-            </route.Link>
-          </Button>
-          <Button asChild disabled={disabled}>
-            <route.Link
+            </route.Link>} nativeButton={false} disabled={disabled}/>
+            
+          
+          <Button render={<route.Link
               to="/dashboard/season/$seasonId/info/$serieId/edit/addGames"
               search={(prev) => ({ women: prev.women })}
               disabled={disabled}
             >
               Lägg till matcher
-            </route.Link>
-          </Button>
-          <Button asChild disabled={disabled}>
-            <route.Link
+            </route.Link>} nativeButton={false} disabled={disabled}/>
+            
+          
+          <Button render={<route.Link
               to="/dashboard/season/$seasonId/info/$serieId/edit/addTable"
               search={(prev) => ({ women: prev.women })}
               disabled={disabled}
             >
               Lägg till tabell
-            </route.Link>
-          </Button>
-          <Button asChild disabled={disabled}>
-            <route.Link
+            </route.Link>} nativeButton={false} disabled={disabled}/>
+            
+          
+          <Button render={<route.Link
               to="/dashboard/season/$seasonId/info/$serieId/edit/editTable"
               search={(prev) => ({ women: prev.women })}
               disabled={disabled}
             >
               Ändra tabell
-            </route.Link>
-          </Button>
-          <Button asChild>
-            <route.Link to="." search={(prev) => ({ women: prev.women })}>
+            </route.Link>} nativeButton={false} disabled={disabled}/>
+            
+          
+          <Button render={<route.Link to="." search={(prev) => ({ women: prev.women })}>
               Tillbaka
-            </route.Link>
-          </Button>
+            </route.Link>} nativeButton={false}/>
+            
+          
         </div>
         <Outlet />
       </Card>

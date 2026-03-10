@@ -1,6 +1,6 @@
 import { Circle } from 'lucide-react'
 
-import { Skeleton } from '@/components/ui/skeleton'
+import { Skeleton } from '@/components/base/ui/skeleton'
 
 const SeasonStatsSkeleton = () => {
   return (
@@ -11,7 +11,12 @@ const SeasonStatsSkeleton = () => {
       <div className="mb-2 grid grid-cols-1 gap-y-4 pt-2 md:grid-cols-2 md:gap-x-20 lg:grid-cols-3 xl:gap-x-44">
         <div>
           {Array.from({ length: 6 }).map((_i, index) => {
-            return <Skeleton key={index} className="mb-1 h-9 w-full" />
+            return (
+              <Skeleton
+                key={index}
+                className="mb-1 h-9 w-full"
+              />
+            )
           })}
         </div>
         <div>
@@ -58,7 +63,12 @@ const SeasonStatsSkeleton = () => {
         </h4>
         <div className="grid grid-cols-1 gap-y-4 pt-2 md:grid-cols-2 md:gap-x-20 lg:grid-cols-3 xl:gap-x-44">
           {Array.from({ length: 6 }).map((_i, index) => {
-            return <Skeleton key={index} className="mb-1 h-9 w-full" />
+            return (
+              <Skeleton
+                key={index}
+                className="mb-1 h-9 w-full"
+              />
+            )
           })}
         </div>
       </div>

@@ -6,7 +6,7 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
+} from '@/components/base/ui/card'
 
 type Streak = {
   teamId: number

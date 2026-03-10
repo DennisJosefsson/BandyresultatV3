@@ -1,7 +1,10 @@
-import { useLocation, useNavigate } from '@tanstack/react-router'
+import {
+  useLocation,
+  useNavigate,
+} from '@tanstack/react-router'
 import { useMediaQuery } from 'usehooks-ts'
 
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/base/ui/button'
 import { useFavTeam } from '@/lib/contexts/favTeamsContext'
 import type { Game } from '@/lib/types/game'
 import { cn } from '@/lib/utils/utils'
@@ -12,7 +15,9 @@ type GamesListItemProps = {
 
 const GamesListItem = ({ game }: GamesListItemProps) => {
   const { favTeams } = useFavTeam()
-  const navigate = useNavigate({ from: '/seasons/$year/$group/games' })
+  const navigate = useNavigate({
+    from: '/seasons/$year/$group/games',
+  })
   const matches = useMediaQuery('(min-width: 768px)')
 
   const origin = useLocation().pathname
@@ -37,7 +42,9 @@ const GamesListItem = ({ game }: GamesListItemProps) => {
         <span
           className={cn(
             'w-24 sm:w-40 lg:w-40 xl:w-52 2xl:w-60',
-            favTeams.includes(game.homeTeamId) ? 'font-bold' : null,
+            favTeams.includes(game.homeTeamId)
+              ? 'font-bold'
+              : null,
           )}
         >
           {game.home.casualName}
@@ -46,13 +53,17 @@ const GamesListItem = ({ game }: GamesListItemProps) => {
         <span
           className={cn(
             'w-24 sm:w-40 lg:w-40 xl:w-52 2xl:w-60',
-            favTeams.includes(game.awayTeamId) ? 'font-bold' : null,
+            favTeams.includes(game.awayTeamId)
+              ? 'font-bold'
+              : null,
           )}
         >
           {game.away.casualName}
         </span>
 
-        <span className="w-16 text-right tabular-nums">{game.result}</span>
+        <span className="w-16 text-right tabular-nums">
+          {game.result}
+        </span>
 
         {game.halftimeResult && (
           <>

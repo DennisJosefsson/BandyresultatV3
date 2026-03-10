@@ -1,5 +1,3 @@
-import { useState } from 'react'
-
 import { useSearchResults } from '../-hooks/useSearchResults'
 import SearchButtons from './SearchButtons'
 import SearchError from './SearchError'
@@ -8,7 +6,6 @@ import SearchContent from './SearchResultContent'
 import SearchTeamComponent from './SearchTeamComponent'
 
 const Search = () => {
-  const [openAccordion, setOpenAccordion] = useState('')
   const {
     error,
     searchResult,
@@ -23,23 +20,25 @@ const Search = () => {
         <div className="flex flex-row justify-end">
           <SearchButtons
             sendSearchRequest={sendSearchRequest}
-            setOpenAccordion={setOpenAccordion}
           />
         </div>
         <div className="ml-2 flex w-full flex-col">
           <SearchTeamComponent />
-          <SearchForms
-            openAccordion={openAccordion}
-            setOpenAccordion={setOpenAccordion}
-          />
+          <SearchForms />
         </div>
         {searchResult === undefined ? null : (
           <div>
             {error ? (
-              <SearchError reset={reset} searchResult={searchResult} />
+              <SearchError
+                reset={reset}
+                searchResult={searchResult}
+              />
             ) : null}
-            {isSearchResultSuccess && searchResult.status === 200 ? (
-              <SearchContent gameArray={searchResult.searchResult} />
+            {isSearchResultSuccess &&
+            searchResult.status === 200 ? (
+              <SearchContent
+                gameArray={searchResult.searchResult}
+              />
             ) : null}
           </div>
         )}

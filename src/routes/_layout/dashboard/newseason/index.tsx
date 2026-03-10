@@ -2,11 +2,13 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useRef } from 'react'
 
 import ConfirmDialog from '@/components/Common/ConfirmDialog'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/base/ui/button'
 
 import { newSeasonMutation } from '../-hooks/newSeasonMutation'
 
-export const Route = createFileRoute('/_layout/dashboard/newseason/')({
+export const Route = createFileRoute(
+  '/_layout/dashboard/newseason/',
+)({
   component: RouteComponent,
 })
 
@@ -27,7 +29,9 @@ function RouteComponent() {
         onClose={() => {}}
       />
       <div className="mt-20 flex flex-row justify-center">
-        <Button onClick={() => dialogRef.current?.showModal()}>
+        <Button
+          onClick={() => dialogRef.current?.showModal()}
+        >
           Generera ny säsong.
         </Button>
       </div>

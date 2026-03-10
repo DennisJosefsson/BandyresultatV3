@@ -1,13 +1,13 @@
-import { useAuth } from '@clerk/clerk-react'
-import { useRouter, useSearch } from '@tanstack/react-router'
-import { LoaderPinwheelIcon, SidebarIcon } from 'lucide-react'
-import { useMediaQuery } from 'usehooks-ts'
+import {
+  useRouter,
+  useSearch,
+} from '@tanstack/react-router'
+import { SidebarIcon } from 'lucide-react'
 
-import ClerkHeader from '../../integrations/clerk/header-user.tsx'
-import { Button } from '../ui/button.tsx'
-import { Label } from '../ui/label'
-import { useSidebar } from '../ui/sidebar'
-import { Switch } from '../ui/switch'
+import { Button } from '../base/ui/button.tsx'
+import { Label } from '../base/ui/label'
+import { useSidebar } from '../base/ui/sidebar'
+import { Switch } from '../base/ui/switch'
 import { RouterBreadcrumb } from './Breadcrumb.tsx'
 import ModeToggle from './ModeToggle'
 
@@ -18,8 +18,8 @@ const Header = () => {
     from: '__root__',
     select: (search) => search.women,
   })
-  const matches = useMediaQuery('(min-width: 430px)')
-  const { isLoaded } = useAuth()
+  // const matches = useMediaQuery('(min-width: 430px)')
+  // const { isLoaded } = useAuth()
 
   const updateWomen = () => {
     navigate({
@@ -34,7 +34,7 @@ const Header = () => {
   }
 
   return (
-    <header className="bg-background sticky top-0 z-50 flex w-full items-center border-b">
+    <header className="bg-primary-foreground sticky top-0 z-50 flex w-full items-center border-b mb-2">
       <div className="flex h-(--header-height) w-full items-center justify-between gap-2">
         <div className="flex flex-row items-center gap-4">
           <Button
@@ -55,23 +55,13 @@ const Header = () => {
               checked={women}
               onCheckedChange={updateWomen}
             />
-            <Label htmlFor="women">{women ? 'Herrar' : 'Damer'}</Label>
+            <Label htmlFor="women">
+              {women ? 'Herrar' : 'Damer'}
+            </Label>
           </div>
-          {isLoaded && (
-            <>
-              <ClerkHeader />
-              <div>
-                <ModeToggle />
-              </div>
-            </>
-          )}
-          {!isLoaded && (
-            <div>
-              <Button variant="outline" size={matches ? 'icon' : 'smallicon'}>
-                <LoaderPinwheelIcon className="size-[1.2rem] animate-spin" />
-              </Button>
-            </div>
-          )}
+          <div className="mx-2">
+            <ModeToggle />
+          </div>
         </div>
       </div>
     </header>

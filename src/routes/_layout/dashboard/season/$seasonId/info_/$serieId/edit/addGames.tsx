@@ -12,19 +12,22 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
-  const [gameData, setGameData] = useState<BulkGameFileParser | null>(null)
+  const [gameData, setGameData] =
+    useState<BulkGameFileParser | null>(null)
 
   return (
-    <div className="flex flex-col gap-2">
-      <div>
+    <div className="mt-6 flex flex-col gap-4">
+      <div className="flex flex-row justify-center">
         <FileInput setGameData={setGameData} />
       </div>
       <div>
         {gameData ? (
           <BulkGames gameData={gameData} />
         ) : (
-          <div className="mt-6 flex flex-row justify-center">
-            <span className="text-sm">Väntar på data...</span>
+          <div className="flex flex-row justify-center">
+            <span className="text-sm">
+              Väntar på data...
+            </span>
           </div>
         )}
       </div>

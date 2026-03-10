@@ -1,12 +1,9 @@
 import { getRouteApi } from '@tanstack/react-router'
 
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import { Table, TableBody } from '@/components/ui/table'
+  Table,
+  TableBody,
+} from '@/components/base/ui/table'
 import { groupConstant } from '@/lib/utils/constants'
 
 import { filterOpposition } from '../../-functions/utils/filterOpposition'
@@ -25,21 +22,20 @@ const DetailedData = () => {
     <div>
       {data.categoryData.map((level) => {
         return (
-          <Card
+          <div
             key={level.level}
-            className="mb-2"
+            className="mb-4"
           >
-            <CardHeader className="p-2">
-              <CardTitle className="text-[10px] md:text-sm">
-                {level.levelName}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-2 pt-0">
+            <h4 className="text-[10px] md:text-sm mb-2">
+              {level.levelName}
+            </h4>
+
+            <div>
               {level.tables.map((category) => {
                 return (
                   <div
                     key={category.category}
-                    className="mb-2"
+                    className="mb-6"
                   >
                     <h6 className="text-[10px] md:text-sm">
                       {groupConstant[category.category]}
@@ -78,8 +74,8 @@ const DetailedData = () => {
                   </div>
                 )
               })}
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         )
       })}
     </div>

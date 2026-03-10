@@ -1,5 +1,5 @@
-import type { CheckedState } from '@/components/ui/checkbox'
-import { Checkbox } from '@/components/ui/checkbox'
+import type { CheckedState } from '@/components/base/ui/checkbox'
+import { Checkbox } from '@/components/base/ui/checkbox'
 import { cn } from '@/lib/utils/utils'
 import { Link } from '@tanstack/react-router'
 

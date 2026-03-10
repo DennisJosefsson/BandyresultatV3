@@ -1,10 +1,8 @@
 import type { Dispatch, SetStateAction } from 'react'
 import XLSX from 'xlsx'
 
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import type { BulkGameFileParser } from '@/lib/types/game';
+import { Input } from '@/components/base/ui/input'
+import type { BulkGameFileParser } from '@/lib/types/game'
 import { bulkGameFileParser } from '@/lib/types/game'
 
 const process = (ab: ArrayBuffer) => {
@@ -33,14 +31,19 @@ const process = (ab: ArrayBuffer) => {
 const FileInput = ({
   setGameData,
 }: {
-  setGameData: Dispatch<SetStateAction<BulkGameFileParser | null>>
+  setGameData: Dispatch<
+    SetStateAction<BulkGameFileParser | null>
+  >
 }) => {
-  const onChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onChange = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     if (event.target.files) {
       const parsedData = await process(
         await event.target.files[0].arrayBuffer(),
       )
-      const gameData = bulkGameFileParser.safeParse(parsedData)
+      const gameData =
+        bulkGameFileParser.safeParse(parsedData)
       if (!gameData.success) {
         console.log('ERROR', gameData.error)
       } else {
@@ -50,16 +53,14 @@ const FileInput = ({
   }
 
   return (
-    <div className="grid w-full max-w-sm items-center gap-1.5">
-      <Label htmlFor="xlsx-file">Matchfil</Label>
-      <Button asChild variant="outline">
-        <Input
-          id="xlsx-file"
-          type="file"
-          accept=".xlsx,application/xlsx"
-          onChange={onChange}
-        />
-      </Button>
+    <div className="flex flex-row items-center gap-1.5">
+      <Input
+        id="xlsx-file"
+        type="file"
+        accept=".xlsx,application/xlsx"
+        onChange={onChange}
+        className="file:justify-between file:mr-24"
+      />
     </div>
   )
 }

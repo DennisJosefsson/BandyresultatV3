@@ -1,10 +1,13 @@
-import { useNavigate, useSearch } from '@tanstack/react-router'
-import type { ChangeEvent} from 'react';
+import {
+  useNavigate,
+  useSearch,
+} from '@tanstack/react-router'
+import type { ChangeEvent } from 'react'
 import { useEffect, useState } from 'react'
 import { useDebounceValue } from 'usehooks-ts'
 
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { Input } from '@/components/base/ui/input'
+import { Label } from '@/components/base/ui/label'
 import type { SearchParamsFields } from '@/lib/types/search'
 
 type StringInputProps = {
@@ -13,13 +16,20 @@ type StringInputProps = {
   placeholder: string
 }
 
-const StringInput = ({ field, label, placeholder }: StringInputProps) => {
+const StringInput = ({
+  field,
+  label,
+  placeholder,
+}: StringInputProps) => {
   const searchField = useSearch({
     from: '/_layout/search',
     select: (search) => search[field],
   })
   const [input, setInput] = useState(searchField ?? '')
-  const [debouncedValue, setValue] = useDebounceValue(input, 250)
+  const [debouncedValue, setValue] = useDebounceValue(
+    input,
+    250,
+  )
   const navigate = useNavigate({ from: '/search' })
 
   useEffect(() => {
@@ -27,12 +37,17 @@ const StringInput = ({ field, label, placeholder }: StringInputProps) => {
       resetScroll: false,
       search: (prev) => ({
         ...prev,
-        [field]: debouncedValue.length === 0 ? undefined : debouncedValue,
+        [field]:
+          debouncedValue.length === 0
+            ? undefined
+            : debouncedValue,
       }),
     })
   }, [debouncedValue, field, navigate])
 
-  const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleOnChange = (
+    event: ChangeEvent<HTMLInputElement>,
+  ) => {
     setInput(event.target.value)
     setValue(event.target.value)
   }

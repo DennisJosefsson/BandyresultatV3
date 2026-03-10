@@ -9,6 +9,7 @@ import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorCompon
 import Loading from '@/components/Loading/Loading'
 import { zd } from '@/lib/utils/zod'
 
+import SeasonHeader from './$year/-components/SeasonHeader'
 import { getGroups } from './$year/-functions/getGroups'
 
 const yearParser = zd.object({
@@ -82,7 +83,8 @@ function Season() {
   const childMatches = useChildMatches()
   if (childMatches.length === 0) {
     return (
-      <div className="m-4 flex flex-col gap-4">
+      <div className="flex flex-col gap-4">
+        <SeasonHeader />
         <div className="flex flex-row justify-center">
           <h3 className="text-base font-semibold">
             Välj grupp
@@ -107,7 +109,10 @@ function Season() {
           />
         )}
       >
-        <Outlet />
+        <div className="m-4 flex flex-col gap-4">
+          <SeasonHeader />
+          <Outlet />
+        </div>
       </CatchBoundary>
     </div>
   )

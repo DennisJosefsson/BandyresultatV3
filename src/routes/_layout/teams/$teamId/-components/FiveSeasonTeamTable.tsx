@@ -3,8 +3,11 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
-import { Table, TableBody } from '@/components/ui/table'
+} from '@/components/base/ui/card'
+import {
+  Table,
+  TableBody,
+} from '@/components/base/ui/table'
 
 import type { FiveSeason } from '../-functions/getLastFiveSeasons'
 import TeamTableHeader from './TableComponents/TableHeader'

@@ -1,5 +1,10 @@
 import Date from '@/components/Common/Date'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/base/ui/card'
 
 type LatestWinsProps = {
   latestWins: Array<{
@@ -12,7 +17,10 @@ type LatestWinsProps = {
   title: string
 }
 
-const LatestWins = ({ latestWins, title }: LatestWinsProps) => {
+const LatestWins = ({
+  latestWins,
+  title,
+}: LatestWinsProps) => {
   if (latestWins.length === 0) return null
   return (
     <Card className="mt-2 w-full">
@@ -36,7 +44,9 @@ const LatestWins = ({ latestWins, title }: LatestWinsProps) => {
                   <div>
                     {game.homeName}-{game.awayName}
                   </div>
-                  <div className="tabular-nums">{game.result}</div>
+                  <div className="tabular-nums">
+                    {game.result}
+                  </div>
                 </div>
               </div>
             )

@@ -1,20 +1,26 @@
-import { CatchBoundary, Link, createFileRoute } from '@tanstack/react-router'
-import { useState } from 'react'
+import {
+  CatchBoundary,
+  Link,
+  createFileRoute,
+} from '@tanstack/react-router'
 
-import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from '@/components/ui/accordion'
-import { CardContent } from '@/components/ui/card'
+} from '@/components/base/ui/accordion'
+import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 
 import { getTeamSeasons } from './-functions/teamSeasons'
 
-export const Route = createFileRoute('/_layout/teams/$teamId/seasons')({
+export const Route = createFileRoute(
+  '/_layout/teams/$teamId/seasons',
+)({
   loader: async ({ params }) => {
-    const data = await getTeamSeasons({ data: params.teamId })
+    const data = await getTeamSeasons({
+      data: params.teamId,
+    })
     if (!data) {
       throw new Error('Något gick fel.')
     }
@@ -64,7 +70,11 @@ function RouteComponent() {
         console.error(error)
       }}
       errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent id="seasons" error={error} reset={reset} />
+        <SimpleErrorComponent
+          id="seasons"
+          error={error}
+          reset={reset}
+        />
       )}
     >
       <Seasons />
@@ -73,16 +83,22 @@ function RouteComponent() {
 }
 
 function Seasons() {
-  const [open, setOpen] = useState('seasons')
-  const seasons = Route.useLoaderData({ select: (data) => data.seasons })
-  const rest = Route.useLoaderData({ select: (data) => data.rest })
+  const seasons = Route.useLoaderData({
+    select: (data) => data.seasons,
+  })
+  const rest = Route.useLoaderData({
+    select: (data) => data.rest,
+  })
 
   return (
-    <CardContent className="p-1 md:p-2">
-      <Accordion type="single" collapsible value={open} onValueChange={setOpen}>
+    <div>
+      <Accordion
+        defaultValue={['seasons']}
+        className="border"
+      >
         <AccordionItem
           value="seasons"
-          className="bg-background mb-2 rounded-md p-2 shadow-md"
+          className="mb-2 rounded-md p-2 shadow-md border-b last:border-b-0"
         >
           <AccordionTrigger className="text-sm md:text-base">
             Senaste säsongerna
@@ -98,7 +114,7 @@ function Seasons() {
                     params={{ seasonId: season.seasonId }}
                     search={(prev) => ({ ...prev })}
                   >
-                    <div className="bg-muted dark:bg-muted/50 flex items-center justify-center rounded p-2 text-[10px] font-semibold sm:text-sm md:text-base">
+                    <div className="flex items-center justify-center rounded p-2 text-[10px] font-semibold sm:text-sm md:text-base">
                       {season.year}
                     </div>
                   </Link>
@@ -110,7 +126,7 @@ function Seasons() {
         {rest.length > 0 ? (
           <AccordionItem
             value="rest"
-            className="bg-background mb-2 rounded-md p-2 shadow-md"
+            className="mb-2 rounded-md p-2 shadow-md border-b last:border-b-0"
           >
             <AccordionTrigger className="text-sm md:text-base">
               Övriga
@@ -126,7 +142,7 @@ function Seasons() {
                       params={{ seasonId: season.seasonId }}
                       search={(prev) => ({ ...prev })}
                     >
-                      <div className="bg-muted dark:bg-muted/50 flex items-center justify-center rounded p-2 text-[10px] font-semibold sm:text-sm md:text-base">
+                      <div className="flex items-center justify-center rounded p-2 text-[10px] font-semibold sm:text-sm md:text-base">
                         {season.year}
                       </div>
                     </Link>
@@ -137,6 +153,6 @@ function Seasons() {
           </AccordionItem>
         ) : null}
       </Accordion>
-    </CardContent>
+    </div>
   )
 }

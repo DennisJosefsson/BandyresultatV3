@@ -1,6 +1,6 @@
-import type { CheckedState } from '@/components/ui/checkbox'
-import { Checkbox } from '@/components/ui/checkbox'
-import type { MapRef } from '@/components/ui/map'
+import type { CheckedState } from '@/components/base/ui/checkbox'
+import { Checkbox } from '@/components/base/ui/checkbox'
+import type { MapRef } from '@/components/base/ui/map'
 import type { LngLatLike } from 'maplibre-gl'
 import type {
   Dispatch,
@@ -75,8 +75,8 @@ const CountyList = ({
   }
 
   return (
-    <div className="grid grid-cols-2 gap-2">
-      <div className="text-primary mb-2 flex flex-row items-center justify-between text-[10px] md:text-sm xl:text-base 2xl:text-lg">
+    <div className="grid grid-cols-2 gap-2 w-80">
+      <div className="text-primary mb-2 flex flex-row items-center justify-between text-[10px] md:text-sm ">
         <span
           className="cursor-pointer truncate"
           onClick={() => onClick([15, 62] as LngLatLike, 4)}
@@ -93,7 +93,7 @@ const CountyList = ({
         return (
           <div
             key={county.county}
-            className="text-primary mb-2 flex flex-row items-center justify-between text-[10px] md:text-sm xl:text-base 2xl:text-lg"
+            className="text-primary mb-2 flex flex-row items-center justify-between text-[10px] md:text-sm "
           >
             <span
               className="cursor-pointer truncate"

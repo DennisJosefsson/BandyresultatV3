@@ -1,21 +1,21 @@
 import { getRouteApi } from '@tanstack/react-router'
 
-import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
+import { Button } from '@/components/base/ui/button'
+import { Checkbox } from '@/components/base/ui/checkbox'
 import {
   Field,
   FieldError,
   FieldGroup,
   FieldLabel,
   FieldSet,
-} from '@/components/ui/field'
-import { Input } from '@/components/ui/input'
+} from '@/components/base/ui/field'
+import { Input } from '@/components/base/ui/input'
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupInput,
-} from '@/components/ui/input-group'
+} from '@/components/base/ui/input-group'
 
 import { useEditGameForm } from '../../../-hooks/useEditGameForm'
 
@@ -56,14 +56,20 @@ const EditGameForm = () => {
     <div className="mt-4 flex w-full flex-col gap-4 px-8">
       <div className="flex flex-row justify-between">
         <div>
-          <h3 className="mb-4 text-base">Redigera resultat</h3>
+          <h3 className="mb-4 text-base">
+            Redigera resultat
+          </h3>
           <h4 className="text-sm">
             {game.home.name} - {game.away.name}
           </h4>
         </div>
         <div>
           <Field orientation="horizontal">
-            <Button type="button" variant="outline" onClick={close}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={close}
+            >
               Stäng
             </Button>
             <Button
@@ -73,7 +79,10 @@ const EditGameForm = () => {
             >
               Reset
             </Button>
-            <Button type="submit" form="edit-game">
+            <Button
+              type="submit"
+              form="edit-game"
+            >
               Skicka
             </Button>
           </Field>
@@ -93,22 +102,29 @@ const EditGameForm = () => {
                 name="result"
                 children={(field) => {
                   const isInvalid =
-                    field.state.meta.isTouched && !field.state.meta.isValid
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <FieldLabel htmlFor={field.name}>Slutresultat</FieldLabel>
+                      <FieldLabel htmlFor={field.name}>
+                        Slutresultat
+                      </FieldLabel>
                       <Input
                         id={field.name}
                         name={field.name}
                         value={field.state.value}
                         onBlur={field.handleBlur}
-                        onChange={(e) => field.handleChange(e.target.value)}
+                        onChange={(e) =>
+                          field.handleChange(e.target.value)
+                        }
                         aria-invalid={isInvalid}
                         placeholder="T.ex. 5-3"
                         autoComplete="off"
                       />
                       {isInvalid && (
-                        <FieldError errors={field.state.meta.errors} />
+                        <FieldError
+                          errors={field.state.meta.errors}
+                        />
                       )}
                     </Field>
                   )
@@ -118,7 +134,8 @@ const EditGameForm = () => {
                 name="halftimeResult"
                 children={(field) => {
                   const isInvalid =
-                    field.state.meta.isTouched && !field.state.meta.isValid
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
                       <FieldLabel htmlFor={field.name}>
@@ -130,13 +147,17 @@ const EditGameForm = () => {
                         name={field.name}
                         value={field.state.value}
                         onBlur={field.handleBlur}
-                        onChange={(e) => field.handleChange(e.target.value)}
+                        onChange={(e) =>
+                          field.handleChange(e.target.value)
+                        }
                         placeholder="T.ex. 2-3"
                         aria-invalid={isInvalid}
                       />
 
                       {isInvalid && (
-                        <FieldError errors={field.state.meta.errors} />
+                        <FieldError
+                          errors={field.state.meta.errors}
+                        />
                       )}
                     </Field>
                   )
@@ -146,17 +167,24 @@ const EditGameForm = () => {
                 name="date"
                 children={(field) => {
                   const isInvalid =
-                    field.state.meta.isTouched && !field.state.meta.isValid
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <FieldLabel htmlFor={field.name}>Datum</FieldLabel>
+                      <FieldLabel htmlFor={field.name}>
+                        Datum
+                      </FieldLabel>
                       <InputGroup>
                         <InputGroupInput
                           id={field.name}
                           name={field.name}
                           value={field.state.value}
                           onBlur={field.handleBlur}
-                          onChange={(e) => field.handleChange(e.target.value)}
+                          onChange={(e) =>
+                            field.handleChange(
+                              e.target.value,
+                            )
+                          }
                           placeholder="T.ex. 2025-12-26"
                           aria-invalid={isInvalid}
                         />
@@ -170,7 +198,9 @@ const EditGameForm = () => {
                         </InputGroupAddon>
                       </InputGroup>
                       {isInvalid && (
-                        <FieldError errors={field.state.meta.errors} />
+                        <FieldError
+                          errors={field.state.meta.errors}
+                        />
                       )}
                     </Field>
                   )
@@ -180,7 +210,8 @@ const EditGameForm = () => {
                 name="otResult"
                 children={(field) => {
                   const isInvalid =
-                    field.state.meta.isTouched && !field.state.meta.isValid
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
                       <FieldLabel htmlFor={field.name}>
@@ -192,13 +223,17 @@ const EditGameForm = () => {
                         name={field.name}
                         value={field.state.value}
                         onBlur={field.handleBlur}
-                        onChange={(e) => field.handleChange(e.target.value)}
+                        onChange={(e) =>
+                          field.handleChange(e.target.value)
+                        }
                         placeholder="T.ex. 2-3"
                         aria-invalid={isInvalid}
                       />
 
                       {isInvalid && (
-                        <FieldError errors={field.state.meta.errors} />
+                        <FieldError
+                          errors={field.state.meta.errors}
+                        />
                       )}
                     </Field>
                   )
@@ -211,7 +246,8 @@ const EditGameForm = () => {
                   name="extraTime"
                   children={(field) => {
                     const isInvalid =
-                      field.state.meta.isTouched && !field.state.meta.isValid
+                      field.state.meta.isTouched &&
+                      !field.state.meta.isValid
                     return (
                       <FieldSet>
                         <FieldGroup data-slot="checkbox-group">
@@ -224,7 +260,9 @@ const EditGameForm = () => {
                               name={field.name}
                               checked={field.state.value}
                               onCheckedChange={(checked) =>
-                                field.handleChange(checked === true)
+                                field.handleChange(
+                                  checked === true,
+                                )
                               }
                             />
                             <FieldLabel
@@ -236,7 +274,9 @@ const EditGameForm = () => {
                           </Field>
                         </FieldGroup>
                         {isInvalid && (
-                          <FieldError errors={field.state.meta.errors} />
+                          <FieldError
+                            errors={field.state.meta.errors}
+                          />
                         )}
                       </FieldSet>
                     )
@@ -248,7 +288,8 @@ const EditGameForm = () => {
                   name="penalties"
                   children={(field) => {
                     const isInvalid =
-                      field.state.meta.isTouched && !field.state.meta.isValid
+                      field.state.meta.isTouched &&
+                      !field.state.meta.isValid
                     return (
                       <FieldSet>
                         <FieldGroup data-slot="checkbox-group">
@@ -261,7 +302,9 @@ const EditGameForm = () => {
                               name={field.name}
                               checked={field.state.value}
                               onCheckedChange={(checked) =>
-                                field.handleChange(checked === true)
+                                field.handleChange(
+                                  checked === true,
+                                )
                               }
                             />
                             <FieldLabel
@@ -273,7 +316,9 @@ const EditGameForm = () => {
                           </Field>
                         </FieldGroup>
                         {isInvalid && (
-                          <FieldError errors={field.state.meta.errors} />
+                          <FieldError
+                            errors={field.state.meta.errors}
+                          />
                         )}
                       </FieldSet>
                     )

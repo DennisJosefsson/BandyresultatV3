@@ -1,26 +1,35 @@
-import { useNavigate, useSearch } from '@tanstack/react-router'
+import {
+  useNavigate,
+  useSearch,
+} from '@tanstack/react-router'
 import { CircleXIcon } from 'lucide-react'
 import { List, useListRef } from 'react-window'
 
-import { Button } from '@/components/ui/button'
-import { Label } from '@/components/ui/label'
+import { Button } from '@/components/base/ui/button'
+import { Label } from '@/components/base/ui/label'
 import {
   Select,
   SelectContent,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from '@/components/base/ui/select'
 import type { SearchParamsFields } from '@/lib/types/search'
 
 import { useSearchTeams } from '../-hooks/useSearchTeams'
 import RenderItem from './SelectRenderItem'
 
 type TeamSelectionProps = {
-  field: Extract<SearchParamsFields, 'teamId' | 'opponentId'>
+  field: Extract<
+    SearchParamsFields,
+    'teamId' | 'opponentId'
+  >
   label: string
 }
 
-const TeamSelection = ({ field, label }: TeamSelectionProps) => {
+const TeamSelection = ({
+  field,
+  label,
+}: TeamSelectionProps) => {
   const listRef = useListRef(null)
   const searchField = useSearch({
     from: '/_layout/search',
@@ -30,19 +39,29 @@ const TeamSelection = ({ field, label }: TeamSelectionProps) => {
   const navigate = useNavigate({ from: '/search' })
   const { teamSelection } = useSearchTeams()
 
-  const onValueChange = (value: string): void => {
-    navigate({ search: (prev) => ({ ...prev, [field]: parseInt(value) }) })
+  const onValueChange = (value: string | null): void => {
+    if (value) {
+      navigate({
+        search: (prev) => ({
+          ...prev,
+          [field]: parseInt(value) ?? undefined,
+        }),
+      })
+    }
   }
 
   const reset = () => {
-    navigate({ search: (prev) => ({ ...prev, [field]: undefined }) })
+    navigate({
+      search: (prev) => ({ ...prev, [field]: undefined }),
+    })
   }
 
   const teamSelectIndex = teamSelection.findIndex((val) => {
     val.value === searchField
   })
 
-  const openIndex = teamSelectIndex === -1 ? 0 : teamSelectIndex
+  const openIndex =
+    teamSelectIndex === -1 ? 0 : teamSelectIndex
 
   const onOpenChange = (open: boolean): void => {
     if (open && listRef && listRef.current) {
@@ -67,13 +86,15 @@ const TeamSelection = ({ field, label }: TeamSelectionProps) => {
         <div>
           <Select
             value={searchField?.toString() ?? ''}
-            onValueChange={onValueChange}
+            onValueChange={(value) => onValueChange(value)}
             onOpenChange={(open) => onOpenChange(open)}
           >
             <SelectTrigger className="w-[280px]">
-              <SelectValue placeholder="Välj">{selectedLabel}</SelectValue>
+              <SelectValue placeholder="Välj">
+                {selectedLabel}
+              </SelectValue>
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent alignItemWithTrigger={false}>
               <List
                 rowComponent={RenderItem}
                 rowHeight={40}
@@ -85,7 +106,11 @@ const TeamSelection = ({ field, label }: TeamSelectionProps) => {
           </Select>
         </div>
         <div>
-          <Button onClick={reset} variant="ghost" size="icon">
+          <Button
+            onClick={reset}
+            variant="ghost"
+            size="icon"
+          >
             <CircleXIcon />
           </Button>
         </div>

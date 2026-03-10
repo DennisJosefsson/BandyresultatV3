@@ -1,4 +1,4 @@
-import { Skeleton } from '@/components/ui/skeleton'
+import { Skeleton } from '@/components/base/ui/skeleton'
 
 const GeneralStatsSkeleton = () => {
   return (
@@ -10,7 +10,12 @@ const GeneralStatsSkeleton = () => {
         </div>
         <div className="grid grid-cols-1 gap-2 md:gap-4 lg:grid-cols-2 lg:gap-6">
           {Array.from({ length: 24 }).map((_i, index) => {
-            return <Skeleton key={index} className="h-12 w-full" />
+            return (
+              <Skeleton
+                key={index}
+                className="h-12 w-full"
+              />
+            )
           })}
         </div>
       </div>

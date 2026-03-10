@@ -1,9 +1,14 @@
 import { getRouteApi } from '@tanstack/react-router'
 import { useState } from 'react'
 
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
+import { Button } from '@/components/base/ui/button'
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/base/ui/card'
+import { Input } from '@/components/base/ui/input'
 
 import { addTeamToSerieMutation } from '../../../-hooks/addTeamToSerieMutation'
 
@@ -12,8 +17,12 @@ const route = getRouteApi(
 )
 
 const AddTeamToSerie = () => {
-  const serieId = route.useParams({ select: (s) => s.serieId })
-  const teams = route.useLoaderData({ select: (s) => s.teamsInSeason })
+  const serieId = route.useParams({
+    select: (s) => s.serieId,
+  })
+  const teams = route.useLoaderData({
+    select: (s) => s.teamsInSeason,
+  })
   const teamInSerie = route
     .useLoaderData({ select: (s) => s.teamsInSerie })
     .map((team) => team.teamId)
@@ -37,7 +46,9 @@ const AddTeamToSerie = () => {
               placeholder="Filter"
               value={teamFilter}
               name="teamFilter"
-              onChange={(event) => setTeamFilter(event.target.value)}
+              onChange={(event) =>
+                setTeamFilter(event.target.value)
+              }
             />
           </div>
         </div>
@@ -45,14 +56,20 @@ const AddTeamToSerie = () => {
 
       <CardContent className="grid grid-cols-3 gap-8 place-self-start px-10">
         {teams
-          .filter((team) => team.team.casualName.includes(teamFilter))
-          .filter((team) => !teamInSerie.includes(team.teamId))
+          .filter((team) =>
+            team.team.casualName.includes(teamFilter),
+          )
+          .filter(
+            (team) => !teamInSerie.includes(team.teamId),
+          )
           .map((team) => {
             return (
               <Button
                 key={team.teamId.toString()}
                 size="sm"
-                onClick={() => onClickTeamButton(team.teamId)}
+                onClick={() =>
+                  onClickTeamButton(team.teamId)
+                }
               >
                 {team.team.casualName}
               </Button>

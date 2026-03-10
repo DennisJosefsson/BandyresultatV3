@@ -1,6 +1,11 @@
 import type { ReactNode } from 'react'
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/base/ui/card'
 import { useFavTeam } from '@/lib/contexts/favTeamsContext'
 
 const PlayoffCard = ({
@@ -51,10 +56,20 @@ function Content({ children }: { children: ReactNode }) {
   )
 }
 
-function Team({ teamId, children }: { teamId: number; children: ReactNode }) {
+function Team({
+  teamId,
+  children,
+}: {
+  teamId: number
+  children: ReactNode
+}) {
   const { favTeams } = useFavTeam()
   return (
-    <span className={favTeams.includes(teamId) ? 'font-bold' : undefined}>
+    <span
+      className={
+        favTeams.includes(teamId) ? 'font-bold' : undefined
+      }
+    >
       {children}
     </span>
   )

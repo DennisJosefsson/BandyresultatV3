@@ -1,6 +1,7 @@
 import type {
   ColumnDef,
-  SortingState} from '@tanstack/react-table';
+  SortingState,
+} from '@tanstack/react-table'
 import {
   flexRender,
   getCoreRowModel,
@@ -17,7 +18,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
+} from '@/components/base/ui/table'
 import { useFavTeam } from '@/lib/contexts/favTeamsContext'
 
 import { hideColumns, showColumns } from './columns'
@@ -44,7 +45,9 @@ const DataTable = <TData, TValue>({
     { id: 'totalGoalsScored', desc: true },
     { id: 'team_casualName', desc: false },
   ])
-  const [columnVisibility, setColumnVisibility] = useState({})
+  const [columnVisibility, setColumnVisibility] = useState(
+    {},
+  )
   const table = useReactTable({
     data,
     columns,
@@ -108,10 +111,16 @@ const DataTable = <TData, TValue>({
             table.getRowModel().rows.map((row, index) => (
               <TableRow
                 key={row.id}
-                data-state={row.getIsSelected() && 'selected'}
+                data-state={
+                  row.getIsSelected() && 'selected'
+                }
                 className={`${
                   favTeams.includes(
-                    teamObject[getString(row.getValue('team_casualName'))],
+                    teamObject[
+                      getString(
+                        row.getValue('team_casualName'),
+                      )
+                    ],
                   )
                     ? 'font-bold'
                     : null
@@ -144,7 +153,10 @@ const DataTable = <TData, TValue>({
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
+              <TableCell
+                colSpan={columns.length}
+                className="h-24 text-center"
+              >
                 Inga resultat.
               </TableCell>
             </TableRow>

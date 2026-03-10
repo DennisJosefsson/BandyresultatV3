@@ -22,6 +22,7 @@ import { ThemeProvider } from '@/lib/contexts/themeContext'
 import { getFavTeamsServerFn } from '@/lib/favTeams'
 import { getThemeServerFn } from '@/lib/theme'
 
+import { TooltipProvider } from '@/components/base/ui/tooltip'
 import ClerkProvider from '../integrations/clerk/provider'
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 import appCss from '../styles.css?url'
@@ -132,20 +133,24 @@ function RootDocument() {
         <ClerkProvider>
           <ThemeProvider theme={theme}>
             <FavTeamsProvider favTeams={favTeams}>
-              <Outlet />
-              <TanStackRouterDevtools />
-              <TanStackDevtools
-                config={{
-                  position: 'bottom-right',
-                }}
-                plugins={[
-                  {
-                    name: 'Tanstack Router',
-                    render: <TanStackRouterDevtoolsPanel />,
-                  },
-                  TanStackQueryDevtools,
-                ]}
-              />
+              <TooltipProvider>
+                <Outlet />
+                <TanStackRouterDevtools position="bottom-right" />
+                <TanStackDevtools
+                  config={{
+                    position: 'bottom-right',
+                  }}
+                  plugins={[
+                    {
+                      name: 'Tanstack Router',
+                      render: (
+                        <TanStackRouterDevtoolsPanel />
+                      ),
+                    },
+                    TanStackQueryDevtools,
+                  ]}
+                />
+              </TooltipProvider>
             </FavTeamsProvider>
           </ThemeProvider>
         </ClerkProvider>

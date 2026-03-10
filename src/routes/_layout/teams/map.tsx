@@ -1,7 +1,8 @@
-import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
+import {
+  CatchBoundary,
+  createFileRoute,
+} from '@tanstack/react-router'
 
-// import { lazy } from 'react'
-// const NewMap = lazy(async () => await import('./-components/Map/Map'))
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import Loading from '@/components/Loading/Loading'
 
@@ -27,7 +28,11 @@ function MapComponent() {
         console.error(error)
       }}
       errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent id="teamsmap" error={error} reset={reset} />
+        <SimpleErrorComponent
+          id="teamsmap"
+          error={error}
+          reset={reset}
+        />
       )}
     >
       <Map />

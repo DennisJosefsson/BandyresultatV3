@@ -9,12 +9,12 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
-import { Label } from '@/components/ui/label'
+} from '@/components/base/ui/card'
+import { Label } from '@/components/base/ui/label'
 import {
   RadioGroup,
   RadioGroupItem,
-} from '@/components/ui/radio-group'
+} from '@/components/base/ui/radio-group'
 import type { SearchParamsFields } from '@/lib/types/search'
 
 type RadioComponentProps = {
@@ -65,9 +65,12 @@ const RadioComponent = ({
                 return (
                   <div
                     key={cat.value}
-                    className="flex items-center space-y-0 space-x-3"
+                    className="flex items-center space-y-0 space-x-3 justify-between w-40"
                   >
-                    <Label htmlFor={cat.value}>
+                    <Label
+                      htmlFor={cat.value}
+                      className="text-sm"
+                    >
                       {cat.label}
                     </Label>
                     <RadioGroupItem

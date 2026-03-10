@@ -1,13 +1,13 @@
 import { getRouteApi } from '@tanstack/react-router'
 
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/base/ui/button'
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
-import { Checkbox } from '@/components/ui/checkbox'
+} from '@/components/base/ui/card'
+import { Checkbox } from '@/components/base/ui/checkbox'
 import {
   Field,
   FieldError,
@@ -15,8 +15,8 @@ import {
   FieldLabel,
   FieldLegend,
   FieldSet,
-} from '@/components/ui/field'
-import { Input } from '@/components/ui/input'
+} from '@/components/base/ui/field'
+import { Input } from '@/components/base/ui/input'
 import {
   Select,
   SelectContent,
@@ -24,8 +24,8 @@ import {
   SelectSeparator,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { Textarea } from '@/components/ui/textarea'
+} from '@/components/base/ui/select'
+import { Textarea } from '@/components/base/ui/textarea'
 import type { editSeriesObject } from '@/lib/types/serie'
 import { categoryEnum } from '@/lib/types/serie'
 import type { zd } from '@/lib/utils/zod'
@@ -73,15 +73,19 @@ const EditSerie = () => {
             <CardTitle>Ändra serie</CardTitle>
           </div>
           <div className="flex flex-row gap-2">
-            <Button asChild>
-              <route.Link
-                to="/dashboard/season/$seasonId"
-                params={{ seasonId }}
-                search={{ women }}
-              >
-                Tillbaka
-              </route.Link>
-            </Button>
+            <Button
+              render={
+                <route.Link
+                  to="/dashboard/season/$seasonId"
+                  params={{ seasonId }}
+                  search={{ women }}
+                >
+                  Tillbaka
+                </route.Link>
+              }
+              nativeButton={false}
+            />
+
             <Button
               type="submit"
               form="editSerieForm"
@@ -191,11 +195,23 @@ const EditSerie = () => {
                           aria-invalid={isInvalid}
                           className="min-w-[120px]"
                         >
-                          <SelectValue placeholder="Välj" />
+                          <SelectValue placeholder="Välj">
+                            {categoryArray.find(
+                              (cat) =>
+                                cat.value ===
+                                field.state.value,
+                            )?.label ?? 'Välj'}
+                          </SelectValue>
                         </SelectTrigger>
-                        <SelectContent position="item-aligned">
+                        <SelectContent
+                          alignItemWithTrigger={true}
+                        >
                           <SelectItem value="auto">
-                            {field.state.value}
+                            {categoryArray.find(
+                              (cat) =>
+                                cat.value ===
+                                field.state.value,
+                            )?.label ?? 'Välj'}
                           </SelectItem>
                           <SelectSeparator />
                           {categoryArray.map((cat) => (

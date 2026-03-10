@@ -91,6 +91,10 @@ code {
   --sidebar-ring: oklch(0.551 0.027 264.364);
 }
 
+@theme {
+  --breakpoint-xs: 27rem;
+}
+
 @theme inline {
   --font-sans: 'Inter Variable', sans-serif;
   --color-sidebar-ring: var(--sidebar-ring);
@@ -148,6 +152,10 @@ code {
   }
   .maplibregl-popup-tip {
     @apply hidden!;
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
   }
 }
 

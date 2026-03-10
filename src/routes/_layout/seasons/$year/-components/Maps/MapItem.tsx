@@ -5,13 +5,13 @@ import {
   Card,
   CardContent,
   CardHeader,
-} from '@/components/ui/card'
+} from '@/components/base/ui/card'
 import {
   MapMarker,
   MarkerContent,
   MarkerPopup,
   MarkerTooltip,
-} from '@/components/ui/map'
+} from '@/components/base/ui/map'
 import type { County } from '@/lib/types/county'
 import type { Municipality } from '@/lib/types/municipality'
 import type { Team } from '@/lib/types/team'

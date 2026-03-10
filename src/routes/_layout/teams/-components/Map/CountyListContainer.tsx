@@ -1,18 +1,22 @@
 import type { LngLatLike } from 'maplibre-gl'
-import type { Dispatch, RefObject, SetStateAction} from 'react';
+import type {
+  Dispatch,
+  RefObject,
+  SetStateAction,
+} from 'react'
 import { useState } from 'react'
 import { useMediaQuery } from 'usehooks-ts'
 
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/base/ui/button'
 import {
   Drawer,
   DrawerClose,
   DrawerContent,
   DrawerFooter,
   DrawerTrigger,
-} from '@/components/ui/drawer'
-// import { LatLng, Map as MapType } from 'leaflet'
-import type { MapRef } from '@/components/ui/map'
+} from '@/components/base/ui/drawer'
+
+import type { MapRef } from '@/components/base/ui/map'
 
 import CountyList from './CountyList'
 
@@ -54,9 +58,15 @@ const CountyListContainer = ({
         </div>
       ) : (
         <div>
-          <Drawer open={open} onOpenChange={setOpen}>
+          <Drawer
+            open={open}
+            onOpenChange={setOpen}
+          >
             <DrawerTrigger asChild>
-              <Button variant="outline" size={matchesSmall ? 'sm' : 'textxxs'}>
+              <Button
+                variant="outline"
+                size={matchesSmall ? 'sm' : 'textxxs'}
+              >
                 Välj län
               </Button>
             </DrawerTrigger>

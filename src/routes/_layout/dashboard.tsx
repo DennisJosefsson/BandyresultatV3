@@ -6,10 +6,14 @@ import {
   useLocation,
 } from '@tanstack/react-router'
 
-import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+} from '@/components/base/ui/tabs'
 import { cn } from '@/lib/utils/utils'
 
+import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import { getDashboardData } from './dashboard/-functions/getDashboardData'
 
 export const Route = createFileRoute('/_layout/dashboard')({
@@ -21,10 +25,14 @@ export const Route = createFileRoute('/_layout/dashboard')({
 function RouteComponent() {
   const data = Route.useLoaderData()
   const womenSeason = Route.useLoaderData({
-    select: (s) => s.lastSeasons.find((season) => season.women === true),
+    select: (s) =>
+      s.lastSeasons.find((season) => season.women === true),
   })
   const menSeason = Route.useLoaderData({
-    select: (s) => s.lastSeasons.find((season) => season.women === false),
+    select: (s) =>
+      s.lastSeasons.find(
+        (season) => season.women === false,
+      ),
   })
 
   const pathname = useLocation().pathname
@@ -34,128 +42,218 @@ function RouteComponent() {
       <div className="">
         <Tabs>
           <TabsList>
-            <TabsTrigger value="seasons" asChild>
-              <Link
-                from={Route.fullPath}
-                to="/dashboard/seasons"
-                search={(prev) => ({ women: prev.women })}
-                // activeProps={{ 'data-state': 'active' }}
-                // activeOptions={{ includeSearch: false, exact: true }}
-              >
-                Säsonger
-              </Link>
-            </TabsTrigger>
-            <TabsTrigger value="newSeason" asChild>
-              <Link
-                from={Route.fullPath}
-                to="/dashboard/newseason"
-                search={(prev) => ({ women: prev.women })}
-                activeProps={{ 'data-state': 'active' }}
-                activeOptions={{ includeSearch: false, exact: true }}
-              >
-                Generera ny säsong
-              </Link>
-            </TabsTrigger>
-            {womenSeason ? (
-              <TabsTrigger value="seasons" asChild>
+            <TabsTrigger
+              nativeButton={false}
+              value="seasons"
+              render={
                 <Link
                   from={Route.fullPath}
-                  to="/dashboard/season/$seasonId"
-                  params={{ seasonId: womenSeason.seasonId }}
-                  search={(prev) => ({ women: prev.women })}
-                >
-                  {({ isActive }) => {
-                    return (
-                      <span
-                        className={cn(
-                          '',
-                          isActive &&
-                            pathname.endsWith(womenSeason.seasonId.toString())
-                            ? 'font-semibold'
-                            : undefined,
-                        )}
-                      >
-                        Dam {womenSeason.year}
-                      </span>
-                    )
+                  to="/dashboard/seasons"
+                  search={(prev) => ({
+                    women: prev.women,
+                  })}
+                  activeProps={{ 'data-state': 'active' }}
+                  activeOptions={{
+                    includeSearch: false,
+                    exact: true,
                   }}
+                >
+                  Säsonger
                 </Link>
-              </TabsTrigger>
+              }
+            />
+
+            <TabsTrigger
+              nativeButton={false}
+              value="newSeason"
+              render={
+                <Link
+                  from={Route.fullPath}
+                  to="/dashboard/newseason"
+                  search={(prev) => ({
+                    women: prev.women,
+                  })}
+                  activeProps={{
+                    'data-state': 'active',
+                  }}
+                  activeOptions={{
+                    includeSearch: false,
+                    exact: true,
+                  }}
+                >
+                  Generera ny säsong
+                </Link>
+              }
+            />
+
+            {womenSeason ? (
+              <TabsTrigger
+                nativeButton={false}
+                value="womenseason"
+                render={
+                  <Link
+                    from={Route.fullPath}
+                    to="/dashboard/season/$seasonId"
+                    params={{
+                      seasonId: womenSeason.seasonId,
+                    }}
+                    search={(prev) => ({
+                      women: prev.women,
+                    })}
+                  >
+                    {({ isActive }) => {
+                      return (
+                        <span
+                          className={cn(
+                            '',
+                            isActive &&
+                              pathname.endsWith(
+                                womenSeason.seasonId.toString(),
+                              )
+                              ? 'font-semibold'
+                              : undefined,
+                          )}
+                        >
+                          Dam {womenSeason.year}
+                        </span>
+                      )
+                    }}
+                  </Link>
+                }
+              />
             ) : null}
             {menSeason ? (
-              <TabsTrigger value="seasons" asChild>
-                <Link
-                  from={Route.fullPath}
-                  to="/dashboard/season/$seasonId"
-                  params={{ seasonId: menSeason.seasonId }}
-                  search={(prev) => ({ women: prev.women })}
-                >
-                  {({ isActive }) => {
-                    return (
-                      <span
-                        className={cn(
-                          'font-normal',
-                          isActive &&
-                            pathname.endsWith(menSeason.seasonId.toString())
-                            ? 'font-semibold'
-                            : undefined,
-                        )}
-                      >
-                        Herr {menSeason.year}
-                      </span>
-                    )
-                  }}
-                </Link>
-              </TabsTrigger>
+              <TabsTrigger
+                nativeButton={false}
+                value="menseason"
+                render={
+                  <Link
+                    from={Route.fullPath}
+                    to="/dashboard/season/$seasonId"
+                    params={{
+                      seasonId: menSeason.seasonId,
+                    }}
+                    search={(prev) => ({
+                      women: prev.women,
+                    })}
+                  >
+                    {({ isActive }) => {
+                      return (
+                        <span
+                          className={cn(
+                            'font-normal',
+                            isActive &&
+                              pathname.endsWith(
+                                menSeason.seasonId.toString(),
+                              )
+                              ? 'font-semibold'
+                              : undefined,
+                          )}
+                        >
+                          Herr {menSeason.year}
+                        </span>
+                      )
+                    }}
+                  </Link>
+                }
+              />
             ) : null}
 
-            <TabsTrigger value="unplayedEarlierGames" asChild>
-              <Link
-                from={Route.fullPath}
-                to="/dashboard/games/$today"
-                params={{ today: 'false' }}
-                search={(prev) => ({ women: prev.women })}
-                activeProps={{ 'data-state': 'active' }}
-                activeOptions={{ includeSearch: false, exact: true }}
-              >
-                Tidigare matcher {`[${data.earlierUnplayedGamesCount}]`}
-              </Link>
-            </TabsTrigger>
-            <TabsTrigger value="todaysUnplayedGames" asChild>
-              <Link
-                from={Route.fullPath}
-                to="/dashboard/games/$today"
-                params={{ today: 'true' }}
-                search={(prev) => ({ women: prev.women })}
-                activeProps={{ 'data-state': 'active' }}
-                activeOptions={{ includeSearch: false, exact: true }}
-              >
-                Dagens matcher {`[${data.todaysUnplayedGamesCount}]`}
-              </Link>
-            </TabsTrigger>
+            <TabsTrigger
+              nativeButton={false}
+              value="unplayedEarlierGames"
+              render={
+                <Link
+                  from={Route.fullPath}
+                  to="/dashboard/games/$today"
+                  params={{ today: 'false' }}
+                  search={(prev) => ({
+                    women: prev.women,
+                  })}
+                  activeProps={{
+                    'data-state': 'active',
+                  }}
+                  activeOptions={{
+                    includeSearch: false,
+                    exact: true,
+                  }}
+                >
+                  Tidigare matcher{' '}
+                  {`[${data.earlierUnplayedGamesCount}]`}
+                </Link>
+              }
+            />
 
-            <TabsTrigger value="teamslist" asChild>
-              <Link
-                from={Route.fullPath}
-                to="/dashboard/teams"
-                search={(prev) => ({ women: prev.women })}
-                activeProps={{ 'data-state': 'active' }}
-                activeOptions={{ includeSearch: false, exact: true }}
-              >
-                Laglista
-              </Link>
-            </TabsTrigger>
-            <TabsTrigger value="newTeam" asChild>
-              <Link
-                from={Route.fullPath}
-                to="/dashboard/teams/add"
-                search={(prev) => ({ women: prev.women })}
-                activeProps={{ 'data-state': 'active' }}
-                activeOptions={{ includeSearch: false, exact: true }}
-              >
-                Lägg till lag
-              </Link>
-            </TabsTrigger>
+            <TabsTrigger
+              nativeButton={false}
+              value="todaysUnplayedGames"
+              render={
+                <Link
+                  from={Route.fullPath}
+                  to="/dashboard/games/$today"
+                  params={{ today: 'true' }}
+                  search={(prev) => ({
+                    women: prev.women,
+                  })}
+                  activeProps={{
+                    'data-state': 'active',
+                  }}
+                  activeOptions={{
+                    includeSearch: false,
+                    exact: true,
+                  }}
+                >
+                  Dagens matcher{' '}
+                  {`[${data.todaysUnplayedGamesCount}]`}
+                </Link>
+              }
+            />
+
+            <TabsTrigger
+              nativeButton={false}
+              value="teamslist"
+              render={
+                <Link
+                  from={Route.fullPath}
+                  to="/dashboard/teams"
+                  search={(prev) => ({
+                    women: prev.women,
+                  })}
+                  activeProps={{
+                    'data-state': 'active',
+                  }}
+                  activeOptions={{
+                    includeSearch: false,
+                    exact: true,
+                  }}
+                >
+                  Laglista
+                </Link>
+              }
+            />
+
+            <TabsTrigger
+              nativeButton={false}
+              value="newTeam"
+              render={
+                <Link
+                  from={Route.fullPath}
+                  to="/dashboard/teams/add"
+                  search={(prev) => ({
+                    women: prev.women,
+                  })}
+                  activeProps={{
+                    'data-state': 'active',
+                  }}
+                  activeOptions={{
+                    includeSearch: false,
+                    exact: true,
+                  }}
+                >
+                  Lägg till lag
+                </Link>
+              }
+            />
           </TabsList>
         </Tabs>
       </div>
@@ -165,7 +263,11 @@ function RouteComponent() {
           console.error(error)
         }}
         errorComponent={({ error, reset }) => (
-          <SimpleErrorComponent id="layout" error={error} reset={reset} />
+          <SimpleErrorComponent
+            id="layout"
+            error={error}
+            reset={reset}
+          />
         )}
       >
         <div className="m-2">

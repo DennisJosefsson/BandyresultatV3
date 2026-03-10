@@ -3,7 +3,7 @@ import {
   useSearch,
 } from '@tanstack/react-router'
 
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/base/ui/button'
 import {
   Dialog,
   DialogClose,
@@ -11,7 +11,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
+} from '@/components/base/ui/dialog'
 import type {
   SearchParamsFields,
   SearchResult,
@@ -70,14 +70,16 @@ const SearchError = ({
         </DialogHeader>
         {searchResult.message}
         <DialogFooter className="sm:justify-start">
-          <DialogClose asChild>
-            <Button
-              className="bg-white text-black hover:bg-slate-300"
-              onClick={resetFn}
-            >
-              Stäng
-            </Button>
-          </DialogClose>
+          <DialogClose
+            render={
+              <Button
+                className="bg-white text-black hover:bg-slate-300"
+                onClick={resetFn}
+              >
+                Stäng
+              </Button>
+            }
+          />
         </DialogFooter>
       </DialogContent>
     </Dialog>

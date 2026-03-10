@@ -10,13 +10,17 @@ import {
   TabsContent,
   TabsList,
   TabsTrigger,
-} from '@/components/ui/tabs'
+} from '@/components/base/ui/tabs'
 
 import AllData from './-components/Compare/AllData'
 import CompareHeader from './-components/Compare/CompareHeader'
-import CompareStats from './-components/Compare/CompareStats'
+import FirstGames from './-components/Compare/CompareStatsSubComponents/FirstGames'
+import Golds from './-components/Compare/CompareStatsSubComponents/Golds'
+import LatestGames from './-components/Compare/CompareStatsSubComponents/LatestGames'
+import LatestWins from './-components/Compare/CompareStatsSubComponents/LatestWins'
+import Playoffs from './-components/Compare/CompareStatsSubComponents/Playoffs'
+import Seasons from './-components/Compare/CompareStatsSubComponents/Seasons'
 import DetailedData from './-components/Compare/DetailedData'
-import TeamsList from './-components/TeamsList/TeamsList'
 import { getCompareTeams } from './-functions/compare'
 
 export const Route = createFileRoute(
@@ -122,7 +126,10 @@ function Compare() {
     <div className="mt-2">
       <CompareHeader />
       <div>
-        <Tabs defaultValue="tables">
+        <Tabs
+          defaultValue="tables"
+          className="flex flex-col"
+        >
           <TabsList>
             <TabsTrigger
               value="tables"
@@ -149,7 +156,27 @@ function Compare() {
             <DetailedData />
           </TabsContent>
 
-          <CompareStats />
+          <TabsContent value="games">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              <LatestWins
+                latestWins={data.latestHomeWin}
+                title="Senaste hemmavinsten"
+              />
+              <LatestWins
+                latestWins={data.latestAwayWin}
+                title="Senaste bortavinsten"
+              />
+              <FirstGames />
+              <LatestGames />
+            </div>
+          </TabsContent>
+          <TabsContent value="stats">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+              <Seasons />
+              <Playoffs />
+              <Golds />
+            </div>
+          </TabsContent>
         </Tabs>
       </div>
     </div>
@@ -174,5 +201,3 @@ function ErrorComponent({ error }: { error: unknown }) {
     </div>
   )
 }
-
-;<TeamsList />

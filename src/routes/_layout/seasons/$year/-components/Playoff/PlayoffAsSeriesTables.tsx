@@ -2,7 +2,9 @@ import { getRouteApi } from '@tanstack/react-router'
 
 import TableList from './SeriesTables/TableList'
 
-const route = getRouteApi('/_layout/seasons/$year/playoff/table')
+const route = getRouteApi(
+  '/_layout/seasons/$year/playoff/table',
+)
 
 const PlayoffAsSeriesTables = () => {
   const playoffSeriesTables = route.useLoaderData({
@@ -12,7 +14,12 @@ const PlayoffAsSeriesTables = () => {
   return (
     <>
       {playoffSeriesTables.map((group) => {
-        return <TableList key={group.group} data={group} />
+        return (
+          <TableList
+            key={group.group}
+            data={group}
+          />
+        )
       })}
     </>
   )

@@ -1,4 +1,7 @@
-import { useNavigate, useSearch } from '@tanstack/react-router'
+import {
+  useNavigate,
+  useSearch,
+} from '@tanstack/react-router'
 import { useCallback, useEffect, useState } from 'react'
 
 import {
@@ -7,10 +10,10 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
-import type { CheckedState } from '@/components/ui/checkbox';
-import { Checkbox } from '@/components/ui/checkbox'
-import { Label } from '@/components/ui/label'
+} from '@/components/base/ui/card'
+import type { CheckedState } from '@/components/base/ui/checkbox'
+import { Checkbox } from '@/components/base/ui/checkbox'
+import { Label } from '@/components/base/ui/label'
 import type { Categories } from '@/lib/types/search'
 
 import { categoryArrayValues } from './arrays/arrays'
@@ -30,15 +33,19 @@ const CategoryArray = () => {
     from: '/_layout/search',
     select: (search) => search.categoryArray,
   })
-  const [selectedCategories, setSelectedCategories] = useState<Array<Categories>>(
-    categoryArray ?? initCategories,
-  )
+  const [selectedCategories, setSelectedCategories] =
+    useState<Array<Categories>>(
+      categoryArray ?? initCategories,
+    )
 
   const navigate = useNavigate({ from: '/search' })
 
   useEffect(() => {
     navigate({
-      search: (prev) => ({ ...prev, categoryArray: selectedCategories }),
+      search: (prev) => ({
+        ...prev,
+        categoryArray: selectedCategories,
+      }),
     })
   }, [selectedCategories, navigate])
 
@@ -52,28 +59,43 @@ const CategoryArray = () => {
             if (prev.categoryArray) {
               return {
                 ...prev,
-                categoryArray: [...prev.categoryArray, category],
-              }
-            } else {
-              return { ...prev, categoryArray: initCategories }
-            }
-          },
-        })
-      } else {
-        setSelectedCategories((prev) => prev.filter((cat) => cat !== category))
-        navigate({
-          search: (prev) => {
-            if (prev.categoryArray && prev.categoryArray.includes(category)) {
-              return {
-                ...prev,
                 categoryArray: [
-                  ...prev.categoryArray.filter((cat) => cat !== category),
+                  ...prev.categoryArray,
+                  category,
                 ],
               }
             } else {
               return {
                 ...prev,
-                categoryArray: initCategories.filter((cat) => cat !== category),
+                categoryArray: initCategories,
+              }
+            }
+          },
+        })
+      } else {
+        setSelectedCategories((prev) =>
+          prev.filter((cat) => cat !== category),
+        )
+        navigate({
+          search: (prev) => {
+            if (
+              prev.categoryArray &&
+              prev.categoryArray.includes(category)
+            ) {
+              return {
+                ...prev,
+                categoryArray: [
+                  ...prev.categoryArray.filter(
+                    (cat) => cat !== category,
+                  ),
+                ],
+              }
+            } else {
+              return {
+                ...prev,
+                categoryArray: initCategories.filter(
+                  (cat) => cat !== category,
+                ),
               }
             }
           },
@@ -87,7 +109,9 @@ const CategoryArray = () => {
       <Card>
         <CardHeader>
           <CardTitle>Matchkategorier</CardTitle>
-          <CardDescription>Välj minst en kategori.</CardDescription>
+          <CardDescription>
+            Välj minst en kategori.
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 gap-y-2 md:grid-cols-2 lg:grid-cols-3 lg:gap-x-12">
@@ -97,11 +121,15 @@ const CategoryArray = () => {
                   className="flex flex-row items-center justify-between"
                   key={cat.category}
                 >
-                  <Label htmlFor={cat.category}>{cat.name}</Label>
+                  <Label htmlFor={cat.category}>
+                    {cat.name}
+                  </Label>
                   <Checkbox
                     name="categoryArray"
                     id={cat.category}
-                    checked={selectedCategories.includes(cat.category)}
+                    checked={selectedCategories.includes(
+                      cat.category,
+                    )}
                     onCheckedChange={(checked) =>
                       onCheckedChange(checked, cat.category)
                     }

@@ -1,9 +1,19 @@
 import { useMediaQuery } from 'usehooks-ts'
 
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Button } from '@/components/base/ui/button'
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/base/ui/card'
+import { Skeleton } from '@/components/base/ui/skeleton'
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/components/base/ui/tabs'
 
 const CompareSkeleton = () => {
   const matches = useMediaQuery('(min-width: 430px)')
@@ -17,7 +27,9 @@ const CompareSkeleton = () => {
             </div>
 
             <div className="mb-2 flex flex-row justify-end gap-2 xl:mb-6">
-              <Button size={matches ? 'sm' : 'xxs'}>Länk</Button>
+              <Button size={matches ? 'sm' : 'xxs'}>
+                Länk
+              </Button>
             </div>
           </div>
           <Skeleton className="h-2.5 w-32 md:h-4" />
@@ -26,13 +38,22 @@ const CompareSkeleton = () => {
       <div>
         <Tabs defaultValue="tables">
           <TabsList>
-            <TabsTrigger value="tables" className="text-[10px] md:text-sm">
+            <TabsTrigger
+              value="tables"
+              className="text-[10px] md:text-sm"
+            >
               Tabeller
             </TabsTrigger>
-            <TabsTrigger value="games" className="text-[10px] md:text-sm">
+            <TabsTrigger
+              value="games"
+              className="text-[10px] md:text-sm"
+            >
               Matcher
             </TabsTrigger>
-            <TabsTrigger value="stats" className="text-[10px] md:text-sm">
+            <TabsTrigger
+              value="stats"
+              className="text-[10px] md:text-sm"
+            >
               Statistik
             </TabsTrigger>
           </TabsList>

@@ -6,9 +6,15 @@ import {
 } from '@tanstack/react-router'
 
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+} from '@/components/base/ui/tabs'
 
-export const Route = createFileRoute('/_layout/seasons/$year/playoff')({
+export const Route = createFileRoute(
+  '/_layout/seasons/$year/playoff',
+)({
   staticData: { breadcrumb: 'Slutspel' },
   head: () => ({
     meta: [
@@ -28,7 +34,11 @@ function RouteComponent() {
         console.error(error)
       }}
       errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent id="playoff" error={error} reset={reset} />
+        <SimpleErrorComponent
+          id="playoff"
+          error={error}
+          reset={reset}
+        />
       )}
     >
       <Playoff />
@@ -42,39 +52,53 @@ function Playoff() {
       <div className="">
         <Tabs>
           <TabsList>
-            <TabsTrigger value="table" asChild>
-              <Link
-                from="/seasons/$year/playoff"
-                to="/seasons/$year/playoff/table"
-                params={(prev) => ({ year: prev.year })}
-                search={(prev) => ({ women: prev.women })}
-                activeProps={{ 'data-state': 'active' }}
-              >
-                Slutspel
-              </Link>
-            </TabsTrigger>
-            <TabsTrigger value="games" asChild>
-              <Link
-                from="/seasons/$year/playoff"
-                to="/seasons/$year/playoff/games"
-                params={(prev) => ({ year: prev.year })}
-                search={(prev) => ({ women: prev.women })}
-                activeProps={{ 'data-state': 'active' }}
-              >
-                Matcher
-              </Link>
-            </TabsTrigger>
-            <TabsTrigger value="stats" asChild>
-              <Link
-                from="/seasons/$year/playoff"
-                to="/seasons/$year/playoff/stats"
-                params={(prev) => ({ year: prev.year })}
-                search={(prev) => ({ women: prev.women })}
-                activeProps={{ 'data-state': 'active' }}
-              >
-                Statistik
-              </Link>
-            </TabsTrigger>
+            <TabsTrigger
+              value="table"
+              render={
+                <Link
+                  from="/seasons/$year/playoff"
+                  to="/seasons/$year/playoff/table"
+                  params={(prev) => ({ year: prev.year })}
+                  search={(prev) => ({ women: prev.women })}
+                  activeProps={{ 'data-state': 'active' }}
+                >
+                  Slutspel
+                </Link>
+              }
+              nativeButton={false}
+            />
+
+            <TabsTrigger
+              value="games"
+              render={
+                <Link
+                  from="/seasons/$year/playoff"
+                  to="/seasons/$year/playoff/games"
+                  params={(prev) => ({ year: prev.year })}
+                  search={(prev) => ({ women: prev.women })}
+                  activeProps={{ 'data-state': 'active' }}
+                >
+                  Matcher
+                </Link>
+              }
+              nativeButton={false}
+            />
+
+            <TabsTrigger
+              value="stats"
+              render={
+                <Link
+                  from="/seasons/$year/playoff"
+                  to="/seasons/$year/playoff/stats"
+                  params={(prev) => ({ year: prev.year })}
+                  search={(prev) => ({ women: prev.women })}
+                  activeProps={{ 'data-state': 'active' }}
+                >
+                  Statistik
+                </Link>
+              }
+              nativeButton={false}
+            />
           </TabsList>
         </Tabs>
       </div>

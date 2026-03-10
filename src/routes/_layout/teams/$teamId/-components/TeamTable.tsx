@@ -1,7 +1,15 @@
 import { getRouteApi } from '@tanstack/react-router'
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Table, TableBody } from '@/components/ui/table'
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/base/ui/card'
+import {
+  Table,
+  TableBody,
+} from '@/components/base/ui/table'
 
 import TeamTableHeader from './TableComponents/TableHeader'
 import TeamTableRow from './TableComponents/TeamTableDataRow'
@@ -9,7 +17,9 @@ import TeamTableRow from './TableComponents/TeamTableDataRow'
 const route = getRouteApi('/_layout/teams/$teamId')
 
 const TeamTable = () => {
-  const tables = route.useLoaderData({ select: (data) => data.tables })
+  const tables = route.useLoaderData({
+    select: (data) => data.tables,
+  })
   if (tables.length === 0) {
     return (
       <div className="mt-4 flex flex-row justify-center">
@@ -23,7 +33,10 @@ const TeamTable = () => {
     <div className="mb-6">
       {tables.map((level) => {
         return (
-          <Card key={level.level} className="mb-2 p-1 sm:mb-4 md:mb-6 md:p-2">
+          <Card
+            key={level.level}
+            className="mb-2 p-1 sm:mb-4 md:mb-6 md:p-2"
+          >
             <CardHeader className="p-1 md:p-2">
               <CardTitle className="text-[10px] md:text-sm lg:text-base xl:text-lg">
                 {level.levelName}
@@ -39,7 +52,9 @@ const TeamTable = () => {
                     <Table className="w-full table-fixed">
                       <TeamTableHeader />
                       <TableBody>
-                        <TeamTableRow table={table.tables} />
+                        <TeamTableRow
+                          table={table.tables}
+                        />
                       </TableBody>
                     </Table>
                   </div>

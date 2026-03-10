@@ -4,7 +4,7 @@ import type {
   SetStateAction,
 } from 'react'
 
-import { Input } from '@/components/ui/input'
+import { Input } from '@/components/base/ui/input'
 type FilterComponentProps = {
   teamFilter: string
   setTeamFilter: Dispatch<SetStateAction<string>>

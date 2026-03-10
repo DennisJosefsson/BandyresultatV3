@@ -8,10 +8,13 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
   useSidebar,
-} from '@/components/ui/sidebar'
+} from '@/components/base/ui/sidebar'
 
 export function MaratonSidebar() {
-  const women = useSearch({ from: '__root__', select: (s) => s.women })
+  const women = useSearch({
+    from: '__root__',
+    select: (s) => s.women,
+  })
   const { open } = useSidebar()
 
   if (!open) return null
@@ -22,49 +25,55 @@ export function MaratonSidebar() {
         <SidebarGroupContent>
           <SidebarMenuSub>
             <SidebarMenuSubItem>
-              <SidebarMenuSubButton asChild>
-                <Link
-                  to="/maraton/table/$maratonTable"
-                  params={{
-                    maratonTable: 'all',
-                  }}
-                  search={{ women }}
-                  activeOptions={{ includeSearch: false }}
-                  activeProps={{ className: `font-bold` }}
-                >
-                  <span>Alla</span>
-                </Link>
-              </SidebarMenuSubButton>
+              <SidebarMenuSubButton
+                render={
+                  <Link
+                    to="/maraton/table/$maratonTable"
+                    params={{
+                      maratonTable: 'all',
+                    }}
+                    search={{ women }}
+                    activeOptions={{ includeSearch: false }}
+                    activeProps={{ className: `font-bold` }}
+                  >
+                    <span>Alla</span>
+                  </Link>
+                }
+              />
             </SidebarMenuSubItem>
             <SidebarMenuSubItem>
-              <SidebarMenuSubButton asChild>
-                <Link
-                  to="/maraton/table/$maratonTable"
-                  params={{
-                    maratonTable: 'home',
-                  }}
-                  search={{ women }}
-                  activeOptions={{ includeSearch: false }}
-                  activeProps={{ className: `font-bold` }}
-                >
-                  <span>Hemma</span>
-                </Link>
-              </SidebarMenuSubButton>
+              <SidebarMenuSubButton
+                render={
+                  <Link
+                    to="/maraton/table/$maratonTable"
+                    params={{
+                      maratonTable: 'home',
+                    }}
+                    search={{ women }}
+                    activeOptions={{ includeSearch: false }}
+                    activeProps={{ className: `font-bold` }}
+                  >
+                    <span>Hemma</span>
+                  </Link>
+                }
+              />
             </SidebarMenuSubItem>
             <SidebarMenuSubItem>
-              <SidebarMenuSubButton asChild>
-                <Link
-                  to="/maraton/table/$maratonTable"
-                  params={{
-                    maratonTable: 'away',
-                  }}
-                  search={{ women }}
-                  activeOptions={{ includeSearch: false }}
-                  activeProps={{ className: `font-bold` }}
-                >
-                  <span>Borta</span>
-                </Link>
-              </SidebarMenuSubButton>
+              <SidebarMenuSubButton
+                render={
+                  <Link
+                    to="/maraton/table/$maratonTable"
+                    params={{
+                      maratonTable: 'away',
+                    }}
+                    search={{ women }}
+                    activeOptions={{ includeSearch: false }}
+                    activeProps={{ className: `font-bold` }}
+                  >
+                    <span>Borta</span>
+                  </Link>
+                }
+              />
             </SidebarMenuSubItem>
           </SidebarMenuSub>
         </SidebarGroupContent>
@@ -75,64 +84,74 @@ export function MaratonSidebar() {
         <SidebarGroupContent>
           <SidebarMenuSub>
             <SidebarMenuSubItem>
-              <SidebarMenuSubButton asChild>
-                <Link
-                  to="/maraton/records/stats"
-                  search={{ women }}
-                  activeOptions={{ includeSearch: false }}
-                  activeProps={{ className: `font-bold` }}
-                >
-                  <span>Statistik</span>
-                </Link>
-              </SidebarMenuSubButton>
+              <SidebarMenuSubButton
+                render={
+                  <Link
+                    to="/maraton/records/stats"
+                    search={{ women }}
+                    activeOptions={{ includeSearch: false }}
+                    activeProps={{ className: `font-bold` }}
+                  >
+                    <span>Statistik</span>
+                  </Link>
+                }
+              />
             </SidebarMenuSubItem>
             <SidebarMenuSubItem>
-              <SidebarMenuSubButton asChild>
-                <Link
-                  to="/maraton/records/points"
-                  search={{ women }}
-                  activeOptions={{ includeSearch: false }}
-                  activeProps={{ className: `font-bold` }}
-                >
-                  <span>Poäng</span>
-                </Link>
-              </SidebarMenuSubButton>
+              <SidebarMenuSubButton
+                render={
+                  <Link
+                    to="/maraton/records/points"
+                    search={{ women }}
+                    activeOptions={{ includeSearch: false }}
+                    activeProps={{ className: `font-bold` }}
+                  >
+                    <span>Poäng</span>
+                  </Link>
+                }
+              />
             </SidebarMenuSubItem>
             <SidebarMenuSubItem>
-              <SidebarMenuSubButton asChild>
-                <Link
-                  to="/maraton/records/scored"
-                  search={{ women }}
-                  activeOptions={{ includeSearch: false }}
-                  activeProps={{ className: `font-bold` }}
-                >
-                  <span>Gjorda mål</span>
-                </Link>
-              </SidebarMenuSubButton>
+              <SidebarMenuSubButton
+                render={
+                  <Link
+                    to="/maraton/records/scored"
+                    search={{ women }}
+                    activeOptions={{ includeSearch: false }}
+                    activeProps={{ className: `font-bold` }}
+                  >
+                    <span>Gjorda mål</span>
+                  </Link>
+                }
+              />
             </SidebarMenuSubItem>
             <SidebarMenuSubItem>
-              <SidebarMenuSubButton asChild>
-                <Link
-                  to="/maraton/records/conceded"
-                  search={{ women }}
-                  activeOptions={{ includeSearch: false }}
-                  activeProps={{ className: `font-bold` }}
-                >
-                  <span>Insläppta mål</span>
-                </Link>
-              </SidebarMenuSubButton>
+              <SidebarMenuSubButton
+                render={
+                  <Link
+                    to="/maraton/records/conceded"
+                    search={{ women }}
+                    activeOptions={{ includeSearch: false }}
+                    activeProps={{ className: `font-bold` }}
+                  >
+                    <span>Insläppta mål</span>
+                  </Link>
+                }
+              />
             </SidebarMenuSubItem>
             <SidebarMenuSubItem>
-              <SidebarMenuSubButton asChild>
-                <Link
-                  to="/maraton/records/streaks"
-                  search={{ women }}
-                  activeOptions={{ includeSearch: false }}
-                  activeProps={{ className: `font-bold` }}
-                >
-                  <span>Rekordsviter</span>
-                </Link>
-              </SidebarMenuSubButton>
+              <SidebarMenuSubButton
+                render={
+                  <Link
+                    to="/maraton/records/streaks"
+                    search={{ women }}
+                    activeOptions={{ includeSearch: false }}
+                    activeProps={{ className: `font-bold` }}
+                  >
+                    <span>Rekordsviter</span>
+                  </Link>
+                }
+              />
             </SidebarMenuSubItem>
           </SidebarMenuSub>
         </SidebarGroupContent>
@@ -142,16 +161,18 @@ export function MaratonSidebar() {
         <SidebarGroupContent>
           <SidebarMenuSub>
             <SidebarMenuSubItem>
-              <SidebarMenuSubButton asChild>
-                <Link
-                  to="/maraton/help"
-                  search={{ women }}
-                  activeOptions={{ includeSearch: false }}
-                  activeProps={{ className: `font-bold` }}
-                >
-                  <span>Hjälp</span>
-                </Link>
-              </SidebarMenuSubButton>
+              <SidebarMenuSubButton
+                render={
+                  <Link
+                    to="/maraton/help"
+                    search={{ women }}
+                    activeOptions={{ includeSearch: false }}
+                    activeProps={{ className: `font-bold` }}
+                  >
+                    <span>Hjälp</span>
+                  </Link>
+                }
+              />
             </SidebarMenuSubItem>
           </SidebarMenuSub>
         </SidebarGroupContent>

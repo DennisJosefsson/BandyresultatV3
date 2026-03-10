@@ -16,7 +16,7 @@ import {
 import { useMediaQuery } from 'usehooks-ts'
 
 import { TabBarInline } from '@/components/TabBar/TabBar'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/base/ui/button'
 
 const route = getRouteApi('/_layout/seasons/$year')
 
