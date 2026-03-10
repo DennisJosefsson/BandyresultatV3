@@ -1,6 +1,6 @@
 import type { RowComponentProps } from 'react-window'
 
-import { SelectItem } from '@/components/ui/select'
+import { SelectItem } from '@/components/base/ui/select'
 
 type Item = {
   value: number

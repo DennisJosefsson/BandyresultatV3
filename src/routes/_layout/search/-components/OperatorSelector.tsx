@@ -2,16 +2,15 @@ import {
   useNavigate,
   useSearch,
 } from '@tanstack/react-router'
-import { useState } from 'react'
 
-import { Label } from '@/components/ui/label'
+import { Label } from '@/components/base/ui/label'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from '@/components/base/ui/select'
 import type {
   OperatorValues,
   SearchParamsFields,
@@ -44,29 +43,37 @@ const OperatorSelector = ({
     from: '/_layout/search',
     select: (search) => search[field],
   })
-  const [value, setValue] = useState<OperatorValues>(
-    searchField ?? defaultValue,
-  )
+
   const navigate = useNavigate({ from: '/search' })
 
-  const onValueChange = (val: OperatorValues): void => {
-    navigate({
-      resetScroll: false,
-      search: (prev) => ({ ...prev, [field]: val }),
-    })
-    setValue(val)
+  const onValueChange = (
+    val: OperatorValues | null,
+  ): void => {
+    if (val) {
+      navigate({
+        resetScroll: false,
+        search: (prev) => ({ ...prev, [field]: val }),
+      })
+    }
   }
+
+  const arrayLabel = searchField
+    ? array.find((lab) => lab.value === searchField)?.label
+    : array.find((lab) => lab.value === defaultValue)?.label
+
   return (
     <div>
       <Label>{label}</Label>
       <Select
-        value={value}
+        value={searchField ?? defaultValue}
         onValueChange={onValueChange}
       >
         <SelectTrigger className="w-[280px]">
-          <SelectValue placeholder="Välj" />
+          <SelectValue placeholder="Välj">
+            {arrayLabel}
+          </SelectValue>
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent alignItemWithTrigger={true}>
           {array.map((item) => {
             return (
               <SelectItem

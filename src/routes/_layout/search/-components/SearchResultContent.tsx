@@ -4,7 +4,7 @@ import {
   useMediaQuery,
 } from 'usehooks-ts'
 
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/base/ui/button'
 import type { SearchResult } from '@/lib/types/search'
 import { getBaseUrl } from '@/lib/utils/utils'
 

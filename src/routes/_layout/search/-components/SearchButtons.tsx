@@ -2,18 +2,15 @@ import {
   useNavigate,
   useSearch,
 } from '@tanstack/react-router'
-import type { Dispatch, SetStateAction } from 'react'
 
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/base/ui/button'
 
 type SearchButtonsProps = {
   sendSearchRequest: () => void
-  setOpenAccordion: Dispatch<SetStateAction<string>>
 }
 
 const SearchButtons = ({
   sendSearchRequest,
-  setOpenAccordion,
 }: SearchButtonsProps) => {
   const searchParams = useSearch({
     from: '/_layout/search',
@@ -21,12 +18,12 @@ const SearchButtons = ({
   const navigate = useNavigate({ from: '/search' })
   const handleOnClick = () => {
     sendSearchRequest()
-    setOpenAccordion('')
+    // setOpenAccordion('')
   }
 
   const reset = () => {
     navigate({ search: { women: searchParams.women } })
-    setOpenAccordion('')
+    // setOpenAccordion('')
   }
 
   return (

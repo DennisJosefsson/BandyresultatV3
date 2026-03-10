@@ -2,16 +2,15 @@ import {
   getRouteApi,
   useNavigate,
 } from '@tanstack/react-router'
-import { useState } from 'react'
 
-import { Label } from '@/components/ui/label'
+import { Label } from '@/components/base/ui/label'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from '@/components/base/ui/select'
 
 import { limitSelection } from './arrays/arrays'
 
@@ -21,23 +20,25 @@ const LimitSelection = () => {
   const limit = route.useSearch({
     select: (search) => search.limit,
   })
-  const [value, setValue] = useState(
-    limit?.toString() ?? '10',
-  )
+
   const navigate = useNavigate({ from: '/search' })
 
-  const onValueChange = (val: string): void => {
-    navigate({
-      resetScroll: false,
-      search: (prev) => ({ ...prev, limit: parseInt(val) }),
-    })
-    setValue(val)
+  const onValueChange = (val: string | null): void => {
+    if (val) {
+      navigate({
+        resetScroll: false,
+        search: (prev) => ({
+          ...prev,
+          limit: parseInt(val),
+        }),
+      })
+    }
   }
   return (
     <div>
       <Label>Antal träffar</Label>
       <Select
-        value={value}
+        value={limit?.toString() ?? '10'}
         onValueChange={onValueChange}
       >
         <SelectTrigger className="w-[280px]">
