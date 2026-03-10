@@ -1,11 +1,22 @@
 import { createServerFn } from '@tanstack/react-start'
-import { and, asc, desc, eq, inArray, notInArray, sql } from 'drizzle-orm'
+import {
+  and,
+  asc,
+  desc,
+  eq,
+  inArray,
+  ne,
+  notInArray,
+  sql,
+} from 'drizzle-orm'
 
 import { db } from '@/db'
 import { games, seasons, series, teams } from '@/db/schema'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 
-export const getSearchTeams = createServerFn({ method: 'GET' })
+export const getSearchTeams = createServerFn({
+  method: 'GET',
+})
   .middleware([errorMiddleware])
   .handler(async () => {
     const firstDivTeams = await db
@@ -20,12 +31,18 @@ export const getSearchTeams = createServerFn({ method: 'GET' })
         inArray(
           teams.teamId,
           db
-            .selectDistinctOn([games.homeTeamId], { teamId: games.homeTeamId })
+            .selectDistinctOn([games.homeTeamId], {
+              teamId: games.homeTeamId,
+            })
             .from(games)
-            .leftJoin(series, eq(games.serieId, series.serieId))
+            .leftJoin(
+              series,
+              eq(games.serieId, series.serieId),
+            )
             .where(
               and(
                 eq(series.level, 1.0),
+                ne(games.homeTeamId, 176),
                 inArray(
                   games.seasonId,
                   db
@@ -52,9 +69,14 @@ export const getSearchTeams = createServerFn({ method: 'GET' })
         notInArray(
           teams.teamId,
           db
-            .selectDistinctOn([games.homeTeamId], { teamId: games.homeTeamId })
+            .selectDistinctOn([games.homeTeamId], {
+              teamId: games.homeTeamId,
+            })
             .from(games)
-            .leftJoin(series, eq(games.serieId, series.serieId))
+            .leftJoin(
+              series,
+              eq(games.serieId, series.serieId),
+            )
             .where(
               and(
                 eq(series.level, 1.0),
