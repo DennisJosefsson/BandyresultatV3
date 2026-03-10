@@ -1,3 +1,4 @@
+import { FieldError } from '@/components/base/ui/field'
 import { cn } from '@/lib/utils/utils'
 import type {
   DetailedHTMLProps,
@@ -10,6 +11,14 @@ import {
   InputGroupInput,
 } from '../base/ui/input-group'
 
+type ErrorField =
+  | {
+      hasErrorField: true
+      errorBoolean: boolean
+      errors?: Array<{ message?: string } | undefined>
+    }
+  | { hasErrorField: false | undefined }
+
 interface CustomNumberInputProps extends Omit<
   DetailedHTMLProps<
     InputHTMLAttributes<HTMLInputElement>,
@@ -19,12 +28,14 @@ interface CustomNumberInputProps extends Omit<
 > {
   decrementer: () => void
   incrementer: () => void
+  error?: ErrorField
 }
 
 const CustomNumberInput = ({
   decrementer,
   incrementer,
   className,
+  error,
   ...props
 }: CustomNumberInputProps) => {
   return (
@@ -55,6 +66,9 @@ const CustomNumberInput = ({
           +
         </InputGroupButton>
       </InputGroupAddon>
+      {error?.hasErrorField && error.errorBoolean && (
+        <FieldError errors={error.errors} />
+      )}
     </InputGroup>
   )
 }
