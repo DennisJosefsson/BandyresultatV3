@@ -18,6 +18,12 @@ import {
 } from '@/components/base/ui/field'
 import { Input } from '@/components/base/ui/input'
 import {
+  Map,
+  MapControls,
+  MapMarker,
+  MarkerContent,
+} from '@/components/base/ui/map'
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -25,12 +31,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/base/ui/select'
-import {
-  Map,
-  MapControls,
-  MapMarker,
-  MarkerContent,
-} from '@/components/ui/map'
 import { zd } from '@/lib/utils/zod'
 
 import { municipalityQueries } from '../../../-hooks/getMunicipalities'
