@@ -36,11 +36,17 @@ export type GroupTable = {
   tables: Array<TeamTable>
 }
 
-export type MaratonTable = Omit<TeamTable, 'season' | 'women' | 'group'> & {
+export type MaratonTable = Omit<
+  TeamTable,
+  'season' | 'women' | 'group'
+> & {
   seasons: number
 }
 
-export type DevDataTableItem = Omit<TeamTable, 'season' | 'women' | 'group'> & {
+export type DevDataTableItem = Omit<
+  TeamTable,
+  'season' | 'women' | 'group'
+> & {
   position: number
   date: string
 }
@@ -48,7 +54,10 @@ export type ReturnDevDataTableItem = DevDataTableItem & {
   arrowDirection: 'up' | 'down' | null
 }
 
-export type PlayoffTable = Omit<TeamTable, 'women' | 'season'> & {
+export type PlayoffTable = Omit<
+  TeamTable,
+  'women' | 'season'
+> & {
   awayGoals: number
 }
 
@@ -82,15 +91,15 @@ export const newStaticTable = zd.object({
   teamName: zd.string(),
   teamId: zd.number(),
   seasonId: zd.number(),
-  games: zd.number(),
-  position: zd.number(),
-  won: zd.number(),
-  draw: zd.number(),
-  lost: zd.number(),
-  scoredGoals: zd.number(),
-  concededGoals: zd.number(),
-  goalDifference: zd.number(),
-  points: zd.number(),
+  games: zd.number().nonnegative(),
+  position: zd.number().positive().int(),
+  won: zd.number().nonnegative(),
+  draw: zd.number().nonnegative().int(),
+  lost: zd.number().nonnegative().int(),
+  scoredGoals: zd.number().nonnegative().int(),
+  concededGoals: zd.number().nonnegative().int(),
+  goalDifference: zd.number().nonnegative().int(),
+  points: zd.number().nonnegative().int(),
   qualification: zd.boolean(),
   women: zd.boolean(),
   group: zd.string(),
@@ -106,15 +115,15 @@ export const editStaticTable = zd.object({
   tableId: zd.number(),
   teamId: zd.number(),
   teamName: zd.string(),
-  games: zd.number(),
-  position: zd.number(),
-  won: zd.number(),
-  draw: zd.number(),
-  lost: zd.number(),
-  scoredGoals: zd.number(),
-  concededGoals: zd.number(),
-  goalDifference: zd.number(),
-  points: zd.number(),
+  games: zd.number().nonnegative(),
+  position: zd.number().positive().int(),
+  won: zd.number().nonnegative(),
+  draw: zd.number().nonnegative().int(),
+  lost: zd.number().nonnegative().int(),
+  scoredGoals: zd.number().nonnegative().int(),
+  concededGoals: zd.number().nonnegative().int(),
+  goalDifference: zd.number().nonnegative().int(),
+  points: zd.number().nonnegative().int(),
 })
 
 export const editStaticTableArray = zd.object({
