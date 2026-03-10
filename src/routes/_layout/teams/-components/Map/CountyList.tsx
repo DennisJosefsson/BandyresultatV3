@@ -1,6 +1,6 @@
 import type { CheckedState } from '@/components/base/ui/checkbox'
 import { Checkbox } from '@/components/base/ui/checkbox'
-import type { MapRef } from '@/components/ui/map'
+import type { MapRef } from '@/components/base/ui/map'
 import type { LngLatLike } from 'maplibre-gl'
 import type {
   Dispatch,

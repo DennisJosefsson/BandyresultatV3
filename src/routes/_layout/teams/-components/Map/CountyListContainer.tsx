@@ -16,7 +16,7 @@ import {
   DrawerTrigger,
 } from '@/components/base/ui/drawer'
 
-import type { MapRef } from '@/components/ui/map'
+import type { MapRef } from '@/components/base/ui/map'
 
 import CountyList from './CountyList'
 

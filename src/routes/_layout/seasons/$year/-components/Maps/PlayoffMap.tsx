@@ -1,7 +1,7 @@
 import { getRouteApi } from '@tanstack/react-router'
 
 import { Card } from '@/components/base/ui/card'
-import { Map, MapControls } from '@/components/ui/map'
+import { Map, MapControls } from '@/components/base/ui/map'
 
 import MapItem from './MapItem'
 

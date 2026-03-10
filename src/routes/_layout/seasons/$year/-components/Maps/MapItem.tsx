@@ -11,7 +11,7 @@ import {
   MarkerContent,
   MarkerPopup,
   MarkerTooltip,
-} from '@/components/ui/map'
+} from '@/components/base/ui/map'
 import type { County } from '@/lib/types/county'
 import type { Municipality } from '@/lib/types/municipality'
 import type { Team } from '@/lib/types/team'

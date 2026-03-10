@@ -2,11 +2,11 @@ import { getRouteApi } from '@tanstack/react-router'
 import { useEffect, useRef, useState } from 'react'
 
 import { Card } from '@/components/base/ui/card'
-import type { MapRef } from '@/components/ui/map'
+import type { MapRef } from '@/components/base/ui/map'
 import {
   Map as MapCn,
   MapControls,
-} from '@/components/ui/map'
+} from '@/components/base/ui/map'
 import { calcBoundsFromCoordinates } from '@/routes/_layout/teams/$teamId/-functions/calcLongLatBounds'
 
 import CountyListContainer from './CountyListContainer'
