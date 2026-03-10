@@ -19,7 +19,7 @@ const MaratonTablesButtonList = () => {
         Maratontabell {women ? 'Damer' : 'Herrar'}
       </h1>
       <div className="flex flex-row justify-center">
-        <div className="mb-2 grid grid-cols-3 gap-4">
+        <div className="mb-6 flex flex-row justify-center gap-4">
           <Link
             from="/maraton/table/$maratonTable"
             to="."

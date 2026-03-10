@@ -29,7 +29,7 @@ const SeasonTablesButtonList = () => {
         Serietabell {women ? 'Damer' : 'Herrar'}
       </h1>
       <div className="flex flex-row justify-center">
-        <div className="mb-2 flex flex-row w-40 justify-center gap-4">
+        <div className="mb-6 flex flex-row justify-center gap-4">
           <Link
             from="/seasons/$year/$group/tables/$table"
             to="."
