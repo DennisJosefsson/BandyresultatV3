@@ -8,12 +8,8 @@ import {
   FieldLegend,
   FieldSet,
 } from '@/components/base/ui/field'
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from '@/components/base/ui/input-group'
 
+import CustomNumberInput from '@/components/Common/CustomNumberInput'
 import { editStaticTableForm } from '../../../-hooks/editStaticTableForm'
 
 const EditStaticTableForm = () => {
@@ -46,7 +42,7 @@ const EditStaticTableForm = () => {
                 field.state.meta.isTouched &&
                 !field.state.meta.isValid
               return (
-                <FieldSet className="gap-4">
+                <FieldSet className="gap-5">
                   <FieldLegend variant="label">
                     <div className="grid grid-cols-10">
                       <span className="w-40">Lag</span>
@@ -69,7 +65,7 @@ const EditStaticTableForm = () => {
                           className="grid grid-cols-10 gap-2"
                         >
                           <FieldLabel
-                            htmlFor={`tablearray-label-${index}`}
+                            htmlFor={`tableArray[${index}].position`}
                             className="max-w-40 text-base"
                           >
                             {team.teamName}
@@ -93,73 +89,47 @@ const EditStaticTableForm = () => {
                                 >
                                   <FieldContent>
                                     <div className="w-24">
-                                      <InputGroup>
-                                        <InputGroupInput
-                                          id={`tablearray-position-${index}`}
-                                          name={
-                                            subField.name
-                                          }
-                                          value={
+                                      <CustomNumberInput
+                                        id={subField.name}
+                                        name={subField.name}
+                                        value={
+                                          subField.state
+                                            .value
+                                        }
+                                        onBlur={
+                                          subField.handleBlur
+                                        }
+                                        onChange={(e) =>
+                                          subField.handleChange(
+                                            e.target
+                                              .valueAsNumber,
+                                          )
+                                        }
+                                        aria-invalid={
+                                          isSubFieldInvalid
+                                        }
+                                        placeholder="Position"
+                                        incrementer={() =>
+                                          subField.setValue(
                                             subField.state
-                                              .value
-                                          }
-                                          onBlur={
-                                            subField.handleBlur
-                                          }
-                                          onChange={(e) =>
-                                            subField.handleChange(
-                                              e.target
-                                                .valueAsNumber,
-                                            )
-                                          }
-                                          aria-invalid={
-                                            isSubFieldInvalid
-                                          }
-                                          placeholder="Position"
-                                          type="number"
-                                          className="appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-                                        />
-                                        <InputGroupAddon align="inline-end">
-                                          <Button
-                                            type="button"
-                                            variant="ghost"
-                                            onClick={() =>
-                                              subField.setValue(
-                                                subField
-                                                  .state
-                                                  .value -
-                                                  1,
-                                              )
-                                            }
-                                          >
-                                            -
-                                          </Button>
-                                        </InputGroupAddon>
-                                        <InputGroupAddon align="inline-end">
-                                          <Button
-                                            type="button"
-                                            variant="ghost"
-                                            onClick={() =>
-                                              subField.setValue(
-                                                subField
-                                                  .state
-                                                  .value +
-                                                  1,
-                                              )
-                                            }
-                                          >
-                                            +
-                                          </Button>
-                                        </InputGroupAddon>
-                                        {isSubFieldInvalid && (
-                                          <FieldError
-                                            errors={
-                                              subField.state
-                                                .meta.errors
-                                            }
-                                          />
-                                        )}
-                                      </InputGroup>
+                                              .value + 1,
+                                          )
+                                        }
+                                        decrementer={() =>
+                                          subField.setValue(
+                                            subField.state
+                                              .value - 1,
+                                          )
+                                        }
+                                        error={{
+                                          hasErrorField: true,
+                                          errorBoolean:
+                                            isSubFieldInvalid,
+                                          errors:
+                                            subField.state
+                                              .meta.errors,
+                                        }}
+                                      />
                                     </div>
                                   </FieldContent>
                                 </Field>
@@ -186,73 +156,47 @@ const EditStaticTableForm = () => {
                                 >
                                   <FieldContent>
                                     <div className="w-24">
-                                      <InputGroup>
-                                        <InputGroupInput
-                                          id={`tablearray-games-${index}`}
-                                          name={
-                                            subField.name
-                                          }
-                                          value={
+                                      <CustomNumberInput
+                                        id={subField.name}
+                                        name={subField.name}
+                                        value={
+                                          subField.state
+                                            .value
+                                        }
+                                        onBlur={
+                                          subField.handleBlur
+                                        }
+                                        onChange={(e) =>
+                                          subField.handleChange(
+                                            e.target
+                                              .valueAsNumber,
+                                          )
+                                        }
+                                        aria-invalid={
+                                          isSubFieldInvalid
+                                        }
+                                        placeholder="Matcher"
+                                        incrementer={() =>
+                                          subField.setValue(
                                             subField.state
-                                              .value
-                                          }
-                                          onBlur={
-                                            subField.handleBlur
-                                          }
-                                          onChange={(e) =>
-                                            subField.handleChange(
-                                              e.target
-                                                .valueAsNumber,
-                                            )
-                                          }
-                                          aria-invalid={
-                                            isSubFieldInvalid
-                                          }
-                                          placeholder="Matcher"
-                                          type="number"
-                                          className="appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-                                        />
-                                        <InputGroupAddon align="inline-end">
-                                          <Button
-                                            type="button"
-                                            variant="ghost"
-                                            onClick={() =>
-                                              subField.setValue(
-                                                subField
-                                                  .state
-                                                  .value -
-                                                  1,
-                                              )
-                                            }
-                                          >
-                                            -
-                                          </Button>
-                                        </InputGroupAddon>
-                                        <InputGroupAddon align="inline-end">
-                                          <Button
-                                            type="button"
-                                            variant="ghost"
-                                            onClick={() =>
-                                              subField.setValue(
-                                                subField
-                                                  .state
-                                                  .value +
-                                                  1,
-                                              )
-                                            }
-                                          >
-                                            +
-                                          </Button>
-                                        </InputGroupAddon>
-                                        {isSubFieldInvalid && (
-                                          <FieldError
-                                            errors={
-                                              subField.state
-                                                .meta.errors
-                                            }
-                                          />
-                                        )}
-                                      </InputGroup>
+                                              .value + 1,
+                                          )
+                                        }
+                                        decrementer={() =>
+                                          subField.setValue(
+                                            subField.state
+                                              .value - 1,
+                                          )
+                                        }
+                                        error={{
+                                          hasErrorField: true,
+                                          errorBoolean:
+                                            isSubFieldInvalid,
+                                          errors:
+                                            subField.state
+                                              .meta.errors,
+                                        }}
+                                      />
                                     </div>
                                   </FieldContent>
                                 </Field>
@@ -278,73 +222,47 @@ const EditStaticTableForm = () => {
                                 >
                                   <FieldContent>
                                     <div className="w-24">
-                                      <InputGroup>
-                                        <InputGroupInput
-                                          id={`tablearray-won-${index}`}
-                                          name={
-                                            subField.name
-                                          }
-                                          value={
+                                      <CustomNumberInput
+                                        id={subField.name}
+                                        name={subField.name}
+                                        value={
+                                          subField.state
+                                            .value
+                                        }
+                                        onBlur={
+                                          subField.handleBlur
+                                        }
+                                        onChange={(e) =>
+                                          subField.handleChange(
+                                            e.target
+                                              .valueAsNumber,
+                                          )
+                                        }
+                                        aria-invalid={
+                                          isSubFieldInvalid
+                                        }
+                                        placeholder="Vinster"
+                                        incrementer={() =>
+                                          subField.setValue(
                                             subField.state
-                                              .value
-                                          }
-                                          onBlur={
-                                            subField.handleBlur
-                                          }
-                                          onChange={(e) =>
-                                            subField.handleChange(
-                                              e.target
-                                                .valueAsNumber,
-                                            )
-                                          }
-                                          aria-invalid={
-                                            isSubFieldInvalid
-                                          }
-                                          placeholder="Vinster"
-                                          type="number"
-                                          className="appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-                                        />
-                                        <InputGroupAddon align="inline-end">
-                                          <Button
-                                            type="button"
-                                            variant="ghost"
-                                            onClick={() =>
-                                              subField.setValue(
-                                                subField
-                                                  .state
-                                                  .value -
-                                                  1,
-                                              )
-                                            }
-                                          >
-                                            -
-                                          </Button>
-                                        </InputGroupAddon>
-                                        <InputGroupAddon align="inline-end">
-                                          <Button
-                                            type="button"
-                                            variant="ghost"
-                                            onClick={() =>
-                                              subField.setValue(
-                                                subField
-                                                  .state
-                                                  .value +
-                                                  1,
-                                              )
-                                            }
-                                          >
-                                            +
-                                          </Button>
-                                        </InputGroupAddon>
-                                        {isSubFieldInvalid && (
-                                          <FieldError
-                                            errors={
-                                              subField.state
-                                                .meta.errors
-                                            }
-                                          />
-                                        )}
-                                      </InputGroup>
+                                              .value + 1,
+                                          )
+                                        }
+                                        decrementer={() =>
+                                          subField.setValue(
+                                            subField.state
+                                              .value - 1,
+                                          )
+                                        }
+                                        error={{
+                                          hasErrorField: true,
+                                          errorBoolean:
+                                            isSubFieldInvalid,
+                                          errors:
+                                            subField.state
+                                              .meta.errors,
+                                        }}
+                                      />
                                     </div>
                                   </FieldContent>
                                 </Field>
@@ -370,73 +288,47 @@ const EditStaticTableForm = () => {
                                 >
                                   <FieldContent>
                                     <div className="w-24">
-                                      <InputGroup>
-                                        <InputGroupInput
-                                          id={`tablearray-draw-${index}`}
-                                          name={
-                                            subField.name
-                                          }
-                                          value={
+                                      <CustomNumberInput
+                                        id={subField.name}
+                                        name={subField.name}
+                                        value={
+                                          subField.state
+                                            .value
+                                        }
+                                        onBlur={
+                                          subField.handleBlur
+                                        }
+                                        onChange={(e) =>
+                                          subField.handleChange(
+                                            e.target
+                                              .valueAsNumber,
+                                          )
+                                        }
+                                        aria-invalid={
+                                          isSubFieldInvalid
+                                        }
+                                        placeholder="Oavgjort"
+                                        incrementer={() =>
+                                          subField.setValue(
                                             subField.state
-                                              .value
-                                          }
-                                          onBlur={
-                                            subField.handleBlur
-                                          }
-                                          onChange={(e) =>
-                                            subField.handleChange(
-                                              e.target
-                                                .valueAsNumber,
-                                            )
-                                          }
-                                          aria-invalid={
-                                            isSubFieldInvalid
-                                          }
-                                          placeholder="Oavgjort"
-                                          type="number"
-                                          className="appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-                                        />
-                                        <InputGroupAddon align="inline-end">
-                                          <Button
-                                            type="button"
-                                            variant="ghost"
-                                            onClick={() =>
-                                              subField.setValue(
-                                                subField
-                                                  .state
-                                                  .value -
-                                                  1,
-                                              )
-                                            }
-                                          >
-                                            -
-                                          </Button>
-                                        </InputGroupAddon>
-                                        <InputGroupAddon align="inline-end">
-                                          <Button
-                                            type="button"
-                                            variant="ghost"
-                                            onClick={() =>
-                                              subField.setValue(
-                                                subField
-                                                  .state
-                                                  .value +
-                                                  1,
-                                              )
-                                            }
-                                          >
-                                            +
-                                          </Button>
-                                        </InputGroupAddon>
-                                        {isSubFieldInvalid && (
-                                          <FieldError
-                                            errors={
-                                              subField.state
-                                                .meta.errors
-                                            }
-                                          />
-                                        )}
-                                      </InputGroup>
+                                              .value + 1,
+                                          )
+                                        }
+                                        decrementer={() =>
+                                          subField.setValue(
+                                            subField.state
+                                              .value - 1,
+                                          )
+                                        }
+                                        error={{
+                                          hasErrorField: true,
+                                          errorBoolean:
+                                            isSubFieldInvalid,
+                                          errors:
+                                            subField.state
+                                              .meta.errors,
+                                        }}
+                                      />
                                     </div>
                                   </FieldContent>
                                 </Field>
@@ -462,73 +354,47 @@ const EditStaticTableForm = () => {
                                 >
                                   <FieldContent>
                                     <div className="w-24">
-                                      <InputGroup>
-                                        <InputGroupInput
-                                          id={`tablearray-lost-${index}`}
-                                          name={
-                                            subField.name
-                                          }
-                                          value={
+                                      <CustomNumberInput
+                                        id={subField.name}
+                                        name={subField.name}
+                                        value={
+                                          subField.state
+                                            .value
+                                        }
+                                        onBlur={
+                                          subField.handleBlur
+                                        }
+                                        onChange={(e) =>
+                                          subField.handleChange(
+                                            e.target
+                                              .valueAsNumber,
+                                          )
+                                        }
+                                        aria-invalid={
+                                          isSubFieldInvalid
+                                        }
+                                        placeholder="Förluster"
+                                        incrementer={() =>
+                                          subField.setValue(
                                             subField.state
-                                              .value
-                                          }
-                                          onBlur={
-                                            subField.handleBlur
-                                          }
-                                          onChange={(e) =>
-                                            subField.handleChange(
-                                              e.target
-                                                .valueAsNumber,
-                                            )
-                                          }
-                                          aria-invalid={
-                                            isSubFieldInvalid
-                                          }
-                                          placeholder="Förlust"
-                                          type="number"
-                                          className="appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-                                        />
-                                        <InputGroupAddon align="inline-end">
-                                          <Button
-                                            type="button"
-                                            variant="ghost"
-                                            onClick={() =>
-                                              subField.setValue(
-                                                subField
-                                                  .state
-                                                  .value -
-                                                  1,
-                                              )
-                                            }
-                                          >
-                                            -
-                                          </Button>
-                                        </InputGroupAddon>
-                                        <InputGroupAddon align="inline-end">
-                                          <Button
-                                            type="button"
-                                            variant="ghost"
-                                            onClick={() =>
-                                              subField.setValue(
-                                                subField
-                                                  .state
-                                                  .value +
-                                                  1,
-                                              )
-                                            }
-                                          >
-                                            +
-                                          </Button>
-                                        </InputGroupAddon>
-                                        {isSubFieldInvalid && (
-                                          <FieldError
-                                            errors={
-                                              subField.state
-                                                .meta.errors
-                                            }
-                                          />
-                                        )}
-                                      </InputGroup>
+                                              .value + 1,
+                                          )
+                                        }
+                                        decrementer={() =>
+                                          subField.setValue(
+                                            subField.state
+                                              .value - 1,
+                                          )
+                                        }
+                                        error={{
+                                          hasErrorField: true,
+                                          errorBoolean:
+                                            isSubFieldInvalid,
+                                          errors:
+                                            subField.state
+                                              .meta.errors,
+                                        }}
+                                      />
                                     </div>
                                   </FieldContent>
                                 </Field>
@@ -554,73 +420,47 @@ const EditStaticTableForm = () => {
                                 >
                                   <FieldContent>
                                     <div className="w-24">
-                                      <InputGroup>
-                                        <InputGroupInput
-                                          id={`tablearray-scoredGoals-${index}`}
-                                          name={
-                                            subField.name
-                                          }
-                                          value={
+                                      <CustomNumberInput
+                                        id={subField.name}
+                                        name={subField.name}
+                                        value={
+                                          subField.state
+                                            .value
+                                        }
+                                        onBlur={
+                                          subField.handleBlur
+                                        }
+                                        onChange={(e) =>
+                                          subField.handleChange(
+                                            e.target
+                                              .valueAsNumber,
+                                          )
+                                        }
+                                        aria-invalid={
+                                          isSubFieldInvalid
+                                        }
+                                        placeholder="Gjorda mål"
+                                        incrementer={() =>
+                                          subField.setValue(
                                             subField.state
-                                              .value
-                                          }
-                                          onBlur={
-                                            subField.handleBlur
-                                          }
-                                          onChange={(e) =>
-                                            subField.handleChange(
-                                              e.target
-                                                .valueAsNumber,
-                                            )
-                                          }
-                                          aria-invalid={
-                                            isSubFieldInvalid
-                                          }
-                                          placeholder="Gjorda mål"
-                                          type="number"
-                                          className="appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-                                        />
-                                        <InputGroupAddon align="inline-end">
-                                          <Button
-                                            type="button"
-                                            variant="ghost"
-                                            onClick={() =>
-                                              subField.setValue(
-                                                subField
-                                                  .state
-                                                  .value -
-                                                  1,
-                                              )
-                                            }
-                                          >
-                                            -
-                                          </Button>
-                                        </InputGroupAddon>
-                                        <InputGroupAddon align="inline-end">
-                                          <Button
-                                            type="button"
-                                            variant="ghost"
-                                            onClick={() =>
-                                              subField.setValue(
-                                                subField
-                                                  .state
-                                                  .value +
-                                                  1,
-                                              )
-                                            }
-                                          >
-                                            +
-                                          </Button>
-                                        </InputGroupAddon>
-                                        {isSubFieldInvalid && (
-                                          <FieldError
-                                            errors={
-                                              subField.state
-                                                .meta.errors
-                                            }
-                                          />
-                                        )}
-                                      </InputGroup>
+                                              .value + 1,
+                                          )
+                                        }
+                                        decrementer={() =>
+                                          subField.setValue(
+                                            subField.state
+                                              .value - 1,
+                                          )
+                                        }
+                                        error={{
+                                          hasErrorField: true,
+                                          errorBoolean:
+                                            isSubFieldInvalid,
+                                          errors:
+                                            subField.state
+                                              .meta.errors,
+                                        }}
+                                      />
                                     </div>
                                   </FieldContent>
                                 </Field>
@@ -646,73 +486,47 @@ const EditStaticTableForm = () => {
                                 >
                                   <FieldContent>
                                     <div className="w-24">
-                                      <InputGroup>
-                                        <InputGroupInput
-                                          id={`tablearray-concededGoals-${index}`}
-                                          name={
-                                            subField.name
-                                          }
-                                          value={
+                                      <CustomNumberInput
+                                        id={subField.name}
+                                        name={subField.name}
+                                        value={
+                                          subField.state
+                                            .value
+                                        }
+                                        onBlur={
+                                          subField.handleBlur
+                                        }
+                                        onChange={(e) =>
+                                          subField.handleChange(
+                                            e.target
+                                              .valueAsNumber,
+                                          )
+                                        }
+                                        aria-invalid={
+                                          isSubFieldInvalid
+                                        }
+                                        placeholder="Insläppta mål"
+                                        incrementer={() =>
+                                          subField.setValue(
                                             subField.state
-                                              .value
-                                          }
-                                          onBlur={
-                                            subField.handleBlur
-                                          }
-                                          onChange={(e) =>
-                                            subField.handleChange(
-                                              e.target
-                                                .valueAsNumber,
-                                            )
-                                          }
-                                          aria-invalid={
-                                            isSubFieldInvalid
-                                          }
-                                          placeholder="Insläppta mål"
-                                          type="number"
-                                          className="appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-                                        />
-                                        <InputGroupAddon align="inline-end">
-                                          <Button
-                                            type="button"
-                                            variant="ghost"
-                                            onClick={() =>
-                                              subField.setValue(
-                                                subField
-                                                  .state
-                                                  .value -
-                                                  1,
-                                              )
-                                            }
-                                          >
-                                            -
-                                          </Button>
-                                        </InputGroupAddon>
-                                        <InputGroupAddon align="inline-end">
-                                          <Button
-                                            type="button"
-                                            variant="ghost"
-                                            onClick={() =>
-                                              subField.setValue(
-                                                subField
-                                                  .state
-                                                  .value +
-                                                  1,
-                                              )
-                                            }
-                                          >
-                                            +
-                                          </Button>
-                                        </InputGroupAddon>
-                                        {isSubFieldInvalid && (
-                                          <FieldError
-                                            errors={
-                                              subField.state
-                                                .meta.errors
-                                            }
-                                          />
-                                        )}
-                                      </InputGroup>
+                                              .value + 1,
+                                          )
+                                        }
+                                        decrementer={() =>
+                                          subField.setValue(
+                                            subField.state
+                                              .value - 1,
+                                          )
+                                        }
+                                        error={{
+                                          hasErrorField: true,
+                                          errorBoolean:
+                                            isSubFieldInvalid,
+                                          errors:
+                                            subField.state
+                                              .meta.errors,
+                                        }}
+                                      />
                                     </div>
                                   </FieldContent>
                                 </Field>
@@ -738,73 +552,47 @@ const EditStaticTableForm = () => {
                                 >
                                   <FieldContent>
                                     <div className="w-24">
-                                      <InputGroup>
-                                        <InputGroupInput
-                                          id={`tablearray-goalDifference-${index}`}
-                                          name={
-                                            subField.name
-                                          }
-                                          value={
+                                      <CustomNumberInput
+                                        id={subField.name}
+                                        name={subField.name}
+                                        value={
+                                          subField.state
+                                            .value
+                                        }
+                                        onBlur={
+                                          subField.handleBlur
+                                        }
+                                        onChange={(e) =>
+                                          subField.handleChange(
+                                            e.target
+                                              .valueAsNumber,
+                                          )
+                                        }
+                                        aria-invalid={
+                                          isSubFieldInvalid
+                                        }
+                                        placeholder="Målskillnad"
+                                        incrementer={() =>
+                                          subField.setValue(
                                             subField.state
-                                              .value
-                                          }
-                                          onBlur={
-                                            subField.handleBlur
-                                          }
-                                          onChange={(e) =>
-                                            subField.handleChange(
-                                              e.target
-                                                .valueAsNumber,
-                                            )
-                                          }
-                                          aria-invalid={
-                                            isSubFieldInvalid
-                                          }
-                                          placeholder="Målskillnad"
-                                          type="number"
-                                          className="appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-                                        />
-                                        <InputGroupAddon align="inline-end">
-                                          <Button
-                                            type="button"
-                                            variant="ghost"
-                                            onClick={() =>
-                                              subField.setValue(
-                                                subField
-                                                  .state
-                                                  .value -
-                                                  1,
-                                              )
-                                            }
-                                          >
-                                            -
-                                          </Button>
-                                        </InputGroupAddon>
-                                        <InputGroupAddon align="inline-end">
-                                          <Button
-                                            type="button"
-                                            variant="ghost"
-                                            onClick={() =>
-                                              subField.setValue(
-                                                subField
-                                                  .state
-                                                  .value +
-                                                  1,
-                                              )
-                                            }
-                                          >
-                                            +
-                                          </Button>
-                                        </InputGroupAddon>
-                                        {isSubFieldInvalid && (
-                                          <FieldError
-                                            errors={
-                                              subField.state
-                                                .meta.errors
-                                            }
-                                          />
-                                        )}
-                                      </InputGroup>
+                                              .value + 1,
+                                          )
+                                        }
+                                        decrementer={() =>
+                                          subField.setValue(
+                                            subField.state
+                                              .value - 1,
+                                          )
+                                        }
+                                        error={{
+                                          hasErrorField: true,
+                                          errorBoolean:
+                                            isSubFieldInvalid,
+                                          errors:
+                                            subField.state
+                                              .meta.errors,
+                                        }}
+                                      />
                                     </div>
                                   </FieldContent>
                                 </Field>
@@ -830,73 +618,47 @@ const EditStaticTableForm = () => {
                                 >
                                   <FieldContent>
                                     <div className="w-24">
-                                      <InputGroup>
-                                        <InputGroupInput
-                                          id={`tablearray-points-${index}`}
-                                          name={
-                                            subField.name
-                                          }
-                                          value={
+                                      <CustomNumberInput
+                                        id={subField.name}
+                                        name={subField.name}
+                                        value={
+                                          subField.state
+                                            .value
+                                        }
+                                        onBlur={
+                                          subField.handleBlur
+                                        }
+                                        onChange={(e) =>
+                                          subField.handleChange(
+                                            e.target
+                                              .valueAsNumber,
+                                          )
+                                        }
+                                        aria-invalid={
+                                          isSubFieldInvalid
+                                        }
+                                        placeholder="Poäng"
+                                        incrementer={() =>
+                                          subField.setValue(
                                             subField.state
-                                              .value
-                                          }
-                                          onBlur={
-                                            subField.handleBlur
-                                          }
-                                          onChange={(e) =>
-                                            subField.handleChange(
-                                              e.target
-                                                .valueAsNumber,
-                                            )
-                                          }
-                                          aria-invalid={
-                                            isSubFieldInvalid
-                                          }
-                                          placeholder="Poäng"
-                                          type="number"
-                                          className="appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-                                        />
-                                        <InputGroupAddon align="inline-end">
-                                          <Button
-                                            type="button"
-                                            variant="ghost"
-                                            onClick={() =>
-                                              subField.setValue(
-                                                subField
-                                                  .state
-                                                  .value -
-                                                  1,
-                                              )
-                                            }
-                                          >
-                                            -
-                                          </Button>
-                                        </InputGroupAddon>
-                                        <InputGroupAddon align="inline-end">
-                                          <Button
-                                            type="button"
-                                            variant="ghost"
-                                            onClick={() =>
-                                              subField.setValue(
-                                                subField
-                                                  .state
-                                                  .value +
-                                                  1,
-                                              )
-                                            }
-                                          >
-                                            +
-                                          </Button>
-                                        </InputGroupAddon>
-                                        {isSubFieldInvalid && (
-                                          <FieldError
-                                            errors={
-                                              subField.state
-                                                .meta.errors
-                                            }
-                                          />
-                                        )}
-                                      </InputGroup>
+                                              .value + 1,
+                                          )
+                                        }
+                                        decrementer={() =>
+                                          subField.setValue(
+                                            subField.state
+                                              .value - 1,
+                                          )
+                                        }
+                                        error={{
+                                          hasErrorField: true,
+                                          errorBoolean:
+                                            isSubFieldInvalid,
+                                          errors:
+                                            subField.state
+                                              .meta.errors,
+                                        }}
+                                      />
                                     </div>
                                   </FieldContent>
                                 </Field>
