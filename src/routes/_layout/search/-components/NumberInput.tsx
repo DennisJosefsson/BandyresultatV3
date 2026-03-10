@@ -18,12 +18,16 @@ type NumberInputProps = {
   >
   label: string
   placeholder: string
+  min?: number
+  max?: number
 }
 
 const NumberInput = ({
   field,
   label,
   placeholder,
+  min,
+  max,
 }: NumberInputProps) => {
   const searchField = useSearch({
     from: '/_layout/search',
@@ -36,7 +40,7 @@ const NumberInput = ({
     event: ChangeEvent<HTMLInputElement>,
   ) => {
     const value = event.target.value
-    console.log(value)
+
     if (value === '') {
       navigate({
         resetScroll: false,
@@ -107,6 +111,8 @@ const NumberInput = ({
         placeholder={placeholder}
         incrementer={handleIncrement}
         decrementer={handleDecrement}
+        min={min}
+        max={max}
       />
     </div>
   )

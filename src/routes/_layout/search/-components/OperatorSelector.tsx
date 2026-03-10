@@ -62,11 +62,13 @@ const OperatorSelector = ({
     : array.find((lab) => lab.value === defaultValue)?.label
 
   return (
-    <div>
-      <Label>{label}</Label>
+    <div className="grid w-full max-w-sm items-center gap-1.5 px-1">
+      <Label htmlFor={field}>{label}</Label>
       <Select
         value={searchField ?? defaultValue}
         onValueChange={onValueChange}
+        name={field}
+        id={field}
       >
         <SelectTrigger className="w-[280px]">
           <SelectValue placeholder="Välj">

@@ -1,10 +1,13 @@
-import { orderSelection, orderVariableSelection } from './arrays/arrays'
+import {
+  orderSelection,
+  orderVariableSelection,
+} from './arrays/arrays'
 import LimitSelection from './LimitSelection'
 import OperatorSelector from './OperatorSelector'
 
 const OrderFormComponent = () => {
   return (
-    <div className="bg-background mb-2 flex w-[18rem] flex-col rounded lg:w-full">
+    <div className="mb-2 flex w-[18rem] flex-col rounded lg:w-full">
       <div className="grid grid-cols-1 lg:grid-cols-3">
         <div className="flex max-w-[16rem] flex-col">
           <LimitSelection />
