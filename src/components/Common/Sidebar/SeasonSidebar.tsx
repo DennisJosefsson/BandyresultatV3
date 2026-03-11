@@ -6,6 +6,7 @@ import {
 } from '@tanstack/react-router'
 import {
   CalendarIcon,
+  CalendarSearchIcon,
   ChartLineIcon,
   ChevronsLeftRightEllipsisIcon,
   FolderKanbanIcon,
@@ -114,6 +115,27 @@ export function DefaultSeasonSidebar({
 }) {
   return (
     <SidebarMenuSub>
+      <SidebarMenuSubItem>
+        <SidebarMenuSubButton
+          render={
+            <Link
+              to="/seasons"
+              params={{ page: 1 }}
+              search={{ women }}
+              activeOptions={{
+                includeSearch: false,
+                exact: true,
+              }}
+              activeProps={{ className: `font-bold` }}
+            >
+              <span>
+                <CalendarSearchIcon className="size-4" />
+              </span>
+              <span>Säsongslista</span>
+            </Link>
+          }
+        />
+      </SidebarMenuSubItem>
       <SidebarMenuSubItem>
         <SidebarMenuSubButton
           render={

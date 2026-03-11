@@ -12,7 +12,6 @@ import {
   TableOfContentsIcon,
   User,
 } from 'lucide-react'
-import { useState } from 'react'
 
 import {
   DefaultSeasonSidebar,
@@ -34,7 +33,7 @@ import { useGetFirstAndLastSeason } from '@/routes/_layout/seasons/$year/-hooks/
 
 import { SignedIn, SignedOut } from '@clerk/clerk-react'
 import { MaratonSidebar } from './MaratonSidebar'
-import { SearchSidebar } from './SeearchSidebar'
+import { SearchSidebar } from './SearchSidebar'
 import { TeamSidebar } from './TeamSidebar'
 
 const AppSidebar = () => {
@@ -65,72 +64,11 @@ const AppSidebar = () => {
       ? 'season'
       : teamsRoute
         ? 'teams'
-        : null
-
-  const [openCollapse, setOpenCollapse] = useState<
-    'season' | 'maraton' | 'teams' | 'search' | null
-  >(defaultOpen)
+        : searchRoute
+          ? 'search'
+          : null
 
   const { lastSeason } = useGetFirstAndLastSeason()
-
-  const openSeason = (fromLink: boolean) => {
-    if (
-      openCollapse === 'season' &&
-      (seasonRoute || seasonListRoute) &&
-      fromLink
-    ) {
-      return
-    } else if (
-      openCollapse === 'season' &&
-      (seasonRoute || seasonListRoute)
-    ) {
-      setOpenCollapse(null)
-    } else {
-      setOpenCollapse('season')
-    }
-  }
-
-  const openMaraton = (fromLink: boolean) => {
-    if (
-      openCollapse === 'maraton' &&
-      maratonRoute &&
-      fromLink
-    ) {
-      return
-    } else if (openCollapse === 'maraton' && maratonRoute) {
-      setOpenCollapse(null)
-    } else {
-      setOpenCollapse('maraton')
-    }
-  }
-
-  const openTeams = (fromLink: boolean) => {
-    if (
-      openCollapse === 'teams' &&
-      teamsRoute &&
-      fromLink
-    ) {
-      return
-    } else if (openCollapse === 'teams' && teamsRoute) {
-      setOpenCollapse(null)
-    } else {
-      setOpenCollapse('teams')
-    }
-  }
-
-  const openSearch = (fromLink: boolean) => {
-    if (
-      openCollapse === 'search' &&
-      searchRoute &&
-      fromLink
-    ) {
-      return
-    } else if (openCollapse === 'search' && searchRoute) {
-      setOpenCollapse(null)
-    } else {
-      setOpenCollapse('search')
-    }
-  }
 
   return (
     <Sidebar
@@ -140,8 +78,7 @@ const AppSidebar = () => {
       <SidebarContent>
         <SidebarMenu>
           <Collapsible
-            open={openCollapse === 'season'}
-            onOpenChange={() => openSeason(false)}
+            open={defaultOpen === 'season'}
             className="group/collapsible"
           >
             <SidebarMenuItem>
@@ -151,7 +88,6 @@ const AppSidebar = () => {
                     to="/seasons"
                     search={{ women, page: 1 }}
                     className="text-foreground hover:text-foreground transition-colors"
-                    onClick={() => openSeason(true)}
                     activeProps={{ className: `font-bold` }}
                   >
                     <span>
@@ -164,12 +100,6 @@ const AppSidebar = () => {
                   </Link>
                 }
               />
-
-              {/* <CollapsibleTrigger asChild>
-                <SidebarMenuAction>
-                  <ChevronDown className="ml-auto h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
-                </SidebarMenuAction>
-              </CollapsibleTrigger> */}
 
               <CollapsibleContent>
                 {!seasonRoute && (
@@ -184,8 +114,7 @@ const AppSidebar = () => {
             </SidebarMenuItem>
           </Collapsible>
           <Collapsible
-            open={openCollapse === 'teams'}
-            onOpenChange={() => openTeams(false)}
+            open={defaultOpen === 'teams'}
             className="group/collapsible"
           >
             <SidebarMenuItem>
@@ -196,7 +125,6 @@ const AppSidebar = () => {
                     search={{ women }}
                     className="text-foreground hover:text-foreground transition-colors"
                     activeProps={{ className: `font-bold` }}
-                    onClick={() => openTeams(true)}
                   >
                     <span>
                       <ShieldUserIcon className="size-4" />
@@ -206,19 +134,13 @@ const AppSidebar = () => {
                 }
               />
 
-              {/* <CollapsibleTrigger asChild>
-                <SidebarMenuAction>
-                  <ChevronDown className="ml-auto h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
-                </SidebarMenuAction>
-              </CollapsibleTrigger> */}
               <CollapsibleContent>
                 <TeamSidebar />
               </CollapsibleContent>
             </SidebarMenuItem>
           </Collapsible>
           <Collapsible
-            open={openCollapse === 'search'}
-            onOpenChange={() => openSearch(false)}
+            open={defaultOpen === 'search'}
             className="group/collapsible"
           >
             <SidebarMenuItem>
@@ -238,11 +160,6 @@ const AppSidebar = () => {
                 }
               />
 
-              {/* <CollapsibleTrigger asChild>
-                <SidebarMenuAction>
-                  <ChevronDown className="ml-auto h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
-                </SidebarMenuAction>
-              </CollapsibleTrigger> */}
               <CollapsibleContent>
                 <SearchSidebar />
               </CollapsibleContent>
@@ -250,8 +167,7 @@ const AppSidebar = () => {
           </Collapsible>
 
           <Collapsible
-            open={openCollapse === 'maraton'}
-            onOpenChange={() => openMaraton(false)}
+            open={defaultOpen === 'maraton'}
             className="group/collapsible"
           >
             <SidebarMenuItem>
@@ -263,7 +179,6 @@ const AppSidebar = () => {
                     search={{ women }}
                     className="text-foreground hover:text-foreground transition-colors"
                     activeProps={{ className: `font-bold` }}
-                    onClick={() => openMaraton(true)}
                   >
                     <span>
                       <TableOfContentsIcon className="size-4" />
@@ -322,11 +237,12 @@ const AppSidebar = () => {
           {/* </SignedIn> */}
         </SidebarMenu>
       </SidebarContent>
-      <SidebarFooter>
+      <SidebarFooter className="p-0">
         <SidebarMenu>
           <SidebarMenuItem>
             <SignedIn>
               <SidebarMenuButton
+                className="p-0"
                 render={
                   <Link
                     to="/logout"
