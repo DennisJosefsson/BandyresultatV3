@@ -1,6 +1,12 @@
-import type { Categories, OperatorValues } from '@/lib/types/search'
+import type {
+  Categories,
+  OperatorValues,
+} from '@/lib/types/search'
 
-export const orderSelection: Array<{ value: OperatorValues; label: string }> = [
+export const orderSelection: Array<{
+  value: OperatorValues
+  label: string
+}> = [
   { value: 'asc', label: 'Stigande' },
   { value: 'desc', label: 'Fallande' },
 ]
@@ -17,31 +23,77 @@ export const orderVariableSelection: Array<{
 ]
 
 export const selectedGenderArray = [
-  { value: 'all', label: 'Alla' },
-  { value: 'men', label: 'Herrar' },
-  { value: 'women', label: 'Damer' },
+  {
+    value: 'all',
+    label: 'Alla',
+    description: 'Både dam- och herrmatcher.',
+  },
+  {
+    value: 'men',
+    label: 'Herrar',
+    description: 'Enbart herrmatcher.',
+  },
+  {
+    value: 'women',
+    label: 'Damer',
+    description: 'Enbart dammatcher.',
+  },
 ]
 
 export const homeGameArray = [
-  { value: 'all', label: 'Alla' },
-  { value: 'home', label: 'Hemma' },
-  { value: 'away', label: 'Borta' },
+  {
+    value: 'all',
+    label: 'Alla',
+    description: 'Både hemma- och bortamatcher.',
+  },
+  {
+    value: 'home',
+    label: 'Hemma',
+    description: 'Enbart hemmamatcher.',
+  },
+  {
+    value: 'away',
+    label: 'Borta',
+    description: 'Enbart bortamatcher.',
+  },
 ]
 
 export const gameResultArray = [
-  { value: 'all', label: 'Alla' },
-  { value: 'win', label: 'Vinst' },
-  { value: 'lost', label: 'Förlust' },
-  { value: 'draw', label: 'Oavgjort' },
+  {
+    value: 'all',
+    label: 'Alla',
+    description: 'Alla matcher, oavsett resultat',
+  },
+  {
+    value: 'win',
+    label: 'Vinst',
+    description: 'Enbart vinstmatcher.',
+  },
+  {
+    value: 'lost',
+    label: 'Förlust',
+    description: 'Enbart förlustmatcher.',
+  },
+  {
+    value: 'draw',
+    label: 'Oavgjort',
+    description: 'Enbart oavgjorda matcher.',
+  },
 ]
 
-export const operatorSelection: Array<{ value: OperatorValues; label: string }> = [
+export const operatorSelection: Array<{
+  value: OperatorValues
+  label: string
+}> = [
   { value: 'gte', label: 'Lika eller större än' },
   { value: 'lte', label: 'Lika eller mindre än' },
   { value: 'eq', label: 'Lika' },
 ]
 
-export const categoryArrayValues: Array<{ category: Categories; name: string }> = [
+export const categoryArrayValues: Array<{
+  category: Categories
+  name: string
+}> = [
   { category: 'regular', name: 'Grundserie' },
   { category: 'qualification', name: 'Kvalserie' },
   { category: 'playoffseries', name: 'Slutspelsserie' },
@@ -55,7 +107,10 @@ export const levelArray = [
   { value: '1.0', label: 'Högsta divisionen' },
   { value: '1.5', label: 'Kval till högsta divisionen' },
   { value: '2.0', label: 'Näst högsta divisionen' },
-  { value: '2.5', label: 'Kval till näst högsta divisionen' },
+  {
+    value: '2.5',
+    label: 'Kval till näst högsta divisionen',
+  },
   { value: '3.0', label: 'Tredje divisionen' },
 ]
 

@@ -2,20 +2,11 @@ import {
   useNavigate,
   useSearch,
 } from '@tanstack/react-router'
-import { useCallback, useEffect, useState } from 'react'
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/base/ui/card'
 import type { CheckedState } from '@/components/base/ui/checkbox'
-import { Checkbox } from '@/components/base/ui/checkbox'
-import { Label } from '@/components/base/ui/label'
 import type { Categories } from '@/lib/types/search'
 
+import CheckboxBadge from '@/components/Common/CheckboxBadge'
 import { categoryArrayValues } from './arrays/arrays'
 
 const initCategories = [
@@ -33,113 +24,94 @@ const CategoryArray = () => {
     from: '/_layout/search',
     select: (search) => search.categoryArray,
   })
-  const [selectedCategories, setSelectedCategories] =
-    useState<Array<Categories>>(
-      categoryArray ?? initCategories,
-    )
 
   const navigate = useNavigate({ from: '/search' })
 
-  useEffect(() => {
-    navigate({
-      search: (prev) => ({
-        ...prev,
-        categoryArray: selectedCategories,
-      }),
-    })
-  }, [selectedCategories, navigate])
-
-  const onCheckedChange = useCallback(
-    (checked: CheckedState, category: Categories) => {
-      if (checked) {
-        setSelectedCategories((prev) => [...prev, category])
-
-        navigate({
-          search: (prev) => {
-            if (prev.categoryArray) {
-              return {
-                ...prev,
-                categoryArray: [
-                  ...prev.categoryArray,
-                  category,
-                ],
-              }
-            } else {
-              return {
-                ...prev,
-                categoryArray: initCategories,
-              }
+  const onCheckedChange = (
+    checked: CheckedState,
+    category: Categories,
+  ) => {
+    if (checked) {
+      navigate({
+        search: (prev) => {
+          if (prev.categoryArray) {
+            return {
+              ...prev,
+              categoryArray: [
+                ...prev.categoryArray,
+                category,
+              ],
             }
-          },
-        })
-      } else {
-        setSelectedCategories((prev) =>
-          prev.filter((cat) => cat !== category),
-        )
-        navigate({
-          search: (prev) => {
-            if (
-              prev.categoryArray &&
-              prev.categoryArray.includes(category)
-            ) {
-              return {
-                ...prev,
-                categoryArray: [
-                  ...prev.categoryArray.filter(
-                    (cat) => cat !== category,
-                  ),
-                ],
-              }
-            } else {
-              return {
-                ...prev,
-                categoryArray: initCategories.filter(
+          } else {
+            return {
+              ...prev,
+              categoryArray: initCategories,
+            }
+          }
+        },
+      })
+    } else {
+      navigate({
+        search: (prev) => {
+          if (
+            prev.categoryArray &&
+            prev.categoryArray.includes(category)
+          ) {
+            return {
+              ...prev,
+              categoryArray: [
+                ...prev.categoryArray.filter(
                   (cat) => cat !== category,
                 ),
-              }
+              ],
             }
-          },
-        })
-      }
-    },
-    [navigate],
-  )
+          } else {
+            return {
+              ...prev,
+              categoryArray: initCategories.filter(
+                (cat) => cat !== category,
+              ),
+            }
+          }
+        },
+      })
+    }
+  }
   return (
     <div>
-      <Card>
-        <CardHeader>
-          <CardTitle>Matchkategorier</CardTitle>
-          <CardDescription>
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2 mb-2">
+          <h4 className="text-sm">Matchkategorier</h4>
+          <h6 className="text-[10px[">
             Välj minst en kategori.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
+          </h6>
+        </div>
+        <div>
           <div className="grid grid-cols-1 gap-y-2 md:grid-cols-2 lg:grid-cols-3 lg:gap-x-12">
             {categoryArrayValues.map((cat) => {
               return (
-                <div
-                  className="flex flex-row items-center justify-between"
+                <CheckboxBadge
                   key={cat.category}
-                >
-                  <Label htmlFor={cat.category}>
-                    {cat.name}
-                  </Label>
-                  <Checkbox
-                    name="categoryArray"
-                    id={cat.category}
-                    checked={selectedCategories.includes(
-                      cat.category,
-                    )}
-                    onCheckedChange={(checked) =>
-                      onCheckedChange(checked, cat.category)
-                    }
-                  />
-                </div>
+                  name="categoryArray"
+                  id={cat.category}
+                  checked={
+                    categoryArray
+                      ? categoryArray.includes(cat.category)
+                      : initCategories.includes(
+                          cat.category,
+                        )
+                  }
+                  onCheckedChange={(checked) =>
+                    onCheckedChange(checked, cat.category)
+                  }
+                  title={cat.name}
+                  orientation="horizontal"
+                />
               )
             })}
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   )
 }

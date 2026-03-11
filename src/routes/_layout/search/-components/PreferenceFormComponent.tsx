@@ -8,23 +8,26 @@ import RadioComponent from './RadioComponent'
 
 const PreferenceFormComponent = () => {
   return (
-    <div className="bg-background mb-2 flex w-[18rem] flex-col rounded lg:w-full">
+    <div className="mb-2 flex w-[18rem] flex-col lg:w-full">
       <div className="grid grid-cols-1 gap-y-2">
         <CategoryArray />
         <RadioComponent
           array={gameResultArray}
           label="Matchresultat"
           field="gameResult"
+          defaultValue='all'
         />
         <RadioComponent
           array={homeGameArray}
           label="Hemma/Borta"
           field="homeGame"
+          defaultValue='all'
         />
         <RadioComponent
           array={selectedGenderArray}
           label="Dam/Herr"
           field="selectedGender"
+          defaultValue='all'
         />
       </div>
     </div>
