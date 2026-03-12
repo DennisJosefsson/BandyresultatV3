@@ -20,6 +20,5 @@
     "drizzle-orm/mysql-core",
     "drizzle-orm/sqlite-core",
     "drizzle-orm/singlestore-core"
-  ],
-  "oxc.path.node": "/home/dennis/.nvm/versions/node/v22.17.0/bin/node"
+  ]
 }
