@@ -18,8 +18,6 @@ const Header = () => {
     from: '__root__',
     select: (search) => search.women,
   })
-  // const matches = useMediaQuery('(min-width: 430px)')
-  // const { isLoaded } = useAuth()
 
   const updateWomen = () => {
     navigate({
@@ -36,26 +34,30 @@ const Header = () => {
   return (
     <header className="bg-primary-foreground sticky top-0 z-50 flex w-full items-center border-b mb-2">
       <div className="flex h-(--header-height) w-full items-center justify-between gap-2">
-        <div className="flex flex-row items-center gap-4">
+        <div className="flex flex-row items-center gap-2">
           <Button
             className="h-8 w-8"
             variant="ghost"
             size="icon"
             onClick={toggleSidebar}
           >
-            <SidebarIcon />
+            <SidebarIcon className="size-3 sm:size-4" />
           </Button>
           <RouterBreadcrumb />
         </div>
-        <div className="mr-2 flex flex-row items-center gap-6">
-          <div className="flex w-full items-center space-x-2">
+        <div className="mr-2 flex flex-row items-center gap-2 sm:gap-6">
+          <div className="flex w-full items-center space-x-1 sm:space-x-2">
             <Switch
+              size="sm"
               id="women"
               defaultChecked={women}
               checked={women}
               onCheckedChange={updateWomen}
             />
-            <Label htmlFor="women">
+            <Label
+              className="text-[10px] md:text-xs lg:text-sm"
+              htmlFor="women"
+            >
               {women ? 'Herrar' : 'Damer'}
             </Label>
           </div>
