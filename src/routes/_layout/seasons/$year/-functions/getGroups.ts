@@ -44,7 +44,7 @@ export const getGroups = createServerFn({ method: 'GET' })
   .handler(
     async ({ data: { year, women } }): GroupReturn => {
       const seasonYear = seasonIdCheck.parse(year)
-      const breadCrumb = `${women === true ? 'Damer' : 'Herrar'} ${seasonYear!}`
+      const breadCrumb = `${seasonYear!}`
       const title = `Bandyresultat - ${women === true ? 'Damer' : 'Herrar'} ${seasonYear!}`
       const url = `https://bandyresultat.se/seasons/${year}?women=${women}`
       const description = `Säsongen ${seasonYear} ${women ? 'damer' : 'herrar'}`
