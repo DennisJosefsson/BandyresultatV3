@@ -11,7 +11,7 @@ type StatsProps = {
 
 const StatsComponent = ({ stats }: StatsProps) => {
   return (
-    <div className="grid grid-cols-1 gap-20 lg:grid-cols-2">
+    <div className="grid grid-cols-1 gap-y-6 lg:gap-y-10 lg:gap-x-10 2xl:gap-x-20 lg:grid-cols-2">
       <GoalData goalData={stats} />
       <GameData gameData={stats} />
       <GoalStats goalData={stats} />
