@@ -12,13 +12,20 @@ export function SearchSidebar() {
     from: '__root__',
     select: (s) => s.women,
   })
-  const { open } = useSidebar()
+  const { open, isMobile, setOpenMobile } = useSidebar()
+
+  const toggleOnMobile = () => {
+    if (isMobile) {
+      setOpenMobile(false)
+    }
+  }
 
   if (!open) return null
   return (
     <SidebarMenuSub>
       <SidebarMenuSubItem>
         <SidebarMenuSubButton
+          onClick={toggleOnMobile}
           render={
             <Link
               to="/search"
@@ -29,13 +36,14 @@ export function SearchSidebar() {
               }}
               activeProps={{ className: `font-bold` }}
             >
-              <span>Sök</span>
+              <span className="md:text-sm">Sök</span>
             </Link>
           }
         />
       </SidebarMenuSubItem>
       <SidebarMenuSubItem>
         <SidebarMenuSubButton
+          onClick={toggleOnMobile}
           render={
             <Link
               to="/search/help"
@@ -43,7 +51,7 @@ export function SearchSidebar() {
               activeOptions={{ includeSearch: false }}
               activeProps={{ className: `font-bold` }}
             >
-              <span>Hjälp</span>
+              <span className="md:text-sm">Hjälp</span>
             </Link>
           }
         />

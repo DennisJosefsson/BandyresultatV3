@@ -28,6 +28,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from '@/components/base/ui/sidebar'
 import { useGetFirstAndLastSeason } from '@/routes/_layout/seasons/$year/-hooks/useGetFirstAndLastSeason'
 
@@ -41,6 +42,9 @@ const AppSidebar = () => {
     from: '__root__',
     select: (search) => search.women,
   })
+
+  const { isMobile, setOpenMobile } = useSidebar()
+
   const seasonRoute = useMatches().some(
     (m) => m.routeId === '/_layout/seasons/$year',
   )
@@ -70,6 +74,14 @@ const AppSidebar = () => {
 
   const { lastSeason } = useGetFirstAndLastSeason()
 
+  const toggleOnMobile = () => {
+    if (isMobile) {
+      setOpenMobile(false)
+    }
+  }
+
+  
+
   return (
     <Sidebar
       className="font-poppins top-(--header-height) h-[calc(100svh-var(--header-height))]! mt-2"
@@ -83,6 +95,7 @@ const AppSidebar = () => {
           >
             <SidebarMenuItem>
               <SidebarMenuButton
+                
                 render={
                   <Link
                     to="/seasons"
@@ -119,6 +132,7 @@ const AppSidebar = () => {
           >
             <SidebarMenuItem>
               <SidebarMenuButton
+                onClick={toggleOnMobile}
                 render={
                   <Link
                     to="/teams"
@@ -145,6 +159,7 @@ const AppSidebar = () => {
           >
             <SidebarMenuItem>
               <SidebarMenuButton
+                onClick={toggleOnMobile}
                 render={
                   <Link
                     to="/search"
@@ -172,6 +187,7 @@ const AppSidebar = () => {
           >
             <SidebarMenuItem>
               <SidebarMenuButton
+                onClick={toggleOnMobile}
                 render={
                   <Link
                     to="/maraton/table/$maratonTable"
@@ -197,6 +213,7 @@ const AppSidebar = () => {
           </Collapsible>
           <SidebarMenuItem>
             <SidebarMenuButton
+              onClick={toggleOnMobile}
               render={
                 <Link
                   to="/about"
@@ -217,6 +234,7 @@ const AppSidebar = () => {
           {/* <SignedIn> */}
           <SidebarMenuItem>
             <SidebarMenuButton
+              onClick={toggleOnMobile}
               render={
                 <Link
                   to="/dashboard"
@@ -242,6 +260,7 @@ const AppSidebar = () => {
           <SidebarMenuItem>
             <SignedIn>
               <SidebarMenuButton
+                onClick={toggleOnMobile}
                 className="p-0"
                 render={
                   <Link
@@ -265,6 +284,7 @@ const AppSidebar = () => {
 
             <SignedOut>
               <SidebarMenuButton
+                onClick={toggleOnMobile}
                 render={
                   <Link
                     to="/login"

@@ -15,7 +15,13 @@ export function MaratonSidebar() {
     from: '__root__',
     select: (s) => s.women,
   })
-  const { open } = useSidebar()
+  const { open, isMobile, setOpenMobile } = useSidebar()
+
+  const toggleOnMobile = () => {
+    if (isMobile) {
+      setOpenMobile(false)
+    }
+  }
 
   if (!open) return null
   return (
@@ -26,6 +32,7 @@ export function MaratonSidebar() {
           <SidebarMenuSub>
             <SidebarMenuSubItem>
               <SidebarMenuSubButton
+                onClick={toggleOnMobile}
                 render={
                   <Link
                     to="/maraton/table/$maratonTable"
@@ -36,13 +43,14 @@ export function MaratonSidebar() {
                     activeOptions={{ includeSearch: false }}
                     activeProps={{ className: `font-bold` }}
                   >
-                    <span>Alla</span>
+                    <span className="md:text-sm">Alla</span>
                   </Link>
                 }
               />
             </SidebarMenuSubItem>
             <SidebarMenuSubItem>
               <SidebarMenuSubButton
+                onClick={toggleOnMobile}
                 render={
                   <Link
                     to="/maraton/table/$maratonTable"
@@ -53,13 +61,16 @@ export function MaratonSidebar() {
                     activeOptions={{ includeSearch: false }}
                     activeProps={{ className: `font-bold` }}
                   >
-                    <span>Hemma</span>
+                    <span className="md:text-sm">
+                      Hemma
+                    </span>
                   </Link>
                 }
               />
             </SidebarMenuSubItem>
             <SidebarMenuSubItem>
               <SidebarMenuSubButton
+                onClick={toggleOnMobile}
                 render={
                   <Link
                     to="/maraton/table/$maratonTable"
@@ -70,7 +81,9 @@ export function MaratonSidebar() {
                     activeOptions={{ includeSearch: false }}
                     activeProps={{ className: `font-bold` }}
                   >
-                    <span>Borta</span>
+                    <span className="md:text-sm">
+                      Borta
+                    </span>
                   </Link>
                 }
               />
@@ -85,6 +98,7 @@ export function MaratonSidebar() {
           <SidebarMenuSub>
             <SidebarMenuSubItem>
               <SidebarMenuSubButton
+                onClick={toggleOnMobile}
                 render={
                   <Link
                     to="/maraton/records/stats"
@@ -92,13 +106,16 @@ export function MaratonSidebar() {
                     activeOptions={{ includeSearch: false }}
                     activeProps={{ className: `font-bold` }}
                   >
-                    <span>Statistik</span>
+                    <span className="md:text-sm">
+                      Statistik
+                    </span>
                   </Link>
                 }
               />
             </SidebarMenuSubItem>
             <SidebarMenuSubItem>
               <SidebarMenuSubButton
+                onClick={toggleOnMobile}
                 render={
                   <Link
                     to="/maraton/records/points"
@@ -106,13 +123,16 @@ export function MaratonSidebar() {
                     activeOptions={{ includeSearch: false }}
                     activeProps={{ className: `font-bold` }}
                   >
-                    <span>Poäng</span>
+                    <span className="md:text-sm">
+                      Poäng
+                    </span>
                   </Link>
                 }
               />
             </SidebarMenuSubItem>
             <SidebarMenuSubItem>
               <SidebarMenuSubButton
+                onClick={toggleOnMobile}
                 render={
                   <Link
                     to="/maraton/records/scored"
@@ -120,13 +140,16 @@ export function MaratonSidebar() {
                     activeOptions={{ includeSearch: false }}
                     activeProps={{ className: `font-bold` }}
                   >
-                    <span>Gjorda mål</span>
+                    <span className="md:text-sm">
+                      Gjorda mål
+                    </span>
                   </Link>
                 }
               />
             </SidebarMenuSubItem>
             <SidebarMenuSubItem>
               <SidebarMenuSubButton
+                onClick={toggleOnMobile}
                 render={
                   <Link
                     to="/maraton/records/conceded"
@@ -134,13 +157,16 @@ export function MaratonSidebar() {
                     activeOptions={{ includeSearch: false }}
                     activeProps={{ className: `font-bold` }}
                   >
-                    <span>Insläppta mål</span>
+                    <span className="md:text-sm">
+                      Insläppta mål
+                    </span>
                   </Link>
                 }
               />
             </SidebarMenuSubItem>
             <SidebarMenuSubItem>
               <SidebarMenuSubButton
+                onClick={toggleOnMobile}
                 render={
                   <Link
                     to="/maraton/records/streaks"
@@ -148,7 +174,9 @@ export function MaratonSidebar() {
                     activeOptions={{ includeSearch: false }}
                     activeProps={{ className: `font-bold` }}
                   >
-                    <span>Rekordsviter</span>
+                    <span className="md:text-sm">
+                      Rekordsviter
+                    </span>
                   </Link>
                 }
               />
@@ -162,6 +190,7 @@ export function MaratonSidebar() {
           <SidebarMenuSub>
             <SidebarMenuSubItem>
               <SidebarMenuSubButton
+                onClick={toggleOnMobile}
                 render={
                   <Link
                     to="/maraton/help"
@@ -169,7 +198,9 @@ export function MaratonSidebar() {
                     activeOptions={{ includeSearch: false }}
                     activeProps={{ className: `font-bold` }}
                   >
-                    <span>Hjälp</span>
+                    <span className="md:text-sm">
+                      Hjälp
+                    </span>
                   </Link>
                 }
               />

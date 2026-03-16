@@ -12,13 +12,19 @@ export function TeamSidebar() {
     from: '__root__',
     select: (s) => s.women,
   })
-  const { open } = useSidebar()
+  const { isMobile, setOpenMobile } = useSidebar()
+  const toggleOnMobile = () => {
+    if (isMobile) {
+      setOpenMobile(false)
+    }
+  }
 
   if (!open) return null
   return (
     <SidebarMenuSub>
       <SidebarMenuSubItem>
         <SidebarMenuSubButton
+          onClick={toggleOnMobile}
           render={
             <Link
               to="/teams"
@@ -29,13 +35,14 @@ export function TeamSidebar() {
               }}
               activeProps={{ className: `font-bold` }}
             >
-              <span>Laglista</span>
+              <span className="md:text-sm">Laglista</span>
             </Link>
           }
         />
       </SidebarMenuSubItem>
       <SidebarMenuSubItem>
         <SidebarMenuSubButton
+          onClick={toggleOnMobile}
           render={
             <Link
               to="/teams/map"
@@ -43,7 +50,7 @@ export function TeamSidebar() {
               activeOptions={{ includeSearch: false }}
               activeProps={{ className: `font-bold` }}
             >
-              <span>Karta</span>
+              <span className="md:text-sm">Karta</span>
             </Link>
           }
         />

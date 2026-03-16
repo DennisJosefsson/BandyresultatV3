@@ -33,12 +33,18 @@ export function SeasonSidebar() {
   const women = route.useSearch({
     select: (search) => search.women,
   })
-  const { open } = useSidebar()
+  const { open, isMobile, setOpenMobile } = useSidebar()
 
   const { lastSeason } = useGetFirstAndLastSeason()
   const params = useParams({ strict: false })
 
   const data = route.useLoaderData()
+
+  const toggleOnMobile = () => {
+    if (isMobile) {
+      setOpenMobile(false)
+    }
+  }
 
   if (
     data === undefined ||
@@ -76,6 +82,7 @@ export function SeasonSidebar() {
                     key={item.serieId.toString()}
                   >
                     <SidebarMenuSubButton
+                      onClick={toggleOnMobile}
                       render={
                         <Link
                           to="."
@@ -87,7 +94,7 @@ export function SeasonSidebar() {
                             women: prev.women,
                           })}
                         >
-                          <span className="truncate">
+                          <span className="md:text-sm truncate">
                             {item.name}
                           </span>
                         </Link>
@@ -113,10 +120,17 @@ export function DefaultSeasonSidebar({
   women: boolean
   group: string
 }) {
+  const { isMobile, setOpenMobile } = useSidebar()
+  const toggleOnMobile = () => {
+    if (isMobile) {
+      setOpenMobile(false)
+    }
+  }
   return (
     <SidebarMenuSub>
       <SidebarMenuSubItem>
         <SidebarMenuSubButton
+          onClick={toggleOnMobile}
           render={
             <Link
               to="/seasons"
@@ -131,13 +145,16 @@ export function DefaultSeasonSidebar({
               <span>
                 <CalendarSearchIcon className="size-4" />
               </span>
-              <span>Säsongslista</span>
+              <span className="md:text-sm">
+                Säsongslista
+              </span>
             </Link>
           }
         />
       </SidebarMenuSubItem>
       <SidebarMenuSubItem>
         <SidebarMenuSubButton
+          onClick={toggleOnMobile}
           render={
             <Link
               to="/seasons/$year/$group/games"
@@ -149,13 +166,14 @@ export function DefaultSeasonSidebar({
               <span>
                 <CalendarIcon className="size-4" />
               </span>
-              <span>Matcher</span>
+              <span className="md:text-sm">Matcher</span>
             </Link>
           }
         />
       </SidebarMenuSubItem>
       <SidebarMenuSubItem>
         <SidebarMenuSubButton
+          onClick={toggleOnMobile}
           render={
             <Link
               to="/seasons/$year/$group/tables/$table"
@@ -171,7 +189,7 @@ export function DefaultSeasonSidebar({
               <span>
                 <ListIcon className="size-4" />
               </span>
-              <span>Tabell</span>
+              <span className="md:text-sm">Tabell</span>
             </Link>
           }
         />
@@ -179,6 +197,7 @@ export function DefaultSeasonSidebar({
         <SidebarMenuSub>
           <SidebarMenuSubItem>
             <SidebarMenuSubButton
+              onClick={toggleOnMobile}
               render={
                 <Link
                   to="/seasons/$year/$group/tables/$table"
@@ -191,13 +210,14 @@ export function DefaultSeasonSidebar({
                   activeOptions={{ includeSearch: false }}
                   activeProps={{ className: `font-bold` }}
                 >
-                  <span>Alla</span>
+                  <span className="md:text-sm">Alla</span>
                 </Link>
               }
             />
           </SidebarMenuSubItem>
           <SidebarMenuSubItem>
             <SidebarMenuSubButton
+              onClick={toggleOnMobile}
               render={
                 <Link
                   to="/seasons/$year/$group/tables/$table"
@@ -210,13 +230,14 @@ export function DefaultSeasonSidebar({
                   activeOptions={{ includeSearch: false }}
                   activeProps={{ className: `font-bold` }}
                 >
-                  <span>Hemma</span>
+                  <span className="md:text-sm">Hemma</span>
                 </Link>
               }
             />
           </SidebarMenuSubItem>
           <SidebarMenuSubItem>
             <SidebarMenuSubButton
+              onClick={toggleOnMobile}
               render={
                 <Link
                   to="/seasons/$year/$group/tables/$table"
@@ -229,7 +250,7 @@ export function DefaultSeasonSidebar({
                   activeOptions={{ includeSearch: false }}
                   activeProps={{ className: `font-bold` }}
                 >
-                  <span>Borta</span>
+                  <span className="md:text-sm">Borta</span>
                 </Link>
               }
             />
@@ -238,6 +259,7 @@ export function DefaultSeasonSidebar({
       </SidebarMenuSubItem>
       <SidebarMenuSubItem>
         <SidebarMenuSubButton
+          onClick={toggleOnMobile}
           render={
             <Link
               to="/seasons/$year/playoff/table"
@@ -249,7 +271,7 @@ export function DefaultSeasonSidebar({
               <span>
                 <TrophyIcon className="size-4" />
               </span>
-              <span>Slutspel</span>
+              <span className="md:text-sm">Slutspel</span>
             </Link>
           }
         />
@@ -257,6 +279,7 @@ export function DefaultSeasonSidebar({
         <SidebarMenuSub>
           <SidebarMenuSubItem>
             <SidebarMenuSubButton
+              onClick={toggleOnMobile}
               render={
                 <Link
                   to="/seasons/$year/playoff/games"
@@ -265,13 +288,16 @@ export function DefaultSeasonSidebar({
                   activeOptions={{ includeSearch: false }}
                   activeProps={{ className: `font-bold` }}
                 >
-                  <span>Matcher</span>
+                  <span className="md:text-sm">
+                    Matcher
+                  </span>
                 </Link>
               }
             />
           </SidebarMenuSubItem>
           <SidebarMenuSubItem>
             <SidebarMenuSubButton
+              onClick={toggleOnMobile}
               render={
                 <Link
                   to="/seasons/$year/playoff/stats"
@@ -280,13 +306,16 @@ export function DefaultSeasonSidebar({
                   activeOptions={{ includeSearch: false }}
                   activeProps={{ className: `font-bold` }}
                 >
-                  <span>Statistik</span>
+                  <span className="md:text-sm">
+                    Statistik
+                  </span>
                 </Link>
               }
             />
           </SidebarMenuSubItem>
           <SidebarMenuSubItem>
             <SidebarMenuSubButton
+              onClick={toggleOnMobile}
               render={
                 <Link
                   to="/seasons/$year/playoff/map"
@@ -295,7 +324,7 @@ export function DefaultSeasonSidebar({
                   activeOptions={{ includeSearch: false }}
                   activeProps={{ className: `font-bold` }}
                 >
-                  <span>Karta</span>
+                  <span className="md:text-sm">Karta</span>
                 </Link>
               }
             />
@@ -304,6 +333,7 @@ export function DefaultSeasonSidebar({
       </SidebarMenuSubItem>
       <SidebarMenuSubItem>
         <SidebarMenuSubButton
+          onClick={toggleOnMobile}
           render={
             <Link
               to="/seasons/$year/$group/development"
@@ -315,13 +345,14 @@ export function DefaultSeasonSidebar({
               <span>
                 <ChartLineIcon className="size-4" />
               </span>
-              <span>Utveckling</span>
+              <span className="md:text-sm">Utveckling</span>
             </Link>
           }
         />
       </SidebarMenuSubItem>
       <SidebarMenuSubItem>
         <SidebarMenuSubButton
+          onClick={toggleOnMobile}
           render={
             <Link
               to="/seasons/$year/$group/interval"
@@ -333,13 +364,14 @@ export function DefaultSeasonSidebar({
               <span>
                 <ChevronsLeftRightEllipsisIcon className="size-4" />
               </span>
-              <span>Intervall</span>
+              <span className="md:text-sm">Intervall</span>
             </Link>
           }
         />
       </SidebarMenuSubItem>
       <SidebarMenuSubItem>
         <SidebarMenuSubButton
+          onClick={toggleOnMobile}
           render={
             <Link
               to="/seasons/$year/$group/stats"
@@ -351,13 +383,14 @@ export function DefaultSeasonSidebar({
               <span>
                 <FolderKanbanIcon className="size-4" />
               </span>
-              <span>Statistik</span>
+              <span className="md:text-sm">Statistik</span>
             </Link>
           }
         />
       </SidebarMenuSubItem>
       <SidebarMenuSubItem>
         <SidebarMenuSubButton
+          onClick={toggleOnMobile}
           render={
             <Link
               to="/seasons/$year/$group/map"
@@ -369,7 +402,7 @@ export function DefaultSeasonSidebar({
               <span>
                 <MapIcon className="size-4" />
               </span>
-              <span>Karta</span>
+              <span className="md:text-sm">Karta</span>
             </Link>
           }
         />
