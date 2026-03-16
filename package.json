@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev --port 3000",
+    "dev:host": "vite dev --port 3000 --host",
     "build": "vite build",
     "serve": "vite preview",
     "test": "vitest run",
