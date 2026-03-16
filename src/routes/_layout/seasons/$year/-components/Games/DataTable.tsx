@@ -57,7 +57,7 @@ const DataTable = <TData, TValue>({
 
   return (
     <div>
-      <Table className="text-[10px] lg:text-sm xl:text-base">
+      <Table>
         <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
@@ -127,9 +127,7 @@ const DataTable = <TData, TValue>({
                         })}
                         state={{ origin: origin }}
                       >
-                        <span className="text-[10px] md:text-sm xl:text-base 2xl:text-lg">
-                          H2H
-                        </span>
+                        <span>H2H</span>
                       </route.Link>
                     }
                     nativeButton={false}

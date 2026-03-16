@@ -12,7 +12,9 @@ type GameListProps = {
   title: string
 }
 
-const route = getRouteApi('/_layout/seasons/$year/$group/games')
+const route = getRouteApi(
+  '/_layout/seasons/$year/$group/games',
+)
 
 const GamesList = ({ group, title }: GameListProps) => {
   const year = route.useParams({
@@ -26,7 +28,10 @@ const GamesList = ({ group, title }: GameListProps) => {
         {title}
       </h1>
       <div>
-        <div key={group.group} className="mb-6">
+        <div
+          key={group.group}
+          className="mb-6"
+        >
           <div
             id={group.group}
             className="group mb-0.5 flex flex-row items-center gap-1"
@@ -59,18 +64,24 @@ const GamesList = ({ group, title }: GameListProps) => {
                 {},
               )
               return (
-                <div key={date.date} className="mb-4">
+                <div
+                  key={date.date}
+                  className="mb-4"
+                >
                   {date.date !== 'null' && (
                     <div className="group mb-0.5 flex flex-row items-center gap-1">
                       <h3
-                        className="text-[0.75rem] font-semibold tracking-wide md:text-sm xl:text-base 2xl:text-lg"
+                        className="text-[10px] sm:text-xs font-semibold tracking-wide md:text-sm xl:text-base 2xl:text-lg"
                         id={`${group.group}-${date.date}`}
                       >
                         <Date>{date.date}</Date>
                       </h3>
                       <route.Link
                         from="/seasons/$year/$group/games"
-                        params={{ year: year, group: group.group }}
+                        params={{
+                          year: year,
+                          group: group.group,
+                        }}
                         hash={`${group.group}-${date.date}`}
                         search={(prev) => ({ ...prev })}
                       >
