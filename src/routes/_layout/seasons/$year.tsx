@@ -86,7 +86,7 @@ function Season() {
       <div className="flex flex-col gap-4">
         <SeasonHeader />
         <div className="flex flex-row justify-center">
-          <h3 className="text-base font-semibold">
+          <h3 className="text-sm md:text-base font-semibold">
             Välj grupp
           </h3>
         </div>
@@ -109,7 +109,7 @@ function Season() {
           />
         )}
       >
-        <div className="m-4 flex flex-col gap-4">
+        <div className="flex flex-col gap-4">
           <SeasonHeader />
           <Outlet />
         </div>
@@ -143,7 +143,7 @@ function GroupList() {
   if (data.status === 204) return null
 
   return (
-    <div className="grid grid-cols-2 gap-16 xl:grid-cols-6">
+    <div className="grid grid-cols-2 gap-4 md:gap-8 xl:gap-16 lg:grid-cols-4 2xl:grid-cols-6">
       {data.groups.map((group) => {
         return (
           <Route.Link
@@ -152,8 +152,8 @@ function GroupList() {
             params={{ group: group.group, year: year }}
             search={{ women: women }}
           >
-            <div className="flex w-full flex-row items-center justify-center gap-8 border px-4 py-2">
-              <span className="font-semibold">
+            <div className="flex w-full flex-row items-center justify-center border px-4 py-2">
+              <span className="text-[8px] xs:text-[10px] md:text-sm font-semibold text-center">
                 {group.name}
               </span>
             </div>
