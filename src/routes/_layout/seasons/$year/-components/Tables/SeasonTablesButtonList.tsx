@@ -25,7 +25,7 @@ const SeasonTablesButtonList = () => {
   if (year < 1930) return null
   return (
     <div>
-      <h1 className="mb-2 text-center text-sm leading-4 font-bold sm:text-base md:mb-4 lg:text-xl">
+      <h1 className="mb-2 text-center text-xs xs:text-sm leading-4 font-bold sm:text-base md:mb-4 lg:text-xl">
         Serietabell {women ? 'Damer' : 'Herrar'}
       </h1>
       <div className="flex flex-row justify-center">

@@ -1,6 +1,7 @@
 import type {
   ColumnDef,
   SortingState,
+  VisibilityState,
 } from '@tanstack/react-table'
 import {
   flexRender,
@@ -19,6 +20,9 @@ import {
   TableRow,
 } from '@/components/base/ui/table'
 import { useFavTeam } from '@/lib/contexts/favTeamsContext'
+
+import { Button } from '@/components/base/ui/button'
+import { gameColumns, goalsColumns } from './columns'
 
 interface DataTableProps<TData, TValue> {
   columns: Array<ColumnDef<TData, TValue>>
@@ -41,7 +45,11 @@ const DataTable = <TData, TValue>({
     { id: 'totalGoalsScored', desc: true },
     { id: 'team_casualName', desc: false },
   ])
-
+  const [columnVisibility, setColumnVisibility] =
+    useState<VisibilityState>(goalsColumns)
+  const [visibleColumns, setVisibleColumns] = useState<
+    'goals' | 'games'
+  >('goals')
   const table = useReactTable({
     data,
     columns,
@@ -50,8 +58,20 @@ const DataTable = <TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     state: {
       sorting,
+      columnVisibility,
     },
+    onColumnVisibilityChange: setColumnVisibility,
   })
+
+  const onClickHandler = () => {
+    if (visibleColumns === 'goals') {
+      setColumnVisibility(gameColumns)
+      setVisibleColumns('games')
+    } else if (visibleColumns === 'games') {
+      setColumnVisibility(goalsColumns)
+      setVisibleColumns('goals')
+    }
+  }
 
   const { favTeams } = useFavTeam()
 
@@ -62,14 +82,27 @@ const DataTable = <TData, TValue>({
   }
 
   return (
-    <div>
+    <div className="flex flex-col gap-4">
+      <div>
+        <Button
+          className="w-full"
+          variant="outline"
+          size="xs"
+          onClick={onClickHandler}
+        >
+          {visibleColumns === 'games'
+            ? 'Visa målkolumner'
+            : 'Visa matchkolumner'}
+        </Button>
+      </div>
+
       <Table className="text-[10px] lg:text-sm xl:text-base">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               <TableHead
                 key={'position'}
-                className="hidden py-1 sm:table-cell sm:w-12 px-2 xl:text-base 2xl:text-lg"
+                className="hidden px-0 py-1 sm:table-cell sm:w-12 sm:px-2 xl:text-base 2xl:text-lg"
               >
                 P
               </TableHead>
