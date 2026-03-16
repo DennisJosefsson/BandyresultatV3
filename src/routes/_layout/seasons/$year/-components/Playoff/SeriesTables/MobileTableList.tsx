@@ -1,7 +1,7 @@
 import type { PlayoffSeriesTable } from '@/lib/types/table'
 
 import { columns } from './columns'
-import DataTable from './DataTable'
+import MobileDataTable from './MobileDataTable'
 
 type TableListProps = {
   data: PlayoffSeriesTable
@@ -30,13 +30,13 @@ const TableList = ({ data }: TableListProps) => {
         id={data.group}
         className="group mb-0.5 flex flex-row items-center gap-1"
       >
-        <h2 className="text-sm font-semibold tracking-wide lg:text-base xl:text-xl">
+        <h2 className="text-xs xs:text-sm font-bold tracking-wide lg:text-base xl:text-xl">
           {data.name}
         </h2>
       </div>
 
       <div>
-        <DataTable
+        <MobileDataTable
           columns={columns}
           data={data.tables}
           teamObject={teamObject}

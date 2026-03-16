@@ -14,7 +14,7 @@ const PlayoffMap = () => {
 
   return (
     <div>
-      <Card className="xs:max-w-[360px] h-[400px] w-screen max-w-[280px] p-2 sm:h-160 sm:max-w-xl xl:max-w-4xl">
+      <Card className="xs:max-w-100 h-[400px] w-screen max-w-[280px] p-2 sm:h-160 sm:max-w-xl xl:max-w-4xl">
         <Map
           center={[15, 62]}
           zoom={4}

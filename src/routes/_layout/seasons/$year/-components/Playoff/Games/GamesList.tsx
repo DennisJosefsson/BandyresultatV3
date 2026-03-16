@@ -70,7 +70,7 @@ const GamesList = ({ gamesArray }: GameListProps) => {
                       {date.date !== 'null' && (
                         <div className="group mb-0.5 flex flex-row items-center gap-1">
                           <h3
-                            className="text-[0.75rem] font-semibold tracking-wide md:text-sm xl:text-base 2xl:text-lg"
+                            className="text-[10px] sm:text-xs font-semibold tracking-wide md:text-sm xl:text-base 2xl:text-lg"
                             id={`${group.group}-${date.date}`}
                           >
                             <Date>{date.date}</Date>
@@ -90,9 +90,6 @@ const GamesList = ({ gamesArray }: GameListProps) => {
                         columns={columns}
                         data={date.games}
                       />
-                      {/* {date.games.map((game) => {
-                        return <GamesListItem key={game.gameId} game={game} />
-                      })} */}
                     </div>
                   )
                 })}

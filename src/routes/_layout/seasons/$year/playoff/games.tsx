@@ -1,12 +1,17 @@
-import { createFileRoute, notFound } from '@tanstack/react-router'
+import {
+  createFileRoute,
+  notFound,
+} from '@tanstack/react-router'
 
 import Loading from '@/components/Loading/Loading'
 
 import GroupListForErrorComponent from '../-components/GroupListForErrorComponent'
-import PlayoffGames from '../-components/Playoff/PlayoffGames'
+import PlayoffGames from '../-components/Playoff/Games/PlayoffGames'
 import { getPlayoffGames } from '../-functions/getPlayoffGames'
 
-export const Route = createFileRoute('/_layout/seasons/$year/playoff/games')({
+export const Route = createFileRoute(
+  '/_layout/seasons/$year/playoff/games',
+)({
   loaderDeps: ({ search: { women } }) => ({ women }),
   loader: async ({ deps, params }) => {
     const data = await getPlayoffGames({
@@ -52,7 +57,9 @@ export const Route = createFileRoute('/_layout/seasons/$year/playoff/games')({
     ],
   }),
   component: PlayoffGames,
-  pendingComponent: () => <Loading page="seasonGamesList" />,
+  pendingComponent: () => (
+    <Loading page="seasonGamesList" />
+  ),
   notFoundComponent(props) {
     if (props.data && typeof props.data === 'string') {
       return (
