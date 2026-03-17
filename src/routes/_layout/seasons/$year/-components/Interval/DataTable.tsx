@@ -49,7 +49,7 @@ const DataTable = <TData, TValue>({
 
   return (
     <div>
-      <Table className="text-[10px] lg:text-sm xl:text-base">
+      <Table>
         <TableCaption>{comment}</TableCaption>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -64,7 +64,7 @@ const DataTable = <TData, TValue>({
                 return (
                   <TableHead
                     key={header.id}
-                    className={`max-w-[${header.column.getSize()}px]`}
+                    className="px-0"
                   >
                     {header.isPlaceholder
                       ? null

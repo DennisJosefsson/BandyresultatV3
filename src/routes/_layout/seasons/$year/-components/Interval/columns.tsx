@@ -2,16 +2,18 @@ import type { ColumnDef } from '@tanstack/react-table'
 
 import type { ReturnDevDataTableItem } from '@/lib/types/table'
 
-export const columns: Array<ColumnDef<ReturnDevDataTableItem>> = [
+export const columns: Array<
+  ColumnDef<ReturnDevDataTableItem>
+> = [
   {
     accessorKey: 'team.casualName',
     header: () => (
-      <div className="w-6 truncate text-left text-[10px] sm:w-24 lg:w-32 lg:text-sm xl:text-base 2xl:text-lg">
+      <div className="w-16 truncate text-left text-[8px] xs:text-[10px] sm:text-xs lg:w-32 lg:text-sm xl:text-base 2xl:text-lg">
         Lag
       </div>
     ),
     cell: ({ row }) => (
-      <div className="w-6 truncate text-left sm:w-28 xl:text-base 2xl:text-lg">
+      <div className="w-16 truncate text-left text-[8px] xs:text-[10px] sm:text-xs sm:w-28 xl:text-base 2xl:text-lg">
         {row.getValue('team_casualName')}
       </div>
     ),
@@ -20,9 +22,13 @@ export const columns: Array<ColumnDef<ReturnDevDataTableItem>> = [
 
   {
     accessorKey: 'totalGames',
-    header: () => <div className="text-center text-[10px] lg:text-sm">M</div>,
+    header: () => (
+      <div className="w-4 lg:w-9 2xl:w-12 text-center text-[8px] xs:text-[10px] sm:text-xs lg:text-sm xl:text-base 2xl:text-lg">
+        M
+      </div>
+    ),
     cell: ({ row }) => (
-      <div className="text-center text-[10px] tabular-nums lg:text-sm xl:text-base 2xl:text-lg">
+      <div className="w-4 lg:w-9 2xl:w-12 text-center text-[8px] xs:text-[10px] sm:text-xs lg:text-sm xl:text-base 2xl:text-lg tabular-nums">
         {row.getValue('totalGames')}
       </div>
     ),
@@ -30,9 +36,13 @@ export const columns: Array<ColumnDef<ReturnDevDataTableItem>> = [
   },
   {
     accessorKey: 'totalWins',
-    header: () => <div className="text-center text-[10px] lg:text-sm">V</div>,
+    header: () => (
+      <div className="w-4 lg:w-9 2xl:w-12 text-center text-[8px] xs:text-[10px] sm:text-xs lg:text-sm xl:text-base 2xl:text-lg">
+        V
+      </div>
+    ),
     cell: ({ row }) => (
-      <div className="text-center text-[10px] tabular-nums lg:text-sm xl:text-base 2xl:text-lg">
+      <div className="w-4 lg:w-9 2xl:w-12 text-center text-[8px] xs:text-[10px] sm:text-xs lg:text-sm xl:text-base 2xl:text-lg tabular-nums">
         {row.getValue('totalWins')}
       </div>
     ),
@@ -40,9 +50,13 @@ export const columns: Array<ColumnDef<ReturnDevDataTableItem>> = [
   },
   {
     accessorKey: 'totalDraws',
-    header: () => <div className="text-center text-[10px] lg:text-sm">O</div>,
+    header: () => (
+      <div className="w-4 lg:w-9 2xl:w-12 text-center text-[8px] xs:text-[10px] sm:text-xs lg:text-sm xl:text-base 2xl:text-lg">
+        O
+      </div>
+    ),
     cell: ({ row }) => (
-      <div className="text-center text-[10px] tabular-nums lg:text-sm xl:text-base 2xl:text-lg">
+      <div className="w-4 lg:w-9 2xl:w-12 text-center text-[8px] xs:text-[10px] sm:text-xs lg:text-sm xl:text-base 2xl:text-lg tabular-nums">
         {row.getValue('totalDraws')}
       </div>
     ),
@@ -50,9 +64,13 @@ export const columns: Array<ColumnDef<ReturnDevDataTableItem>> = [
   },
   {
     accessorKey: 'totalLost',
-    header: () => <div className="text-center text-[10px] lg:text-sm">F</div>,
+    header: () => (
+      <div className="w-4 lg:w-9 2xl:w-12 text-center text-[8px] xs:text-[10px] sm:text-xs lg:text-sm xl:text-base 2xl:text-lg">
+        F
+      </div>
+    ),
     cell: ({ row }) => (
-      <div className="text-center text-[10px] tabular-nums lg:text-sm xl:text-base 2xl:text-lg">
+      <div className="w-4 lg:w-9 2xl:w-12 text-center text-[8px] xs:text-[10px] sm:text-xs lg:text-sm xl:text-base 2xl:text-lg tabular-nums">
         {row.getValue('totalLost')}
       </div>
     ),
@@ -60,9 +78,13 @@ export const columns: Array<ColumnDef<ReturnDevDataTableItem>> = [
   },
   {
     accessorKey: 'totalGoalsScored',
-    header: () => <div className="text-center text-[10px] lg:text-sm">GM</div>,
+    header: () => (
+      <div className="w-4 lg:w-9 2xl:w-12 text-center text-[8px] xs:text-[10px] sm:text-xs lg:text-sm xl:text-base 2xl:text-lg">
+        GM
+      </div>
+    ),
     cell: ({ row }) => (
-      <div className="text-center text-[10px] tabular-nums lg:text-sm xl:text-base 2xl:text-lg">
+      <div className="w-4 lg:w-9 2xl:w-12 text-center text-[8px] xs:text-[10px] sm:text-xs lg:text-sm xl:text-base 2xl:text-lg tabular-nums">
         {row.getValue('totalGoalsScored')}
       </div>
     ),
@@ -70,9 +92,13 @@ export const columns: Array<ColumnDef<ReturnDevDataTableItem>> = [
   },
   {
     accessorKey: 'totalGoalsConceded',
-    header: () => <div className="text-center text-[10px] lg:text-sm">IM</div>,
+    header: () => (
+      <div className="w-4 lg:w-9 2xl:w-12 text-center text-[8px] xs:text-[10px] sm:text-xs lg:text-sm xl:text-base 2xl:text-lg">
+        IM
+      </div>
+    ),
     cell: ({ row }) => (
-      <div className="text-center text-[10px] tabular-nums lg:text-sm xl:text-base 2xl:text-lg">
+      <div className="w-4 lg:w-9 2xl:w-12 text-center text-[8px] xs:text-[10px] sm:text-xs lg:text-sm xl:text-base 2xl:text-lg tabular-nums">
         {row.getValue('totalGoalsConceded')}
       </div>
     ),
@@ -80,9 +106,13 @@ export const columns: Array<ColumnDef<ReturnDevDataTableItem>> = [
   },
   {
     accessorKey: 'totalGoalDifference',
-    header: () => <div className="text-center text-[10px] lg:text-sm">MS</div>,
+    header: () => (
+      <div className="w-4 lg:w-9 2xl:w-12 text-center text-[8px] xs:text-[10px] sm:text-xs lg:text-sm xl:text-base 2xl:text-lg">
+        MS
+      </div>
+    ),
     cell: ({ row }) => (
-      <div className="text-center text-[10px] tabular-nums lg:text-sm xl:text-base 2xl:text-lg">
+      <div className="w-4 lg:w-9 2xl:w-12 text-center text-[8px] xs:text-[10px] sm:text-xs lg:text-sm xl:text-base 2xl:text-lg tabular-nums">
         {row.getValue('totalGoalDifference')}
       </div>
     ),
@@ -90,9 +120,13 @@ export const columns: Array<ColumnDef<ReturnDevDataTableItem>> = [
   },
   {
     accessorKey: 'totalPoints',
-    header: () => <div className="text-center text-[10px] lg:text-sm">P</div>,
+    header: () => (
+      <div className="w-4 lg:w-9 2xl:w-12 text-center text-[8px] xs:text-[10px] sm:text-xs lg:text-sm xl:text-base 2xl:text-lg">
+        P
+      </div>
+    ),
     cell: ({ row }) => (
-      <div className="text-center text-[10px] tabular-nums lg:text-sm xl:text-base 2xl:text-lg">
+      <div className="w-4 lg:w-9 2xl:w-12 text-center text-[8px] xs:text-[10px] sm:text-xs lg:text-sm xl:text-base 2xl:text-lg tabular-nums">
         {row.getValue('totalPoints')}
       </div>
     ),
