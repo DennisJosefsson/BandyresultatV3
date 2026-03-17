@@ -40,11 +40,11 @@ const DevelopmentClicker = () => {
   }, [dates, api, dateApi])
 
   return (
-    <div className="mt-4 flex flex-col gap-4">
-      <div className="mb-1 flex flex-row items-center justify-center">
+    <div className="flex flex-col gap-4 ">
+      <div className="mb-1 flex flex-row items-center justify-center ">
         <Carousel
           setApi={setApi}
-          className="xxs:max-w-xs xs:w-[60%] w-[50%] max-w-60 self-center sm:max-w-sm md:max-w-2xl"
+          className="xs:w-[60%] w-[50%] max-w-60 self-center sm:max-w-sm lg:max-w-2xl "
           opts={{
             loop: true,
             containScroll: 'keepSnaps',
@@ -70,9 +70,9 @@ const DevelopmentClicker = () => {
           <CarouselNext className="h-3 w-3 lg:h-6 lg:w-6" />
         </Carousel>
       </div>
-      <div className="mb-2 flex flex-row items-center justify-center">
+      <div className="mb-2 flex flex-row items-center justify-center ">
         <Carousel
-          className="xxs:max-w-xs xs:w-[60%] w-[50%] max-w-60 self-center sm:max-w-sm md:max-w-2xl"
+          className="xs:w-[60%] w-[50%] max-w-60 self-center sm:max-w-sm lg:max-w-2xl "
           setApi={setDateApi}
           opts={{
             containScroll: 'keepSnaps',
@@ -88,7 +88,7 @@ const DevelopmentClicker = () => {
                 <CarouselItem
                   key={date}
                   className={cn(
-                    'flex basis-1/3 cursor-pointer flex-row items-center justify-center p-0 text-[8px] md:basis-1/5 md:text-sm [.is-snapped]:font-semibold',
+                    'flex basis-1/3 cursor-pointer flex-row items-center justify-center p-0 text-[8px] md:basis-1/5 md:text-sm [.is-snapped]:font-semibold ',
                     { 'basis-full': dates.length < 5 },
                   )}
                   onClick={() =>

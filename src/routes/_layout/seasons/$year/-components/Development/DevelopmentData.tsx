@@ -1,6 +1,7 @@
 import DevelopmentClicker from './DevelopmentClicker'
 import DevelopmentGamesList from './DevelopmentGamesList'
 import DevelopmentTable from './DevelopmentTable'
+import MobileDevelopmentTable from './MobileDevelopmentTable'
 
 const DevelopmentData = () => {
   return (
@@ -8,12 +9,15 @@ const DevelopmentData = () => {
       <div>
         <DevelopmentClicker />
 
-        <div className="grid grid-cols-1 gap-2 lg:grid-cols-7 lg:gap-4">
-          <div className="lg:col-span-3">
+        <div className="grid grid-cols-1 gap-2 xl:grid-cols-7 xl:gap-4">
+          <div className="xl:col-span-3">
             <DevelopmentGamesList />
           </div>
-          <div className="lg:col-span-4">
+          <div className="hidden sm:block xl:col-span-4">
             <DevelopmentTable />
+          </div>
+          <div className="sm:hidden">
+            <MobileDevelopmentTable />
           </div>
         </div>
       </div>

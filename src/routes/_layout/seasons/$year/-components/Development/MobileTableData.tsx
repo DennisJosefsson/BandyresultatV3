@@ -1,10 +1,14 @@
-import type { ColumnDef } from '@tanstack/react-table'
+import type {
+  ColumnDef,
+  VisibilityState,
+} from '@tanstack/react-table'
 import {
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
 
+import { Button } from '@/components/base/ui/button'
 import {
   Table,
   TableBody,
@@ -15,6 +19,8 @@ import {
   TableRow,
 } from '@/components/base/ui/table'
 import { useFavTeam } from '@/lib/contexts/favTeamsContext'
+import { useState } from 'react'
+import { gameColumns, goalsColumns } from './exports'
 
 interface DataTableProps<TData, TValue> {
   columns: Array<ColumnDef<TData, TValue>>
@@ -26,17 +32,26 @@ interface DataTableProps<TData, TValue> {
   comment: string | null
 }
 
-const DataTable = <TData, TValue>({
+const MobileDataTable = <TData, TValue>({
   columns,
   data,
   teamObject,
   serieStructure,
   comment,
 }: DataTableProps<TData, TValue>) => {
+  const [columnVisibility, setColumnVisibility] =
+    useState<VisibilityState>(goalsColumns)
+  const [visibleColumns, setVisibleColumns] = useState<
+    'goals' | 'games'
+  >('goals')
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    state: {
+      columnVisibility,
+    },
+    onColumnVisibilityChange: setColumnVisibility,
   })
 
   const { favTeams } = useFavTeam()
@@ -47,8 +62,30 @@ const DataTable = <TData, TValue>({
     return x as string
   }
 
+  const onClickHandler = () => {
+    if (visibleColumns === 'goals') {
+      setColumnVisibility(gameColumns)
+      setVisibleColumns('games')
+    } else if (visibleColumns === 'games') {
+      setColumnVisibility(goalsColumns)
+      setVisibleColumns('goals')
+    }
+  }
+
   return (
-    <div>
+    <div className="flex flex-col gap-4">
+      <div>
+        <Button
+          className="w-full"
+          variant="outline"
+          size="xs"
+          onClick={onClickHandler}
+        >
+          {visibleColumns === 'games'
+            ? 'Visa målkolumner'
+            : 'Visa matchkolumner'}
+        </Button>
+      </div>
       <Table>
         <TableCaption>{comment}</TableCaption>
         <TableHeader>
@@ -128,4 +165,4 @@ const DataTable = <TData, TValue>({
   )
 }
 
-export default DataTable
+export default MobileDataTable

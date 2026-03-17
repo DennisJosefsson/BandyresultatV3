@@ -2,12 +2,14 @@ import type { ColumnDef } from '@tanstack/react-table'
 
 import type { Game } from '@/lib/types/game'
 
-export const columns: Array<ColumnDef<Omit<Game, 'season'>>> = [
+export const columns: Array<
+  ColumnDef<Omit<Game, 'season'>>
+> = [
   {
     accessorKey: 'home.casualName',
 
     cell: ({ row }) => (
-      <div className="w-6 truncate text-left sm:w-24 lg:w-32 xl:text-base 2xl:text-lg">
+      <div className="w-16 truncate text-left sm:w-24 xl:w-32 text-[8px] xs:text-xs sm:text-sm xl:text-base 2xl:text-lg">
         {row.getValue('home_casualName')}
       </div>
     ),
@@ -16,7 +18,7 @@ export const columns: Array<ColumnDef<Omit<Game, 'season'>>> = [
     accessorKey: 'game_id',
 
     cell: () => (
-      <div className="w-4 text-center text-[10px] tabular-nums lg:text-sm xl:text-base 2xl:text-lg">
+      <div className="w-4 text-center tabular-nums text-[8px] xs:text-xs sm:text-sm xl:text-base 2xl:text-lg">
         <span>-</span>
       </div>
     ),
@@ -26,7 +28,7 @@ export const columns: Array<ColumnDef<Omit<Game, 'season'>>> = [
     accessorKey: 'away.casualName',
 
     cell: ({ row }) => (
-      <div className="w-6 truncate text-left sm:w-24 lg:w-32 xl:text-base 2xl:text-lg">
+      <div className="w-16 truncate text-left sm:w-24 xl:w-32 text-[8px] xs:text-xs sm:text-sm xl:text-base 2xl:text-lg">
         {row.getValue('away_casualName')}
       </div>
     ),
@@ -35,25 +37,8 @@ export const columns: Array<ColumnDef<Omit<Game, 'season'>>> = [
     accessorKey: 'result',
 
     cell: ({ row }) => (
-      <div className="w-12 text-center text-[10px] tabular-nums lg:text-sm xl:text-base 2xl:text-lg">
+      <div className="w-12 text-center tabular-nums text-[8px] xs:text-xs sm:text-sm xl:text-base 2xl:text-lg">
         {row.getValue('result')}
-      </div>
-    ),
-  },
-
-  {
-    accessorKey: 'penalties',
-    cell: ({ row }) => (
-      <div className="w-12 text-center text-[10px] tabular-nums lg:text-sm xl:text-base 2xl:text-lg">
-        <span>{row.getValue('penalties') === true ? 'S' : null}</span>
-      </div>
-    ),
-  },
-  {
-    accessorKey: 'extraTime',
-    cell: ({ row }) => (
-      <div className="w-12 text-center text-[10px] tabular-nums lg:text-sm xl:text-base 2xl:text-lg">
-        <span>{row.getValue('extraTime') === true ? 'ÖT' : null}</span>
       </div>
     ),
   },
