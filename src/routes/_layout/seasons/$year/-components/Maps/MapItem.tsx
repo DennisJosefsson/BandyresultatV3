@@ -41,9 +41,9 @@ function MapItem({
         <div className="size-4 rounded-full border-2 border-orange-500 bg-orange-500 opacity-75 shadow-lg" />
       </MarkerContent>
       <MarkerTooltip>{team.team.name}</MarkerTooltip>
-      <MarkerPopup className="w-50 sm:w-85 md:w-100">
+      <MarkerPopup className="w-35 sm:w-85 md:w-100">
         <div className="w-full flex flex-col gap-2 sm:gap-4">
-          <div className="flex flex-row justify-between items-center">
+          <div className="flex flex-col xs:flex-row xs:justify-between xsitems-center">
             <span className="text-[8px] sm:text-sm md:text-base lg:text-lg font-bold">
               {team.team.name}
             </span>
