@@ -14,13 +14,14 @@ const LatestGames = () => {
   if (data.status === 400) return null
   if (data.latestGames.length < 1) return null
   return (
-    <Card className="mt-2 w-full">
-      <CardHeader className="p-2">
-        <CardTitle className="text-[10px] md:text-sm xl:text-base 2xl:text-lg">
-          Senaste matcherna
-        </CardTitle>
+    <Card
+      className="mt-2 w-full"
+      size="sm"
+    >
+      <CardHeader>
+        <CardTitle>Senaste matcherna</CardTitle>
       </CardHeader>
-      <CardContent className="mb-3 w-full p-1 pt-0 text-xs xl:text-sm 2xl:text-base">
+      <CardContent>
         <div>
           {data.latestGames.map((game) => {
             return (

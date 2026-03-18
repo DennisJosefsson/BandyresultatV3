@@ -23,13 +23,14 @@ const LatestWins = ({
 }: LatestWinsProps) => {
   if (latestWins.length === 0) return null
   return (
-    <Card className="mt-2 w-full">
-      <CardHeader className="p-2">
-        <CardTitle className="text-[10px] md:text-sm xl:text-base 2xl:text-lg">
-          {title}
-        </CardTitle>
+    <Card
+      className="mt-2 w-full"
+      size="sm"
+    >
+      <CardHeader>
+        <CardTitle>{title}</CardTitle>
       </CardHeader>
-      <CardContent className="mb-3 w-full p-1 pt-0 text-xs xl:text-sm 2xl:text-base">
+      <CardContent>
         <div>
           {latestWins.map((game) => {
             return (

@@ -18,13 +18,14 @@ const Seasons = () => {
   if (data.status === 400) return null
   return (
     <>
-      <Card className="mt-2 w-full">
-        <CardHeader className="p-2">
-          <CardTitle className="text-[10px] md:text-sm xl:text-base 2xl:text-lg">
-            Säsonger i databasen
-          </CardTitle>
+      <Card
+        className="mt-2 w-full"
+        size="sm"
+      >
+        <CardHeader>
+          <CardTitle>Säsonger i databasen</CardTitle>
         </CardHeader>
-        <CardContent className="w-full p-1 pt-0 text-xs xl:text-sm 2xl:text-base">
+        <CardContent>
           <div className="mb-2">
             {data.allDbSeasons.map((team) => {
               return (
@@ -44,13 +45,14 @@ const Seasons = () => {
           </div>
         </CardContent>
       </Card>
-      <Card className="mt-2 w-full">
-        <CardHeader className="p-2">
-          <CardTitle className="text-[10px] md:text-sm xl:text-base 2xl:text-lg">
-            Säsonger i högsta serien
-          </CardTitle>
+      <Card
+        className="mt-2 w-full"
+        size="sm"
+      >
+        <CardHeader>
+          <CardTitle>Säsonger i högsta serien</CardTitle>
         </CardHeader>
-        <CardContent className="w-full p-1 pt-0 text-xs xl:text-sm 2xl:text-base">
+        <CardContent>
           <div className="mb-2">
             {data.firstDivisionSeasons.map((team) => {
               return (
@@ -72,13 +74,16 @@ const Seasons = () => {
       </Card>
       {!women && (
         <>
-          <Card className="mt-2 w-full">
-            <CardHeader className="p-2">
-              <CardTitle className="text-[10px] md:text-sm xl:text-base 2xl:text-lg">
+          <Card
+            className="mt-2 w-full"
+            size="sm"
+          >
+            <CardHeader>
+              <CardTitle>
                 Säsonger i högsta serien sedan 1931
               </CardTitle>
             </CardHeader>
-            <CardContent className="w-full p-1 pt-0 text-[10px] sm:text-sm">
+            <CardContent>
               <div className="mb-2">
                 {data.firstDivisionSeasonsSince1931.map(
                   (team) => {

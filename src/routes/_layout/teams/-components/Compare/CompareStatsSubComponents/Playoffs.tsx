@@ -17,13 +17,14 @@ const Playoffs = () => {
   if (data.status === 400) return null
   return (
     <>
-      <Card className="mt-2 w-full">
-        <CardHeader className="p-2">
-          <CardTitle className="text-[10px] md:text-sm xl:text-base 2xl:text-lg">
-            Slutspel
-          </CardTitle>
+      <Card
+        className="mt-2 w-full"
+        size="sm"
+      >
+        <CardHeader>
+          <CardTitle>Slutspel</CardTitle>
         </CardHeader>
-        <CardContent className="w-full p-1 pt-0 text-xs xl:text-sm 2xl:text-base">
+        <CardContent>
           <div className="mb-2">
             {data.allPlayoffs.map((team) => {
               return (
@@ -45,13 +46,14 @@ const Playoffs = () => {
       </Card>
       {!women && (
         <>
-          <Card className="mt-2 w-full">
-            <CardHeader className="p-2">
-              <CardTitle className="text-[10px] md:text-sm xl:text-base 2xl:text-lg">
-                Slutspel sedan 1931
-              </CardTitle>
+          <Card
+            className="mt-2 w-full"
+            size="sm"
+          >
+            <CardHeader>
+              <CardTitle>Slutspel sedan 1931</CardTitle>
             </CardHeader>
-            <CardContent className="w-full p-1 pt-0 text-xs xl:text-sm 2xl:text-base">
+            <CardContent>
               <div className="mb-2">
                 {data.playoffs.map((team) => {
                   return (

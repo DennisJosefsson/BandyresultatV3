@@ -82,7 +82,7 @@ const CompareHeader = () => {
           <div className="md:p-2">
             <div className="w-full">
               <div className="flex flex-row items-center justify-between">
-                <span className="mb-2 text-xs font-semibold md:text-base xl:text-lg 2xl:text-xl">
+                <span className="mb-2 text-xs font-semibold sm:text-sm md:text-base xl:text-lg 2xl:text-xl">
                   Inbördes möten
                 </span>
                 <Buttons length={allData.length} />

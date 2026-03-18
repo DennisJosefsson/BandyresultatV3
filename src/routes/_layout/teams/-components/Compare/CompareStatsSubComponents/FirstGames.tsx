@@ -16,13 +16,14 @@ const FirstGames = () => {
   if (data.status === 400) return null
 
   return (
-    <Card className="mt-2 w-full">
-      <CardHeader className="p-2">
-        <CardTitle className="text-[10px] md:text-sm xl:text-base 2xl:text-lg">
-          Första matcherna
-        </CardTitle>
+    <Card
+      className="mt-2 w-full"
+      size="sm"
+    >
+      <CardHeader>
+        <CardTitle>Första matcherna</CardTitle>
       </CardHeader>
-      <CardContent className="w-full p-1 pt-0 text-xs xl:text-sm 2xl:text-base">
+      <CardContent>
         <div className="mb-2">
           {data.firstGames.map((game) => {
             return (
