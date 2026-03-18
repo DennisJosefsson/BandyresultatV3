@@ -1,62 +1,84 @@
 import type { CheckedState } from '@/components/base/ui/checkbox'
-import { useLoaderData, useNavigate, useSearch } from '@tanstack/react-router'
-import { useCallback, useState } from 'react'
+import {
+  useLoaderData,
+  useNavigate,
+  useSearch,
+} from '@tanstack/react-router'
+import { useState } from 'react'
 
 import FilterComponent from './FilterComponent'
 import TeamsListItem from './TeamsListItem'
 
 const TeamsList = () => {
   const [teamFilter, setTeamFilter] = useState<string>('')
-  const { teamArray } = useSearch({ from: '/_layout/teams/' })
-  const [selectedTeams, setSelectedTeams] = useState<Array<number>>(teamArray ?? [])
+  const { teamArray } = useSearch({
+    from: '/_layout/teams/',
+  })
+  const [selectedTeams, setSelectedTeams] = useState<
+    Array<number>
+  >(teamArray ?? [])
   const data = useLoaderData({ from: '/_layout/teams' })
 
   const navigate = useNavigate({ from: '/teams/' })
 
   const teams = data.filter((team) =>
-    team.name.toLowerCase().includes(teamFilter.toLowerCase()),
+    team.name
+      .toLowerCase()
+      .includes(teamFilter.toLowerCase()),
   )
 
-  const onCheckedChange = useCallback(
-    (checked: CheckedState, teamId: number) => {
-      if (checked) {
-        setSelectedTeams((prev) => [...prev, teamId])
-        navigate({
-          resetScroll: false,
-          search: (prev) => {
-            if (prev.teamArray) {
-              return { ...prev, teamArray: [...prev.teamArray, teamId] }
-            } else {
-              return { ...prev, teamArray: [teamId] }
+  const onCheckedChange = (
+    checked: CheckedState,
+    teamId: number,
+  ) => {
+    if (checked) {
+      setSelectedTeams((prev) => [...prev, teamId])
+      navigate({
+        resetScroll: false,
+        search: (prev) => {
+          if (prev.teamArray) {
+            return {
+              ...prev,
+              teamArray: [...prev.teamArray, teamId],
             }
-          },
-        })
-      } else {
-        setSelectedTeams((prev) => prev.filter((team) => team !== teamId))
-        navigate({
-          resetScroll: false,
-          search: (prev) => {
-            if (prev.teamArray && prev.teamArray.includes(teamId)) {
-              return {
-                ...prev,
-                teamArray: [
-                  ...prev.teamArray.filter((team) => team !== teamId),
-                ],
-              }
-            } else {
-              return { ...prev, teamArray: [] }
+          } else {
+            return { ...prev, teamArray: [teamId] }
+          }
+        },
+      })
+    } else {
+      setSelectedTeams((prev) =>
+        prev.filter((team) => team !== teamId),
+      )
+      navigate({
+        resetScroll: false,
+        search: (prev) => {
+          if (
+            prev.teamArray &&
+            prev.teamArray.includes(teamId)
+          ) {
+            return {
+              ...prev,
+              teamArray: [
+                ...prev.teamArray.filter(
+                  (team) => team !== teamId,
+                ),
+              ],
             }
-          },
-        })
-      }
-    },
-    [navigate],
-  )
-
+          } else {
+            return { ...prev, teamArray: [] }
+          }
+        },
+      })
+    }
+  }
   return (
     <div>
-      <FilterComponent teamFilter={teamFilter} setTeamFilter={setTeamFilter} />
-      <div className="grid grid-cols-1 gap-x-8 gap-y-2 pt-2 lg:grid-cols-3 2xl:grid-cols-4">
+      <FilterComponent
+        teamFilter={teamFilter}
+        setTeamFilter={setTeamFilter}
+      />
+      <div className="grid grid-cols-1 gap-x-8 gap-y-2 pt-2 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
         {teams.map((team) => {
           return (
             <TeamsListItem

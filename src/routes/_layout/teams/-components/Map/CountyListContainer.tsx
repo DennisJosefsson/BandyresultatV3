@@ -42,7 +42,7 @@ const CountyListContainer = ({
   setCounties,
   mapRef,
 }: CountyListContainerProp) => {
-  const matches = useMediaQuery('(min-width: 768px)')
+  const matches = useMediaQuery('(min-width: 1280px)')
   const matchesSmall = useMediaQuery('(min-width: 430px)')
   const [open, setOpen] = useState(false)
   return (
@@ -72,7 +72,7 @@ const CountyListContainer = ({
             </DrawerTrigger>
 
             <DrawerContent>
-              <div className="m-2 max-h-[2/3]">
+              <div className="m-2 max-h-[2/3] px-2 xs:px-4 sm:px-10">
                 <CountyList
                   countyArray={countyArray}
                   setCounties={setCounties}

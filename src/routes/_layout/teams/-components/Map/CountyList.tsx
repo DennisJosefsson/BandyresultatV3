@@ -75,7 +75,7 @@ const CountyList = ({
   }
 
   return (
-    <div className="grid grid-cols-2 gap-2 w-80">
+    <div className="grid grid-cols-2 gap-4 w-full sm:w-80">
       <div className="text-primary mb-2 flex flex-row items-center justify-between text-[10px] md:text-sm ">
         <span
           className="cursor-pointer truncate"

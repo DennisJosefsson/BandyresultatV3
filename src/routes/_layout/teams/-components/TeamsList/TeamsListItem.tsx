@@ -22,18 +22,18 @@ const TeamsListItem = ({
   selectedTeams,
   onCheckedChange,
 }: TeamsListItemProps) => {
-  //   const { favTeams } = useTeampreferenceContext()
-  //   const pathName = useLocation().pathname
-  //   const women = useSearch({
-  //     from: '/_layout',
-  //     select: (search) => search.women,
-  //   })
-
   return (
-    <div className="bg-muted dark:bg-muted/50 flex flex-row items-center justify-between space-y-0 space-x-3 rounded p-2 text-sm has-data-[state=checked]:font-bold md:text-base 2xl:text-lg">
+    <div
+      data-state={
+        selectedTeams.includes(team.teamId)
+          ? 'checked'
+          : 'unchecked'
+      }
+      className="bg-muted data-[state=checked]:outline data-[state=checked]:shadow-md data-[state=checked]:shadow-accent dark:bg-muted/50 flex flex-row items-center justify-between space-y-0 space-x-3 rounded p-2 text-sm md:text-base 2xl:text-lg data-[state=checked]:outline-primary/30 data-[state=checked]:bg-primary/10 dark:data-[state=checked]:outline-primary/20 dark:data-[state=checked]:bg-primary/10"
+    >
       <span
         className={cn(
-          'w-32 peer-data-[state=checked]:underline',
+          'w-32 data-[state=checked]:underline',
         )}
       >
         <Link
@@ -52,7 +52,7 @@ const TeamsListItem = ({
           team.teamId &&
           onCheckedChange(checked, team.teamId)
         }
-        className="peer bg-muted data-[state=checked]:border-primary data-[state=checked]:bg-background data-[state=checked]:text-primary dark:bg-muted/50 dark:data-[state=checked]:bg-background dark:data-[state=checked]:text-primary dark:data-[state=checked]:border-white"
+        className="ring ring-accent-foreground dark:ring-0"
       />
     </div>
   )
