@@ -12,7 +12,7 @@ export function TeamSidebar() {
     from: '__root__',
     select: (s) => s.women,
   })
-  const { isMobile, setOpenMobile } = useSidebar()
+  const { open, isMobile, setOpenMobile } = useSidebar()
   const toggleOnMobile = () => {
     if (isMobile) {
       setOpenMobile(false)
