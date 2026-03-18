@@ -3,12 +3,7 @@ import {
   useLocation,
   useSearch,
 } from '@tanstack/react-router'
-import {
-  CircleQuestionMarkIcon,
-  ListIcon,
-  MapIcon,
-  SearchIcon,
-} from 'lucide-react'
+import { ListIcon, MapIcon, SearchIcon } from 'lucide-react'
 import { useMediaQuery } from 'usehooks-ts'
 
 import { TabBarInline } from '@/components/TabBar/TabBar'
@@ -29,16 +24,6 @@ const TeamsTabBar = () => {
     : true
 
   const teamsTabBarObject = {
-    help: (
-      <Button
-        size={matches ? 'default' : 'icon'}
-        variant={
-          pathName.endsWith('help') ? 'default' : 'outline'
-        }
-      >
-        {matches ? 'Hjälp' : <CircleQuestionMarkIcon />}
-      </Button>
-    ),
     tabBarArray: [
       {
         tab: (
