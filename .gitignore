@@ -13,3 +13,5 @@ count.txt
 todos.json
 OLDREADME.md
 /drizzle
+devDatabase.env
+testDatabase.env
