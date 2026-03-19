@@ -1,4 +1,7 @@
-import type { SortingState } from '@tanstack/react-table'
+import type {
+  SortingState,
+  VisibilityState,
+} from '@tanstack/react-table'
 import {
   flexRender,
   getCoreRowModel,
@@ -9,7 +12,6 @@ import { useState } from 'react'
 
 import type { TeamTable } from '@/lib/types/table'
 
-// oxlint-disable no-unused-expressions
 import {
   Table,
   TableBody,
@@ -20,26 +22,35 @@ import {
 } from '@/components/base/ui/table'
 import { cn } from '@/lib/utils/utils'
 
-import { columns } from './columns'
+import { Button } from '@/components/base/ui/button'
+import {
+  columns,
+  gameColumns,
+  goalsColumns,
+} from './columns'
 
-interface DataTableProps {
+interface MobileDataTableProps {
   data: Array<TeamTable>
   casualName: string
   serieStructure: Array<number> | null | undefined
 }
 
-const DataTable = ({
+const MobileDataTable = ({
   data,
   serieStructure,
   casualName,
-}: DataTableProps) => {
+}: MobileDataTableProps) => {
   const [sorting, setSorting] = useState<SortingState>([
     { id: 'totalPoints', desc: true },
     { id: 'totalGoalDifference', desc: true },
     { id: 'totalGoalsScored', desc: true },
     { id: 'team_casualName', desc: false },
   ])
-
+  const [columnVisibility, setColumnVisibility] =
+    useState<VisibilityState>(goalsColumns)
+  const [visibleColumns, setVisibleColumns] = useState<
+    'goals' | 'games'
+  >('goals')
   const table = useReactTable({
     data,
     columns,
@@ -48,7 +59,9 @@ const DataTable = ({
     getSortedRowModel: getSortedRowModel(),
     state: {
       sorting,
+      columnVisibility,
     },
+    onColumnVisibilityChange: setColumnVisibility,
   })
 
   const getString = (x: unknown): string => {
@@ -57,18 +70,34 @@ const DataTable = ({
     return x as string
   }
 
+  const onClickHandler = () => {
+    if (visibleColumns === 'goals') {
+      setColumnVisibility(gameColumns)
+      setVisibleColumns('games')
+    } else if (visibleColumns === 'games') {
+      setColumnVisibility(goalsColumns)
+      setVisibleColumns('goals')
+    }
+  }
+
   return (
-    <div>
+    <div className="flex flex-col gap-4">
+      <div>
+        <Button
+          className="w-full"
+          variant="outline"
+          size="xs"
+          onClick={onClickHandler}
+        >
+          {visibleColumns === 'games'
+            ? 'Visa målkolumner'
+            : 'Visa matchkolumner'}
+        </Button>
+      </div>
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
-              <TableHead
-                key={'position'}
-                className="hidden px-0 py-1 sm:table-cell sm:w-12 sm:px-2 xl:text-base 2xl:text-lg"
-              >
-                P
-              </TableHead>
               {headerGroup.headers.map((header) => {
                 return (
                   <TableHead
@@ -108,12 +137,6 @@ const DataTable = ({
                     : null,
                 )}
               >
-                <TableCell
-                  key={`index-${index}`}
-                  className="hidden tabular-nums sm:table-cell sm:w-12"
-                >
-                  {index + 1}
-                </TableCell>
                 {row.getVisibleCells().map((cell) => {
                   return (
                     <TableCell
@@ -145,4 +168,4 @@ const DataTable = ({
   )
 }
 
-export default DataTable
+export default MobileDataTable

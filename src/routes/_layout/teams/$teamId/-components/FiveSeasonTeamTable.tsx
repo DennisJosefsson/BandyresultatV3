@@ -26,14 +26,15 @@ const FiveSeasonTeamTable = ({
         return (
           <Card
             key={table.group}
-            className="mb-2 p-1 sm:mb-4 md:mb-6 md:p-2"
+            className="mb-2"
+            size="sm"
           >
-            <CardHeader className="p-1 md:p-2">
-              <CardTitle className="text-[10px] md:text-sm">
+            <CardHeader>
+              <CardTitle className="group-data-[size=sm]/card:text-[10px] xs:group-data-[size=sm]/card:text-xs md:group-data-[size=sm]/card:text-sm">
                 {`${table.serie.serieName} ${season}`}
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-1 md:p-2">
+            <CardContent>
               <Table className="w-full table-fixed">
                 <TeamTableHeader />
                 <TableBody>

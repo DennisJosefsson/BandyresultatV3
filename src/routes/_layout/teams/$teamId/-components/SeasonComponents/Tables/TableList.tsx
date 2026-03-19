@@ -1,6 +1,7 @@
 import type { GroupTable } from '@/lib/types/table'
 
 import DataTable from './DataTable'
+import MobileDataTable from './MobileDataTable'
 
 type TableListProps = {
   tableArray: Array<GroupTable>
@@ -37,14 +38,26 @@ const TableList = ({
               </h2>
             </div>
 
-            <div>
+            <div className="hidden sm:block">
               <DataTable
                 data={group.tables}
                 casualName={casualName}
                 serieStructure={group.serieStructure}
               />
               {group.comment && (
-                <p className="bg-background p-1 text-[8px] md:text-xs">
+                <p className="p-1 text-[8px] md:text-xs">
+                  {group.comment}
+                </p>
+              )}
+            </div>
+            <div className="sm:hidden">
+              <MobileDataTable
+                data={group.tables}
+                casualName={casualName}
+                serieStructure={group.serieStructure}
+              />
+              {group.comment && (
+                <p className="p-1 text-[8px] md:text-xs">
                   {group.comment}
                 </p>
               )}

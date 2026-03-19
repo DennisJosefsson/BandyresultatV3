@@ -21,13 +21,20 @@ const GameStatComponent = ({
 }: {
   children: ReactNode
 }) => {
-  return <Card className="mb-2">{children}</Card>
+  return (
+    <Card
+      className="mb-2"
+      size="sm"
+    >
+      {children}
+    </Card>
+  )
 }
 
 function Title({ children }: { children: ReactNode }) {
   return (
-    <CardHeader className="p-3">
-      <CardTitle className="text-[10px] md:text-sm">
+    <CardHeader>
+      <CardTitle className="group-data-[size=sm]/card:text-[10px] xs:group-data-[size=sm]/card:text-xs md:group-data-[size=sm]/card:text-sm">
         {children}
       </CardTitle>
     </CardHeader>
@@ -42,13 +49,13 @@ function Content({
   if (!statArray || statArray.length === 0) return null
 
   return (
-    <CardContent className="xxs:text-xs text-[10px] lg:mr-0 lg:text-sm">
+    <CardContent>
       <div>
         {statArray.map((stat, index) => {
           return (
             <div
               key={`${stat.gameId}-${index}`}
-              className="bg-muted-foreground/20 xs:p-2 mb-1 flex flex-col gap-1 rounded p-1"
+              className="bg-muted-foreground/20 xs:p-2 mb-1 flex flex-col gap-1 rounded p-1 text-[10px] lg:text-sm"
             >
               <div className="flex flex-row justify-between">
                 <span>

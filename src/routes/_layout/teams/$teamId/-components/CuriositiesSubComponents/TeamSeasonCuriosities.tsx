@@ -22,13 +22,16 @@ const TeamSeasonCuriosities = () => {
   } = route.useLoaderData()
 
   return (
-    <Card className="mb-2 p-1">
-      <CardHeader className="p-1 md:p-6">
-        <CardTitle className="text-[10px] md:text-sm">
+    <Card
+      className="mb-2"
+      size="sm"
+    >
+      <CardHeader>
+        <CardTitle className="group-data-[size=sm]/card:text-[10px] xs:group-data-[size=sm]/card:text-xs md:group-data-[size=sm]/card:text-sm">
           Kuriosa
         </CardTitle>
       </CardHeader>
-      <CardContent className="xxs:text-xs p-1 text-[10px] md:p-6 lg:mr-0 lg:text-sm">
+      <CardContent>
         <div className="mb-1">{seasonString}</div>
 
         <div className="mb-1">{finalsAndWinsString}</div>
@@ -36,7 +39,7 @@ const TeamSeasonCuriosities = () => {
         <div className="mb-1">{playoffCountString}</div>
 
         {playoffStreak.length > 0 ? (
-          <div className="mb-1">
+          <div className="mb-1 sm:mb-2 lg:mb-3">
             {playoffStreak.map((streak, index) => {
               return (
                 <div key={`${streak.startYear}-${index}`}>

@@ -1,6 +1,16 @@
 import Date from '@/components/Common/Date'
 import type { GroupGames } from '@/lib/types/game'
 
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/base/ui/table'
+import { Fragment } from 'react/jsx-runtime'
 import GamesListItem from './GamesListItem'
 
 type GameListProps = {
@@ -38,7 +48,7 @@ const GamesList = ({
           return (
             <div
               key={group.group}
-              className="mb-6"
+              className="mb-6 w-full"
             >
               <div
                 id={group.group}
@@ -48,37 +58,59 @@ const GamesList = ({
                   {group.name}
                 </h3>
               </div>
-              {group.comment && (
-                <p className="bg-background my-2 max-w-xl p-1 text-[10px] font-bold md:text-xs xl:text-sm 2xl:text-base">
-                  {group.comment}
-                </p>
-              )}
-              <div>
-                {group.dates.map((date) => {
-                  return (
-                    <div key={date.date}>
-                      {date.date !== 'null' && (
-                        <div className="group mb-0.5 flex flex-row items-center gap-1 lg:mb-1 2xl:mb-2">
-                          <h3
-                            className="text-[0.75rem] tracking-wide md:text-sm xl:text-base 2xl:text-lg"
-                            id={`${group.group}-${date.date}`}
-                          >
-                            <Date>{date.date}</Date>
-                          </h3>
-                        </div>
-                      )}
-                      {date.games.map((game) => {
-                        return (
-                          <GamesListItem
-                            key={game.gameId}
-                            game={game}
-                          />
-                        )
-                      })}
-                    </div>
-                  )
-                })}
-              </div>
+              <Table className="w-full xl:w-4/5 2xl:w-2/3 table-fixed">
+                {group.comment && (
+                  <TableCaption>
+                    {group.comment}
+                  </TableCaption>
+                )}
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="text-[8px] sm:text-sm lg:text-base px-0 h-8 w-12 xs:w-18">
+                      Hemma
+                    </TableHead>
+                    <TableHead className="text-[8px] sm:text-sm lg:text-base px-0 h-8 w-4"></TableHead>
+                    <TableHead className="text-[8px] sm:text-sm lg:text-base px-0 h-8 w-12 xs:w-18">
+                      Borta
+                    </TableHead>
+                    <TableHead className="text-[8px] sm:text-sm lg:text-base px-0 h-8 w-12 xs:w-18">
+                      Resultat
+                    </TableHead>
+                    <TableHead className="text-[8px] sm:text-sm lg:text-base px-0 h-8 w-12">
+                      Halvtid
+                    </TableHead>
+                    <TableHead className="text-[8px] sm:text-sm lg:text-base px-0 h-8 w-12 text-center">
+                      Avgörande
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {group.dates.map((date) => {
+                    return (
+                      <Fragment key={date.date}>
+                        {date.date !== 'null' && (
+                          <TableRow>
+                            <TableCell
+                              colSpan={6}
+                              className="p-0 py-1 text-[8px] sm:text-sm lg:text-base w-24"
+                            >
+                              <Date>{date.date}</Date>
+                            </TableCell>
+                          </TableRow>
+                        )}
+                        {date.games.map((game) => {
+                          return (
+                            <GamesListItem
+                              key={game.gameId}
+                              game={game}
+                            />
+                          )
+                        })}
+                      </Fragment>
+                    )
+                  })}
+                </TableBody>
+              </Table>
             </div>
           )
         })}

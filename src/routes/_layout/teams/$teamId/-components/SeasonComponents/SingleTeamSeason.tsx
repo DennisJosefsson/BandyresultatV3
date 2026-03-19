@@ -48,7 +48,7 @@ const SingleTeamSeason = () => {
               </div>
             </Button>
           </Link>
-          <h4 className="text-sm font-semibold md:text-lg">
+          <h4 className="text-xs sm:text-sm font-semibold md:text-base">
             {season.seasonYear}
           </h4>
           <Link

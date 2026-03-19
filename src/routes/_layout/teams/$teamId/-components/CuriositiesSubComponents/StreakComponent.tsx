@@ -22,13 +22,20 @@ const StreakComponent = ({
 }: {
   children: ReactNode
 }) => {
-  return <Card className="mb-2">{children}</Card>
+  return (
+    <Card
+      className="mb-2"
+      size="sm"
+    >
+      {children}
+    </Card>
+  )
 }
 
 function Title({ children }: { children: ReactNode }) {
   return (
-    <CardHeader className="p-3">
-      <CardTitle className="text-[10px] md:text-sm">
+    <CardHeader>
+      <CardTitle className="group-data-[size=sm]/card:text-[10px] xs:group-data-[size=sm]/card:text-xs md:group-data-[size=sm]/card:text-sm">
         {children}
       </CardTitle>
     </CardHeader>
@@ -39,13 +46,13 @@ function Content({ streak }: { streak: Array<Streak> }) {
   if (!streak || streak.length === 0) return null
 
   return (
-    <CardContent className="xxs:text-xs text-[10px] lg:mr-0 lg:text-sm">
+    <CardContent>
       <div>
         {streak.map((s, index) => {
           return (
             <div
               key={`${s.startDate}-${index}`}
-              className="bg-muted-foreground/20 mb-1 flex flex-row justify-between rounded px-3 py-1"
+              className="bg-muted-foreground/20 mb-1 flex flex-row justify-between rounded px-2 py-1 text-[10px] lg:text-sm"
             >
               <div>
                 <Date>{s.startDate}</Date> -{' '}
