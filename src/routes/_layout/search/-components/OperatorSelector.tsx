@@ -70,7 +70,7 @@ const OperatorSelector = ({
         name={field}
         id={field}
       >
-        <SelectTrigger className="w-[280px]">
+        <SelectTrigger className="w-62">
           <SelectValue placeholder="Välj">
             {arrayLabel}
           </SelectValue>

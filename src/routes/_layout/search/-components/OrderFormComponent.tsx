@@ -8,7 +8,7 @@ import OperatorSelector from './OperatorSelector'
 const OrderFormComponent = () => {
   return (
     <div className="mb-2 flex w-[18rem] flex-col rounded lg:w-full">
-      <div className="grid grid-cols-1 lg:grid-cols-3">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div className="flex max-w-[16rem] flex-col">
           <LimitSelection />
         </div>

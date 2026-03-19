@@ -89,7 +89,7 @@ const TeamSelection = ({
             onValueChange={(value) => onValueChange(value)}
             onOpenChange={(open) => onOpenChange(open)}
           >
-            <SelectTrigger className="w-[280px]">
+            <SelectTrigger className="w-62">
               <SelectValue placeholder="Välj">
                 {selectedLabel}
               </SelectValue>

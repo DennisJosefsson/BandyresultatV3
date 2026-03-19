@@ -53,7 +53,7 @@ const RadioComponent = ({
           onValueChange={handleOnChange}
           defaultValue={defaultValue}
           value={searchField ?? 'all'}
-          className="flex flex-row justify-between gap-8"
+          className="grid grid-cols-1 gap-4 sm:flex sm:flex-row sm:justify-between sm:gap-8"
         />
       </div>
     </div>

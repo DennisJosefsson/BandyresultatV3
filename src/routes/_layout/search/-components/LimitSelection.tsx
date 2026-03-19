@@ -43,7 +43,7 @@ const LimitSelection = () => {
         name="limit"
         id="limit"
       >
-        <SelectTrigger className="w-[280px]">
+        <SelectTrigger className="w-62">
           <SelectValue placeholder="Välj" />
         </SelectTrigger>
         <SelectContent>
