@@ -143,9 +143,12 @@ export const getSingleTeamSeason = createServerFn({
           eq(seasons.seasonId, games.seasonId),
         )
         .where(
-          or(
-            eq(games.homeTeamId, team.teamId),
-            eq(games.awayTeamId, team.teamId),
+          and(
+            or(
+              eq(games.homeTeamId, team.teamId),
+              eq(games.awayTeamId, team.teamId),
+            ),
+            eq(games.seasonId, season.seasonId),
           ),
         )
         .orderBy(desc(games.date))
