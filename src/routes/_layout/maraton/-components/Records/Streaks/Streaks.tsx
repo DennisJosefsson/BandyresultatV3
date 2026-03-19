@@ -4,18 +4,25 @@ import Date from '@/components/Common/Date'
 
 import StreakCard from './StreakCard'
 
-const route = getRouteApi('/_layout/maraton/records/streaks')
+const route = getRouteApi(
+  '/_layout/maraton/records/streaks',
+)
 
 const Streaks = () => {
-  const data = route.useLoaderData({ select: (s) => s.streaks })
+  const data = route.useLoaderData({
+    select: (s) => s.streaks,
+  })
   return (
     <div>
-      <div className="grid grid-cols-1 gap-20 lg:grid-cols-2 xl:grid-cols-3">
+      <div className="grid grid-cols-1 gap-y-4 lg:gap-4 2xl:gap-10 lg:grid-cols-2 xl:grid-cols-3">
         <StreakCard
           streak={data.unbeatenStreak}
           title="Matcher i rad utan förlust"
         />
-        <StreakCard streak={data.winStreak} title="Matcher i rad med vinst" />
+        <StreakCard
+          streak={data.winStreak}
+          title="Matcher i rad med vinst"
+        />
         <StreakCard
           streak={data.drawStreak}
           title="Matcher i rad med oavgjort"
@@ -30,41 +37,45 @@ const Streaks = () => {
         />
 
         <div className="p-2">
-          <h3 className="mb-2 text-sm leading-4 font-bold sm:text-lg lg:text-xl">
+          <h3 className="mb-2 text-xs leading-4 font-bold sm:text-base xl:text-lg">
             Inofficiella Svenska Mästare
           </h3>
           <div>
-            {data.currInoffChamps.games.map((team, index) => {
-              return (
-                <div
-                  className="mb-1 flex max-w-100 flex-row items-center justify-between p-1 text-[10px] md:mb-2 md:p-2 md:text-sm"
-                  key={`${team.team.name}-${Math.random()}`}
-                >
-                  <span className="mr-4 w-8 text-right text-base font-bold tabular-nums md:text-2xl">
-                    {index + 1}
-                  </span>
-                  <div className="mr-4 flex grow flex-col">
-                    <div className="flex flex-row justify-between">
-                      <span className="truncate font-semibold">
-                        {team.team.name}
-                      </span>
-                      <span className="text-right">{team.result}</span>
-                    </div>
-                    <div className="flex flex-row items-center justify-between text-[10px] md:text-xs">
-                      <div>
-                        <span className="w-48 sm:w-64">
-                          <Date>{team.date}</Date>
+            {data.currInoffChamps.games.map(
+              (team, index) => {
+                return (
+                  <div
+                    className="mb-1 flex max-w-100 flex-row items-center justify-between p-1 text-[10px] md:mb-2 md:p-2 md:text-sm"
+                    key={`${team.team.name}-${Math.random()}`}
+                  >
+                    <span className="mr-4 w-8 text-right text-base font-bold tabular-nums md:text-2xl">
+                      {index + 1}
+                    </span>
+                    <div className="mr-4 flex grow flex-col">
+                      <div className="flex flex-row justify-between">
+                        <span className="truncate font-semibold">
+                          {team.team.name}
+                        </span>
+                        <span className="text-right">
+                          {team.result}
                         </span>
                       </div>
+                      <div className="flex flex-row items-center justify-between text-[10px] md:text-xs">
+                        <div>
+                          <span className="w-48 sm:w-64">
+                            <Date>{team.date}</Date>
+                          </span>
+                        </div>
 
-                      <span className="text-right">
-                        {team.opponent.shortName}
-                      </span>
+                        <span className="text-right">
+                          {team.opponent.shortName}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              )
-            })}
+                )
+              },
+            )}
           </div>
           <div>
             <p className="w-[292px] p-1 text-xs font-bold md:w-88">

@@ -15,7 +15,7 @@ const PointsGoals = ({ data, stat }: PointsGoalsProps) => {
       </h2>
       <div className="grid grid-cols-1 gap-2 lg:grid-cols-2 xl:grid-cols-3">
         <div>
-          <h3 className="mb-2 text-xs leading-4 font-bold sm:text-base lg:text-lg">
+          <h3 className="mb-2 text-xs leading-4 font-bold sm:text-base xl:text-lg">
             Genomsnitt
           </h3>
           <div>
@@ -26,7 +26,7 @@ const PointsGoals = ({ data, stat }: PointsGoalsProps) => {
           </div>
         </div>
         <div>
-          <h3 className="mb-2 text-xs leading-4 font-bold sm:text-base lg:text-lg">
+          <h3 className="mb-2 text-xs leading-4 font-bold sm:text-base xl:text-lg">
             Genomsnitt Hemma
           </h3>
           <div>
@@ -37,7 +37,7 @@ const PointsGoals = ({ data, stat }: PointsGoalsProps) => {
           </div>
         </div>
         <div>
-          <h3 className="mb-2 text-xs leading-4 font-bold sm:text-base lg:text-lg">
+          <h3 className="mb-2 text-xs leading-4 font-bold sm:text-base xl:text-lg">
             Genomsnitt Borta
           </h3>
           <div>
@@ -53,7 +53,7 @@ const PointsGoals = ({ data, stat }: PointsGoalsProps) => {
       </h2>
       <div className="grid grid-cols-1 gap-2 lg:grid-cols-2 xl:grid-cols-3">
         <div>
-          <h3 className="mb-2 text-xs leading-4 font-bold sm:text-base lg:text-lg">
+          <h3 className="mb-2 text-xs leading-4 font-bold sm:text-base xl:text-lg">
             Genomsnitt
           </h3>
           <div>
@@ -64,7 +64,7 @@ const PointsGoals = ({ data, stat }: PointsGoalsProps) => {
           </div>
         </div>
         <div>
-          <h3 className="mb-2 text-xs leading-4 font-bold sm:text-base lg:text-lg">
+          <h3 className="mb-2 text-xs leading-4 font-bold sm:text-base xl:text-lg">
             Genomsnitt Hemma
           </h3>
           <div>
@@ -75,7 +75,7 @@ const PointsGoals = ({ data, stat }: PointsGoalsProps) => {
           </div>
         </div>
         <div>
-          <h3 className="mb-2 text-xs leading-4 font-bold sm:text-base lg:text-lg">
+          <h3 className="mb-2 text-xs leading-4 font-bold sm:text-base xl:text-lg">
             Genomsnitt Borta
           </h3>
           <div>
@@ -91,7 +91,7 @@ const PointsGoals = ({ data, stat }: PointsGoalsProps) => {
       </h2>
       <div className="grid grid-cols-1 gap-2 lg:grid-cols-2 xl:grid-cols-3">
         <div>
-          <h3 className="mb-2 text-xs leading-4 font-bold sm:text-base lg:text-lg">
+          <h3 className="mb-2 text-xs leading-4 font-bold sm:text-base xl:text-lg">
             Totalt
           </h3>
           <div>
@@ -102,7 +102,7 @@ const PointsGoals = ({ data, stat }: PointsGoalsProps) => {
           </div>
         </div>
         <div>
-          <h3 className="mb-2 text-xs leading-4 font-bold sm:text-base lg:text-lg">
+          <h3 className="mb-2 text-xs leading-4 font-bold sm:text-base xl:text-lg">
             Totalt Hemma
           </h3>
           <div>
@@ -113,7 +113,7 @@ const PointsGoals = ({ data, stat }: PointsGoalsProps) => {
           </div>
         </div>
         <div>
-          <h3 className="mb-2 text-xs leading-4 font-bold sm:text-base lg:text-lg">
+          <h3 className="mb-2 text-xs leading-4 font-bold sm:text-base xl:text-lg">
             Totalt Borta
           </h3>
           <div>
@@ -129,7 +129,7 @@ const PointsGoals = ({ data, stat }: PointsGoalsProps) => {
       </h2>
       <div className="grid grid-cols-1 gap-2 lg:grid-cols-2 xl:grid-cols-3">
         <div>
-          <h3 className="mb-2 text-xs leading-4 font-bold sm:text-base lg:text-lg">
+          <h3 className="mb-2 text-xs leading-4 font-bold sm:text-base xl:text-lg">
             Totalt
           </h3>
           <div>
@@ -140,7 +140,7 @@ const PointsGoals = ({ data, stat }: PointsGoalsProps) => {
           </div>
         </div>
         <div>
-          <h3 className="mb-2 text-xs leading-4 font-bold sm:text-base lg:text-lg">
+          <h3 className="mb-2 text-xs leading-4 font-bold sm:text-base xl:text-lg">
             Totalt Hemma
           </h3>
           <div>
@@ -151,7 +151,7 @@ const PointsGoals = ({ data, stat }: PointsGoalsProps) => {
           </div>
         </div>
         <div>
-          <h3 className="mb-2 text-xs leading-4 font-bold sm:text-base lg:text-lg">
+          <h3 className="mb-2 text-xs leading-4 font-bold sm:text-base xl:text-lg">
             Totalt Borta
           </h3>
           <div>

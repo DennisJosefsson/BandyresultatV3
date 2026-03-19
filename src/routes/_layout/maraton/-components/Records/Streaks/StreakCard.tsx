@@ -8,7 +8,7 @@ type StreakCardProps = {
 const StreakCard = ({ streak, title }: StreakCardProps) => {
   return (
     <div className="mt-2">
-      <h3 className="mb-2 text-xs leading-4 font-bold sm:text-base lg:text-lg">
+      <h3 className="mb-2 text-xs leading-4 font-bold sm:text-base xl:text-lg">
         {title}
       </h3>
       <div>
