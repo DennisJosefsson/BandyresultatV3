@@ -59,7 +59,7 @@ export async function getStreakData({
       res.map((t) => {
         return {
           date: t.date,
-          result: `${t.goalsConceded}-${t.goalsConceded}`,
+          result: `${t.goalsScored}-${t.goalsConceded}`,
           team: t.team,
           opponent: t.opponent,
         }
