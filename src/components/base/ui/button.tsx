@@ -37,6 +37,8 @@ const buttonVariants = cva(
         'icon-lg':
           "size-8 [&_svg:not([class*='size-'])]:size-4",
         smallicon: 'h-6 w-6',
+        responsive:
+          "h6 gap-1 px-1.5 text-[8px]/relaxed has-data-[icon=inline-end]:pr-1 has-data-[icon=inline-start]:pl-1 [&_svg:not([class*='size-'])]:size-2.5 xs:text-[10px] sm:px-2 sm:text-xs/relaxed sm:has-data-[icon=inline-end]:pr-1.5 sm:has-data-[icon=inline-start]:pl-1.5 sm:[&_svg:not([class*='size-'])]:size-3 lg:h-7 lg:[&_svg:not([class*='size-'])]:size-3.5",
       },
     },
     defaultVariants: {
