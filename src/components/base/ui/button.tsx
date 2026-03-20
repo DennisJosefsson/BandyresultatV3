@@ -39,6 +39,8 @@ const buttonVariants = cva(
         smallicon: 'h-6 w-6',
         responsive:
           "h6 gap-1 px-1.5 text-[8px]/relaxed has-data-[icon=inline-end]:pr-1 has-data-[icon=inline-start]:pl-1 [&_svg:not([class*='size-'])]:size-2.5 xs:text-[10px] sm:px-2 sm:text-xs/relaxed sm:has-data-[icon=inline-end]:pr-1.5 sm:has-data-[icon=inline-start]:pl-1.5 sm:[&_svg:not([class*='size-'])]:size-3 lg:h-7 lg:[&_svg:not([class*='size-'])]:size-3.5",
+        tabbar:
+          "size-5 sm:size-6 md:px-2 md:text-xs/relaxed md:h-6 md:w-fit lg:h-7 lg:[&_svg:not([class*='size-'])]:size-3.5",
       },
     },
     defaultVariants: {
