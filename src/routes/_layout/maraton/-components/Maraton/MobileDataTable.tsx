@@ -21,24 +21,22 @@ import {
 } from '@/components/base/ui/table'
 import { useFavTeam } from '@/lib/contexts/favTeamsContext'
 
-import { Button } from '@/components/base/ui/button'
+import { Button } from '@/components/base/ui//button'
 import { gameColumns, goalsColumns } from './columns'
 
-interface DataTableProps<TData, TValue> {
+interface MobileDataTableProps<TData, TValue> {
   columns: Array<ColumnDef<TData, TValue>>
   data: Array<TData>
   teamObject: {
     [x: string]: number
   }
-  serieStructure: number[] | null | undefined
 }
 
-const DataTable = <TData, TValue>({
+const MobileDataTable = <TData, TValue>({
   columns,
   data,
   teamObject,
-  serieStructure,
-}: DataTableProps<TData, TValue>) => {
+}: MobileDataTableProps<TData, TValue>) => {
   const [sorting, setSorting] = useState<SortingState>([
     { id: 'totalPoints', desc: true },
     { id: 'totalGoalDifference', desc: true },
@@ -63,6 +61,14 @@ const DataTable = <TData, TValue>({
     onColumnVisibilityChange: setColumnVisibility,
   })
 
+  const { favTeams } = useFavTeam()
+
+  const getString = (x: unknown): string => {
+    if (!x) throw new Error('Missing string')
+
+    return x as string
+  }
+
   const onClickHandler = () => {
     if (visibleColumns === 'goals') {
       setColumnVisibility(gameColumns)
@@ -73,16 +79,8 @@ const DataTable = <TData, TValue>({
     }
   }
 
-  const { favTeams } = useFavTeam()
-
-  const getString = (x: unknown): string => {
-    if (!x) throw new Error('Missing string')
-
-    return x as string
-  }
-
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-2 sm:gap-3 md:gap-4">
       <div>
         <Button
           className="w-full"
@@ -95,14 +93,13 @@ const DataTable = <TData, TValue>({
             : 'Visa matchkolumner'}
         </Button>
       </div>
-
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               <TableHead
                 key={'position'}
-                className="text-center text-[7px] xs:text-[8px] sm:text-[10px] tabular-nums md:text-sm xl:text-base 2xl:text-lg max-w-10"
+                className="hidden xs:table-cell text-center text-[7px] xs:text-[8px] sm:text-[10px] tabular-nums md:text-sm xl:text-base 2xl:text-lg max-w-10"
               >
                 P
               </TableHead>
@@ -143,15 +140,11 @@ const DataTable = <TData, TValue>({
                   )
                     ? 'font-bold'
                     : null
-                } ${
-                  serieStructure?.includes(index + 1)
-                    ? 'border-foreground border-b-2'
-                    : null
                 }`}
               >
                 <TableCell
                   key={`index-${index}`}
-                  className="hidden tabular-nums sm:table-cell sm:w-12 xl:text-base 2xl:text-lg"
+                  className="hidden xs:table-cell text-center text-[7px] xs:text-[8px] sm:text-[10px] tabular-nums md:text-sm xl:text-base 2xl:text-lg max-w-10"
                 >
                   {index + 1}
                 </TableCell>
@@ -186,4 +179,4 @@ const DataTable = <TData, TValue>({
   )
 }
 
-export default DataTable
+export default MobileDataTable

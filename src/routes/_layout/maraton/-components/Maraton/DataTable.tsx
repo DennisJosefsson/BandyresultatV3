@@ -8,8 +8,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { useEffect, useState } from 'react'
-import { useMediaQuery } from 'usehooks-ts'
+import { useState } from 'react'
 
 import {
   Table,
@@ -20,8 +19,6 @@ import {
   TableRow,
 } from '@/components/base/ui/table'
 import { useFavTeam } from '@/lib/contexts/favTeamsContext'
-
-import { hideColumns, showColumns } from './columns'
 
 interface DataTableProps<TData, TValue> {
   columns: Array<ColumnDef<TData, TValue>>
@@ -36,16 +33,12 @@ const DataTable = <TData, TValue>({
   data,
   teamObject,
 }: DataTableProps<TData, TValue>) => {
-  const matches = useMediaQuery('(min-width: 640px)')
   const [sorting, setSorting] = useState<SortingState>([
     { id: 'totalPoints', desc: true },
     { id: 'totalGoalDifference', desc: true },
     { id: 'totalGoalsScored', desc: true },
     { id: 'team_casualName', desc: false },
   ])
-  const [columnVisibility, setColumnVisibility] = useState(
-    {},
-  )
   const table = useReactTable({
     data,
     columns,
@@ -54,16 +47,8 @@ const DataTable = <TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     state: {
       sorting,
-      columnVisibility,
     },
-    onColumnVisibilityChange: setColumnVisibility,
   })
-
-  useEffect(() => {
-    matches
-      ? setColumnVisibility(showColumns)
-      : setColumnVisibility(hideColumns)
-  }, [matches])
 
   const { favTeams } = useFavTeam()
 
@@ -75,13 +60,13 @@ const DataTable = <TData, TValue>({
 
   return (
     <div>
-      <Table className="text-[10px] lg:text-sm xl:text-base">
+      <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               <TableHead
                 key={'position'}
-                className="hidden px-0 py-1 sm:table-cell sm:w-12 sm:px-2 xl:text-base 2xl:text-lg"
+                className="text-center text-[7px] xs:text-[8px] sm:text-[10px] tabular-nums md:text-sm xl:text-base 2xl:text-lg max-w-10"
               >
                 P
               </TableHead>
@@ -89,7 +74,7 @@ const DataTable = <TData, TValue>({
                 return (
                   <TableHead
                     key={header.id}
-                    className={`max-w-[${header.column.getSize()}px]`}
+                    className="px-0"
                   >
                     {header.isPlaceholder
                       ? null
@@ -126,7 +111,7 @@ const DataTable = <TData, TValue>({
               >
                 <TableCell
                   key={`index-${index}`}
-                  className="hidden tabular-nums sm:table-cell sm:w-12 xl:text-base 2xl:text-lg"
+                  className="text-center text-[7px] xs:text-[8px] sm:text-[10px] tabular-nums md:text-sm xl:text-base 2xl:text-lg max-w-10"
                 >
                   {index + 1}
                 </TableCell>
@@ -134,7 +119,7 @@ const DataTable = <TData, TValue>({
                   return (
                     <TableCell
                       key={cell.id}
-                      className={`px-0 py-1 max-w-[${cell.column.getSize()}px]`}
+                      className="px-0 py-1"
                     >
                       {flexRender(
                         cell.column.columnDef.cell,

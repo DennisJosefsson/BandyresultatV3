@@ -1,5 +1,4 @@
 import { Link, getRouteApi } from '@tanstack/react-router'
-import { useMediaQuery } from 'usehooks-ts'
 
 import { Button } from '@/components/base/ui/button'
 
@@ -8,7 +7,6 @@ const route = getRouteApi(
 )
 
 const MaratonTablesButtonList = () => {
-  const matches = useMediaQuery('(min-width: 430px)')
   const women = route.useSearch({
     select: (search) => search.women,
   })
@@ -32,7 +30,7 @@ const MaratonTablesButtonList = () => {
           >
             {({ isActive, isTransitioning }) => (
               <Button
-                size={matches ? 'sm' : 'xxs'}
+                size="responsive"
                 variant={
                   isActive || isTransitioning
                     ? 'default'
@@ -56,7 +54,7 @@ const MaratonTablesButtonList = () => {
           >
             {({ isActive, isTransitioning }) => (
               <Button
-                size={matches ? 'sm' : 'textxxs'}
+                size="responsive"
                 variant={
                   isActive || isTransitioning
                     ? 'default'
@@ -80,7 +78,7 @@ const MaratonTablesButtonList = () => {
           >
             {({ isActive, isTransitioning }) => (
               <Button
-                size={matches ? 'sm' : 'textxxs'}
+                size="responsive"
                 variant={
                   isActive || isTransitioning
                     ? 'default'
