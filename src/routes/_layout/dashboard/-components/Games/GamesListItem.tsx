@@ -1,5 +1,4 @@
 import type { Dispatch, SetStateAction } from 'react'
-import { useMediaQuery } from 'usehooks-ts'
 
 import { Button } from '@/components/base/ui/button'
 import { Checkbox } from '@/components/base/ui/checkbox'
@@ -44,8 +43,6 @@ const GamesListItem = ({
   edit,
   setEdit,
 }: GamesListItemProps) => {
-  const matches768 = useMediaQuery('(min-width: 768px)')
-
   const resultForm = useInlineEditGameForm({ game })
 
   const dateForm = useInledDateEditForm({ game })
@@ -60,7 +57,9 @@ const GamesListItem = ({
     dateForm.validateField('date', 'blur')
   }
 
-  const matchup = `${matches768 ? game.home.casualName : game.home.shortName} - ${matches768 ? game.away.casualName : game.away.shortName}`
+  const matchup = `${game.home.shortName} - ${game.away.shortName}`
+
+  const mdMatchup = `${game.home.casualName} - ${game.away.casualName}`
 
   if (
     edit.editGame === 'result' &&
@@ -77,8 +76,11 @@ const GamesListItem = ({
         >
           <FieldGroup>
             <div className="flex flex-row items-center gap-4">
-              <span className="text-base h-8">
+              <span className="text-base h-8 md:hidden">
                 {matchup}
+              </span>
+              <span className="hidden text-base h-8 md:inline-block">
+                {mdMatchup}
               </span>
               <resultForm.Field
                 name="result"
@@ -342,7 +344,12 @@ const GamesListItem = ({
           }}
         >
           <div className="flex flex-row items-center gap-10">
-            <span className="text-base">{matchup}</span>
+            <span className="text-base h-8 md:hidden">
+              {matchup}
+            </span>
+            <span className="hidden text-base h-8 md:inline-block">
+              {mdMatchup}
+            </span>
             <FieldGroup className="h-9 max-w-48">
               <dateForm.Field
                 name="date"
@@ -421,26 +428,21 @@ const GamesListItem = ({
       <div className="w-full">
         <div
           id={game.gameId?.toString()}
-          className="mb-1 flex flex-row justify-evenly gap-1 px-1 py-0.5 text-[10px] transition-colors md:grid md:max-w-240 md:grid-cols-9 md:gap-4 md:px-2 md:text-sm"
+          className="mb-1 flex flex-row justify-start gap-1 px-1 py-0.5 text-[10px] transition-colors md:max-w-240 md:gap-4 md:px-2 md:text-sm"
         >
-          <span>{game.date}</span>
-          <span>
-            {matches768
-              ? game.home.casualName
-              : game.home.shortName}
+          <span className="w-20">{game.date}</span>
+          <span className="w-50 text-base h-8 md:hidden">
+            {matchup}
           </span>
-          <span className="w-1 text-center xl:w-4">-</span>
-          <span>
-            {matches768
-              ? game.away.casualName
-              : game.away.shortName}
+          <span className="w-50 hidden text-base h-8 md:inline-block">
+            {mdMatchup}
           </span>
 
-          <span className="text-right tabular-nums md:w-16">
+          <span className="text-right tabular-nums w-10">
             {game.result}
           </span>
 
-          <span className="text-right tabular-nums md:w-16">
+          <span className="text-right tabular-nums w-10">
             {game.halftimeResult
               ? `(${game.halftimeResult})`
               : null}
@@ -452,7 +454,7 @@ const GamesListItem = ({
           </span>
           <span>
             <Button
-              size={matches768 ? 'default' : 'textxxs'}
+              size="responsive"
               onClick={() =>
                 setEdit({
                   editGame: 'result',
@@ -465,7 +467,7 @@ const GamesListItem = ({
           </span>
           <span>
             <Button
-              size={matches768 ? 'default' : 'textxxs'}
+              size="responsive"
               onClick={() =>
                 setEdit({
                   editGame: 'date',

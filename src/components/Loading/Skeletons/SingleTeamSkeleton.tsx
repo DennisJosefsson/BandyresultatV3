@@ -1,5 +1,3 @@
-import { useMediaQuery } from 'usehooks-ts'
-
 import { Button } from '@/components/base/ui/button'
 import {
   Card,
@@ -16,7 +14,6 @@ import {
 } from '@/components/base/ui/tabs'
 
 const SingleTeamSkeleton = () => {
-  const matches = useMediaQuery('(min-width: 430px)')
   return (
     <div className="font-inter text-foreground mt-2 flex min-h-screen w-full flex-col">
       <CardHeader className="p-1 md:p-6">
@@ -27,9 +24,7 @@ const SingleTeamSkeleton = () => {
 
           <div>
             <div>
-              <Button size={matches ? 'sm' : 'xxs'}>
-                Favoritlag
-              </Button>
+              <Button size="responsive">Favoritlag</Button>
             </div>
           </div>
         </div>

@@ -8,7 +8,6 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { useMediaQuery } from 'usehooks-ts'
 
 import { Button } from '@/components/base/ui/button'
 import {
@@ -44,8 +43,6 @@ const DataTable = <TData, TValue>({
   })
 
   const { favTeams } = useFavTeam()
-
-  const matches = useMediaQuery('(min-width: 768px)')
 
   const origin = useLocation().pathname
 
@@ -101,7 +98,7 @@ const DataTable = <TData, TValue>({
                 })}
                 <TableCell className="w-12">
                   <Button
-                    size={matches ? 'sm' : 'xs'}
+                    size="responsive"
                     variant="default"
                     render={
                       <route.Link

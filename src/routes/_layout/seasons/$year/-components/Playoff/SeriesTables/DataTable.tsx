@@ -8,8 +8,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { useEffect, useState } from 'react'
-import { useMediaQuery } from 'usehooks-ts'
+import { useState } from 'react'
 
 import {
   Table,
@@ -20,8 +19,6 @@ import {
   TableRow,
 } from '@/components/base/ui/table'
 import { useFavTeam } from '@/lib/contexts/favTeamsContext'
-
-import { hideColumns, showColumns } from './columns'
 
 interface DataTableProps<TData, TValue> {
   columns: Array<ColumnDef<TData, TValue>>
@@ -38,16 +35,12 @@ const DataTable = <TData, TValue>({
   teamObject,
   serieStructure,
 }: DataTableProps<TData, TValue>) => {
-  const matches = useMediaQuery('(min-width: 640px)')
   const [sorting, setSorting] = useState<SortingState>([
     { id: 'totalPoints', desc: true },
     { id: 'totalGoalDifference', desc: true },
     { id: 'totalGoalsScored', desc: true },
     { id: 'team_casualName', desc: false },
   ])
-  const [columnVisibility, setColumnVisibility] = useState(
-    {},
-  )
   const table = useReactTable({
     data,
     columns,
@@ -56,16 +49,8 @@ const DataTable = <TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     state: {
       sorting,
-      columnVisibility,
     },
-    onColumnVisibilityChange: setColumnVisibility,
   })
-
-  useEffect(() => {
-    matches
-      ? setColumnVisibility(showColumns)
-      : setColumnVisibility(hideColumns)
-  }, [matches])
 
   const { favTeams } = useFavTeam()
 

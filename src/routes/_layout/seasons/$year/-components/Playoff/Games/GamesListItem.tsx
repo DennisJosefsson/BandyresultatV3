@@ -1,5 +1,4 @@
 import { getRouteApi } from '@tanstack/react-router'
-import { useMediaQuery } from 'usehooks-ts'
 
 import { Button } from '@/components/base/ui/button'
 import { useFavTeam } from '@/lib/contexts/favTeamsContext'
@@ -17,7 +16,6 @@ const route = getRouteApi(
 const GamesListItem = ({ game }: GamesListItemProps) => {
   const { favTeams } = useFavTeam()
   const navigate = route.useNavigate()
-  const matches = useMediaQuery('(min-width: 768px)')
 
   const onClickHandler = () => {
     navigate({
@@ -70,7 +68,7 @@ const GamesListItem = ({ game }: GamesListItemProps) => {
         )}
 
         <Button
-          size={matches ? 'sm' : 'xs'}
+          size="responsive"
           variant="ghost"
           className="group hover:bg-muted/90"
           onClick={() => onClickHandler()}

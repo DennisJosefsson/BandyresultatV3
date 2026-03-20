@@ -5,18 +5,16 @@ import {
   UserButton,
 } from '@clerk/clerk-react'
 import { User } from 'lucide-react'
-import { useMediaQuery } from 'usehooks-ts'
 
 import { Button } from '@/components/base/ui/button'
 
 export default function HeaderUser() {
-  const matches = useMediaQuery('(min-width: 430px)')
   return (
     <div>
       <SignedIn>
         <Button
           variant="outline"
-          size={matches ? 'icon' : 'smallicon'}
+          size="responsive"
           render={
             <UserButton
               fallback={
@@ -33,7 +31,7 @@ export default function HeaderUser() {
         >
           <Button
             variant="outline"
-            size={matches ? 'icon' : 'smallicon'}
+            size="responsive"
           >
             <User className="h-[1.2rem] w-[1.2rem]" />
           </Button>

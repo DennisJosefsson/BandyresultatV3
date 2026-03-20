@@ -43,7 +43,7 @@ const CountyListContainer = ({
   mapRef,
 }: CountyListContainerProp) => {
   const matches = useMediaQuery('(min-width: 1280px)')
-  const matchesSmall = useMediaQuery('(min-width: 430px)')
+
   const [open, setOpen] = useState(false)
   return (
     <div>
@@ -65,7 +65,7 @@ const CountyListContainer = ({
             <DrawerTrigger asChild>
               <Button
                 variant="outline"
-                size={matchesSmall ? 'sm' : 'textxxs'}
+                size="responsive"
               >
                 Välj län
               </Button>

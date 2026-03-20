@@ -2,7 +2,6 @@ import {
   useLocation,
   useNavigate,
 } from '@tanstack/react-router'
-import { useMediaQuery } from 'usehooks-ts'
 
 import { Button } from '@/components/base/ui/button'
 import { useFavTeam } from '@/lib/contexts/favTeamsContext'
@@ -18,7 +17,6 @@ const GamesListItem = ({ game }: GamesListItemProps) => {
   const navigate = useNavigate({
     from: '/seasons/$year/$group/games',
   })
-  const matches = useMediaQuery('(min-width: 768px)')
 
   const origin = useLocation().pathname
 
@@ -74,7 +72,7 @@ const GamesListItem = ({ game }: GamesListItemProps) => {
         )}
 
         <Button
-          size={matches ? 'sm' : 'xs'}
+          size="responsive"
           variant="default"
           className="group"
           onClick={onClickHandler}

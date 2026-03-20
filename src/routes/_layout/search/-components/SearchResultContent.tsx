@@ -1,8 +1,5 @@
 import { useLocation } from '@tanstack/react-router'
-import {
-  useCopyToClipboard,
-  useMediaQuery,
-} from 'usehooks-ts'
+import { useCopyToClipboard } from 'usehooks-ts'
 
 import { Button } from '@/components/base/ui/button'
 import type { SearchResult } from '@/lib/types/search'
@@ -15,7 +12,6 @@ type SearchContentProps = { gameArray: Array<SearchResult> }
 const SearchContent = ({
   gameArray,
 }: SearchContentProps) => {
-  const matches = useMediaQuery('(min-width: 430px)')
   const [copiedText, copy] = useCopyToClipboard()
   const baseUrl = getBaseUrl()
   const link = useLocation({
@@ -28,7 +24,7 @@ const SearchContent = ({
     <div className="mx-1 mt-2 xl:mx-0">
       <div className="flex flex-row gap-2">
         <Button
-          size={matches ? 'sm' : 'xxs'}
+          size="responsive"
           onClick={() => copy(copyLink)}
         >
           {copiedText ? 'Kopierad!' : 'Länk'}

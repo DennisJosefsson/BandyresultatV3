@@ -1,5 +1,4 @@
 import { Link, getRouteApi } from '@tanstack/react-router'
-import { useMediaQuery } from 'usehooks-ts'
 
 import { Button } from '@/components/base/ui/button'
 import { useFavTeam } from '@/lib/contexts/favTeamsContext'
@@ -14,7 +13,7 @@ const TeamHeader = () => {
     select: (params) => params.teamId,
   })
   const women = route.useSearch({ select: (s) => s.women })
-  const matches = useMediaQuery('(min-width: 430px)')
+
   const { favTeams, setFavTeams } = useFavTeam()
 
   //   const { origin } = getOrigin()
@@ -66,7 +65,7 @@ const TeamHeader = () => {
 
         <div className="flex flex-row items-center gap-1">
           {/* {origin ? (
-            <Button onClick={goBack} size={matches ? 'sm' : 'xxs'}>
+            <Button onClick={goBack} size='responsive'>
               Tillbaka
             </Button>
           ) : null} */}
@@ -74,7 +73,7 @@ const TeamHeader = () => {
           {favTeams.includes(teamId) && (
             <Button
               onClick={remove}
-              size={matches ? 'sm' : 'xxs'}
+              size="responsive"
             >
               Ta bort favorit
             </Button>
@@ -82,7 +81,7 @@ const TeamHeader = () => {
           {!favTeams.includes(teamId) && (
             <Button
               onClick={add}
-              size={matches ? 'sm' : 'xxs'}
+              size="responsive"
             >
               Favoritlag
             </Button>

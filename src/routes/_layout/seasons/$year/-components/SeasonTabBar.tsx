@@ -13,7 +13,6 @@ import {
   TrophyIcon,
   VenusIcon,
 } from 'lucide-react'
-import { useMediaQuery } from 'usehooks-ts'
 
 import { TabBarInline } from '@/components/TabBar/TabBar'
 import { Button } from '@/components/base/ui/button'
@@ -21,8 +20,6 @@ import { Button } from '@/components/base/ui/button'
 const route = getRouteApi('/_layout/seasons/$year')
 
 const SeasonTabBar = () => {
-  const matches = useMediaQuery('(min-width: 840px)')
-
   const women = useSearch({
     from: '/_layout',
     select: (search) => search.women,
@@ -46,18 +43,13 @@ const SeasonTabBar = () => {
         params={(prev) => ({ ...prev })}
         search={(prev) => ({ ...prev, women: !women })}
       >
-        <Button size={matches ? 'default' : 'xs'}>
-          {women ? (
-            matches ? (
-              'Herrar'
-            ) : (
-              <MarsIcon />
-            )
-          ) : matches ? (
-            'Damer'
-          ) : (
-            <VenusIcon />
-          )}
+        <Button size="tabbar">
+          <span className="hidden md:inline-block">
+            {women ? 'Herrar' : 'Damer'}
+          </span>
+          <span className="md:hidden">
+            {women ? <MarsIcon /> : <VenusIcon />}
+          </span>
         </Button>
       </Link>
     ),
@@ -78,9 +70,14 @@ const SeasonTabBar = () => {
               return (
                 <Button
                   variant={isActive ? 'default' : 'outline'}
-                  size={matches ? 'default' : 'xs'}
+                  size="tabbar"
                 >
-                  {matches ? 'Matcher' : <CalendarIcon />}
+                  <span className="hidden md:inline-block">
+                    Matcher
+                  </span>
+                  <span className="md:hidden">
+                    <CalendarIcon />
+                  </span>
                 </Button>
               )
             }}
@@ -106,9 +103,14 @@ const SeasonTabBar = () => {
               return (
                 <Button
                   variant={isActive ? 'default' : 'outline'}
-                  size={matches ? 'default' : 'xs'}
+                  size="tabbar"
                 >
-                  {matches ? 'Tabell' : <ListIcon />}
+                  <span className="hidden md:inline-block">
+                    Tabell
+                  </span>
+                  <span className="md:hidden">
+                    <ListIcon />
+                  </span>
                 </Button>
               )
             }}
@@ -130,9 +132,14 @@ const SeasonTabBar = () => {
               return (
                 <Button
                   variant={isActive ? 'default' : 'outline'}
-                  size={matches ? 'default' : 'xs'}
+                  size="tabbar"
                 >
-                  {matches ? 'Slutspel' : <TrophyIcon />}
+                  <span className="hidden md:inline-block">
+                    Slutspel
+                  </span>
+                  <span className="md:hidden">
+                    <TrophyIcon />
+                  </span>
                 </Button>
               )
             }}
@@ -154,13 +161,14 @@ const SeasonTabBar = () => {
               return (
                 <Button
                   variant={isActive ? 'default' : 'outline'}
-                  size={matches ? 'default' : 'xs'}
+                  size="tabbar"
                 >
-                  {matches ? (
-                    'Utveckling'
-                  ) : (
+                  <span className="hidden md:inline-block">
+                    Utveckling
+                  </span>
+                  <span className="md:hidden">
                     <ChartLineIcon />
-                  )}
+                  </span>
                 </Button>
               )
             }}
@@ -182,13 +190,14 @@ const SeasonTabBar = () => {
               return (
                 <Button
                   variant={isActive ? 'default' : 'outline'}
-                  size={matches ? 'default' : 'xs'}
+                  size="tabbar"
                 >
-                  {matches ? (
-                    'Intervall'
-                  ) : (
+                  <span className="hidden md:inline-block">
+                    Intervall
+                  </span>
+                  <span className="md:hidden">
                     <ChevronsLeftRightEllipsisIcon />
-                  )}
+                  </span>
                 </Button>
               )
             }}
@@ -197,53 +206,6 @@ const SeasonTabBar = () => {
 
         tabName: 'interval',
       },
-      //   {
-      //     tab: (
-      //       <Link
-      //         from="/seasons/$year"
-      //         to="/seasons/$year/stats"
-      //         params={{ year: year }}
-      //         search={(prev) => ({ ...prev })}
-      //         activeOptions={{ includeSearch: false }}
-      //       >
-      //         {({ isActive }) => {
-      //           return (
-      //             <Button
-      //               variant={isActive ? 'default' : 'outline'}
-      //               size={matches ? 'default' : 'xs'}
-      //             >
-      //               {matches ? 'Statistik' : <StatsIcon />}
-      //             </Button>
-      //           )
-      //         }}
-      //       </Link>
-      //     ),
-
-      //     tabName: 'stats',
-      //   },
-      //   {
-      //     tab: (
-      //       <Link
-      //         from="/seasons/$year"
-      //         to="/seasons/$year/map"
-      //         params={{ year: year }}
-      //         search={(prev) => ({ ...prev })}
-      //         activeOptions={{ includeSearch: false }}
-      //       >
-      //         {({ isActive }) => {
-      //           return (
-      //             <Button
-      //               variant={isActive ? 'default' : 'outline'}
-      //               size={matches ? 'default' : 'xs'}
-      //             >
-      //               {matches ? 'Karta' : <MapIcon />}
-      //             </Button>
-      //           )
-      //         }}
-      //       </Link>
-      //     ),
-      //     tabName: 'map',
-      //   },
     ],
   }
   return (

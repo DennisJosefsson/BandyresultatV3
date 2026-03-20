@@ -3,17 +3,12 @@ import {
   useLocation,
   useNavigate,
 } from '@tanstack/react-router'
-import {
-  useCopyToClipboard,
-  useMediaQuery,
-} from 'usehooks-ts'
+import { useCopyToClipboard } from 'usehooks-ts'
 
 import { Button } from '@/components/base/ui/button'
 
 const Buttons = ({ length }: { length: number }) => {
   const [copiedText, copy] = useCopyToClipboard()
-  const matches = useMediaQuery('(min-width: 430px)')
-  const matches768 = useMediaQuery('(min-width: 768px)')
 
   const navigate = useNavigate()
 
@@ -34,9 +29,7 @@ const Buttons = ({ length }: { length: number }) => {
     <div className="mb-2 flex flex-row justify-end gap-2 xl:mb-6">
       {origin ? (
         <Button
-          size={
-            matches768 ? 'default' : matches ? 'sm' : 'xxs'
-          }
+          size="responsive"
           onClick={goBack}
         >
           Tillbaka
@@ -45,9 +38,7 @@ const Buttons = ({ length }: { length: number }) => {
       {length > 0 && (
         <Button
           onClick={() => copy(copyLink)}
-          size={
-            matches768 ? 'default' : matches ? 'sm' : 'xxs'
-          }
+          size="responsive"
         >
           {copiedText ? 'Kopierad!' : `Länk`}
         </Button>

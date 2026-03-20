@@ -4,13 +4,11 @@ import {
   useSearch,
 } from '@tanstack/react-router'
 import { ListIcon, MapIcon, SearchIcon } from 'lucide-react'
-import { useMediaQuery } from 'usehooks-ts'
 
 import { TabBarInline } from '@/components/TabBar/TabBar'
 import { Button } from '@/components/base/ui/button'
 
 const TeamsTabBar = () => {
-  const matches = useMediaQuery('(min-width: 640px)')
   const search = useSearch({ from: '/_layout/teams' })
   const teamArray = useSearch({
     from: '/_layout/teams',
@@ -39,9 +37,14 @@ const TeamsTabBar = () => {
                       ? 'default'
                       : 'outline'
                   }
-                  size={matches ? 'default' : 'icon'}
+                  size="tabbar"
                 >
-                  {matches ? 'Laglista' : <ListIcon />}
+                  <span className="hidden md:inline-block">
+                    Laglista
+                  </span>
+                  <span className="md:hidden">
+                    <ListIcon />
+                  </span>
                 </Button>
               )
             }}
@@ -59,9 +62,14 @@ const TeamsTabBar = () => {
               return (
                 <Button
                   variant={isActive ? 'default' : 'outline'}
-                  size={matches ? 'default' : 'icon'}
+                  size="tabbar"
                 >
-                  {matches ? 'Karta' : <MapIcon />}
+                  <span className="hidden md:inline-block">
+                    Karta
+                  </span>
+                  <span className="md:hidden">
+                    <MapIcon />
+                  </span>
                 </Button>
               )
             }}
@@ -81,10 +89,15 @@ const TeamsTabBar = () => {
               return (
                 <Button
                   variant={isActive ? 'default' : 'outline'}
-                  size={matches ? 'default' : 'icon'}
+                  size="tabbar"
                   disabled={disabled}
                 >
-                  {matches ? 'Jämför' : <SearchIcon />}
+                  <span className="hidden md:inline-block">
+                    Jämför
+                  </span>
+                  <span className="md:hidden">
+                    <SearchIcon />
+                  </span>
                 </Button>
               )
             }}

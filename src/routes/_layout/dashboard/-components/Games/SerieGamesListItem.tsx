@@ -1,5 +1,4 @@
 import { getRouteApi } from '@tanstack/react-router'
-import { useMediaQuery } from 'usehooks-ts'
 
 import { Button } from '@/components/base/ui/button'
 import type { Game } from '@/lib/types/game'
@@ -17,40 +16,44 @@ const GamesListItem = ({
   game,
   openDialog,
 }: GamesListItemProps) => {
-  const matches768 = useMediaQuery('(min-width: 768px)')
   const women = route.useSearch({ select: (s) => s.women })
+
+  const matchup = `${game.home.shortName} - ${game.away.shortName}`
+
+  const mdMatchup = `${game.home.casualName} - ${game.away.casualName}`
+
   return (
     <div className="w-full">
       <div
         id={game.gameId?.toString()}
-        className="mb-1 flex flex-row justify-evenly gap-1 px-1 py-0.5 text-[10px] transition-colors md:grid md:max-w-240 md:grid-cols-8 md:gap-4 md:px-2 md:text-sm"
+        className="mb-1 flex flex-row gap-1 px-1 py-0.5 text-[10px] transition-colors md:gap-4 md:px-2 md:text-sm"
       >
-        <span>{game.date}</span>
-        <span>
-          {matches768
-            ? game.home.casualName
-            : game.home.shortName}
+        <span className="w-20">{game.date}</span>
+        <span className="w-50 text-base h-8 md:hidden">
+          {matchup}
         </span>
-        <span className="w-1 text-center xl:w-4"> - </span>
-        <span>
-          {matches768
-            ? game.away.casualName
-            : game.away.shortName}
+        <span className="w-50 hidden text-base h-8 md:inline-block">
+          {mdMatchup}
         </span>
 
-        <span className="text-right tabular-nums md:w-16">
+        <span className="text-right tabular-nums w-10">
           {game.result}
         </span>
 
-        <span className="text-right tabular-nums md:w-16">
+        <span className="text-right tabular-nums w-10">
           {game.halftimeResult
             ? `(${game.halftimeResult})`
+            : null}
+        </span>
+        <span className="text-right tabular-nums md:w-16">
+          {game.otResult
+            ? `otResult: (${game.otResult})`
             : null}
         </span>
 
         <span>
           <Button
-            size={matches768 ? 'default' : 'textxxs'}
+            size="responsive"
             render={
               <route.Link
                 to="/dashboard/season/$seasonId/info/$serieId/edit/$gameId"
@@ -65,7 +68,7 @@ const GamesListItem = ({
         </span>
         <span>
           <Button
-            size={matches768 ? 'default' : 'textxxs'}
+            size="responsive"
             variant="destructive"
             onClick={() => openDialog(game.gameId)}
           >

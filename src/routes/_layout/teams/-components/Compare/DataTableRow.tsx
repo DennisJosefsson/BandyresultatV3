@@ -1,5 +1,3 @@
-import { useMediaQuery } from 'usehooks-ts'
-
 import {
   TableCell,
   TableRow,
@@ -25,24 +23,19 @@ interface TableRowData {
 }
 
 const DataTableRow = ({ team }: { team: TableRowData }) => {
-  const matches = useMediaQuery('(min-width: 640px)')
+  const matchup = team.opponent
+    ? `${team.team.casualName}-${team.opponent.casualName}`
+    : team.team.casualName
+  const smMatchup = team.opponent
+    ? `${team.team.shortName}-${team.opponent.shortName}`
+    : team.team.shortName
   return (
     <TableRow>
       <TableCell className="px-1 py-1 text-left text-[10px] md:py-2 lg:text-sm xl:text-base 2xl:text-lg">
-        {team.opponent && (
-          <>
-            {!matches
-              ? `${team.team.shortName}-${team.opponent.shortName}`
-              : `${team.team.casualName}-${team.opponent.casualName}`}
-          </>
-        )}
-        {!team.opponent && (
-          <>
-            {!matches
-              ? team.team.shortName
-              : team.team.casualName}
-          </>
-        )}
+        <span className="sm:hidden">{matchup}</span>
+        <span className="hidden sm:inline-block">
+          {smMatchup}
+        </span>
       </TableCell>
       <TableCell className="px-1 py-1 text-right text-[10px] tabular-nums md:py-2 lg:text-sm xl:text-base 2xl:text-lg">
         {team.totalGames}
