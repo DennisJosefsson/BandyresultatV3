@@ -71,7 +71,7 @@ const GamesList = ({ group, title }: GameListProps) => {
                   {date.date !== 'null' && (
                     <div className="group mb-0.5 flex flex-row items-center gap-1">
                       <h3
-                        className="text-[10px] sm:text-xs font-semibold tracking-wide md:text-sm xl:text-base 2xl:text-lg"
+                        className="text-[10px] sm:text-xs font-semibold tracking-wide md:text-sm xl:text-base"
                         id={`${group.group}-${date.date}`}
                       >
                         <Date>{date.date}</Date>
