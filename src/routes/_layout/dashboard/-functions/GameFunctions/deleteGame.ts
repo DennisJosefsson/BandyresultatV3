@@ -4,14 +4,17 @@ import { eq } from 'drizzle-orm'
 
 import { db } from '@/db'
 import { games } from '@/db/schema'
+import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import { zd } from '@/lib/utils/zod'
 
 export const deleteGame = createServerFn({ method: 'POST' })
-  .middleware([errorMiddleware])
+  .middleware([authMiddleware, errorMiddleware])
   .inputValidator(
-    zodValidator(zd.object({ gameId: zd.number().positive().int() })),
+    zodValidator(
+      zd.object({ gameId: zd.number().positive().int() }),
+    ),
   )
   .handler(async ({ data: { gameId } }) => {
     try {

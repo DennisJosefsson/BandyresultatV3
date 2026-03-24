@@ -3,12 +3,15 @@ import { zodValidator } from '@tanstack/zod-adapter'
 
 import { db } from '@/db'
 import { teamseries } from '@/db/schema'
+import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import { zd } from '@/lib/utils/zod'
 
-export const addTeamToSerie = createServerFn({ method: 'POST' })
-  .middleware([errorMiddleware])
+export const addTeamToSerie = createServerFn({
+  method: 'POST',
+})
+  .middleware([authMiddleware, errorMiddleware])
   .inputValidator(
     zodValidator(
       zd.object({
@@ -19,7 +22,9 @@ export const addTeamToSerie = createServerFn({ method: 'POST' })
   )
   .handler(async ({ data: { teamId, serieId } }) => {
     try {
-      await db.insert(teamseries).values({ teamId, serieId })
+      await db
+        .insert(teamseries)
+        .values({ teamId, serieId })
 
       return { status: 200, message: 'Lag tillagt' }
     } catch (error) {

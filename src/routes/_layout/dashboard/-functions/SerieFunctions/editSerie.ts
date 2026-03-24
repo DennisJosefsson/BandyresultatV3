@@ -4,12 +4,15 @@ import { eq } from 'drizzle-orm'
 
 import { db } from '@/db'
 import { series } from '@/db/schema'
+import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import { editSeriesObject } from '@/lib/types/serie'
 
-export const editSerieInput = createServerFn({ method: 'POST' })
-  .middleware([errorMiddleware])
+export const editSerieInput = createServerFn({
+  method: 'POST',
+})
+  .middleware([authMiddleware, errorMiddleware])
   .inputValidator(zodValidator(editSeriesObject))
   .handler(async ({ data }) => {
     try {
@@ -20,7 +23,10 @@ export const editSerieInput = createServerFn({ method: 'POST' })
         .returning()
         .then((res) => res[0])
 
-      return { status: 200, message: `${editSerie.serieName} uppdaterad.` }
+      return {
+        status: 200,
+        message: `${editSerie.serieName} uppdaterad.`,
+      }
     } catch (error) {
       catchError(error)
     }

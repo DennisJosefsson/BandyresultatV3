@@ -3,15 +3,18 @@ import { zodValidator } from '@tanstack/zod-adapter'
 
 import { db } from '@/db'
 import { games, teamgames } from '@/db/schema'
+import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import { generatedGameObjectArray } from '@/lib/types/game'
 
 type TeamGame = typeof teamgames.$inferInsert
 
-export const insertFromGeneratedSchedule = createServerFn({ method: 'POST' })
+export const insertFromGeneratedSchedule = createServerFn({
+  method: 'POST',
+})
   .inputValidator(zodValidator(generatedGameObjectArray))
-  .middleware([errorMiddleware])
+  .middleware([authMiddleware, errorMiddleware])
   .handler(async ({ data: { gameArray } }) => {
     try {
       const newTeamGames: Array<TeamGame> = []

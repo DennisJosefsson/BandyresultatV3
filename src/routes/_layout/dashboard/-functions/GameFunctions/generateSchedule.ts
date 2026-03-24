@@ -5,6 +5,7 @@ import { eq } from 'drizzle-orm'
 
 import { db } from '@/db'
 import { games, teams, teamseries } from '@/db/schema'
+import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import type { generatedGameObject } from '@/lib/types/game'
@@ -15,7 +16,7 @@ type GameObject = zd.infer<typeof generatedGameObject>
 export const generateSchedule = createServerFn({
   method: 'GET',
 })
-  .middleware([errorMiddleware])
+  .middleware([authMiddleware, errorMiddleware])
   .inputValidator(
     zodValidator(
       zd.object({ serieId: zd.number().int().positive() }),

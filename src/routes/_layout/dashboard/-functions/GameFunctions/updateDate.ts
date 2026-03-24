@@ -7,10 +7,11 @@ import { games, teamgames } from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 
+import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
 import { parseUpdateDate } from '../dataParsers/parseUpdateDate'
 
 export const updateDate = createServerFn({ method: 'POST' })
-  .middleware([errorMiddleware])
+  .middleware([authMiddleware, errorMiddleware])
   .inputValidator(zodValidator(parseUpdateDate))
   .handler(async ({ data }) => {
     try {
@@ -31,7 +32,9 @@ export const updateDate = createServerFn({ method: 'POST' })
         .set({
           date: data.date,
         })
-        .where(eq(teamgames.teamGameId, data.homeTeamGameId))
+        .where(
+          eq(teamgames.teamGameId, data.homeTeamGameId),
+        )
         .returning()
 
       const updatedAwayTeamGame = await db
@@ -39,7 +42,9 @@ export const updateDate = createServerFn({ method: 'POST' })
         .set({
           date: data.date,
         })
-        .where(eq(teamgames.teamGameId, data.awayTeamGameId))
+        .where(
+          eq(teamgames.teamGameId, data.awayTeamGameId),
+        )
         .returning()
 
       if (
@@ -49,7 +54,10 @@ export const updateDate = createServerFn({ method: 'POST' })
         return { status: 404, message: 'Teamgames saknas.' }
       }
 
-      return { status: 200, message: `Matchdatum ändrat till ${data.date}` }
+      return {
+        status: 200,
+        message: `Matchdatum ändrat till ${data.date}`,
+      }
     } catch (error) {
       catchError(error)
     }

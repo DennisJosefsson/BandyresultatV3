@@ -4,6 +4,7 @@ import { eq } from 'drizzle-orm'
 
 import { db } from '@/db'
 import { teamseasons } from '@/db/schema'
+import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import { zd } from '@/lib/utils/zod'
@@ -11,9 +12,13 @@ import { zd } from '@/lib/utils/zod'
 export const deleteTeamSeason = createServerFn({
   method: 'POST',
 })
-  .middleware([errorMiddleware])
+  .middleware([authMiddleware, errorMiddleware])
   .inputValidator(
-    zodValidator(zd.object({ teamseasonId: zd.number().int().positive() })),
+    zodValidator(
+      zd.object({
+        teamseasonId: zd.number().int().positive(),
+      }),
+    ),
   )
   .handler(async ({ data: { teamseasonId } }) => {
     try {
@@ -21,7 +26,10 @@ export const deleteTeamSeason = createServerFn({
         .delete(teamseasons)
         .where(eq(teamseasons.teamseasonId, teamseasonId))
 
-      return { status: 200, message: 'Teamseason borttagen.' }
+      return {
+        status: 200,
+        message: 'Teamseason borttagen.',
+      }
     } catch (error) {
       catchError(error)
     }

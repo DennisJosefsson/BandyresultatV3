@@ -6,12 +6,13 @@ import { games, teamgames } from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 
+import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
 import { parseNewGameWithResult } from '../dataParsers/parseGameResults'
 
 export const addSingleGame = createServerFn({
   method: 'POST',
 })
-  .middleware([errorMiddleware])
+  .middleware([authMiddleware, errorMiddleware])
   .inputValidator(zodValidator(parseNewGameWithResult))
   .handler(async ({ data }) => {
     try {

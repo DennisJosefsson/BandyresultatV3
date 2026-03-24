@@ -4,20 +4,30 @@ import { eq } from 'drizzle-orm'
 
 import { db } from '@/db'
 import { parentchildseries } from '@/db/schema'
+import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import { zd } from '@/lib/utils/zod'
 
-export const removeParentChildSerie = createServerFn({ method: 'POST' })
-  .middleware([errorMiddleware])
-  .inputValidator(zodValidator(zd.object({ id: zd.number().int().positive() })))
+export const removeParentChildSerie = createServerFn({
+  method: 'POST',
+})
+  .middleware([authMiddleware, errorMiddleware])
+  .inputValidator(
+    zodValidator(
+      zd.object({ id: zd.number().int().positive() }),
+    ),
+  )
   .handler(async ({ data }) => {
     try {
       await db
         .delete(parentchildseries)
         .where(eq(parentchildseries.id, data.id))
 
-      return { status: 200, message: `ParentSerie borttagen.` }
+      return {
+        status: 200,
+        message: `ParentSerie borttagen.`,
+      }
     } catch (error) {
       catchError(error)
     }

@@ -3,12 +3,15 @@ import { zodValidator } from '@tanstack/zod-adapter'
 
 import { db } from '@/db'
 import { series } from '@/db/schema'
+import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import { newSeriesObject } from '@/lib/types/serie'
 
-export const newSerieInput = createServerFn({ method: 'POST' })
-  .middleware([errorMiddleware])
+export const newSerieInput = createServerFn({
+  method: 'POST',
+})
+  .middleware([authMiddleware, errorMiddleware])
   .inputValidator(zodValidator(newSeriesObject))
   .handler(async ({ data }) => {
     try {

@@ -4,12 +4,13 @@ import { eq } from 'drizzle-orm'
 
 import { db } from '@/db'
 import { teams } from '@/db/schema'
+import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import { editTeamObject } from '@/lib/types/team'
 
 export const editTeam = createServerFn({ method: 'POST' })
-  .middleware([errorMiddleware])
+  .middleware([authMiddleware, errorMiddleware])
   .inputValidator(zodValidator(editTeamObject))
   .handler(async ({ data }) => {
     try {

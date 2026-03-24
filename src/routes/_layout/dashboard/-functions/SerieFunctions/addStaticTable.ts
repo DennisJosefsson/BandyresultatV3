@@ -4,12 +4,15 @@ import { eq } from 'drizzle-orm'
 
 import { db } from '@/db'
 import { series, tables } from '@/db/schema'
+import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import { newStaticTableArray } from '@/lib/types/table'
 
-export const addStaticTable = createServerFn({ method: 'POST' })
-  .middleware([errorMiddleware])
+export const addStaticTable = createServerFn({
+  method: 'POST',
+})
+  .middleware([authMiddleware, errorMiddleware])
   .inputValidator(zodValidator(newStaticTableArray))
   .handler(async ({ data }) => {
     try {

@@ -4,12 +4,15 @@ import { and, eq } from 'drizzle-orm'
 
 import { db } from '@/db'
 import { metadata, seasons, teams } from '@/db/schema'
+import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import { metadataObject } from '@/lib/types/metadata'
 
-export const updateMetadata = createServerFn({ method: 'POST' })
-  .middleware([errorMiddleware])
+export const updateMetadata = createServerFn({
+  method: 'POST',
+})
+  .middleware([authMiddleware, errorMiddleware])
   .inputValidator(zodValidator(metadataObject))
   .handler(async ({ data: { metadataId, ...rest } }) => {
     try {
@@ -26,7 +29,9 @@ export const updateMetadata = createServerFn({ method: 'POST' })
                 db
                   .select({ women: seasons.women })
                   .from(seasons)
-                  .where(eq(seasons.seasonId, rest.seasonId)),
+                  .where(
+                    eq(seasons.seasonId, rest.seasonId),
+                  ),
               ),
             ),
           )
@@ -40,7 +45,10 @@ export const updateMetadata = createServerFn({ method: 'POST' })
         .set(newMetadata)
         .where(eq(metadata.metadataId, metadataId))
 
-      return { status: 200, message: 'Metadata uppdaterad.' }
+      return {
+        status: 200,
+        message: 'Metadata uppdaterad.',
+      }
     } catch (error) {
       catchError(error)
     }

@@ -3,6 +3,7 @@ import { zodValidator } from '@tanstack/zod-adapter'
 
 import { db } from '@/db'
 import { teamseasons } from '@/db/schema'
+import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import { zd } from '@/lib/utils/zod'
@@ -12,7 +13,7 @@ type NewTeamseason = typeof teamseasons.$inferInsert
 export const addTeamSeason = createServerFn({
   method: 'POST',
 })
-  .middleware([errorMiddleware])
+  .middleware([authMiddleware, errorMiddleware])
   .inputValidator(
     zodValidator(
       zd.object({
@@ -23,12 +24,17 @@ export const addTeamSeason = createServerFn({
   )
   .handler(async ({ data: { teamId, seasonId } }) => {
     try {
-      const newTeamseason: NewTeamseason = { teamId, seasonId }
+      const newTeamseason: NewTeamseason = {
+        teamId,
+        seasonId,
+      }
 
       const teamSeason = await db
         .insert(teamseasons)
         .values(newTeamseason)
-        .returning({ teamseasonId: teamseasons.teamseasonId })
+        .returning({
+          teamseasonId: teamseasons.teamseasonId,
+        })
 
       if (!teamSeason) throw new Error('Något gick fel.')
       return { status: 200, message: 'Teamseason inlagd.' }

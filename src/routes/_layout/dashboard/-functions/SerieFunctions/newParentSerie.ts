@@ -4,12 +4,15 @@ import { eq } from 'drizzle-orm'
 
 import { db } from '@/db'
 import { parentchildseries, series } from '@/db/schema'
+import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import { newParentSerieObject } from '@/lib/types/serie'
 
-export const newParentSerieInput = createServerFn({ method: 'POST' })
-  .middleware([errorMiddleware])
+export const newParentSerieInput = createServerFn({
+  method: 'POST',
+})
+  .middleware([authMiddleware, errorMiddleware])
   .inputValidator(zodValidator(newParentSerieObject))
   .handler(async ({ data }) => {
     try {
