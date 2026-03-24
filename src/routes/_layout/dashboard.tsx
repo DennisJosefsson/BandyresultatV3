@@ -14,10 +14,27 @@ import {
 import { cn } from '@/lib/utils/utils'
 
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
+import { authStateFn } from './dashboard/-functions/authStateFn'
 import { getDashboardData } from './dashboard/-functions/getDashboardData'
 
 export const Route = createFileRoute('/_layout/dashboard')({
-  // beforeLoad: () => authStateFn(),
+  beforeLoad: async () => {
+    const { isAdmin } = await authStateFn()
+
+    if (!isAdmin) {
+      throw Route.redirect({
+        to: '/unauthorized',
+        search: (prev) => ({ women: prev.women ?? false }),
+        statusCode: 401,
+        state: {
+          redirectCause:
+            'Du måste vara inloggad för att se denna sida.',
+        },
+      })
+    }
+
+    return
+  },
   loader: () => getDashboardData(),
   component: RouteComponent,
 })
