@@ -8,8 +8,6 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createFileRoute } from '@tanstack/react-router'
-
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as LayoutRouteImport } from './routes/_layout'
 import { Route as LayoutIndexRouteImport } from './routes/_layout/index'
@@ -17,6 +15,7 @@ import { Route as LayoutTeamsRouteImport } from './routes/_layout/teams'
 import { Route as LayoutSeasonsRouteImport } from './routes/_layout/seasons'
 import { Route as LayoutSearchRouteImport } from './routes/_layout/search'
 import { Route as LayoutDashboardRouteImport } from './routes/_layout/dashboard'
+import { Route as LayoutUnauthorizedIndexRouteImport } from './routes/_layout/unauthorized/index'
 import { Route as LayoutTeamsIndexRouteImport } from './routes/_layout/teams/index'
 import { Route as LayoutSeasonsIndexRouteImport } from './routes/_layout/seasons/index'
 import { Route as LayoutSearchIndexRouteImport } from './routes/_layout/search/index'
@@ -82,10 +81,6 @@ import { Route as LayoutDashboardSeasonSeasonIdInfoSerieIdEditAddTableRouteImpor
 import { Route as LayoutDashboardSeasonSeasonIdInfoSerieIdEditAddGamesRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/$serieId/edit/addGames'
 import { Route as LayoutDashboardSeasonSeasonIdInfoSerieIdEditGameIdRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/$serieId/edit/$gameId'
 
-const LayoutUnauthorizedIndexLazyRouteImport = createFileRoute(
-  '/_layout/unauthorized/',
-)()
-
 const LayoutRoute = LayoutRouteImport.update({
   id: '/_layout',
   getParentRoute: () => rootRouteImport,
@@ -115,14 +110,11 @@ const LayoutDashboardRoute = LayoutDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => LayoutRoute,
 } as any)
-const LayoutUnauthorizedIndexLazyRoute =
-  LayoutUnauthorizedIndexLazyRouteImport.update({
-    id: '/unauthorized/',
-    path: '/unauthorized/',
-    getParentRoute: () => LayoutRoute,
-  } as any).lazy(() =>
-    import('./routes/_layout/unauthorized/index.lazy').then((d) => d.Route),
-  )
+const LayoutUnauthorizedIndexRoute = LayoutUnauthorizedIndexRouteImport.update({
+  id: '/unauthorized/',
+  path: '/unauthorized/',
+  getParentRoute: () => LayoutRoute,
+} as any)
 const LayoutTeamsIndexRoute = LayoutTeamsIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -512,7 +504,7 @@ export interface FileRoutesByFullPath {
   '/search/': typeof LayoutSearchIndexRoute
   '/seasons/': typeof LayoutSeasonsIndexRoute
   '/teams/': typeof LayoutTeamsIndexRoute
-  '/unauthorized/': typeof LayoutUnauthorizedIndexLazyRoute
+  '/unauthorized/': typeof LayoutUnauthorizedIndexRoute
   '/dashboard/games/$today': typeof LayoutDashboardGamesTodayRoute
   '/dashboard/season/$seasonId': typeof LayoutDashboardSeasonSeasonIdRouteWithChildren
   '/dashboard/team/$teamId': typeof LayoutDashboardTeamTeamIdRoute
@@ -579,7 +571,7 @@ export interface FileRoutesByTo {
   '/search': typeof LayoutSearchIndexRoute
   '/seasons': typeof LayoutSeasonsIndexRoute
   '/teams': typeof LayoutTeamsIndexRoute
-  '/unauthorized': typeof LayoutUnauthorizedIndexLazyRoute
+  '/unauthorized': typeof LayoutUnauthorizedIndexRoute
   '/dashboard/games/$today': typeof LayoutDashboardGamesTodayRoute
   '/dashboard/team/$teamId': typeof LayoutDashboardTeamTeamIdRoute
   '/dashboard/teams/add': typeof LayoutDashboardTeamsAddRoute
@@ -651,7 +643,7 @@ export interface FileRoutesById {
   '/_layout/search/': typeof LayoutSearchIndexRoute
   '/_layout/seasons/': typeof LayoutSeasonsIndexRoute
   '/_layout/teams/': typeof LayoutTeamsIndexRoute
-  '/_layout/unauthorized/': typeof LayoutUnauthorizedIndexLazyRoute
+  '/_layout/unauthorized/': typeof LayoutUnauthorizedIndexRoute
   '/_layout/dashboard/games/$today': typeof LayoutDashboardGamesTodayRoute
   '/_layout/dashboard/season/$seasonId': typeof LayoutDashboardSeasonSeasonIdRouteWithChildren
   '/_layout/dashboard/team/$teamId': typeof LayoutDashboardTeamTeamIdRoute
@@ -967,7 +959,7 @@ declare module '@tanstack/react-router' {
       id: '/_layout/unauthorized/'
       path: '/unauthorized'
       fullPath: '/unauthorized/'
-      preLoaderRoute: typeof LayoutUnauthorizedIndexLazyRouteImport
+      preLoaderRoute: typeof LayoutUnauthorizedIndexRouteImport
       parentRoute: typeof LayoutRoute
     }
     '/_layout/teams/': {
@@ -1717,7 +1709,7 @@ interface LayoutRouteChildren {
   LayoutAboutIndexRoute: typeof LayoutAboutIndexRoute
   LayoutLoginIndexRoute: typeof LayoutLoginIndexRoute
   LayoutLogoutIndexRoute: typeof LayoutLogoutIndexRoute
-  LayoutUnauthorizedIndexLazyRoute: typeof LayoutUnauthorizedIndexLazyRoute
+  LayoutUnauthorizedIndexRoute: typeof LayoutUnauthorizedIndexRoute
   LayoutMaratonHelpIndexRoute: typeof LayoutMaratonHelpIndexRoute
 }
 
@@ -1733,7 +1725,7 @@ const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutAboutIndexRoute: LayoutAboutIndexRoute,
   LayoutLoginIndexRoute: LayoutLoginIndexRoute,
   LayoutLogoutIndexRoute: LayoutLogoutIndexRoute,
-  LayoutUnauthorizedIndexLazyRoute: LayoutUnauthorizedIndexLazyRoute,
+  LayoutUnauthorizedIndexRoute: LayoutUnauthorizedIndexRoute,
   LayoutMaratonHelpIndexRoute: LayoutMaratonHelpIndexRoute,
 }
 
