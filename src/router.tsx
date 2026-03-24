@@ -26,7 +26,10 @@ export const getRouter = () => {
     },
   })
 
-  setupRouterSsrQueryIntegration({ router, queryClient: rqContext.queryClient })
+  setupRouterSsrQueryIntegration({
+    router,
+    queryClient: rqContext.queryClient,
+  })
 
   return router
 }
@@ -37,5 +40,6 @@ declare module '@tanstack/react-router' {
   }
   interface HistoryState {
     origin?: string
+    redirectCause?: string
   }
 }
