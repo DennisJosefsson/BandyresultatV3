@@ -1,36 +1,48 @@
 import { createMiddleware } from '@tanstack/react-start'
 
+import { redirect } from '@tanstack/react-router'
 import DbError from './DbError'
+import UnauthorizedError from './UnauthorizedError'
 import ZodParsingError from './ZodParsingError'
 
-export const errorMiddleware = createMiddleware({ type: 'function' }).server(
-  async ({ next }) => {
-    try {
-      const result = await next()
-      return result
-    } catch (error) {
-      if (error) {
-        if (error instanceof ZodParsingError) {
-          console.error('Zod parsing error', error.message)
-          throw error
-        } else if (error instanceof DbError) {
-          console.error(
-            'Database error:',
-            error.name,
-            error.message,
-            error.context.constraint,
-            error.context.query,
-          )
+export const errorMiddleware = createMiddleware({
+  type: 'function',
+}).server(async ({ next }) => {
+  try {
+    const result = await next()
 
-          throw error
-        } else if (error instanceof Error) {
-          console.error('Unknown error', error.message)
-          throw error
-        }
+    return result
+  } catch (error) {
+    if (error) {
+      if (error instanceof ZodParsingError) {
+        console.error('Zod parsing error', error.message)
+        throw error
+      } else if (error instanceof UnauthorizedError) {
+        throw redirect({
+          to: '/unauthorized',
+          search: { women: false },
+          state: {
+            redirectCause: error.message,
+          },
+        })
+      } else if (error instanceof DbError) {
+        console.error(
+          'Database error:',
+          error.name,
+          error.message,
+          error.context.constraint,
+          error.context.query,
+        )
+
+        throw error
+      } else if (error instanceof Error) {
+        console.error('Unknown error', error.message)
+        throw error
       }
     }
+  }
 
-    const result = await next()
-    return result
-  },
-)
+  const result = await next()
+
+  return result
+})

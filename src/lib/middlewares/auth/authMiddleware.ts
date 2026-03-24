@@ -1,18 +1,21 @@
-import { auth, clerkClient } from '@clerk/tanstack-react-start/server'
+import {
+  auth,
+  clerkClient,
+} from '@clerk/tanstack-react-start/server'
 import { createMiddleware } from '@tanstack/react-start'
+import UnauthorizedError from '../errors/UnauthorizedError'
 
-export const authMiddleware = createMiddleware({ type: 'function' }).server(
-  async ({ next }) => {
-    const { orgRole, userId } = await auth()
-    const isAdmin = orgRole === 'org:admin'
+export const authMiddleware = createMiddleware({
+  type: 'function',
+}).server(async ({ next }) => {
+  const { orgRole, userId } = await auth()
+  const isAdmin = orgRole === 'org:admin'
+  if (!isAdmin) {
+    throw new UnauthorizedError()
+  }
 
-    if (!isAdmin) {
-      throw new Response('Unauthorized', { status: 401 })
-    }
+  const user = await clerkClient().users.getUser(userId)
 
-    const user = await clerkClient().users.getUser(userId)
-
-    const result = await next({ context: { user } })
-    return result
-  },
-)
+  const result = await next({ context: { user, isAdmin } })
+  return result
+})
