@@ -15,7 +15,8 @@ export const getRouter = () => {
     routeTree,
     context: { ...rqContext },
     defaultPreload: false,
-
+    scrollRestoration: true,
+    scrollRestorationBehavior: 'smooth',
     defaultNotFoundComponent: DefaultNotFound,
     Wrap: (props: { children: React.ReactNode }) => {
       return (
