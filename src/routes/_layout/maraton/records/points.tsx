@@ -1,11 +1,16 @@
-import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
+import {
+  CatchBoundary,
+  createFileRoute,
+} from '@tanstack/react-router'
 
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 
 import Points from '../-components/Records/PointsGoalsEtc/Points'
 import { getPointRecords } from '../-functions/getPointRecords'
 
-export const Route = createFileRoute('/_layout/maraton/records/points')({
+export const Route = createFileRoute(
+  '/_layout/maraton/records/points',
+)({
   loaderDeps: ({ search: { women } }) => ({ women }),
   loader: async ({ deps }) => {
     const data = await getPointRecords({
@@ -16,24 +21,33 @@ export const Route = createFileRoute('/_layout/maraton/records/points')({
     return data
   },
   staticData: {
-    breadcrumb: (match) => match.loaderData.breadCrumb,
+    breadcrumb: (match) =>
+      match.loaderData.breadCrumb ?? 'Poäng',
   },
   head: ({ loaderData }) => ({
     meta: [
       {
-        title: loaderData?.meta.title,
+        title:
+          loaderData?.meta.title ??
+          'Bandyresultat - Rekord: Poäng',
       },
       {
         name: 'description',
-        content: loaderData?.meta.description,
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - Rekord: Poäng',
       },
       {
         property: 'og:description',
-        content: loaderData?.meta.description,
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - Rekord: Poäng',
       },
       {
         property: 'og:title',
-        content: loaderData?.meta.title,
+        content:
+          loaderData?.meta.title ??
+          'Bandyresultat - Rekord: Poäng',
       },
       {
         property: 'og:type',
@@ -41,7 +55,9 @@ export const Route = createFileRoute('/_layout/maraton/records/points')({
       },
       {
         property: 'og:url',
-        content: loaderData?.meta.url,
+        content:
+          loaderData?.meta.url ??
+          'https://www.bandyresultat.se/maraton/records/points',
       },
       {
         property: 'og:image',
@@ -61,7 +77,11 @@ function RouteComponent() {
         console.error(error)
       }}
       errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent id="points" error={error} reset={reset} />
+        <SimpleErrorComponent
+          id="points"
+          error={error}
+          reset={reset}
+        />
       )}
     >
       <Points />

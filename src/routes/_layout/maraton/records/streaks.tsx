@@ -1,4 +1,7 @@
-import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
+import {
+  CatchBoundary,
+  createFileRoute,
+} from '@tanstack/react-router'
 
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import Loading from '@/components/Loading/Loading'
@@ -6,7 +9,9 @@ import Loading from '@/components/Loading/Loading'
 import Streaks from '../-components/Records/Streaks/Streaks'
 import { getStreakRecords } from '../-functions/getStreakRecords'
 
-export const Route = createFileRoute('/_layout/maraton/records/streaks')({
+export const Route = createFileRoute(
+  '/_layout/maraton/records/streaks',
+)({
   loaderDeps: ({ search: { women } }) => ({ women }),
   loader: async ({ deps }) => {
     const data = await getStreakRecords({
@@ -19,24 +24,33 @@ export const Route = createFileRoute('/_layout/maraton/records/streaks')({
   component: RouteComponent,
 
   staticData: {
-    breadcrumb: (match) => match.loaderData.breadCrumb,
+    breadcrumb: (match) =>
+      match.loaderData.breadCrumb ?? 'Sviter',
   },
   head: ({ loaderData }) => ({
     meta: [
       {
-        title: loaderData?.meta.title,
+        title:
+          loaderData?.meta.title ??
+          'Bandyresultat - Rekord: Sviter',
       },
       {
         name: 'description',
-        content: loaderData?.meta.description,
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - Rekord: Sviter',
       },
       {
         property: 'og:description',
-        content: loaderData?.meta.description,
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - Rekord: Sviter',
       },
       {
         property: 'og:title',
-        content: loaderData?.meta.title,
+        content:
+          loaderData?.meta.title ??
+          'Bandyresultat - Rekord: Sviter',
       },
       {
         property: 'og:type',
@@ -44,7 +58,9 @@ export const Route = createFileRoute('/_layout/maraton/records/streaks')({
       },
       {
         property: 'og:url',
-        content: loaderData?.meta.url,
+        content:
+          loaderData?.meta.url ??
+          'https://www.bandyresultat.se/maraton/records/streaks',
       },
       {
         property: 'og:image',
@@ -64,7 +80,11 @@ function RouteComponent() {
         console.error(error)
       }}
       errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent id="streaks" error={error} reset={reset} />
+        <SimpleErrorComponent
+          id="streaks"
+          error={error}
+          reset={reset}
+        />
       )}
     >
       <Streaks />

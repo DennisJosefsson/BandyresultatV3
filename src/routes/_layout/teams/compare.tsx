@@ -79,7 +79,7 @@ export const Route = createFileRoute(
         property: 'og:url',
         content:
           loaderData?.meta.url ??
-          'https://bandyresultat.se/teams/compare',
+          'https://bandyresultat.se/',
       },
       {
         property: 'og:image',

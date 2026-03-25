@@ -11,12 +11,18 @@ import GroupListForErrorComponent from '../-components/GroupListForErrorComponen
 import StatsComponent from '../-components/Stats/Stats'
 import { getGroupStats } from '../-functions/getGroupStats'
 
-export const Route = createFileRoute('/_layout/seasons/$year/$group/stats')({
+export const Route = createFileRoute(
+  '/_layout/seasons/$year/$group/stats',
+)({
   loaderDeps: ({ search: { women } }) => ({ women }),
   loader: async ({ deps, params }) => {
     if (!params.group) throw notFound()
     const data = await getGroupStats({
-      data: { group: params.group, year: params.year, women: deps.women },
+      data: {
+        group: params.group,
+        year: params.year,
+        women: deps.women,
+      },
     })
     if (!data) throw new Error('Missing data')
     if (data.status === 404) {
@@ -46,19 +52,34 @@ export const Route = createFileRoute('/_layout/seasons/$year/$group/stats')({
       </div>
     )
   },
-  staticData: { breadcrumb: (match) => match.loaderData.breadCrumb },
+  staticData: {
+    breadcrumb: (match) =>
+      match.loaderData.breadCrumb ?? 'Statistik',
+  },
   head: ({ loaderData }) => ({
     meta: [
       {
-        title: loaderData?.meta.title,
+        title:
+          loaderData?.meta.title ??
+          'Bandyresultat - Statistik',
+      },
+      {
+        name: 'description',
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - Statistik',
       },
       {
         property: 'og:description',
-        content: loaderData?.meta.description,
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - Statistik',
       },
       {
         property: 'og:title',
-        content: loaderData?.meta.title,
+        content:
+          loaderData?.meta.title ??
+          'Bandyresultat - Statistik',
       },
       {
         property: 'og:type',
@@ -66,7 +87,9 @@ export const Route = createFileRoute('/_layout/seasons/$year/$group/stats')({
       },
       {
         property: 'og:url',
-        content: loaderData?.meta.url,
+        content:
+          loaderData?.meta.url ??
+          'https://www.bandyresultat.se',
       },
       {
         property: 'og:image',
@@ -85,7 +108,11 @@ function RouteComponent() {
         console.error(error)
       }}
       errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent id="stats" error={error} reset={reset} />
+        <SimpleErrorComponent
+          id="stats"
+          error={error}
+          reset={reset}
+        />
       )}
     >
       <Stats />

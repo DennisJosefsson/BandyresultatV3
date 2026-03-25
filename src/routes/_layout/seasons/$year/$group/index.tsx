@@ -61,15 +61,27 @@ export const Route = createFileRoute(
   head: ({ loaderData }) => ({
     meta: [
       {
-        title: loaderData?.meta.title,
+        title:
+          loaderData?.meta.title ??
+          'Bandyresultat - Sektioner',
+      },
+      {
+        name: 'description',
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - Sektioner',
       },
       {
         property: 'og:description',
-        content: loaderData?.meta.description,
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - Sektioner',
       },
       {
         property: 'og:title',
-        content: loaderData?.meta.title,
+        content:
+          loaderData?.meta.title ??
+          'Bandyresultat - Sektioner',
       },
       {
         property: 'og:type',
@@ -77,7 +89,9 @@ export const Route = createFileRoute(
       },
       {
         property: 'og:url',
-        content: loaderData?.meta.url,
+        content:
+          loaderData?.meta.url ??
+          'https://www.bandyresultat.se',
       },
       {
         property: 'og:image',

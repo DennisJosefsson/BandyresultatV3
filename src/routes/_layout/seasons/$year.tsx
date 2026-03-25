@@ -40,24 +40,33 @@ export const Route = createFileRoute(
     return data
   },
   staticData: {
-    breadcrumb: (match) => match.loaderData.breadCrumb,
+    breadcrumb: (match) =>
+      match.loaderData.breadCrumb ?? 'Säsong',
   },
   head: ({ loaderData }) => ({
     meta: [
       {
-        title: loaderData?.meta.title,
+        title:
+          loaderData?.meta.title ??
+          'Bandyresultat - Säsong',
       },
       {
         name: 'description',
-        content: loaderData?.meta.description,
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - Säsong',
       },
       {
         property: 'og:description',
-        content: loaderData?.meta.description,
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - Säsong',
       },
       {
         property: 'og:title',
-        content: loaderData?.meta.title,
+        content:
+          loaderData?.meta.title ??
+          'Bandyresultat - Säsong',
       },
       {
         property: 'og:type',
@@ -65,7 +74,9 @@ export const Route = createFileRoute(
       },
       {
         property: 'og:url',
-        content: loaderData?.meta.url,
+        content:
+          loaderData?.meta.url ??
+          'https://www.bandyresultat.se/seasons',
       },
       {
         property: 'og:image',

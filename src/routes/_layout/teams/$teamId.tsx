@@ -36,24 +36,31 @@ export const Route = createFileRoute(
   pendingComponent: () => <Loading page="singleTeam" />,
   notFoundComponent: NotFound,
   staticData: {
-    breadcrumb: (match) => match.loaderData.breadCrumb,
+    breadcrumb: (match) =>
+      match.loaderData.breadCrumb ?? 'Lag',
   },
   head: ({ loaderData }) => ({
     meta: [
       {
-        title: loaderData?.meta.title,
+        title:
+          loaderData?.meta.title ?? 'Bandyresultat - Lag',
       },
       {
         name: 'description',
-        content: loaderData?.meta.description,
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - Lag',
       },
       {
         property: 'og:description',
-        content: loaderData?.meta.description,
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - Lag',
       },
       {
         property: 'og:title',
-        content: loaderData?.meta.title,
+        content:
+          loaderData?.meta.title ?? 'Bandyresultat - Lag',
       },
       {
         property: 'og:type',
@@ -61,7 +68,9 @@ export const Route = createFileRoute(
       },
       {
         property: 'og:url',
-        content: loaderData?.meta.url,
+        content:
+          loaderData?.meta.url ??
+          'https://www.bandyresultat.se',
       },
       {
         property: 'og:image',

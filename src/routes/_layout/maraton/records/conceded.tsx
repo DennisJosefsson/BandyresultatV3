@@ -16,24 +16,24 @@ export const Route = createFileRoute('/_layout/maraton/records/conceded')({
     return data
   },
   staticData: {
-    breadcrumb: (match) => match.loaderData.breadCrumb,
+    breadcrumb: (match) => match.loaderData.breadCrumb ?? 'Insläppta mål',
   },
   head: ({ loaderData }) => ({
     meta: [
       {
-        title: loaderData?.meta.title,
+        title: loaderData?.meta.title ?? 'Bandyresultat - Rekord: Insläppta mål',
       },
       {
         name: 'description',
-        content: loaderData?.meta.description,
+        content: loaderData?.meta.description ?? 'Bandyresultat - Rekord: Insläppta mål',
       },
       {
         property: 'og:description',
-        content: loaderData?.meta.description,
+        content: loaderData?.meta.description ?? 'Bandyresultat - Rekord: Insläppta mål',
       },
       {
         property: 'og:title',
-        content: loaderData?.meta.title,
+        content: loaderData?.meta.title ?? 'Bandyresultat - Rekord: Insläppta mål',
       },
       {
         property: 'og:type',
@@ -41,7 +41,7 @@ export const Route = createFileRoute('/_layout/maraton/records/conceded')({
       },
       {
         property: 'og:url',
-        content: loaderData?.meta.url,
+        content: loaderData?.meta.url ?? 'https://www.bandyresultat.se/maraton/records/conceded',
       },
       {
         property: 'og:image',

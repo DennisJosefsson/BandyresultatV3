@@ -24,23 +24,31 @@ export const Route = createFileRoute('/_layout/teams/$teamId/$seasonId')({
     return data
   },
   component: RouteComponent,
-  staticData: { breadcrumb: (match) => match.loaderData.seasonYear },
+  staticData: { breadcrumb: (match) => match.loaderData.seasonYear ?? 'Säsong' },
   head: ({ loaderData }) => ({
-    meta: [
+   meta: [
       {
-        title: loaderData?.meta.title,
+        title:
+          loaderData?.meta.title ??
+          'Bandyresultat - Lagsäsong',
       },
       {
         name: 'description',
-        content: loaderData?.meta.description,
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - Lagsäsong',
       },
       {
         property: 'og:description',
-        content: loaderData?.meta.description,
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - Lagsäsong',
       },
       {
         property: 'og:title',
-        content: loaderData?.meta.title,
+        content:
+          loaderData?.meta.title ??
+          'Bandyresultat - Lagsäsong',
       },
       {
         property: 'og:type',
@@ -48,7 +56,9 @@ export const Route = createFileRoute('/_layout/teams/$teamId/$seasonId')({
       },
       {
         property: 'og:url',
-        content: loaderData?.meta.url,
+        content:
+          loaderData?.meta.url ??
+          'https://www.bandyresultat.se',
       },
       {
         property: 'og:image',

@@ -17,7 +17,10 @@ export const Route = createFileRoute(
 )({
   params: {
     parse: (params) => ({
-      table: zd.enum(['all', 'away', 'home']).catch('all').parse(params.table),
+      table: zd
+        .enum(['all', 'away', 'home'])
+        .catch('all')
+        .parse(params.table),
     }),
     stringify: ({ table }) => ({ table: `${table}` }),
   },
@@ -30,7 +33,11 @@ export const Route = createFileRoute(
     ) {
       throw redirect({
         to: '/seasons/$year/$group/tables/$table',
-        params: { table: 'all', year: params.year, group: params.group },
+        params: {
+          table: 'all',
+          year: params.year,
+          group: params.group,
+        },
         search: { women: search.women },
       })
     }
@@ -75,19 +82,34 @@ export const Route = createFileRoute(
       </div>
     )
   },
-  staticData: { breadcrumb: (match) => match.loaderData.breadCrumb },
+  staticData: {
+    breadcrumb: (match) =>
+      match.loaderData.breadCrumb ?? 'Tabell',
+  },
   head: ({ loaderData }) => ({
     meta: [
       {
-        title: loaderData?.meta.title,
+        title:
+          loaderData?.meta.title ??
+          'Bandyresultat - Tabell',
+      },
+      {
+        name: 'description',
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - Tabell',
       },
       {
         property: 'og:description',
-        content: loaderData?.meta.description,
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - Tabell',
       },
       {
         property: 'og:title',
-        content: loaderData?.meta.title,
+        content:
+          loaderData?.meta.title ??
+          'Bandyresultat - Tabell',
       },
       {
         property: 'og:type',
@@ -95,7 +117,9 @@ export const Route = createFileRoute(
       },
       {
         property: 'og:url',
-        content: loaderData?.meta.url,
+        content:
+          loaderData?.meta.url ??
+          'https://www.bandyresultat.se',
       },
       {
         property: 'og:image',
@@ -114,7 +138,11 @@ function RouteComponent() {
         console.error(error)
       }}
       errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent id="seasonTables" error={error} reset={reset} />
+        <SimpleErrorComponent
+          id="seasonTables"
+          error={error}
+          reset={reset}
+        />
       )}
     >
       <SeasonTables />

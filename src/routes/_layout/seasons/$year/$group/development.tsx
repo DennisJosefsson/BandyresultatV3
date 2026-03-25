@@ -60,19 +60,34 @@ export const Route = createFileRoute(
       </div>
     )
   },
-  staticData: { breadcrumb: (match) => match.loaderData.breadCrumb },
+  staticData: {
+    breadcrumb: (match) =>
+      match.loaderData.breadCrumb ?? 'Utveckling',
+  },
   head: ({ loaderData }) => ({
     meta: [
       {
-        title: loaderData?.meta.title,
+        title:
+          loaderData?.meta.title ??
+          'Bandyresultat - Tabellutveckling',
+      },
+      {
+        name: 'description',
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - Tabellutveckling',
       },
       {
         property: 'og:description',
-        content: loaderData?.meta.description,
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - Tabellutveckling',
       },
       {
         property: 'og:title',
-        content: loaderData?.meta.title,
+        content:
+          loaderData?.meta.title ??
+          'Bandyresultat - Tabellutveckling',
       },
       {
         property: 'og:type',
@@ -80,7 +95,9 @@ export const Route = createFileRoute(
       },
       {
         property: 'og:url',
-        content: loaderData?.meta.url,
+        content:
+          loaderData?.meta.url ??
+          'https://www.bandyresultat.se',
       },
       {
         property: 'og:image',
@@ -99,7 +116,11 @@ function RouteComponent() {
         console.error(error)
       }}
       errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent id="development" error={error} reset={reset} />
+        <SimpleErrorComponent
+          id="development"
+          error={error}
+          reset={reset}
+        />
       )}
     >
       <Development />
