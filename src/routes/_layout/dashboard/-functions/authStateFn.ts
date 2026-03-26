@@ -4,8 +4,13 @@ import { createServerFn } from '@tanstack/react-start'
 export const authStateFn = createServerFn({
   method: 'GET',
 }).handler(async () => {
-  const { orgRole } = await auth()
-  const isAdmin = orgRole === 'org:admin'
+  try {
+    const { orgRole } = await auth()
+    const isAdmin = orgRole === 'org:admin'
 
-  return { isAdmin }
+    return { isAdmin }
+  } catch (error) {
+    console.error('authStateFnError: ', error)
+    return { isAdmin: false }
+  }
 })

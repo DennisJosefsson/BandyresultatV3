@@ -22,8 +22,12 @@ const searchParams = z.object({
 export const Route = createFileRoute('/_layout/teams')({
   validateSearch: searchParams,
   loaderDeps: ({ search: { women } }) => ({ women }),
-  loader: async ({ deps }) =>
-    await getTeams({ data: deps.women }),
+  loader: async ({ deps }) => {
+    const data = await getTeams({ data: deps.women })
+    if (!data) throw new Error('Missing teams data')
+
+    return data
+  },
   component: TeamsHeader,
   staticData: { breadcrumb: 'Lag' },
 })

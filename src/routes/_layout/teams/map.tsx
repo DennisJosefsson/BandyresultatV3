@@ -14,6 +14,7 @@ export const Route = createFileRoute('/_layout/teams/map')({
   component: MapComponent,
   loader: async ({ deps }) => {
     const data = await getMapTeams({ data: deps.women })
+    if (!data) throw new Error('Missing mapTeams data')
     return data
   },
   pendingComponent: () => <Loading page="seasonMap" />,

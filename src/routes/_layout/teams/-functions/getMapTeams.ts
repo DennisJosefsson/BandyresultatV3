@@ -4,6 +4,7 @@ import { asc, sql } from 'drizzle-orm'
 import { z } from 'zod'
 
 import { db } from '@/db'
+import { catchError } from '@/lib/middlewares/errors/catchError'
 import type { MapTeam } from '@/lib/types/team'
 
 const women = z.boolean()
@@ -15,21 +16,25 @@ type SortedTeamGroups = {
 export const getMapTeams = createServerFn({ method: 'GET' })
   .inputValidator(zodValidator(women))
   .handler(async ({ data }) => {
-    const mapTeams = await db.query.teams.findMany({
-      where: (teams, { eq, ne, and }) =>
-        and(eq(teams.women, data), ne(teams.teamId, 176)),
-      with: {
-        county: true,
-        municipality: true,
-      },
-      orderBy: [
-        asc(sql`casual_name collate "se-SE-x-icu"`),
-      ],
-    })
+    try {
+      const mapTeams = await db.query.teams.findMany({
+        where: (teams, { eq, ne, and }) =>
+          and(eq(teams.women, data), ne(teams.teamId, 176)),
+        with: {
+          county: true,
+          municipality: true,
+        },
+        orderBy: [
+          asc(sql`casual_name collate "se-SE-x-icu"`),
+        ],
+      })
 
-    const sortedTeams = sortMapTeams(mapTeams)
+      const sortedTeams = sortMapTeams(mapTeams)
 
-    return sortedTeams
+      return sortedTeams
+    } catch (error) {
+      catchError(error)
+    }
   })
 
 function sortMapTeams(teamArray: Array<MapTeam>) {

@@ -45,10 +45,11 @@ export const Route = createFileRoute('/_layout/seasons/')({
 
   loaderDeps: ({ search: { page } }) => ({ page }),
   loader: async ({ deps }) => {
-    const seasons = await getPaginatedSeasons({
+    const data = await getPaginatedSeasons({
       data: deps.page,
     })
-    return seasons
+    if (!data) throw new Error('Missing seasons data')
+    return data
   },
   component: Seasons,
 })

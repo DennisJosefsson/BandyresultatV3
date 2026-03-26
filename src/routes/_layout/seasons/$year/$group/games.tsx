@@ -24,6 +24,8 @@ export const Route = createFileRoute(
         women: deps.women,
       },
     })
+    if (!data) throw new Error('Missing games data')
+
     if (data.status === 404) {
       throw notFound({ data: data.message })
     }

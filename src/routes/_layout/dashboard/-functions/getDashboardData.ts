@@ -1,11 +1,20 @@
 import { createServerFn } from '@tanstack/react-start'
-import { and, desc, eq, getTableColumns, lt } from 'drizzle-orm'
+import {
+  and,
+  desc,
+  eq,
+  getTableColumns,
+  lt,
+} from 'drizzle-orm'
 
 import { db } from '@/db'
 import { games, seasons } from '@/db/schema'
+import { catchError } from '@/lib/middlewares/errors/catchError'
 
-export const getDashboardData = createServerFn({ method: 'GET' }).handler(
-  async () => {
+export const getDashboardData = createServerFn({
+  method: 'GET',
+}).handler(async () => {
+  try {
     const today = new Date().toLocaleDateString('se-SV', {
       year: 'numeric',
       month: '2-digit',
@@ -36,6 +45,12 @@ export const getDashboardData = createServerFn({ method: 'GET' }).handler(
         ),
       )
 
-    return { lastSeasons, todaysUnplayedGamesCount, earlierUnplayedGamesCount }
-  },
-)
+    return {
+      lastSeasons,
+      todaysUnplayedGamesCount,
+      earlierUnplayedGamesCount,
+    }
+  } catch (error) {
+    catchError(error)
+  }
+})

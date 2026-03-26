@@ -1,14 +1,19 @@
 import { createServerFn } from '@tanstack/react-start'
 
 import { db } from '@/db'
+import { catchError } from '@/lib/middlewares/errors/catchError'
 
-export const getFirstAndLastSeason = createServerFn({ method: 'GET' }).handler(
-  async () => {
+export const getFirstAndLastSeason = createServerFn({
+  method: 'GET',
+}).handler(async () => {
+  try {
     const firstSeason = await db.query.seasons
       .findFirst({
         columns: { year: true },
-        where: (seasons, { eq }) => eq(seasons.women, false),
-        orderBy: (seasons, { asc }) => asc(seasons.seasonId),
+        where: (seasons, { eq }) =>
+          eq(seasons.women, false),
+        orderBy: (seasons, { asc }) =>
+          asc(seasons.seasonId),
       })
       .then((s) => {
         if (!s) throw new Error('Ingen första-säsong!')
@@ -18,13 +23,17 @@ export const getFirstAndLastSeason = createServerFn({ method: 'GET' }).handler(
     const lastSeason = await db.query.seasons
       .findFirst({
         columns: { year: true },
-        where: (seasons, { eq }) => eq(seasons.women, false),
-        orderBy: (seasons, { desc }) => desc(seasons.seasonId),
+        where: (seasons, { eq }) =>
+          eq(seasons.women, false),
+        orderBy: (seasons, { desc }) =>
+          desc(seasons.seasonId),
       })
       .then((s) => {
         if (!s) throw new Error('Ingen sista-säsong!')
         return Number(s.year.split('/')[1])
       })
     return { firstSeason, lastSeason }
-  },
-)
+  } catch (error) {
+    catchError(error)
+  }
+})

@@ -7,6 +7,7 @@ export const useGetFirstAndLastSeason = () => {
     queryKey: ['firstAndLastSeason'],
     queryFn: getFirstAndLastSeason,
   })
-
+  if (!data)
+    throw new Error('Missing firstAndLastSeason data')
   return data
 }

@@ -35,7 +35,13 @@ export const Route = createFileRoute('/_layout/dashboard')({
 
     return
   },
-  loader: () => getDashboardData(),
+  loader: async () => {
+    const data = await getDashboardData()
+
+    if (!data) throw new Error('Missing dashboard data.')
+
+    return data
+  },
   component: RouteComponent,
 })
 

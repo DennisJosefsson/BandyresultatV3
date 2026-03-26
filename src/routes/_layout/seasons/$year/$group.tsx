@@ -22,7 +22,9 @@ export const Route = createFileRoute(
     return data
   },
   staticData: {
-    breadcrumb: (match) => match.loaderData.breadCrumb,
+    breadcrumb: (match) => {
+      return match.loaderData.breadCrumb ?? 'Serie'
+    },
   },
   component: RouteComponent,
 })

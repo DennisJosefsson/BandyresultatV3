@@ -37,11 +37,14 @@ export const Route = createFileRoute(
       data: { year: params.year, women: deps.women },
     })
 
+    if (!data) throw new Error('Missing groups data')
+
     return data
   },
   staticData: {
-    breadcrumb: (match) =>
-      match.loaderData.breadCrumb ?? 'Säsong',
+    breadcrumb: (match) => {
+      return match.loaderData.breadCrumb ?? 'Säsong'
+    },
   },
   head: ({ loaderData }) => ({
     meta: [

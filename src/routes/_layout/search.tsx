@@ -13,7 +13,12 @@ import { getSearchTeams } from './search/-functions/getSearchTeams'
 export const Route = createFileRoute('/_layout/search')({
   staticData: { breadcrumb: 'Sök' },
   validateSearch: zodValidator(clientSearchParams),
-  loader: () => getSearchTeams(),
+  loader: async () => {
+    const teams = await getSearchTeams()
+    if (!teams) throw new Error('Missing teams data')
+
+    return teams
+  },
   component: RouteComponent,
 })
 

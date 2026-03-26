@@ -28,14 +28,18 @@ export const Route = createFileRoute(
     params: { year, group },
     deps: { women },
   }) => {
-    const result = await validateGroup({
+    const data = await validateGroup({
       data: { year, group, women },
     })
-    if (result.status === 404)
+
+    if (!data)
+      throw new Error('Missing groupValidation data')
+
+    if (data.status === 404)
       throw notFound({
         data: `Ingen ${women ? 'dam' : 'herr'}serie med detta namn det här året. Välj en ny i listan.`,
       })
-    return result
+    return data
   },
   component: RouteComponent,
   notFoundComponent(props) {
