@@ -223,6 +223,4 @@ export const parseSearchRequest = (
   return parsedObject
 }
 
-export type ParsedSearchRequest = NonNullable<
-  ReturnType<typeof parseSearchRequest>['data']
->
+

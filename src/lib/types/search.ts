@@ -1,3 +1,4 @@
+import type { parseSearchRequest } from '@/routes/_layout/search/-functions/parseSearchRequest'
 import { zd } from '../utils/zod'
 import type { TeamBase } from './team'
 import type { Unpacked } from './unpacked'
@@ -17,7 +18,10 @@ export const clientSearchParams = zd.object({
     )
     .optional()
     .catch(undefined),
-  order: zd.enum(['asc', 'desc']).optional().catch(undefined),
+  order: zd
+    .enum(['asc', 'desc'])
+    .optional()
+    .catch(undefined),
   limit: zd.number().optional().catch(undefined),
   result: zd.string().optional().catch(undefined),
   gameResult: zd
@@ -25,7 +29,9 @@ export const clientSearchParams = zd.object({
     .optional()
     .catch(undefined),
   goalsScored: zd
-    .number({ message: 'Antal gjorda mål måste vara en siffra.' })
+    .number({
+      message: 'Antal gjorda mål måste vara en siffra.',
+    })
     .optional()
     .catch(undefined),
   goalsScoredOperator: zd
@@ -38,20 +44,33 @@ export const clientSearchParams = zd.object({
     .optional()
     .catch(undefined),
   goalDiff: zd.number().optional().catch(undefined),
-  goalDiffOperator: zd.enum(['gte', 'lte', 'eq']).optional().catch(undefined),
+  goalDiffOperator: zd
+    .enum(['gte', 'lte', 'eq'])
+    .optional()
+    .catch(undefined),
   startSeason: zd
-    .number({ message: 'Första säsong måste vara ett årtal.' })
+    .number({
+      message: 'Första säsong måste vara ett årtal.',
+    })
     .optional()
     .catch(undefined),
   endSeason: zd
-    .number({ message: 'Sista säsong måste vara ett årtal.' })
+    .number({
+      message: 'Sista säsong måste vara ett årtal.',
+    })
     .optional()
     .catch(undefined),
   teamId: zd.number().optional().catch(undefined),
   opponentId: zd.number().optional().catch(undefined),
   inputDate: zd.string().optional().catch(undefined),
-  selectedGender: zd.enum(['all', 'men', 'women']).optional().catch(undefined),
-  homeGame: zd.enum(['all', 'home', 'away']).optional().catch(undefined),
+  selectedGender: zd
+    .enum(['all', 'men', 'women'])
+    .optional()
+    .catch(undefined),
+  homeGame: zd
+    .enum(['all', 'home', 'away'])
+    .optional()
+    .catch(undefined),
   orderVar: zd
     .enum([
       'date',
@@ -71,7 +90,9 @@ export const clientSearchParams = zd.object({
 
 const searchParamsFields = clientSearchParams.keyof()
 
-export type SearchParamsFields = zd.infer<typeof searchParamsFields>
+export type SearchParamsFields = zd.infer<
+  typeof searchParamsFields
+>
 
 const pickedTypes = clientSearchParams.pick({
   orderVar: true,
@@ -81,13 +102,19 @@ const pickedTypes = clientSearchParams.pick({
 
 type PickedTypes = zd.infer<typeof pickedTypes>
 
-const categories = clientSearchParams.pick({ categoryArray: true })
+const categories = clientSearchParams.pick({
+  categoryArray: true,
+})
 
 type Category = zd.infer<typeof categories>
 
-export type OperatorValues = NonNullable<PickedTypes[keyof PickedTypes]>
+export type OperatorValues = NonNullable<
+  PickedTypes[keyof PickedTypes]
+>
 
-export type Categories = Unpacked<NonNullable<Category[keyof Category]>>
+export type Categories = Unpacked<
+  NonNullable<Category[keyof Category]>
+>
 
 export type SearchResult = {
   gameId: number
@@ -98,3 +125,7 @@ export type SearchResult = {
   home: TeamBase
   away: TeamBase
 }
+
+export type ParsedSearchRequest = NonNullable<
+  ReturnType<typeof parseSearchRequest>['data']
+>
