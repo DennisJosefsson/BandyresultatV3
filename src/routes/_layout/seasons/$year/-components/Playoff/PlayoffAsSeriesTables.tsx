@@ -8,14 +8,14 @@ const route = getRouteApi(
 )
 
 const PlayoffAsSeriesTables = () => {
-  const playoffSeriesTables = route.useLoaderData({
-    select: (s) => s.playoffSeriesTables,
-  })
-  if (!playoffSeriesTables) return null
+  const data = route.useLoaderData()
+
+  if (data.status === 404 || !data.playoffSeriesTables)
+    return null
   return (
     <div>
       <div className="hidden sm:block">
-        {playoffSeriesTables.map((group) => {
+        {data.playoffSeriesTables.map((group) => {
           return (
             <TableList
               key={group.group}
@@ -25,7 +25,7 @@ const PlayoffAsSeriesTables = () => {
         })}
       </div>
       <div className="sm:hidden">
-        {playoffSeriesTables.map((group) => {
+        {data.playoffSeriesTables.map((group) => {
           return (
             <MobileTableList
               key={group.group}

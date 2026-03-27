@@ -8,7 +8,7 @@ const route = getRouteApi(
 
 const PlayoffGames = () => {
   const data = route.useLoaderData()
-
+  if (data.status === 404) return null
   return (
     <div className="mx-1 mt-2 grid grid-cols-1 xl:grid-cols-2 xl:gap-1 xl:mx-0">
       {data.games.playedLength > 0 ? (

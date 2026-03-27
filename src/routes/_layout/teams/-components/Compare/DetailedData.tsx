@@ -16,7 +16,8 @@ const DetailedData = () => {
   const searchObject = route.useSearch()
 
   const data = route.useLoaderData()
-  if (data.status === 400) return null
+  if (data.status === 400 || data.status === 404)
+    return null
 
   return (
     <div>

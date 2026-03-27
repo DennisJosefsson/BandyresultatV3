@@ -2,7 +2,6 @@ import {
   CatchBoundary,
   Outlet,
   createFileRoute,
-  notFound,
   useChildMatches,
 } from '@tanstack/react-router'
 import {
@@ -35,33 +34,9 @@ export const Route = createFileRoute(
     if (!data)
       throw new Error('Missing groupValidation data')
 
-    if (data.status === 404)
-      throw notFound({
-        data: `Ingen ${women ? 'dam' : 'herr'}serie med detta namn det här året. Välj en ny i listan.`,
-      })
     return data
   },
   component: RouteComponent,
-  notFoundComponent(props) {
-    if (props.data && typeof props.data === 'string') {
-      return (
-        <div className="mt-4 flex flex-col justify-center text-sm">
-          <div className="mb-4 flex flex-row justify-center">
-            <p>{props.data}</p>
-          </div>
-
-          {props.data.includes('Välj en ny i listan') ? (
-            <GroupListForErrorComponent />
-          ) : null}
-        </div>
-      )
-    }
-    return (
-      <div className="mt-4 flex flex-row justify-center">
-        <p>Något gick tyvärr fel.</p>
-      </div>
-    )
-  },
   head: ({ loaderData }) => ({
     meta: [
       {
@@ -107,6 +82,22 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
+  const data = Route.useLoaderData()
+  if (data.status === 404) {
+    return (
+      <div className="mt-4 flex flex-col justify-center text-sm">
+        <div className="mb-4 flex flex-row justify-center">
+          <span className="text-[8px] xs:text-[10px] sm:text-xs lg:text-sm font-semibold">
+            {data.message}
+          </span>
+        </div>
+
+        {data.message.includes('Välj en ny i listan') ? (
+          <GroupListForErrorComponent />
+        ) : null}
+      </div>
+    )
+  }
   return (
     <CatchBoundary
       getResetKey={() => 'reset'}
@@ -141,14 +132,14 @@ function IndexRoute() {
 
 function SectionMenu() {
   const women = Route.useSearch({ select: (s) => s.women })
-  const serieName = Route.useLoaderData({
-    select: (s) => s.serieName,
-  })
+  const data = Route.useLoaderData()
+
+  if (data.status === 404) return null
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-row justify-center">
         <h3 className="text-xs sm:text-sm xl:text-base font-semibold">
-          {serieName}
+          {data.serieName}
         </h3>
       </div>
       <div className="flex flex-col gap-4 sm:gap-10 2xl:gap-16">

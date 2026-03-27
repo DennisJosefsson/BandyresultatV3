@@ -1,19 +1,24 @@
 import { getRouteApi } from '@tanstack/react-router'
 
-import Date from '@/components/Common/Date'
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from '@/components/base/ui/card'
+import CompareWinsCard from './CompareWinsCard'
 
 const route = getRouteApi('/_layout/teams/compare')
 
 const FirstGames = () => {
   const data = route.useLoaderData()
 
-  if (data.status === 400) return null
+  if (
+    data.status === 400 ||
+    data.status === 404 ||
+    data.firstGames.length === 0
+  )
+    return null
 
   return (
     <Card
@@ -25,26 +30,12 @@ const FirstGames = () => {
       </CardHeader>
       <CardContent>
         <div className="mb-2">
-          {data.firstGames.map((game) => {
-            return (
-              <div
-                key={game.gameId}
-                className="bg-muted-foreground/20 my-2 flex w-full flex-col rounded px-3 py-1"
-              >
-                <div className="mb-0.5 font-semibold">
-                  <Date>{game.date}</Date>
-                </div>
-                <div className="flex flex-row justify-between">
-                  <div>
-                    {game.homeName}-{game.awayName}
-                  </div>
-                  <div className="tabular-nums">
-                    {game.result}
-                  </div>
-                </div>
-              </div>
-            )
-          })}
+          {data.firstGames.map((stat) => (
+            <CompareWinsCard
+              stat={stat}
+              key={stat.gameId}
+            />
+          ))}
         </div>
       </CardContent>
     </Card>

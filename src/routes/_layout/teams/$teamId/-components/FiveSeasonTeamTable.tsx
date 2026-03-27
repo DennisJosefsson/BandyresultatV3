@@ -9,7 +9,7 @@ import {
   TableBody,
 } from '@/components/base/ui/table'
 
-import type { FiveSeason } from '../-functions/getLastFiveSeasons'
+import type { FiveSeason } from '@/lib/types/team'
 import TeamTableHeader from './TableComponents/TableHeader'
 import TeamTableRow from './TableComponents/TeamTableDataRow'
 

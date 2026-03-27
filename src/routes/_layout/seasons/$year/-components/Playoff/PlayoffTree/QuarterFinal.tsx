@@ -7,16 +7,20 @@ import {
 
 import DefaultComponent from './DefaultComponent'
 
-const route = getRouteApi('/_layout/seasons/$year/playoff/table')
+const route = getRouteApi(
+  '/_layout/seasons/$year/playoff/table',
+)
 
 const QuarterFinal = () => {
-  const quarterFinals = route.useLoaderData({ select: (s) => s.quarterTables })
-  if (!quarterFinals) return null
+  const data = route.useLoaderData()
 
-  if (quarterFinals.length === 2) {
+  if (data.status === 404 || !data.quarterTables)
+    return null
+
+  if (data.quarterTables.length === 2) {
     return (
       <div className="grid grid-cols-1 gap-2 lg:grid-cols-5">
-        {quarterFinals.map((group, index) => {
+        {data.quarterTables.map((group, index) => {
           return (
             <DefaultComponent
               key={`${group.group}-${index}`}
@@ -31,7 +35,7 @@ const QuarterFinal = () => {
 
   return (
     <div className="grid grid-cols-1 gap-2 lg:grid-cols-4">
-      {quarterFinals.map((group, index) => (
+      {data.quarterTables.map((group, index) => (
         <DefaultComponent
           key={`${group.group}-${index}`}
           group={group}

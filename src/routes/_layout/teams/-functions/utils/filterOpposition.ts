@@ -1,14 +1,11 @@
-import type {
-  CompareCatTable,
-  CompareCatTableItem,
-} from './compareQueries'
+import type { CompareCatTableRow } from '@/lib/types/compare'
 
 export const filterOpposition = (
-  array: CompareCatTable,
+  array: Array<CompareCatTableRow>,
 ) => {
   const tempArray: Array<string> = []
 
-  const callback = (item: CompareCatTableItem) => {
+  const callback = (item: CompareCatTableRow) => {
     if (
       tempArray.includes(
         item.team.casualName + item.opponent.casualName,

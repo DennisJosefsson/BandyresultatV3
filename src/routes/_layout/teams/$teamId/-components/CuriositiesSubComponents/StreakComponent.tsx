@@ -8,14 +8,7 @@ import {
   CardTitle,
 } from '@/components/base/ui/card'
 
-type Streak = {
-  teamId: number
-  name: string
-  women: boolean
-  gameCount: number
-  startDate: string
-  endDate: string
-}
+import type { TeamStreak } from '@/lib/types/team'
 
 const StreakComponent = ({
   children,
@@ -42,7 +35,7 @@ function Title({ children }: { children: ReactNode }) {
   )
 }
 
-function Content({ streak }: { streak: Array<Streak> }) {
+function Content({ streak }: { streak: Array<TeamStreak> }) {
   if (!streak || streak.length === 0) return null
 
   return (

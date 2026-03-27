@@ -1,7 +1,6 @@
 import {
   CatchBoundary,
   createFileRoute,
-  notFound,
 } from '@tanstack/react-router'
 
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
@@ -16,7 +15,6 @@ export const Route = createFileRoute(
 )({
   loaderDeps: ({ search: { women } }) => ({ women }),
   loader: async ({ deps, params }) => {
-    if (!params.group) throw notFound()
     const data = await getGames({
       data: {
         group: params.group,
@@ -26,35 +24,12 @@ export const Route = createFileRoute(
     })
     if (!data) throw new Error('Missing games data')
 
-    if (data.status === 404) {
-      throw notFound({ data: data.message })
-    }
     return data
   },
   component: RouteComponent,
   pendingComponent: () => (
     <Loading page="seasonGamesList" />
   ),
-  notFoundComponent(props) {
-    if (props.data && typeof props.data === 'string') {
-      return (
-        <div className="mt-4 flex flex-col justify-center text-sm">
-          <div className="mb-4 flex flex-row justify-center">
-            <p>{props.data}</p>
-          </div>
-
-          {props.data.includes('Välj en ny i listan') ? (
-            <GroupListForErrorComponent />
-          ) : null}
-        </div>
-      )
-    }
-    return (
-      <div className="mt-4 flex flex-row justify-center">
-        <p>Något gick tyvärr fel.</p>
-      </div>
-    )
-  },
   staticData: {
     breadcrumb: (match) =>
       match.loaderData.breadCrumb ?? 'Matcher',
@@ -104,6 +79,22 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
+  const data = Route.useLoaderData()
+  if (data.status === 404) {
+    return (
+      <div className="mt-4 flex flex-col justify-center text-sm">
+        <div className="mb-4 flex flex-row justify-center">
+          <span className="text-[8px] xs:text-[10px] sm:text-xs lg:text-sm font-semibold">
+            {data.message}
+          </span>
+        </div>
+
+        {data.message.includes('Välj en ny i listan') ? (
+          <GroupListForErrorComponent />
+        ) : null}
+      </div>
+    )
+  }
   return (
     <CatchBoundary
       getResetKey={() => 'reset'}

@@ -73,6 +73,16 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
+  const data = Route.useLoaderData()
+  if (data.status === 404) {
+    return (
+      <div className="flex flex-row justify-center mt-4">
+        <span className="font-semibold text-[8px] xs:text-xs sm:text-sm xl:text-base">
+          {data.message}
+        </span>
+      </div>
+    )
+  }
   return (
     <CatchBoundary
       getResetKey={() => 'reset'}
@@ -93,12 +103,8 @@ function RouteComponent() {
 }
 
 function Seasons() {
-  const seasons = Route.useLoaderData({
-    select: (data) => data.seasons,
-  })
-  const rest = Route.useLoaderData({
-    select: (data) => data.rest,
-  })
+  const data = Route.useLoaderData()
+  if (data.status === 404) return null
 
   return (
     <div>
@@ -115,7 +121,7 @@ function Seasons() {
           </AccordionTrigger>
           <AccordionContent>
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 xl:grid-cols-8">
-              {seasons.map((season) => {
+              {data.seasons.map((season) => {
                 return (
                   <Link
                     key={season.seasonId}
@@ -133,7 +139,7 @@ function Seasons() {
             </div>
           </AccordionContent>
         </AccordionItem>
-        {rest.length > 0 ? (
+        {data.rest.length > 0 ? (
           <AccordionItem
             value="rest"
             className="mb-2 rounded-md p-2 shadow-md border-b last:border-b-0"
@@ -143,7 +149,7 @@ function Seasons() {
             </AccordionTrigger>
             <AccordionContent>
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 xl:grid-cols-8">
-                {rest.map((season) => {
+                {data.rest.map((season) => {
                   return (
                     <Link
                       key={season.seasonId}

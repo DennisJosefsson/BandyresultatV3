@@ -87,6 +87,46 @@ export type PlayoffSeriesTable = {
   name: string
 }
 
+export type SingleTeamTableItem = {
+  category: string
+  totalGames: number
+  totalWins: number
+  totalDraws: number
+  totalLost: number
+  totalGoalsScored: number
+  totalGoalsConceded: number
+  totalGoalDifference: number
+  totalPoints: number
+  serie: {
+    level: number
+  }
+}
+
+export const singleTeamTableItem = zd.object({
+  category: zd.string(),
+  totalDraws: zd.coerce.number(),
+  totalGames: zd.coerce.number(),
+  totalGoalDifference: zd.coerce.number(),
+  totalGoalsConceded: zd.coerce.number(),
+  totalGoalsScored: zd.coerce.number(),
+  totalLost: zd.coerce.number(),
+  totalPoints: zd.coerce.number(),
+  totalWins: zd.coerce.number(),
+  serie: zd.object({ level: zd.number() }),
+})
+
+export const singleTeamTable = zd.array(singleTeamTableItem)
+
+export type SingleTeamTables = Array<{
+  level: string
+  levelName: string
+  tables: Array<{
+    category: string
+    categoryName: string
+    tables: SingleTeamTableItem
+  }>
+}>
+
 export const newStaticTable = zd.object({
   teamName: zd.string(),
   teamId: zd.number(),

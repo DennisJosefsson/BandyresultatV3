@@ -1,7 +1,6 @@
 import {
   CatchBoundary,
   createFileRoute,
-  notFound,
   redirect,
 } from '@tanstack/react-router'
 
@@ -43,7 +42,6 @@ export const Route = createFileRoute(
     }
   },
   loader: async ({ deps, params }) => {
-    if (!params.group) throw notFound()
     const data = await getTables({
       data: {
         group: params.group,
@@ -53,35 +51,11 @@ export const Route = createFileRoute(
       },
     })
     if (!data) throw new Error('Missing data')
-    if (data.status === 404) {
-      throw notFound({
-        data: data.message,
-        routeId: '/_layout/seasons/$year/$group/',
-      })
-    }
+
     return data
   },
   component: RouteComponent,
-  notFoundComponent(props) {
-    if (props.data && typeof props.data === 'string') {
-      return (
-        <div className="mt-4 flex flex-col justify-center text-sm">
-          <div className="mb-4 flex flex-row justify-center">
-            <p>{props.data}</p>
-          </div>
 
-          {props.data.includes('Välj en ny i listan') ? (
-            <GroupListForErrorComponent />
-          ) : null}
-        </div>
-      )
-    }
-    return (
-      <div className="mt-4 flex flex-row justify-center">
-        <p>Något gick tyvärr fel.</p>
-      </div>
-    )
-  },
   staticData: {
     breadcrumb: (match) =>
       match.loaderData.breadCrumb ?? 'Tabell',
@@ -131,6 +105,22 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
+  const data = Route.useLoaderData()
+  if (data.status === 404) {
+    return (
+      <div className="mt-4 flex flex-col justify-center text-sm">
+        <div className="mb-4 flex flex-row justify-center">
+          <span className="text-[8px] xs:text-[10px] sm:text-xs lg:text-sm font-semibold">
+            {data.message}
+          </span>
+        </div>
+
+        {data.message.includes('Välj en ny i listan') ? (
+          <GroupListForErrorComponent />
+        ) : null}
+      </div>
+    )
+  }
   return (
     <CatchBoundary
       getResetKey={() => 'reset'}

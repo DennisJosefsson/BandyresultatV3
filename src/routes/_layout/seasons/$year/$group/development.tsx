@@ -2,7 +2,6 @@ import {
   CatchBoundary,
   Navigate,
   createFileRoute,
-  notFound,
 } from '@tanstack/react-router'
 import { zodValidator } from '@tanstack/zod-adapter'
 
@@ -30,36 +29,11 @@ export const Route = createFileRoute(
       },
     })
     if (!data) throw new Error('Missing data')
-    if (data.status === 404) {
-      throw notFound({
-        data: data.message,
-        routeId: '/_layout/seasons/$year/$group/',
-      })
-    }
 
     return data
   },
   component: RouteComponent,
-  notFoundComponent(props) {
-    if (props.data && typeof props.data === 'string') {
-      return (
-        <div className="mt-4 flex flex-col justify-center text-sm">
-          <div className="mb-4 flex flex-row justify-center">
-            <p>{props.data}</p>
-          </div>
 
-          {props.data.includes('Välj en ny i listan') ? (
-            <GroupListForErrorComponent />
-          ) : null}
-        </div>
-      )
-    }
-    return (
-      <div className="mt-4 flex flex-row justify-center">
-        <p>Något gick tyvärr fel.</p>
-      </div>
-    )
-  },
   staticData: {
     breadcrumb: (match) =>
       match.loaderData.breadCrumb ?? 'Utveckling',
@@ -109,6 +83,22 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
+  const data = Route.useLoaderData()
+  if (data.status === 404) {
+    return (
+      <div className="mt-4 flex flex-col justify-center text-sm">
+        <div className="mb-4 flex flex-row justify-center">
+          <span className="text-[8px] xs:text-[10px] sm:text-xs lg:text-sm font-semibold">
+            {data.message}
+          </span>
+        </div>
+
+        {data.message.includes('Välj en ny i listan') ? (
+          <GroupListForErrorComponent />
+        ) : null}
+      </div>
+    )
+  }
   return (
     <CatchBoundary
       getResetKey={() => 'reset'}
@@ -130,7 +120,9 @@ function RouteComponent() {
 
 function Development() {
   const data = Route.useLoaderData()
+
   const index = Route.useSearch({ select: (s) => s.index })
+  if (data.status === 404) return null
   if (index >= data.dates.length) {
     return (
       <Navigate

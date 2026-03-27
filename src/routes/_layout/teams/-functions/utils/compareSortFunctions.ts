@@ -1,15 +1,15 @@
 import type {
-  AllGamesTable,
-  AllGamesTableItem,
-  CompareCatTable,
-} from './compareQueries'
+  CompareAllTableRow,
+  CompareBaseTable,
+  CompareCatTableRow,
+} from '@/lib/types/compare'
 
 type SortedCompareCategoryTables = {
-  [key: string]: CompareCatTable
+  [key: string]: Array<CompareCatTableRow>
 }
 
 type SortedTables = {
-  [key: string]: CompareCatTable
+  [key: string]: Array<CompareCatTableRow>
 }
 
 type LevelName = {
@@ -25,7 +25,7 @@ const levelName: LevelName = {
 }
 
 export const compareSortLevelFunction = (
-  gamesArray: CompareCatTable,
+  gamesArray: Array<CompareCatTableRow>,
 ) => {
   const sortLevels = gamesArray.reduce((levels, table) => {
     if (!levels[table.serie.level]) {
@@ -79,11 +79,9 @@ export const compareSortLevelFunction = (
 }
 
 export const compareAllTeamData = (
-  allDataArray: AllGamesTable,
+  allDataArray: Array<CompareAllTableRow>,
 ) => {
-  const newArray: Array<
-    Omit<AllGamesTableItem, 'opponentId' | 'opponent'>
-  > = []
+  const newArray: Array<CompareBaseTable> = []
 
   allDataArray.forEach((team) => {
     if (

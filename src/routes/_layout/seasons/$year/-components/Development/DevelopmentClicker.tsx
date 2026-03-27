@@ -18,13 +18,13 @@ const route = getRouteApi(
 
 const DevelopmentClicker = () => {
   const navigate = route.useNavigate()
-  const dates = route.useLoaderData({
-    select: (s) => s.dates,
-  })
+
   const index = route.useSearch({ select: (s) => s.index })
 
   const [api, setApi] = useState<CarouselApi>()
   const [dateApi, setDateApi] = useState<CarouselApi>()
+
+  const data = route.useLoaderData()
 
   useEffect(() => {
     if (!api || !dateApi) return
@@ -37,7 +37,9 @@ const DevelopmentClicker = () => {
       })
       dateApi.scrollTo(api.selectedScrollSnap(), true)
     })
-  }, [dates, api, dateApi])
+  }, [data, api, dateApi])
+
+  if (data.status === 404) return null
 
   return (
     <div className="flex flex-col gap-4 ">
@@ -53,7 +55,7 @@ const DevelopmentClicker = () => {
           plugins={[Classnames()]}
         >
           <CarouselContent className="-ml-1">
-            {Array.from({ length: dates.length }).map(
+            {Array.from({ length: data.dates.length }).map(
               (_, arrIndex) => {
                 return (
                   <CarouselItem
@@ -83,13 +85,13 @@ const DevelopmentClicker = () => {
           plugins={[Classnames()]}
         >
           <CarouselContent>
-            {dates.map((date, arrIndex) => {
+            {data.dates.map((date, arrIndex) => {
               return (
                 <CarouselItem
                   key={date}
                   className={cn(
                     'flex basis-1/3 cursor-pointer flex-row items-center justify-center p-0 text-[8px] md:basis-1/5 md:text-sm [.is-snapped]:font-semibold ',
-                    { 'basis-full': dates.length < 5 },
+                    { 'basis-full': data.dates.length < 5 },
                   )}
                   onClick={() =>
                     api && api.scrollTo(arrIndex, true)

@@ -2,18 +2,15 @@ import { getRouteApi } from '@tanstack/react-router'
 
 import TableList from './Tables/TableList'
 
-const route = getRouteApi('/_layout/teams/$teamId/$seasonId')
+const route = getRouteApi(
+  '/_layout/teams/$teamId/$seasonId',
+)
 
 const SeasonTables = () => {
-  const tables = route.useLoaderData({ select: (data) => data.tables })
-  const staticTables = route.useLoaderData({
-    select: (data) => data.staticTables,
-  })
-  const casualName = route.useLoaderData({
-    select: (data) => data.team.casualName,
-  })
+  const data = route.useLoaderData()
+  if (data.status === 404) return null
 
-  if (tables.length + staticTables.length === 0) {
+  if (data.tables.length + data.staticTables.length === 0) {
     return (
       <div className="mt-2 flex flex-row justify-center font-semibold">
         Inga tabeller än denna säsong.
@@ -23,11 +20,17 @@ const SeasonTables = () => {
 
   return (
     <div>
-      {tables.length > 0 ? (
-        <TableList tableArray={tables} casualName={casualName} />
+      {data.tables.length > 0 ? (
+        <TableList
+          tableArray={data.tables}
+          casualName={data.team.casualName}
+        />
       ) : null}
-      {staticTables.length > 0 ? (
-        <TableList casualName={casualName} tableArray={staticTables} />
+      {data.staticTables.length > 0 ? (
+        <TableList
+          casualName={data.team.casualName}
+          tableArray={data.staticTables}
+        />
       ) : null}
     </div>
   )

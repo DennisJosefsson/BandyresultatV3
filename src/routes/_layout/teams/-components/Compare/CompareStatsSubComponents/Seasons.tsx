@@ -6,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/base/ui/card'
+import CompareStatsCard from './CompareStatsCard'
 const route = getRouteApi('/_layout/teams/compare')
 
 const Seasons = () => {
@@ -15,7 +16,8 @@ const Seasons = () => {
     },
   })
   const data = route.useLoaderData()
-  if (data.status === 400) return null
+  if (data.status === 400 || data.status === 404)
+    return null
   return (
     <>
       <Card
@@ -27,19 +29,12 @@ const Seasons = () => {
         </CardHeader>
         <CardContent>
           <div className="mb-2">
-            {data.allDbSeasons.map((team) => {
+            {data.allDbSeasons.map((stat) => {
               return (
-                <div
-                  key={team.teamId}
-                  className="bg-muted-foreground/20 my-2 flex w-full flex-col rounded px-3 py-1"
-                >
-                  <div className="flex flex-row justify-between">
-                    <div>{team.team.casualName}</div>
-                    <div className="text-right">
-                      {team.seasons}
-                    </div>
-                  </div>
-                </div>
+                <CompareStatsCard
+                  stat={stat}
+                  key={stat.teamId}
+                />
               )
             })}
           </div>
@@ -54,19 +49,12 @@ const Seasons = () => {
         </CardHeader>
         <CardContent>
           <div className="mb-2">
-            {data.firstDivisionSeasons.map((team) => {
+            {data.firstDivisionSeasons.map((stat) => {
               return (
-                <div
-                  key={team.teamId}
-                  className="bg-muted-foreground/20 my-2 flex w-full flex-col rounded px-3 py-1"
-                >
-                  <div className="flex flex-row justify-between">
-                    <div>{team.team.casualName}</div>
-                    <div className="text-right">
-                      {team.seasons}
-                    </div>
-                  </div>
-                </div>
+                <CompareStatsCard
+                  stat={stat}
+                  key={stat.teamId}
+                />
               )
             })}
           </div>
@@ -86,19 +74,12 @@ const Seasons = () => {
             <CardContent>
               <div className="mb-2">
                 {data.firstDivisionSeasonsSince1931.map(
-                  (team) => {
+                  (stat) => {
                     return (
-                      <div
-                        key={team.teamId}
-                        className="bg-muted-foreground/20 my-2 flex w-full flex-col rounded px-3 py-1"
-                      >
-                        <div className="flex flex-row justify-between">
-                          <div>{team.team.casualName}</div>
-                          <div className="text-right">
-                            {team.seasons}
-                          </div>
-                        </div>
-                      </div>
+                      <CompareStatsCard
+                        stat={stat}
+                        key={stat.teamId}
+                      />
                     )
                   },
                 )}

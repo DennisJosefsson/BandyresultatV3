@@ -1,5 +1,4 @@
-import type {
-  SQL} from 'drizzle-orm';
+import type { SQL } from 'drizzle-orm'
 import {
   and,
   asc,
@@ -26,6 +25,7 @@ import {
   teamseasons,
 } from '@/db/schema'
 import type { Game } from '@/lib/types/game'
+import type { SerieData } from '@/lib/types/serie'
 import {
   gameSortFunction,
   leagueTableParser,
@@ -61,7 +61,10 @@ export const getTeamSeasonStaticTables = async ({
       season: {
         year: seasons.year,
         seasonId: seasons.seasonId,
-      } as unknown as SQL<{ year: string; seasonId: number }>,
+      } as unknown as SQL<{
+        year: string
+        seasonId: number
+      }>,
       team: {
         teamId: teams.teamId,
         name: teams.name,
@@ -75,7 +78,10 @@ export const getTeamSeasonStaticTables = async ({
       }>,
     })
     .from(tables)
-    .leftJoin(seasons, eq(seasons.seasonId, tables.seasonId))
+    .leftJoin(
+      seasons,
+      eq(seasons.seasonId, tables.seasonId),
+    )
     .leftJoin(teams, eq(teams.teamId, tables.teamId))
     .leftJoin(series, eq(series.serieId, tables.serieId))
     .where(
@@ -88,14 +94,18 @@ export const getTeamSeasonStaticTables = async ({
 
   const seriesData = await db
     .select({
-      name: series.serieName,
+      serieName: series.serieName,
       group: series.group,
+      category: series.category,
       comment: series.comment,
       serieStructure: series.serieStructure,
       level: series.level,
     })
     .from(series)
-    .leftJoin(seasons, eq(seasons.seasonId, series.seasonId))
+    .leftJoin(
+      seasons,
+      eq(seasons.seasonId, series.seasonId),
+    )
     .where(
       and(
         inArray(series.group, groupArray),
@@ -104,9 +114,10 @@ export const getTeamSeasonStaticTables = async ({
       ),
     )
 
-  return tableSortFunction(getStaticTables, seriesData).filter((table) =>
-    groupArray.includes(table.group),
-  )
+  return tableSortFunction(
+    getStaticTables,
+    seriesData,
+  ).filter((table) => groupArray.includes(table.group))
 }
 
 export const getTeamSeasonTables = async ({
@@ -127,7 +138,10 @@ export const getTeamSeasonTables = async ({
       season: {
         year: seasons.year,
         seasonId: seasons.seasonId,
-      } as unknown as SQL<{ year: string; seasonId: number }>,
+      } as unknown as SQL<{
+        year: string
+        seasonId: number
+      }>,
       team: {
         name: teams.name,
         teamId: teams.teamId,
@@ -139,10 +153,15 @@ export const getTeamSeasonTables = async ({
         casualName: string
         shortName: string
       }>,
-      serie: { level: series.level } as unknown as SQL<{ level: number }>,
+      serie: { level: series.level } as unknown as SQL<{
+        level: number
+      }>,
     })
     .from(teamgames)
-    .leftJoin(seasons, eq(seasons.seasonId, teamgames.seasonId))
+    .leftJoin(
+      seasons,
+      eq(seasons.seasonId, teamgames.seasonId),
+    )
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .where(
@@ -175,7 +194,10 @@ export const getTeamSeasonTables = async ({
       season: {
         year: seasons.year,
         seasonId: seasons.seasonId,
-      } as unknown as SQL<{ year: string; seasonId: number }>,
+      } as unknown as SQL<{
+        year: string
+        seasonId: number
+      }>,
       team: {
         teamId: teams.teamId,
         name: teams.name,
@@ -188,34 +210,46 @@ export const getTeamSeasonTables = async ({
         casualName: string
       }>,
       totalGames: count(teamgames.teamGameId),
-      totalPoints: sum(teamgames.points).mapWith(Number).as('total_points'),
+      totalPoints: sum(teamgames.points)
+        .mapWith(Number)
+        .as('total_points'),
       totalGoalsScored: sum(teamgames.goalsScored)
         .mapWith(Number)
         .as('total_goals_scored') as unknown as SQL<number>,
       totalGoalsConceded: sum(teamgames.goalsConceded)
         .mapWith(Number)
-        .as('total_goals_conceded') as unknown as SQL<number>,
+        .as(
+          'total_goals_conceded',
+        ) as unknown as SQL<number>,
 
       totalGoalDifference: sum(teamgames.goalDifference)
         .mapWith(Number)
-        .as('total_goal_difference') as unknown as SQL<number>,
+        .as(
+          'total_goal_difference',
+        ) as unknown as SQL<number>,
 
-      totalWins: sql<number>`cast(count(*) filter (where win) as int)`.as(
-        'totalWins',
-      ),
-      totalDraws: sql<number>`cast(count(*) filter (where draw) as int)`.as(
-        'totalDraws',
-      ),
-      totalLost: sql<number>`cast(count(*) filter (where lost) as int)`.as(
-        'totalLost',
-      ),
+      totalWins:
+        sql<number>`cast(count(*) filter (where win) as int)`.as(
+          'totalWins',
+        ),
+      totalDraws:
+        sql<number>`cast(count(*) filter (where draw) as int)`.as(
+          'totalDraws',
+        ),
+      totalLost:
+        sql<number>`cast(count(*) filter (where lost) as int)`.as(
+          'totalLost',
+        ),
       serie: {
         level: series.level,
       } as unknown as SQL<{ level: number }>,
     })
     .from(teamgames)
     .leftJoin(series, eq(teamgames.serieId, series.serieId))
-    .leftJoin(seasons, eq(seasons.seasonId, teamgames.seasonId))
+    .leftJoin(
+      seasons,
+      eq(seasons.seasonId, teamgames.seasonId),
+    )
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
     .where(
       and(
@@ -250,16 +284,22 @@ export const getTeamSeasonTables = async ({
 
   const seriesData = await db
     .select({
-      name: series.serieName,
+      serieName: series.serieName,
       group: series.group,
+      category: series.category,
       comment: series.comment,
       serieStructure: series.serieStructure,
       level: series.level,
       bonusPoints: series.bonusPoints,
-      season: { women: seasons.women } as unknown as SQL<{ women: boolean }>,
+      season: { women: seasons.women } as unknown as SQL<{
+        women: boolean
+      }>,
     })
     .from(series)
-    .leftJoin(seasons, eq(seasons.seasonId, series.seasonId))
+    .leftJoin(
+      seasons,
+      eq(seasons.seasonId, series.seasonId),
+    )
     .where(
       and(
         inArray(series.group, groupArray),
@@ -272,7 +312,10 @@ export const getTeamSeasonTables = async ({
     (serie) => serie.bonusPoints !== null,
   )
 
-  if (seriesWithBonusPoints && seriesWithBonusPoints.bonusPoints) {
+  if (
+    seriesWithBonusPoints &&
+    seriesWithBonusPoints.bonusPoints
+  ) {
     const bonusPointsObject = JSON.parse(
       seriesWithBonusPoints.bonusPoints,
     ) as BonusPoints
@@ -283,14 +326,16 @@ export const getTeamSeasonTables = async ({
         ? {
             ...table,
             totalPoints:
-              table.totalPoints + bonusPointsObject[table.teamId.toString()],
+              table.totalPoints +
+              bonusPointsObject[table.teamId.toString()],
           }
         : table
     })
 
-    return tableSortFunction(updatedTable, seriesData).filter((table) =>
-      groupArray.includes(table.group),
-    )
+    return tableSortFunction(
+      updatedTable,
+      seriesData,
+    ).filter((table) => groupArray.includes(table.group))
   }
 
   if (['1933', '1937'].includes(seasonYear)) {
@@ -300,7 +345,10 @@ export const getTeamSeasonTables = async ({
         season: {
           year: seasons.year,
           seasonId: seasons.seasonId,
-        } as unknown as SQL<{ year: string; seasonId: number }>,
+        } as unknown as SQL<{
+          year: string
+          seasonId: number
+        }>,
         team: {
           name: teams.name,
           shortName: teams.shortName,
@@ -312,8 +360,14 @@ export const getTeamSeasonTables = async ({
         }>,
       })
       .from(teamgames)
-      .leftJoin(seasons, eq(seasons.seasonId, teamgames.seasonId))
-      .leftJoin(series, eq(series.serieId, teamgames.serieId))
+      .leftJoin(
+        seasons,
+        eq(seasons.seasonId, teamgames.seasonId),
+      )
+      .leftJoin(
+        series,
+        eq(series.serieId, teamgames.serieId),
+      )
       .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
       .where(
         and(
@@ -321,8 +375,14 @@ export const getTeamSeasonTables = async ({
             ? like(teamgames.group, 'Div%')
             : like(teamgames.group, 'Avd%'),
           seasonYear === '1933'
-            ? notInArray(teamgames.opponentId, [5, 31, 57, 29])
-            : notInArray(teamgames.opponentId, [5, 64, 57, 17]),
+            ? notInArray(
+                teamgames.opponentId,
+                [5, 31, 57, 29],
+              )
+            : notInArray(
+                teamgames.opponentId,
+                [5, 64, 57, 17],
+              ),
           eq(seasons.year, seasonYear),
           eq(series.level, 1),
         ),
@@ -331,12 +391,14 @@ export const getTeamSeasonTables = async ({
     gameArray.forEach((game) => {
       const tableIndex = tabell.findIndex(
         (table) =>
-          table.team === game.team && table.group.includes('Nedflyttning'),
+          table.team === game.team &&
+          table.group.includes('Nedflyttning'),
       )
 
       if (tableIndex === -1) return
 
-      tabell[tableIndex].totalGames = tabell[tableIndex].totalGames + 1
+      tabell[tableIndex].totalGames =
+        tabell[tableIndex].totalGames + 1
       tabell[tableIndex].totalWins =
         tabell[tableIndex].totalWins + (game.win ? 1 : 0)
       tabell[tableIndex].totalDraws =
@@ -353,34 +415,29 @@ export const getTeamSeasonTables = async ({
         tabell[tableIndex].totalGoalDifference +
         (game.goalDifference ? game.goalDifference : 0)
       tabell[tableIndex].totalPoints =
-        tabell[tableIndex].totalPoints + (game.points ? game.points : 0)
+        tabell[tableIndex].totalPoints +
+        (game.points ? game.points : 0)
     })
 
-    return tableSortFunction(tabell, seriesData).filter((table) =>
-      groupArray.includes(table.group),
+    return tableSortFunction(tabell, seriesData).filter(
+      (table) => groupArray.includes(table.group),
     )
   }
 
-  return tableSortFunction(tabell, seriesData).filter((table) =>
-    groupArray.includes(table.group),
+  return tableSortFunction(tabell, seriesData).filter(
+    (table) => groupArray.includes(table.group),
   )
 }
 
 type GetSeasonGamesProps = {
   gamesArray: Array<Game>
-  seriesArray: Array<{
-    category: string
-    group: string
-    comment: string | null
-    name: string
-    level: number
-  }>
+  seriesArray: Array<SerieData>
 }
 
 type SeriesData = {
   group: string
   comment: string
-  name: string
+  serieName: string
   level: number
   serieStructure: Array<number>
 }
@@ -397,21 +454,36 @@ export const getSeasonGames = ({
     return {
       group: serie.group,
       comment: serie.comment,
-      name: serie.name,
+      serieName: serie.serieName,
       level: serie.level,
     }
   }) as Array<SeriesData>
 
   const unsortedPlayedGames = gamesArray
     .filter((game) => game.played === true)
-    .sort((a, b) => getTime(new Date(a.date)) - getTime(new Date(b.date)))
+    .sort(
+      (a, b) =>
+        getTime(new Date(a.date)) -
+        getTime(new Date(b.date)),
+    )
   const unsortedUnplayedGames = gamesArray
     .filter((game) => !game.played)
-    .sort((a, b) => getTime(new Date(a.date)) - getTime(new Date(b.date)))
+    .sort(
+      (a, b) =>
+        getTime(new Date(a.date)) -
+        getTime(new Date(b.date)),
+    )
 
-  const playedGames = gameSortFunction(unsortedPlayedGames, seriesData, true)
+  const playedGames = gameSortFunction(
+    unsortedPlayedGames,
+    seriesData,
+    true,
+  )
 
-  const unplayedGames = gameSortFunction(unsortedUnplayedGames, seriesData)
+  const unplayedGames = gameSortFunction(
+    unsortedUnplayedGames,
+    seriesData,
+  )
 
   return { playedGames, unplayedGames }
 }
@@ -428,10 +500,16 @@ export const getSeasons = async ({
       season: {
         year: seasons.year,
         seasonId: seasons.seasonId,
-      } as unknown as SQL<{ year: string; seasonId: number }>,
+      } as unknown as SQL<{
+        year: string
+        seasonId: number
+      }>,
     })
     .from(teamseasons)
-    .leftJoin(seasons, eq(seasons.seasonId, teamseasons.seasonId))
+    .leftJoin(
+      seasons,
+      eq(seasons.seasonId, teamseasons.seasonId),
+    )
     .where(eq(teamseasons.teamId, teamId))
     .orderBy(asc(teamseasons.seasonId))
     .limit(1)
@@ -440,7 +518,9 @@ export const getSeasons = async ({
       if (season[0].season.year.includes('/')) {
         return {
           year: season[0].season.year,
-          seasonId: parseInt(season[0].season.year.split('/')[1]),
+          seasonId: parseInt(
+            season[0].season.year.split('/')[1],
+          ),
         }
       } else if (season[0].season.year) {
         return {
@@ -455,10 +535,16 @@ export const getSeasons = async ({
       season: {
         year: seasons.year,
         seasonId: seasons.seasonId,
-      } as unknown as SQL<{ year: string; seasonId: number }>,
+      } as unknown as SQL<{
+        year: string
+        seasonId: number
+      }>,
     })
     .from(teamseasons)
-    .leftJoin(seasons, eq(seasons.seasonId, teamseasons.seasonId))
+    .leftJoin(
+      seasons,
+      eq(seasons.seasonId, teamseasons.seasonId),
+    )
     .where(eq(teamseasons.teamId, teamId))
     .orderBy(desc(teamseasons.seasonId))
     .limit(1)
@@ -467,7 +553,9 @@ export const getSeasons = async ({
       if (season[0].season.year.includes('/')) {
         return {
           year: season[0].season.year,
-          seasonId: parseInt(season[0].season.year.split('/')[1]),
+          seasonId: parseInt(
+            season[0].season.year.split('/')[1],
+          ),
         }
       } else if (season[0].season.year) {
         return {
@@ -486,12 +574,21 @@ export const getSeasons = async ({
       season: {
         year: seasons.year,
         seasonId: seasons.seasonId,
-      } as unknown as SQL<{ year: string; seasonId: number }>,
+      } as unknown as SQL<{
+        year: string
+        seasonId: number
+      }>,
     })
     .from(teamseasons)
-    .leftJoin(seasons, eq(seasons.seasonId, teamseasons.seasonId))
+    .leftJoin(
+      seasons,
+      eq(seasons.seasonId, teamseasons.seasonId),
+    )
     .where(
-      and(eq(teamseasons.teamId, teamId), gt(teamseasons.seasonId, seasonId)),
+      and(
+        eq(teamseasons.teamId, teamId),
+        gt(teamseasons.seasonId, seasonId),
+      ),
     )
     .orderBy(asc(teamseasons.seasonId))
     .limit(1)
@@ -500,7 +597,9 @@ export const getSeasons = async ({
       if (season[0].season.year.includes('/')) {
         return {
           year: season[0].season.year,
-          seasonId: parseInt(season[0].season.year.split('/')[1]),
+          seasonId: parseInt(
+            season[0].season.year.split('/')[1],
+          ),
         }
       } else if (season[0].season.year) {
         return {
@@ -515,12 +614,21 @@ export const getSeasons = async ({
       season: {
         year: seasons.year,
         seasonId: seasons.seasonId,
-      } as unknown as SQL<{ year: string; seasonId: number }>,
+      } as unknown as SQL<{
+        year: string
+        seasonId: number
+      }>,
     })
     .from(teamseasons)
-    .leftJoin(seasons, eq(seasons.seasonId, teamseasons.seasonId))
+    .leftJoin(
+      seasons,
+      eq(seasons.seasonId, teamseasons.seasonId),
+    )
     .where(
-      and(eq(teamseasons.teamId, teamId), lt(teamseasons.seasonId, seasonId)),
+      and(
+        eq(teamseasons.teamId, teamId),
+        lt(teamseasons.seasonId, seasonId),
+      ),
     )
     .orderBy(desc(teamseasons.seasonId))
     .limit(1)
@@ -529,7 +637,9 @@ export const getSeasons = async ({
       if (season[0].season.year.includes('/')) {
         return {
           year: season[0].season.year,
-          seasonId: parseInt(season[0].season.year.split('/')[1]),
+          seasonId: parseInt(
+            season[0].season.year.split('/')[1],
+          ),
         }
       } else if (season[0].season.year) {
         return {
@@ -539,5 +649,10 @@ export const getSeasons = async ({
       }
     })
 
-  return { firstSeason, lastSeason, nextSeason, previousSeason }
+  return {
+    firstSeason,
+    lastSeason,
+    nextSeason,
+    previousSeason,
+  }
 }

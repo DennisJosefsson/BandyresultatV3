@@ -34,7 +34,6 @@ export const Route = createFileRoute(
   },
   component: SingleTeam,
   pendingComponent: () => <Loading page="singleTeam" />,
-  notFoundComponent: NotFound,
   staticData: {
     breadcrumb: (match) =>
       match.loaderData.breadCrumb ?? 'Lag',
@@ -82,6 +81,32 @@ export const Route = createFileRoute(
 })
 
 function SingleTeam() {
+  const data = Route.useLoaderData()
+  if (data.status === 404) {
+    return (
+      <div className="mt-2 flex flex-row justify-center">
+        <p>
+          Finns tyvärr inget sådant lag, men det finns en{' '}
+          <Link
+            to="/teams"
+            search={{ women: false }}
+            className="underline"
+          >
+            lista
+          </Link>{' '}
+          och man kan också söka via{' '}
+          <Link
+            to="/teams/map"
+            search={{ women: false }}
+            className="underline"
+          >
+            karta
+          </Link>
+          .
+        </p>
+      </div>
+    )
+  }
   return (
     <div>
       <CatchBoundary
@@ -102,32 +127,6 @@ function SingleTeam() {
           <Outlet />
         </div>
       </CatchBoundary>
-    </div>
-  )
-}
-
-function NotFound() {
-  return (
-    <div className="mt-2 flex flex-row justify-center">
-      <p>
-        Finns tyvärr inget sådant lag, men det finns en{' '}
-        <Link
-          to="/teams"
-          search={{ women: false }}
-          className="underline"
-        >
-          lista
-        </Link>{' '}
-        och man kan också söka via{' '}
-        <Link
-          to="/teams/map"
-          search={{ women: false }}
-          className="underline"
-        >
-          karta
-        </Link>
-        .
-      </p>
     </div>
   )
 }

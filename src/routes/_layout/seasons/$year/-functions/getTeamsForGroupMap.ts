@@ -1,6 +1,6 @@
 import { createServerFn } from '@tanstack/react-start'
 import { zodValidator } from '@tanstack/zod-adapter'
-import type { SQL } from 'drizzle-orm';
+import type { SQL } from 'drizzle-orm'
 import { and, eq, getTableColumns } from 'drizzle-orm'
 
 import { db } from '@/db'
@@ -30,17 +30,27 @@ type TeamsForGroupMapReturn =
     }
   | {
       status: 200
-      teams: Array<{ team: Team; county: County; municipality: Municipality }>
+      teams: Array<{
+        team: Team
+        county: County
+        municipality: Municipality
+      }>
       breadCrumb: string
       meta: Meta
     }
   | undefined
 
-export const getTeamsForGroupMap = createServerFn({ method: 'GET' })
+export const getTeamsForGroupMap = createServerFn({
+  method: 'GET',
+})
   .middleware([errorMiddleware])
   .inputValidator(
     zodValidator(
-      zd.object({ group: zd.string(), year: zd.int(), women: zd.boolean() }),
+      zd.object({
+        group: zd.string(),
+        year: zd.int(),
+        women: zd.boolean(),
+      }),
     ),
   )
   .handler(
@@ -61,8 +71,7 @@ export const getTeamsForGroupMap = createServerFn({ method: 'GET' })
         if (year < 1930) {
           return {
             status: 404,
-            message:
-              'Enbart slutspelsmatcher denna säsong, kartan finns under slutspel.',
+            message: `Enbart slutspelsmatcher ${seasonYear}, kartan finns under slutspel.`,
             breadCrumb,
             meta,
           }
@@ -71,7 +80,8 @@ export const getTeamsForGroupMap = createServerFn({ method: 'GET' })
         if (year < 1973 && women) {
           return {
             status: 404,
-            message: 'Damernas första säsong var 1972/1973.',
+            message:
+              'Damernas första säsong var 1972/1973.',
             breadCrumb,
             meta,
           }
@@ -91,7 +101,10 @@ export const getTeamsForGroupMap = createServerFn({ method: 'GET' })
             ...getTableColumns(series),
           })
           .from(series)
-          .leftJoin(seasons, eq(seasons.seasonId, series.seasonId))
+          .leftJoin(
+            seasons,
+            eq(seasons.seasonId, series.seasonId),
+          )
           .where(
             and(
               eq(seasons.women, women),
@@ -107,29 +120,47 @@ export const getTeamsForGroupMap = createServerFn({ method: 'GET' })
         if (!serie)
           return {
             status: 404,
-            message: `Ingen ${women ? 'dam' : 'herr'}serie med detta namn det här året. Välj en ny i listan.`,
+            message: `Ingen ${women ? 'dam' : 'herr'}serie med detta namn ${seasonYear}. Välj en ny i listan.`,
             breadCrumb,
             meta,
           }
 
         const teamArray = await db
           .select({
-            team: getTableColumns(teams) as unknown as SQL<Team>,
-            county: getTableColumns(county) as unknown as SQL<County>,
+            team: getTableColumns(
+              teams,
+            ) as unknown as SQL<Team>,
+            county: getTableColumns(
+              county,
+            ) as unknown as SQL<County>,
             municipality: getTableColumns(
               municipality,
             ) as unknown as SQL<Municipality>,
           })
           .from(teamseries)
-          .leftJoin(teams, eq(teams.teamId, teamseries.teamId))
+          .leftJoin(
+            teams,
+            eq(teams.teamId, teamseries.teamId),
+          )
           .leftJoin(
             municipality,
-            eq(teams.municipalityId, municipality.municipalityId),
+            eq(
+              teams.municipalityId,
+              municipality.municipalityId,
+            ),
           )
-          .leftJoin(county, eq(teams.countyId, county.countyId))
+          .leftJoin(
+            county,
+            eq(teams.countyId, county.countyId),
+          )
           .where(eq(teamseries.serieId, serie.serieId))
 
-        return { status: 200, teams: teamArray, breadCrumb, meta }
+        return {
+          status: 200,
+          teams: teamArray,
+          breadCrumb,
+          meta,
+        }
       } catch (error) {
         catchError(error)
       }

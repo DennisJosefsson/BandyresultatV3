@@ -91,6 +91,18 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
+  const data = Route.useLoaderData()
+
+  if (data.status === 400 || data.status === 404) {
+    return (
+      <div className="font-inter mt-10 flex flex-row items-center justify-center">
+        <p className="text-center text-[8px] xs:text-[10px] sm:text-xs md:text-sm xl:text-base font-semibold">
+          {data.message}
+          <br />
+        </p>
+      </div>
+    )
+  }
   return (
     <CatchBoundary
       getResetKey={() => 'reset'}
@@ -112,16 +124,8 @@ function RouteComponent() {
 
 function Compare() {
   const data = Route.useLoaderData()
-  if (data.status === 400) {
-    return (
-      <div className="font-inter mt-2 flex flex-row items-center justify-center">
-        <p className="text-center text-base font-semibold">
-          {data.message ?? 'Något gick fel.'}
-          <br />
-        </p>
-      </div>
-    )
-  }
+  if (data.status === 400 || data.status === 404)
+    return null
   return (
     <div className="mt-2">
       <CompareHeader />

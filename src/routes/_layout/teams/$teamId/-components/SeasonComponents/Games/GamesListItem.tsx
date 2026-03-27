@@ -16,16 +16,15 @@ type GamesListItemProps = {
 }
 
 const GamesListItem = ({ game }: GamesListItemProps) => {
-  const casualName = route.useLoaderData({
-    select: (data) => data.team.casualName,
-  })
+  const data = route.useLoaderData()
+  if (data.status === 404) return null
 
   return (
     <TableRow className="text-[8px] sm:text-sm lg:text-base">
       <TableCell
         className={cn(
           'w-12 xs:w-18 p-0 py-1 truncate',
-          casualName === game.home.casualName
+          data.team.casualName === game.home.casualName
             ? 'text-primary font-bold'
             : null,
         )}
@@ -36,7 +35,7 @@ const GamesListItem = ({ game }: GamesListItemProps) => {
       <TableCell
         className={cn(
           'w-12 xs:w-18 p-0 py-1 truncate',
-          casualName === game.away.casualName
+          data.team.casualName === game.away.casualName
             ? 'text-primary font-bold'
             : null,
         )}

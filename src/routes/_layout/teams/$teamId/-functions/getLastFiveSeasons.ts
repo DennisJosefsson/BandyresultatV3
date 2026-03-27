@@ -18,32 +18,8 @@ import {
   teamgames,
   teamseasons,
 } from '@/db/schema'
+import type { FiveSeasonTableItem } from '@/lib/types/team'
 import { sortOrder } from '@/lib/utils/constants'
-
-type FiveSeasonTableItem = {
-  seasonId: number
-  group: string
-  category: string
-  totalGames: number
-  totalPoints: number
-  totalGoalsScored: number
-  totalGoalsConceded: number
-  totalGoalDifference: number
-  totalWins: number
-  totalDraws: number
-  totalLost: number
-  serie: {
-    serieName: string
-  }
-  season: {
-    year: string
-  }
-}
-
-export type FiveSeason = {
-  season: string
-  tables: Array<FiveSeasonTableItem>
-}
 
 export const getLastFiveSeasons = async ({
   teamId,

@@ -15,6 +15,7 @@ type ValidateGroupReturn =
       status: 404
       breadCrumb: string
       meta: Meta
+      message: string
     }
   | {
       status: 200
@@ -77,7 +78,12 @@ export const validateGroup = createServerFn({
           })
 
         if (!serie)
-          return { status: 404, breadCrumb: 'Serie', meta }
+          return {
+            status: 404,
+            breadCrumb: 'Serie',
+            meta,
+            message: `Ingen ${women ? 'dam' : 'herr'}serie med detta namn ${seasonYear}. Välj en ny i listan.`,
+          }
         return {
           status: 200,
           breadCrumb: serie.serieName,

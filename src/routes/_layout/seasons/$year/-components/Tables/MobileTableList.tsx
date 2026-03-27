@@ -10,6 +10,7 @@ const route = getRouteApi(
 
 const MobileTableList = () => {
   const data = route.useLoaderData()
+  if (data.status === 404) return null
 
   if (data.tables.length === 0) {
     return (

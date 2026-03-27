@@ -7,14 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/base/ui/card'
-
-type StatItem = {
-  gameId: number
-  date: string
-  result: string | null
-  homeTeam: string | null
-  awayTeam: string | null
-}
+import type { TeamStatItem } from '@/lib/types/team'
 
 const GameStatComponent = ({
   children,
@@ -44,7 +37,7 @@ function Title({ children }: { children: ReactNode }) {
 function Content({
   statArray,
 }: {
-  statArray: Array<StatItem>
+  statArray: Array<TeamStatItem>
 }) {
   if (!statArray || statArray.length === 0) return null
 

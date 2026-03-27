@@ -13,12 +13,10 @@ const SeasonTablesButtonList = () => {
   const year = route.useParams({
     select: (param) => param.year,
   })
+  const data = route.useLoaderData()
+  if (data.status === 404) return null
 
-  const hasStatic = Boolean(
-    route.useLoaderData({
-      select: (s) => s.serie.hasStatic,
-    }),
-  )
+  const hasStatic = Boolean(data.serie.hasStatic)
 
   if (year < 1930) return null
   return (

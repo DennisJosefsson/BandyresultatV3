@@ -1,10 +1,11 @@
 import {
+  CatchBoundary,
   createFileRoute,
-  notFound,
 } from '@tanstack/react-router'
 
 import Loading from '@/components/Loading/Loading'
 
+import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import PlayoffMap from '../-components/Maps/PlayoffMap'
 import { getTeamsForPlayoffMap } from '../-functions/getTeamForPlayoffMap'
 
@@ -17,9 +18,7 @@ export const Route = createFileRoute(
       data: { year: params.year, women: deps.women },
     })
     if (!data) throw new Error('Missing data')
-    if (data.status === 404) {
-      throw notFound({ data: data.message })
-    }
+
     return data
   },
   staticData: { breadcrumb: 'Karta' },
@@ -63,22 +62,38 @@ export const Route = createFileRoute(
       },
     ],
   }),
-  component: PlayoffMap,
+  component: RouteComponent,
   pendingComponent: () => <Loading page="seasonStats" />,
-  notFoundComponent(props) {
-    if (props.data && typeof props.data === 'string') {
-      return (
-        <div className="mt-4 flex flex-col justify-center text-sm">
-          <div className="mb-4 flex flex-row justify-center">
-            <p>{props.data}</p>
-          </div>
-        </div>
-      )
-    }
+})
+
+function RouteComponent() {
+  const data = Route.useLoaderData()
+  if (data.status === 404) {
     return (
-      <div className="mt-4 flex flex-row justify-center">
-        <p>Något gick tyvärr fel.</p>
+      <div className="mt-4 flex flex-col justify-center text-sm">
+        <div className="mb-4 flex flex-row justify-center">
+          <span className="text-[8px] xs:text-[10px] sm:text-xs lg:text-sm font-semibold">
+            {data.message}
+          </span>
+        </div>
       </div>
     )
-  },
-})
+  }
+  return (
+    <CatchBoundary
+      getResetKey={() => 'reset'}
+      onCatch={(error) => {
+        console.error(error)
+      }}
+      errorComponent={({ error, reset }) => (
+        <SimpleErrorComponent
+          id="playoffmap"
+          error={error}
+          reset={reset}
+        />
+      )}
+    >
+      <PlayoffMap />
+    </CatchBoundary>
+  )
+}

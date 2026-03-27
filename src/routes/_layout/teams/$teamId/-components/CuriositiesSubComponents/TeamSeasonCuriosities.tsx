@@ -9,17 +9,8 @@ import {
 const route = getRouteApi('/_layout/teams/$teamId')
 
 const TeamSeasonCuriosities = () => {
-  const playoffStreak = route.useLoaderData({
-    select: (data) => data.streaks.playoffStreak,
-  })
-  const {
-    team: { casualName },
-    strings: {
-      seasonString,
-      finalsAndWinsString,
-      playoffCountString,
-    },
-  } = route.useLoaderData()
+  const data = route.useLoaderData()
+  if (data.status === 404) return null
 
   return (
     <Card
@@ -32,23 +23,31 @@ const TeamSeasonCuriosities = () => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="mb-1">{seasonString}</div>
+        <div className="mb-1">
+          {data.strings.seasonString}
+        </div>
 
-        <div className="mb-1">{finalsAndWinsString}</div>
+        <div className="mb-1">
+          {data.strings.finalsAndWinsString}
+        </div>
 
-        <div className="mb-1">{playoffCountString}</div>
+        <div className="mb-1">
+          {data.strings.playoffCountString}
+        </div>
 
-        {playoffStreak.length > 0 ? (
+        {data.streaks.playoffStreak.length > 0 ? (
           <div className="mb-1 sm:mb-2 lg:mb-3">
-            {playoffStreak.map((streak, index) => {
-              return (
-                <div key={`${streak.startYear}-${index}`}>
-                  {casualName} spelade slutspel{' '}
-                  {streak.streakLength} år på raken mellan{' '}
-                  {streak.startYear} och {streak.endYear}.
-                </div>
-              )
-            })}
+            {data.streaks.playoffStreak.map(
+              (streak, index) => {
+                return (
+                  <div key={`${streak.startYear}-${index}`}>
+                    {data.team.casualName} spelade slutspel{' '}
+                    {streak.streakLength} år på raken mellan{' '}
+                    {streak.startYear} och {streak.endYear}.
+                  </div>
+                )
+              },
+            )}
           </div>
         ) : null}
       </CardContent>

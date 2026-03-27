@@ -5,52 +5,61 @@ import StreakComponent from './StreakComponent'
 const route = getRouteApi('/_layout/teams/$teamId')
 
 const Streaks = () => {
-  const streaks = route.useLoaderData({ select: (data) => data.streaks })
+  const data = route.useLoaderData()
+  if (data.status === 404) return null
   return (
     <div className="grid grid-cols-1 gap-1 md:grid-cols-2 md:gap-2">
-      {streaks.unbeatenStreak.length > 0 ? (
+      {data.streaks.unbeatenStreak.length > 0 ? (
         <StreakComponent>
-          <StreakComponent.Title>Obesegrade</StreakComponent.Title>
+          <StreakComponent.Title>
+            Obesegrade
+          </StreakComponent.Title>
           <StreakComponent.Content
-            streak={streaks.unbeatenStreak}
+            streak={data.streaks.unbeatenStreak}
           ></StreakComponent.Content>
         </StreakComponent>
       ) : null}
 
-      {streaks.winStreak.length > 0 ? (
+      {data.streaks.winStreak.length > 0 ? (
         <StreakComponent>
-          <StreakComponent.Title>Vinster i rad</StreakComponent.Title>
+          <StreakComponent.Title>
+            Vinster i rad
+          </StreakComponent.Title>
           <StreakComponent.Content
-            streak={streaks.winStreak}
+            streak={data.streaks.winStreak}
           ></StreakComponent.Content>
         </StreakComponent>
       ) : null}
 
-      {streaks.drawStreak.length > 0 ? (
+      {data.streaks.drawStreak.length > 0 ? (
         <StreakComponent>
-          <StreakComponent.Title>Oavgjorda</StreakComponent.Title>
+          <StreakComponent.Title>
+            Oavgjorda
+          </StreakComponent.Title>
           <StreakComponent.Content
-            streak={streaks.drawStreak}
+            streak={data.streaks.drawStreak}
           ></StreakComponent.Content>
         </StreakComponent>
       ) : null}
 
-      {streaks.losingStreak.length > 0 ? (
+      {data.streaks.losingStreak.length > 0 ? (
         <StreakComponent>
-          <StreakComponent.Title>Förluster</StreakComponent.Title>
+          <StreakComponent.Title>
+            Förluster
+          </StreakComponent.Title>
           <StreakComponent.Content
-            streak={streaks.losingStreak}
+            streak={data.streaks.losingStreak}
           ></StreakComponent.Content>
         </StreakComponent>
       ) : null}
 
-      {streaks.noWinStreak.length > 0 ? (
+      {data.streaks.noWinStreak.length > 0 ? (
         <StreakComponent>
           <StreakComponent.Title>
             Matcher i rad utan vinst
           </StreakComponent.Title>
           <StreakComponent.Content
-            streak={streaks.noWinStreak}
+            streak={data.streaks.noWinStreak}
           ></StreakComponent.Content>
         </StreakComponent>
       ) : null}

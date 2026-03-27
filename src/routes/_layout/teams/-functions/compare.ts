@@ -1,4 +1,3 @@
-import { notFound } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
 import { ZodError } from 'zod'
 
@@ -7,6 +6,16 @@ import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import { zd } from '@/lib/utils/zod'
 
+import type {
+  CompareAllTableRow,
+  CompareBaseTable,
+  CompareCategoryData,
+  CompareGameStat,
+  CompareLatestWinStats,
+  CompareSeasonStat,
+} from '@/lib/types/compare'
+import type { Meta } from '@/lib/types/meta'
+import type { Team } from '@/lib/types/team'
 import {
   getAllDbSeasons,
   getAllGamesTables,
@@ -26,6 +35,42 @@ import {
 } from './utils/compareSortFunctions'
 import getCompareHeaderText from './utils/getCompareHeaderText'
 
+type CompareReturn =
+  | {
+      status: 404
+      meta: Meta
+      breadCrumb: string
+      message: string
+    }
+  | {
+      status: 400
+      meta: Meta
+      breadCrumb: string
+      message: string
+    }
+  | {
+      status: 200
+      meta: Meta
+      breadCrumb: string
+      compareTeams: Array<Team>
+      categoryData: CompareCategoryData
+      allData: Array<CompareAllTableRow>
+      sortedData: Array<CompareBaseTable>
+      gameCount: number
+      golds: Array<CompareSeasonStat>
+      playoffs: Array<CompareSeasonStat>
+      allPlayoffs: Array<CompareSeasonStat>
+      firstDivisionSeasonsSince1931: Array<CompareSeasonStat>
+      allDbSeasons: Array<CompareSeasonStat>
+      firstDivisionSeasons: Array<CompareSeasonStat>
+      firstGames: Array<CompareGameStat>
+      latestGames: Array<CompareGameStat>
+      latestHomeWin: Array<CompareLatestWinStats>
+      latestAwayWin: Array<CompareLatestWinStats>
+      compareHeaderText: string
+    }
+  | undefined
+
 export const getCompareTeams = createServerFn({
   method: 'POST',
 })
@@ -39,18 +84,18 @@ export const getCompareTeams = createServerFn({
     }),
   )
   .middleware([errorMiddleware])
-  .handler(async ({ data }) => {
+  .handler(async ({ data }): Promise<CompareReturn> => {
     try {
       const { teamArray, women } = data
 
       if (!teamArray) {
         const breadCrumb = `H2H`
         const title = `Bandyresultat - ${breadCrumb}`
-        const description = ``
-        const url = `https://bandyresultat.se/teams/compare?women=${data.women}`
+        const description = `Lag måste väljas.`
+        const url = `https://bandyresultat.se/teams?women=${data.women}`
 
         return {
-          message: 'Lag måste väljas',
+          message: 'Lag måste väljas.',
           breadCrumb,
           meta: { title, description, url },
           status: 400,
@@ -60,8 +105,8 @@ export const getCompareTeams = createServerFn({
       if (teamArray.length !== 2) {
         const breadCrumb = `H2H`
         const title = `Bandyresultat - ${breadCrumb}`
-        const description = ``
-        const url = `https://bandyresultat.se/teams/compare?women=${data.women}`
+        const description = `Två lag ska väljas.`
+        const url = `https://bandyresultat.se/teams?women=${data.women}`
 
         return {
           message: 'Välj två lag.',
@@ -80,8 +125,21 @@ export const getCompareTeams = createServerFn({
         teamArray,
       })
 
-      if (!getCatTables || getCatTables.length === 0) {
-        throw notFound()
+      if (catTables.length === 0) {
+        const teamStrings = compareTeams
+          .map((team) => team.name)
+          .join(' och ')
+        const breadCrumb = `H2H`
+        const title = `Bandyresultat - ${breadCrumb}`
+        const description = `${teamStrings} har inga spelade matcher mot varandra i databasen.`
+        const url = `https://bandyresultat.se/teams/compare?women=${women}&teamArray=[${compareTeams.map((team) => team.teamId).join(',')}]`
+
+        return {
+          message: description,
+          breadCrumb,
+          meta: { title, description, url },
+          status: 404,
+        }
       }
 
       const categoryData =
@@ -153,7 +211,7 @@ export const getCompareTeams = createServerFn({
         const breadCrumb = `H2H`
         const title = `Bandyresultat - ${breadCrumb}`
         const description = ``
-        const url = `https://bandyresultat.se/teams/compare?women=${data.women}`
+        const url = `https://bandyresultat.se/teams?women=${data.women}`
         const errorString = error.issues
           .map((issue) => issue.message)
           .join(',')

@@ -6,16 +6,15 @@ import { useFavTeam } from '@/lib/contexts/favTeamsContext'
 const route = getRouteApi('/_layout/teams/$teamId')
 
 const TeamHeader = () => {
-  const team = route.useLoaderData({
-    select: (data) => data.team,
-  })
+  const data = route.useLoaderData()
+
   const teamId = route.useParams({
     select: (params) => params.teamId,
   })
   const women = route.useSearch({ select: (s) => s.women })
 
   const { favTeams, setFavTeams } = useFavTeam()
-
+  if (data.status === 404) return null
   //   const { origin } = getOrigin()
   //   const navigate = useNavigate()
 
@@ -38,12 +37,12 @@ const TeamHeader = () => {
     <div className="mb-4">
       <div className="flex flex-row items-center justify-between">
         <div className="flex flex-row flex-wrap gap-2 text-xs sm:text-sm md:text-base xl:text-lg">
-          <span>{team.name}</span>
+          <span>{data.team.name}</span>
           <div className="flex flex-row gap-2">
             <span>[ </span>
             <Link
               to="/teams/$teamId"
-              params={{ teamId: team.teamId }}
+              params={{ teamId: data.team.teamId }}
               search={{ women }}
               activeOptions={{ exact: true }}
               className="font-normal"
@@ -53,7 +52,7 @@ const TeamHeader = () => {
             <span> | </span>
             <Link
               to="/teams/$teamId/seasons"
-              params={{ teamId: team.teamId }}
+              params={{ teamId: data.team.teamId }}
               search={{ women }}
               className="font-normal"
             >

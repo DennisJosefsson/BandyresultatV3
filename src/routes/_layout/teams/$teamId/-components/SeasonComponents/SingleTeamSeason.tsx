@@ -20,7 +20,8 @@ const route = getRouteApi(
 )
 
 const SingleTeamSeason = () => {
-  const season = route.useLoaderData()
+  const data = route.useLoaderData()
+  if (data.status === 404) return null
   return (
     <div>
       <div className="flex flex-col gap-2">
@@ -32,8 +33,8 @@ const SingleTeamSeason = () => {
             params={(prev) => ({
               ...prev,
               seasonId:
-                season.previousSeason?.seasonId ??
-                season.lastSeason?.seasonId,
+                data.previousSeason?.seasonId ??
+                data.lastSeason?.seasonId,
             })}
           >
             <Button
@@ -49,7 +50,7 @@ const SingleTeamSeason = () => {
             </Button>
           </Link>
           <h4 className="text-xs sm:text-sm font-semibold md:text-base">
-            {season.seasonYear}
+            {data.seasonYear}
           </h4>
           <Link
             from="/teams/$teamId/$seasonId"
@@ -58,8 +59,8 @@ const SingleTeamSeason = () => {
             params={(prev) => ({
               ...prev,
               seasonId:
-                season.nextSeason?.seasonId ??
-                season.firstSeason?.seasonId,
+                data.nextSeason?.seasonId ??
+                data.firstSeason?.seasonId,
             })}
           >
             <Button
@@ -106,16 +107,16 @@ const SingleTeamSeason = () => {
             </TabsContent>
             <TabsContent value="games">
               <GamesList
-                hasGames={season.hasGames}
-                gamesArray={season.games.playedGames}
+                hasGames={data.hasGames}
+                gamesArray={data.games.playedGames}
                 tab="games"
               />
             </TabsContent>
 
             <TabsContent value="upcoming">
               <GamesList
-                hasGames={season.hasGames}
-                gamesArray={season.games.unplayedGames}
+                hasGames={data.hasGames}
+                gamesArray={data.games.unplayedGames}
                 tab="upcoming"
               />
             </TabsContent>

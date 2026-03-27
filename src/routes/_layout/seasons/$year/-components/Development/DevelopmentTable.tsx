@@ -3,14 +3,17 @@ import { getRouteApi } from '@tanstack/react-router'
 import { columns } from './tablecolumns'
 import DataTable from './TableDataTable'
 
-const route = getRouteApi('/_layout/seasons/$year/$group/development')
+const route = getRouteApi(
+  '/_layout/seasons/$year/$group/development',
+)
 
 const DevelopmentTable = () => {
   const index = route.useSearch({ select: (s) => s.index })
-  const serie = route.useLoaderData({ select: (s) => s.serie })
-  const tables = route.useLoaderData({ select: (s) => s.tables })
+  const data = route.useLoaderData()
 
-  const teamObject = tables[index]?.table.reduce(
+  if (data.status === 404) return null
+
+  const teamObject = data.tables[index]?.table.reduce(
     (o, key) => ({
       ...o,
       [key.team.casualName]: key.teamId,
@@ -21,10 +24,10 @@ const DevelopmentTable = () => {
   return (
     <DataTable
       columns={columns}
-      serieStructure={serie.serieStructure}
-      comment={serie.comment}
+      serieStructure={data.serie.serieStructure}
+      comment={data.serie.comment}
       teamObject={teamObject}
-      data={tables[index].table}
+      data={data.tables[index].table}
     />
   )
 }

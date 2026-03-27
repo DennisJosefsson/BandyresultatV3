@@ -11,9 +11,8 @@ const route = getRouteApi(
 )
 
 const SeasonPlayoffTables = () => {
-  const playoffAsSeries = route.useLoaderData({
-    select: (s) => s.playoffSeason.playoffAsSeries,
-  })
+  const data = route.useLoaderData()
+  if (data.status === 404) return null
 
   return (
     <div className="m-0 mt-4 w-full lg:justify-self-center">
@@ -22,7 +21,9 @@ const SeasonPlayoffTables = () => {
         <SemiFinal />
         <QuarterFinal />
         <EightFinal />
-        {playoffAsSeries && <PlayoffAsSeriesTables />}
+        {data.playoffSeason.playoffAsSeries ? (
+          <PlayoffAsSeriesTables />
+        ) : null}
       </div>
     </div>
   )

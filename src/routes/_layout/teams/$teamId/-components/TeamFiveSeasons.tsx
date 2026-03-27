@@ -5,10 +5,9 @@ import FiveSeasonTeamTable from './FiveSeasonTeamTable'
 const route = getRouteApi('/_layout/teams/$teamId')
 
 const TeamFiveSeasonsTables = () => {
-  const fiveSeasonArray = route.useLoaderData({
-    select: (data) => data.fiveSeasons,
-  })
-  if (fiveSeasonArray.length === 0) {
+  const data = route.useLoaderData()
+  if (data.status === 404) return null
+  if (data.fiveSeasons.length === 0) {
     return (
       <div className="mt-4 flex flex-row justify-center">
         <h2 className="text-xs font-bold md:text-sm">
@@ -19,7 +18,7 @@ const TeamFiveSeasonsTables = () => {
   }
   return (
     <div className="mb-6">
-      {fiveSeasonArray.map((season) => {
+      {data.fiveSeasons.map((season) => {
         return (
           <div key={season.season}>
             <FiveSeasonTeamTable

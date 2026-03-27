@@ -11,7 +11,7 @@ const route = getRouteApi(
 
 const PlayoffMap = () => {
   const data = route.useLoaderData()
-
+  if (data.status === 404) return null
   return (
     <div>
       <Card className="xs:max-w-100 h-[400px] w-screen max-w-[280px] p-2 sm:h-160 sm:max-w-xl xl:max-w-4xl">

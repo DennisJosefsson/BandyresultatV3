@@ -17,10 +17,9 @@ import TeamTableRow from './TableComponents/TeamTableDataRow'
 const route = getRouteApi('/_layout/teams/$teamId')
 
 const TeamTable = () => {
-  const tables = route.useLoaderData({
-    select: (data) => data.tables,
-  })
-  if (tables.length === 0) {
+  const data = route.useLoaderData()
+  if (data.status === 404) return null
+  if (data.tables.length === 0) {
     return (
       <div className="mt-4 flex flex-row justify-center">
         <h2 className="text-xs font-bold md:text-sm">
@@ -31,7 +30,7 @@ const TeamTable = () => {
   }
   return (
     <div className="mb-6">
-      {tables.map((level) => {
+      {data.tables.map((level) => {
         return (
           <Card
             key={level.level}
