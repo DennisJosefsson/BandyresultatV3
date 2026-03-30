@@ -1,5 +1,6 @@
 import { FieldError } from '@/components/base/ui/field'
 import { cn } from '@/lib/utils/utils'
+import { CircleXIcon } from 'lucide-react'
 import type {
   DetailedHTMLProps,
   InputHTMLAttributes,
@@ -28,12 +29,14 @@ interface CustomNumberInputProps extends Omit<
 > {
   decrementer: () => void
   incrementer: () => void
+  resetter?: () => void
   error?: ErrorField
 }
 
 const CustomNumberInput = ({
   decrementer,
   incrementer,
+  resetter,
   className,
   error,
   ...props
@@ -44,7 +47,7 @@ const CustomNumberInput = ({
         {...props}
         type="number"
         className={cn(
-          'appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none',
+          'appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none items-center',
           className,
         )}
       />
@@ -66,6 +69,17 @@ const CustomNumberInput = ({
           +
         </InputGroupButton>
       </InputGroupAddon>
+      {resetter ? (
+        <InputGroupAddon align="inline-end">
+          <InputGroupButton
+            type="button"
+            variant="ghost"
+            onClick={() => resetter()}
+          >
+            <CircleXIcon className="size-3" />
+          </InputGroupButton>
+        </InputGroupAddon>
+      ) : null}
       {error?.hasErrorField && error.errorBoolean && (
         <FieldError errors={error.errors} />
       )}
