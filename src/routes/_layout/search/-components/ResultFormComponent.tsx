@@ -18,7 +18,7 @@ const ResultFormComponent = () => {
           <NumberInput
             field="goalDiff"
             label="Målskillnad"
-            placeholder="Siffra större än 0."
+            placeholder="Positiv eller negativ siffra."
           />
         </div>
         <div className="flex max-w-[16rem] flex-col">

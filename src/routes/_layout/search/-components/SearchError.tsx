@@ -16,6 +16,7 @@ import type {
   SearchParamsFields,
   SearchResult,
 } from '@/lib/types/search'
+import { cn } from '@/lib/utils/utils'
 type SearchErrorProps = {
   searchResult:
     | {
@@ -64,9 +65,20 @@ const SearchError = ({
 
   return (
     <Dialog defaultOpen={true}>
-      <DialogContent className="bg-red-600 text-white">
+      <DialogContent
+        className={cn(
+          'bg-background',
+          searchResult.status === 400
+            ? 'bg-red-500'
+            : undefined,
+        )}
+      >
         <DialogHeader>
-          <DialogTitle>Oops, något gick fel.</DialogTitle>
+          <DialogTitle>
+            {searchResult.status === 400
+              ? 'Oops, där blev det fel.'
+              : 'Inga resultat'}
+          </DialogTitle>
         </DialogHeader>
         {searchResult.message}
         <DialogFooter className="sm:justify-start">

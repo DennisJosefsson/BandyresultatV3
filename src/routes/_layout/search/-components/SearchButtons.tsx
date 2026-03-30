@@ -28,9 +28,19 @@ const SearchButtons = ({
 
   return (
     <div className="flex max-h-40 flex-row gap-2">
-      <Button onClick={handleOnClick}>Skicka</Button>
+      <Button
+        size="responsive"
+        onClick={handleOnClick}
+      >
+        Skicka
+      </Button>
 
-      <Button onClick={reset}>Nollställ</Button>
+      <Button
+        size="responsive"
+        onClick={reset}
+      >
+        Nollställ
+      </Button>
     </div>
   )
 }

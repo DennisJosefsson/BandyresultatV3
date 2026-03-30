@@ -20,13 +20,13 @@ import {
   teams,
 } from '@/db/schema'
 import type {
+  ParsedSearchRequest,
   SearchParamsFields,
   clientSearchParams,
 } from '@/lib/types/search'
 import type { TeamBase } from '@/lib/types/team'
 import type { zd } from '@/lib/utils/zod'
 
-import type { ParsedSearchRequest } from './parseSearchRequest'
 import { parseSearchRequest } from './parseSearchRequest'
 type Data = zd.infer<typeof clientSearchParams>
 
@@ -83,12 +83,16 @@ export async function getSearchData({
         gameId: teamgames.gameId,
         result: games.result,
         halftimeResult: games.halftimeResult,
+        otResult: games.otResult,
         date: games.date,
         qualificationGame: teamgames.qualificationGame,
         goalsScored: teamgames.goalsScored,
         goalsConceded: teamgames.goalsConceded,
         goalDifference: teamgames.goalDifference,
         totalGoals: teamgames.totalGoals,
+        women: teamgames.women,
+        extraTime: games.extraTime,
+        penalties: games.penalties,
       })
       .from(teamgames)
       .leftJoin(games, eq(games.gameId, teamgames.gameId))
@@ -113,12 +117,16 @@ export async function getSearchData({
       gameId: filteredtCte.gameId,
       result: filteredtCte.result,
       halftimeResult: filteredtCte.halftimeResult,
+      otResult: filteredtCte.otResult,
       date: filteredtCte.date,
       qualificationGame: filteredtCte.qualificationGame,
       goalsScored: filteredtCte.goalsScored,
       goalsConceded: filteredtCte.goalsConceded,
       goalDifference: filteredtCte.goalDifference,
       totalGoals: filteredtCte.totalGoals,
+      women: filteredtCte.women,
+      extraTime: filteredtCte.extraTime,
+      penalties: filteredtCte.penalties,
       home: {
         teamId: sql`home.team_id`
           .mapWith(Number)

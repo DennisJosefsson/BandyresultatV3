@@ -80,7 +80,7 @@ const TeamSelection = ({
   return (
     <div className="flex flex-col gap-1">
       <div>
-        <Label>{label}</Label>
+        <Label htmlFor={field}>{label}</Label>
       </div>
       <div className="flex flex-row items-center gap-x-2">
         <div>
@@ -88,6 +88,8 @@ const TeamSelection = ({
             value={searchField?.toString() ?? ''}
             onValueChange={(value) => onValueChange(value)}
             onOpenChange={(open) => onOpenChange(open)}
+            id={field}
+            name={field}
           >
             <SelectTrigger className="w-62">
               <SelectValue placeholder="Välj">
@@ -110,6 +112,7 @@ const TeamSelection = ({
             onClick={reset}
             variant="ghost"
             size="icon"
+            id={`${field}-reset`}
           >
             <CircleXIcon />
           </Button>

@@ -21,13 +21,14 @@ const SearchContent = ({
   const copyLink = `${baseUrl + link + '&submit=true'}`
 
   return (
-    <div className="mx-1 mt-2 xl:mx-0">
-      <div className="flex flex-row gap-2">
+    <div className="mx-1 mt-4 xl:mx-0">
+      <div className="flex flex-row-reverse gap-2">
         <Button
           size="responsive"
           onClick={() => copy(copyLink)}
+          className="w-30"
         >
-          {copiedText ? 'Kopierad!' : 'Länk'}
+          {copiedText ? 'Kopierad!' : 'Länk till sökningen'}
         </Button>
       </div>
       <div className="w-full">

@@ -7,7 +7,9 @@ const route = getRouteApi('/_layout/search')
 
 const useSearchMutation = () => {
   const data = route.useSearch()
-  const mutation = useMutation({ mutationFn: () => getSearchResults({ data }) })
+  const mutation = useMutation({
+    mutationFn: () => getSearchResults({ data }),
+  })
 
   return mutation
 }
