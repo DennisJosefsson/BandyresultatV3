@@ -120,10 +120,14 @@ export type SearchResult = {
   gameId: number
   result: string | null
   halftimeResult: string | null
+  otResult:string | null
   date: string | null
   qualificationGame: boolean | null
   home: TeamBase
   away: TeamBase
+  women:boolean | null
+  extraTime:boolean | null
+  penalties:boolean | null
 }
 
 export type ParsedSearchRequest = NonNullable<
