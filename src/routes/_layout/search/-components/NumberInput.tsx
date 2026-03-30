@@ -100,6 +100,16 @@ const NumberInput = ({
     }
   }
 
+  const handleReset = () => {
+    navigate({
+      resetScroll: false,
+      search: (prev) => ({
+        ...prev,
+        [field]: undefined,
+      }),
+    })
+  }
+
   return (
     <div className="grid w-full max-w-sm items-center gap-1.5 px-1">
       <Label htmlFor={field}>{label}</Label>
@@ -111,6 +121,7 @@ const NumberInput = ({
         placeholder={placeholder}
         incrementer={handleIncrement}
         decrementer={handleDecrement}
+        resetter={handleReset}
         min={min}
         max={max}
       />
