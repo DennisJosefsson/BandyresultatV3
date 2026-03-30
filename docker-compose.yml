@@ -1,9 +1,9 @@
 services:
   devDatabase:
-    container_name: devDatabase20260209
+    container_name: devDatabase20260330
     image: postgres:17-alpine
     volumes:
-      - /home/dennis/projekt/database/bandyresultat/init/dev-init20260209.sql:/docker-entrypoint-initdb.d/init.sql
+      - /home/dennis/projekt/database/bandyresultat/init/dev-init20260330.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - '55555:5432'
     env_file:
