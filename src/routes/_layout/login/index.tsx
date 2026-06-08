@@ -1,4 +1,4 @@
-import { GoogleOneTap, SignIn } from '@clerk/clerk-react'
+import { GoogleOneTap, SignIn } from "@clerk/react"
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_layout/login/')({

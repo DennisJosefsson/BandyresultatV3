@@ -1,6 +1,6 @@
-import { ClerkProvider } from '@clerk/clerk-react'
+import { ClerkProvider } from "@clerk/react"
 import { svSE } from '@clerk/localizations'
-import { dark, shadcn } from '@clerk/themes'
+import { dark, shadcn } from "@clerk/ui/themes"
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 if (!PUBLISHABLE_KEY) {

@@ -1,9 +1,4 @@
-import {
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from '@clerk/clerk-react'
+import { SignInButton, Show, UserButton } from "@clerk/react";
 import { User } from 'lucide-react'
 
 import { Button } from '@/components/base/ui/button'
@@ -11,7 +6,7 @@ import { Button } from '@/components/base/ui/button'
 export default function HeaderUser() {
   return (
     <div>
-      <SignedIn>
+      <Show when="signed-in">
         <Button
           variant="outline"
           size="responsive"
@@ -23,8 +18,8 @@ export default function HeaderUser() {
             />
           }
         ></Button>
-      </SignedIn>
-      <SignedOut>
+      </Show>
+      <Show when="signed-out">
         <SignInButton
           mode="modal"
           oauthFlow="popup"
@@ -36,7 +31,7 @@ export default function HeaderUser() {
             <User className="h-[1.2rem] w-[1.2rem]" />
           </Button>
         </SignInButton>
-      </SignedOut>
+      </Show>
     </div>
-  )
+  );
 }

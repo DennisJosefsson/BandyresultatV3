@@ -32,7 +32,7 @@ import {
 } from '@/components/base/ui/sidebar'
 import { useGetFirstAndLastSeason } from '@/routes/_layout/seasons/$year/-hooks/useGetFirstAndLastSeason'
 
-import { SignedIn, SignedOut } from '@clerk/clerk-react'
+import { Show } from "@clerk/react";
 import { MaratonSidebar } from './MaratonSidebar'
 import { SearchSidebar } from './SearchSidebar'
 import { TeamSidebar } from './TeamSidebar'
@@ -258,7 +258,7 @@ const AppSidebar = () => {
       <SidebarFooter className="p-0">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SignedIn>
+            <Show when="signed-in">
               <SidebarMenuButton
                 onClick={toggleOnMobile}
                 className="p-0"
@@ -280,9 +280,9 @@ const AppSidebar = () => {
                   </Link>
                 }
               />
-            </SignedIn>
+            </Show>
 
-            <SignedOut>
+            <Show when="signed-out">
               <SidebarMenuButton
                 onClick={toggleOnMobile}
                 render={
@@ -303,12 +303,12 @@ const AppSidebar = () => {
                   </Link>
                 }
               />
-            </SignedOut>
+            </Show>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }
 
 export default AppSidebar
