@@ -1,5 +1,8 @@
 import { clerkMiddleware } from '@clerk/tanstack-react-start/server'
-import { createStart } from '@tanstack/react-start'
+import {
+  createCsrfMiddleware,
+  createStart,
+} from '@tanstack/react-start'
 
 import { compareRequestErrorAdapter } from './lib/middlewares/errors/CompareRequestError'
 import { dbErrorAdapter } from './lib/middlewares/errors/DbError'
@@ -9,9 +12,14 @@ import { zodParsingErrorAdapter } from './lib/middlewares/errors/ZodParsingError
 
 const SECRET_KEY = process.env.CLERK_SECRET_KEY
 
+const csrfMiddleware = createCsrfMiddleware({
+  filter: (ctx) => ctx.handlerType === 'serverFn',
+})
+
 export const startInstance = createStart(() => {
   return {
     requestMiddleware: [
+      csrfMiddleware,
       clerkMiddleware({
         secretKey: SECRET_KEY,
       }),
