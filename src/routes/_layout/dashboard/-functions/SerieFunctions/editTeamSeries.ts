@@ -14,7 +14,7 @@ export const editTeamSerie = createServerFn({
   method: 'POST',
 })
   .middleware([authMiddleware, errorMiddleware])
-  .inputValidator(zodValidator(editTeamSeriesArray))
+  .validator(zodValidator(editTeamSeriesArray))
   .handler(async ({ data: { teamserie } }) => {
     try {
       if (teamserie.length === 0) {

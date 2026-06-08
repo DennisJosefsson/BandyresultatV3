@@ -35,7 +35,7 @@ type TeamSeasonReturn =
 export const getTeamSeasons = createServerFn({
   method: 'GET',
 })
-  .inputValidator(zodValidator(zd.number()))
+  .validator(zodValidator(zd.number()))
   .middleware([errorMiddleware])
   .handler(
     async ({ data: teamId }): Promise<TeamSeasonReturn> => {

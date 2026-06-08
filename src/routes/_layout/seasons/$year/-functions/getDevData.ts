@@ -41,7 +41,7 @@ type DevDataReturn =
 
 export const getDevData = createServerFn({ method: 'GET' })
   .middleware([errorMiddleware])
-  .inputValidator(
+  .validator(
     zodValidator(
       zd.object({
         group: zd.string(),

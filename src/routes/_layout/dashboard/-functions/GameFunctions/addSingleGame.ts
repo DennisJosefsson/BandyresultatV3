@@ -13,7 +13,7 @@ export const addSingleGame = createServerFn({
   method: 'POST',
 })
   .middleware([authMiddleware, errorMiddleware])
-  .inputValidator(zodValidator(parseNewGameWithResult))
+  .validator(zodValidator(parseNewGameWithResult))
   .handler(async ({ data }) => {
     try {
       const {

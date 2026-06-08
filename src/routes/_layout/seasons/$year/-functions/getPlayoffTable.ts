@@ -46,7 +46,7 @@ export const getPlayoffTable = createServerFn({
   method: 'GET',
 })
   .middleware([errorMiddleware])
-  .inputValidator(
+  .validator(
     zodValidator(
       zd.object({ year: zd.number(), women: zd.boolean() }),
     ),

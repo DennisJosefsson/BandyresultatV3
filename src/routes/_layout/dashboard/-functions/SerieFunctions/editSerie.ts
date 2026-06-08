@@ -13,7 +13,7 @@ export const editSerieInput = createServerFn({
   method: 'POST',
 })
   .middleware([authMiddleware, errorMiddleware])
-  .inputValidator(zodValidator(editSeriesObject))
+  .validator(zodValidator(editSeriesObject))
   .handler(async ({ data }) => {
     try {
       const editSerie = await db

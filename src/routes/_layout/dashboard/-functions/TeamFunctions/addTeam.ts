@@ -10,7 +10,7 @@ import { newTeam } from '@/lib/types/team'
 
 export const addTeam = createServerFn({ method: 'POST' })
   .middleware([authMiddleware, errorMiddleware])
-  .inputValidator(zodValidator(newTeam))
+  .validator(zodValidator(newTeam))
   .handler(async ({ data }) => {
     try {
       const returnTeam = await db

@@ -17,7 +17,7 @@ export const generateSchedule = createServerFn({
   method: 'GET',
 })
   .middleware([authMiddleware, errorMiddleware])
-  .inputValidator(
+  .validator(
     zodValidator(
       zd.object({ serieId: zd.number().int().positive() }),
     ),

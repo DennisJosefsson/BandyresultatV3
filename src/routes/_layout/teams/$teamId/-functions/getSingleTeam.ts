@@ -72,7 +72,7 @@ type TeamReturn =
 export const getSingleTeam = createServerFn({
   method: 'GET',
 })
-  .inputValidator(
+  .validator(
     zodValidator(
       zd
         .number('Lag-id måste vara en siffra.')

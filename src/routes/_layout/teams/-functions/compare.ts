@@ -74,7 +74,7 @@ type CompareReturn =
 export const getCompareTeams = createServerFn({
   method: 'POST',
 })
-  .inputValidator(
+  .validator(
     zd.object({
       teamArray: zd
         .array(zd.number().int().positive())

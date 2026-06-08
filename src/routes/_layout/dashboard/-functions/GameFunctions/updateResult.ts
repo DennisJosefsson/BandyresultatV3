@@ -14,7 +14,7 @@ export const updateResult = createServerFn({
   method: 'POST',
 })
   .middleware([authMiddleware, errorMiddleware])
-  .inputValidator(zodValidator(parseGameResult))
+  .validator(zodValidator(parseGameResult))
   .handler(async ({ data }) => {
     try {
       const currChamp = await db.query.teamgames.findFirst({

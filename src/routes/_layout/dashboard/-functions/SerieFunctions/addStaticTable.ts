@@ -13,7 +13,7 @@ export const addStaticTable = createServerFn({
   method: 'POST',
 })
   .middleware([authMiddleware, errorMiddleware])
-  .inputValidator(zodValidator(newStaticTableArray))
+  .validator(zodValidator(newStaticTableArray))
   .handler(async ({ data }) => {
     try {
       await db.insert(tables).values(data.tableArray)

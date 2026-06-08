@@ -13,7 +13,7 @@ export const getSerieDataForSingleGame = createServerFn({
   method: 'GET',
 })
   .middleware([errorMiddleware])
-  .inputValidator(
+  .validator(
     zd.object({ serieId: zd.number().int().positive() }),
   )
   .handler(async ({ data: { serieId } }) => {

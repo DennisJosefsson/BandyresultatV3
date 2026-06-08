@@ -8,10 +8,14 @@ import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import { zd } from '@/lib/utils/zod'
 
-export const getMunicipalitiesForTeamForm = createServerFn({ method: 'GET' })
+export const getMunicipalitiesForTeamForm = createServerFn({
+  method: 'GET',
+})
   .middleware([errorMiddleware])
-  .inputValidator(
-    zodValidator(zd.object({ countyId: zd.number().int().positive() })),
+  .validator(
+    zodValidator(
+      zd.object({ countyId: zd.number().int().positive() }),
+    ),
   )
   .handler(async ({ data: { countyId } }) => {
     try {
@@ -21,7 +25,10 @@ export const getMunicipalitiesForTeamForm = createServerFn({ method: 'GET' })
         .where(eq(municipality.countyId, countyId))
         .then((res) =>
           res.map((muni) => {
-            return { value: muni.municipalityId, label: muni.name }
+            return {
+              value: muni.municipalityId,
+              label: muni.name,
+            }
           }),
         )
       return { status: 200, municipalities: muniList }

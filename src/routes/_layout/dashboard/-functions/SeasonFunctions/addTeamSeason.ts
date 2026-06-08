@@ -14,7 +14,7 @@ export const addTeamSeason = createServerFn({
   method: 'POST',
 })
   .middleware([authMiddleware, errorMiddleware])
-  .inputValidator(
+  .validator(
     zodValidator(
       zd.object({
         teamId: zd.number().int().positive(),

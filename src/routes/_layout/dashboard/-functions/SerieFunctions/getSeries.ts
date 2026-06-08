@@ -8,10 +8,14 @@ import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import { zd } from '@/lib/utils/zod'
 
-export const getSeriesForSeriesForm = createServerFn({ method: 'GET' })
+export const getSeriesForSeriesForm = createServerFn({
+  method: 'GET',
+})
   .middleware([errorMiddleware])
-  .inputValidator(
-    zodValidator(zd.object({ seasonId: zd.number().positive().int() })),
+  .validator(
+    zodValidator(
+      zd.object({ seasonId: zd.number().positive().int() }),
+    ),
   )
   .handler(async ({ data: { seasonId } }) => {
     try {

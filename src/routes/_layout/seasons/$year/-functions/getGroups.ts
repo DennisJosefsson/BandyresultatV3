@@ -38,7 +38,7 @@ type GroupReturn = Promise<
 >
 
 export const getGroups = createServerFn({ method: 'GET' })
-  .inputValidator(
+  .validator(
     zodValidator(
       zd.object({ year: zd.number(), women: zd.boolean() }),
     ),

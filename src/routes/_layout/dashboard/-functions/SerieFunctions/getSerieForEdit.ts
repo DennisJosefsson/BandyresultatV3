@@ -27,7 +27,7 @@ export const getSerieForEdit = createServerFn({
   method: 'GET',
 })
   .middleware([errorMiddleware])
-  .inputValidator(
+  .validator(
     zodValidator(
       zd.object({
         seasonId: zd.number().positive().int(),

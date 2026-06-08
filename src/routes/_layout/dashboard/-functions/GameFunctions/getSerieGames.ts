@@ -1,6 +1,6 @@
 import { createServerFn } from '@tanstack/react-start'
 import { zodValidator } from '@tanstack/zod-adapter'
-import type { SQL } from 'drizzle-orm';
+import type { SQL } from 'drizzle-orm'
 import { asc, eq, getTableColumns } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
 
@@ -13,10 +13,14 @@ import { zd } from '@/lib/utils/zod'
 const home = alias(teams, 'home')
 const away = alias(teams, 'away')
 
-export const getSerieGames = createServerFn({ method: 'GET' })
+export const getSerieGames = createServerFn({
+  method: 'GET',
+})
   .middleware([errorMiddleware])
-  .inputValidator(
-    zodValidator(zd.object({ serieId: zd.number().positive().int() })),
+  .validator(
+    zodValidator(
+      zd.object({ serieId: zd.number().positive().int() }),
+    ),
   )
   .handler(async ({ data: { serieId } }) => {
     try {
@@ -47,18 +51,28 @@ export const getSerieGames = createServerFn({ method: 'GET' })
           }>,
         })
         .from(games)
-        .leftJoin(seasons, eq(seasons.seasonId, games.seasonId))
+        .leftJoin(
+          seasons,
+          eq(seasons.seasonId, games.seasonId),
+        )
         .leftJoin(home, eq(games.homeTeamId, home.teamId))
         .leftJoin(away, eq(games.awayTeamId, away.teamId))
         .where(eq(games.serieId, serieId))
         .orderBy(asc(games.date))
 
       if (!gamesArray || gamesArray.length === 0) {
-        return { status: 404, message: 'Inga matcher än denna säsong.' }
+        return {
+          status: 404,
+          message: 'Inga matcher än denna säsong.',
+        }
       }
 
-      const playedGames = gamesArray.filter((game) => game.played === true)
-      const unplayedGames = gamesArray.filter((game) => game.played === false)
+      const playedGames = gamesArray.filter(
+        (game) => game.played === true,
+      )
+      const unplayedGames = gamesArray.filter(
+        (game) => game.played === false,
+      )
 
       return { status: 200, playedGames, unplayedGames }
     } catch (error) {

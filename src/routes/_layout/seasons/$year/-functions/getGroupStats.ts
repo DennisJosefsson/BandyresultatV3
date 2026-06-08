@@ -23,9 +23,11 @@ type GroupStatsReturn =
   | (Stats & { breadCrumb: string; meta: Meta })
   | undefined
 
-export const getGroupStats = createServerFn({ method: 'GET' })
+export const getGroupStats = createServerFn({
+  method: 'GET',
+})
   .middleware([errorMiddleware])
-  .inputValidator(
+  .validator(
     zodValidator(
       zd.object({
         group: zd.string(),
@@ -35,7 +37,9 @@ export const getGroupStats = createServerFn({ method: 'GET' })
     ),
   )
   .handler(
-    async ({ data: { group, year, women } }): Promise<GroupStatsReturn> => {
+    async ({
+      data: { group, year, women },
+    }): Promise<GroupStatsReturn> => {
       try {
         const seasonYear = seasonIdCheck.parse(year)
         const breadCrumb = 'Statistik'
@@ -60,7 +64,8 @@ export const getGroupStats = createServerFn({ method: 'GET' })
         if (year < 1973 && women) {
           return {
             status: 404,
-            message: 'Damernas första säsong var 1972/1973.',
+            message:
+              'Damernas första säsong var 1972/1973.',
             breadCrumb,
             meta,
           }
@@ -80,7 +85,10 @@ export const getGroupStats = createServerFn({ method: 'GET' })
             ...getTableColumns(series),
           })
           .from(series)
-          .leftJoin(seasons, eq(seasons.seasonId, series.seasonId))
+          .leftJoin(
+            seasons,
+            eq(seasons.seasonId, series.seasonId),
+          )
           .where(
             and(
               eq(seasons.women, women),
@@ -103,13 +111,17 @@ export const getGroupStats = createServerFn({ method: 'GET' })
 
         const gameCount = await db.$count(
           games,
-          and(eq(games.serieId, serie.serieId), eq(games.played, true)),
+          and(
+            eq(games.serieId, serie.serieId),
+            eq(games.played, true),
+          ),
         )
 
         if (serie.hasStatic && gameCount === 0) {
           return {
             status: 404,
-            message: 'Serien har enbart sluttabell, ingen matchdata.',
+            message:
+              'Serien har enbart sluttabell, ingen matchdata.',
             breadCrumb,
             meta,
           }
@@ -126,7 +138,14 @@ export const getGroupStats = createServerFn({ method: 'GET' })
 
         const data = await getGroupStatsData({ serie })
 
-        return { status: 200, serie, gameCount, ...data, breadCrumb, meta }
+        return {
+          status: 200,
+          serie,
+          gameCount,
+          ...data,
+          breadCrumb,
+          meta,
+        }
       } catch (error) {
         catchError(error)
       }

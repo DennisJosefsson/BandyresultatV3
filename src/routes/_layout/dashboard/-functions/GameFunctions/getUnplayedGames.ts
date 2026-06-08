@@ -1,11 +1,23 @@
 import { createServerFn } from '@tanstack/react-start'
 import { zodValidator } from '@tanstack/zod-adapter'
-import type { SQL } from 'drizzle-orm';
-import { and, asc, desc, eq, getTableColumns, lte } from 'drizzle-orm'
+import type { SQL } from 'drizzle-orm'
+import {
+  and,
+  asc,
+  desc,
+  eq,
+  getTableColumns,
+  lte,
+} from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
 
 import { db } from '@/db'
-import { games, series, teamgames, teams } from '@/db/schema'
+import {
+  games,
+  series,
+  teamgames,
+  teams,
+} from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import type { TeamBaseWithTeamGameId } from '@/lib/types/team'
 import { zd } from '@/lib/utils/zod'
@@ -15,17 +27,24 @@ const away = alias(teams, 'away')
 const homeTeamGame = alias(teamgames, 'home_teamgame')
 const awayTeamGame = alias(teamgames, 'away_teamgame')
 
-export const getUnplayedGames = createServerFn({ method: 'GET' })
-  .inputValidator(
-    zodValidator(zd.object({ today: zd.enum(['true', 'false']) })),
+export const getUnplayedGames = createServerFn({
+  method: 'GET',
+})
+  .validator(
+    zodValidator(
+      zd.object({ today: zd.enum(['true', 'false']) }),
+    ),
   )
   .handler(async ({ data: { today } }) => {
     try {
-      const currDate = new Date().toLocaleDateString('se-SV', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-      })
+      const currDate = new Date().toLocaleDateString(
+        'se-SV',
+        {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+        },
+      )
 
       const unplayedGames = await db
         .select({
@@ -71,7 +90,11 @@ export const getUnplayedGames = createServerFn({ method: 'GET' })
             eq(games.played, false),
           ),
         )
-        .orderBy(asc(series.level), asc(games.women), desc(games.date))
+        .orderBy(
+          asc(series.level),
+          asc(games.women),
+          desc(games.date),
+        )
 
       return unplayedGames
     } catch (error) {

@@ -80,7 +80,7 @@ type SingeTeamSeasonReturn =
 export const getSingleTeamSeason = createServerFn({
   method: 'GET',
 })
-  .inputValidator(
+  .validator(
     zodValidator(
       zd.object({
         teamId: zd.number(),

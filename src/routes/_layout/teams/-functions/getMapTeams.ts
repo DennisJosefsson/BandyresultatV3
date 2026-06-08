@@ -14,7 +14,7 @@ type SortedTeamGroups = {
 }
 
 export const getMapTeams = createServerFn({ method: 'GET' })
-  .inputValidator(zodValidator(women))
+  .validator(zodValidator(women))
   .handler(async ({ data }) => {
     try {
       const mapTeams = await db.query.teams.findMany({

@@ -13,7 +13,7 @@ export const removeTeamFromSerie = createServerFn({
   method: 'POST',
 })
   .middleware([authMiddleware, errorMiddleware])
-  .inputValidator(
+  .validator(
     zodValidator(
       zd.object({
         teamseriesId: zd.number().int().positive(),

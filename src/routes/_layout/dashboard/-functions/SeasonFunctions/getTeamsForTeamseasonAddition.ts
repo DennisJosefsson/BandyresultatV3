@@ -1,6 +1,6 @@
 import { createServerFn } from '@tanstack/react-start'
 import { zodValidator } from '@tanstack/zod-adapter'
-import type { SQL} from 'drizzle-orm';
+import type { SQL } from 'drizzle-orm'
 import { asc, eq, getTableColumns, sql } from 'drizzle-orm'
 
 import { db } from '@/db'
@@ -10,17 +10,23 @@ import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import type { TeamBase } from '@/lib/types/team'
 import { zd } from '@/lib/utils/zod'
 
-export const getTeamsForTeamseasonAddition = createServerFn({ method: 'GET' })
+export const getTeamsForTeamseasonAddition = createServerFn(
+  { method: 'GET' },
+)
   .middleware([errorMiddleware])
-  .inputValidator(
-    zodValidator(zd.object({ seasonId: zd.number().int().positive() })),
+  .validator(
+    zodValidator(
+      zd.object({ seasonId: zd.number().int().positive() }),
+    ),
   )
   .handler(async ({ data: { seasonId } }) => {
     try {
       const allTeams = await db
         .select()
         .from(teams)
-        .orderBy(asc(sql`casual_name collate "se-SE-x-icu"`))
+        .orderBy(
+          asc(sql`casual_name collate "se-SE-x-icu"`),
+        )
 
       const teamSeasons = await db
         .select({
@@ -33,9 +39,14 @@ export const getTeamsForTeamseasonAddition = createServerFn({ method: 'GET' })
           } as unknown as SQL<TeamBase>,
         })
         .from(teamseasons)
-        .leftJoin(teams, eq(teamseasons.teamId, teams.teamId))
+        .leftJoin(
+          teams,
+          eq(teamseasons.teamId, teams.teamId),
+        )
         .where(eq(teamseasons.seasonId, seasonId))
-        .orderBy(asc(sql`teams.casual_name collate "se-SE-x-icu"`))
+        .orderBy(
+          asc(sql`teams.casual_name collate "se-SE-x-icu"`),
+        )
 
       return { allTeams, teamSeasons }
     } catch (error) {

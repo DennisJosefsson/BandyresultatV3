@@ -11,7 +11,7 @@ import { editTeamObject } from '@/lib/types/team'
 
 export const editTeam = createServerFn({ method: 'POST' })
   .middleware([authMiddleware, errorMiddleware])
-  .inputValidator(zodValidator(editTeamObject))
+  .validator(zodValidator(editTeamObject))
   .handler(async ({ data }) => {
     try {
       const returnTeam = await db

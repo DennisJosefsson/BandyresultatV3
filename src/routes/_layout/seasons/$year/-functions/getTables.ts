@@ -17,7 +17,9 @@ import { getUnionedTables } from './getTableFunctions'
 type TablesReturn =
   | {
       status: 200
-      tables: Array<Omit<TeamTable, 'women' | 'group' | 'season'>>
+      tables: Array<
+        Omit<TeamTable, 'women' | 'group' | 'season'>
+      >
       serie: Serie
       breadCrumb: string
       meta: Meta
@@ -32,18 +34,22 @@ type TablesReturn =
 
 export const getTables = createServerFn({ method: 'GET' })
   .middleware([errorMiddleware])
-  .inputValidator(
+  .validator(
     zodValidator(
       zd.object({
         group: zd.string(),
         year: zd.int(),
         women: zd.boolean(),
-        table: zd.enum(['all', 'home', 'away']).catch('all'),
+        table: zd
+          .enum(['all', 'home', 'away'])
+          .catch('all'),
       }),
     ),
   )
   .handler(
-    async ({ data: { group, year, women, table } }): Promise<TablesReturn> => {
+    async ({
+      data: { group, year, women, table },
+    }): Promise<TablesReturn> => {
       try {
         const seasonYear = seasonIdCheck.parse(year)
         const breadCrumb =
@@ -71,7 +77,8 @@ export const getTables = createServerFn({ method: 'GET' })
         if (year < 1930) {
           return {
             status: 404,
-            message: 'Inga serietabeller för den här säsongen',
+            message:
+              'Inga serietabeller för den här säsongen',
             breadCrumb: 'Tabell',
             meta,
           }
@@ -80,7 +87,8 @@ export const getTables = createServerFn({ method: 'GET' })
         if (year < 1973 && women) {
           return {
             status: 404,
-            message: 'Damernas första säsong var 1972/1973.',
+            message:
+              'Damernas första säsong var 1972/1973.',
             breadCrumb: 'Tabell',
             meta,
           }
@@ -91,7 +99,10 @@ export const getTables = createServerFn({ method: 'GET' })
             ...getTableColumns(series),
           })
           .from(series)
-          .leftJoin(seasons, eq(seasons.seasonId, series.seasonId))
+          .leftJoin(
+            seasons,
+            eq(seasons.seasonId, series.seasonId),
+          )
           .where(
             and(
               eq(seasons.women, women),
@@ -112,9 +123,18 @@ export const getTables = createServerFn({ method: 'GET' })
             meta,
           }
 
-        const results = await getUnionedTables({ serie, table })
+        const results = await getUnionedTables({
+          serie,
+          table,
+        })
 
-        return { status: 200, tables: results, serie, breadCrumb, meta }
+        return {
+          status: 200,
+          tables: results,
+          serie,
+          breadCrumb,
+          meta,
+        }
       } catch (error) {
         catchError(error)
       }

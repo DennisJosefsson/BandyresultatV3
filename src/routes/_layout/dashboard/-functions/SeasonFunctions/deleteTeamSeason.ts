@@ -13,7 +13,7 @@ export const deleteTeamSeason = createServerFn({
   method: 'POST',
 })
   .middleware([authMiddleware, errorMiddleware])
-  .inputValidator(
+  .validator(
     zodValidator(
       zd.object({
         teamseasonId: zd.number().int().positive(),

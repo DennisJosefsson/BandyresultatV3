@@ -31,7 +31,7 @@ export const getPlayoffStats = createServerFn({
   method: 'GET',
 })
   .middleware([errorMiddleware])
-  .inputValidator(
+  .validator(
     zodValidator(
       zd.object({
         year: zd.int(),

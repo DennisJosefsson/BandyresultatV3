@@ -13,7 +13,7 @@ export const updateMetadata = createServerFn({
   method: 'POST',
 })
   .middleware([authMiddleware, errorMiddleware])
-  .inputValidator(zodValidator(metadataObject))
+  .validator(zodValidator(metadataObject))
   .handler(async ({ data: { metadataId, ...rest } }) => {
     try {
       let winnerId = null

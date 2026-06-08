@@ -41,7 +41,7 @@ const away = alias(teams, 'away')
 
 export const getGames = createServerFn({ method: 'GET' })
   .middleware([errorMiddleware])
-  .inputValidator(
+  .validator(
     zodValidator(
       zd.object({
         group: zd.string(),

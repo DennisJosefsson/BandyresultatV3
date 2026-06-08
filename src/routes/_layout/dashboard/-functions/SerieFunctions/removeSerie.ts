@@ -13,7 +13,7 @@ export const removeSerie = createServerFn({
   method: 'POST',
 })
   .middleware([authMiddleware, errorMiddleware])
-  .inputValidator(
+  .validator(
     zodValidator(
       zd.object({ serieId: zd.number().int().positive() }),
     ),

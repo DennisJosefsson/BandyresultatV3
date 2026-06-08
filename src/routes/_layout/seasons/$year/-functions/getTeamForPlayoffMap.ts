@@ -49,7 +49,7 @@ export const getTeamsForPlayoffMap = createServerFn({
   method: 'GET',
 })
   .middleware([errorMiddleware])
-  .inputValidator(
+  .validator(
     zodValidator(
       zd.object({ year: zd.int(), women: zd.boolean() }),
     ),

@@ -10,12 +10,17 @@ import { zd } from '@/lib/utils/zod'
 
 export const getEditTeam = createServerFn({ method: 'GET' })
   .middleware([errorMiddleware])
-  .inputValidator(
-    zodValidator(zd.object({ teamId: zd.number().int().positive() })),
+  .validator(
+    zodValidator(
+      zd.object({ teamId: zd.number().int().positive() }),
+    ),
   )
   .handler(async ({ data: { teamId } }) => {
     try {
-      const team = await db.select().from(teams).where(eq(teams.teamId, teamId))
+      const team = await db
+        .select()
+        .from(teams)
+        .where(eq(teams.teamId, teamId))
 
       return { status: 200, team: team[0] }
     } catch (error) {

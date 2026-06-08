@@ -13,7 +13,7 @@ export const removeParentChildSerie = createServerFn({
   method: 'POST',
 })
   .middleware([authMiddleware, errorMiddleware])
-  .inputValidator(
+  .validator(
     zodValidator(
       zd.object({ id: zd.number().int().positive() }),
     ),

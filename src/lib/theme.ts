@@ -1,5 +1,8 @@
 import { createServerFn } from '@tanstack/react-start'
-import { getCookie, setCookie } from '@tanstack/react-start/server'
+import {
+  getCookie,
+  setCookie,
+} from '@tanstack/react-start/server'
 import * as z from 'zod'
 
 const postThemeValidator = z.union([
@@ -14,6 +17,8 @@ export const getThemeServerFn = createServerFn().handler(
   async () => (getCookie(storageKey) || 'system') as T,
 )
 
-export const setThemeServerFn = createServerFn({ method: 'POST' })
-  .inputValidator(postThemeValidator)
+export const setThemeServerFn = createServerFn({
+  method: 'POST',
+})
+  .validator(postThemeValidator)
   .handler(async ({ data }) => setCookie(storageKey, data))

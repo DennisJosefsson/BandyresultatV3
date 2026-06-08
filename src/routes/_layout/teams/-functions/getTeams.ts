@@ -9,7 +9,7 @@ import { catchError } from '@/lib/middlewares/errors/catchError'
 const women = z.boolean()
 
 export const getTeams = createServerFn({ method: 'GET' })
-  .inputValidator(zodValidator(women))
+  .validator(zodValidator(women))
   .handler(async ({ data }) => {
     try {
       const teamArray = await db.query.teams.findMany({

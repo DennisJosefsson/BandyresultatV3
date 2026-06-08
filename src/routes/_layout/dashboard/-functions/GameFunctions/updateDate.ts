@@ -12,7 +12,7 @@ import { parseUpdateDate } from '../dataParsers/parseUpdateDate'
 
 export const updateDate = createServerFn({ method: 'POST' })
   .middleware([authMiddleware, errorMiddleware])
-  .inputValidator(zodValidator(parseUpdateDate))
+  .validator(zodValidator(parseUpdateDate))
   .handler(async ({ data }) => {
     try {
       const updatedGame = await db

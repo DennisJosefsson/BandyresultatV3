@@ -13,7 +13,7 @@ export const editStaticTable = createServerFn({
   method: 'POST',
 })
   .middleware([authMiddleware, errorMiddleware])
-  .inputValidator(zodValidator(editStaticTableArray))
+  .validator(zodValidator(editStaticTableArray))
   .handler(async ({ data: { tableArray } }) => {
     try {
       if (tableArray.length === 0) {

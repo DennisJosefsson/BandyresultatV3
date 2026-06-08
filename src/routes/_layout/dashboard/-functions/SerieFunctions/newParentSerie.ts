@@ -13,7 +13,7 @@ export const newParentSerieInput = createServerFn({
   method: 'POST',
 })
   .middleware([authMiddleware, errorMiddleware])
-  .inputValidator(zodValidator(newParentSerieObject))
+  .validator(zodValidator(newParentSerieObject))
   .handler(async ({ data }) => {
     try {
       const newParentSerie = await db

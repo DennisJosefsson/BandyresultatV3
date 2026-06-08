@@ -14,7 +14,7 @@ export const editParentSerieInput = createServerFn({
   method: 'POST',
 })
   .middleware([authMiddleware, errorMiddleware])
-  .inputValidator(zodValidator(editParentSerieObjectArray))
+  .validator(zodValidator(editParentSerieObjectArray))
   .handler(async ({ data: { parentSeries } }) => {
     try {
       if (parentSeries.length === 0) {

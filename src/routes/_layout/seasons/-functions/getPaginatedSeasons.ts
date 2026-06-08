@@ -12,7 +12,7 @@ export const parsePage = z.number().optional().catch(1)
 export const getPaginatedSeasons = createServerFn({
   method: 'GET',
 })
-  .inputValidator(zodValidator(parsePage))
+  .validator(zodValidator(parsePage))
   .handler(async ({ data }) => {
     try {
       const count = await db.$count(

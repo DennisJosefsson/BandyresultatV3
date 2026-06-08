@@ -24,7 +24,7 @@ export const getSeriesTableData = createServerFn({
   method: 'GET',
 })
   .middleware([errorMiddleware])
-  .inputValidator(
+  .validator(
     zodValidator(
       zd.object({ serieId: zd.number().positive().int() }),
     ),

@@ -13,7 +13,7 @@ export const updatePlayoffSeason = createServerFn({
   method: 'POST',
 })
   .middleware([authMiddleware, errorMiddleware])
-  .inputValidator(zodValidator(playoffSeasonObject))
+  .validator(zodValidator(playoffSeasonObject))
   .handler(
     async ({ data: { playoffSeasonId, ...rest } }) => {
       try {

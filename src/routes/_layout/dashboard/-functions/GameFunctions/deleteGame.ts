@@ -11,7 +11,7 @@ import { zd } from '@/lib/utils/zod'
 
 export const deleteGame = createServerFn({ method: 'POST' })
   .middleware([authMiddleware, errorMiddleware])
-  .inputValidator(
+  .validator(
     zodValidator(
       zd.object({ gameId: zd.number().positive().int() }),
     ),

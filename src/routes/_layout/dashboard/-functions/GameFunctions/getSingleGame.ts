@@ -1,6 +1,6 @@
 import { createServerFn } from '@tanstack/react-start'
 import { zodValidator } from '@tanstack/zod-adapter'
-import type { SQL } from 'drizzle-orm';
+import type { SQL } from 'drizzle-orm'
 import { and, eq, getTableColumns } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
 
@@ -15,8 +15,12 @@ const away = alias(teams, 'away')
 const homeTeamGame = alias(teamgames, 'home_teamgame')
 const awayTeamGame = alias(teamgames, 'away_teamgame')
 
-export const getSingleGame = createServerFn({ method: 'GET' })
-  .inputValidator(zodValidator(zd.object({ gameId: zd.number() })))
+export const getSingleGame = createServerFn({
+  method: 'GET',
+})
+  .validator(
+    zodValidator(zd.object({ gameId: zd.number() })),
+  )
   .handler(async ({ data: { gameId } }) => {
     try {
       const game = await db

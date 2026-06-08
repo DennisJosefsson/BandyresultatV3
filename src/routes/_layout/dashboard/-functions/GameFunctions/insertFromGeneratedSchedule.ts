@@ -13,7 +13,7 @@ type TeamGame = typeof teamgames.$inferInsert
 export const insertFromGeneratedSchedule = createServerFn({
   method: 'POST',
 })
-  .inputValidator(zodValidator(generatedGameObjectArray))
+  .validator(zodValidator(generatedGameObjectArray))
   .middleware([authMiddleware, errorMiddleware])
   .handler(async ({ data: { gameArray } }) => {
     try {
