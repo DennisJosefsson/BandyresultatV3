@@ -32,7 +32,7 @@ import {
 } from '@/components/base/ui/sidebar'
 import { useGetFirstAndLastSeason } from '@/routes/_layout/seasons/$year/-hooks/useGetFirstAndLastSeason'
 
-import { Show } from "@clerk/react";
+import { Show } from '@clerk/react'
 import { MaratonSidebar } from './MaratonSidebar'
 import { SearchSidebar } from './SearchSidebar'
 import { TeamSidebar } from './TeamSidebar'
@@ -80,8 +80,6 @@ const AppSidebar = () => {
     }
   }
 
-  
-
   return (
     <Sidebar
       className="font-poppins top-(--header-height) h-[calc(100svh-var(--header-height))]! mt-2"
@@ -95,7 +93,6 @@ const AppSidebar = () => {
           >
             <SidebarMenuItem>
               <SidebarMenuButton
-                
                 render={
                   <Link
                     to="/seasons"
@@ -231,28 +228,28 @@ const AppSidebar = () => {
               }
             />
           </SidebarMenuItem>
-          {/* <SignedIn> */}
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              onClick={toggleOnMobile}
-              render={
-                <Link
-                  to="/dashboard"
-                  search={{ women }}
-                  className="text-foreground hover:text-foreground transition-colors"
-                  activeProps={{ className: `font-bold` }}
-                >
-                  <span>
-                    <LayoutDashboardIcon className="size-4" />
-                  </span>
-                  <span className="text-base">
-                    Dashboard
-                  </span>
-                </Link>
-              }
-            />
-          </SidebarMenuItem>
-          {/* </SignedIn> */}
+          <Show when="signed-in">
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                onClick={toggleOnMobile}
+                render={
+                  <Link
+                    to="/dashboard"
+                    search={{ women }}
+                    className="text-foreground hover:text-foreground transition-colors"
+                    activeProps={{ className: `font-bold` }}
+                  >
+                    <span>
+                      <LayoutDashboardIcon className="size-4" />
+                    </span>
+                    <span className="text-base">
+                      Dashboard
+                    </span>
+                  </Link>
+                }
+              />
+            </SidebarMenuItem>
+          </Show>
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter className="p-0">
@@ -308,7 +305,7 @@ const AppSidebar = () => {
         </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
-  );
+  )
 }
 
 export default AppSidebar
