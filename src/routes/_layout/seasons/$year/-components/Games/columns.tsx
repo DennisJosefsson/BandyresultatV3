@@ -1,15 +1,12 @@
 import type { ColumnDef } from '@tanstack/react-table'
-
 import type { Game } from '@/lib/types/game'
 
-export const columns: Array<
-  ColumnDef<Omit<Game, 'season'>>
-> = [
+export const columns: Array<ColumnDef<Omit<Game, 'season'>>> = [
   {
     accessorKey: 'home.casualName',
 
     cell: ({ row }) => (
-      <div className="w-12 text-left text-[8px] sm:text-sm lg:text-base md:text-sm sm:w-24 2xl:w-32">
+      <div className="w-12 text-left text-[8px] sm:w-24 sm:text-sm md:text-sm lg:text-base 2xl:w-32">
         {row.getValue('home_casualName')}
       </div>
     ),
@@ -18,7 +15,7 @@ export const columns: Array<
     accessorKey: 'game_id',
 
     cell: () => (
-      <div className="w-4 text-[8px] sm:text-sm lg:text-base md:text-sm">
+      <div className="w-4 text-[8px] sm:text-sm md:text-sm lg:text-base">
         <span>-</span>
       </div>
     ),
@@ -28,20 +25,17 @@ export const columns: Array<
     accessorKey: 'away.casualName',
 
     cell: ({ row }) => (
-      <div className="w-12 text-left text-[8px] sm:text-sm lg:text-base md:text-sm sm:w-24 2xl:w-32">
+      <div className="w-12 text-left text-[8px] sm:w-24 sm:text-sm md:text-sm lg:text-base 2xl:w-32">
         {row.getValue('away_casualName')}
       </div>
     ),
   },
   {
-    accessorFn: (row) =>
-      row.otResult
-        ? `${row.otResult} (${row.result})`
-        : row.result,
+    accessorFn: (row) => (row.otResult ? `${row.otResult} (${row.result})` : row.result),
     accessorKey: 'result',
 
     cell: ({ row }) => (
-      <div className="w-6 md:w-8 lg:w-10 2xl:w-12 tabular-nums text-[8px] sm:text-sm lg:text-base md:text-sm">
+      <div className="w-6 text-[8px] tabular-nums sm:text-sm md:w-8 md:text-sm lg:w-10 lg:text-base 2xl:w-12">
         {row.getValue('result')}
       </div>
     ),
@@ -49,10 +43,9 @@ export const columns: Array<
   {
     accessorKey: 'halftimeResult',
     cell: ({ row }) => (
-      <div className="w-6 md:w-8 lg:w-10 2xl:w-12 tabular-nums text-[8px] sm:text-sm lg:text-base md:text-sm">
+      <div className="w-6 text-[8px] tabular-nums sm:text-sm md:w-8 md:text-sm lg:w-10 lg:text-base 2xl:w-12">
         <span>
-          {row.getValue('halftimeResult') === null ||
-          row.getValue('halftimeResult') === ''
+          {row.getValue('halftimeResult') === null || row.getValue('halftimeResult') === ''
             ? null
             : `(${row.getValue('halftimeResult')})`}
         </span>
@@ -72,7 +65,7 @@ export const columns: Array<
     },
 
     cell: ({ row }) => (
-      <div className="w-6 md:w-8 lg:w-10 2xl:w-12 tabular-nums text-[8px] sm:text-sm lg:text-base md:text-sm">
+      <div className="w-6 text-[8px] tabular-nums sm:text-sm md:w-8 md:text-sm lg:w-10 lg:text-base 2xl:w-12">
         <span>{row.getValue('decider')}</span>
       </div>
     ),

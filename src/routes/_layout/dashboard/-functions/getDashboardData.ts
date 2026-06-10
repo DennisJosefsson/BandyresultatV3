@@ -1,15 +1,8 @@
+import { and, desc, eq, getTableColumns, lt } from 'drizzle-orm'
 import { createServerFn } from '@tanstack/react-start'
-import {
-  and,
-  desc,
-  eq,
-  getTableColumns,
-  lt,
-} from 'drizzle-orm'
-
-import { db } from '@/db'
-import { games, seasons } from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
+import { games, seasons } from '@/db/schema'
+import { db } from '@/db'
 
 export const getDashboardData = createServerFn({
   method: 'GET',
@@ -37,11 +30,7 @@ export const getDashboardData = createServerFn({
       .where(
         eq(
           seasons.year,
-          db
-            .select({ year: seasons.year })
-            .from(seasons)
-            .orderBy(desc(seasons.seasonId))
-            .limit(1),
+          db.select({ year: seasons.year }).from(seasons).orderBy(desc(seasons.seasonId)).limit(1),
         ),
       )
 

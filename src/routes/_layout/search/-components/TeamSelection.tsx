@@ -1,35 +1,19 @@
-import {
-  useNavigate,
-  useSearch,
-} from '@tanstack/react-router'
-import { CircleXIcon } from 'lucide-react'
 import { List, useListRef } from 'react-window'
-
-import { Button } from '@/components/base/ui/button'
-import { Label } from '@/components/base/ui/label'
-import {
-  Select,
-  SelectContent,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/base/ui/select'
+import { CircleXIcon } from 'lucide-react'
+import { useNavigate, useSearch } from '@tanstack/react-router'
 import type { SearchParamsFields } from '@/lib/types/search'
-
-import { useSearchTeams } from '../-hooks/useSearchTeams'
+import { Select, SelectContent, SelectTrigger, SelectValue } from '@/components/base/ui/select'
+import { Label } from '@/components/base/ui/label'
+import { Button } from '@/components/base/ui/button'
 import RenderItem from './SelectRenderItem'
+import { useSearchTeams } from '../-hooks/useSearchTeams'
 
 type TeamSelectionProps = {
-  field: Extract<
-    SearchParamsFields,
-    'teamId' | 'opponentId'
-  >
+  field: Extract<SearchParamsFields, 'teamId' | 'opponentId'>
   label: string
 }
 
-const TeamSelection = ({
-  field,
-  label,
-}: TeamSelectionProps) => {
+const TeamSelection = ({ field, label }: TeamSelectionProps) => {
   const listRef = useListRef(null)
   const searchField = useSearch({
     from: '/_layout/search',
@@ -60,8 +44,7 @@ const TeamSelection = ({
     val.value === searchField
   })
 
-  const openIndex =
-    teamSelectIndex === -1 ? 0 : teamSelectIndex
+  const openIndex = teamSelectIndex === -1 ? 0 : teamSelectIndex
 
   const onOpenChange = (open: boolean): void => {
     if (open && listRef && listRef.current) {
@@ -73,9 +56,7 @@ const TeamSelection = ({
     }
   }
 
-  const selectedLabel = teamSelection.find(
-    (val) => val.value === searchField,
-  )?.label
+  const selectedLabel = teamSelection.find((val) => val.value === searchField)?.label
 
   return (
     <div className="flex flex-col gap-1">
@@ -92,9 +73,7 @@ const TeamSelection = ({
             name={field}
           >
             <SelectTrigger className="w-62">
-              <SelectValue placeholder="Välj">
-                {selectedLabel}
-              </SelectValue>
+              <SelectValue placeholder="Välj">{selectedLabel}</SelectValue>
             </SelectTrigger>
             <SelectContent alignItemWithTrigger={false}>
               <List
@@ -108,12 +87,7 @@ const TeamSelection = ({
           </Select>
         </div>
         <div>
-          <Button
-            onClick={reset}
-            variant="ghost"
-            size="icon"
-            id={`${field}-reset`}
-          >
+          <Button onClick={reset} variant="ghost" size="icon" id={`${field}-reset`}>
             <CircleXIcon />
           </Button>
         </div>

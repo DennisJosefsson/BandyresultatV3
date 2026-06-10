@@ -1,5 +1,5 @@
-import { auth } from '@clerk/tanstack-react-start/server'
 import { createServerFn } from '@tanstack/react-start'
+import { auth } from '@clerk/tanstack-react-start/server'
 
 export const authStateFn = createServerFn({
   method: 'GET',

@@ -10,11 +10,7 @@ export type TabBarObject = {
   }>
 }
 
-export const TabBarInline = ({
-  tabBarObject,
-}: {
-  tabBarObject: TabBarObject
-}) => {
+export const TabBarInline = ({ tabBarObject }: { tabBarObject: TabBarObject }) => {
   return (
     <div>
       <div className="xs:mb-2 flex flex-row items-center justify-between gap-1 md:gap-2">
@@ -27,11 +23,7 @@ export const TabBarInline = ({
   )
 }
 
-export const TabBarDivided = ({
-  tabBarObject,
-}: {
-  tabBarObject: TabBarObject
-}) => {
+export const TabBarDivided = ({ tabBarObject }: { tabBarObject: TabBarObject }) => {
   return (
     <div>
       <div className="xs:mb-2 flex flex-row items-center justify-between gap-1 md:gap-2 md:text-lg">

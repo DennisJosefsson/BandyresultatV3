@@ -1,10 +1,6 @@
-import {
-  useNavigate,
-  useSearch,
-} from '@tanstack/react-router'
-
-import RadioBadges from '@/components/Common/RadioBadge'
+import { useNavigate, useSearch } from '@tanstack/react-router'
 import type { SearchParamsFields } from '@/lib/types/search'
+import RadioBadges from '@/components/Common/RadioBadge'
 
 type RadioComponentProps = {
   array: Array<{
@@ -12,20 +8,12 @@ type RadioComponentProps = {
     label: string
     description: string
   }>
-  field: Extract<
-    SearchParamsFields,
-    'homeGame' | 'selectedGender' | 'gameResult'
-  >
+  field: Extract<SearchParamsFields, 'homeGame' | 'selectedGender' | 'gameResult'>
   label: string
   defaultValue: string
 }
 
-const RadioComponent = ({
-  array,
-  field,
-  label,
-  defaultValue,
-}: RadioComponentProps) => {
+const RadioComponent = ({ array, field, label, defaultValue }: RadioComponentProps) => {
   const searchField = useSearch({
     from: '/_layout/search',
     select: (search) => search[field],
@@ -41,7 +29,7 @@ const RadioComponent = ({
   }
 
   return (
-    <div className="flex flex-col gap-4 mt-2">
+    <div className="mt-2 flex flex-col gap-4">
       <div>
         <h4 className="text-sm">{label}</h4>
       </div>

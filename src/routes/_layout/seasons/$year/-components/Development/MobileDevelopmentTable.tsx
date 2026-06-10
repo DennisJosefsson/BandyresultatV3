@@ -1,11 +1,8 @@
 import { getRouteApi } from '@tanstack/react-router'
-
-import MobileDataTable from './MobileTableData'
 import { columns } from './tablecolumns'
+import MobileDataTable from './MobileTableData'
 
-const route = getRouteApi(
-  '/_layout/seasons/$year/$group/development',
-)
+const route = getRouteApi('/_layout/seasons/$year/$group/development')
 
 const MobileDevelopmentTable = () => {
   const index = route.useSearch({ select: (s) => s.index })

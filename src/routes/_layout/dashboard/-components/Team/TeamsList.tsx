@@ -1,12 +1,8 @@
-import { getRouteApi } from '@tanstack/react-router'
 import { useState } from 'react'
-
-import { Button } from '@/components/base/ui/button'
-import {
-  Card,
-  CardContent,
-} from '@/components/base/ui/card'
+import { getRouteApi } from '@tanstack/react-router'
 import { Input } from '@/components/base/ui/input'
+import { Card, CardContent } from '@/components/base/ui/card'
+import { Button } from '@/components/base/ui/button'
 
 const route = getRouteApi('/_layout/dashboard/teams/')
 
@@ -33,9 +29,7 @@ const TeamsList = () => {
               placeholder="Filter"
               value={filter}
               name="teamFilter"
-              onChange={(event) =>
-                setFilter(event.target.value)
-              }
+              onChange={(event) => setFilter(event.target.value)}
             />
           </div>
           <div className="grid grid-cols-2 gap-x-20">

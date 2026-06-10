@@ -1,16 +1,12 @@
-import type {
-  ColumnDef,
-  SortingState,
-  VisibilityState,
-} from '@tanstack/react-table'
+import type { ColumnDef, SortingState, VisibilityState } from '@tanstack/react-table'
+import { useState } from 'react'
 import {
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { useState } from 'react'
-
+import { useFavTeam } from '@/lib/contexts/favTeamsContext'
 import {
   Table,
   TableBody,
@@ -19,8 +15,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/base/ui/table'
-import { useFavTeam } from '@/lib/contexts/favTeamsContext'
-
 import { Button } from '@/components/base/ui//button'
 import { gameColumns, goalsColumns } from './columns'
 
@@ -43,11 +37,8 @@ const MobileDataTable = <TData, TValue>({
     { id: 'totalGoalsScored', desc: true },
     { id: 'team_casualName', desc: false },
   ])
-  const [columnVisibility, setColumnVisibility] =
-    useState<VisibilityState>(goalsColumns)
-  const [visibleColumns, setVisibleColumns] = useState<
-    'goals' | 'games'
-  >('goals')
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(goalsColumns)
+  const [visibleColumns, setVisibleColumns] = useState<'goals' | 'games'>('goals')
   const table = useReactTable({
     data,
     columns,
@@ -82,15 +73,8 @@ const MobileDataTable = <TData, TValue>({
   return (
     <div className="flex flex-col gap-2 sm:gap-3 md:gap-4">
       <div>
-        <Button
-          className="w-full"
-          variant="outline"
-          size="xs"
-          onClick={onClickHandler}
-        >
-          {visibleColumns === 'games'
-            ? 'Visa målkolumner'
-            : 'Visa matchkolumner'}
+        <Button className="w-full" variant="outline" size="xs" onClick={onClickHandler}>
+          {visibleColumns === 'games' ? 'Visa målkolumner' : 'Visa matchkolumner'}
         </Button>
       </div>
       <Table>
@@ -99,22 +83,16 @@ const MobileDataTable = <TData, TValue>({
             <TableRow key={headerGroup.id}>
               <TableHead
                 key={'position'}
-                className="hidden xs:table-cell text-center text-[7px] xs:text-[8px] sm:text-[10px] tabular-nums md:text-sm xl:text-base 2xl:text-lg max-w-10"
+                className="xs:table-cell xs:text-[8px] hidden max-w-10 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base 2xl:text-lg"
               >
                 P
               </TableHead>
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead
-                    key={header.id}
-                    className="px-0"
-                  >
+                  <TableHead key={header.id} className="px-0">
                     {header.isPlaceholder
                       ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
+                      : flexRender(header.column.columnDef.header, header.getContext())}
                   </TableHead>
                 )
               })}
@@ -127,37 +105,23 @@ const MobileDataTable = <TData, TValue>({
             table.getRowModel().rows.map((row, index) => (
               <TableRow
                 key={row.id}
-                data-state={
-                  row.getIsSelected() && 'selected'
-                }
+                data-state={row.getIsSelected() && 'selected'}
                 className={`${
-                  favTeams.includes(
-                    teamObject[
-                      getString(
-                        row.getValue('team_casualName'),
-                      )
-                    ],
-                  )
+                  favTeams.includes(teamObject[getString(row.getValue('team_casualName'))])
                     ? 'font-bold'
                     : null
                 }`}
               >
                 <TableCell
                   key={`index-${index}`}
-                  className="hidden xs:table-cell text-center text-[7px] xs:text-[8px] sm:text-[10px] tabular-nums md:text-sm xl:text-base 2xl:text-lg max-w-10"
+                  className="xs:table-cell xs:text-[8px] hidden max-w-10 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base 2xl:text-lg"
                 >
                   {index + 1}
                 </TableCell>
                 {row.getVisibleCells().map((cell) => {
                   return (
-                    <TableCell
-                      key={cell.id}
-                      className="px-0 py-1"
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
+                    <TableCell key={cell.id} className="px-0 py-1">
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   )
                 })}
@@ -165,10 +129,7 @@ const MobileDataTable = <TData, TValue>({
             ))
           ) : (
             <TableRow>
-              <TableCell
-                colSpan={columns.length}
-                className="h-24 text-center"
-              >
+              <TableCell colSpan={columns.length} className="h-24 text-center">
                 Inga resultat.
               </TableCell>
             </TableRow>

@@ -1,5 +1,4 @@
 import { createSerializationAdapter } from '@tanstack/react-router'
-
 import { CustomError } from './CustomError'
 
 export default class UnauthorizedError extends CustomError {
@@ -16,9 +15,7 @@ export default class UnauthorizedError extends CustomError {
   }) {
     const { code, message, logging } = params || {}
 
-    super(
-      message || 'Du har inte tillåtelse att göra detta.',
-    )
+    super(message || 'Du har inte tillåtelse att göra detta.')
     this._code = code || UnauthorizedError._statusCode
     this._logging = logging || false
     this._context = params?.context || {}
@@ -27,9 +24,7 @@ export default class UnauthorizedError extends CustomError {
   }
 
   get errors() {
-    return [
-      { message: this.message, context: this._context },
-    ]
+    return [{ message: this.message, context: this._context }]
   }
 
   get statusCode() {
@@ -41,32 +36,22 @@ export default class UnauthorizedError extends CustomError {
   }
 }
 
-export const unauthorizedErrorAdapter =
-  createSerializationAdapter({
-    key: 'compare-request-error',
-    test: (v) => v instanceof UnauthorizedError,
-    toSerializable: ({
+export const unauthorizedErrorAdapter = createSerializationAdapter({
+  key: 'compare-request-error',
+  test: (v) => v instanceof UnauthorizedError,
+  toSerializable: ({ message, errors, statusCode, logging }) => {
+    return {
       message,
       errors,
-      statusCode,
       logging,
-    }) => {
-      return {
-        message,
-        errors,
-        logging,
-        statusCode,
-      }
-    },
-    fromSerializable: ({
+      statusCode,
+    }
+  },
+  fromSerializable: ({ message, statusCode, logging }) => {
+    return new UnauthorizedError({
       message,
-      statusCode,
+      code: statusCode,
       logging,
-    }) => {
-      return new UnauthorizedError({
-        message,
-        code: statusCode,
-        logging,
-      })
-    },
-  })
+    })
+  },
+})

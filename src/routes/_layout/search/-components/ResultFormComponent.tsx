@@ -1,18 +1,14 @@
-import { operatorSelection } from './arrays/arrays'
-import NumberInput from './NumberInput'
-import OperatorSelector from './OperatorSelector'
 import StringInput from './StringInput'
+import OperatorSelector from './OperatorSelector'
+import NumberInput from './NumberInput'
+import { operatorSelection } from './arrays/arrays'
 
 const ResultFormComponent = () => {
   return (
     <div className="mb-2 flex w-[18rem] flex-col rounded lg:w-full">
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <div className="flex max-w-[16rem] flex-col lg:col-span-2">
-          <StringInput
-            field="result"
-            label="Resultat"
-            placeholder="T.ex. 5-3"
-          />
+          <StringInput field="result" label="Resultat" placeholder="T.ex. 5-3" />
         </div>
         <div className="flex max-w-[16rem] flex-col">
           <NumberInput
@@ -30,11 +26,7 @@ const ResultFormComponent = () => {
           />
         </div>
         <div className="flex max-w-[16rem] flex-col">
-          <NumberInput
-            field="goalsScored"
-            label="Gjorda mål"
-            placeholder="Siffra större än 0."
-          />
+          <NumberInput field="goalsScored" label="Gjorda mål" placeholder="Siffra större än 0." />
         </div>
         <div className="flex max-w-[16rem] flex-col">
           <OperatorSelector

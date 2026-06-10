@@ -1,21 +1,9 @@
 import type { SQL } from 'drizzle-orm'
-import {
-  and,
-  asc,
-  avg,
-  desc,
-  eq,
-  gt,
-  inArray,
-  max,
-  sql,
-  sum,
-} from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
-
-import { db } from '@/db'
+import { and, asc, avg, desc, eq, gt, inArray, max, sql, sum } from 'drizzle-orm'
 import type { playoffseason } from '@/db/schema'
 import { games, teamgames, teams } from '@/db/schema'
+import { db } from '@/db'
 
 type GetPlayoffStatsDataProps = {
   playoffSeason: typeof playoffseason.$inferSelect
@@ -24,17 +12,11 @@ type GetPlayoffStatsDataProps = {
 const home = alias(teams, 'home')
 const away = alias(teams, 'away')
 
-export async function getPlayoffStatsData({
-  playoffSeason,
-}: GetPlayoffStatsDataProps) {
+export async function getPlayoffStatsData({ playoffSeason }: GetPlayoffStatsDataProps) {
   const goalData = await db
     .select({
-      goalsScoredTotal: sum(teamgames.totalGoals).mapWith(
-        Number,
-      ),
-      goalsScoredAvg: avg(teamgames.totalGoals).mapWith(
-        Number,
-      ),
+      goalsScoredTotal: sum(teamgames.totalGoals).mapWith(Number),
+      goalsScoredAvg: avg(teamgames.totalGoals).mapWith(Number),
     })
     .from(teamgames)
     .where(
@@ -79,14 +61,12 @@ export async function getPlayoffStatsData({
 
   const homeGameData = await db
     .select({
-      winTotal:
-        sql`sum(case when teamgames.win = true then 1 else 0 end)`
-          .mapWith(Number)
-          .as('win_total'),
-      winAvg:
-        sql`round(avg(case when teamgames.win = true then 1 else 0 end)::numeric,3) * 100`
-          .mapWith(Number)
-          .as('win_avg'),
+      winTotal: sql`sum(case when teamgames.win = true then 1 else 0 end)`
+        .mapWith(Number)
+        .as('win_total'),
+      winAvg: sql`round(avg(case when teamgames.win = true then 1 else 0 end)::numeric,3) * 100`
+        .mapWith(Number)
+        .as('win_avg'),
     })
     .from(teamgames)
     .where(
@@ -101,14 +81,12 @@ export async function getPlayoffStatsData({
 
   const awayGameData = await db
     .select({
-      winTotal:
-        sql`sum(case when teamgames.win = true then 1 else 0 end)`
-          .mapWith(Number)
-          .as('win_total'),
-      winAvg:
-        sql`round(avg(case when teamgames.win = true then 1 else 0 end)::numeric,3) * 100`
-          .mapWith(Number)
-          .as('win_avg'),
+      winTotal: sql`sum(case when teamgames.win = true then 1 else 0 end)`
+        .mapWith(Number)
+        .as('win_total'),
+      winAvg: sql`round(avg(case when teamgames.win = true then 1 else 0 end)::numeric,3) * 100`
+        .mapWith(Number)
+        .as('win_avg'),
     })
     .from(teamgames)
     .where(
@@ -123,14 +101,12 @@ export async function getPlayoffStatsData({
 
   const drawData = await db
     .select({
-      drawTotal:
-        sql`sum(case when teamgames.draw = true then 1 else 0 end)`
-          .mapWith(Number)
-          .as('draw_total'),
-      drawAvg:
-        sql`round(avg(case when teamgames.draw = true then 1 else 0 end)::numeric,3) * 100`
-          .mapWith(Number)
-          .as('draw_avg'),
+      drawTotal: sql`sum(case when teamgames.draw = true then 1 else 0 end)`
+        .mapWith(Number)
+        .as('draw_total'),
+      drawAvg: sql`round(avg(case when teamgames.draw = true then 1 else 0 end)::numeric,3) * 100`
+        .mapWith(Number)
+        .as('draw_avg'),
     })
     .from(teamgames)
     .where(
@@ -177,9 +153,7 @@ export async function getPlayoffStatsData({
     .select({
       date: games.date,
       result: games.result,
-      value: sql`games.home_goal + games.away_goal`
-        .mapWith(Number)
-        .as('value'),
+      value: sql`games.home_goal + games.away_goal`.mapWith(Number).as('value'),
       home: {
         teamId: home.teamId,
         name: home.name,
@@ -232,9 +206,7 @@ export async function getPlayoffStatsData({
       date: games.date,
       result: games.result,
       gameId: games.gameId,
-      value: sql`games.home_goal + games.away_goal`
-        .mapWith(Number)
-        .as('value'),
+      value: sql`games.home_goal + games.away_goal`.mapWith(Number).as('value'),
       home: {
         teamId: home.teamId,
         name: home.name,
@@ -292,17 +264,12 @@ export async function getPlayoffStatsData({
           teamgames.goalDifference,
           db
             .select({
-              goalDifference: max(
-                teamgames.goalDifference,
-              ).as('goal_difference'),
+              goalDifference: max(teamgames.goalDifference).as('goal_difference'),
             })
             .from(teamgames)
             .where(
               and(
-                eq(
-                  teamgames.seasonId,
-                  playoffSeason.seasonId,
-                ),
+                eq(teamgames.seasonId, playoffSeason.seasonId),
                 eq(teamgames.played, true),
                 eq(teamgames.playoff, true),
               ),
@@ -315,9 +282,7 @@ export async function getPlayoffStatsData({
     .select({
       date: games.date,
       result: games.result,
-      value: sql`abs(games.home_goal - games.away_goal)`
-        .mapWith(Number)
-        .as('value'),
+      value: sql`abs(games.home_goal - games.away_goal)`.mapWith(Number).as('value'),
       gameId: games.gameId,
       home: {
         teamId: home.teamId,
@@ -380,19 +345,10 @@ export async function getPlayoffStatsData({
 type StreakFunctionProps = {
   playoffSeason: typeof playoffseason.$inferSelect
   threshold: number
-  streak:
-    | 'winStreak'
-    | 'drawStreak'
-    | 'losingStreak'
-    | 'noWinStreak'
-    | 'unbeatenStreak'
+  streak: 'winStreak' | 'drawStreak' | 'losingStreak' | 'noWinStreak' | 'unbeatenStreak'
 }
 
-async function getStreak({
-  playoffSeason,
-  threshold,
-  streak,
-}: StreakFunctionProps) {
+async function getStreak({ playoffSeason, threshold, streak }: StreakFunctionProps) {
   let values
   switch (streak) {
     case 'winStreak':
@@ -402,19 +358,13 @@ async function getStreak({
             teamId: teamgames.teamId,
             result: teamgames.win,
             date: teamgames.date,
-            value:
-              sql<number>`case when win = true then 1 else 0 end`.as(
-                'value',
-              ),
+            value: sql<number>`case when win = true then 1 else 0 end`.as('value'),
           })
           .from(teamgames)
           .where(
             and(
               eq(teamgames.played, true),
-              eq(
-                teamgames.seasonId,
-                playoffSeason.seasonId,
-              ),
+              eq(teamgames.seasonId, playoffSeason.seasonId),
               eq(teamgames.playoff, true),
             ),
           ),
@@ -427,19 +377,13 @@ async function getStreak({
             teamId: teamgames.teamId,
             result: teamgames.draw,
             date: teamgames.date,
-            value:
-              sql<number>`case when draw = true then 1 else 0 end`.as(
-                'value',
-              ),
+            value: sql<number>`case when draw = true then 1 else 0 end`.as('value'),
           })
           .from(teamgames)
           .where(
             and(
               eq(teamgames.played, true),
-              eq(
-                teamgames.seasonId,
-                playoffSeason.seasonId,
-              ),
+              eq(teamgames.seasonId, playoffSeason.seasonId),
               eq(teamgames.playoff, true),
             ),
           ),
@@ -452,19 +396,13 @@ async function getStreak({
             teamId: teamgames.teamId,
             result: teamgames.lost,
             date: teamgames.date,
-            value:
-              sql<number>`case when lost = true then 1 else 0 end`.as(
-                'value',
-              ),
+            value: sql<number>`case when lost = true then 1 else 0 end`.as('value'),
           })
           .from(teamgames)
           .where(
             and(
               eq(teamgames.played, true),
-              eq(
-                teamgames.seasonId,
-                playoffSeason.seasonId,
-              ),
+              eq(teamgames.seasonId, playoffSeason.seasonId),
               eq(teamgames.playoff, true),
             ),
           ),
@@ -477,19 +415,13 @@ async function getStreak({
             teamId: teamgames.teamId,
             result: teamgames.win,
             date: teamgames.date,
-            value:
-              sql<number>`case when win = false then 1 else 0 end`.as(
-                'value',
-              ),
+            value: sql<number>`case when win = false then 1 else 0 end`.as('value'),
           })
           .from(teamgames)
           .where(
             and(
               eq(teamgames.played, true),
-              eq(
-                teamgames.seasonId,
-                playoffSeason.seasonId,
-              ),
+              eq(teamgames.seasonId, playoffSeason.seasonId),
               eq(teamgames.playoff, true),
             ),
           ),
@@ -502,19 +434,13 @@ async function getStreak({
             teamId: teamgames.teamId,
             result: teamgames.lost,
             date: teamgames.date,
-            value:
-              sql<number>`case when lost = false then 1 else 0 end`.as(
-                'value',
-              ),
+            value: sql<number>`case when lost = false then 1 else 0 end`.as('value'),
           })
           .from(teamgames)
           .where(
             and(
               eq(teamgames.played, true),
-              eq(
-                teamgames.seasonId,
-                playoffSeason.seasonId,
-              ),
+              eq(teamgames.seasonId, playoffSeason.seasonId),
               eq(teamgames.playoff, true),
             ),
           ),
@@ -531,14 +457,10 @@ async function getStreak({
         teamId: values.teamId,
         result: values.result,
         date: values.date,
-        sumResults:
-          sql<number>`sum(values.value) over(partition by team order by date)`.as(
-            'sum_results',
-          ),
-        round:
-          sql<number>`row_number() over (partition by team order by date)`.as(
-            'round',
-          ),
+        sumResults: sql<number>`sum(values.value) over(partition by team order by date)`.as(
+          'sum_results',
+        ),
+        round: sql<number>`row_number() over (partition by team order by date)`.as('round'),
       })
       .from(values),
   )
@@ -551,18 +473,13 @@ async function getStreak({
         result: summed_values.result,
         date: summed_values.date,
         sumResults: summed_values.sumResults,
-        grouped: sql<number>`round - sum_results`.as(
-          'grouped',
-        ),
+        grouped: sql<number>`round - sum_results`.as('grouped'),
       })
       .from(summed_values)
       .where(
         eq(
           summed_values.result,
-          streak === 'unbeatenStreak' ||
-            streak === 'noWinStreak'
-            ? false
-            : true,
+          streak === 'unbeatenStreak' || streak === 'noWinStreak' ? false : true,
         ),
       ),
   )
@@ -572,19 +489,13 @@ async function getStreak({
       .with(grouped_results)
       .select({
         teamId: grouped_results.teamId,
-        maxCount:
-          sql<number>`mode() within group (order by grouped_results.grouped)`.as(
-            'max_count',
-          ),
-        dates: sql<
-          Array<string>
-        >`array_agg(date order by date)`.as('dates'),
+        maxCount: sql<number>`mode() within group (order by grouped_results.grouped)`.as(
+          'max_count',
+        ),
+        dates: sql<Array<string>>`array_agg(date order by date)`.as('dates'),
       })
       .from(grouped_results)
-      .groupBy(
-        grouped_results.grouped,
-        grouped_results.teamId,
-      ),
+      .groupBy(grouped_results.grouped, grouped_results.teamId),
   )
 
   const streaks = await db
@@ -592,26 +503,13 @@ async function getStreak({
     .select({
       teamId: group_array.teamId,
       name: teams.name as unknown as SQL<string>,
-      gameCount:
-        sql<number>`array_length(group_array.dates,1)`.as(
-          'game_count',
-        ),
-      startDate: sql<string>`group_array.dates[1]`.as(
-        'start_date',
-      ),
-      endDate:
-        sql<string>`group_array.dates[array_upper(group_array.dates,1)]`.as(
-          'end_date',
-        ),
+      gameCount: sql<number>`array_length(group_array.dates,1)`.as('game_count'),
+      startDate: sql<string>`group_array.dates[1]`.as('start_date'),
+      endDate: sql<string>`group_array.dates[array_upper(group_array.dates,1)]`.as('end_date'),
     })
     .from(group_array)
     .leftJoin(teams, eq(teams.teamId, group_array.teamId))
-    .where(
-      gt(
-        sql<number>`array_length(group_array.dates,1)`,
-        threshold,
-      ),
-    )
+    .where(gt(sql<number>`array_length(group_array.dates,1)`, threshold))
     .orderBy(desc(sql`game_count`), asc(sql`start_date`))
     .limit(3)
 

@@ -1,17 +1,10 @@
-import {
-  CatchBoundary,
-  createFileRoute,
-} from '@tanstack/react-router'
-
+import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
 import Loading from '@/components/Loading/Loading'
-
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
-import PlayoffGames from '../-components/Playoff/Games/PlayoffGames'
 import { getPlayoffGames } from '../-functions/getPlayoffGames'
+import PlayoffGames from '../-components/Playoff/Games/PlayoffGames'
 
-export const Route = createFileRoute(
-  '/_layout/seasons/$year/playoff/games',
-)({
+export const Route = createFileRoute('/_layout/seasons/$year/playoff/games')({
   loaderDeps: ({ search: { women } }) => ({ women }),
   loader: async ({ deps, params }) => {
     const data = await getPlayoffGames({
@@ -25,27 +18,19 @@ export const Route = createFileRoute(
   head: ({ loaderData }) => ({
     meta: [
       {
-        title:
-          loaderData?.meta.title ??
-          'Bandyresultat - Matcher',
+        title: loaderData?.meta.title ?? 'Bandyresultat - Matcher',
       },
       {
         name: 'description',
-        content:
-          loaderData?.meta.description ??
-          'Bandyresultat - Matcher',
+        content: loaderData?.meta.description ?? 'Bandyresultat - Matcher',
       },
       {
         property: 'og:description',
-        content:
-          loaderData?.meta.description ??
-          'Bandyresultat - Matcher',
+        content: loaderData?.meta.description ?? 'Bandyresultat - Matcher',
       },
       {
         property: 'og:title',
-        content:
-          loaderData?.meta.title ??
-          'Bandyresultat - Matcher',
+        content: loaderData?.meta.title ?? 'Bandyresultat - Matcher',
       },
       {
         property: 'og:type',
@@ -53,9 +38,7 @@ export const Route = createFileRoute(
       },
       {
         property: 'og:url',
-        content:
-          loaderData?.meta.url ??
-          'https://www.bandyresultat.se',
+        content: loaderData?.meta.url ?? 'https://www.bandyresultat.se',
       },
       {
         property: 'og:image',
@@ -65,9 +48,7 @@ export const Route = createFileRoute(
     ],
   }),
   component: RouteComponent,
-  pendingComponent: () => (
-    <Loading page="seasonGamesList" />
-  ),
+  pendingComponent: () => <Loading page="seasonGamesList" />,
 })
 
 function RouteComponent() {
@@ -76,7 +57,7 @@ function RouteComponent() {
     return (
       <div className="mt-4 flex flex-col justify-center text-sm">
         <div className="mb-4 flex flex-row justify-center">
-          <span className="text-[8px] xs:text-[10px] sm:text-xs lg:text-sm font-semibold">
+          <span className="xs:text-[10px] text-[8px] font-semibold sm:text-xs lg:text-sm">
             {data.message}
           </span>
         </div>
@@ -90,11 +71,7 @@ function RouteComponent() {
         console.error(error)
       }}
       errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent
-          id="playoffgames"
-          error={error}
-          reset={reset}
-        />
+        <SimpleErrorComponent id="playoffgames" error={error} reset={reset} />
       )}
     >
       <PlayoffGames />

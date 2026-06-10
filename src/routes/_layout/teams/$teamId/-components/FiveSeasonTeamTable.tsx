@@ -1,17 +1,8 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/base/ui/card'
-import {
-  Table,
-  TableBody,
-} from '@/components/base/ui/table'
-
 import type { FiveSeason } from '@/lib/types/team'
-import TeamTableHeader from './TableComponents/TableHeader'
+import { Table, TableBody } from '@/components/base/ui/table'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/base/ui/card'
 import TeamTableRow from './TableComponents/TeamTableDataRow'
+import TeamTableHeader from './TableComponents/TableHeader'
 
 const FiveSeasonTeamTable = ({
   tables,
@@ -24,13 +15,9 @@ const FiveSeasonTeamTable = ({
     <div className="mb-6">
       {tables.map((table, index) => {
         return (
-          <Card
-            key={table.group}
-            className="mb-2"
-            size="sm"
-          >
+          <Card key={table.group} className="mb-2" size="sm">
             <CardHeader>
-              <CardTitle className="group-data-[size=sm]/card:text-[10px] xs:group-data-[size=sm]/card:text-xs md:group-data-[size=sm]/card:text-sm">
+              <CardTitle className="xs:group-data-[size=sm]/card:text-xs group-data-[size=sm]/card:text-[10px] md:group-data-[size=sm]/card:text-sm">
                 {`${table.serie.serieName} ${season}`}
               </CardTitle>
             </CardHeader>
@@ -38,10 +25,7 @@ const FiveSeasonTeamTable = ({
               <Table className="w-full table-fixed">
                 <TeamTableHeader />
                 <TableBody>
-                  <TeamTableRow
-                    table={table}
-                    key={index}
-                  />
+                  <TeamTableRow table={table} key={index} />
                 </TableBody>
               </Table>
             </CardContent>

@@ -1,29 +1,10 @@
-import type {
-  SQL} from 'drizzle-orm';
-import {
-  and,
-  asc,
-  count,
-  eq,
-  getTableColumns,
-  inArray,
-  or,
-  sql,
-  sum,
-} from 'drizzle-orm'
+import type { SQL } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
-
-import { db } from '@/db'
-import {
-  games,
-  parentchildseries,
-  series,
-  teamgames,
-  teams,
-  teamseries,
-} from '@/db/schema'
-import type { Game } from '@/lib/types/game'
+import { and, asc, count, eq, getTableColumns, inArray, or, sql, sum } from 'drizzle-orm'
 import type { DevDataTableItem, ReturnDevDataTableItem } from '@/lib/types/table'
+import type { Game } from '@/lib/types/game'
+import { games, parentchildseries, series, teamgames, teams, teamseries } from '@/db/schema'
+import { db } from '@/db'
 
 type FunctionProps = {
   serie: typeof series.$inferSelect
@@ -46,9 +27,7 @@ export const getDevelopmentData = async ({ serie }: FunctionProps) => {
             teamId: teamgames.teamId,
             position: sql`0`.mapWith(Number).as('position'),
             totalGames: count(teamgames.teamGameId).as('total_games'),
-            totalPoints: sum(teamgames.points)
-              .mapWith(Number)
-              .as('total_points'),
+            totalPoints: sum(teamgames.points).mapWith(Number).as('total_points'),
             totalGoalsScored: sum(teamgames.goalsScored)
               .mapWith(Number)
               .as('total_goals_scored') as unknown as SQL<number>,
@@ -58,25 +37,15 @@ export const getDevelopmentData = async ({ serie }: FunctionProps) => {
             totalGoalDifference: sum(teamgames.goalDifference)
               .mapWith(Number)
               .as('total_goal_difference') as unknown as SQL<number>,
-            totalWins: sql<number>`cast(count(*) filter (where win) as int)`.as(
-              'total_wins',
-            ),
-            totalDraws:
-              sql<number>`cast(count(*) filter (where draw) as int)`.as(
-                'total_draws',
-              ),
-            totalLost:
-              sql<number>`cast(count(*) filter (where lost) as int)`.as(
-                'total_lost',
-              ),
+            totalWins: sql<number>`cast(count(*) filter (where win) as int)`.as('total_wins'),
+            totalDraws: sql<number>`cast(count(*) filter (where draw) as int)`.as('total_draws'),
+            totalLost: sql<number>`cast(count(*) filter (where lost) as int)`.as('total_lost'),
           })
           .from(teamgames)
           .where(
             and(
               inArray(teamgames.teamId, teamArray),
-              serie.allParentGames
-                ? undefined
-                : inArray(teamgames.opponentId, teamArray),
+              serie.allParentGames ? undefined : inArray(teamgames.opponentId, teamArray),
               inArray(
                 teamgames.serieId,
                 db
@@ -101,12 +70,8 @@ export const getDevelopmentData = async ({ serie }: FunctionProps) => {
                 .mapWith(Number)
                 .as('total_points'),
             totalGoalsScored: sql`0`.mapWith(Number).as('total_goals_scored'),
-            totalGoalsConceded: sql`0`
-              .mapWith(Number)
-              .as('total_goals_conceded'),
-            totalGoalDifference: sql`0`
-              .mapWith(Number)
-              .as('total_goal_difference'),
+            totalGoalsConceded: sql`0`.mapWith(Number).as('total_goals_conceded'),
+            totalGoalDifference: sql`0`.mapWith(Number).as('total_goal_difference'),
             totalWins: sql`0`.mapWith(Number).as('total_wins'),
             totalDraws: sql`0`.mapWith(Number).as('total_draws'),
             totalLost: sql`0`.mapWith(Number).as('total_lost'),
@@ -114,17 +79,9 @@ export const getDevelopmentData = async ({ serie }: FunctionProps) => {
           .from(teamgames)
           .leftJoin(
             teamseries,
-            and(
-              eq(teamgames.teamId, teamseries.teamId),
-              eq(teamgames.serieId, teamseries.serieId),
-            ),
+            and(eq(teamgames.teamId, teamseries.teamId), eq(teamgames.serieId, teamseries.serieId)),
           )
-          .where(
-            and(
-              inArray(teamgames.teamId, teamArray),
-              eq(teamgames.serieId, serie.serieId),
-            ),
-          ),
+          .where(and(inArray(teamgames.teamId, teamArray), eq(teamgames.serieId, serie.serieId))),
       )
 
   const seriesGames = db.$with('series_games').as(
@@ -287,16 +244,11 @@ export const getDevelopmentData = async ({ serie }: FunctionProps) => {
     .leftJoin(away, eq(games.awayTeamId, away.teamId))
     .where(
       and(
-        serie.hasMix
-          ? inArray(games.group, [serie.group, 'mix'])
-          : eq(games.group, serie.group),
+        serie.hasMix ? inArray(games.group, [serie.group, 'mix']) : eq(games.group, serie.group),
 
         eq(games.seasonId, serie.seasonId),
         eq(games.played, true),
-        or(
-          inArray(games.homeTeamId, teamArray),
-          inArray(games.awayTeamId, teamArray),
-        ),
+        or(inArray(games.homeTeamId, teamArray), inArray(games.awayTeamId, teamArray)),
       ),
     )
     .orderBy(asc(games.date))
@@ -336,11 +288,7 @@ type ReturnType = {
   table: Array<ReturnDevDataTableItem>
 }
 
-function tableSorting({
-  startTable,
-  tableArray,
-  dateArray,
-}: TableSortingProps): Array<ReturnType> {
+function tableSorting({ startTable, tableArray, dateArray }: TableSortingProps): Array<ReturnType> {
   const returnArray: Array<IntReturnType> = []
   const currTable = new Map<string, DevDataTableItem>()
   startTable.forEach((item) => {
@@ -383,12 +331,8 @@ function tableSorting({
     return {
       date: date.date,
       table: date.table.map((tbl) => {
-        const prevPosObject = array[index - 1].table.find(
-          (team) => team.teamId === tbl.teamId,
-        )
-        const currPosObject = array[index].table.find(
-          (team) => team.teamId === tbl.teamId,
-        )
+        const prevPosObject = array[index - 1].table.find((team) => team.teamId === tbl.teamId)
+        const currPosObject = array[index].table.find((team) => team.teamId === tbl.teamId)
         if (!prevPosObject || !currPosObject) {
           throw new Error('Missing position objects')
         }

@@ -1,9 +1,4 @@
-import {
-  getRouteApi,
-  useNavigate,
-} from '@tanstack/react-router'
-
-import { Label } from '@/components/base/ui/label'
+import { getRouteApi, useNavigate } from '@tanstack/react-router'
 import {
   Select,
   SelectContent,
@@ -11,7 +6,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/base/ui/select'
-
+import { Label } from '@/components/base/ui/label'
 import { limitSelection } from './arrays/arrays'
 
 const route = getRouteApi('/_layout/search')
@@ -49,10 +44,7 @@ const LimitSelection = () => {
         <SelectContent>
           {limitSelection.map((item) => {
             return (
-              <SelectItem
-                value={item.value}
-                key={item.value}
-              >
+              <SelectItem value={item.value} key={item.value}>
                 {item.label}
               </SelectItem>
             )

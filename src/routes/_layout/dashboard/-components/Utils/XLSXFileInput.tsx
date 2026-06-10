@@ -1,9 +1,8 @@
 import type { Dispatch, SetStateAction } from 'react'
 import XLSX from 'xlsx'
-
-import { Input } from '@/components/base/ui/input'
 import type { BulkGameFileParser } from '@/lib/types/game'
 import { bulkGameFileParser } from '@/lib/types/game'
+import { Input } from '@/components/base/ui/input'
 
 const process = (ab: ArrayBuffer) => {
   const wb = XLSX.read(ab)
@@ -31,19 +30,12 @@ const process = (ab: ArrayBuffer) => {
 const FileInput = ({
   setGameData,
 }: {
-  setGameData: Dispatch<
-    SetStateAction<BulkGameFileParser | null>
-  >
+  setGameData: Dispatch<SetStateAction<BulkGameFileParser | null>>
 }) => {
-  const onChange = async (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const onChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
-      const parsedData = await process(
-        await event.target.files[0].arrayBuffer(),
-      )
-      const gameData =
-        bulkGameFileParser.safeParse(parsedData)
+      const parsedData = await process(await event.target.files[0].arrayBuffer())
+      const gameData = bulkGameFileParser.safeParse(parsedData)
       if (!gameData.success) {
         console.log('ERROR', gameData.error)
       } else {
@@ -59,7 +51,7 @@ const FileInput = ({
         type="file"
         accept=".xlsx,application/xlsx"
         onChange={onChange}
-        className="file:justify-between file:mr-24"
+        className="file:mr-24 file:justify-between"
       />
     </div>
   )

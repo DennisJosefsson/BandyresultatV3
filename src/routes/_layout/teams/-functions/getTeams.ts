@@ -1,10 +1,9 @@
-import { createServerFn } from '@tanstack/react-start'
-import { zodValidator } from '@tanstack/zod-adapter'
-import { asc, sql } from 'drizzle-orm'
 import { z } from 'zod'
-
-import { db } from '@/db'
+import { asc, sql } from 'drizzle-orm'
+import { zodValidator } from '@tanstack/zod-adapter'
+import { createServerFn } from '@tanstack/react-start'
 import { catchError } from '@/lib/middlewares/errors/catchError'
+import { db } from '@/db'
 
 const women = z.boolean()
 
@@ -18,11 +17,8 @@ export const getTeams = createServerFn({ method: 'GET' })
           name: true,
           casualName: true,
         },
-        where: (teams, { eq, ne, and }) =>
-          and(eq(teams.women, data), ne(teams.teamId, 176)),
-        orderBy: [
-          asc(sql`casual_name collate "se-SE-x-icu"`),
-        ],
+        where: (teams, { eq, ne, and }) => and(eq(teams.women, data), ne(teams.teamId, 176)),
+        orderBy: [asc(sql`casual_name collate "se-SE-x-icu"`)],
       })
 
       return teamArray

@@ -1,13 +1,23 @@
 'use client'
 
-import { Loader2, Locate, Maximize, Minus, Plus, X } from 'lucide-react'
-import MapLibreGL from 'maplibre-gl';
-import type { MarkerOptions, PopupOptions } from 'maplibre-gl';
-import 'maplibre-gl/dist/maplibre-gl.css'
-import { createContext, forwardRef, useCallback, useContext, useEffect, useId, useImperativeHandle, useMemo, useRef, useState } from 'react';
-import type { ReactNode } from 'react';
+import type { ReactNode } from 'react'
+import type { MarkerOptions, PopupOptions } from 'maplibre-gl'
 import { createPortal } from 'react-dom'
-
+import 'maplibre-gl/dist/maplibre-gl.css'
+import {
+  createContext,
+  forwardRef,
+  useCallback,
+  useContext,
+  useEffect,
+  useId,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
+import MapLibreGL from 'maplibre-gl'
+import { Loader2, Locate, Maximize, Minus, Plus, X } from 'lucide-react'
 import { cn } from '@/lib/utils/utils'
 
 // Check document class for theme (works with next-themes, etc.)
@@ -21,9 +31,7 @@ function getDocumentTheme(): Theme | null {
 // Get system preference
 function getSystemTheme(): Theme {
   if (typeof window === 'undefined') return 'light'
-  return window.matchMedia('(prefers-color-scheme: dark)').matches
-    ? 'dark'
-    : 'light'
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
 }
 
 function useResolvedTheme(themeProp?: 'light' | 'dark'): 'light' | 'dark' {
@@ -149,8 +157,7 @@ const Map = forwardRef<MapRef, MapProps>(function Map(
   useEffect(() => {
     if (!containerRef.current) return
 
-    const initialStyle =
-      resolvedTheme === 'dark' ? mapStyles.dark : mapStyles.light
+    const initialStyle = resolvedTheme === 'dark' ? mapStyles.dark : mapStyles.light
     currentStyleRef.current = initialStyle
 
     const map = new MapLibreGL.Map({
@@ -289,12 +296,8 @@ function MapMarker({
     const handleMouseLeave = (e: MouseEvent) => onMouseLeave?.(e)
 
     markerInstance.getElement()?.addEventListener('click', handleClick)
-    markerInstance
-      .getElement()
-      ?.addEventListener('mouseenter', handleMouseEnter)
-    markerInstance
-      .getElement()
-      ?.addEventListener('mouseleave', handleMouseLeave)
+    markerInstance.getElement()?.addEventListener('mouseenter', handleMouseEnter)
+    markerInstance.getElement()?.addEventListener('mouseleave', handleMouseLeave)
 
     const handleDragStart = () => {
       const lngLat = markerInstance.getLngLat()
@@ -330,10 +333,7 @@ function MapMarker({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [map])
 
-  if (
-    marker.getLngLat().lng !== longitude ||
-    marker.getLngLat().lat !== latitude
-  ) {
+  if (marker.getLngLat().lng !== longitude || marker.getLngLat().lat !== latitude) {
     marker.setLngLat([longitude, latitude])
   }
   if (marker.isDraggable() !== draggable) {
@@ -342,9 +342,7 @@ function MapMarker({
 
   const currentOffset = marker.getOffset()
   const newOffset = markerOptions.offset ?? [0, 0]
-  const [newOffsetX, newOffsetY] = Array.isArray(newOffset)
-    ? newOffset
-    : [newOffset.x, newOffset.y]
+  const [newOffsetX, newOffsetY] = Array.isArray(newOffset) ? newOffset : [newOffset.x, newOffset.y]
   if (currentOffset.x !== newOffsetX || currentOffset.y !== newOffsetY) {
     marker.setOffset(newOffset)
   }
@@ -359,11 +357,7 @@ function MapMarker({
     marker.setPitchAlignment(markerOptions.pitchAlignment ?? 'auto')
   }
 
-  return (
-    <MarkerContext.Provider value={{ marker, map }}>
-      {children}
-    </MarkerContext.Provider>
-  )
+  return <MarkerContext.Provider value={{ marker, map }}>{children}</MarkerContext.Provider>
 }
 
 type MarkerContentProps = {
@@ -480,11 +474,7 @@ type MarkerTooltipProps = {
   className?: string
 } & Omit<PopupOptions, 'className' | 'closeButton' | 'closeOnClick'>
 
-function MarkerTooltip({
-  children,
-  className,
-  ...popupOptions
-}: MarkerTooltipProps) {
+function MarkerTooltip({ children, className, ...popupOptions }: MarkerTooltipProps) {
   const { marker, map } = useMarkerContext()
   const container = useMemo(() => document.createElement('div'), [])
   const prevTooltipOptions = useRef(popupOptions)
@@ -557,11 +547,7 @@ type MarkerLabelProps = {
   position?: 'top' | 'bottom'
 }
 
-function MarkerLabel({
-  children,
-  className,
-  position = 'top',
-}: MarkerLabelProps) {
+function MarkerLabel({ children, className, position = 'top' }: MarkerLabelProps) {
   const positionClasses = {
     top: 'bottom-full mb-1',
     bottom: 'top-full mt-1',
@@ -701,11 +687,7 @@ function MapControls({
 
   return (
     <div
-      className={cn(
-        'absolute z-10 flex flex-col gap-1.5',
-        positionClasses[position],
-        className,
-      )}
+      className={cn('absolute z-10 flex flex-col gap-1.5', positionClasses[position], className)}
     >
       {showZoom && (
         <ControlGroup>
@@ -852,10 +834,7 @@ function MapPopup({
   if (popup.isOpen()) {
     const prev = popupOptionsRef.current
 
-    if (
-      popup.getLngLat().lng !== longitude ||
-      popup.getLngLat().lat !== latitude
-    ) {
+    if (popup.getLngLat().lng !== longitude || popup.getLngLat().lat !== latitude) {
       popup.setLngLat([longitude, latitude])
     }
 
@@ -1030,9 +1009,7 @@ function MapRoute({
   return null
 }
 
-type MapClusterLayerProps<
-  P extends GeoJSON.GeoJsonProperties = GeoJSON.GeoJsonProperties,
-> = {
+type MapClusterLayerProps<P extends GeoJSON.GeoJsonProperties = GeoJSON.GeoJsonProperties> = {
   /** GeoJSON FeatureCollection data or URL to fetch GeoJSON from */
   data: string | GeoJSON.FeatureCollection<GeoJSON.Point, P>
   /** Maximum zoom level to cluster points on (default: 14) */
@@ -1046,21 +1023,12 @@ type MapClusterLayerProps<
   /** Color for unclustered individual points (default: "#3b82f6") */
   pointColor?: string
   /** Callback when an unclustered point is clicked */
-  onPointClick?: (
-    feature: GeoJSON.Feature<GeoJSON.Point, P>,
-    coordinates: [number, number],
-  ) => void
+  onPointClick?: (feature: GeoJSON.Feature<GeoJSON.Point, P>, coordinates: [number, number]) => void
   /** Callback when a cluster is clicked. If not provided, zooms into the cluster */
-  onClusterClick?: (
-    clusterId: number,
-    coordinates: [number, number],
-    pointCount: number,
-  ) => void
+  onClusterClick?: (clusterId: number, coordinates: [number, number], pointCount: number) => void
 }
 
-function MapClusterLayer<
-  P extends GeoJSON.GeoJsonProperties = GeoJSON.GeoJsonProperties,
->({
+function MapClusterLayer<P extends GeoJSON.GeoJsonProperties = GeoJSON.GeoJsonProperties>({
   data,
   clusterMaxZoom = 14,
   clusterRadius = 50,
@@ -1153,10 +1121,8 @@ function MapClusterLayer<
 
     return () => {
       try {
-        if (map.getLayer(clusterCountLayerId))
-          map.removeLayer(clusterCountLayerId)
-        if (map.getLayer(unclusteredLayerId))
-          map.removeLayer(unclusteredLayerId)
+        if (map.getLayer(clusterCountLayerId)) map.removeLayer(clusterCountLayerId)
+        if (map.getLayer(unclusteredLayerId)) map.removeLayer(unclusteredLayerId)
         if (map.getLayer(clusterLayerId)) map.removeLayer(clusterLayerId)
         if (map.getSource(sourceId)) map.removeSource(sourceId)
       } catch {
@@ -1182,8 +1148,7 @@ function MapClusterLayer<
 
     const prev = stylePropsRef.current
     const colorsChanged =
-      prev.clusterColors !== clusterColors ||
-      prev.clusterThresholds !== clusterThresholds
+      prev.clusterColors !== clusterColors || prev.clusterThresholds !== clusterThresholds
 
     // Update cluster layer colors and sizes
     if (map.getLayer(clusterLayerId) && colorsChanged) {
@@ -1241,10 +1206,7 @@ function MapClusterLayer<
       const feature = features[0]
       const clusterId = feature.properties?.cluster_id as number
       const pointCount = feature.properties?.point_count as number
-      const coordinates = (feature.geometry as GeoJSON.Point).coordinates as [
-        number,
-        number,
-      ]
+      const coordinates = (feature.geometry as GeoJSON.Point).coordinates as [number, number]
 
       if (onClusterClick) {
         onClusterClick(clusterId, coordinates, pointCount)
@@ -1268,19 +1230,17 @@ function MapClusterLayer<
       if (!onPointClick || !e.features?.length) return
 
       const feature = e.features[0]
-      const coordinates = (
-        feature.geometry as GeoJSON.Point
-      ).coordinates.slice() as [number, number]
+      const coordinates = (feature.geometry as GeoJSON.Point).coordinates.slice() as [
+        number,
+        number,
+      ]
 
       // Handle world copies
       while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
         coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360
       }
 
-      onPointClick(
-        feature as unknown as GeoJSON.Feature<GeoJSON.Point, P>,
-        coordinates,
-      )
+      onPointClick(feature as unknown as GeoJSON.Feature<GeoJSON.Point, P>, coordinates)
     }
 
     // Cursor style handlers
@@ -1314,15 +1274,7 @@ function MapClusterLayer<
       map.off('mouseenter', unclusteredLayerId, handleMouseEnterPoint)
       map.off('mouseleave', unclusteredLayerId, handleMouseLeavePoint)
     }
-  }, [
-    isLoaded,
-    map,
-    clusterLayerId,
-    unclusteredLayerId,
-    sourceId,
-    onClusterClick,
-    onPointClick,
-  ])
+  }, [isLoaded, map, clusterLayerId, unclusteredLayerId, sourceId, onClusterClick, onPointClick])
 
   return null
 }

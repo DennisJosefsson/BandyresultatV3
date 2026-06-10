@@ -1,17 +1,7 @@
-import { Button } from '@/components/base/ui/button'
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/base/ui/card'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/base/ui/tabs'
 import { Skeleton } from '@/components/base/ui/skeleton'
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/components/base/ui/tabs'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/base/ui/card'
+import { Button } from '@/components/base/ui/button'
 
 const SingleTeamSkeleton = () => {
   return (
@@ -32,28 +22,16 @@ const SingleTeamSkeleton = () => {
       <CardContent className="p-1 md:p-6">
         <Tabs defaultValue="tables">
           <TabsList>
-            <TabsTrigger
-              className="text-[10px] md:text-sm"
-              value="tables"
-            >
+            <TabsTrigger className="text-[10px] md:text-sm" value="tables">
               Tabeller
             </TabsTrigger>
-            <TabsTrigger
-              className="text-[10px] md:text-sm"
-              value="fiveSeasons"
-            >
+            <TabsTrigger className="text-[10px] md:text-sm" value="fiveSeasons">
               Senaste säsongerna
             </TabsTrigger>
-            <TabsTrigger
-              className="text-[10px] md:text-sm"
-              value="stats"
-            >
+            <TabsTrigger className="text-[10px] md:text-sm" value="stats">
               Statistik
             </TabsTrigger>
-            <TabsTrigger
-              className="text-[10px] md:text-sm"
-              value="chart"
-            >
+            <TabsTrigger className="text-[10px] md:text-sm" value="chart">
               Diagram
             </TabsTrigger>
           </TabsList>
@@ -65,16 +43,9 @@ const SingleTeamSkeleton = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-1 md:p-6">
-                {Array.from({ length: 2 }).map(
-                  (_i, index) => {
-                    return (
-                      <Skeleton
-                        key={index}
-                        className="mb-1 h-9 w-full"
-                      />
-                    )
-                  },
-                )}
+                {Array.from({ length: 2 }).map((_i, index) => {
+                  return <Skeleton key={index} className="mb-1 h-9 w-full" />
+                })}
               </CardContent>
             </Card>
             <Card className="mb-2 p-1 sm:mb-4 md:mb-6 md:p-6">
@@ -84,16 +55,9 @@ const SingleTeamSkeleton = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-1 md:p-6">
-                {Array.from({ length: 2 }).map(
-                  (_i, index) => {
-                    return (
-                      <Skeleton
-                        key={index}
-                        className="mb-1 h-9 w-full"
-                      />
-                    )
-                  },
-                )}
+                {Array.from({ length: 2 }).map((_i, index) => {
+                  return <Skeleton key={index} className="mb-1 h-9 w-full" />
+                })}
               </CardContent>
             </Card>
           </TabsContent>

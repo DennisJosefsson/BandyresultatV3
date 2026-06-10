@@ -1,7 +1,7 @@
-import DevelopmentClicker from './DevelopmentClicker'
-import DevelopmentGamesList from './DevelopmentGamesList'
-import DevelopmentTable from './DevelopmentTable'
 import MobileDevelopmentTable from './MobileDevelopmentTable'
+import DevelopmentTable from './DevelopmentTable'
+import DevelopmentGamesList from './DevelopmentGamesList'
+import DevelopmentClicker from './DevelopmentClicker'
 
 const DevelopmentData = () => {
   return (

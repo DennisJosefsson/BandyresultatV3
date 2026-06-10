@@ -1,6 +1,4 @@
-import { relations, sql } from 'drizzle-orm'
-import type {
-  AnyPgColumn} from 'drizzle-orm/pg-core';
+import type { AnyPgColumn } from 'drizzle-orm/pg-core'
 import {
   boolean,
   customType,
@@ -16,6 +14,7 @@ import {
   unique,
   varchar,
 } from 'drizzle-orm/pg-core'
+import { relations, sql } from 'drizzle-orm'
 
 export const county = pgTable('county', {
   countyId: integer('county_id').primaryKey().notNull(),
@@ -201,9 +200,7 @@ export const series = pgTable(
     comment: text(),
     level: decimalNumber().notNull(),
     hasMix: boolean('has_mix'),
-    parentSerieId: integer('parent_serie_id').references(
-      (): AnyPgColumn => series.serieId,
-    ),
+    parentSerieId: integer('parent_serie_id').references((): AnyPgColumn => series.serieId),
     hasStatic: boolean('has_static').default(false),
     hasParent: boolean('has_parent').default(false),
     allParentGames: boolean('all_parent_games').default(false),
@@ -321,9 +318,7 @@ export const teamgames = pgTable(
     seasonId: integer('season_id').notNull(),
     homeGame: boolean('home_game').default(false),
     serieId: integer('serie_id').notNull(),
-    totalGoals: integer('total_goals').generatedAlwaysAs(
-      sql`(goals_scored + goals_conceded)`,
-    ),
+    totalGoals: integer('total_goals').generatedAlwaysAs(sql`(goals_scored + goals_conceded)`),
     firstHalfTotalGoals: integer('total_first_half_goals').generatedAlwaysAs(
       sql`(first_half_goals_scored + first_half_goals_conceded)`,
     ),
@@ -543,16 +538,13 @@ export const metadataRelations = relations(metadata, ({ one }) => ({
   }),
 }))
 
-export const municipalityRelations = relations(
-  municipality,
-  ({ one, many }) => ({
-    county: one(county, {
-      fields: [municipality.countyId],
-      references: [county.countyId],
-    }),
-    teams: many(teams),
+export const municipalityRelations = relations(municipality, ({ one, many }) => ({
+  county: one(county, {
+    fields: [municipality.countyId],
+    references: [county.countyId],
   }),
-)
+  teams: many(teams),
+}))
 
 export const countyRelations = relations(county, ({ many }) => ({
   municipalities: many(municipality),
@@ -639,18 +631,15 @@ export const teamgamesRelations = relations(teamgames, ({ one }) => ({
   }),
 }))
 
-export const parentchildseriesRelations = relations(
-  parentchildseries,
-  ({ one }) => ({
-    parent: one(series, {
-      fields: [parentchildseries.parentId],
-      references: [series.serieId],
-      relationName: 'parent',
-    }),
-    child: one(series, {
-      fields: [parentchildseries.parentId],
-      references: [series.serieId],
-      relationName: 'child',
-    }),
+export const parentchildseriesRelations = relations(parentchildseries, ({ one }) => ({
+  parent: one(series, {
+    fields: [parentchildseries.parentId],
+    references: [series.serieId],
+    relationName: 'parent',
   }),
-)
+  child: one(series, {
+    fields: [parentchildseries.parentId],
+    references: [series.serieId],
+    relationName: 'child',
+  }),
+}))

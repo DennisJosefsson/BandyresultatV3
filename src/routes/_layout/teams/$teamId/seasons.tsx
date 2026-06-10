@@ -1,22 +1,14 @@
-import {
-  CatchBoundary,
-  Link,
-  createFileRoute,
-} from '@tanstack/react-router'
-
+import { CatchBoundary, Link, createFileRoute } from '@tanstack/react-router'
+import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from '@/components/base/ui/accordion'
-import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
-
 import { getTeamSeasons } from './-functions/teamSeasons'
 
-export const Route = createFileRoute(
-  '/_layout/teams/$teamId/seasons',
-)({
+export const Route = createFileRoute('/_layout/teams/$teamId/seasons')({
   loader: async ({ params }) => {
     const data = await getTeamSeasons({
       data: params.teamId,
@@ -31,27 +23,19 @@ export const Route = createFileRoute(
   head: ({ loaderData }) => ({
     meta: [
       {
-        title:
-          loaderData?.meta.title ??
-          'Bandyresultat - Lagsäsonger',
+        title: loaderData?.meta.title ?? 'Bandyresultat - Lagsäsonger',
       },
       {
         name: 'description',
-        content:
-          loaderData?.meta.description ??
-          'Bandyresultat - Lagsäsonger',
+        content: loaderData?.meta.description ?? 'Bandyresultat - Lagsäsonger',
       },
       {
         property: 'og:description',
-        content:
-          loaderData?.meta.description ??
-          'Bandyresultat - Lagsäsonger',
+        content: loaderData?.meta.description ?? 'Bandyresultat - Lagsäsonger',
       },
       {
         property: 'og:title',
-        content:
-          loaderData?.meta.title ??
-          'Bandyresultat - Lagsäsonger',
+        content: loaderData?.meta.title ?? 'Bandyresultat - Lagsäsonger',
       },
       {
         property: 'og:type',
@@ -59,9 +43,7 @@ export const Route = createFileRoute(
       },
       {
         property: 'og:url',
-        content:
-          loaderData?.meta.url ??
-          'https://www.bandyresultat.se',
+        content: loaderData?.meta.url ?? 'https://www.bandyresultat.se',
       },
       {
         property: 'og:image',
@@ -76,8 +58,8 @@ function RouteComponent() {
   const data = Route.useLoaderData()
   if (data.status === 404) {
     return (
-      <div className="flex flex-row justify-center mt-4">
-        <span className="font-semibold text-[8px] xs:text-xs sm:text-sm xl:text-base">
+      <div className="mt-4 flex flex-row justify-center">
+        <span className="xs:text-xs text-[8px] font-semibold sm:text-sm xl:text-base">
           {data.message}
         </span>
       </div>
@@ -90,11 +72,7 @@ function RouteComponent() {
         console.error(error)
       }}
       errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent
-          id="seasons"
-          error={error}
-          reset={reset}
-        />
+        <SimpleErrorComponent id="seasons" error={error} reset={reset} />
       )}
     >
       <Seasons />
@@ -108,17 +86,12 @@ function Seasons() {
 
   return (
     <div>
-      <Accordion
-        defaultValue={['seasons']}
-        className="border"
-      >
+      <Accordion defaultValue={['seasons']} className="border">
         <AccordionItem
           value="seasons"
-          className="mb-2 rounded-md p-2 shadow-md border-b last:border-b-0"
+          className="mb-2 rounded-md border-b p-2 shadow-md last:border-b-0"
         >
-          <AccordionTrigger className="text-sm md:text-base">
-            Senaste säsongerna
-          </AccordionTrigger>
+          <AccordionTrigger className="text-sm md:text-base">Senaste säsongerna</AccordionTrigger>
           <AccordionContent>
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 xl:grid-cols-8">
               {data.seasons.map((season) => {
@@ -142,11 +115,9 @@ function Seasons() {
         {data.rest.length > 0 ? (
           <AccordionItem
             value="rest"
-            className="mb-2 rounded-md p-2 shadow-md border-b last:border-b-0"
+            className="mb-2 rounded-md border-b p-2 shadow-md last:border-b-0"
           >
-            <AccordionTrigger className="text-sm md:text-base">
-              Övriga
-            </AccordionTrigger>
+            <AccordionTrigger className="text-sm md:text-base">Övriga</AccordionTrigger>
             <AccordionContent>
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 xl:grid-cols-8">
                 {data.rest.map((season) => {

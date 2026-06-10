@@ -1,15 +1,12 @@
-import { useMutation } from '@tanstack/react-query'
-import { useRouter } from '@tanstack/react-router'
 import type { RefObject } from 'react'
 import { toast } from 'sonner'
-
+import { useRouter } from '@tanstack/react-router'
+import { useMutation } from '@tanstack/react-query'
 import { removeTeamFromSerie } from '../-functions/SerieFunctions/removeTeamFromSerie'
 
 type Data = { status: 200; message: string } | undefined
 
-export const deleteTeamserieMutation = (
-  dialogRef: RefObject<HTMLDialogElement | null>,
-) => {
+export const deleteTeamserieMutation = (dialogRef: RefObject<HTMLDialogElement | null>) => {
   const mutation = useMutation({
     mutationFn: removeTeamFromSerie,
     onSuccess: (data) => onSuccessDeleteMutation(data),
@@ -25,8 +22,7 @@ export const deleteTeamserieMutation = (
     }
     router.invalidate({
       filter: (route) =>
-        route.routeId ===
-        '/_layout/dashboard/season/$seasonId/info_/$serieId/edit',
+        route.routeId === '/_layout/dashboard/season/$seasonId/info_/$serieId/edit',
     })
     dialogRef.current?.close()
   }

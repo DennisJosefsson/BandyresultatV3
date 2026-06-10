@@ -1,9 +1,8 @@
 import { createMiddleware } from '@tanstack/react-start'
-
 import { redirect } from '@tanstack/react-router'
-import DbError from './DbError'
-import UnauthorizedError from './UnauthorizedError'
 import ZodParsingError from './ZodParsingError'
+import UnauthorizedError from './UnauthorizedError'
+import DbError from './DbError'
 
 export const errorMiddleware = createMiddleware({
   type: 'function',

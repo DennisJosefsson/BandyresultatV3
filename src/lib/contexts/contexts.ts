@@ -1,4 +1,4 @@
-import type { Dispatch } from 'react';
+import type { Dispatch } from 'react'
 import { createContext } from 'react'
 
 export type Theme = 'dark' | 'light' | 'system'
@@ -21,9 +21,7 @@ const initialState: ThemeProviderState = {
 export type GenderType = boolean
 export type TeamPreference = Array<number>
 
-export type GenderActionType =
-  | { type: 'TOGGLE' }
-  | { type: 'SET'; payload: boolean }
+export type GenderActionType = { type: 'TOGGLE' } | { type: 'SET'; payload: boolean }
 export type MenuActionType = { type: 'TOGGLE' } | { type: 'CLOSE' }
 export type FavTeamsActionType =
   | { type: 'ADD_TEAM'; teamId: number }
@@ -40,5 +38,4 @@ export const TeamPreferenceContext = createContext<{
   favTeamsDispatch: Dispatch<FavTeamsActionType>
 } | null>(null)
 
-export const ThemeProviderContext =
-  createContext<ThemeProviderState>(initialState)
+export const ThemeProviderContext = createContext<ThemeProviderState>(initialState)

@@ -1,5 +1,5 @@
-import Date from '@/components/Common/Date'
 import type { RecordStreak } from '@/lib/types/records'
+import Date from '@/components/Common/Date'
 type StreakCardProps = {
   streak: Array<RecordStreak>
   title: string
@@ -8,9 +8,7 @@ type StreakCardProps = {
 const StreakCard = ({ streak, title }: StreakCardProps) => {
   return (
     <div className="mt-2">
-      <h3 className="mb-2 text-xs leading-4 font-bold sm:text-base xl:text-lg">
-        {title}
-      </h3>
+      <h3 className="mb-2 text-xs leading-4 font-bold sm:text-base xl:text-lg">{title}</h3>
       <div>
         {streak.map((s) => {
           return (
@@ -23,14 +21,11 @@ const StreakCard = ({ streak, title }: StreakCardProps) => {
               </span>
               <div className="flex grow flex-col">
                 <div className="flex flex-row justify-between">
-                  <span className="truncate font-semibold">
-                    {s.name}
-                  </span>
+                  <span className="truncate font-semibold">{s.name}</span>
                 </div>
                 <div className="flex flex-row items-center justify-between text-[10px] md:text-xs">
                   <span className="w-48 sm:w-64">
-                    <Date>{s.startDate}</Date> -{' '}
-                    <Date>{s.endDate}</Date>
+                    <Date>{s.startDate}</Date> - <Date>{s.endDate}</Date>
                   </span>
                 </div>
               </div>

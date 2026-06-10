@@ -1,14 +1,13 @@
-import { createServerFn } from '@tanstack/react-start'
-import { zodValidator } from '@tanstack/zod-adapter'
 import type { SQL } from 'drizzle-orm'
 import { inArray, sql } from 'drizzle-orm'
-
-import { db } from '@/db'
-import { teamseries } from '@/db/schema'
-import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
-import { catchError } from '@/lib/middlewares/errors/catchError'
-import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
+import { zodValidator } from '@tanstack/zod-adapter'
+import { createServerFn } from '@tanstack/react-start'
 import { editTeamSeriesArray } from '@/lib/types/serie'
+import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
+import { catchError } from '@/lib/middlewares/errors/catchError'
+import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
+import { teamseries } from '@/db/schema'
+import { db } from '@/db'
 
 export const editTeamSerie = createServerFn({
   method: 'POST',
@@ -33,10 +32,7 @@ export const editTeamSerie = createServerFn({
       }
 
       sqlChunks.push(sql`end)`)
-      const finalSql: SQL = sql.join(
-        sqlChunks,
-        sql.raw(' '),
-      )
+      const finalSql: SQL = sql.join(sqlChunks, sql.raw(' '))
       await db
         .update(teamseries)
         .set({ bonusPoints: finalSql })

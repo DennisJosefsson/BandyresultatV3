@@ -1,26 +1,14 @@
-import {
-  CatchBoundary,
-  Link,
-  Outlet,
-  createFileRoute,
-} from '@tanstack/react-router'
-
-import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
-import Loading from '@/components/Loading/Loading'
+import { CatchBoundary, Link, Outlet, createFileRoute } from '@tanstack/react-router'
 import { zd } from '@/lib/utils/zod'
-
-import TeamHeader from './$teamId/-components/TeamHeader'
+import Loading from '@/components/Loading/Loading'
+import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import { getSingleTeam } from './$teamId/-functions/getSingleTeam'
+import TeamHeader from './$teamId/-components/TeamHeader'
 
-export const Route = createFileRoute(
-  '/_layout/teams/$teamId',
-)({
+export const Route = createFileRoute('/_layout/teams/$teamId')({
   params: {
     parse: (params) => ({
-      teamId: zd
-        .number()
-        .int()
-        .parse(Number(params.teamId)),
+      teamId: zd.number().int().parse(Number(params.teamId)),
     }),
     stringify: ({ teamId }) => ({ teamId: `${teamId}` }),
   },
@@ -35,31 +23,24 @@ export const Route = createFileRoute(
   component: SingleTeam,
   pendingComponent: () => <Loading page="singleTeam" />,
   staticData: {
-    breadcrumb: (match) =>
-      match.loaderData.breadCrumb ?? 'Lag',
+    breadcrumb: (match) => match.loaderData.breadCrumb ?? 'Lag',
   },
   head: ({ loaderData }) => ({
     meta: [
       {
-        title:
-          loaderData?.meta.title ?? 'Bandyresultat - Lag',
+        title: loaderData?.meta.title ?? 'Bandyresultat - Lag',
       },
       {
         name: 'description',
-        content:
-          loaderData?.meta.description ??
-          'Bandyresultat - Lag',
+        content: loaderData?.meta.description ?? 'Bandyresultat - Lag',
       },
       {
         property: 'og:description',
-        content:
-          loaderData?.meta.description ??
-          'Bandyresultat - Lag',
+        content: loaderData?.meta.description ?? 'Bandyresultat - Lag',
       },
       {
         property: 'og:title',
-        content:
-          loaderData?.meta.title ?? 'Bandyresultat - Lag',
+        content: loaderData?.meta.title ?? 'Bandyresultat - Lag',
       },
       {
         property: 'og:type',
@@ -67,9 +48,7 @@ export const Route = createFileRoute(
       },
       {
         property: 'og:url',
-        content:
-          loaderData?.meta.url ??
-          'https://www.bandyresultat.se',
+        content: loaderData?.meta.url ?? 'https://www.bandyresultat.se',
       },
       {
         property: 'og:image',
@@ -87,19 +66,11 @@ function SingleTeam() {
       <div className="mt-2 flex flex-row justify-center">
         <p>
           Finns tyvärr inget sådant lag, men det finns en{' '}
-          <Link
-            to="/teams"
-            search={{ women: false }}
-            className="underline"
-          >
+          <Link to="/teams" search={{ women: false }} className="underline">
             lista
           </Link>{' '}
           och man kan också söka via{' '}
-          <Link
-            to="/teams/map"
-            search={{ women: false }}
-            className="underline"
-          >
+          <Link to="/teams/map" search={{ women: false }} className="underline">
             karta
           </Link>
           .
@@ -115,11 +86,7 @@ function SingleTeam() {
           console.error(error)
         }}
         errorComponent={({ error, reset }) => (
-          <SimpleErrorComponent
-            id="singleteam"
-            error={error}
-            reset={reset}
-          />
+          <SimpleErrorComponent id="singleteam" error={error} reset={reset} />
         )}
       >
         <div className="font-inter text-foreground mt-6 flex min-h-screen flex-col">

@@ -1,13 +1,8 @@
-import {
-  CatchBoundary,
-  createFileRoute,
-} from '@tanstack/react-router'
-
-import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
+import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
 import Loading from '@/components/Loading/Loading'
-
-import Map from './-components/Map/Map'
+import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import { getMapTeams } from './-functions/getMapTeams'
+import Map from './-components/Map/Map'
 
 export const Route = createFileRoute('/_layout/teams/map')({
   loaderDeps: ({ search: { women } }) => ({ women }),
@@ -29,11 +24,7 @@ function MapComponent() {
         console.error(error)
       }}
       errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent
-          id="teamsmap"
-          error={error}
-          reset={reset}
-        />
+        <SimpleErrorComponent id="teamsmap" error={error} reset={reset} />
       )}
     >
       <Map />

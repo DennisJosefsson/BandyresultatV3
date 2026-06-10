@@ -1,53 +1,30 @@
 import type { parseSearchRequest } from '@/routes/_layout/search/-functions/parseSearchRequest'
-import { zd } from '../utils/zod'
-import type { TeamBase } from './team'
 import type { Unpacked } from './unpacked'
+import type { TeamBase } from './team'
+import { zd } from '../utils/zod'
 
 export const clientSearchParams = zd.object({
   categoryArray: zd
     .array(
-      zd.enum([
-        'regular',
-        'qualification',
-        'playoffseries',
-        'eight',
-        'quarter',
-        'semi',
-        'final',
-      ]),
+      zd.enum(['regular', 'qualification', 'playoffseries', 'eight', 'quarter', 'semi', 'final']),
     )
     .optional()
     .catch(undefined),
-  order: zd
-    .enum(['asc', 'desc'])
-    .optional()
-    .catch(undefined),
+  order: zd.enum(['asc', 'desc']).optional().catch(undefined),
   limit: zd.number().optional().catch(undefined),
   result: zd.string().optional().catch(undefined),
-  gameResult: zd
-    .enum(['all', 'win', 'lost', 'draw'])
-    .optional()
-    .catch(undefined),
+  gameResult: zd.enum(['all', 'win', 'lost', 'draw']).optional().catch(undefined),
   goalsScored: zd
     .number({
       message: 'Antal gjorda mål måste vara en siffra.',
     })
     .optional()
     .catch(undefined),
-  goalsScoredOperator: zd
-    .enum(['gte', 'lte', 'eq'])
-    .optional()
-    .catch(undefined),
+  goalsScoredOperator: zd.enum(['gte', 'lte', 'eq']).optional().catch(undefined),
   goalsConceded: zd.number().optional().catch(undefined),
-  goalsConcededOperator: zd
-    .enum(['gte', 'lte', 'eq'])
-    .optional()
-    .catch(undefined),
+  goalsConcededOperator: zd.enum(['gte', 'lte', 'eq']).optional().catch(undefined),
   goalDiff: zd.number().optional().catch(undefined),
-  goalDiffOperator: zd
-    .enum(['gte', 'lte', 'eq'])
-    .optional()
-    .catch(undefined),
+  goalDiffOperator: zd.enum(['gte', 'lte', 'eq']).optional().catch(undefined),
   startSeason: zd
     .number({
       message: 'Första säsong måste vara ett årtal.',
@@ -63,22 +40,10 @@ export const clientSearchParams = zd.object({
   teamId: zd.number().optional().catch(undefined),
   opponentId: zd.number().optional().catch(undefined),
   inputDate: zd.string().optional().catch(undefined),
-  selectedGender: zd
-    .enum(['all', 'men', 'women'])
-    .optional()
-    .catch(undefined),
-  homeGame: zd
-    .enum(['all', 'home', 'away'])
-    .optional()
-    .catch(undefined),
+  selectedGender: zd.enum(['all', 'men', 'women']).optional().catch(undefined),
+  homeGame: zd.enum(['all', 'home', 'away']).optional().catch(undefined),
   orderVar: zd
-    .enum([
-      'date',
-      'totalGoals',
-      'goalDifference',
-      'goalsScored',
-      'goalsConceded',
-    ])
+    .enum(['date', 'totalGoals', 'goalDifference', 'goalsScored', 'goalsConceded'])
     .optional()
     .catch(undefined),
   level: zd
@@ -90,9 +55,7 @@ export const clientSearchParams = zd.object({
 
 const searchParamsFields = clientSearchParams.keyof()
 
-export type SearchParamsFields = zd.infer<
-  typeof searchParamsFields
->
+export type SearchParamsFields = zd.infer<typeof searchParamsFields>
 
 const pickedTypes = clientSearchParams.pick({
   orderVar: true,
@@ -108,28 +71,22 @@ const categories = clientSearchParams.pick({
 
 type Category = zd.infer<typeof categories>
 
-export type OperatorValues = NonNullable<
-  PickedTypes[keyof PickedTypes]
->
+export type OperatorValues = NonNullable<PickedTypes[keyof PickedTypes]>
 
-export type Categories = Unpacked<
-  NonNullable<Category[keyof Category]>
->
+export type Categories = Unpacked<NonNullable<Category[keyof Category]>>
 
 export type SearchResult = {
   gameId: number
   result: string | null
   halftimeResult: string | null
-  otResult:string | null
+  otResult: string | null
   date: string | null
   qualificationGame: boolean | null
   home: TeamBase
   away: TeamBase
-  women:boolean | null
-  extraTime:boolean | null
-  penalties:boolean | null
+  women: boolean | null
+  extraTime: boolean | null
+  penalties: boolean | null
 }
 
-export type ParsedSearchRequest = NonNullable<
-  ReturnType<typeof parseSearchRequest>['data']
->
+export type ParsedSearchRequest = NonNullable<ReturnType<typeof parseSearchRequest>['data']>

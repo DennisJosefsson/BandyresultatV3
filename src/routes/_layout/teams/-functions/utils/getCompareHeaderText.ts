@@ -5,17 +5,11 @@ type GetCompareHeaderText = {
   gameCount: number
 }
 
-const getCompareHeaderText = ({
-  teams,
-  gameCount,
-}: GetCompareHeaderText): string => {
-  const teamStringArray = [
-    ...new Set(teams.map((team) => team.casualName)),
-  ]
+const getCompareHeaderText = ({ teams, gameCount }: GetCompareHeaderText): string => {
+  const teamStringArray = [...new Set(teams.map((team) => team.casualName))]
 
   const lastTeam = teamStringArray.pop()
-  const teamString =
-    teamStringArray.join(', ') + ' och ' + lastTeam
+  const teamString = teamStringArray.join(', ') + ' och ' + lastTeam
 
   let compareHeaderText = ''
 

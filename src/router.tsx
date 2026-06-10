@@ -1,11 +1,10 @@
-import { createRouter } from '@tanstack/react-router'
 import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query'
-
+import { createRouter } from '@tanstack/react-router'
+import type { BreadcrumbValue } from './components/Header/Breadcrumb'
+import { routeTree } from './routeTree.gen'
+import * as TanstackQuery from './integrations/tanstack-query/root-provider'
 // Import the generated route tree
 import DefaultNotFound from './components/ErrorComponents/DefaultNotFound'
-import type { BreadcrumbValue } from './components/Header/Breadcrumb'
-import * as TanstackQuery from './integrations/tanstack-query/root-provider'
-import { routeTree } from './routeTree.gen'
 
 // Create a new router instance
 export const getRouter = () => {
@@ -19,11 +18,7 @@ export const getRouter = () => {
     scrollRestorationBehavior: 'smooth',
     defaultNotFoundComponent: DefaultNotFound,
     Wrap: (props: { children: React.ReactNode }) => {
-      return (
-        <TanstackQuery.Provider {...rqContext}>
-          {props.children}
-        </TanstackQuery.Provider>
-      )
+      return <TanstackQuery.Provider {...rqContext}>{props.children}</TanstackQuery.Provider>
     },
   })
 

@@ -1,14 +1,13 @@
-import { getRouteApi } from '@tanstack/react-router'
 import { useRef, useState } from 'react'
-
+import { getRouteApi } from '@tanstack/react-router'
+import { zd } from '@/lib/utils/zod'
 import ConfirmDialog from '@/components/Common/ConfirmDialog'
-import { Button } from '@/components/base/ui/button'
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/base/ui/card'
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from '@/components/base/ui/input-group'
 import {
   Field,
   FieldContent,
@@ -17,43 +16,26 @@ import {
   FieldLegend,
   FieldSet,
 } from '@/components/base/ui/field'
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput,
-} from '@/components/base/ui/input-group'
-import { zd } from '@/lib/utils/zod'
-
-import { deleteTeamserieMutation } from '../../../-hooks/deleteTeamserieMutation'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/base/ui/card'
+import { Button } from '@/components/base/ui/button'
 import { useEditTeamSeriesForm } from '../../../-hooks/useEditTeamSeriesForm'
+import { deleteTeamserieMutation } from '../../../-hooks/deleteTeamserieMutation'
 
-const route = getRouteApi(
-  '/_layout/dashboard/season/$seasonId/info_/$serieId/edit',
-)
+const route = getRouteApi('/_layout/dashboard/season/$seasonId/info_/$serieId/edit')
 
 const EditTeamSerie = () => {
-  const teamserieDialogRef =
-    useRef<HTMLDialogElement | null>(null)
-  const [teamseriesId, setTeamseriesId] = useState<
-    number | null
-  >(null)
-  const [teamName, setTeamName] = useState<string | null>(
-    null,
-  )
+  const teamserieDialogRef = useRef<HTMLDialogElement | null>(null)
+  const [teamseriesId, setTeamseriesId] = useState<number | null>(null)
+  const [teamName, setTeamName] = useState<string | null>(null)
   const form = useEditTeamSeriesForm()
-  const teamArray = route
-    .useLoaderData({ select: (s) => s.teamsInSerie })
-    .map((team) => {
-      return {
-        teamseriesId: team.teamseriesId,
-        teamName: team.team.casualName,
-        teamId: team.team.teamId,
-      }
-    })
-  const mutation = deleteTeamserieMutation(
-    teamserieDialogRef,
-  )
+  const teamArray = route.useLoaderData({ select: (s) => s.teamsInSerie }).map((team) => {
+    return {
+      teamseriesId: team.teamseriesId,
+      teamName: team.team.casualName,
+      teamId: team.team.teamId,
+    }
+  })
+  const mutation = deleteTeamserieMutation(teamserieDialogRef)
   const openDialog = (id: number) => {
     setTeamseriesId(id)
     teamserieDialogRef.current?.showModal()
@@ -81,10 +63,7 @@ const EditTeamSerie = () => {
               <CardTitle>Ändra Teamserie</CardTitle>
             </div>
             <div className="flex flex-row gap-2">
-              <Button
-                type="submit"
-                form="editTeamSerieForm"
-              >
+              <Button type="submit" form="editTeamSerieForm">
                 Ändra
               </Button>
             </div>
@@ -99,146 +78,81 @@ const EditTeamSerie = () => {
             }}
           >
             <FieldGroup>
-              <form.Field
-                name="teamserie"
-                mode="array"
-              >
+              <form.Field name="teamserie" mode="array">
                 {(field) => {
-                  const isInvalid =
-                    field.state.meta.isTouched &&
-                    !field.state.meta.isValid
+                  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
                   return (
                     <FieldSet className="gap-4">
                       <FieldLegend variant="label">
                         <div className="flex flex-row items-center gap-2">
-                          <span className="w-40 text-sm">
-                            Lag
-                          </span>
-                          <span className="w-40 text-sm">
-                            TeamId
-                          </span>
-                          <div className="w-40 text-sm">
-                            Bonuspoäng
-                          </div>
+                          <span className="w-40 text-sm">Lag</span>
+                          <span className="w-40 text-sm">TeamId</span>
+                          <div className="w-40 text-sm">Bonuspoäng</div>
                         </div>
                       </FieldLegend>
                       <FieldGroup className="gap-4">
-                        {field.state.value.map(
-                          (team, index) => (
-                            <form.Field
-                              key={index}
-                              name={`teamserie[${index}].bonusPoints`}
-                              children={(subField) => {
-                                const currTeamName =
-                                  teamArray.find(
-                                    (t) =>
-                                      t.teamseriesId ===
-                                      team.teamseriesId,
-                                  )?.teamName
-                                const currTeamId =
-                                  teamArray.find(
-                                    (t) =>
-                                      t.teamseriesId ===
-                                      team.teamseriesId,
-                                  )?.teamId
-                                const isSubFieldInvalid =
-                                  subField.state.meta
-                                    .isTouched &&
-                                  !subField.state.meta
-                                    .isValid
-                                return (
-                                  <Field
-                                    orientation="horizontal"
-                                    data-invalid={
-                                      isSubFieldInvalid
-                                    }
-                                  >
-                                    <FieldContent>
-                                      <div className="flex flex-row items-center gap-2">
-                                        <span className="w-40 text-sm">
-                                          {currTeamName}
-                                        </span>
-                                        <span className="w-40 text-sm">
-                                          {currTeamId}
-                                        </span>
-                                        <div className="w-40">
-                                          <InputGroup>
-                                            <InputGroupInput
-                                              id={`form-team-array-bonusPoints-${index}`}
-                                              name={
-                                                subField.name
-                                              }
-                                              value={
-                                                subField
-                                                  .state
-                                                  .value
-                                              }
-                                              onBlur={
-                                                subField.handleBlur
-                                              }
-                                              onChange={(
-                                                e,
-                                              ) =>
-                                                subField.handleChange(
-                                                  zd.coerce
-                                                    .number()
-                                                    .parse(
-                                                      e
-                                                        .target
-                                                        .value,
-                                                    ),
-                                                )
-                                              }
-                                              aria-invalid={
-                                                isSubFieldInvalid
-                                              }
-                                              placeholder="0"
-                                            />
+                        {field.state.value.map((team, index) => (
+                          <form.Field
+                            key={index}
+                            name={`teamserie[${index}].bonusPoints`}
+                            children={(subField) => {
+                              const currTeamName = teamArray.find(
+                                (t) => t.teamseriesId === team.teamseriesId,
+                              )?.teamName
+                              const currTeamId = teamArray.find(
+                                (t) => t.teamseriesId === team.teamseriesId,
+                              )?.teamId
+                              const isSubFieldInvalid =
+                                subField.state.meta.isTouched && !subField.state.meta.isValid
+                              return (
+                                <Field orientation="horizontal" data-invalid={isSubFieldInvalid}>
+                                  <FieldContent>
+                                    <div className="flex flex-row items-center gap-2">
+                                      <span className="w-40 text-sm">{currTeamName}</span>
+                                      <span className="w-40 text-sm">{currTeamId}</span>
+                                      <div className="w-40">
+                                        <InputGroup>
+                                          <InputGroupInput
+                                            id={`form-team-array-bonusPoints-${index}`}
+                                            name={subField.name}
+                                            value={subField.state.value}
+                                            onBlur={subField.handleBlur}
+                                            onChange={(e) =>
+                                              subField.handleChange(
+                                                zd.coerce.number().parse(e.target.value),
+                                              )
+                                            }
+                                            aria-invalid={isSubFieldInvalid}
+                                            placeholder="0"
+                                          />
 
-                                            <InputGroupAddon align="inline-end">
-                                              <InputGroupButton
-                                                type="button"
-                                                variant="ghost"
-                                                onClick={() => {
-                                                  setTeamName(
-                                                    currTeamName ??
-                                                      'Okänt lag',
-                                                  )
-                                                  openDialog(
-                                                    team.teamseriesId,
-                                                  )
-                                                }}
-                                                aria-label={`Ta bort lag ${index + 1}`}
-                                              >
-                                                Ta bort lag
-                                              </InputGroupButton>
-                                            </InputGroupAddon>
-                                          </InputGroup>
-                                          {isSubFieldInvalid && (
-                                            <FieldError
-                                              errors={
-                                                subField
-                                                  .state
-                                                  .meta
-                                                  .errors
-                                              }
-                                            />
-                                          )}
-                                        </div>
+                                          <InputGroupAddon align="inline-end">
+                                            <InputGroupButton
+                                              type="button"
+                                              variant="ghost"
+                                              onClick={() => {
+                                                setTeamName(currTeamName ?? 'Okänt lag')
+                                                openDialog(team.teamseriesId)
+                                              }}
+                                              aria-label={`Ta bort lag ${index + 1}`}
+                                            >
+                                              Ta bort lag
+                                            </InputGroupButton>
+                                          </InputGroupAddon>
+                                        </InputGroup>
+                                        {isSubFieldInvalid && (
+                                          <FieldError errors={subField.state.meta.errors} />
+                                        )}
                                       </div>
-                                    </FieldContent>
-                                  </Field>
-                                )
-                              }}
-                            />
-                          ),
-                        )}
+                                    </div>
+                                  </FieldContent>
+                                </Field>
+                              )
+                            }}
+                          />
+                        ))}
                       </FieldGroup>
-                      {isInvalid && (
-                        <FieldError
-                          errors={field.state.meta.errors}
-                        />
-                      )}
+                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
                     </FieldSet>
                   )
                 }}

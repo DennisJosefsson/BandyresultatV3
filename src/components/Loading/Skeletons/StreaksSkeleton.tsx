@@ -10,16 +10,9 @@ const StreaksSkeleton = () => {
               <Skeleton className="h-8 w-32" />
             </div>
             <div>
-              {Array.from({ length: 10 }).map(
-                (_i, index) => {
-                  return (
-                    <Skeleton
-                      key={index}
-                      className="mb-1 h-12 w-full"
-                    />
-                  )
-                },
-              )}
+              {Array.from({ length: 10 }).map((_i, index) => {
+                return <Skeleton key={index} className="mb-1 h-12 w-full" />
+              })}
             </div>
           </div>
           <div>
@@ -27,16 +20,9 @@ const StreaksSkeleton = () => {
               <Skeleton className="h-8 w-32" />
             </div>
             <div>
-              {Array.from({ length: 10 }).map(
-                (_i, index) => {
-                  return (
-                    <Skeleton
-                      key={index}
-                      className="mb-1 h-12 w-full"
-                    />
-                  )
-                },
-              )}
+              {Array.from({ length: 10 }).map((_i, index) => {
+                return <Skeleton key={index} className="mb-1 h-12 w-full" />
+              })}
             </div>
           </div>
           <div>
@@ -44,16 +30,9 @@ const StreaksSkeleton = () => {
               <Skeleton className="h-8 w-32" />
             </div>
             <div>
-              {Array.from({ length: 10 }).map(
-                (_i, index) => {
-                  return (
-                    <Skeleton
-                      key={index}
-                      className="mb-1 h-12 w-full"
-                    />
-                  )
-                },
-              )}
+              {Array.from({ length: 10 }).map((_i, index) => {
+                return <Skeleton key={index} className="mb-1 h-12 w-full" />
+              })}
             </div>
           </div>
         </div>

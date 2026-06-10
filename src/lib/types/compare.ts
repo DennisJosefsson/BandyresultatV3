@@ -61,5 +61,4 @@ export type CompareLatestWinStats = {
   homeName: string | null
   awayName: string | null
   date: string
-
 }

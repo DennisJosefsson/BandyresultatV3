@@ -1,5 +1,4 @@
 import { Link, useSearch } from '@tanstack/react-router'
-
 import {
   SidebarMenuSub,
   SidebarMenuSubButton,

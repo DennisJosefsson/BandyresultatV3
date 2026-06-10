@@ -1,21 +1,11 @@
-import {
-  revalidateLogic,
-  useForm,
-} from '@tanstack/react-form'
-import { useMutation } from '@tanstack/react-query'
-import {
-  getRouteApi,
-  useRouter,
-} from '@tanstack/react-router'
 import { toast } from 'sonner'
-
+import { getRouteApi, useRouter } from '@tanstack/react-router'
+import { useMutation } from '@tanstack/react-query'
+import { revalidateLogic, useForm } from '@tanstack/react-form'
 import { newStaticTableArray } from '@/lib/types/table'
-
 import { addStaticTable } from '../-functions/SerieFunctions/addStaticTable'
 
-const route = getRouteApi(
-  '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/addTable',
-)
+const route = getRouteApi('/_layout/dashboard/season/$seasonId/info_/$serieId/edit/addTable')
 
 type Data = Awaited<ReturnType<typeof addStaticTable>>
 
@@ -40,8 +30,7 @@ export const addStaticTableForm = () => {
     defaultValues: {
       tableArray: values,
     },
-    onSubmit: ({ value }) =>
-      mutation.mutateAsync({ data: value }),
+    onSubmit: ({ value }) => mutation.mutateAsync({ data: value }),
   })
 
   const onMutationSuccess = (data: Data) => {
@@ -51,9 +40,7 @@ export const addStaticTableForm = () => {
       toast.success(data.message)
     }
     router.invalidate({
-      filter: (r) =>
-        r.routeId ===
-        '/_layout/dashboard/season/$seasonId/info_/$serieId/edit',
+      filter: (r) => r.routeId === '/_layout/dashboard/season/$seasonId/info_/$serieId/edit',
     })
     navigate({
       to: '/dashboard/season/$seasonId/info/$serieId/edit',

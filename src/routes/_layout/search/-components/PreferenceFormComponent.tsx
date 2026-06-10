@@ -1,10 +1,6 @@
-import {
-  gameResultArray,
-  homeGameArray,
-  selectedGenderArray,
-} from './arrays/arrays'
-import CategoryArray from './CategoryArray'
 import RadioComponent from './RadioComponent'
+import CategoryArray from './CategoryArray'
+import { gameResultArray, homeGameArray, selectedGenderArray } from './arrays/arrays'
 
 const PreferenceFormComponent = () => {
   return (

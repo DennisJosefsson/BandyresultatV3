@@ -1,8 +1,5 @@
-import {
-  auth,
-  clerkClient,
-} from '@clerk/tanstack-react-start/server'
 import { createMiddleware } from '@tanstack/react-start'
+import { auth, clerkClient } from '@clerk/tanstack-react-start/server'
 import UnauthorizedError from '../errors/UnauthorizedError'
 
 export const authMiddleware = createMiddleware({

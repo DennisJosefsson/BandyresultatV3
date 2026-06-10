@@ -1,9 +1,7 @@
 import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
-
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
-
-import Conceded from '../-components/Records/PointsGoalsEtc/Conceded'
 import { getConcededRecords } from '../-functions/getConcededRecords'
+import Conceded from '../-components/Records/PointsGoalsEtc/Conceded'
 
 export const Route = createFileRoute('/_layout/maraton/records/conceded')({
   loaderDeps: ({ search: { women } }) => ({ women }),

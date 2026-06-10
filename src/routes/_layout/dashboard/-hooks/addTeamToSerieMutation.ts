@@ -1,7 +1,6 @@
-import { useMutation } from '@tanstack/react-query'
-import { useRouter } from '@tanstack/react-router'
 import { toast } from 'sonner'
-
+import { useRouter } from '@tanstack/react-router'
+import { useMutation } from '@tanstack/react-query'
 import { addTeamToSerie } from '../-functions/SerieFunctions/addTeamToSerie'
 
 type Data = { status: 200; message: string } | undefined
@@ -23,8 +22,7 @@ export const addTeamToSerieMutation = () => {
     }
     router.invalidate({
       filter: (route) =>
-        route.routeId ===
-        '/_layout/dashboard/season/$seasonId/info_/$serieId/edit',
+        route.routeId === '/_layout/dashboard/season/$seasonId/info_/$serieId/edit',
     })
   }
 

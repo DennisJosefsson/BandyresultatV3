@@ -1,6 +1,6 @@
-import Date from '@/components/Common/Date'
+import { Fragment } from 'react/jsx-runtime'
 import type { GroupGames } from '@/lib/types/game'
-
+import Date from '@/components/Common/Date'
 import {
   Table,
   TableBody,
@@ -10,7 +10,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/base/ui/table'
-import { Fragment } from 'react/jsx-runtime'
 import GamesListItem from './GamesListItem'
 
 type GameListProps = {
@@ -19,25 +18,18 @@ type GameListProps = {
   hasGames: boolean
 }
 
-const GamesList = ({
-  gamesArray,
-  tab,
-  hasGames,
-}: GameListProps) => {
+const GamesList = ({ gamesArray, tab, hasGames }: GameListProps) => {
   if (!hasGames) {
     return (
       <div className="mt-2 flex flex-row justify-center font-semibold">
-        Inga inlagda matcher denna säsong, men tabell ska
-        finnas.
+        Inga inlagda matcher denna säsong, men tabell ska finnas.
       </div>
     )
   }
   if (gamesArray.length === 0) {
     return (
       <div className="mt-2 flex flex-row justify-center font-semibold">
-        {tab === 'upcoming'
-          ? 'Inga ospelade matcher.'
-          : 'Inga spelade matcher än.'}
+        {tab === 'upcoming' ? 'Inga ospelade matcher.' : 'Inga spelade matcher än.'}
       </div>
     )
   }
@@ -46,10 +38,7 @@ const GamesList = ({
       <div>
         {gamesArray.map((group) => {
           return (
-            <div
-              key={group.group}
-              className="mb-6 w-full"
-            >
+            <div key={group.group} className="mb-6 w-full">
               <div
                 id={group.group}
                 className="group mb-0.5 flex flex-row items-center gap-1 lg:mb-1 2xl:mb-2"
@@ -58,28 +47,24 @@ const GamesList = ({
                   {group.name}
                 </h3>
               </div>
-              <Table className="w-full xl:w-4/5 2xl:w-2/3 table-fixed">
-                {group.comment && (
-                  <TableCaption>
-                    {group.comment}
-                  </TableCaption>
-                )}
+              <Table className="w-full table-fixed xl:w-4/5 2xl:w-2/3">
+                {group.comment && <TableCaption>{group.comment}</TableCaption>}
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="text-[8px] sm:text-sm lg:text-base px-0 h-8 w-12 xs:w-18">
+                    <TableHead className="xs:w-18 h-8 w-12 px-0 text-[8px] sm:text-sm lg:text-base">
                       Hemma
                     </TableHead>
-                    <TableHead className="text-[8px] sm:text-sm lg:text-base px-0 h-8 w-4"></TableHead>
-                    <TableHead className="text-[8px] sm:text-sm lg:text-base px-0 h-8 w-12 xs:w-18">
+                    <TableHead className="h-8 w-4 px-0 text-[8px] sm:text-sm lg:text-base"></TableHead>
+                    <TableHead className="xs:w-18 h-8 w-12 px-0 text-[8px] sm:text-sm lg:text-base">
                       Borta
                     </TableHead>
-                    <TableHead className="text-[8px] sm:text-sm lg:text-base px-0 h-8 w-12 xs:w-18">
+                    <TableHead className="xs:w-18 h-8 w-12 px-0 text-[8px] sm:text-sm lg:text-base">
                       Resultat
                     </TableHead>
-                    <TableHead className="text-[8px] sm:text-sm lg:text-base px-0 h-8 w-12">
+                    <TableHead className="h-8 w-12 px-0 text-[8px] sm:text-sm lg:text-base">
                       Halvtid
                     </TableHead>
-                    <TableHead className="text-[8px] sm:text-sm lg:text-base px-0 h-8 w-12 text-center">
+                    <TableHead className="h-8 w-12 px-0 text-center text-[8px] sm:text-sm lg:text-base">
                       Avgörande
                     </TableHead>
                   </TableRow>
@@ -92,19 +77,14 @@ const GamesList = ({
                           <TableRow>
                             <TableCell
                               colSpan={6}
-                              className="p-0 py-1 text-[8px] sm:text-sm lg:text-base w-24"
+                              className="w-24 p-0 py-1 text-[8px] sm:text-sm lg:text-base"
                             >
                               <Date>{date.date}</Date>
                             </TableCell>
                           </TableRow>
                         )}
                         {date.games.map((game) => {
-                          return (
-                            <GamesListItem
-                              key={game.gameId}
-                              game={game}
-                            />
-                          )
+                          return <GamesListItem key={game.gameId} game={game} />
                         })}
                       </Fragment>
                     )

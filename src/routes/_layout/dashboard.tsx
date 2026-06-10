@@ -1,21 +1,9 @@
-import {
-  CatchBoundary,
-  Link,
-  Outlet,
-  createFileRoute,
-  useLocation,
-} from '@tanstack/react-router'
-
-import {
-  Tabs,
-  TabsList,
-  TabsTrigger,
-} from '@/components/base/ui/tabs'
+import { CatchBoundary, Link, Outlet, createFileRoute, useLocation } from '@tanstack/react-router'
 import { cn } from '@/lib/utils/utils'
-
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
-import { authStateFn } from './dashboard/-functions/authStateFn'
+import { Tabs, TabsList, TabsTrigger } from '@/components/base/ui/tabs'
 import { getDashboardData } from './dashboard/-functions/getDashboardData'
+import { authStateFn } from './dashboard/-functions/authStateFn'
 
 export const Route = createFileRoute('/_layout/dashboard')({
   beforeLoad: async () => {
@@ -27,8 +15,7 @@ export const Route = createFileRoute('/_layout/dashboard')({
         search: (prev) => ({ women: prev.women ?? false }),
         statusCode: 401,
         state: {
-          redirectCause:
-            'Du måste vara inloggad för att se denna sida.',
+          redirectCause: 'Du måste vara inloggad för att se denna sida.',
         },
       })
     }
@@ -48,14 +35,10 @@ export const Route = createFileRoute('/_layout/dashboard')({
 function RouteComponent() {
   const data = Route.useLoaderData()
   const womenSeason = Route.useLoaderData({
-    select: (s) =>
-      s.lastSeasons.find((season) => season.women === true),
+    select: (s) => s.lastSeasons.find((season) => season.women === true),
   })
   const menSeason = Route.useLoaderData({
-    select: (s) =>
-      s.lastSeasons.find(
-        (season) => season.women === false,
-      ),
+    select: (s) => s.lastSeasons.find((season) => season.women === false),
   })
 
   const pathname = useLocation().pathname
@@ -129,10 +112,7 @@ function RouteComponent() {
                         <span
                           className={cn(
                             '',
-                            isActive &&
-                              pathname.endsWith(
-                                womenSeason.seasonId.toString(),
-                              )
+                            isActive && pathname.endsWith(womenSeason.seasonId.toString())
                               ? 'font-semibold'
                               : undefined,
                           )}
@@ -165,10 +145,7 @@ function RouteComponent() {
                         <span
                           className={cn(
                             'font-normal',
-                            isActive &&
-                              pathname.endsWith(
-                                menSeason.seasonId.toString(),
-                              )
+                            isActive && pathname.endsWith(menSeason.seasonId.toString())
                               ? 'font-semibold'
                               : undefined,
                           )}
@@ -201,8 +178,7 @@ function RouteComponent() {
                     exact: true,
                   }}
                 >
-                  Tidigare matcher{' '}
-                  {`[${data.earlierUnplayedGamesCount}]`}
+                  Tidigare matcher {`[${data.earlierUnplayedGamesCount}]`}
                 </Link>
               }
             />
@@ -226,8 +202,7 @@ function RouteComponent() {
                     exact: true,
                   }}
                 >
-                  Dagens matcher{' '}
-                  {`[${data.todaysUnplayedGamesCount}]`}
+                  Dagens matcher {`[${data.todaysUnplayedGamesCount}]`}
                 </Link>
               }
             />
@@ -286,11 +261,7 @@ function RouteComponent() {
           console.error(error)
         }}
         errorComponent={({ error, reset }) => (
-          <SimpleErrorComponent
-            id="layout"
-            error={error}
-            reset={reset}
-          />
+          <SimpleErrorComponent id="layout" error={error} reset={reset} />
         )}
       >
         <div className="m-2">

@@ -1,10 +1,7 @@
-import { FieldError } from '@/components/base/ui/field'
-import { cn } from '@/lib/utils/utils'
+import type { DetailedHTMLProps, InputHTMLAttributes } from 'react'
 import { CircleXIcon } from 'lucide-react'
-import type {
-  DetailedHTMLProps,
-  InputHTMLAttributes,
-} from 'react'
+import { cn } from '@/lib/utils/utils'
+import { FieldError } from '@/components/base/ui/field'
 import {
   InputGroup,
   InputGroupAddon,
@@ -21,10 +18,7 @@ type ErrorField =
   | { hasErrorField: false | undefined }
 
 interface CustomNumberInputProps extends Omit<
-  DetailedHTMLProps<
-    InputHTMLAttributes<HTMLInputElement>,
-    HTMLInputElement
-  >,
+  DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>,
   'type'
 > {
   decrementer: () => void
@@ -52,37 +46,23 @@ const CustomNumberInput = ({
         )}
       />
       <InputGroupAddon align="inline-end">
-        <InputGroupButton
-          type="button"
-          variant="ghost"
-          onClick={() => decrementer()}
-        >
+        <InputGroupButton type="button" variant="ghost" onClick={() => decrementer()}>
           -
         </InputGroupButton>
       </InputGroupAddon>
       <InputGroupAddon align="inline-end">
-        <InputGroupButton
-          type="button"
-          variant="ghost"
-          onClick={() => incrementer()}
-        >
+        <InputGroupButton type="button" variant="ghost" onClick={() => incrementer()}>
           +
         </InputGroupButton>
       </InputGroupAddon>
       {resetter ? (
         <InputGroupAddon align="inline-end">
-          <InputGroupButton
-            type="button"
-            variant="ghost"
-            onClick={() => resetter()}
-          >
+          <InputGroupButton type="button" variant="ghost" onClick={() => resetter()}>
             <CircleXIcon className="size-3" />
           </InputGroupButton>
         </InputGroupAddon>
       ) : null}
-      {error?.hasErrorField && error.errorBoolean && (
-        <FieldError errors={error.errors} />
-      )}
+      {error?.hasErrorField && error.errorBoolean && <FieldError errors={error.errors} />}
     </InputGroup>
   )
 }

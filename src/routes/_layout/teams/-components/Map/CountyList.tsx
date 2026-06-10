@@ -1,12 +1,8 @@
+import type { Dispatch, RefObject, SetStateAction } from 'react'
+import type { LngLatLike } from 'maplibre-gl'
+import type { MapRef } from '@/components/base/ui/map'
 import type { CheckedState } from '@/components/base/ui/checkbox'
 import { Checkbox } from '@/components/base/ui/checkbox'
-import type { MapRef } from '@/components/base/ui/map'
-import type { LngLatLike } from 'maplibre-gl'
-import type {
-  Dispatch,
-  RefObject,
-  SetStateAction,
-} from 'react'
 
 type County = {
   county: string
@@ -24,25 +20,13 @@ type CountyListProp = {
   mapRef: RefObject<MapRef | null>
 }
 
-const CountyList = ({
-  countyArray,
-  counties,
-  setCounties,
-  mapRef,
-}: CountyListProp) => {
+const CountyList = ({ countyArray, counties, setCounties, mapRef }: CountyListProp) => {
   if (!mapRef) return null
-  const onCheckedChange = (
-    checked: CheckedState,
-    county: County,
-  ) => {
+  const onCheckedChange = (checked: CheckedState, county: County) => {
     if (checked) {
       setCounties((prev) => [...prev, county])
     } else {
-      setCounties((prev) =>
-        prev.filter(
-          (name) => name.county !== county.county,
-        ),
-      )
+      setCounties((prev) => prev.filter((name) => name.county !== county.county))
     }
   }
 
@@ -59,24 +43,19 @@ const CountyList = ({
   }
 
   const isChecked = (county: string) => {
-    const countyObject = counties.find(
-      (item) => item.county === county,
-    )
+    const countyObject = counties.find((item) => item.county === county)
 
     if (!countyObject) return false
     return true
   }
 
-  const onClick = (
-    center: LngLatLike,
-    zoom: number = 7.5,
-  ) => {
+  const onClick = (center: LngLatLike, zoom: number = 7.5) => {
     mapRef.current?.easeTo({ center, zoom })
   }
 
   return (
-    <div className="grid grid-cols-2 gap-4 w-full sm:w-80">
-      <div className="text-primary mb-2 flex flex-row items-center justify-between text-[10px] md:text-sm ">
+    <div className="grid w-full grid-cols-2 gap-4 sm:w-80">
+      <div className="text-primary mb-2 flex flex-row items-center justify-between text-[10px] md:text-sm">
         <span
           className="cursor-pointer truncate"
           onClick={() => onClick([15, 62] as LngLatLike, 4)}
@@ -93,20 +72,15 @@ const CountyList = ({
         return (
           <div
             key={county.county}
-            className="text-primary mb-2 flex flex-row items-center justify-between text-[10px] md:text-sm "
+            className="text-primary mb-2 flex flex-row items-center justify-between text-[10px] md:text-sm"
           >
-            <span
-              className="cursor-pointer truncate"
-              onClick={() => onClick(county.center)}
-            >
+            <span className="cursor-pointer truncate" onClick={() => onClick(county.center)}>
               {county.county}
             </span>
             <Checkbox
               name={county.county}
               checked={isChecked(county.county)}
-              onCheckedChange={(checked) =>
-                onCheckedChange(checked, county)
-              }
+              onCheckedChange={(checked) => onCheckedChange(checked, county)}
             />
           </div>
         )

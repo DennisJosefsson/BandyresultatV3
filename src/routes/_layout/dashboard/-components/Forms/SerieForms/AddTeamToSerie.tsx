@@ -1,20 +1,11 @@
-import { getRouteApi } from '@tanstack/react-router'
 import { useState } from 'react'
-
-import { Button } from '@/components/base/ui/button'
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/base/ui/card'
+import { getRouteApi } from '@tanstack/react-router'
 import { Input } from '@/components/base/ui/input'
-
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/base/ui/card'
+import { Button } from '@/components/base/ui/button'
 import { addTeamToSerieMutation } from '../../../-hooks/addTeamToSerieMutation'
 
-const route = getRouteApi(
-  '/_layout/dashboard/season/$seasonId/info_/$serieId/edit',
-)
+const route = getRouteApi('/_layout/dashboard/season/$seasonId/info_/$serieId/edit')
 
 const AddTeamToSerie = () => {
   const serieId = route.useParams({
@@ -46,9 +37,7 @@ const AddTeamToSerie = () => {
               placeholder="Filter"
               value={teamFilter}
               name="teamFilter"
-              onChange={(event) =>
-                setTeamFilter(event.target.value)
-              }
+              onChange={(event) => setTeamFilter(event.target.value)}
             />
           </div>
         </div>
@@ -56,20 +45,14 @@ const AddTeamToSerie = () => {
 
       <CardContent className="grid grid-cols-3 gap-8 place-self-start px-10">
         {teams
-          .filter((team) =>
-            team.team.casualName.includes(teamFilter),
-          )
-          .filter(
-            (team) => !teamInSerie.includes(team.teamId),
-          )
+          .filter((team) => team.team.casualName.includes(teamFilter))
+          .filter((team) => !teamInSerie.includes(team.teamId))
           .map((team) => {
             return (
               <Button
                 key={team.teamId.toString()}
                 size="sm"
-                onClick={() =>
-                  onClickTeamButton(team.teamId)
-                }
+                onClick={() => onClickTeamButton(team.teamId)}
               >
                 {team.team.casualName}
               </Button>

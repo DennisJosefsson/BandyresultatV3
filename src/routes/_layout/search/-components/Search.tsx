@@ -1,20 +1,15 @@
 import { useRef } from 'react'
-import { useSearchResults } from '../-hooks/useSearchResults'
-import SearchButtons from './SearchButtons'
-import SearchError from './SearchError'
-import SearchForms from './SearchForms'
-import SearchContent from './SearchResultContent'
 import SearchTeamComponent from './SearchTeamComponent'
+import SearchContent from './SearchResultContent'
+import SearchForms from './SearchForms'
+import SearchError from './SearchError'
+import SearchButtons from './SearchButtons'
+import { useSearchResults } from '../-hooks/useSearchResults'
 
 const Search = () => {
   const searchResultDivRef = useRef<HTMLDivElement>(null)
-  const {
-    error,
-    searchResult,
-    sendSearchRequest,
-    reset,
-    isSearchResultSuccess,
-  } = useSearchResults()
+  const { error, searchResult, sendSearchRequest, reset, isSearchResultSuccess } =
+    useSearchResults()
 
   const handleOnClick = () => {
     sendSearchRequest()
@@ -27,9 +22,7 @@ const Search = () => {
     <div className="mx-1 mt-2 xl:mx-0">
       <div className="flex flex-col">
         <div className="flex flex-row justify-end">
-          <SearchButtons
-            sendSearchRequest={handleOnClick}
-          />
+          <SearchButtons sendSearchRequest={handleOnClick} />
         </div>
         <div className="ml-2 flex w-full flex-col">
           <SearchTeamComponent />
@@ -38,18 +31,10 @@ const Search = () => {
         <div>
           {searchResult === undefined ? null : (
             <div>
-              {error ? (
-                <SearchError
-                  reset={reset}
-                  searchResult={searchResult}
-                />
-              ) : null}
-              {isSearchResultSuccess &&
-              searchResult.status === 200 ? (
+              {error ? <SearchError reset={reset} searchResult={searchResult} /> : null}
+              {isSearchResultSuccess && searchResult.status === 200 ? (
                 <div ref={searchResultDivRef}>
-                  <SearchContent
-                    gameArray={searchResult.searchResult}
-                  />
+                  <SearchContent gameArray={searchResult.searchResult} />
                 </div>
               ) : null}
             </div>

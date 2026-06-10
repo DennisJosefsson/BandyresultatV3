@@ -1,7 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
-
-import AddStaticTableForm from '@/routes/_layout/dashboard/-components/Forms/TableForms/AddStaticTableForm'
 import { getSeriesTableData } from '@/routes/_layout/dashboard/-functions/SerieFunctions/getSeriesTableData'
+import AddStaticTableForm from '@/routes/_layout/dashboard/-components/Forms/TableForms/AddStaticTableForm'
 
 export const Route = createFileRoute(
   '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/addTable',
@@ -22,10 +21,8 @@ function RouteComponent() {
 
   if (data.status === 400) {
     return (
-      <div className="flex flex-row justify-center mt-4">
-        <span className="text-sm font-semibold">
-          {data.message}
-        </span>
+      <div className="mt-4 flex flex-row justify-center">
+        <span className="text-sm font-semibold">{data.message}</span>
       </div>
     )
   }

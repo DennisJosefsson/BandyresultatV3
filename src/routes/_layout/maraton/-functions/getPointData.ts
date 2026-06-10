@@ -1,33 +1,13 @@
-import { db } from '@/db'
-import {
-  seasons,
-  series,
-  teamgames,
-  teams,
-} from '@/db/schema'
-import type { TeamBase } from '@/lib/types/team'
 import type { SQL } from 'drizzle-orm'
-import {
-  and,
-  asc,
-  count,
-  desc,
-  eq,
-  gt,
-  gte,
-  sql,
-} from 'drizzle-orm'
+import { and, asc, count, desc, eq, gt, gte, sql } from 'drizzle-orm'
+import type { TeamBase } from '@/lib/types/team'
+import { seasons, series, teamgames, teams } from '@/db/schema'
+import { db } from '@/db'
 
-export async function getPointData({
-  women,
-}: {
-  women: boolean
-}) {
+export async function getPointData({ women }: { women: boolean }) {
   const averagePointsMax = await db
     .select({
-      data: sql`round(avg(teamgames.points),2)`
-        .mapWith(Number)
-        .as('data'),
+      data: sql`round(avg(teamgames.points),2)`.mapWith(Number).as('data'),
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
@@ -39,10 +19,7 @@ export async function getPointData({
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
-    .leftJoin(
-      seasons,
-      eq(teamgames.seasonId, seasons.seasonId),
-    )
+    .leftJoin(seasons, eq(teamgames.seasonId, seasons.seasonId))
     .where(
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
@@ -54,13 +31,7 @@ export async function getPointData({
     )
     .groupBy(teams.teamId, seasons.year)
     .having(gte(count(teamgames.teamGameId), 10))
-    .orderBy(
-      desc(
-        sql`round(avg(teamgames.points),2)`
-          .mapWith(Number)
-          .as('data'),
-      ),
-    )
+    .orderBy(desc(sql`round(avg(teamgames.points),2)`.mapWith(Number).as('data')))
     .limit(10)
     .then((res) => {
       const filteredResult = res.map((item, index) => {
@@ -70,11 +41,8 @@ export async function getPointData({
         return {
           ...item,
           position:
-            index !== 0 &&
-            filteredResult[index - 1].data === item.data
-              ? filteredResult.find(
-                  (r) => r.data === item.data,
-                )?.position
+            index !== 0 && filteredResult[index - 1].data === item.data
+              ? filteredResult.find((r) => r.data === item.data)?.position
               : item.position,
         }
       })
@@ -82,9 +50,7 @@ export async function getPointData({
 
   const averagePointsMaxHome = await db
     .select({
-      data: sql`round(avg(teamgames.points),2)`
-        .mapWith(Number)
-        .as('data'),
+      data: sql`round(avg(teamgames.points),2)`.mapWith(Number).as('data'),
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
@@ -96,10 +62,7 @@ export async function getPointData({
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
-    .leftJoin(
-      seasons,
-      eq(teamgames.seasonId, seasons.seasonId),
-    )
+    .leftJoin(seasons, eq(teamgames.seasonId, seasons.seasonId))
     .where(
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
@@ -112,13 +75,7 @@ export async function getPointData({
     )
     .groupBy(teams.teamId, seasons.year)
     .having(gte(count(teamgames.teamGameId), 5))
-    .orderBy(
-      desc(
-        sql`round(avg(teamgames.points),2)`
-          .mapWith(Number)
-          .as('data'),
-      ),
-    )
+    .orderBy(desc(sql`round(avg(teamgames.points),2)`.mapWith(Number).as('data')))
     .limit(10)
     .then((res) => {
       const filteredResult = res.map((item, index) => {
@@ -128,11 +85,8 @@ export async function getPointData({
         return {
           ...item,
           position:
-            index !== 0 &&
-            filteredResult[index - 1].data === item.data
-              ? filteredResult.find(
-                  (r) => r.data === item.data,
-                )?.position
+            index !== 0 && filteredResult[index - 1].data === item.data
+              ? filteredResult.find((r) => r.data === item.data)?.position
               : item.position,
         }
       })
@@ -140,9 +94,7 @@ export async function getPointData({
 
   const averagePointsMaxAway = await db
     .select({
-      data: sql`round(avg(teamgames.points),2)`
-        .mapWith(Number)
-        .as('data'),
+      data: sql`round(avg(teamgames.points),2)`.mapWith(Number).as('data'),
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
@@ -154,10 +106,7 @@ export async function getPointData({
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
-    .leftJoin(
-      seasons,
-      eq(teamgames.seasonId, seasons.seasonId),
-    )
+    .leftJoin(seasons, eq(teamgames.seasonId, seasons.seasonId))
     .where(
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
@@ -170,13 +119,7 @@ export async function getPointData({
     )
     .groupBy(teams.teamId, seasons.year)
     .having(gte(count(teamgames.teamGameId), 5))
-    .orderBy(
-      desc(
-        sql`round(avg(teamgames.points),2)`
-          .mapWith(Number)
-          .as('data'),
-      ),
-    )
+    .orderBy(desc(sql`round(avg(teamgames.points),2)`.mapWith(Number).as('data')))
     .limit(10)
     .then((res) => {
       const filteredResult = res.map((item, index) => {
@@ -186,11 +129,8 @@ export async function getPointData({
         return {
           ...item,
           position:
-            index !== 0 &&
-            filteredResult[index - 1].data === item.data
-              ? filteredResult.find(
-                  (r) => r.data === item.data,
-                )?.position
+            index !== 0 && filteredResult[index - 1].data === item.data
+              ? filteredResult.find((r) => r.data === item.data)?.position
               : item.position,
         }
       })
@@ -198,9 +138,7 @@ export async function getPointData({
 
   const averagePointsMin = await db
     .select({
-      data: sql`round(avg(teamgames.points),2)`
-        .mapWith(Number)
-        .as('data'),
+      data: sql`round(avg(teamgames.points),2)`.mapWith(Number).as('data'),
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
@@ -212,10 +150,7 @@ export async function getPointData({
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
-    .leftJoin(
-      seasons,
-      eq(teamgames.seasonId, seasons.seasonId),
-    )
+    .leftJoin(seasons, eq(teamgames.seasonId, seasons.seasonId))
     .where(
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
@@ -227,13 +162,7 @@ export async function getPointData({
     )
     .groupBy(teams.teamId, seasons.year)
     .having(gte(count(teamgames.teamGameId), 10))
-    .orderBy(
-      asc(
-        sql`round(avg(teamgames.points),2)`
-          .mapWith(Number)
-          .as('data'),
-      ),
-    )
+    .orderBy(asc(sql`round(avg(teamgames.points),2)`.mapWith(Number).as('data')))
     .limit(10)
     .then((res) => {
       const filteredResult = res.map((item, index) => {
@@ -243,11 +172,8 @@ export async function getPointData({
         return {
           ...item,
           position:
-            index !== 0 &&
-            filteredResult[index - 1].data === item.data
-              ? filteredResult.find(
-                  (r) => r.data === item.data,
-                )?.position
+            index !== 0 && filteredResult[index - 1].data === item.data
+              ? filteredResult.find((r) => r.data === item.data)?.position
               : item.position,
         }
       })
@@ -255,9 +181,7 @@ export async function getPointData({
 
   const averagePointsMinHome = await db
     .select({
-      data: sql`round(avg(teamgames.points),2)`
-        .mapWith(Number)
-        .as('data'),
+      data: sql`round(avg(teamgames.points),2)`.mapWith(Number).as('data'),
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
@@ -269,10 +193,7 @@ export async function getPointData({
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
-    .leftJoin(
-      seasons,
-      eq(teamgames.seasonId, seasons.seasonId),
-    )
+    .leftJoin(seasons, eq(teamgames.seasonId, seasons.seasonId))
     .where(
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
@@ -285,13 +206,7 @@ export async function getPointData({
     )
     .groupBy(teams.teamId, seasons.year)
     .having(gte(count(teamgames.teamGameId), 5))
-    .orderBy(
-      asc(
-        sql`round(avg(teamgames.points),2)`
-          .mapWith(Number)
-          .as('data'),
-      ),
-    )
+    .orderBy(asc(sql`round(avg(teamgames.points),2)`.mapWith(Number).as('data')))
     .limit(10)
     .then((res) => {
       const filteredResult = res.map((item, index) => {
@@ -301,11 +216,8 @@ export async function getPointData({
         return {
           ...item,
           position:
-            index !== 0 &&
-            filteredResult[index - 1].data === item.data
-              ? filteredResult.find(
-                  (r) => r.data === item.data,
-                )?.position
+            index !== 0 && filteredResult[index - 1].data === item.data
+              ? filteredResult.find((r) => r.data === item.data)?.position
               : item.position,
         }
       })
@@ -313,9 +225,7 @@ export async function getPointData({
 
   const averagePointsMinAway = await db
     .select({
-      data: sql`round(avg(teamgames.points),2)`
-        .mapWith(Number)
-        .as('data'),
+      data: sql`round(avg(teamgames.points),2)`.mapWith(Number).as('data'),
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
@@ -327,10 +237,7 @@ export async function getPointData({
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
-    .leftJoin(
-      seasons,
-      eq(teamgames.seasonId, seasons.seasonId),
-    )
+    .leftJoin(seasons, eq(teamgames.seasonId, seasons.seasonId))
     .where(
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
@@ -343,13 +250,7 @@ export async function getPointData({
     )
     .groupBy(teams.teamId, seasons.year)
     .having(gte(count(teamgames.teamGameId), 5))
-    .orderBy(
-      asc(
-        sql`round(avg(teamgames.points),2)`
-          .mapWith(Number)
-          .as('data'),
-      ),
-    )
+    .orderBy(asc(sql`round(avg(teamgames.points),2)`.mapWith(Number).as('data')))
     .limit(10)
     .then((res) => {
       const filteredResult = res.map((item, index) => {
@@ -359,11 +260,8 @@ export async function getPointData({
         return {
           ...item,
           position:
-            index !== 0 &&
-            filteredResult[index - 1].data === item.data
-              ? filteredResult.find(
-                  (r) => r.data === item.data,
-                )?.position
+            index !== 0 && filteredResult[index - 1].data === item.data
+              ? filteredResult.find((r) => r.data === item.data)?.position
               : item.position,
         }
       })
@@ -371,9 +269,7 @@ export async function getPointData({
 
   const sumPointsMax = await db
     .select({
-      data: sql`sum(teamgames.points)`
-        .mapWith(Number)
-        .as('data'),
+      data: sql`sum(teamgames.points)`.mapWith(Number).as('data'),
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
@@ -385,10 +281,7 @@ export async function getPointData({
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
-    .leftJoin(
-      seasons,
-      eq(teamgames.seasonId, seasons.seasonId),
-    )
+    .leftJoin(seasons, eq(teamgames.seasonId, seasons.seasonId))
     .where(
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
@@ -400,13 +293,7 @@ export async function getPointData({
     )
     .groupBy(teams.teamId, seasons.year)
     .having(gte(count(teamgames.teamGameId), 10))
-    .orderBy(
-      desc(
-        sql`sum(teamgames.points)`
-          .mapWith(Number)
-          .as('data'),
-      ),
-    )
+    .orderBy(desc(sql`sum(teamgames.points)`.mapWith(Number).as('data')))
     .limit(10)
     .then((res) => {
       const filteredResult = res.map((item, index) => {
@@ -416,11 +303,8 @@ export async function getPointData({
         return {
           ...item,
           position:
-            index !== 0 &&
-            filteredResult[index - 1].data === item.data
-              ? filteredResult.find(
-                  (r) => r.data === item.data,
-                )?.position
+            index !== 0 && filteredResult[index - 1].data === item.data
+              ? filteredResult.find((r) => r.data === item.data)?.position
               : item.position,
         }
       })
@@ -428,9 +312,7 @@ export async function getPointData({
 
   const sumPointsMaxHome = await db
     .select({
-      data: sql`sum(teamgames.points)`
-        .mapWith(Number)
-        .as('data'),
+      data: sql`sum(teamgames.points)`.mapWith(Number).as('data'),
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
@@ -442,10 +324,7 @@ export async function getPointData({
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
-    .leftJoin(
-      seasons,
-      eq(teamgames.seasonId, seasons.seasonId),
-    )
+    .leftJoin(seasons, eq(teamgames.seasonId, seasons.seasonId))
     .where(
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
@@ -458,13 +337,7 @@ export async function getPointData({
     )
     .groupBy(teams.teamId, seasons.year)
     .having(gte(count(teamgames.teamGameId), 5))
-    .orderBy(
-      desc(
-        sql`sum(teamgames.points)`
-          .mapWith(Number)
-          .as('data'),
-      ),
-    )
+    .orderBy(desc(sql`sum(teamgames.points)`.mapWith(Number).as('data')))
     .limit(10)
     .then((res) => {
       const filteredResult = res.map((item, index) => {
@@ -474,11 +347,8 @@ export async function getPointData({
         return {
           ...item,
           position:
-            index !== 0 &&
-            filteredResult[index - 1].data === item.data
-              ? filteredResult.find(
-                  (r) => r.data === item.data,
-                )?.position
+            index !== 0 && filteredResult[index - 1].data === item.data
+              ? filteredResult.find((r) => r.data === item.data)?.position
               : item.position,
         }
       })
@@ -486,9 +356,7 @@ export async function getPointData({
 
   const sumPointsMaxAway = await db
     .select({
-      data: sql`sum(teamgames.points)`
-        .mapWith(Number)
-        .as('data'),
+      data: sql`sum(teamgames.points)`.mapWith(Number).as('data'),
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
@@ -500,10 +368,7 @@ export async function getPointData({
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
-    .leftJoin(
-      seasons,
-      eq(teamgames.seasonId, seasons.seasonId),
-    )
+    .leftJoin(seasons, eq(teamgames.seasonId, seasons.seasonId))
     .where(
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
@@ -516,13 +381,7 @@ export async function getPointData({
     )
     .groupBy(teams.teamId, seasons.year)
     .having(gte(count(teamgames.teamGameId), 5))
-    .orderBy(
-      desc(
-        sql`sum(teamgames.points)`
-          .mapWith(Number)
-          .as('data'),
-      ),
-    )
+    .orderBy(desc(sql`sum(teamgames.points)`.mapWith(Number).as('data')))
     .limit(10)
     .then((res) => {
       const filteredResult = res.map((item, index) => {
@@ -532,11 +391,8 @@ export async function getPointData({
         return {
           ...item,
           position:
-            index !== 0 &&
-            filteredResult[index - 1].data === item.data
-              ? filteredResult.find(
-                  (r) => r.data === item.data,
-                )?.position
+            index !== 0 && filteredResult[index - 1].data === item.data
+              ? filteredResult.find((r) => r.data === item.data)?.position
               : item.position,
         }
       })
@@ -544,9 +400,7 @@ export async function getPointData({
 
   const sumPointsMin = await db
     .select({
-      data: sql`sum(teamgames.points)`
-        .mapWith(Number)
-        .as('data'),
+      data: sql`sum(teamgames.points)`.mapWith(Number).as('data'),
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
@@ -558,10 +412,7 @@ export async function getPointData({
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
-    .leftJoin(
-      seasons,
-      eq(teamgames.seasonId, seasons.seasonId),
-    )
+    .leftJoin(seasons, eq(teamgames.seasonId, seasons.seasonId))
     .where(
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
@@ -573,13 +424,7 @@ export async function getPointData({
     )
     .groupBy(teams.teamId, seasons.year)
     .having(gte(count(teamgames.teamGameId), 10))
-    .orderBy(
-      asc(
-        sql`sum(teamgames.points)`
-          .mapWith(Number)
-          .as('data'),
-      ),
-    )
+    .orderBy(asc(sql`sum(teamgames.points)`.mapWith(Number).as('data')))
     .limit(10)
     .then((res) => {
       const filteredResult = res.map((item, index) => {
@@ -589,11 +434,8 @@ export async function getPointData({
         return {
           ...item,
           position:
-            index !== 0 &&
-            filteredResult[index - 1].data === item.data
-              ? filteredResult.find(
-                  (r) => r.data === item.data,
-                )?.position
+            index !== 0 && filteredResult[index - 1].data === item.data
+              ? filteredResult.find((r) => r.data === item.data)?.position
               : item.position,
         }
       })
@@ -601,9 +443,7 @@ export async function getPointData({
 
   const sumPointsMinHome = await db
     .select({
-      data: sql`sum(teamgames.points)`
-        .mapWith(Number)
-        .as('data'),
+      data: sql`sum(teamgames.points)`.mapWith(Number).as('data'),
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
@@ -615,10 +455,7 @@ export async function getPointData({
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
-    .leftJoin(
-      seasons,
-      eq(teamgames.seasonId, seasons.seasonId),
-    )
+    .leftJoin(seasons, eq(teamgames.seasonId, seasons.seasonId))
     .where(
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
@@ -631,13 +468,7 @@ export async function getPointData({
     )
     .groupBy(teams.teamId, seasons.year)
     .having(gte(count(teamgames.teamGameId), 5))
-    .orderBy(
-      asc(
-        sql`sum(teamgames.points)`
-          .mapWith(Number)
-          .as('data'),
-      ),
-    )
+    .orderBy(asc(sql`sum(teamgames.points)`.mapWith(Number).as('data')))
     .limit(10)
     .then((res) => {
       const filteredResult = res.map((item, index) => {
@@ -647,11 +478,8 @@ export async function getPointData({
         return {
           ...item,
           position:
-            index !== 0 &&
-            filteredResult[index - 1].data === item.data
-              ? filteredResult.find(
-                  (r) => r.data === item.data,
-                )?.position
+            index !== 0 && filteredResult[index - 1].data === item.data
+              ? filteredResult.find((r) => r.data === item.data)?.position
               : item.position,
         }
       })
@@ -659,9 +487,7 @@ export async function getPointData({
 
   const sumPointsMinAway = await db
     .select({
-      data: sql`sum(teamgames.points)`
-        .mapWith(Number)
-        .as('data'),
+      data: sql`sum(teamgames.points)`.mapWith(Number).as('data'),
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
@@ -673,10 +499,7 @@ export async function getPointData({
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
-    .leftJoin(
-      seasons,
-      eq(teamgames.seasonId, seasons.seasonId),
-    )
+    .leftJoin(seasons, eq(teamgames.seasonId, seasons.seasonId))
     .where(
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
@@ -689,13 +512,7 @@ export async function getPointData({
     )
     .groupBy(teams.teamId, seasons.year)
     .having(gte(count(teamgames.teamGameId), 5))
-    .orderBy(
-      asc(
-        sql`sum(teamgames.points)`
-          .mapWith(Number)
-          .as('data'),
-      ),
-    )
+    .orderBy(asc(sql`sum(teamgames.points)`.mapWith(Number).as('data')))
     .limit(10)
     .then((res) => {
       const filteredResult = res.map((item, index) => {
@@ -705,11 +522,8 @@ export async function getPointData({
         return {
           ...item,
           position:
-            index !== 0 &&
-            filteredResult[index - 1].data === item.data
-              ? filteredResult.find(
-                  (r) => r.data === item.data,
-                )?.position
+            index !== 0 && filteredResult[index - 1].data === item.data
+              ? filteredResult.find((r) => r.data === item.data)?.position
               : item.position,
         }
       })

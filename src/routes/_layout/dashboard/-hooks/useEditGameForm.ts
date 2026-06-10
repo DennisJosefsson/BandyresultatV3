@@ -1,22 +1,12 @@
-import {
-  revalidateLogic,
-  useForm,
-} from '@tanstack/react-form'
-import { useMutation } from '@tanstack/react-query'
-import {
-  getRouteApi,
-  useRouter,
-} from '@tanstack/react-router'
 import { toast } from 'sonner'
-
-import { submitGameResult } from '@/lib/types/game'
+import { getRouteApi, useRouter } from '@tanstack/react-router'
+import { useMutation } from '@tanstack/react-query'
+import { revalidateLogic, useForm } from '@tanstack/react-form'
 import type { zd } from '@/lib/utils/zod'
-
+import { submitGameResult } from '@/lib/types/game'
 import { updateResult } from '../-functions/GameFunctions/updateResult'
 
-const route = getRouteApi(
-  '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/$gameId',
-)
+const route = getRouteApi('/_layout/dashboard/season/$seasonId/info_/$serieId/edit/$gameId')
 
 type Data = Awaited<ReturnType<typeof updateResult>>
 
@@ -55,8 +45,7 @@ export const useEditGameForm = () => {
     defaultValues,
     validationLogic: revalidateLogic(),
     validators: { onDynamic: submitGameResult },
-    onSubmit: ({ value }) =>
-      mutation.mutateAsync({ data: value }),
+    onSubmit: ({ value }) => mutation.mutateAsync({ data: value }),
   })
 
   const close = () => {
@@ -68,9 +57,7 @@ export const useEditGameForm = () => {
 
   const onSuccessSubmit = (data: Data) => {
     router.invalidate({
-      filter: (r) =>
-        r.routeId ===
-        '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/games',
+      filter: (r) => r.routeId === '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/games',
     })
     if (!data) {
       toast.success('Okänt fel.')

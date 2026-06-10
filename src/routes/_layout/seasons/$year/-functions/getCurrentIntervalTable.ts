@@ -8,10 +8,7 @@ type FunctionProps = {
   }>
 }
 
-export const getCurrentIntervalTable = ({
-  range,
-  tables,
-}: FunctionProps) => {
+export const getCurrentIntervalTable = ({ range, tables }: FunctionProps) => {
   if (range.length !== 2) throw Error('Felaktig range data')
 
   const start = range[0]
@@ -35,9 +32,7 @@ export const getCurrentIntervalTable = ({
 
   const table = endTable
     .map((item) => {
-      const startItem = startTable.find(
-        (s) => s.teamId === item.teamId,
-      )
+      const startItem = startTable.find((s) => s.teamId === item.teamId)
       if (!startItem) {
         throw Error('Felaktig data')
       }
@@ -50,17 +45,10 @@ export const getCurrentIntervalTable = ({
         totalWins: item.totalWins - startItem.totalWins,
         totalDraws: item.totalDraws - startItem.totalDraws,
         totalLost: item.totalLost - startItem.totalLost,
-        totalGoalsScored:
-          item.totalGoalsScored -
-          startItem.totalGoalsScored,
-        totalGoalsConceded:
-          item.totalGoalsConceded -
-          startItem.totalGoalsConceded,
-        totalGoalDifference:
-          item.totalGoalDifference -
-          startItem.totalGoalDifference,
-        totalPoints:
-          item.totalPoints - startItem.totalPoints,
+        totalGoalsScored: item.totalGoalsScored - startItem.totalGoalsScored,
+        totalGoalsConceded: item.totalGoalsConceded - startItem.totalGoalsConceded,
+        totalGoalDifference: item.totalGoalDifference - startItem.totalGoalDifference,
+        totalPoints: item.totalPoints - startItem.totalPoints,
       }
     })
     .sort((a, b) => {

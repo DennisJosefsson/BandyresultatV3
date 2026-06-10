@@ -1,18 +1,13 @@
 import type { SQL } from 'drizzle-orm'
-import { and, asc, desc, eq, lt, sql } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
-
-import { db } from '@/db'
+import { and, asc, desc, eq, lt, sql } from 'drizzle-orm'
 import { series, teamgames, teams } from '@/db/schema'
+import { db } from '@/db'
 
 const team = alias(teams, 'team')
 const opponent = alias(teams, 'opponent')
 
-export async function getStreakData({
-  women,
-}: {
-  women: boolean
-}) {
+export async function getStreakData({ women }: { women: boolean }) {
   const currInoffChamps = await db
     .select({
       date: teamgames.date,
@@ -43,16 +38,8 @@ export async function getStreakData({
     })
     .from(teamgames)
     .leftJoin(team, eq(team.teamId, teamgames.teamId))
-    .leftJoin(
-      opponent,
-      eq(opponent.teamId, teamgames.teamId),
-    )
-    .where(
-      and(
-        eq(teamgames.women, women),
-        eq(teamgames.currInoffChamp, true),
-      ),
-    )
+    .leftJoin(opponent, eq(opponent.teamId, teamgames.teamId))
+    .where(and(eq(teamgames.women, women), eq(teamgames.currInoffChamp, true)))
     .orderBy(desc(teamgames.date))
     .limit(10)
     .then((res) =>
@@ -68,10 +55,7 @@ export async function getStreakData({
 
   const currInoffChampsCount = await db.$count(
     teamgames,
-    and(
-      eq(teamgames.currInoffChamp, true),
-      eq(teamgames.women, women),
-    ),
+    and(eq(teamgames.currInoffChamp, true), eq(teamgames.women, women)),
   )
 
   const currInoffChampsObject = {
@@ -116,18 +100,10 @@ export async function getStreakData({
 
 type StreakFunctionProps = {
   women: boolean
-  streak:
-    | 'winStreak'
-    | 'drawStreak'
-    | 'losingStreak'
-    | 'noWinStreak'
-    | 'unbeatenStreak'
+  streak: 'winStreak' | 'drawStreak' | 'losingStreak' | 'noWinStreak' | 'unbeatenStreak'
 }
 
-async function getStreak({
-  women,
-  streak,
-}: StreakFunctionProps) {
+async function getStreak({ women, streak }: StreakFunctionProps) {
   let values
   switch (streak) {
     case 'winStreak':
@@ -139,23 +115,11 @@ async function getStreak({
             draw: teamgames.draw,
             lost: teamgames.lost,
             date: teamgames.date,
-            value:
-              sql<number>`case when win = true then 1 else 0 end`.as(
-                'value',
-              ),
+            value: sql<number>`case when win = true then 1 else 0 end`.as('value'),
           })
           .from(teamgames)
-          .leftJoin(
-            series,
-            eq(series.serieId, teamgames.serieId),
-          )
-          .where(
-            and(
-              eq(teamgames.played, true),
-              lt(series.level, 2),
-              eq(teamgames.women, women),
-            ),
-          ),
+          .leftJoin(series, eq(series.serieId, teamgames.serieId))
+          .where(and(eq(teamgames.played, true), lt(series.level, 2), eq(teamgames.women, women))),
       )
       break
     case 'drawStreak':
@@ -167,23 +131,11 @@ async function getStreak({
             draw: teamgames.draw,
             lost: teamgames.lost,
             date: teamgames.date,
-            value:
-              sql<number>`case when draw = true then 1 else 0 end`.as(
-                'value',
-              ),
+            value: sql<number>`case when draw = true then 1 else 0 end`.as('value'),
           })
           .from(teamgames)
-          .leftJoin(
-            series,
-            eq(series.serieId, teamgames.serieId),
-          )
-          .where(
-            and(
-              eq(teamgames.played, true),
-              lt(series.level, 2),
-              eq(teamgames.women, women),
-            ),
-          ),
+          .leftJoin(series, eq(series.serieId, teamgames.serieId))
+          .where(and(eq(teamgames.played, true), lt(series.level, 2), eq(teamgames.women, women))),
       )
       break
     case 'losingStreak':
@@ -195,23 +147,11 @@ async function getStreak({
             draw: teamgames.draw,
             lost: teamgames.lost,
             date: teamgames.date,
-            value:
-              sql<number>`case when lost = true then 1 else 0 end`.as(
-                'value',
-              ),
+            value: sql<number>`case when lost = true then 1 else 0 end`.as('value'),
           })
           .from(teamgames)
-          .leftJoin(
-            series,
-            eq(series.serieId, teamgames.serieId),
-          )
-          .where(
-            and(
-              eq(teamgames.played, true),
-              lt(series.level, 2),
-              eq(teamgames.women, women),
-            ),
-          ),
+          .leftJoin(series, eq(series.serieId, teamgames.serieId))
+          .where(and(eq(teamgames.played, true), lt(series.level, 2), eq(teamgames.women, women))),
       )
       break
     case 'noWinStreak':
@@ -223,23 +163,11 @@ async function getStreak({
             draw: teamgames.draw,
             lost: teamgames.lost,
             date: teamgames.date,
-            value:
-              sql<number>`case when win = false then 1 else 0 end`.as(
-                'value',
-              ),
+            value: sql<number>`case when win = false then 1 else 0 end`.as('value'),
           })
           .from(teamgames)
-          .leftJoin(
-            series,
-            eq(series.serieId, teamgames.serieId),
-          )
-          .where(
-            and(
-              eq(teamgames.played, true),
-              lt(series.level, 2),
-              eq(teamgames.women, women),
-            ),
-          ),
+          .leftJoin(series, eq(series.serieId, teamgames.serieId))
+          .where(and(eq(teamgames.played, true), lt(series.level, 2), eq(teamgames.women, women))),
       )
       break
     case 'unbeatenStreak':
@@ -251,23 +179,11 @@ async function getStreak({
             draw: teamgames.draw,
             lost: teamgames.lost,
             date: teamgames.date,
-            value:
-              sql<number>`case when lost = false then 1 else 0 end`.as(
-                'value',
-              ),
+            value: sql<number>`case when lost = false then 1 else 0 end`.as('value'),
           })
           .from(teamgames)
-          .leftJoin(
-            series,
-            eq(series.serieId, teamgames.serieId),
-          )
-          .where(
-            and(
-              eq(teamgames.played, true),
-              lt(series.level, 2),
-              eq(teamgames.women, women),
-            ),
-          ),
+          .leftJoin(series, eq(series.serieId, teamgames.serieId))
+          .where(and(eq(teamgames.played, true), lt(series.level, 2), eq(teamgames.women, women))),
       )
       break
     default:
@@ -283,14 +199,10 @@ async function getStreak({
         draw: values.draw,
         lost: values.lost,
         date: values.date,
-        sumResults:
-          sql<number>`sum(values.value) over(partition by team order by date)`.as(
-            'sum_results',
-          ),
-        round:
-          sql<number>`row_number() over (partition by team order by date)`.as(
-            'round',
-          ),
+        sumResults: sql<number>`sum(values.value) over(partition by team order by date)`.as(
+          'sum_results',
+        ),
+        round: sql<number>`row_number() over (partition by team order by date)`.as('round'),
       })
       .from(values),
   )
@@ -323,9 +235,7 @@ async function getStreak({
         teamId: summed_values.teamId,
         date: summed_values.date,
         sumResults: summed_values.sumResults,
-        grouped: sql<number>`round - sum_results`.as(
-          'grouped',
-        ),
+        grouped: sql<number>`round - sum_results`.as('grouped'),
       })
       .from(summed_values)
       .where(whereQuery),
@@ -336,19 +246,13 @@ async function getStreak({
       .with(grouped_results)
       .select({
         teamId: grouped_results.teamId,
-        maxCount:
-          sql<number>`mode() within group (order by grouped_results.grouped)`.as(
-            'max_count',
-          ),
-        dates: sql<
-          Array<string>
-        >`array_agg(date order by date)`.as('dates'),
+        maxCount: sql<number>`mode() within group (order by grouped_results.grouped)`.as(
+          'max_count',
+        ),
+        dates: sql<Array<string>>`array_agg(date order by date)`.as('dates'),
       })
       .from(grouped_results)
-      .groupBy(
-        grouped_results.grouped,
-        grouped_results.teamId,
-      ),
+      .groupBy(grouped_results.grouped, grouped_results.teamId),
   )
 
   const streaks = await db
@@ -356,27 +260,16 @@ async function getStreak({
     .select({
       teamId: group_array.teamId,
       name: teams.name as unknown as SQL<string>,
-      gameCount:
-        sql<number>`array_length(group_array.dates,1)`.as(
-          'game_count',
-        ),
-      startDate: sql<string>`group_array.dates[1]`.as(
-        'start_date',
-      ),
-      endDate:
-        sql<string>`group_array.dates[array_upper(group_array.dates,1)]`.as(
-          'end_date',
-        ),
+      gameCount: sql<number>`array_length(group_array.dates,1)`.as('game_count'),
+      startDate: sql<string>`group_array.dates[1]`.as('start_date'),
+      endDate: sql<string>`group_array.dates[array_upper(group_array.dates,1)]`.as('end_date'),
     })
     .from(group_array)
     .leftJoin(teams, eq(teams.teamId, group_array.teamId))
     .orderBy(desc(sql`game_count`), asc(sql`start_date`))
     .limit(20)
     .then((res) => {
-      const tenthCount =
-        res.length >= 10
-          ? res[9].gameCount
-          : res[res.length - 1].gameCount
+      const tenthCount = res.length >= 10 ? res[9].gameCount : res[res.length - 1].gameCount
       const filteredResult = res
         .filter((item) => item.gameCount >= tenthCount)
         .map((item, index) => {
@@ -386,12 +279,8 @@ async function getStreak({
         return {
           ...item,
           position:
-            index !== 0 &&
-            filteredResult[index - 1].gameCount ===
-              item.gameCount
-              ? filteredResult.find(
-                  (r) => r.gameCount === item.gameCount,
-                )?.position
+            index !== 0 && filteredResult[index - 1].gameCount === item.gameCount
+              ? filteredResult.find((r) => r.gameCount === item.gameCount)?.position
               : item.position,
         }
       })

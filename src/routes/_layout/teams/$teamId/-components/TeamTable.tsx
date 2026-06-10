@@ -1,18 +1,8 @@
 import { getRouteApi } from '@tanstack/react-router'
-
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/base/ui/card'
-import {
-  Table,
-  TableBody,
-} from '@/components/base/ui/table'
-
-import TeamTableHeader from './TableComponents/TableHeader'
+import { Table, TableBody } from '@/components/base/ui/table'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/base/ui/card'
 import TeamTableRow from './TableComponents/TeamTableDataRow'
+import TeamTableHeader from './TableComponents/TableHeader'
 
 const route = getRouteApi('/_layout/teams/$teamId')
 
@@ -22,9 +12,7 @@ const TeamTable = () => {
   if (data.tables.length === 0) {
     return (
       <div className="mt-4 flex flex-row justify-center">
-        <h2 className="text-xs font-bold md:text-sm">
-          Tyvärr saknas tabelldata för detta lag.
-        </h2>
+        <h2 className="text-xs font-bold md:text-sm">Tyvärr saknas tabelldata för detta lag.</h2>
       </div>
     )
   }
@@ -32,15 +20,9 @@ const TeamTable = () => {
     <div className="mb-6">
       {data.tables.map((level) => {
         return (
-          <Card
-            key={level.level}
-            size="sm"
-            className="mb-2"
-          >
+          <Card key={level.level} size="sm" className="mb-2">
             <CardHeader>
-              <CardTitle className="text-[10px] md:text-sm">
-                {level.levelName}
-              </CardTitle>
+              <CardTitle className="text-[10px] md:text-sm">{level.levelName}</CardTitle>
             </CardHeader>
             <CardContent>
               {level.tables.map((table) => {
@@ -52,9 +34,7 @@ const TeamTable = () => {
                     <Table className="w-full table-fixed">
                       <TeamTableHeader />
                       <TableBody>
-                        <TeamTableRow
-                          table={table.tables}
-                        />
+                        <TeamTableRow table={table.tables} />
                       </TableBody>
                     </Table>
                   </div>

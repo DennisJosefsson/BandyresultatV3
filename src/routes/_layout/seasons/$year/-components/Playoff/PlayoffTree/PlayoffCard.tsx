@@ -1,12 +1,6 @@
 import type { ReactNode } from 'react'
-
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/base/ui/card'
 import { useFavTeam } from '@/lib/contexts/favTeamsContext'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/base/ui/card'
 
 const PlayoffCard = ({
   styleClass = '',
@@ -49,30 +43,12 @@ function Result({ children }: { children: ReactNode }) {
 }
 
 function Content({ children }: { children: ReactNode }) {
-  return (
-    <CardContent className="text-[10px] sm:text-xs lg:text-sm">
-      {children}
-    </CardContent>
-  )
+  return <CardContent className="text-[10px] sm:text-xs lg:text-sm">{children}</CardContent>
 }
 
-function Team({
-  teamId,
-  children,
-}: {
-  teamId: number
-  children: ReactNode
-}) {
+function Team({ teamId, children }: { teamId: number; children: ReactNode }) {
   const { favTeams } = useFavTeam()
-  return (
-    <span
-      className={
-        favTeams.includes(teamId) ? 'font-bold' : undefined
-      }
-    >
-      {children}
-    </span>
-  )
+  return <span className={favTeams.includes(teamId) ? 'font-bold' : undefined}>{children}</span>
 }
 
 PlayoffCard.Title = Title

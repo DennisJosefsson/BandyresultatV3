@@ -1,7 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
-
-import TeamsList from '../-components/Team/TeamsList'
 import { getAllTeams } from '../-functions/TeamFunctions/getAllTeams'
+import TeamsList from '../-components/Team/TeamsList'
 
 export const Route = createFileRoute('/_layout/dashboard/teams/')({
   loader: async () => {

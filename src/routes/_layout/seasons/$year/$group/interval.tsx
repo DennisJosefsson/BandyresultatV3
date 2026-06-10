@@ -1,26 +1,18 @@
-import {
-  CatchBoundary,
-  Navigate,
-  createFileRoute,
-} from '@tanstack/react-router'
-import { zodValidator } from '@tanstack/zod-adapter'
-
-import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
-import { zd } from '@/lib/utils/zod'
-
 import { useEffect } from 'react'
-import GroupListForErrorComponent from '../-components/GroupListForErrorComponent'
-import RangeData from '../-components/Interval/RangeData'
+import { zodValidator } from '@tanstack/zod-adapter'
+import { CatchBoundary, Navigate, createFileRoute } from '@tanstack/react-router'
+import { zd } from '@/lib/utils/zod'
+import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import { getDevData } from '../-functions/getDevData'
+import RangeData from '../-components/Interval/RangeData'
+import GroupListForErrorComponent from '../-components/GroupListForErrorComponent'
 
 const searchParams = zd.object({
   start: zd.int().nonnegative().catch(0),
   end: zd.int().nonnegative().optional(),
 })
 
-export const Route = createFileRoute(
-  '/_layout/seasons/$year/$group/interval',
-)({
+export const Route = createFileRoute('/_layout/seasons/$year/$group/interval')({
   validateSearch: zodValidator(searchParams),
   loaderDeps: ({ search: { women } }) => ({
     women,
@@ -47,21 +39,15 @@ export const Route = createFileRoute(
   head: ({ loaderData }) => ({
     meta: [
       {
-        title:
-          loaderData?.meta.title ??
-          'Bandyresultat - Intervall',
+        title: loaderData?.meta.title ?? 'Bandyresultat - Intervall',
       },
       {
         property: 'og:description',
-        content:
-          loaderData?.meta.description ??
-          'Bandyresultat - Intervall',
+        content: loaderData?.meta.description ?? 'Bandyresultat - Intervall',
       },
       {
         property: 'og:title',
-        content:
-          loaderData?.meta.title ??
-          'Bandyresultat - Intervall',
+        content: loaderData?.meta.title ?? 'Bandyresultat - Intervall',
       },
       {
         property: 'og:type',
@@ -69,9 +55,7 @@ export const Route = createFileRoute(
       },
       {
         property: 'og:url',
-        content:
-          loaderData?.meta.url ??
-          'https://www.bandyresultat.se',
+        content: loaderData?.meta.url ?? 'https://www.bandyresultat.se',
       },
       {
         property: 'og:image',
@@ -88,14 +72,12 @@ function RouteComponent() {
     return (
       <div className="mt-4 flex flex-col justify-center text-sm">
         <div className="mb-4 flex flex-row justify-center">
-          <span className="text-[8px] xs:text-[10px] sm:text-xs lg:text-sm font-semibold">
+          <span className="xs:text-[10px] text-[8px] font-semibold sm:text-xs lg:text-sm">
             {data.message}
           </span>
         </div>
 
-        {data.message.includes('Välj en ny i listan') ? (
-          <GroupListForErrorComponent />
-        ) : null}
+        {data.message.includes('Välj en ny i listan') ? <GroupListForErrorComponent /> : null}
       </div>
     )
   }
@@ -106,11 +88,7 @@ function RouteComponent() {
         console.error(error)
       }}
       errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent
-          id="interval"
-          error={error}
-          reset={reset}
-        />
+        <SimpleErrorComponent id="interval" error={error} reset={reset} />
       )}
     >
       <Interval />
@@ -129,11 +107,7 @@ function Interval() {
   useEffect(() => {
     if (data.status === 404) return
     const dataLength = data.games.length
-    if (
-      cause === 'stay' &&
-      start !== 0 &&
-      end !== dataLength - 1
-    ) {
+    if (cause === 'stay' && start !== 0 && end !== dataLength - 1) {
       navigate({
         to: '.',
         params: (prev) => ({ year: prev.year }),
@@ -148,11 +122,7 @@ function Interval() {
 
   if (data.status === 404) return null
 
-  if (
-    (end && end >= data.dates.length) ||
-    start >= data.dates.length ||
-    (end && start >= end)
-  ) {
+  if ((end && end >= data.dates.length) || start >= data.dates.length || (end && start >= end)) {
     return (
       <Navigate
         to="."

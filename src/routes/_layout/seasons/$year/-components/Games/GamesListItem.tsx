@@ -1,12 +1,8 @@
-import {
-  useLocation,
-  useNavigate,
-} from '@tanstack/react-router'
-
-import { Button } from '@/components/base/ui/button'
-import { useFavTeam } from '@/lib/contexts/favTeamsContext'
+import { useLocation, useNavigate } from '@tanstack/react-router'
 import type { Game } from '@/lib/types/game'
 import { cn } from '@/lib/utils/utils'
+import { useFavTeam } from '@/lib/contexts/favTeamsContext'
+import { Button } from '@/components/base/ui/button'
 
 type GamesListItemProps = {
   game: Omit<Game, 'season'>
@@ -40,9 +36,7 @@ const GamesListItem = ({ game }: GamesListItemProps) => {
         <span
           className={cn(
             'w-24 sm:w-40 lg:w-40 xl:w-52 2xl:w-60',
-            favTeams.includes(game.homeTeamId)
-              ? 'font-bold'
-              : null,
+            favTeams.includes(game.homeTeamId) ? 'font-bold' : null,
           )}
         >
           {game.home.casualName}
@@ -51,32 +45,21 @@ const GamesListItem = ({ game }: GamesListItemProps) => {
         <span
           className={cn(
             'w-24 sm:w-40 lg:w-40 xl:w-52 2xl:w-60',
-            favTeams.includes(game.awayTeamId)
-              ? 'font-bold'
-              : null,
+            favTeams.includes(game.awayTeamId) ? 'font-bold' : null,
           )}
         >
           {game.away.casualName}
         </span>
 
-        <span className="w-16 text-right tabular-nums">
-          {game.result}
-        </span>
+        <span className="w-16 text-right tabular-nums">{game.result}</span>
 
         {game.halftimeResult && (
           <>
-            <span className="w-10 text-right tabular-nums md:w-16">
-              ({game.halftimeResult})
-            </span>
+            <span className="w-10 text-right tabular-nums md:w-16">({game.halftimeResult})</span>
           </>
         )}
 
-        <Button
-          size="responsive"
-          variant="default"
-          className="group"
-          onClick={onClickHandler}
-        >
+        <Button size="responsive" variant="default" className="group" onClick={onClickHandler}>
           <span className="text-[10px] group-hover:font-semibold md:text-sm xl:text-base 2xl:text-lg">
             H2H
           </span>

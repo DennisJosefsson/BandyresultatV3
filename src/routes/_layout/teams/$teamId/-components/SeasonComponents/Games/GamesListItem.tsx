@@ -1,15 +1,9 @@
 import { getRouteApi } from '@tanstack/react-router'
-
-import {
-  TableCell,
-  TableRow,
-} from '@/components/base/ui/table'
 import type { Game } from '@/lib/types/game'
 import { cn } from '@/lib/utils/utils'
+import { TableCell, TableRow } from '@/components/base/ui/table'
 
-const route = getRouteApi(
-  '/_layout/teams/$teamId/$seasonId',
-)
+const route = getRouteApi('/_layout/teams/$teamId/$seasonId')
 
 type GamesListItemProps = {
   game: Game
@@ -24,9 +18,7 @@ const GamesListItem = ({ game }: GamesListItemProps) => {
       <TableCell
         className={cn(
           'w-12 xs:w-18 p-0 py-1 truncate',
-          data.team.casualName === game.home.casualName
-            ? 'text-primary font-bold'
-            : null,
+          data.team.casualName === game.home.casualName ? 'text-primary font-bold' : null,
         )}
       >
         {game.home.casualName}
@@ -35,32 +27,22 @@ const GamesListItem = ({ game }: GamesListItemProps) => {
       <TableCell
         className={cn(
           'w-12 xs:w-18 p-0 py-1 truncate',
-          data.team.casualName === game.away.casualName
-            ? 'text-primary font-bold'
-            : null,
+          data.team.casualName === game.away.casualName ? 'text-primary font-bold' : null,
         )}
       >
         {game.away.casualName}
       </TableCell>
 
-      <TableCell className="w-12 xs:w-18 tabular-nums p-0 py-1">
-        {game.otResult
-          ? `${game.otResult} (${game.result})`
-          : game.result}
+      <TableCell className="xs:w-18 w-12 p-0 py-1 tabular-nums">
+        {game.otResult ? `${game.otResult} (${game.result})` : game.result}
       </TableCell>
 
-      <TableCell className="w-8 tabular-nums p-0 py-1">
-        {game.halftimeResult
-          ? `(${game.halftimeResult})`
-          : null}
+      <TableCell className="w-8 p-0 py-1 tabular-nums">
+        {game.halftimeResult ? `(${game.halftimeResult})` : null}
       </TableCell>
 
       <TableCell className="w-6 p-0 py-1 text-center">
-        {game.penalties
-          ? 'S'
-          : game.extraTime
-            ? 'ÖT'
-            : null}
+        {game.penalties ? 'S' : game.extraTime ? 'ÖT' : null}
       </TableCell>
     </TableRow>
   )

@@ -1,7 +1,7 @@
 import type { AnyRouteMatch } from '@tanstack/react-router'
-import { Link, useMatches } from '@tanstack/react-router'
 import { Fragment } from 'react'
-
+import { HouseIcon } from 'lucide-react'
+import { Link, useMatches } from '@tanstack/react-router'
 import {
   Breadcrumb,
   BreadcrumbEllipsis,
@@ -11,7 +11,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/base/ui/breadcrumb'
-import { HouseIcon } from 'lucide-react'
 
 export type BreadcrumbValue =
   | string
@@ -26,25 +25,22 @@ type ResolvedBreadcrumbItem = {
 export function RouterBreadcrumb() {
   const matches = useMatches()
 
-  const breadcrumbs: Array<ResolvedBreadcrumbItem> =
-    matches.flatMap((match) => {
-      const staticData = match.staticData
-      if (!staticData?.breadcrumb) return []
+  const breadcrumbs: Array<ResolvedBreadcrumbItem> = matches.flatMap((match) => {
+    const staticData = match.staticData
+    if (!staticData?.breadcrumb) return []
 
-      const breadcrumbValue =
-        typeof staticData.breadcrumb === 'function'
-          ? staticData.breadcrumb(match)
-          : staticData.breadcrumb
+    const breadcrumbValue =
+      typeof staticData.breadcrumb === 'function'
+        ? staticData.breadcrumb(match)
+        : staticData.breadcrumb
 
-      const items = Array.isArray(breadcrumbValue)
-        ? breadcrumbValue
-        : [breadcrumbValue]
+    const items = Array.isArray(breadcrumbValue) ? breadcrumbValue : [breadcrumbValue]
 
-      return items.map((item) => ({
-        label: item,
-        path: match.pathname,
-      }))
-    })
+    return items.map((item) => ({
+      label: item,
+      path: match.pathname,
+    }))
+  })
 
   if (breadcrumbs.length === 0) {
     return null
@@ -59,7 +55,7 @@ export function RouterBreadcrumb() {
           <BreadcrumbLink
             render={
               <Link to={breadcrumbs[0].path}>
-                <span className="hidden sm:block truncate text-[7px] xs:text-[8px] md:text-xs font-semibold">
+                <span className="xs:text-[8px] hidden truncate text-[7px] font-semibold sm:block md:text-xs">
                   {breadcrumbs[0].label}
                 </span>
                 <span className="sm:hidden">
@@ -79,7 +75,7 @@ export function RouterBreadcrumb() {
                 <BreadcrumbItem>
                   {isLast ? (
                     <BreadcrumbPage>
-                      <span className="truncate text-[7px] xs:text-[8px] md:text-xs font-semibold">
+                      <span className="xs:text-[8px] truncate text-[7px] font-semibold md:text-xs">
                         {crumb.label}
                       </span>
                     </BreadcrumbPage>
@@ -87,7 +83,7 @@ export function RouterBreadcrumb() {
                     <BreadcrumbLink
                       render={
                         <Link to={crumb.path}>
-                          <span className="truncate text-[7px] xs:text-[8px] md:text-xs font-semibold">
+                          <span className="xs:text-[8px] truncate text-[7px] font-semibold md:text-xs">
                             {crumb.label}
                           </span>
                         </Link>
@@ -95,9 +91,7 @@ export function RouterBreadcrumb() {
                     />
                   )}
                 </BreadcrumbItem>
-                {!isLast && (
-                  <BreadcrumbSeparator className="[&>svg]:size-2 md:[&>svg]:size-3.5" />
-                )}
+                {!isLast && <BreadcrumbSeparator className="[&>svg]:size-2 md:[&>svg]:size-3.5" />}
               </Fragment>
             )
           })}
@@ -117,7 +111,7 @@ export function RouterBreadcrumb() {
               <BreadcrumbItem>
                 {isLast ? (
                   <BreadcrumbPage>
-                    <span className="truncate text-[7px] xs:text-[8px] md:text-xs font-semibold">
+                    <span className="xs:text-[8px] truncate text-[7px] font-semibold md:text-xs">
                       {crumb.label}
                     </span>
                   </BreadcrumbPage>
@@ -125,7 +119,7 @@ export function RouterBreadcrumb() {
                   <BreadcrumbLink
                     render={
                       <Link to={crumb.path}>
-                        <span className="truncate text-[7px] xs:text-[8px] md:text-xs font-semibold">
+                        <span className="xs:text-[8px] truncate text-[7px] font-semibold md:text-xs">
                           {crumb.label}
                         </span>
                       </Link>
@@ -133,9 +127,7 @@ export function RouterBreadcrumb() {
                   />
                 )}
               </BreadcrumbItem>
-              {!isLast && (
-                <BreadcrumbSeparator className="[&>svg]:size-2 md:[&>svg]:size-3.5" />
-              )}
+              {!isLast && <BreadcrumbSeparator className="[&>svg]:size-2 md:[&>svg]:size-3.5" />}
             </Fragment>
           )
         })}

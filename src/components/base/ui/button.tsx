@@ -1,7 +1,6 @@
-import { Button as ButtonPrimitive } from '@base-ui/react/button'
 import type { VariantProps } from 'class-variance-authority'
 import { cva } from 'class-variance-authority'
-
+import { Button as ButtonPrimitive } from '@base-ui/react/button'
 import { cn } from '@/lib/utils/utils'
 
 const buttonVariants = cva(
@@ -9,8 +8,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default:
-          'bg-primary text-primary-foreground [a]:hover:bg-primary/80',
+        default: 'bg-primary text-primary-foreground [a]:hover:bg-primary/80',
         outline:
           'border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50',
         secondary:
@@ -30,12 +28,9 @@ const buttonVariants = cva(
         sm: "h-6 gap-1 px-2 text-xs/relaxed has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3",
         lg: "h-8 gap-1 px-2.5 text-xs/relaxed has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 [&_svg:not([class*='size-'])]:size-4",
         icon: "size-7 [&_svg:not([class*='size-'])]:size-3.5",
-        'icon-xs':
-          "size-3.5 sm:size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5",
-        'icon-sm':
-          "size-6 [&_svg:not([class*='size-'])]:size-3",
-        'icon-lg':
-          "size-8 [&_svg:not([class*='size-'])]:size-4",
+        'icon-xs': "size-3.5 sm:size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5",
+        'icon-sm': "size-6 [&_svg:not([class*='size-'])]:size-3",
+        'icon-lg': "size-8 [&_svg:not([class*='size-'])]:size-4",
         smallicon: 'h-6 w-6',
         responsive:
           "h6 gap-1 px-1.5 text-[8px]/relaxed has-data-[icon=inline-end]:pr-1 has-data-[icon=inline-start]:pl-1 [&_svg:not([class*='size-'])]:size-2.5 xs:text-[10px] sm:px-2 sm:text-xs/relaxed sm:has-data-[icon=inline-end]:pr-1.5 sm:has-data-[icon=inline-start]:pl-1.5 sm:[&_svg:not([class*='size-'])]:size-3 lg:h-7 lg:[&_svg:not([class*='size-'])]:size-3.5",
@@ -55,14 +50,11 @@ function Button({
   variant = 'default',
   size = 'default',
   ...props
-}: ButtonPrimitive.Props &
-  VariantProps<typeof buttonVariants>) {
+}: ButtonPrimitive.Props & VariantProps<typeof buttonVariants>) {
   return (
     <ButtonPrimitive
       data-slot="button"
-      className={cn(
-        buttonVariants({ variant, size, className }),
-      )}
+      className={cn(buttonVariants({ variant, size, className }))}
       {...props}
     />
   )

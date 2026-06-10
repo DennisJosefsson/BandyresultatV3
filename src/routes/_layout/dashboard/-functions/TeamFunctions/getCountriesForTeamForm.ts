@@ -1,9 +1,8 @@
 import { createServerFn } from '@tanstack/react-start'
-
-import { db } from '@/db'
-import { county } from '@/db/schema'
-import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
+import { catchError } from '@/lib/middlewares/errors/catchError'
+import { county } from '@/db/schema'
+import { db } from '@/db'
 
 export const getCountiesForTeamForm = createServerFn({
   method: 'GET',

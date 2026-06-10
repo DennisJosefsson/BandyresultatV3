@@ -13,9 +13,7 @@ const Date = ({
     return <span>Saknar speldatum</span>
   }
 
-  return (
-    <span className={className}>{dayjs(children).format('D MMMM YYYY')}</span>
-  )
+  return <span className={className}>{dayjs(children).format('D MMMM YYYY')}</span>
 }
 
 export default Date

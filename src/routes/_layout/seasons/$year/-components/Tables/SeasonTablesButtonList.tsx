@@ -1,10 +1,7 @@
 import { Link, getRouteApi } from '@tanstack/react-router'
-
 import { Button } from '@/components/base/ui/button'
 
-const route = getRouteApi(
-  '/_layout/seasons/$year/$group/tables/$table',
-)
+const route = getRouteApi('/_layout/seasons/$year/$group/tables/$table')
 
 const SeasonTablesButtonList = () => {
   const women = route.useSearch({
@@ -21,7 +18,7 @@ const SeasonTablesButtonList = () => {
   if (year < 1930) return null
   return (
     <div>
-      <h1 className="mb-2 text-center text-xs xs:text-sm leading-4 font-bold sm:text-base md:mb-4 lg:text-xl">
+      <h1 className="xs:text-sm mb-2 text-center text-xs leading-4 font-bold sm:text-base md:mb-4 lg:text-xl">
         Serietabell {women ? 'Damer' : 'Herrar'}
       </h1>
       <div className="flex flex-row justify-center">
@@ -39,11 +36,7 @@ const SeasonTablesButtonList = () => {
             {({ isActive, isTransitioning }) => (
               <Button
                 size="responsive"
-                variant={
-                  isActive || isTransitioning
-                    ? 'default'
-                    : 'outline'
-                }
+                variant={isActive || isTransitioning ? 'default' : 'outline'}
                 disabled={isTransitioning}
               >
                 Alla
@@ -64,11 +57,7 @@ const SeasonTablesButtonList = () => {
             {({ isActive, isTransitioning }) => (
               <Button
                 size="responsive"
-                variant={
-                  isActive || isTransitioning
-                    ? 'default'
-                    : 'outline'
-                }
+                variant={isActive || isTransitioning ? 'default' : 'outline'}
                 disabled={isTransitioning || hasStatic}
               >
                 Hemma
@@ -89,11 +78,7 @@ const SeasonTablesButtonList = () => {
             {({ isActive, isTransitioning }) => (
               <Button
                 size="responsive"
-                variant={
-                  isActive || isTransitioning
-                    ? 'default'
-                    : 'outline'
-                }
+                variant={isActive || isTransitioning ? 'default' : 'outline'}
                 disabled={isTransitioning || hasStatic}
               >
                 Borta

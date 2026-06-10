@@ -1,15 +1,12 @@
-import type {
-  ColumnDef,
-  SortingState,
-} from '@tanstack/react-table'
+import type { ColumnDef, SortingState } from '@tanstack/react-table'
+import { useState } from 'react'
 import {
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { useState } from 'react'
-
+import { useFavTeam } from '@/lib/contexts/favTeamsContext'
 import {
   Table,
   TableBody,
@@ -18,7 +15,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/base/ui/table'
-import { useFavTeam } from '@/lib/contexts/favTeamsContext'
 
 interface DataTableProps<TData, TValue> {
   columns: Array<ColumnDef<TData, TValue>>
@@ -26,7 +22,7 @@ interface DataTableProps<TData, TValue> {
   teamObject: {
     [x: string]: number
   }
-  serieStructure: number[] | null | undefined
+  serieStructure: Array<number> | null | undefined
 }
 
 const DataTable = <TData, TValue>({
@@ -69,22 +65,16 @@ const DataTable = <TData, TValue>({
             <TableRow key={headerGroup.id}>
               <TableHead
                 key={'position'}
-                className="hidden py-1 sm:table-cell sm:w-12 px-2 xl:text-base 2xl:text-lg"
+                className="hidden px-2 py-1 sm:table-cell sm:w-12 xl:text-base 2xl:text-lg"
               >
                 P
               </TableHead>
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead
-                    key={header.id}
-                    className="px-0"
-                  >
+                  <TableHead key={header.id} className="px-0">
                     {header.isPlaceholder
                       ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
+                      : flexRender(header.column.columnDef.header, header.getContext())}
                   </TableHead>
                 )
               })}
@@ -97,24 +87,12 @@ const DataTable = <TData, TValue>({
             table.getRowModel().rows.map((row, index) => (
               <TableRow
                 key={row.id}
-                data-state={
-                  row.getIsSelected() && 'selected'
-                }
+                data-state={row.getIsSelected() && 'selected'}
                 className={`${
-                  favTeams.includes(
-                    teamObject[
-                      getString(
-                        row.getValue('team_casualName'),
-                      )
-                    ],
-                  )
+                  favTeams.includes(teamObject[getString(row.getValue('team_casualName'))])
                     ? 'font-bold'
                     : null
-                } ${
-                  serieStructure?.includes(index + 1)
-                    ? 'border-foreground border-b-2'
-                    : null
-                }`}
+                } ${serieStructure?.includes(index + 1) ? 'border-foreground border-b-2' : null}`}
               >
                 <TableCell
                   key={`index-${index}`}
@@ -124,14 +102,8 @@ const DataTable = <TData, TValue>({
                 </TableCell>
                 {row.getVisibleCells().map((cell) => {
                   return (
-                    <TableCell
-                      key={cell.id}
-                      className="px-0 py-1"
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
+                    <TableCell key={cell.id} className="px-0 py-1">
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   )
                 })}
@@ -139,10 +111,7 @@ const DataTable = <TData, TValue>({
             ))
           ) : (
             <TableRow>
-              <TableCell
-                colSpan={columns.length}
-                className="h-24 text-center"
-              >
+              <TableCell colSpan={columns.length} className="h-24 text-center">
                 Inga resultat.
               </TableCell>
             </TableRow>

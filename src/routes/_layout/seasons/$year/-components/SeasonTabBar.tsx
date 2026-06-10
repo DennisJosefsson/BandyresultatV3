@@ -1,10 +1,4 @@
 import {
-  Link,
-  getRouteApi,
-  useParams,
-  useSearch,
-} from '@tanstack/react-router'
-import {
   CalendarIcon,
   ChartLineIcon,
   ChevronsLeftRightEllipsisIcon,
@@ -13,7 +7,7 @@ import {
   TrophyIcon,
   VenusIcon,
 } from 'lucide-react'
-
+import { Link, getRouteApi, useParams, useSearch } from '@tanstack/react-router'
 import { TabBarInline } from '@/components/TabBar/TabBar'
 import { Button } from '@/components/base/ui/button'
 
@@ -38,18 +32,10 @@ const SeasonTabBar = () => {
   const table = params.table ?? 'all'
   const seasonTabBarObject = {
     gender: (
-      <Link
-        to="."
-        params={(prev) => ({ ...prev })}
-        search={(prev) => ({ ...prev, women: !women })}
-      >
+      <Link to="." params={(prev) => ({ ...prev })} search={(prev) => ({ ...prev, women: !women })}>
         <Button size="tabbar">
-          <span className="hidden md:inline-block">
-            {women ? 'Herrar' : 'Damer'}
-          </span>
-          <span className="md:hidden">
-            {women ? <MarsIcon /> : <VenusIcon />}
-          </span>
+          <span className="hidden md:inline-block">{women ? 'Herrar' : 'Damer'}</span>
+          <span className="md:hidden">{women ? <MarsIcon /> : <VenusIcon />}</span>
         </Button>
       </Link>
     ),
@@ -68,13 +54,8 @@ const SeasonTabBar = () => {
           >
             {({ isActive }) => {
               return (
-                <Button
-                  variant={isActive ? 'default' : 'outline'}
-                  size="tabbar"
-                >
-                  <span className="hidden md:inline-block">
-                    Matcher
-                  </span>
+                <Button variant={isActive ? 'default' : 'outline'} size="tabbar">
+                  <span className="hidden md:inline-block">Matcher</span>
                   <span className="md:hidden">
                     <CalendarIcon />
                   </span>
@@ -101,13 +82,8 @@ const SeasonTabBar = () => {
           >
             {({ isActive }) => {
               return (
-                <Button
-                  variant={isActive ? 'default' : 'outline'}
-                  size="tabbar"
-                >
-                  <span className="hidden md:inline-block">
-                    Tabell
-                  </span>
+                <Button variant={isActive ? 'default' : 'outline'} size="tabbar">
+                  <span className="hidden md:inline-block">Tabell</span>
                   <span className="md:hidden">
                     <ListIcon />
                   </span>
@@ -130,13 +106,8 @@ const SeasonTabBar = () => {
           >
             {({ isActive }) => {
               return (
-                <Button
-                  variant={isActive ? 'default' : 'outline'}
-                  size="tabbar"
-                >
-                  <span className="hidden md:inline-block">
-                    Slutspel
-                  </span>
+                <Button variant={isActive ? 'default' : 'outline'} size="tabbar">
+                  <span className="hidden md:inline-block">Slutspel</span>
                   <span className="md:hidden">
                     <TrophyIcon />
                   </span>
@@ -159,13 +130,8 @@ const SeasonTabBar = () => {
           >
             {({ isActive }) => {
               return (
-                <Button
-                  variant={isActive ? 'default' : 'outline'}
-                  size="tabbar"
-                >
-                  <span className="hidden md:inline-block">
-                    Utveckling
-                  </span>
+                <Button variant={isActive ? 'default' : 'outline'} size="tabbar">
+                  <span className="hidden md:inline-block">Utveckling</span>
                   <span className="md:hidden">
                     <ChartLineIcon />
                   </span>
@@ -188,13 +154,8 @@ const SeasonTabBar = () => {
           >
             {({ isActive }) => {
               return (
-                <Button
-                  variant={isActive ? 'default' : 'outline'}
-                  size="tabbar"
-                >
-                  <span className="hidden md:inline-block">
-                    Intervall
-                  </span>
+                <Button variant={isActive ? 'default' : 'outline'} size="tabbar">
+                  <span className="hidden md:inline-block">Intervall</span>
                   <span className="md:hidden">
                     <ChevronsLeftRightEllipsisIcon />
                   </span>

@@ -1,26 +1,13 @@
-import { createServerFn } from '@tanstack/react-start'
-import { zodValidator } from '@tanstack/zod-adapter'
 import type { SQL } from 'drizzle-orm'
-import {
-  and,
-  asc,
-  desc,
-  eq,
-  getTableColumns,
-  lte,
-} from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
-
-import { db } from '@/db'
-import {
-  games,
-  series,
-  teamgames,
-  teams,
-} from '@/db/schema'
-import { catchError } from '@/lib/middlewares/errors/catchError'
+import { and, asc, desc, eq, getTableColumns, lte } from 'drizzle-orm'
+import { zodValidator } from '@tanstack/zod-adapter'
+import { createServerFn } from '@tanstack/react-start'
 import type { TeamBaseWithTeamGameId } from '@/lib/types/team'
 import { zd } from '@/lib/utils/zod'
+import { catchError } from '@/lib/middlewares/errors/catchError'
+import { games, series, teamgames, teams } from '@/db/schema'
+import { db } from '@/db'
 
 const home = alias(teams, 'home')
 const away = alias(teams, 'away')
@@ -30,21 +17,14 @@ const awayTeamGame = alias(teamgames, 'away_teamgame')
 export const getUnplayedGames = createServerFn({
   method: 'GET',
 })
-  .validator(
-    zodValidator(
-      zd.object({ today: zd.enum(['true', 'false']) }),
-    ),
-  )
+  .validator(zodValidator(zd.object({ today: zd.enum(['true', 'false']) })))
   .handler(async ({ data: { today } }) => {
     try {
-      const currDate = new Date().toLocaleDateString(
-        'se-SV',
-        {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-        },
-      )
+      const currDate = new Date().toLocaleDateString('se-SV', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      })
 
       const unplayedGames = await db
         .select({
@@ -70,31 +50,19 @@ export const getUnplayedGames = createServerFn({
         .leftJoin(away, eq(games.awayTeamId, away.teamId))
         .leftJoin(
           homeTeamGame,
-          and(
-            eq(home.teamId, homeTeamGame.teamId),
-            eq(homeTeamGame.gameId, games.gameId),
-          ),
+          and(eq(home.teamId, homeTeamGame.teamId), eq(homeTeamGame.gameId, games.gameId)),
         )
         .leftJoin(
           awayTeamGame,
-          and(
-            eq(away.teamId, awayTeamGame.teamId),
-            eq(awayTeamGame.gameId, games.gameId),
-          ),
+          and(eq(away.teamId, awayTeamGame.teamId), eq(awayTeamGame.gameId, games.gameId)),
         )
         .where(
           and(
-            today === 'true'
-              ? eq(games.date, currDate)
-              : lte(games.date, currDate),
+            today === 'true' ? eq(games.date, currDate) : lte(games.date, currDate),
             eq(games.played, false),
           ),
         )
-        .orderBy(
-          asc(series.level),
-          asc(games.women),
-          desc(games.date),
-        )
+        .orderBy(asc(series.level), asc(games.women), desc(games.date))
 
       return unplayedGames
     } catch (error) {

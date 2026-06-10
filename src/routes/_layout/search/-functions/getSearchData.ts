@@ -1,60 +1,34 @@
-import dayjs from 'dayjs'
 import type { SQL } from 'drizzle-orm'
-import {
-  and,
-  asc,
-  desc,
-  eq,
-  gte,
-  inArray,
-  lte,
-  sql,
-} from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
-
-import { db } from '@/db'
-import {
-  games,
-  seasons,
-  teamgames,
-  teams,
-} from '@/db/schema'
+import { and, asc, desc, eq, gte, inArray, lte, sql } from 'drizzle-orm'
+import dayjs from 'dayjs'
+import type { zd } from '@/lib/utils/zod'
+import type { TeamBase } from '@/lib/types/team'
 import type {
   ParsedSearchRequest,
   SearchParamsFields,
   clientSearchParams,
 } from '@/lib/types/search'
-import type { TeamBase } from '@/lib/types/team'
-import type { zd } from '@/lib/utils/zod'
-
+import { games, seasons, teamgames, teams } from '@/db/schema'
+import { db } from '@/db'
 import { parseSearchRequest } from './parseSearchRequest'
 type Data = zd.infer<typeof clientSearchParams>
 
-export async function getSearchData({
-  data,
-}: {
-  data: Data
-}) {
+export async function getSearchData({ data }: { data: Data }) {
   const home = alias(teams, 'home')
   const away = alias(teams, 'away')
   const lastSeason = await db.query.seasons.findFirst({
     columns: { year: true },
-    orderBy: (seasonsSchema, { desc: descending }) =>
-      descending(seasonsSchema.seasonId),
+    orderBy: (seasonsSchema, { desc: descending }) => descending(seasonsSchema.seasonId),
   })
 
-  const parsedSearchRequest = parseSearchRequest(
-    data,
-    lastSeason,
-  )
+  const parsedSearchRequest = parseSearchRequest(data, lastSeason)
 
   if (parsedSearchRequest.success === false) {
     const paths = parsedSearchRequest.error.issues.flatMap(
       (e) => e.path,
     ) as Array<SearchParamsFields>
-    const errorString = parsedSearchRequest.error.issues
-      .map((e) => e.message)
-      .join(', ')
+    const errorString = parsedSearchRequest.error.issues.map((e) => e.message).join(', ')
     return {
       status: 400,
       message: errorString,
@@ -66,10 +40,7 @@ export async function getSearchData({
 
   const validatedDates = valiDate(searchRequest.inputDate)
 
-  if (
-    typeof validatedDates === 'object' &&
-    'message' in validatedDates
-  ) {
+  if (typeof validatedDates === 'object' && 'message' in validatedDates) {
     return validatedDates
   }
 
@@ -96,10 +67,7 @@ export async function getSearchData({
       })
       .from(teamgames)
       .leftJoin(games, eq(games.gameId, teamgames.gameId))
-      .leftJoin(
-        seasons,
-        eq(teamgames.seasonId, seasons.seasonId),
-      )
+      .leftJoin(seasons, eq(teamgames.seasonId, seasons.seasonId))
       .where(and(...whereArray))
       .orderBy(...orderArray)
       .limit(100),
@@ -107,9 +75,7 @@ export async function getSearchData({
 
   const filteredtCte = db
     .$with('filtered_cte')
-    .as(
-      db.with(cte).selectDistinctOn([cte.gameId]).from(cte),
-    )
+    .as(db.with(cte).selectDistinctOn([cte.gameId]).from(cte))
 
   const results = await db
     .with(filteredtCte)
@@ -128,32 +94,16 @@ export async function getSearchData({
       extraTime: filteredtCte.extraTime,
       penalties: filteredtCte.penalties,
       home: {
-        teamId: sql`home.team_id`
-          .mapWith(Number)
-          .as('home.team_id'),
-        name: sql`home.name`
-          .mapWith(String)
-          .as('home.name'),
-        casualName: sql`home.casual_name`
-          .mapWith(String)
-          .as('home.casual_name'),
-        shortName: sql`home.short_name`
-          .mapWith(String)
-          .as('home.short_name'),
+        teamId: sql`home.team_id`.mapWith(Number).as('home.team_id'),
+        name: sql`home.name`.mapWith(String).as('home.name'),
+        casualName: sql`home.casual_name`.mapWith(String).as('home.casual_name'),
+        shortName: sql`home.short_name`.mapWith(String).as('home.short_name'),
       } as unknown as SQL<TeamBase>,
       away: {
-        teamId: sql`away.team_id`
-          .mapWith(Number)
-          .as('away.team_id'),
-        name: sql`away.name`
-          .mapWith(String)
-          .as('away.name'),
-        casualName: sql`away.casual_name`
-          .mapWith(String)
-          .as('away.casual_name'),
-        shortName: sql`away.short_name`
-          .mapWith(String)
-          .as('away.short_name'),
+        teamId: sql`away.team_id`.mapWith(Number).as('away.team_id'),
+        name: sql`away.name`.mapWith(String).as('away.name'),
+        casualName: sql`away.casual_name`.mapWith(String).as('away.casual_name'),
+        shortName: sql`away.short_name`.mapWith(String).as('away.short_name'),
       } as unknown as SQL<TeamBase>,
     })
     .from(filteredtCte)
@@ -166,18 +116,14 @@ export async function getSearchData({
   if (results.length === 0) {
     return {
       status: 404,
-      message:
-        'Hittade inga matcher som matchade sökningen.',
+      message: 'Hittade inga matcher som matchade sökningen.',
     } as const
   }
 
   return results
 }
 
-function getWhere(
-  searchParams: ParsedSearchRequest,
-  validatedDates: SQL<unknown>[] | undefined,
-) {
+function getWhere(searchParams: ParsedSearchRequest, validatedDates: Array<SQL<unknown>> | undefined) {
   const whereArray: Array<SQL<unknown>> = [
     eq(teamgames.played, true),
     gte(seasons.year, searchParams.startSeason),
@@ -188,101 +134,49 @@ function getWhere(
   if (validatedDates) whereArray.push(...validatedDates)
 
   if (searchParams.teamId) {
-    whereArray.push(
-      eq(teamgames.teamId, searchParams.teamId),
-    )
+    whereArray.push(eq(teamgames.teamId, searchParams.teamId))
   }
 
   if (searchParams.opponentId) {
-    whereArray.push(
-      eq(teamgames.opponentId, searchParams.opponentId),
-    )
+    whereArray.push(eq(teamgames.opponentId, searchParams.opponentId))
   }
 
-  if (
-    searchParams.goalDiff ||
-    searchParams.goalDiff === 0
-  ) {
+  if (searchParams.goalDiff || searchParams.goalDiff === 0) {
     if (searchParams.goalDiffOperator === 'gte') {
-      whereArray.push(
-        gte(
-          teamgames.goalDifference,
-          searchParams.goalDiff,
-        ),
-      )
+      whereArray.push(gte(teamgames.goalDifference, searchParams.goalDiff))
     }
     if (searchParams.goalDiffOperator === 'lte') {
-      whereArray.push(
-        lte(
-          teamgames.goalDifference,
-          searchParams.goalDiff,
-        ),
-      )
+      whereArray.push(lte(teamgames.goalDifference, searchParams.goalDiff))
     }
 
     if (searchParams.goalDiffOperator === 'eq') {
-      whereArray.push(
-        eq(teamgames.goalDifference, searchParams.goalDiff),
-      )
+      whereArray.push(eq(teamgames.goalDifference, searchParams.goalDiff))
     }
   }
 
-  if (
-    searchParams.goalsScored ||
-    searchParams.goalsScored === 0
-  ) {
+  if (searchParams.goalsScored || searchParams.goalsScored === 0) {
     if (searchParams.goalsScoredOperator === 'gte') {
-      whereArray.push(
-        gte(
-          teamgames.goalsScored,
-          searchParams.goalsScored,
-        ),
-      )
+      whereArray.push(gte(teamgames.goalsScored, searchParams.goalsScored))
     }
     if (searchParams.goalsScoredOperator === 'lte') {
-      whereArray.push(
-        lte(
-          teamgames.goalsScored,
-          searchParams.goalsScored,
-        ),
-      )
+      whereArray.push(lte(teamgames.goalsScored, searchParams.goalsScored))
     }
 
     if (searchParams.goalsScoredOperator === 'eq') {
-      whereArray.push(
-        eq(teamgames.goalsScored, searchParams.goalsScored),
-      )
+      whereArray.push(eq(teamgames.goalsScored, searchParams.goalsScored))
     }
   }
 
-  if (
-    searchParams.goalsConceded ||
-    searchParams.goalsConceded === 0
-  ) {
+  if (searchParams.goalsConceded || searchParams.goalsConceded === 0) {
     if (searchParams.goalsConcededOperator === 'gte') {
-      whereArray.push(
-        gte(
-          teamgames.goalsConceded,
-          searchParams.goalsConceded,
-        ),
-      )
+      whereArray.push(gte(teamgames.goalsConceded, searchParams.goalsConceded))
     }
     if (searchParams.goalsConcededOperator === 'lte') {
-      whereArray.push(
-        lte(
-          teamgames.goalsConceded,
-          searchParams.goalsConceded,
-        ),
-      )
+      whereArray.push(lte(teamgames.goalsConceded, searchParams.goalsConceded))
     }
 
     if (searchParams.goalsConcededOperator === 'eq') {
-      whereArray.push(
-        eq(
-          teamgames.goalsConceded,
-          searchParams.goalsConceded,
-        ),
-      )
+      whereArray.push(eq(teamgames.goalsConceded, searchParams.goalsConceded))
     }
   }
 
@@ -294,17 +188,11 @@ function getWhere(
     whereArray.push(eq(teamgames.homeGame, false))
   }
 
-  if (
-    searchParams.selectedGender === 'men' &&
-    !searchParams.teamId
-  ) {
+  if (searchParams.selectedGender === 'men' && !searchParams.teamId) {
     whereArray.push(eq(teamgames.women, false))
   }
 
-  if (
-    searchParams.selectedGender === 'women' &&
-    !searchParams.teamId
-  ) {
+  if (searchParams.selectedGender === 'women' && !searchParams.teamId) {
     whereArray.push(eq(teamgames.women, true))
   }
 
@@ -321,16 +209,10 @@ function getWhere(
   }
 
   if (searchParams.result && searchParams.teamId) {
-    const goalsScored = parseInt(
-      searchParams.result.split('-')[0],
-    )
-    const goalsConceded = parseInt(
-      searchParams.result.split('-')[1],
-    )
+    const goalsScored = parseInt(searchParams.result.split('-')[0])
+    const goalsConceded = parseInt(searchParams.result.split('-')[1])
     whereArray.push(eq(teamgames.goalsScored, goalsScored))
-    whereArray.push(
-      eq(teamgames.goalsConceded, goalsConceded),
-    )
+    whereArray.push(eq(teamgames.goalsConceded, goalsConceded))
   } else if (searchParams.result) {
     whereArray.push(eq(games.result, searchParams.result))
   }
@@ -410,10 +292,7 @@ function valiDate(inputDate: string | null | undefined) {
       message: 'Felaktigt datum: ' + inputDate,
       paths: ['inputDate'] as Array<SearchParamsFields>,
     } as const
-  } else if (
-    ['4', '6', '9', '11'].includes(month) &&
-    Number(day) > 30
-  ) {
+  } else if (['4', '6', '9', '11'].includes(month) && Number(day) > 30) {
     return {
       status: 400,
       message: 'Felaktigt datum: ' + inputDate,

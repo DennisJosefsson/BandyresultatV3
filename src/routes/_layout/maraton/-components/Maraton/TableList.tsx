@@ -1,12 +1,9 @@
 import { getRouteApi } from '@tanstack/react-router'
-
-import { columns } from './columns'
-import DataTable from './DataTable'
 import MobileDataTable from './MobileDataTable'
+import DataTable from './DataTable'
+import { columns } from './columns'
 
-const route = getRouteApi(
-  '/_layout/maraton/table/$maratonTable',
-)
+const route = getRouteApi('/_layout/maraton/table/$maratonTable')
 
 const TableList = () => {
   const tables = route.useLoaderData({
@@ -23,18 +20,10 @@ const TableList = () => {
   return (
     <div className="mb-6">
       <div className="hidden md:block">
-        <DataTable
-          columns={columns}
-          data={tables}
-          teamObject={teamObject}
-        />
+        <DataTable columns={columns} data={tables} teamObject={teamObject} />
       </div>
       <div className="md:hidden">
-        <MobileDataTable
-          columns={columns}
-          data={tables}
-          teamObject={teamObject}
-        />
+        <MobileDataTable columns={columns} data={tables} teamObject={teamObject} />
       </div>
     </div>
   )

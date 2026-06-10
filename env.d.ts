@@ -23,10 +23,7 @@ declare global {
     interface ProcessEnv {
       readonly DB_PRODUCTION_URL: string
       readonly DB_DEVELOPMENT_URL: string
-      readonly NODE_ENV:
-        | 'development'
-        | 'production'
-        | 'test'
+      readonly NODE_ENV: 'development' | 'production' | 'test'
       readonly CLERK_SECRET_KEY: string
       readonly PEM: string
       readonly DB_HOST: string

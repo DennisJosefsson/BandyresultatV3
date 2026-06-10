@@ -1,7 +1,6 @@
 import { Link, getRouteApi } from '@tanstack/react-router'
-
-import { Button } from '@/components/base/ui/button'
 import { useFavTeam } from '@/lib/contexts/favTeamsContext'
+import { Button } from '@/components/base/ui/button'
 
 const route = getRouteApi('/_layout/teams/$teamId')
 
@@ -70,18 +69,12 @@ const TeamHeader = () => {
           ) : null} */}
 
           {favTeams.includes(teamId) && (
-            <Button
-              onClick={remove}
-              size="responsive"
-            >
+            <Button onClick={remove} size="responsive">
               Ta bort favorit
             </Button>
           )}
           {!favTeams.includes(teamId) && (
-            <Button
-              onClick={add}
-              size="responsive"
-            >
+            <Button onClick={add} size="responsive">
               Favoritlag
             </Button>
           )}

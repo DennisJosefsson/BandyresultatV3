@@ -1,8 +1,4 @@
-import type {
-  CompareAllTableRow,
-  CompareBaseTable,
-  CompareCatTableRow,
-} from '@/lib/types/compare'
+import type { CompareAllTableRow, CompareBaseTable, CompareCatTableRow } from '@/lib/types/compare'
 
 type SortedCompareCategoryTables = {
   [key: string]: Array<CompareCatTableRow>
@@ -24,9 +20,7 @@ const levelName: LevelName = {
   '5': 'Femte divisionen',
 }
 
-export const compareSortLevelFunction = (
-  gamesArray: Array<CompareCatTableRow>,
-) => {
+export const compareSortLevelFunction = (gamesArray: Array<CompareCatTableRow>) => {
   const sortLevels = gamesArray.reduce((levels, table) => {
     if (!levels[table.serie.level]) {
       levels[table.serie.level] = []
@@ -35,60 +29,43 @@ export const compareSortLevelFunction = (
     return levels
   }, {} as SortedCompareCategoryTables)
 
-  const sortedLevels = Object.keys(sortLevels).map(
-    (level) => {
-      return {
-        level,
-        categories: sortLevels[level],
+  const sortedLevels = Object.keys(sortLevels).map((level) => {
+    return {
+      level,
+      categories: sortLevels[level],
+    }
+  })
+
+  const sortLevelsAndTables = sortedLevels.map((levelObject) => {
+    const sortCats = levelObject.categories.reduce((category, table) => {
+      if (!category[table.category]) {
+        category[table.category] = []
       }
-    },
-  )
+      category[table.category].push(table)
+      return category
+    }, {} as SortedTables)
 
-  const sortLevelsAndTables = sortedLevels.map(
-    (levelObject) => {
-      const sortCats = levelObject.categories.reduce(
-        (category, table) => {
-          if (!category[table.category]) {
-            category[table.category] = []
-          }
-          category[table.category].push(table)
-          return category
-        },
-        {} as SortedTables,
-      )
-
-      const sortedTables = Object.keys(sortCats).map(
-        (cat) => {
-          return {
-            category: cat,
-            tables: sortCats[cat],
-          }
-        },
-      )
+    const sortedTables = Object.keys(sortCats).map((cat) => {
       return {
-        level: levelObject['level'],
-        levelName: levelName[levelObject['level']],
-        tables: sortedTables,
+        category: cat,
+        tables: sortCats[cat],
       }
-    },
-  )
+    })
+    return {
+      level: levelObject['level'],
+      levelName: levelName[levelObject['level']],
+      tables: sortedTables,
+    }
+  })
 
-  return sortLevelsAndTables.sort(
-    (a, b) => parseInt(a.level) - parseInt(b.level),
-  )
+  return sortLevelsAndTables.sort((a, b) => parseInt(a.level) - parseInt(b.level))
 }
 
-export const compareAllTeamData = (
-  allDataArray: Array<CompareAllTableRow>,
-) => {
+export const compareAllTeamData = (allDataArray: Array<CompareAllTableRow>) => {
   const newArray: Array<CompareBaseTable> = []
 
   allDataArray.forEach((team) => {
-    if (
-      !newArray.find(
-        (teamItem) => team.teamId === teamItem.teamId,
-      )
-    ) {
+    if (!newArray.find((teamItem) => team.teamId === teamItem.teamId)) {
       newArray.push({
         teamId: team.teamId,
         team: {
@@ -107,19 +84,14 @@ export const compareAllTeamData = (
         totalPoints: 0,
       })
     }
-    const teamIndex = newArray.findIndex(
-      (teamItem) => team.teamId === teamItem.teamId,
-    )
+    const teamIndex = newArray.findIndex((teamItem) => team.teamId === teamItem.teamId)
     newArray[teamIndex].totalGames += team.totalGames
     newArray[teamIndex].totalWins += team.totalWins
     newArray[teamIndex].totalDraws += team.totalDraws
     newArray[teamIndex].totalLost += team.totalLost
-    newArray[teamIndex].totalGoalsScored +=
-      team.totalGoalsScored
-    newArray[teamIndex].totalGoalsConceded +=
-      team.totalGoalsConceded
-    newArray[teamIndex].totalGoalDifference +=
-      team.totalGoalDifference
+    newArray[teamIndex].totalGoalsScored += team.totalGoalsScored
+    newArray[teamIndex].totalGoalsConceded += team.totalGoalsConceded
+    newArray[teamIndex].totalGoalDifference += team.totalGoalDifference
     newArray[teamIndex].totalPoints += team.totalPoints
   })
 

@@ -1,38 +1,20 @@
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/components/base/ui/tabs'
-
-import TeamCuriosities from './TeamCuriosities'
-import TeamFiveSeasonsTables from './TeamFiveSeasons'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/base/ui/tabs'
 import TeamTable from './TeamTable'
+import TeamFiveSeasonsTables from './TeamFiveSeasons'
+import TeamCuriosities from './TeamCuriosities'
 
 const Team = () => {
   return (
     <div>
-      <Tabs
-        defaultValue="tables"
-        className="flex flex-col"
-      >
+      <Tabs defaultValue="tables" className="flex flex-col">
         <TabsList>
-          <TabsTrigger
-            className="text-[10px] md:text-sm"
-            value="tables"
-          >
+          <TabsTrigger className="text-[10px] md:text-sm" value="tables">
             Tabeller
           </TabsTrigger>
-          <TabsTrigger
-            className="text-[10px] md:text-sm"
-            value="fiveSeasons"
-          >
+          <TabsTrigger className="text-[10px] md:text-sm" value="fiveSeasons">
             Senaste säsongerna
           </TabsTrigger>
-          <TabsTrigger
-            className="text-[10px] md:text-sm"
-            value="stats"
-          >
+          <TabsTrigger className="text-[10px] md:text-sm" value="stats">
             Statistik
           </TabsTrigger>
         </TabsList>

@@ -1,17 +1,9 @@
 import { getRouteApi } from '@tanstack/react-router'
-
-import { Button } from '@/components/base/ui/button'
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/base/ui/card'
 import { sortOrder } from '@/lib/utils/constants'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/base/ui/card'
+import { Button } from '@/components/base/ui/button'
 
-const route = getRouteApi(
-  '/_layout/dashboard/season/$seasonId/',
-)
+const route = getRouteApi('/_layout/dashboard/season/$seasonId/')
 
 const Series = () => {
   const series = route.useLoaderData({
@@ -26,16 +18,10 @@ const Series = () => {
     <Card>
       <CardHeader>
         <div className="flex flex-row items-center justify-between">
-          <CardTitle className="xl:text-lg">
-            Serier
-          </CardTitle>
+          <CardTitle className="xl:text-lg">Serier</CardTitle>
           <Button
             render={
-              <route.Link
-                to="info/newSerie"
-                params={{ seasonId }}
-                search={{ women }}
-              >
+              <route.Link to="info/newSerie" params={{ seasonId }} search={{ women }}>
                 Lägg till serie
               </route.Link>
             }
@@ -48,15 +34,9 @@ const Series = () => {
           <div>
             {series
               .sort((a, b) => {
-                if (
-                  sortOrder.indexOf(a.group) >
-                  sortOrder.indexOf(b.group)
-                ) {
+                if (sortOrder.indexOf(a.group) > sortOrder.indexOf(b.group)) {
                   return 1
-                } else if (
-                  sortOrder.indexOf(a.group) <
-                  sortOrder.indexOf(b.group)
-                ) {
+                } else if (sortOrder.indexOf(a.group) < sortOrder.indexOf(b.group)) {
                   return -1
                 } else {
                   return 0
@@ -65,13 +45,8 @@ const Series = () => {
               .map((serie) => {
                 if (!serie.serieId) return null
                 return (
-                  <div
-                    key={serie.serieId}
-                    className="mb-1 flex flex-row justify-between"
-                  >
-                    <div className="xl:text-lg">
-                      {serie.serieName}
-                    </div>
+                  <div key={serie.serieId} className="mb-1 flex flex-row justify-between">
+                    <div className="xl:text-lg">{serie.serieName}</div>
                     <div className="flex flex-row gap-1">
                       <Button
                         size="sm"

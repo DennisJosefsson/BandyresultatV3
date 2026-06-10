@@ -1,11 +1,7 @@
-import { createServerFn } from '@tanstack/react-start'
 import { ZodError } from 'zod'
-
-import { db } from '@/db'
-import { catchError } from '@/lib/middlewares/errors/catchError'
-import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import { zd } from '@/lib/utils/zod'
-
+import { createServerFn } from '@tanstack/react-start'
+import type { Team } from '@/lib/types/team'
+import type { Meta } from '@/lib/types/meta'
 import type {
   CompareAllTableRow,
   CompareBaseTable,
@@ -14,8 +10,12 @@ import type {
   CompareLatestWinStats,
   CompareSeasonStat,
 } from '@/lib/types/compare'
-import type { Meta } from '@/lib/types/meta'
-import type { Team } from '@/lib/types/team'
+import { zd } from '@/lib/utils/zod'
+import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
+import { catchError } from '@/lib/middlewares/errors/catchError'
+import { db } from '@/db'
+import getCompareHeaderText from './utils/getCompareHeaderText'
+import { compareAllTeamData, compareSortLevelFunction } from './utils/compareSortFunctions'
 import {
   getAllDbSeasons,
   getAllGamesTables,
@@ -29,11 +29,6 @@ import {
   getLatestHomeWin,
   getPlayoffs,
 } from './utils/compareQueries'
-import {
-  compareAllTeamData,
-  compareSortLevelFunction,
-} from './utils/compareSortFunctions'
-import getCompareHeaderText from './utils/getCompareHeaderText'
 
 type CompareReturn =
   | {
@@ -76,9 +71,7 @@ export const getCompareTeams = createServerFn({
 })
   .validator(
     zd.object({
-      teamArray: zd
-        .array(zd.number().int().positive())
-        .optional(),
+      teamArray: zd.array(zd.number().int().positive()).optional(),
 
       women: zd.boolean(),
     }),
@@ -117,8 +110,7 @@ export const getCompareTeams = createServerFn({
       }
 
       const compareTeams = await db.query.teams.findMany({
-        where: (teams, { inArray }) =>
-          inArray(teams.teamId, teamArray),
+        where: (teams, { inArray }) => inArray(teams.teamId, teamArray),
       })
 
       const catTables = await getCatTables({
@@ -126,9 +118,7 @@ export const getCompareTeams = createServerFn({
       })
 
       if (catTables.length === 0) {
-        const teamStrings = compareTeams
-          .map((team) => team.name)
-          .join(' och ')
+        const teamStrings = compareTeams.map((team) => team.name).join(' och ')
         const breadCrumb = `H2H`
         const title = `Bandyresultat - ${breadCrumb}`
         const description = `${teamStrings} har inga spelade matcher mot varandra i databasen.`
@@ -142,8 +132,7 @@ export const getCompareTeams = createServerFn({
         }
       }
 
-      const categoryData =
-        compareSortLevelFunction(catTables)
+      const categoryData = compareSortLevelFunction(catTables)
 
       const allData = await getAllGamesTables({
         teamArray,
@@ -159,21 +148,16 @@ export const getCompareTeams = createServerFn({
 
       const allPlayoffs = await getAllPlayoffs(teamArray)
 
-      const firstDivisionSeasonsSince1931 =
-        await getFirstDivisionSeasonsSince1931(teamArray)
+      const firstDivisionSeasonsSince1931 = await getFirstDivisionSeasonsSince1931(teamArray)
 
       const allDbSeasons = await getAllDbSeasons(teamArray)
 
-      const firstDivisionSeasons =
-        await getFirstDivisionSeasons(teamArray)
+      const firstDivisionSeasons = await getFirstDivisionSeasons(teamArray)
 
-      const { firstGames, latestGames } =
-        await getFirstAndLastGames(teamArray)
+      const { firstGames, latestGames } = await getFirstAndLastGames(teamArray)
 
-      const latestHomeWin =
-        await getLatestHomeWin(teamArray)
-      const latestAwayWin =
-        await getLatestAwayWin(teamArray)
+      const latestHomeWin = await getLatestHomeWin(teamArray)
+      const latestAwayWin = await getLatestAwayWin(teamArray)
 
       const breadCrumb = `H2H:  ${compareTeams.map((team) => team.name).join(' - ')}`
       const title = `Bandyresultat - ${breadCrumb}`
@@ -212,9 +196,7 @@ export const getCompareTeams = createServerFn({
         const title = `Bandyresultat - ${breadCrumb}`
         const description = ``
         const url = `https://bandyresultat.se/teams?women=${data.women}`
-        const errorString = error.issues
-          .map((issue) => issue.message)
-          .join(',')
+        const errorString = error.issues.map((issue) => issue.message).join(',')
         return {
           message: errorString,
           breadCrumb,

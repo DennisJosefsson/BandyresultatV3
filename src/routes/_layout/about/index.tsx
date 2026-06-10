@@ -1,16 +1,7 @@
-import {
-  Link,
-  createFileRoute,
-} from '@tanstack/react-router'
 import Markdown from 'react-markdown'
-
+import { Link, createFileRoute } from '@tanstack/react-router'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/base/ui/card'
 import about from '@/assets/markdown/about.md'
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/base/ui/card'
 
 export const Route = createFileRoute('/_layout/about/')({
   staticData: { breadcrumb: 'Om sidan' },

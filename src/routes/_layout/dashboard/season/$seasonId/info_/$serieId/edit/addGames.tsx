@@ -1,9 +1,8 @@
-import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
-
+import { createFileRoute } from '@tanstack/react-router'
 import type { BulkGameFileParser } from '@/lib/types/game'
-import BulkGames from '@/routes/_layout/dashboard/-components/Games/BulkGames'
 import FileInput from '@/routes/_layout/dashboard/-components/Utils/XLSXFileInput'
+import BulkGames from '@/routes/_layout/dashboard/-components/Games/BulkGames'
 
 export const Route = createFileRoute(
   '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/addGames',
@@ -12,8 +11,7 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
-  const [gameData, setGameData] =
-    useState<BulkGameFileParser | null>(null)
+  const [gameData, setGameData] = useState<BulkGameFileParser | null>(null)
 
   return (
     <div className="mt-6 flex flex-col gap-4">
@@ -25,9 +23,7 @@ function RouteComponent() {
           <BulkGames gameData={gameData} />
         ) : (
           <div className="flex flex-row justify-center">
-            <span className="text-sm">
-              Väntar på data...
-            </span>
+            <span className="text-sm">Väntar på data...</span>
           </div>
         )}
       </div>

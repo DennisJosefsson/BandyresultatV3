@@ -1,19 +1,14 @@
-import { createServerFn } from '@tanstack/react-start'
-import { zodValidator } from '@tanstack/zod-adapter'
 import { and, eq, getTableColumns } from 'drizzle-orm'
-
-import { db } from '@/db'
-import { games, playoffseason, seasons } from '@/db/schema'
-import { catchError } from '@/lib/middlewares/errors/catchError'
-import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
+import { zodValidator } from '@tanstack/zod-adapter'
+import { createServerFn } from '@tanstack/react-start'
+import type { GroupPlayoffTable, PlayoffSeriesTable } from '@/lib/types/table'
 import type { Game } from '@/lib/types/game'
-import type {
-  GroupPlayoffTable,
-  PlayoffSeriesTable,
-} from '@/lib/types/table'
-import { seasonIdCheck } from '@/lib/utils/utils'
 import { zd } from '@/lib/utils/zod'
-
+import { seasonIdCheck } from '@/lib/utils/utils'
+import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
+import { catchError } from '@/lib/middlewares/errors/catchError'
+import { games, playoffseason, seasons } from '@/db/schema'
+import { db } from '@/db'
 import { getPlayoffTableData } from './getPlayoffTableData'
 
 type Meta = {
@@ -26,10 +21,10 @@ type PlayoffTableReturn =
   | {
       status: 200
       finalGames: Array<Omit<Game, 'season'>>
-      semiTables: GroupPlayoffTable[] | undefined
-      quarterTables: GroupPlayoffTable[] | undefined
-      eightTables: GroupPlayoffTable[] | undefined
-      playoffSeriesTables: PlayoffSeriesTable[] | undefined
+      semiTables: Array<GroupPlayoffTable> | undefined
+      quarterTables: Array<GroupPlayoffTable> | undefined
+      eightTables: Array<GroupPlayoffTable> | undefined
+      playoffSeriesTables: Array<PlayoffSeriesTable> | undefined
       playoffSeason: typeof playoffseason.$inferSelect
       breadCrumb: string
       meta: Meta
@@ -46,107 +41,84 @@ export const getPlayoffTable = createServerFn({
   method: 'GET',
 })
   .middleware([errorMiddleware])
-  .validator(
-    zodValidator(
-      zd.object({ year: zd.number(), women: zd.boolean() }),
-    ),
-  )
-  .handler(
-    async ({
-      data: { year, women },
-    }): Promise<PlayoffTableReturn> => {
-      try {
-        const seasonYear = seasonIdCheck.parse(year)
-        const breadCrumb = `Slutspelsträd`
-        const title = `Bandyresultat - Slutspelsträd - ${women === true ? 'Damer' : 'Herrar'} ${seasonYear!}`
-        const url = `https://bandyresultat.se/seasons/${year}/playoff/table?women=${women}`
-        const description = `Slutspelsträd säsongen ${seasonYear} för ${women ? 'damer' : 'herrar'}`
-        const meta = {
-          title,
-          url,
-          description,
-        }
-        if (year < 1973 && women) {
-          return {
-            status: 404,
-            message:
-              'Damernas första säsong var 1972/1973.',
-            breadCrumb,
-            meta,
-          }
-        }
-        const season = await db.query.seasons.findFirst({
-          where: (seasonsSchema, { and: AND, eq: equal }) =>
-            AND(
-              eq(seasonsSchema.year, seasonYear!),
-              equal(seasonsSchema.women, women),
-            ),
-        })
-
-        if (!season) {
-          return {
-            status: 404,
-            message: 'Säsongen finns inte.',
-            breadCrumb,
-            meta,
-          }
-        }
-
-        const playoffSeasonArr = await db
-          .select({ ...getTableColumns(playoffseason) })
-          .from(playoffseason)
-          .leftJoin(
-            seasons,
-            eq(seasons.seasonId, playoffseason.seasonId),
-          )
-          .where(
-            and(
-              eq(seasons.seasonId, season.seasonId),
-              eq(seasons.women, women),
-            ),
-          )
-
-        if (playoffSeasonArr.length === 0) {
-          return {
-            status: 404,
-            message: 'Ingen slutspelsdata.',
-            breadCrumb,
-            meta,
-          }
-        }
-
-        const playoffSeason = playoffSeasonArr[0]
-
-        const playoffGamesCount = await db.$count(
-          games,
-          and(
-            eq(games.seasonId, playoffSeason.seasonId),
-            eq(games.playoff, true),
-          ),
-        )
-
-        if (playoffGamesCount === 0) {
-          return {
-            status: 404,
-            message: 'Inga slutspelsmatcher är inlagda.',
-            breadCrumb,
-            meta,
-          }
-        }
-
-        const playoffData = await getPlayoffTableData({
-          playoffSeason,
-        })
-
+  .validator(zodValidator(zd.object({ year: zd.number(), women: zd.boolean() })))
+  .handler(async ({ data: { year, women } }): Promise<PlayoffTableReturn> => {
+    try {
+      const seasonYear = seasonIdCheck.parse(year)
+      const breadCrumb = `Slutspelsträd`
+      const title = `Bandyresultat - Slutspelsträd - ${women === true ? 'Damer' : 'Herrar'} ${seasonYear!}`
+      const url = `https://bandyresultat.se/seasons/${year}/playoff/table?women=${women}`
+      const description = `Slutspelsträd säsongen ${seasonYear} för ${women ? 'damer' : 'herrar'}`
+      const meta = {
+        title,
+        url,
+        description,
+      }
+      if (year < 1973 && women) {
         return {
-          status: 200,
-          ...playoffData,
-          playoffSeason,
+          status: 404,
+          message: 'Damernas första säsong var 1972/1973.',
           breadCrumb,
           meta,
         }
-      } catch (error) {
-        catchError(error)
       }
-    },
-  )
+      const season = await db.query.seasons.findFirst({
+        where: (seasonsSchema, { and: AND, eq: equal }) =>
+          AND(eq(seasonsSchema.year, seasonYear!), equal(seasonsSchema.women, women)),
+      })
+
+      if (!season) {
+        return {
+          status: 404,
+          message: 'Säsongen finns inte.',
+          breadCrumb,
+          meta,
+        }
+      }
+
+      const playoffSeasonArr = await db
+        .select({ ...getTableColumns(playoffseason) })
+        .from(playoffseason)
+        .leftJoin(seasons, eq(seasons.seasonId, playoffseason.seasonId))
+        .where(and(eq(seasons.seasonId, season.seasonId), eq(seasons.women, women)))
+
+      if (playoffSeasonArr.length === 0) {
+        return {
+          status: 404,
+          message: 'Ingen slutspelsdata.',
+          breadCrumb,
+          meta,
+        }
+      }
+
+      const playoffSeason = playoffSeasonArr[0]
+
+      const playoffGamesCount = await db.$count(
+        games,
+        and(eq(games.seasonId, playoffSeason.seasonId), eq(games.playoff, true)),
+      )
+
+      if (playoffGamesCount === 0) {
+        return {
+          status: 404,
+          message: 'Inga slutspelsmatcher är inlagda.',
+          breadCrumb,
+          meta,
+        }
+      }
+
+      const playoffData = await getPlayoffTableData({
+        playoffSeason,
+      })
+
+      return {
+        status: 200,
+        ...playoffData,
+        playoffSeason,
+        breadCrumb,
+        meta,
+      }
+    } catch (error) {
+      catchError(error)
+    }
+  })

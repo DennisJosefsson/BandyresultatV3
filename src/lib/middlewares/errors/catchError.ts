@@ -1,8 +1,7 @@
 import { ZodError } from 'zod'
-
-import DbError from './DbError'
-import { getDbErrorMessage } from './getDbErrorMessage'
 import ZodParsingError from './ZodParsingError'
+import { getDbErrorMessage } from './getDbErrorMessage'
+import DbError from './DbError'
 
 export function catchError(error: unknown) {
   if (error instanceof ZodError) {

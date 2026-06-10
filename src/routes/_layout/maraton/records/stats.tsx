@@ -1,16 +1,9 @@
-import {
-  CatchBoundary,
-  createFileRoute,
-} from '@tanstack/react-router'
-
+import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
-
-import GeneralStats from '../-components/Records/PointsGoalsEtc/GeneralStats'
 import { getGeneralStats } from '../-functions/getGeneralStats'
+import GeneralStats from '../-components/Records/PointsGoalsEtc/GeneralStats'
 
-export const Route = createFileRoute(
-  '/_layout/maraton/records/stats',
-)({
+export const Route = createFileRoute('/_layout/maraton/records/stats')({
   loaderDeps: ({ search: { women } }) => ({ women }),
   loader: async ({ deps }) => {
     const data = await getGeneralStats({
@@ -21,33 +14,24 @@ export const Route = createFileRoute(
     return data
   },
   staticData: {
-    breadcrumb: (match) =>
-      match.loaderData.breadCrumb ?? 'Statistik',
+    breadcrumb: (match) => match.loaderData.breadCrumb ?? 'Statistik',
   },
   head: ({ loaderData }) => ({
     meta: [
       {
-        title:
-          loaderData?.meta.title ??
-          'Bandyresultat - Rekord: Statistik',
+        title: loaderData?.meta.title ?? 'Bandyresultat - Rekord: Statistik',
       },
       {
         name: 'description',
-        content:
-          loaderData?.meta.description ??
-          'Bandyresultat - Rekord: Statistik',
+        content: loaderData?.meta.description ?? 'Bandyresultat - Rekord: Statistik',
       },
       {
         property: 'og:description',
-        content:
-          loaderData?.meta.description ??
-          'Bandyresultat - Rekord: Statistik',
+        content: loaderData?.meta.description ?? 'Bandyresultat - Rekord: Statistik',
       },
       {
         property: 'og:title',
-        content:
-          loaderData?.meta.title ??
-          'Bandyresultat - Rekord: Statistik',
+        content: loaderData?.meta.title ?? 'Bandyresultat - Rekord: Statistik',
       },
       {
         property: 'og:type',
@@ -55,9 +39,7 @@ export const Route = createFileRoute(
       },
       {
         property: 'og:url',
-        content:
-          loaderData?.meta.url ??
-          'https://www.bandyresultat.se/maraton/records/stats',
+        content: loaderData?.meta.url ?? 'https://www.bandyresultat.se/maraton/records/stats',
       },
       {
         property: 'og:image',
@@ -77,11 +59,7 @@ function RouteComponent() {
         console.error(error)
       }}
       errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent
-          id="generalStats"
-          error={error}
-          reset={reset}
-        />
+        <SimpleErrorComponent id="generalStats" error={error} reset={reset} />
       )}
     >
       <GeneralStats />

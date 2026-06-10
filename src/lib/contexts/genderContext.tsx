@@ -1,7 +1,6 @@
-import type { ReactNode} from 'react';
+import type { ReactNode } from 'react'
 import { useReducer } from 'react'
-
-import type { GenderActionType, GenderType } from './contexts';
+import type { GenderActionType, GenderType } from './contexts'
 import { GenderContext } from './contexts'
 
 const genderReducer = (state: GenderType, action: GenderActionType) => {
@@ -19,9 +18,7 @@ const GenderContextProvider = ({ children }: { children: ReactNode }) => {
   const [womenContext, dispatch] = useReducer(genderReducer, false)
 
   return (
-    <GenderContext.Provider value={{ womenContext, dispatch }}>
-      {children}
-    </GenderContext.Provider>
+    <GenderContext.Provider value={{ womenContext, dispatch }}>{children}</GenderContext.Provider>
   )
 }
 

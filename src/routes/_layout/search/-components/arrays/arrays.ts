@@ -1,7 +1,4 @@
-import type {
-  Categories,
-  OperatorValues,
-} from '@/lib/types/search'
+import type { Categories, OperatorValues } from '@/lib/types/search'
 
 export const orderSelection: Array<{
   value: OperatorValues

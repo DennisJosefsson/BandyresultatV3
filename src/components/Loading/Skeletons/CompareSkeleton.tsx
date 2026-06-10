@@ -1,17 +1,7 @@
-import { Button } from '@/components/base/ui/button'
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/base/ui/card'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/base/ui/tabs'
 import { Skeleton } from '@/components/base/ui/skeleton'
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/components/base/ui/tabs'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/base/ui/card'
+import { Button } from '@/components/base/ui/button'
 
 const CompareSkeleton = () => {
   return (
@@ -33,22 +23,13 @@ const CompareSkeleton = () => {
       <div>
         <Tabs defaultValue="tables">
           <TabsList>
-            <TabsTrigger
-              value="tables"
-              className="text-[10px] md:text-sm"
-            >
+            <TabsTrigger value="tables" className="text-[10px] md:text-sm">
               Tabeller
             </TabsTrigger>
-            <TabsTrigger
-              value="games"
-              className="text-[10px] md:text-sm"
-            >
+            <TabsTrigger value="games" className="text-[10px] md:text-sm">
               Matcher
             </TabsTrigger>
-            <TabsTrigger
-              value="stats"
-              className="text-[10px] md:text-sm"
-            >
+            <TabsTrigger value="stats" className="text-[10px] md:text-sm">
               Statistik
             </TabsTrigger>
           </TabsList>

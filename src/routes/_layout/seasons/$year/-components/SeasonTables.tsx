@@ -1,6 +1,6 @@
-import MobileTableList from './Tables/MobileTableList'
-import SeasonTablesButtonList from './Tables/SeasonTablesButtonList'
 import TableList from './Tables/TableList'
+import SeasonTablesButtonList from './Tables/SeasonTablesButtonList'
+import MobileTableList from './Tables/MobileTableList'
 
 const SeasonTables = () => {
   return (

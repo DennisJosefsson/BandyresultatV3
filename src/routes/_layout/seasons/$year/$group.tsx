@@ -1,20 +1,10 @@
-import {
-  CatchBoundary,
-  Outlet,
-  createFileRoute,
-} from '@tanstack/react-router'
-
+import { CatchBoundary, Outlet, createFileRoute } from '@tanstack/react-router'
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import { validateGroup } from './-functions/validateGroup'
 
-export const Route = createFileRoute(
-  '/_layout/seasons/$year/$group',
-)({
+export const Route = createFileRoute('/_layout/seasons/$year/$group')({
   loaderDeps: ({ search: { women } }) => ({ women }),
-  loader: async ({
-    params: { year, group },
-    deps: { women },
-  }) => {
+  loader: async ({ params: { year, group }, deps: { women } }) => {
     const data = await validateGroup({
       data: { year, group, women },
     })
@@ -37,11 +27,7 @@ function RouteComponent() {
         console.error(error)
       }}
       errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent
-          id="groupRoute"
-          error={error}
-          reset={reset}
-        />
+        <SimpleErrorComponent id="groupRoute" error={error} reset={reset} />
       )}
     >
       <Outlet />

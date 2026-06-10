@@ -1,13 +1,8 @@
-import {
-  CatchBoundary,
-  createFileRoute,
-} from '@tanstack/react-router'
-
+import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
-
-import SeasonsList from './-components/SeasonsList'
-import SeasonsPagination from './-components/SeasonsPagination'
 import { getPaginatedSeasons } from './-functions/getPaginatedSeasons'
+import SeasonsPagination from './-components/SeasonsPagination'
+import SeasonsList from './-components/SeasonsList'
 
 export const Route = createFileRoute('/_layout/seasons/')({
   head: () => ({
@@ -64,11 +59,7 @@ function Seasons() {
             console.error(error)
           }}
           errorComponent={({ error, reset }) => (
-            <SimpleErrorComponent
-              id="Säsongslista"
-              error={error}
-              reset={reset}
-            />
+            <SimpleErrorComponent id="Säsongslista" error={error} reset={reset} />
           )}
         >
           <SeasonsPagination />

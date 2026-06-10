@@ -1,14 +1,10 @@
 // import { useFavTeam } from '@/lib/contexts/favTeamsContext'
 import { getRouteApi } from '@tanstack/react-router'
-
 import Date from '@/components/Common/Date'
-
-import { columns } from './gamesColumn'
 import GamesDataTable from './GamesDataTable'
+import { columns } from './gamesColumn'
 
-const route = getRouteApi(
-  '/_layout/seasons/$year/$group/development',
-)
+const route = getRouteApi('/_layout/seasons/$year/$group/development')
 const DevelopmentGamesList = () => {
   // const { favTeams } = useFavTeam()
   const index = route.useSearch({ select: (s) => s.index })
@@ -29,11 +25,7 @@ const DevelopmentGamesList = () => {
       <div className="text-[10px] sm:text-sm lg:text-base xl:text-lg 2xl:text-xl">
         <Date>{data.games[index]?.date}</Date>
       </div>
-      <GamesDataTable
-        teamObject={teamObject}
-        columns={columns}
-        data={data.games[index]?.games}
-      />
+      <GamesDataTable teamObject={teamObject} columns={columns} data={data.games[index]?.games} />
     </div>
   )
 }

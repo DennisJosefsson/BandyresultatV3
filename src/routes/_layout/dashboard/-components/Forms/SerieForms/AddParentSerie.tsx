@@ -1,18 +1,5 @@
 import { getRouteApi } from '@tanstack/react-router'
-
-import { Button } from '@/components/base/ui/button'
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/base/ui/card'
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from '@/components/base/ui/field'
+import { zd } from '@/lib/utils/zod'
 import {
   Select,
   SelectContent,
@@ -21,26 +8,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/base/ui/select'
-import { zd } from '@/lib/utils/zod'
-
+import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/base/ui/field'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/base/ui/card'
+import { Button } from '@/components/base/ui/button'
 import { useNewParentSerieForm } from '../../../-hooks/useNewParentSerieForm'
 
-const route = getRouteApi(
-  '/_layout/dashboard/season/$seasonId/info_/$serieId/edit',
-)
+const route = getRouteApi('/_layout/dashboard/season/$seasonId/info_/$serieId/edit')
 
 const AddParentSerie = () => {
   const series = route.useLoaderData({
     select: (s) => s.series,
   })
-  const parentSeries = route
-    .useLoaderData({ select: (s) => s.parentSeries })
-    .map((s) => s.parentId)
+  const parentSeries = route.useLoaderData({ select: (s) => s.parentSeries }).map((s) => s.parentId)
   const form = useNewParentSerieForm()
 
-  const seriesArray = series.filter(
-    (serie) => !parentSeries.includes(serie.value),
-  )
+  const seriesArray = series.filter((serie) => !parentSeries.includes(serie.value))
 
   return (
     <Card>
@@ -50,10 +32,7 @@ const AddParentSerie = () => {
             <CardTitle>Ny Parentserie</CardTitle>
           </div>
           <div className="flex flex-row gap-2">
-            <Button
-              type="submit"
-              form="addParentSerieForm"
-            >
+            <Button type="submit" form="addParentSerieForm">
               Lägg till
             </Button>
           </div>
@@ -72,21 +51,15 @@ const AddParentSerie = () => {
             <form.Field
               name="parentId"
               children={(field) => {
-                const isInvalid =
-                  field.state.meta.isTouched &&
-                  !field.state.meta.isValid
+                const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
                 return (
                   <Field data-invalid={isInvalid}>
-                    <FieldLabel htmlFor={field.name}>
-                      ParentSerie
-                    </FieldLabel>
+                    <FieldLabel htmlFor={field.name}>ParentSerie</FieldLabel>
                     <Select
                       name={field.name}
                       value={field.state.value.toString()}
                       onValueChange={(value) => {
-                        field.handleChange(
-                          zd.coerce.number().parse(value),
-                        )
+                        field.handleChange(zd.coerce.number().parse(value))
                       }}
                     >
                       <SelectTrigger
@@ -95,37 +68,22 @@ const AddParentSerie = () => {
                         className="w-full min-w-[120px]"
                       >
                         <SelectValue placeholder="Välj">
-                          {seriesArray.find(
-                            (s) =>
-                              s.value === field.state.value,
-                          )?.label ?? 'Välj'}
+                          {seriesArray.find((s) => s.value === field.state.value)?.label ?? 'Välj'}
                         </SelectValue>
                       </SelectTrigger>
-                      <SelectContent
-                        alignItemWithTrigger={true}
-                      >
+                      <SelectContent alignItemWithTrigger={true}>
                         <SelectItem value="auto">
-                          {seriesArray.find(
-                            (s) =>
-                              s.value === field.state.value,
-                          )?.label ?? 'Välj'}
+                          {seriesArray.find((s) => s.value === field.state.value)?.label ?? 'Välj'}
                         </SelectItem>
                         <SelectSeparator />
                         {seriesArray.map((cat) => (
-                          <SelectItem
-                            key={cat.value}
-                            value={cat.value.toString()}
-                          >
+                          <SelectItem key={cat.value} value={cat.value.toString()}>
                             {cat.label}
                           </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
-                    {isInvalid && (
-                      <FieldError
-                        errors={field.state.meta.errors}
-                      />
-                    )}
+                    {isInvalid && <FieldError errors={field.state.meta.errors} />}
                   </Field>
                 )
               }}

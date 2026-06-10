@@ -1,20 +1,13 @@
-import { Label } from '@/components/base/ui/label'
-import CustomNumberInput from '@/components/Common/CustomNumberInput'
-import type { SearchParamsFields } from '@/lib/types/search'
-import {
-  useNavigate,
-  useSearch,
-} from '@tanstack/react-router'
 import type { ChangeEvent } from 'react'
+import { useNavigate, useSearch } from '@tanstack/react-router'
+import type { SearchParamsFields } from '@/lib/types/search'
+import CustomNumberInput from '@/components/Common/CustomNumberInput'
+import { Label } from '@/components/base/ui/label'
 
 type NumberInputProps = {
   field: Extract<
     SearchParamsFields,
-    | 'endSeason'
-    | 'startSeason'
-    | 'goalDiff'
-    | 'goalsConceded'
-    | 'goalsScored'
+    'endSeason' | 'startSeason' | 'goalDiff' | 'goalsConceded' | 'goalsScored'
   >
   label: string
   placeholder: string
@@ -22,13 +15,7 @@ type NumberInputProps = {
   max?: number
 }
 
-const NumberInput = ({
-  field,
-  label,
-  placeholder,
-  min,
-  max,
-}: NumberInputProps) => {
+const NumberInput = ({ field, label, placeholder, min, max }: NumberInputProps) => {
   const searchField = useSearch({
     from: '/_layout/search',
     select: (search) => search[field],
@@ -36,9 +23,7 @@ const NumberInput = ({
 
   const navigate = useNavigate({ from: '/search' })
 
-  const handleOnChange = (
-    event: ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value
 
     if (value === '') {

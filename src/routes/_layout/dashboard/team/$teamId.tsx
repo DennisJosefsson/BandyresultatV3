@@ -1,10 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
-
 import { zd } from '@/lib/utils/zod'
-
-import EditTeam from '../-components/Forms/TeamForms/EditTeam'
-import { getCountiesForTeamForm } from '../-functions/TeamFunctions/getCountriesForTeamForm'
 import { getEditTeam } from '../-functions/TeamFunctions/getEditTeam'
+import { getCountiesForTeamForm } from '../-functions/TeamFunctions/getCountriesForTeamForm'
+import EditTeam from '../-components/Forms/TeamForms/EditTeam'
 
 export const Route = createFileRoute('/_layout/dashboard/team/$teamId')({
   params: {

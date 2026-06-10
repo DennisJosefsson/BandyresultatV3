@@ -1,22 +1,9 @@
-import type {
-  SQL} from 'drizzle-orm';
-import {
-  and,
-  asc,
-  avg,
-  desc,
-  eq,
-  gt,
-  inArray,
-  max,
-  sql,
-  sum,
-} from 'drizzle-orm'
+import type { SQL } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
-
-import { db } from '@/db'
-import { games, teamgames, teams } from '@/db/schema'
+import { and, asc, avg, desc, eq, gt, inArray, max, sql, sum } from 'drizzle-orm'
 import type { Serie } from '@/lib/types/serie'
+import { games, teamgames, teams } from '@/db/schema'
+import { db } from '@/db'
 
 type GetGroupStatsDataProps = { serie: Serie }
 
@@ -62,10 +49,9 @@ export async function getGroupStatsData({ serie }: GetGroupStatsDataProps) {
       winTotal: sql`sum(case when teamgames.win = true then 1 else 0 end)`
         .mapWith(Number)
         .as('win_total'),
-      winAvg:
-        sql`round(avg(case when teamgames.win = true then 1 else 0 end)::numeric,3) * 100`
-          .mapWith(Number)
-          .as('win_avg'),
+      winAvg: sql`round(avg(case when teamgames.win = true then 1 else 0 end)::numeric,3) * 100`
+        .mapWith(Number)
+        .as('win_avg'),
     })
     .from(teamgames)
     .where(
@@ -82,10 +68,9 @@ export async function getGroupStatsData({ serie }: GetGroupStatsDataProps) {
       winTotal: sql`sum(case when teamgames.win = true then 1 else 0 end)`
         .mapWith(Number)
         .as('win_total'),
-      winAvg:
-        sql`round(avg(case when teamgames.win = true then 1 else 0 end)::numeric,3) * 100`
-          .mapWith(Number)
-          .as('win_avg'),
+      winAvg: sql`round(avg(case when teamgames.win = true then 1 else 0 end)::numeric,3) * 100`
+        .mapWith(Number)
+        .as('win_avg'),
     })
     .from(teamgames)
     .where(
@@ -102,10 +87,9 @@ export async function getGroupStatsData({ serie }: GetGroupStatsDataProps) {
       drawTotal: sql`sum(case when teamgames.draw = true then 1 else 0 end)`
         .mapWith(Number)
         .as('draw_total'),
-      drawAvg:
-        sql`round(avg(case when teamgames.draw = true then 1 else 0 end)::numeric,3) * 100`
-          .mapWith(Number)
-          .as('draw_avg'),
+      drawAvg: sql`round(avg(case when teamgames.draw = true then 1 else 0 end)::numeric,3) * 100`
+        .mapWith(Number)
+        .as('draw_avg'),
     })
     .from(teamgames)
     .where(
@@ -259,17 +243,10 @@ export async function getGroupStatsData({ serie }: GetGroupStatsDataProps) {
           teamgames.goalDifference,
           db
             .select({
-              goalDifference: max(teamgames.goalDifference).as(
-                'goal_difference',
-              ),
+              goalDifference: max(teamgames.goalDifference).as('goal_difference'),
             })
             .from(teamgames)
-            .where(
-              and(
-                eq(teamgames.serieId, serie.serieId),
-                eq(teamgames.played, true),
-              ),
-            ),
+            .where(and(eq(teamgames.serieId, serie.serieId), eq(teamgames.played, true))),
         ),
       ),
     )
@@ -278,9 +255,7 @@ export async function getGroupStatsData({ serie }: GetGroupStatsDataProps) {
     .select({
       date: games.date,
       result: games.result,
-      value: sql`abs(games.home_goal - games.away_goal)`
-        .mapWith(Number)
-        .as('value'),
+      value: sql`abs(games.home_goal - games.away_goal)`.mapWith(Number).as('value'),
       gameId: games.gameId,
       home: {
         teamId: home.teamId,
@@ -343,12 +318,7 @@ export async function getGroupStatsData({ serie }: GetGroupStatsDataProps) {
 type StreakFunctionProps = {
   serie: Serie
   threshold: number
-  streak:
-    | 'winStreak'
-    | 'drawStreak'
-    | 'losingStreak'
-    | 'noWinStreak'
-    | 'unbeatenStreak'
+  streak: 'winStreak' | 'drawStreak' | 'losingStreak' | 'noWinStreak' | 'unbeatenStreak'
 }
 
 async function getStreak({ serie, threshold, streak }: StreakFunctionProps) {
@@ -363,17 +333,10 @@ async function getStreak({ serie, threshold, streak }: StreakFunctionProps) {
             draw: teamgames.draw,
             lost: teamgames.lost,
             date: teamgames.date,
-            value: sql<number>`case when win = true then 1 else 0 end`.as(
-              'value',
-            ),
+            value: sql<number>`case when win = true then 1 else 0 end`.as('value'),
           })
           .from(teamgames)
-          .where(
-            and(
-              eq(teamgames.played, true),
-              eq(teamgames.serieId, serie.serieId),
-            ),
-          ),
+          .where(and(eq(teamgames.played, true), eq(teamgames.serieId, serie.serieId))),
       )
       break
     case 'drawStreak':
@@ -385,17 +348,10 @@ async function getStreak({ serie, threshold, streak }: StreakFunctionProps) {
             draw: teamgames.draw,
             lost: teamgames.lost,
             date: teamgames.date,
-            value: sql<number>`case when draw = true then 1 else 0 end`.as(
-              'value',
-            ),
+            value: sql<number>`case when draw = true then 1 else 0 end`.as('value'),
           })
           .from(teamgames)
-          .where(
-            and(
-              eq(teamgames.played, true),
-              eq(teamgames.serieId, serie.serieId),
-            ),
-          ),
+          .where(and(eq(teamgames.played, true), eq(teamgames.serieId, serie.serieId))),
       )
       break
     case 'losingStreak':
@@ -407,17 +363,10 @@ async function getStreak({ serie, threshold, streak }: StreakFunctionProps) {
             draw: teamgames.draw,
             lost: teamgames.lost,
             date: teamgames.date,
-            value: sql<number>`case when lost = true then 1 else 0 end`.as(
-              'value',
-            ),
+            value: sql<number>`case when lost = true then 1 else 0 end`.as('value'),
           })
           .from(teamgames)
-          .where(
-            and(
-              eq(teamgames.played, true),
-              eq(teamgames.serieId, serie.serieId),
-            ),
-          ),
+          .where(and(eq(teamgames.played, true), eq(teamgames.serieId, serie.serieId))),
       )
       break
     case 'noWinStreak':
@@ -429,17 +378,10 @@ async function getStreak({ serie, threshold, streak }: StreakFunctionProps) {
             draw: teamgames.draw,
             lost: teamgames.lost,
             date: teamgames.date,
-            value: sql<number>`case when win = false then 1 else 0 end`.as(
-              'value',
-            ),
+            value: sql<number>`case when win = false then 1 else 0 end`.as('value'),
           })
           .from(teamgames)
-          .where(
-            and(
-              eq(teamgames.played, true),
-              eq(teamgames.serieId, serie.serieId),
-            ),
-          ),
+          .where(and(eq(teamgames.played, true), eq(teamgames.serieId, serie.serieId))),
       )
       break
     case 'unbeatenStreak':
@@ -451,17 +393,10 @@ async function getStreak({ serie, threshold, streak }: StreakFunctionProps) {
             draw: teamgames.draw,
             lost: teamgames.lost,
             date: teamgames.date,
-            value: sql<number>`case when lost = false then 1 else 0 end`.as(
-              'value',
-            ),
+            value: sql<number>`case when lost = false then 1 else 0 end`.as('value'),
           })
           .from(teamgames)
-          .where(
-            and(
-              eq(teamgames.played, true),
-              eq(teamgames.serieId, serie.serieId),
-            ),
-          ),
+          .where(and(eq(teamgames.played, true), eq(teamgames.serieId, serie.serieId))),
       )
       break
     default:
@@ -477,14 +412,10 @@ async function getStreak({ serie, threshold, streak }: StreakFunctionProps) {
         draw: values.draw,
         lost: values.lost,
         date: values.date,
-        sumResults:
-          sql<number>`sum(values.value) over(partition by team order by date)`.as(
-            'sum_results',
-          ),
-        round:
-          sql<number>`row_number() over (partition by team order by date)`.as(
-            'round',
-          ),
+        sumResults: sql<number>`sum(values.value) over(partition by team order by date)`.as(
+          'sum_results',
+        ),
+        round: sql<number>`row_number() over (partition by team order by date)`.as('round'),
       })
       .from(values),
   )
@@ -528,10 +459,9 @@ async function getStreak({ serie, threshold, streak }: StreakFunctionProps) {
       .with(grouped_results)
       .select({
         teamId: grouped_results.teamId,
-        maxCount:
-          sql<number>`mode() within group (order by grouped_results.grouped)`.as(
-            'max_count',
-          ),
+        maxCount: sql<number>`mode() within group (order by grouped_results.grouped)`.as(
+          'max_count',
+        ),
         dates: sql<Array<string>>`array_agg(date order by date)`.as('dates'),
       })
       .from(grouped_results)
@@ -543,14 +473,9 @@ async function getStreak({ serie, threshold, streak }: StreakFunctionProps) {
     .select({
       teamId: group_array.teamId,
       name: teams.name as unknown as SQL<string>,
-      gameCount: sql<number>`array_length(group_array.dates,1)`.as(
-        'game_count',
-      ),
+      gameCount: sql<number>`array_length(group_array.dates,1)`.as('game_count'),
       startDate: sql<string>`group_array.dates[1]`.as('start_date'),
-      endDate:
-        sql<string>`group_array.dates[array_upper(group_array.dates,1)]`.as(
-          'end_date',
-        ),
+      endDate: sql<string>`group_array.dates[array_upper(group_array.dates,1)]`.as('end_date'),
     })
     .from(group_array)
     .leftJoin(teams, eq(teams.teamId, group_array.teamId))

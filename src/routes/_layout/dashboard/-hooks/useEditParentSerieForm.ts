@@ -1,19 +1,12 @@
-import { useForm } from '@tanstack/react-form'
-import { useMutation } from '@tanstack/react-query'
-import {
-  getRouteApi,
-  useRouter,
-} from '@tanstack/react-router'
 import { toast } from 'sonner'
-
-import { editParentSerieObjectArray } from '@/lib/types/serie'
+import { getRouteApi, useRouter } from '@tanstack/react-router'
+import { useMutation } from '@tanstack/react-query'
+import { useForm } from '@tanstack/react-form'
 import type { zd } from '@/lib/utils/zod'
-
+import { editParentSerieObjectArray } from '@/lib/types/serie'
 import { editParentSerieInput } from '../-functions/SerieFunctions/editParentSerie'
 
-const route = getRouteApi(
-  '/_layout/dashboard/season/$seasonId/info_/$serieId/edit',
-)
+const route = getRouteApi('/_layout/dashboard/season/$seasonId/info_/$serieId/edit')
 
 type Data = { status: 200; message: string } | undefined
 
@@ -29,9 +22,7 @@ export const useEditParentSerieForm = () => {
     onError: (error) => onMutationError(error),
   })
 
-  const defaultValues: zd.input<
-    typeof editParentSerieObjectArray
-  > = {
+  const defaultValues: zd.input<typeof editParentSerieObjectArray> = {
     parentSeries: parentSeries.map((s) => {
       return {
         parentId: s.parentId,
@@ -46,8 +37,7 @@ export const useEditParentSerieForm = () => {
       onSubmit: editParentSerieObjectArray,
     },
     defaultValues: { ...defaultValues },
-    onSubmit: ({ value }) =>
-      mutation.mutateAsync({ data: value }),
+    onSubmit: ({ value }) => mutation.mutateAsync({ data: value }),
   })
 
   const onMutationSuccess = (data: Data) => {
@@ -57,9 +47,7 @@ export const useEditParentSerieForm = () => {
       toast.success(data.message)
     }
     router.invalidate({
-      filter: (r) =>
-        r.routeId ===
-        '/_layout/dashboard/season/$seasonId/info_/$serieId/edit',
+      filter: (r) => r.routeId === '/_layout/dashboard/season/$seasonId/info_/$serieId/edit',
     })
   }
 

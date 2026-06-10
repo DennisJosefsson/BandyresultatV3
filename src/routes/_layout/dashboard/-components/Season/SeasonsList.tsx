@@ -1,6 +1,5 @@
-import { getRouteApi } from '@tanstack/react-router'
 import { useState } from 'react'
-
+import { getRouteApi } from '@tanstack/react-router'
 import { Input } from '@/components/base/ui/input'
 
 const route = getRouteApi('/_layout/dashboard/seasons/')
@@ -9,24 +8,15 @@ const SeasonsList = () => {
   const seasons = route.useLoaderData()
   const [filter, setFilter] = useState<string>('')
 
-  const seasonsList = seasons.filter((s) =>
-    s.year.includes(filter),
-  )
+  const seasonsList = seasons.filter((s) => s.year.includes(filter))
 
   return (
     <div className="flex flex-col gap-2">
-      <Input
-        value={filter}
-        onChange={(e) => setFilter(e.target.value)}
-        placeholder="2025/2026"
-      />
+      <Input value={filter} onChange={(e) => setFilter(e.target.value)} placeholder="2025/2026" />
       <div className="grid grid-cols-2 gap-2 md:grid-cols-4 xl:grid-cols-6">
         {seasonsList.map((season) => {
           return (
-            <div
-              key={season.seasonId.toString()}
-              className="bg-muted/50"
-            >
+            <div key={season.seasonId.toString()} className="bg-muted/50">
               <route.Link
                 to="/dashboard/season/$seasonId"
                 search={{

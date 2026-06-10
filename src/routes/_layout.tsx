@@ -1,18 +1,10 @@
-import { Toaster } from '@/components/base/ui/sonner'
-import {
-  CatchBoundary,
-  Outlet,
-  createFileRoute,
-} from '@tanstack/react-router'
-
-import { Card } from '@/components/base/ui/card'
-import {
-  SidebarInset,
-  SidebarProvider,
-} from '@/components/base/ui/sidebar'
-import AppSidebar from '@/components/Common/Sidebar/AppSidebar'
-import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
+import { CatchBoundary, Outlet, createFileRoute } from '@tanstack/react-router'
 import Header from '@/components/Header/Header'
+import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
+import AppSidebar from '@/components/Common/Sidebar/AppSidebar'
+import { Toaster } from '@/components/base/ui/sonner'
+import { SidebarInset, SidebarProvider } from '@/components/base/ui/sidebar'
+import { Card } from '@/components/base/ui/card'
 export const Route = createFileRoute('/_layout')({
   component: RouteComponent,
 })
@@ -33,11 +25,7 @@ function RouteComponent() {
                     console.error(error)
                   }}
                   errorComponent={({ error, reset }) => (
-                    <SimpleErrorComponent
-                      id="layout"
-                      error={error}
-                      reset={reset}
-                    />
+                    <SimpleErrorComponent id="layout" error={error} reset={reset} />
                   )}
                 >
                   <div className="m-2">

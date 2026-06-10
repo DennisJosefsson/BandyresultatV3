@@ -1,8 +1,7 @@
-import { config } from 'dotenv'
-import { drizzle } from 'drizzle-orm/node-postgres'
 import type { PoolConfig } from 'pg'
 import { Pool } from 'pg'
-
+import { drizzle } from 'drizzle-orm/node-postgres'
+import { config } from 'dotenv'
 import * as schema from './schema.ts'
 
 config()

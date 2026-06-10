@@ -1,31 +1,19 @@
-import {
-  CatchBoundary,
-  createFileRoute,
-} from '@tanstack/react-router'
-
-import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
+import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
 import Loading from '@/components/Loading/Loading'
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/components/base/ui/tabs'
-
-import AllData from './-components/Compare/AllData'
-import CompareHeader from './-components/Compare/CompareHeader'
-import FirstGames from './-components/Compare/CompareStatsSubComponents/FirstGames'
-import Golds from './-components/Compare/CompareStatsSubComponents/Golds'
-import LatestGames from './-components/Compare/CompareStatsSubComponents/LatestGames'
-import LatestWins from './-components/Compare/CompareStatsSubComponents/LatestWins'
-import Playoffs from './-components/Compare/CompareStatsSubComponents/Playoffs'
-import Seasons from './-components/Compare/CompareStatsSubComponents/Seasons'
-import DetailedData from './-components/Compare/DetailedData'
+import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/base/ui/tabs'
 import { getCompareTeams } from './-functions/compare'
+import DetailedData from './-components/Compare/DetailedData'
+import Seasons from './-components/Compare/CompareStatsSubComponents/Seasons'
+import Playoffs from './-components/Compare/CompareStatsSubComponents/Playoffs'
+import LatestWins from './-components/Compare/CompareStatsSubComponents/LatestWins'
+import LatestGames from './-components/Compare/CompareStatsSubComponents/LatestGames'
+import Golds from './-components/Compare/CompareStatsSubComponents/Golds'
+import FirstGames from './-components/Compare/CompareStatsSubComponents/FirstGames'
+import CompareHeader from './-components/Compare/CompareHeader'
+import AllData from './-components/Compare/AllData'
 
-export const Route = createFileRoute(
-  '/_layout/teams/compare',
-)({
+export const Route = createFileRoute('/_layout/teams/compare')({
   loaderDeps: ({ search: searchDeps }) => searchDeps,
   loader: async ({ deps }) => {
     const data = await getCompareTeams({ data: deps })
@@ -34,42 +22,31 @@ export const Route = createFileRoute(
     return data
   },
   component: RouteComponent,
-  errorComponent: ({ error }) => (
-    <ErrorComponent error={error} />
-  ),
+  errorComponent: ({ error }) => <ErrorComponent error={error} />,
   pendingComponent: () => <Loading page="compare" />,
 
   staticData: {
     breadcrumb: (match) => {
-      if (match.loaderData.breadCrumb === undefined)
-        return 'H2H'
+      if (match.loaderData.breadCrumb === undefined) return 'H2H'
       else return match.loaderData.breadCrumb
     },
   },
   head: ({ loaderData }) => ({
     meta: [
       {
-        title:
-          loaderData?.meta.title ??
-          'Bandyresultat - H2H: Fel',
+        title: loaderData?.meta.title ?? 'Bandyresultat - H2H: Fel',
       },
       {
         name: 'description',
-        content:
-          loaderData?.meta.description ??
-          'Bandyresultat - H2H: Fel',
+        content: loaderData?.meta.description ?? 'Bandyresultat - H2H: Fel',
       },
       {
         property: 'og:description',
-        content:
-          loaderData?.meta.description ??
-          'Bandyresultat - H2H: Fel',
+        content: loaderData?.meta.description ?? 'Bandyresultat - H2H: Fel',
       },
       {
         property: 'og:title',
-        content:
-          loaderData?.meta.title ??
-          'Bandyresultat - H2H: Fel',
+        content: loaderData?.meta.title ?? 'Bandyresultat - H2H: Fel',
       },
       {
         property: 'og:type',
@@ -77,9 +54,7 @@ export const Route = createFileRoute(
       },
       {
         property: 'og:url',
-        content:
-          loaderData?.meta.url ??
-          'https://bandyresultat.se/',
+        content: loaderData?.meta.url ?? 'https://bandyresultat.se/',
       },
       {
         property: 'og:image',
@@ -96,7 +71,7 @@ function RouteComponent() {
   if (data.status === 400 || data.status === 404) {
     return (
       <div className="font-inter mt-10 flex flex-row items-center justify-center">
-        <p className="text-center text-[8px] xs:text-[10px] sm:text-xs md:text-sm xl:text-base font-semibold">
+        <p className="xs:text-[10px] text-center text-[8px] font-semibold sm:text-xs md:text-sm xl:text-base">
           {data.message}
           <br />
         </p>
@@ -110,11 +85,7 @@ function RouteComponent() {
         console.error(error)
       }}
       errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent
-          id="compare"
-          error={error}
-          reset={reset}
-        />
+        <SimpleErrorComponent id="compare" error={error} reset={reset} />
       )}
     >
       <Compare />
@@ -124,33 +95,20 @@ function RouteComponent() {
 
 function Compare() {
   const data = Route.useLoaderData()
-  if (data.status === 400 || data.status === 404)
-    return null
+  if (data.status === 400 || data.status === 404) return null
   return (
     <div className="mt-2">
       <CompareHeader />
       <div>
-        <Tabs
-          defaultValue="tables"
-          className="flex flex-col"
-        >
+        <Tabs defaultValue="tables" className="flex flex-col">
           <TabsList>
-            <TabsTrigger
-              value="tables"
-              className="text-[10px] md:text-sm"
-            >
+            <TabsTrigger value="tables" className="text-[10px] md:text-sm">
               Tabeller
             </TabsTrigger>
-            <TabsTrigger
-              value="games"
-              className="text-[10px] md:text-sm"
-            >
+            <TabsTrigger value="games" className="text-[10px] md:text-sm">
               Matcher
             </TabsTrigger>
-            <TabsTrigger
-              value="stats"
-              className="text-[10px] md:text-sm"
-            >
+            <TabsTrigger value="stats" className="text-[10px] md:text-sm">
               Statistik
             </TabsTrigger>
           </TabsList>
@@ -162,14 +120,8 @@ function Compare() {
 
           <TabsContent value="games">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-              <LatestWins
-                latestWins={data.latestHomeWin}
-                title="Senaste hemmavinsten"
-              />
-              <LatestWins
-                latestWins={data.latestAwayWin}
-                title="Senaste bortavinsten"
-              />
+              <LatestWins latestWins={data.latestHomeWin} title="Senaste hemmavinsten" />
+              <LatestWins latestWins={data.latestAwayWin} title="Senaste bortavinsten" />
               <FirstGames />
               <LatestGames />
             </div>
@@ -200,8 +152,6 @@ function ErrorComponent({ error }: { error: unknown }) {
   }
 
   return (
-    <div className="mt-2 flex flex-row items-center justify-center">
-      Något gick tyvärr fel.
-    </div>
+    <div className="mt-2 flex flex-row items-center justify-center">Något gick tyvärr fel.</div>
   )
 }

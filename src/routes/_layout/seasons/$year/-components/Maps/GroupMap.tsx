@@ -1,13 +1,9 @@
 import { getRouteApi } from '@tanstack/react-router'
-
-import { Card } from '@/components/base/ui/card'
 import { Map, MapControls } from '@/components/base/ui/map'
-
+import { Card } from '@/components/base/ui/card'
 import MapItem from './MapItem'
 
-const route = getRouteApi(
-  '/_layout/seasons/$year/$group/map',
-)
+const route = getRouteApi('/_layout/seasons/$year/$group/map')
 
 const GroupMap = () => {
   const data = route.useLoaderData()
@@ -15,11 +11,7 @@ const GroupMap = () => {
   return (
     <div>
       <Card className="xs:max-w-100 h-[400px] w-screen max-w-[280px] p-2 sm:h-160 sm:max-w-xl xl:max-w-4xl">
-        <Map
-          center={[15, 62]}
-          zoom={4}
-          fadeDuration={0}
-        >
+        <Map center={[15, 62]} zoom={4} fadeDuration={0}>
           {data.teams.map((team) => {
             return (
               <MapItem

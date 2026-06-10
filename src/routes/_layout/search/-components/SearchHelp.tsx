@@ -1,5 +1,4 @@
 import Markdown from 'react-markdown'
-
 import searchhelp from '@/assets/markdown/searchhelp.md'
 
 const SearchHelp = () => {

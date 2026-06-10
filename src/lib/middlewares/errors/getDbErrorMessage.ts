@@ -1,7 +1,7 @@
 // Thanks to david-jerry for this code. https://github.com/david-jerry
 
-import { DrizzleError, DrizzleQueryError } from 'drizzle-orm'
 import { DatabaseError } from 'pg'
+import { DrizzleError, DrizzleQueryError } from 'drizzle-orm'
 
 // Defines the shape of the error handler functions
 type ErrorHandler = (error: DatabaseError) => {
@@ -23,9 +23,7 @@ const PostgresErrorHandlers: Record<string, ErrorHandler> = {
     constraint: error.constraint || null,
   }),
   '22P02': (error) => ({
-    message:
-      error.message ||
-      'The data provided is in an invalid format (e.g., not a valid UUID).',
+    message: error.message || 'The data provided is in an invalid format (e.g., not a valid UUID).',
     constraint: null,
   }),
   '23514': (error) => ({
@@ -37,8 +35,7 @@ const PostgresErrorHandlers: Record<string, ErrorHandler> = {
     constraint: error.column || null,
   }),
   '42703': (error) => ({
-    message:
-      error.message || 'An undefined column was referenced in the query.',
+    message: error.message || 'An undefined column was referenced in the query.',
     constraint: error.column || null,
   }),
   '42601': (error) => ({
@@ -46,8 +43,7 @@ const PostgresErrorHandlers: Record<string, ErrorHandler> = {
     constraint: null,
   }),
   '25000': () => ({
-    message:
-      'Transaction failed: a data integrity issue occurred within a database transaction.',
+    message: 'Transaction failed: a data integrity issue occurred within a database transaction.',
     constraint: null,
   }),
   '08006': () => ({
@@ -55,8 +51,7 @@ const PostgresErrorHandlers: Record<string, ErrorHandler> = {
     constraint: null,
   }),
   '42P01': (error) => ({
-    message:
-      error.message || 'A referenced table does not exist in the database.',
+    message: error.message || 'A referenced table does not exist in the database.',
     constraint: null,
   }),
   '40001': () => ({
@@ -84,10 +79,7 @@ export function getDbErrorMessage(error: unknown): {
   constraint: string | null
   query?: string | undefined
 } {
-  if (
-    error instanceof DrizzleQueryError &&
-    error.cause instanceof DatabaseError
-  ) {
+  if (error instanceof DrizzleQueryError && error.cause instanceof DatabaseError) {
     const originalError = error.cause
 
     const handler = PostgresErrorHandlers[originalError.code ?? 'default']

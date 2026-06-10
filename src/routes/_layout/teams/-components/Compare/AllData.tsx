@@ -1,12 +1,7 @@
 import { getRouteApi } from '@tanstack/react-router'
-
-import {
-  Table,
-  TableBody,
-} from '@/components/base/ui/table'
-
-import AllDataTableHeader from './AllDataTableHeader'
+import { Table, TableBody } from '@/components/base/ui/table'
 import DataTableRow from './DataTableRow'
+import AllDataTableHeader from './AllDataTableHeader'
 
 const route = getRouteApi('/_layout/teams/compare')
 
@@ -15,22 +10,14 @@ const AllData = () => {
   const data = route.useLoaderData()
 
   if (data.status === 200) {
-    if (
-      searchObject.teamArray &&
-      searchObject.teamArray.length > 2
-    ) {
+    if (searchObject.teamArray && searchObject.teamArray.length > 2) {
       return (
         <div className="mb-6">
           <Table className="w-full table-fixed">
             <AllDataTableHeader />
             <TableBody>
               {data.sortedData.map((team, index) => {
-                return (
-                  <DataTableRow
-                    key={index}
-                    team={team}
-                  />
-                )
+                return <DataTableRow key={index} team={team} />
               })}
             </TableBody>
           </Table>
@@ -43,12 +30,7 @@ const AllData = () => {
             <AllDataTableHeader />
             <TableBody>
               {data.allData.slice(1).map((team, index) => {
-                return (
-                  <DataTableRow
-                    key={index}
-                    team={team}
-                  />
-                )
+                return <DataTableRow key={index} team={team} />
               })}
             </TableBody>
           </Table>

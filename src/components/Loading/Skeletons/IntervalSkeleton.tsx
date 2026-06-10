@@ -13,12 +13,7 @@ const IntervalSkeleton = () => {
 
       <div>
         {Array.from({ length: 15 }).map((_i, index) => {
-          return (
-            <Skeleton
-              key={index}
-              className="mb-1 h-9 w-full"
-            />
-          )
+          return <Skeleton key={index} className="mb-1 h-9 w-full" />
         })}
       </div>
     </div>

@@ -1,5 +1,4 @@
 import { createFileRoute } from '@tanstack/react-router'
-
 import EditParentSerie from '@/routes/_layout/dashboard/-components/Forms/SerieForms/EditParentSerie'
 
 export const Route = createFileRoute(

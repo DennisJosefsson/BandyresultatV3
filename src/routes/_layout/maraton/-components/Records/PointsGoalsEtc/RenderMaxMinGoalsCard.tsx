@@ -1,5 +1,4 @@
 import type { MaxMinGoalGames } from '@/lib/types/records'
-
 import MaxMinGoalsCard from './MaxMinGoalsCard'
 
 type RenderMaxMinGoalsCardProps = {
@@ -11,12 +10,7 @@ const RenderMaxMinGoalsCard = ({ array, stat }: RenderMaxMinGoalsCardProps) => {
   return (
     <div>
       {array.map((item) => {
-        return (
-          <MaxMinGoalsCard
-            key={`${item.teams}-${item.result}-${stat}`}
-            {...item}
-          />
-        )
+        return <MaxMinGoalsCard key={`${item.teams}-${item.result}-${stat}`} {...item} />
       })}
     </div>
   )

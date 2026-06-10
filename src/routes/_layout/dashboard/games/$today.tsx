@@ -1,9 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
-
 import { zd } from '@/lib/utils/zod'
-
-import GamesList from '../-components/Games/GamesList'
 import { getUnplayedGames } from '../-functions/GameFunctions/getUnplayedGames'
+import GamesList from '../-components/Games/GamesList'
 
 export const Route = createFileRoute('/_layout/dashboard/games/$today')({
   params: {

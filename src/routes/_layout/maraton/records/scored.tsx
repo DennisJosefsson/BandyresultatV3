@@ -1,16 +1,9 @@
-import {
-  CatchBoundary,
-  createFileRoute,
-} from '@tanstack/react-router'
-
+import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
-
-import Scored from '../-components/Records/PointsGoalsEtc/Scored'
 import { getScoredRecords } from '../-functions/getScoredRecords'
+import Scored from '../-components/Records/PointsGoalsEtc/Scored'
 
-export const Route = createFileRoute(
-  '/_layout/maraton/records/scored',
-)({
+export const Route = createFileRoute('/_layout/maraton/records/scored')({
   loaderDeps: ({ search: { women } }) => ({ women }),
   loader: async ({ deps }) => {
     const data = await getScoredRecords({
@@ -21,33 +14,24 @@ export const Route = createFileRoute(
     return data
   },
   staticData: {
-    breadcrumb: (match) =>
-      match.loaderData.breadCrumb ?? 'Gjorda mål',
+    breadcrumb: (match) => match.loaderData.breadCrumb ?? 'Gjorda mål',
   },
   head: ({ loaderData }) => ({
     meta: [
       {
-        title:
-          loaderData?.meta.title ??
-          'Bandyresultat - Rekord: Gjorda mål',
+        title: loaderData?.meta.title ?? 'Bandyresultat - Rekord: Gjorda mål',
       },
       {
         name: 'description',
-        content:
-          loaderData?.meta.description ??
-          'Bandyresultat - Rekord: Gjorda mål',
+        content: loaderData?.meta.description ?? 'Bandyresultat - Rekord: Gjorda mål',
       },
       {
         property: 'og:description',
-        content:
-          loaderData?.meta.description ??
-          'Bandyresultat - Rekord: Gjorda mål',
+        content: loaderData?.meta.description ?? 'Bandyresultat - Rekord: Gjorda mål',
       },
       {
         property: 'og:title',
-        content:
-          loaderData?.meta.title ??
-          'Bandyresultat - Rekord: Gjorda mål',
+        content: loaderData?.meta.title ?? 'Bandyresultat - Rekord: Gjorda mål',
       },
       {
         property: 'og:type',
@@ -55,9 +39,7 @@ export const Route = createFileRoute(
       },
       {
         property: 'og:url',
-        content:
-          loaderData?.meta.url ??
-          'https://www.bandyresultat.se/maraton/records/scored',
+        content: loaderData?.meta.url ?? 'https://www.bandyresultat.se/maraton/records/scored',
       },
       {
         property: 'og:image',
@@ -77,11 +59,7 @@ function RouteComponent() {
         console.error(error)
       }}
       errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent
-          id="scored"
-          error={error}
-          reset={reset}
-        />
+        <SimpleErrorComponent id="scored" error={error} reset={reset} />
       )}
     >
       <Scored />

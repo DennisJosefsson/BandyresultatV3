@@ -1,14 +1,7 @@
-import type {
-  ColumnDef,
-  VisibilityState,
-} from '@tanstack/react-table'
-import {
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from '@tanstack/react-table'
-
-import { Button } from '@/components/base/ui/button'
+import type { ColumnDef, VisibilityState } from '@tanstack/react-table'
+import { useState } from 'react'
+import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
+import { useFavTeam } from '@/lib/contexts/favTeamsContext'
 import {
   Table,
   TableBody,
@@ -18,8 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/base/ui/table'
-import { useFavTeam } from '@/lib/contexts/favTeamsContext'
-import { useState } from 'react'
+import { Button } from '@/components/base/ui/button'
 import { gameColumns, goalsColumns } from './exports'
 
 interface DataTableProps<TData, TValue> {
@@ -28,7 +20,7 @@ interface DataTableProps<TData, TValue> {
   teamObject: {
     [x: string]: number
   }
-  serieStructure: number[] | null | undefined
+  serieStructure: Array<number> | null | undefined
   comment: string | null
 }
 
@@ -39,11 +31,8 @@ const MobileDataTable = <TData, TValue>({
   serieStructure,
   comment,
 }: DataTableProps<TData, TValue>) => {
-  const [columnVisibility, setColumnVisibility] =
-    useState<VisibilityState>(goalsColumns)
-  const [visibleColumns, setVisibleColumns] = useState<
-    'goals' | 'games'
-  >('goals')
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(goalsColumns)
+  const [visibleColumns, setVisibleColumns] = useState<'goals' | 'games'>('goals')
   const table = useReactTable({
     data,
     columns,
@@ -75,15 +64,8 @@ const MobileDataTable = <TData, TValue>({
   return (
     <div className="flex flex-col gap-4">
       <div>
-        <Button
-          className="w-full"
-          variant="outline"
-          size="xs"
-          onClick={onClickHandler}
-        >
-          {visibleColumns === 'games'
-            ? 'Visa målkolumner'
-            : 'Visa matchkolumner'}
+        <Button className="w-full" variant="outline" size="xs" onClick={onClickHandler}>
+          {visibleColumns === 'games' ? 'Visa målkolumner' : 'Visa matchkolumner'}
         </Button>
       </div>
       <Table>
@@ -93,16 +75,10 @@ const MobileDataTable = <TData, TValue>({
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead
-                    key={header.id}
-                    className="px-0"
-                  >
+                  <TableHead key={header.id} className="px-0">
                     {header.isPlaceholder
                       ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
+                      : flexRender(header.column.columnDef.header, header.getContext())}
                   </TableHead>
                 )
               })}
@@ -115,35 +91,17 @@ const MobileDataTable = <TData, TValue>({
             table.getRowModel().rows.map((row, index) => (
               <TableRow
                 key={row.id}
-                data-state={
-                  row.getIsSelected() && 'selected'
-                }
+                data-state={row.getIsSelected() && 'selected'}
                 className={`${
-                  favTeams.includes(
-                    teamObject[
-                      getString(
-                        row.getValue('team_casualName'),
-                      )
-                    ],
-                  )
+                  favTeams.includes(teamObject[getString(row.getValue('team_casualName'))])
                     ? 'font-bold'
                     : null
-                } ${
-                  serieStructure?.includes(index + 1)
-                    ? 'border-foreground border-b-2'
-                    : null
-                }`}
+                } ${serieStructure?.includes(index + 1) ? 'border-foreground border-b-2' : null}`}
               >
                 {row.getVisibleCells().map((cell) => {
                   return (
-                    <TableCell
-                      key={cell.id}
-                      className="px-0 py-1"
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
+                    <TableCell key={cell.id} className="px-0 py-1">
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   )
                 })}
@@ -151,10 +109,7 @@ const MobileDataTable = <TData, TValue>({
             ))
           ) : (
             <TableRow>
-              <TableCell
-                colSpan={columns.length}
-                className="h-24 text-center"
-              >
+              <TableCell colSpan={columns.length} className="h-24 text-center">
                 Inga resultat.
               </TableCell>
             </TableRow>

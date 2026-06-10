@@ -7,15 +7,10 @@ export const initializer = (initialValue = initialState) => {
   return initialValue
 }
 
-export const favTeamsReducer = (
-  state: TeamPreference,
-  action: FavTeamsActionType,
-) => {
+export const favTeamsReducer = (state: TeamPreference, action: FavTeamsActionType) => {
   switch (action.type) {
     case 'ADD_TEAM':
-      return state.find((team) => team === action.teamId)
-        ? state
-        : [...state, action.teamId]
+      return state.find((team) => team === action.teamId) ? state : [...state, action.teamId]
 
     case 'REMOVE_TEAM':
       return state.filter((team) => team !== action.teamId)

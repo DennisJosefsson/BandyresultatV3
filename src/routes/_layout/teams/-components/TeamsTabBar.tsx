@@ -1,10 +1,5 @@
-import {
-  Link,
-  useLocation,
-  useSearch,
-} from '@tanstack/react-router'
 import { ListIcon, MapIcon, SearchIcon } from 'lucide-react'
-
+import { Link, useLocation, useSearch } from '@tanstack/react-router'
 import { TabBarInline } from '@/components/TabBar/TabBar'
 import { Button } from '@/components/base/ui/button'
 
@@ -17,31 +12,20 @@ const TeamsTabBar = () => {
 
   const pathName = useLocation().pathname
 
-  const disabled = teamArray
-    ? Boolean(teamArray.length !== 2)
-    : true
+  const disabled = teamArray ? Boolean(teamArray.length !== 2) : true
 
   const teamsTabBarObject = {
     tabBarArray: [
       {
         tab: (
-          <Link
-            to="/teams"
-            search={search}
-          >
+          <Link to="/teams" search={search}>
             {({ isActive }) => {
               return (
                 <Button
-                  variant={
-                    isActive && pathName.endsWith('teams')
-                      ? 'default'
-                      : 'outline'
-                  }
+                  variant={isActive && pathName.endsWith('teams') ? 'default' : 'outline'}
                   size="tabbar"
                 >
-                  <span className="hidden md:inline-block">
-                    Laglista
-                  </span>
+                  <span className="hidden md:inline-block">Laglista</span>
                   <span className="md:hidden">
                     <ListIcon />
                   </span>
@@ -54,19 +38,11 @@ const TeamsTabBar = () => {
       },
       {
         tab: (
-          <Link
-            to="/teams/map"
-            search={search}
-          >
+          <Link to="/teams/map" search={search}>
             {({ isActive }) => {
               return (
-                <Button
-                  variant={isActive ? 'default' : 'outline'}
-                  size="tabbar"
-                >
-                  <span className="hidden md:inline-block">
-                    Karta
-                  </span>
+                <Button variant={isActive ? 'default' : 'outline'} size="tabbar">
+                  <span className="hidden md:inline-block">Karta</span>
                   <span className="md:hidden">
                     <MapIcon />
                   </span>
@@ -80,11 +56,7 @@ const TeamsTabBar = () => {
 
       {
         tab: (
-          <Link
-            to="/teams/compare"
-            search={search}
-            disabled={disabled}
-          >
+          <Link to="/teams/compare" search={search} disabled={disabled}>
             {({ isActive }) => {
               return (
                 <Button
@@ -92,9 +64,7 @@ const TeamsTabBar = () => {
                   size="tabbar"
                   disabled={disabled}
                 >
-                  <span className="hidden md:inline-block">
-                    Jämför
-                  </span>
+                  <span className="hidden md:inline-block">Jämför</span>
                   <span className="md:hidden">
                     <SearchIcon />
                   </span>

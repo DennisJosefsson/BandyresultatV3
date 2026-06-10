@@ -1,25 +1,21 @@
-import { createServerFn } from '@tanstack/react-start'
-import { zodValidator } from '@tanstack/zod-adapter'
 import { and, eq, getTableColumns } from 'drizzle-orm'
-
-import { db } from '@/db'
-import { seasons, series } from '@/db/schema'
-import { catchError } from '@/lib/middlewares/errors/catchError'
-import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import type { Meta } from '@/lib/types/meta'
-import type { Serie } from '@/lib/types/serie'
+import { zodValidator } from '@tanstack/zod-adapter'
+import { createServerFn } from '@tanstack/react-start'
 import type { TeamTable } from '@/lib/types/table'
-import { seasonIdCheck } from '@/lib/utils/utils'
+import type { Serie } from '@/lib/types/serie'
+import type { Meta } from '@/lib/types/meta'
 import { zd } from '@/lib/utils/zod'
-
+import { seasonIdCheck } from '@/lib/utils/utils'
+import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
+import { catchError } from '@/lib/middlewares/errors/catchError'
+import { seasons, series } from '@/db/schema'
+import { db } from '@/db'
 import { getUnionedTables } from './getTableFunctions'
 
 type TablesReturn =
   | {
       status: 200
-      tables: Array<
-        Omit<TeamTable, 'women' | 'group' | 'season'>
-      >
+      tables: Array<Omit<TeamTable, 'women' | 'group' | 'season'>>
       serie: Serie
       breadCrumb: string
       meta: Meta
@@ -40,103 +36,82 @@ export const getTables = createServerFn({ method: 'GET' })
         group: zd.string(),
         year: zd.int(),
         women: zd.boolean(),
-        table: zd
-          .enum(['all', 'home', 'away'])
-          .catch('all'),
+        table: zd.enum(['all', 'home', 'away']).catch('all'),
       }),
     ),
   )
-  .handler(
-    async ({
-      data: { group, year, women, table },
-    }): Promise<TablesReturn> => {
-      try {
-        const seasonYear = seasonIdCheck.parse(year)
-        const breadCrumb =
-          table === 'all'
-            ? 'Tabell'
-            : table === 'home'
-              ? 'Hemmatabell'
-              : 'Bortatabell'
-        const title = `Bandyresultat - ${breadCrumb} - ${group} - ${women === true ? 'Damer' : 'Herrar'} ${seasonYear!}`
-        const url = `https://bandyresultat.se/seasons/${year}/${group}/tables/${table}?women=${women}`
-        const description = `Serietabeller ${group} ${seasonYear} ${women ? 'damer' : 'herrar'}`
-        const meta = {
-          title,
-          url,
-          description,
+  .handler(async ({ data: { group, year, women, table } }): Promise<TablesReturn> => {
+    try {
+      const seasonYear = seasonIdCheck.parse(year)
+      const breadCrumb =
+        table === 'all' ? 'Tabell' : table === 'home' ? 'Hemmatabell' : 'Bortatabell'
+      const title = `Bandyresultat - ${breadCrumb} - ${group} - ${women === true ? 'Damer' : 'Herrar'} ${seasonYear!}`
+      const url = `https://bandyresultat.se/seasons/${year}/${group}/tables/${table}?women=${women}`
+      const description = `Serietabeller ${group} ${seasonYear} ${women ? 'damer' : 'herrar'}`
+      const meta = {
+        title,
+        url,
+        description,
+      }
+      if (!seasonYear) {
+        return {
+          status: 404,
+          message: 'Säsongen finns inte.',
+          breadCrumb: 'Tabell',
+          meta,
         }
-        if (!seasonYear) {
-          return {
-            status: 404,
-            message: 'Säsongen finns inte.',
-            breadCrumb: 'Tabell',
-            meta,
-          }
+      }
+      if (year < 1930) {
+        return {
+          status: 404,
+          message: 'Inga serietabeller för den här säsongen',
+          breadCrumb: 'Tabell',
+          meta,
         }
-        if (year < 1930) {
-          return {
-            status: 404,
-            message:
-              'Inga serietabeller för den här säsongen',
-            breadCrumb: 'Tabell',
-            meta,
-          }
+      }
+
+      if (year < 1973 && women) {
+        return {
+          status: 404,
+          message: 'Damernas första säsong var 1972/1973.',
+          breadCrumb: 'Tabell',
+          meta,
         }
+      }
 
-        if (year < 1973 && women) {
-          return {
-            status: 404,
-            message:
-              'Damernas första säsong var 1972/1973.',
-            breadCrumb: 'Tabell',
-            meta,
-          }
-        }
-
-        const serie = await db
-          .select({
-            ...getTableColumns(series),
-          })
-          .from(series)
-          .leftJoin(
-            seasons,
-            eq(seasons.seasonId, series.seasonId),
-          )
-          .where(
-            and(
-              eq(seasons.women, women),
-              eq(seasons.year, seasonYear),
-              eq(series.group, group),
-            ),
-          )
-          .then((res) => {
-            if (res.length > 0) return res[0]
-            else return undefined
-          })
-
-        if (!serie)
-          return {
-            status: 404,
-            message: `Ingen ${women ? 'dam' : 'herr'}serie med detta namn det här året. Välj en ny i listan.`,
-            breadCrumb,
-            meta,
-          }
-
-        const results = await getUnionedTables({
-          serie,
-          table,
+      const serie = await db
+        .select({
+          ...getTableColumns(series),
+        })
+        .from(series)
+        .leftJoin(seasons, eq(seasons.seasonId, series.seasonId))
+        .where(and(eq(seasons.women, women), eq(seasons.year, seasonYear), eq(series.group, group)))
+        .then((res) => {
+          if (res.length > 0) return res[0]
+          else return undefined
         })
 
+      if (!serie)
         return {
-          status: 200,
-          tables: results,
-          serie,
+          status: 404,
+          message: `Ingen ${women ? 'dam' : 'herr'}serie med detta namn det här året. Välj en ny i listan.`,
           breadCrumb,
           meta,
         }
-      } catch (error) {
-        catchError(error)
+
+      const results = await getUnionedTables({
+        serie,
+        table,
+      })
+
+      return {
+        status: 200,
+        tables: results,
+        serie,
+        breadCrumb,
+        meta,
       }
-    },
-  )
+    } catch (error) {
+      catchError(error)
+    }
+  })

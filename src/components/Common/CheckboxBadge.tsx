@@ -1,20 +1,10 @@
-import { Checkbox } from '@/components/base/ui/checkbox'
 import type { CheckboxRootProps } from '@base-ui/react'
-import {
-  Field,
-  FieldContent,
-  FieldLabel,
-  FieldTitle,
-} from '../base/ui/field'
+import { Checkbox } from '@/components/base/ui/checkbox'
+import { Field, FieldContent, FieldLabel, FieldTitle } from '../base/ui/field'
 
 interface CheckboxBadgeProps extends CheckboxRootProps {
   title: string
-  orientation?:
-    | 'vertical'
-    | 'horizontal'
-    | 'responsive'
-    | null
-    | undefined
+  orientation?: 'vertical' | 'horizontal' | 'responsive' | null | undefined
 }
 
 const CheckboxBadge = ({
@@ -26,10 +16,7 @@ const CheckboxBadge = ({
   ...props
 }: CheckboxBadgeProps) => {
   return (
-    <FieldLabel
-      htmlFor={id}
-      key={id}
-    >
+    <FieldLabel htmlFor={id} key={id}>
       <Field orientation={orientation}>
         <FieldContent>
           <FieldTitle>{title}</FieldTitle>

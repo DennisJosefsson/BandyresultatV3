@@ -1,26 +1,5 @@
 import { getRouteApi } from '@tanstack/react-router'
-
-import { Button } from '@/components/base/ui/button'
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/base/ui/card'
-import { Checkbox } from '@/components/base/ui/checkbox'
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from '@/components/base/ui/field'
-import { Input } from '@/components/base/ui/input'
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput,
-} from '@/components/base/ui/input-group'
+import { Textarea } from '@/components/base/ui/textarea'
 import {
   Select,
   SelectContent,
@@ -29,12 +8,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/base/ui/select'
-import { Textarea } from '@/components/base/ui/textarea'
-
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from '@/components/base/ui/input-group'
+import { Input } from '@/components/base/ui/input'
+import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/base/ui/field'
+import { Checkbox } from '@/components/base/ui/checkbox'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/base/ui/card'
+import { Button } from '@/components/base/ui/button'
 import { useMetadataForm } from '../../../-hooks/useMetadataForm'
-const route = getRouteApi(
-  '/_layout/dashboard/season/$seasonId/metadata/',
-)
+const route = getRouteApi('/_layout/dashboard/season/$seasonId/metadata/')
 
 type TeamSelection = Array<{
   value: string
@@ -89,10 +75,7 @@ const MetadataForm = () => {
               nativeButton={false}
             />
 
-            <Button
-              type="submit"
-              form="metadataForm"
-            >
+            <Button type="submit" form="metadataForm">
               Skicka
             </Button>
           </div>
@@ -112,31 +95,21 @@ const MetadataForm = () => {
               <form.Field
                 name="year"
                 children={(field) => {
-                  const isInvalid =
-                    field.state.meta.isTouched &&
-                    !field.state.meta.isValid
+                  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <FieldLabel htmlFor={field.name}>
-                        År
-                      </FieldLabel>
+                      <FieldLabel htmlFor={field.name}>År</FieldLabel>
                       <Input
                         id={field.name}
                         name={field.name}
                         value={field.state.value}
                         onBlur={field.handleBlur}
-                        onChange={(e) =>
-                          field.handleChange(e.target.value)
-                        }
+                        onChange={(e) => field.handleChange(e.target.value)}
                         aria-invalid={isInvalid}
                         placeholder="T.ex. 5-3"
                         autoComplete="off"
                       />
-                      {isInvalid && (
-                        <FieldError
-                          errors={field.state.meta.errors}
-                        />
-                      )}
+                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
                     </Field>
                   )
                 }}
@@ -144,31 +117,21 @@ const MetadataForm = () => {
               <form.Field
                 name="name"
                 children={(field) => {
-                  const isInvalid =
-                    field.state.meta.isTouched &&
-                    !field.state.meta.isValid
+                  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <FieldLabel htmlFor={field.name}>
-                        Serienamn
-                      </FieldLabel>
+                      <FieldLabel htmlFor={field.name}>Serienamn</FieldLabel>
                       <Input
                         id={field.name}
                         name={field.name}
                         value={field.state.value}
                         onBlur={field.handleBlur}
-                        onChange={(e) =>
-                          field.handleChange(e.target.value)
-                        }
+                        onChange={(e) => field.handleChange(e.target.value)}
                         aria-invalid={isInvalid}
                         placeholder="T.ex. Elitserien"
                         autoComplete="off"
                       />
-                      {isInvalid && (
-                        <FieldError
-                          errors={field.state.meta.errors}
-                        />
-                      )}
+                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
                     </Field>
                   )
                 }}
@@ -177,31 +140,21 @@ const MetadataForm = () => {
               <form.Field
                 name="hostCity"
                 children={(field) => {
-                  const isInvalid =
-                    field.state.meta.isTouched &&
-                    !field.state.meta.isValid
+                  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <FieldLabel htmlFor={field.name}>
-                        Finalstad
-                      </FieldLabel>
+                      <FieldLabel htmlFor={field.name}>Finalstad</FieldLabel>
                       <Input
                         id={field.name}
                         name={field.name}
                         value={field.state.value}
                         onBlur={field.handleBlur}
-                        onChange={(e) =>
-                          field.handleChange(e.target.value)
-                        }
+                        onChange={(e) => field.handleChange(e.target.value)}
                         aria-invalid={isInvalid}
                         placeholder="T.ex. Västerås"
                         autoComplete="off"
                       />
-                      {isInvalid && (
-                        <FieldError
-                          errors={field.state.meta.errors}
-                        />
-                      )}
+                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
                     </Field>
                   )
                 }}
@@ -209,42 +162,27 @@ const MetadataForm = () => {
               <form.Field
                 name="finalDate"
                 children={(field) => {
-                  const isInvalid =
-                    field.state.meta.isTouched &&
-                    !field.state.meta.isValid
+                  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <FieldLabel htmlFor={field.name}>
-                        Finaldatum
-                      </FieldLabel>
+                      <FieldLabel htmlFor={field.name}>Finaldatum</FieldLabel>
                       <InputGroup>
                         <InputGroupInput
                           id={field.name}
                           name={field.name}
                           value={field.state.value}
                           onBlur={field.handleBlur}
-                          onChange={(e) =>
-                            field.handleChange(
-                              e.target.value,
-                            )
-                          }
+                          onChange={(e) => field.handleChange(e.target.value)}
                           placeholder="T.ex. 2025-12-26"
                           aria-invalid={isInvalid}
                         />
                         <InputGroupAddon align="inline-end">
-                          <InputGroupButton
-                            variant="secondary"
-                            onClick={buttonClick}
-                          >
+                          <InputGroupButton variant="secondary" onClick={buttonClick}>
                             Idag
                           </InputGroupButton>
                         </InputGroupAddon>
                       </InputGroup>
-                      {isInvalid && (
-                        <FieldError
-                          errors={field.state.meta.errors}
-                        />
-                      )}
+                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
                     </Field>
                   )
                 }}
@@ -252,14 +190,10 @@ const MetadataForm = () => {
               <form.Field
                 name="winnerName"
                 children={(field) => {
-                  const isInvalid =
-                    field.state.meta.isTouched &&
-                    !field.state.meta.isValid
+                  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <FieldLabel htmlFor={field.name}>
-                        Vinnande lag
-                      </FieldLabel>
+                      <FieldLabel htmlFor={field.name}>Vinnande lag</FieldLabel>
                       <Select
                         name={field.name}
                         value={field.state.value}
@@ -278,28 +212,17 @@ const MetadataForm = () => {
                         >
                           <SelectValue placeholder="Välj" />
                         </SelectTrigger>
-                        <SelectContent
-                          alignItemWithTrigger={true}
-                        >
-                          <SelectItem value="auto">
-                            {field.state.value}
-                          </SelectItem>
+                        <SelectContent alignItemWithTrigger={true}>
+                          <SelectItem value="auto">{field.state.value}</SelectItem>
                           <SelectSeparator />
                           {teamSelection.map((team) => (
-                            <SelectItem
-                              key={team.value}
-                              value={team.value}
-                            >
+                            <SelectItem key={team.value} value={team.value}>
                               {team.label}
                             </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
-                      {isInvalid && (
-                        <FieldError
-                          errors={field.state.meta.errors}
-                        />
-                      )}
+                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
                     </Field>
                   )
                 }}
@@ -309,37 +232,21 @@ const MetadataForm = () => {
               <form.Field
                 name="final"
                 children={(field) => {
-                  const isInvalid =
-                    field.state.meta.isTouched &&
-                    !field.state.meta.isValid
+                  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <Field
-                        orientation="horizontal"
-                        data-invalid={isInvalid}
-                      >
+                      <Field orientation="horizontal" data-invalid={isInvalid}>
                         <Checkbox
                           id={field.name}
                           name={field.name}
                           checked={field.state.value}
-                          onCheckedChange={(checked) =>
-                            field.handleChange(
-                              checked === true,
-                            )
-                          }
+                          onCheckedChange={(checked) => field.handleChange(checked === true)}
                         />
-                        <FieldLabel
-                          htmlFor={field.name}
-                          className="font-normal"
-                        >
+                        <FieldLabel htmlFor={field.name} className="font-normal">
                           Final
                         </FieldLabel>
                       </Field>
-                      {isInvalid && (
-                        <FieldError
-                          errors={field.state.meta.errors}
-                        />
-                      )}
+                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
                     </Field>
                   )
                 }}
@@ -347,37 +254,21 @@ const MetadataForm = () => {
               <form.Field
                 name="semi"
                 children={(field) => {
-                  const isInvalid =
-                    field.state.meta.isTouched &&
-                    !field.state.meta.isValid
+                  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <Field
-                        orientation="horizontal"
-                        data-invalid={isInvalid}
-                      >
+                      <Field orientation="horizontal" data-invalid={isInvalid}>
                         <Checkbox
                           id={field.name}
                           name={field.name}
                           checked={field.state.value}
-                          onCheckedChange={(checked) =>
-                            field.handleChange(
-                              checked === true,
-                            )
-                          }
+                          onCheckedChange={(checked) => field.handleChange(checked === true)}
                         />
-                        <FieldLabel
-                          htmlFor={field.name}
-                          className="font-normal"
-                        >
+                        <FieldLabel htmlFor={field.name} className="font-normal">
                           Semifinal
                         </FieldLabel>
                       </Field>
-                      {isInvalid && (
-                        <FieldError
-                          errors={field.state.meta.errors}
-                        />
-                      )}
+                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
                     </Field>
                   )
                 }}
@@ -385,37 +276,21 @@ const MetadataForm = () => {
               <form.Field
                 name="quarter"
                 children={(field) => {
-                  const isInvalid =
-                    field.state.meta.isTouched &&
-                    !field.state.meta.isValid
+                  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <Field
-                        orientation="horizontal"
-                        data-invalid={isInvalid}
-                      >
+                      <Field orientation="horizontal" data-invalid={isInvalid}>
                         <Checkbox
                           id={field.name}
                           name={field.name}
                           checked={field.state.value}
-                          onCheckedChange={(checked) =>
-                            field.handleChange(
-                              checked === true,
-                            )
-                          }
+                          onCheckedChange={(checked) => field.handleChange(checked === true)}
                         />
-                        <FieldLabel
-                          htmlFor={field.name}
-                          className="font-normal"
-                        >
+                        <FieldLabel htmlFor={field.name} className="font-normal">
                           Kvartsfinal
                         </FieldLabel>
                       </Field>
-                      {isInvalid && (
-                        <FieldError
-                          errors={field.state.meta.errors}
-                        />
-                      )}
+                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
                     </Field>
                   )
                 }}
@@ -423,37 +298,21 @@ const MetadataForm = () => {
               <form.Field
                 name="eight"
                 children={(field) => {
-                  const isInvalid =
-                    field.state.meta.isTouched &&
-                    !field.state.meta.isValid
+                  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <Field
-                        orientation="horizontal"
-                        data-invalid={isInvalid}
-                      >
+                      <Field orientation="horizontal" data-invalid={isInvalid}>
                         <Checkbox
                           id={field.name}
                           name={field.name}
                           checked={field.state.value}
-                          onCheckedChange={(checked) =>
-                            field.handleChange(
-                              checked === true,
-                            )
-                          }
+                          onCheckedChange={(checked) => field.handleChange(checked === true)}
                         />
-                        <FieldLabel
-                          htmlFor={field.name}
-                          className="font-normal"
-                        >
+                        <FieldLabel htmlFor={field.name} className="font-normal">
                           Åttondelsfinal
                         </FieldLabel>
                       </Field>
-                      {isInvalid && (
-                        <FieldError
-                          errors={field.state.meta.errors}
-                        />
-                      )}
+                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
                     </Field>
                   )
                 }}
@@ -461,37 +320,21 @@ const MetadataForm = () => {
               <form.Field
                 name="northSouth"
                 children={(field) => {
-                  const isInvalid =
-                    field.state.meta.isTouched &&
-                    !field.state.meta.isValid
+                  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <Field
-                        orientation="horizontal"
-                        data-invalid={isInvalid}
-                      >
+                      <Field orientation="horizontal" data-invalid={isInvalid}>
                         <Checkbox
                           id={field.name}
                           name={field.name}
                           checked={field.state.value}
-                          onCheckedChange={(checked) =>
-                            field.handleChange(
-                              checked === true,
-                            )
-                          }
+                          onCheckedChange={(checked) => field.handleChange(checked === true)}
                         />
-                        <FieldLabel
-                          htmlFor={field.name}
-                          className="font-normal"
-                        >
+                        <FieldLabel htmlFor={field.name} className="font-normal">
                           Norr/Söder
                         </FieldLabel>
                       </Field>
-                      {isInvalid && (
-                        <FieldError
-                          errors={field.state.meta.errors}
-                        />
-                      )}
+                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
                     </Field>
                   )
                 }}
@@ -499,37 +342,21 @@ const MetadataForm = () => {
               <form.Field
                 name="multipleGroupStages"
                 children={(field) => {
-                  const isInvalid =
-                    field.state.meta.isTouched &&
-                    !field.state.meta.isValid
+                  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <Field
-                        orientation="horizontal"
-                        data-invalid={isInvalid}
-                      >
+                      <Field orientation="horizontal" data-invalid={isInvalid}>
                         <Checkbox
                           id={field.name}
                           name={field.name}
                           checked={field.state.value}
-                          onCheckedChange={(checked) =>
-                            field.handleChange(
-                              checked === true,
-                            )
-                          }
+                          onCheckedChange={(checked) => field.handleChange(checked === true)}
                         />
-                        <FieldLabel
-                          htmlFor={field.name}
-                          className="font-normal"
-                        >
+                        <FieldLabel htmlFor={field.name} className="font-normal">
                           Dubbla gruppspel
                         </FieldLabel>
                       </Field>
-                      {isInvalid && (
-                        <FieldError
-                          errors={field.state.meta.errors}
-                        />
-                      )}
+                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
                     </Field>
                   )
                 }}
@@ -539,33 +366,23 @@ const MetadataForm = () => {
             <form.Field
               name="comment"
               children={(field) => {
-                const isInvalid =
-                  field.state.meta.isTouched &&
-                  !field.state.meta.isValid
+                const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
                 return (
                   <Field data-invalid={isInvalid}>
-                    <FieldLabel htmlFor={field.name}>
-                      Kommentar
-                    </FieldLabel>
+                    <FieldLabel htmlFor={field.name}>Kommentar</FieldLabel>
 
                     <Textarea
                       id={field.name}
                       name={field.name}
                       value={field.state.value}
                       onBlur={field.handleBlur}
-                      onChange={(e) =>
-                        field.handleChange(e.target.value)
-                      }
+                      onChange={(e) => field.handleChange(e.target.value)}
                       aria-invalid={isInvalid}
                       placeholder="Kommentar..."
                       className="min-h-[120px]"
                     />
 
-                    {isInvalid && (
-                      <FieldError
-                        errors={field.state.meta.errors}
-                      />
-                    )}
+                    {isInvalid && <FieldError errors={field.state.meta.errors} />}
                   </Field>
                 )
               }}

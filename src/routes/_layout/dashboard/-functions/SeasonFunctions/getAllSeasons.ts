@@ -1,10 +1,9 @@
-import { createServerFn } from '@tanstack/react-start'
 import { asc, desc, getTableColumns } from 'drizzle-orm'
-
-import { db } from '@/db'
-import { seasons } from '@/db/schema'
-import { catchError } from '@/lib/middlewares/errors/catchError'
+import { createServerFn } from '@tanstack/react-start'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
+import { catchError } from '@/lib/middlewares/errors/catchError'
+import { seasons } from '@/db/schema'
+import { db } from '@/db'
 
 export const getAllSeasons = createServerFn({ method: 'GET' })
   .middleware([errorMiddleware])

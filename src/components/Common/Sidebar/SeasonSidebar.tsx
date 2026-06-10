@@ -1,10 +1,4 @@
 import {
-  Link,
-  Navigate,
-  getRouteApi,
-  useParams,
-} from '@tanstack/react-router'
-import {
   CalendarIcon,
   CalendarSearchIcon,
   ChartLineIcon,
@@ -14,7 +8,7 @@ import {
   MapIcon,
   TrophyIcon,
 } from 'lucide-react'
-
+import { Link, Navigate, getRouteApi, useParams } from '@tanstack/react-router'
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -24,7 +18,6 @@ import {
   SidebarMenuSubItem,
   useSidebar,
 } from '@/components/base/ui/sidebar'
-
 import { useGetFirstAndLastSeason } from '../../../routes/_layout/seasons/$year/-hooks/useGetFirstAndLastSeason'
 
 const route = getRouteApi('/_layout/seasons/$year')
@@ -46,17 +39,8 @@ export function SeasonSidebar() {
     }
   }
 
-  if (
-    data === undefined ||
-    data.status === 204 ||
-    data.groups.length === 0
-  ) {
-    return (
-      <Navigate
-        to="."
-        params={{ group: 'elitserien' }}
-      />
-    )
+  if (data === undefined || data.status === 204 || data.groups.length === 0) {
+    return <Navigate to="." params={{ group: 'elitserien' }} />
   }
   const groupFromData = data.groups[0].group
 
@@ -66,11 +50,7 @@ export function SeasonSidebar() {
   if (!open) return null
   return (
     <>
-      <DefaultSeasonSidebar
-        year={year}
-        women={women}
-        group={group}
-      />
+      <DefaultSeasonSidebar year={year} women={women} group={group} />
       {data.status === 200 && (
         <SidebarGroup>
           <SidebarGroupLabel>Serier</SidebarGroupLabel>
@@ -78,9 +58,7 @@ export function SeasonSidebar() {
             <SidebarMenuSub>
               {data.groups.map((item) => {
                 return (
-                  <SidebarMenuSubItem
-                    key={item.serieId.toString()}
-                  >
+                  <SidebarMenuSubItem key={item.serieId.toString()}>
                     <SidebarMenuSubButton
                       onClick={toggleOnMobile}
                       render={
@@ -94,9 +72,7 @@ export function SeasonSidebar() {
                             women: prev.women,
                           })}
                         >
-                          <span className="md:text-sm truncate">
-                            {item.name}
-                          </span>
+                          <span className="truncate md:text-sm">{item.name}</span>
                         </Link>
                       }
                     />
@@ -145,9 +121,7 @@ export function DefaultSeasonSidebar({
               <span>
                 <CalendarSearchIcon className="size-4" />
               </span>
-              <span className="md:text-sm">
-                Säsongslista
-              </span>
+              <span className="md:text-sm">Säsongslista</span>
             </Link>
           }
         />
@@ -288,9 +262,7 @@ export function DefaultSeasonSidebar({
                   activeOptions={{ includeSearch: false }}
                   activeProps={{ className: `font-bold` }}
                 >
-                  <span className="md:text-sm">
-                    Matcher
-                  </span>
+                  <span className="md:text-sm">Matcher</span>
                 </Link>
               }
             />
@@ -306,9 +278,7 @@ export function DefaultSeasonSidebar({
                   activeOptions={{ includeSearch: false }}
                   activeProps={{ className: `font-bold` }}
                 >
-                  <span className="md:text-sm">
-                    Statistik
-                  </span>
+                  <span className="md:text-sm">Statistik</span>
                 </Link>
               }
             />

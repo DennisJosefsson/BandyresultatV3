@@ -1,15 +1,8 @@
-import { createServerFn } from '@tanstack/react-start'
-import {
-  getCookie,
-  setCookie,
-} from '@tanstack/react-start/server'
 import * as z from 'zod'
+import { getCookie, setCookie } from '@tanstack/react-start/server'
+import { createServerFn } from '@tanstack/react-start'
 
-const postThemeValidator = z.union([
-  z.literal('light'),
-  z.literal('dark'),
-  z.literal('system'),
-])
+const postThemeValidator = z.union([z.literal('light'), z.literal('dark'), z.literal('system')])
 export type T = z.infer<typeof postThemeValidator>
 const storageKey = 'bandyresultat-theme'
 

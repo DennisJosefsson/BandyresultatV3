@@ -1,5 +1,4 @@
 import { useSuspenseQuery } from '@tanstack/react-query'
-
 import { getFirstAndLastSeason } from '../-functions/getFirstAndLastSeasons'
 
 export const useGetFirstAndLastSeason = () => {
@@ -7,7 +6,6 @@ export const useGetFirstAndLastSeason = () => {
     queryKey: ['firstAndLastSeason'],
     queryFn: getFirstAndLastSeason,
   })
-  if (!data)
-    throw new Error('Missing firstAndLastSeason data')
+  if (!data) throw new Error('Missing firstAndLastSeason data')
   return data
 }

@@ -1,22 +1,12 @@
-import type {
-  Dispatch,
-  KeyboardEvent,
-  SetStateAction,
-} from 'react'
-
+import type { Dispatch, KeyboardEvent, SetStateAction } from 'react'
 import { Input } from '@/components/base/ui/input'
 type FilterComponentProps = {
   teamFilter: string
   setTeamFilter: Dispatch<SetStateAction<string>>
 }
 
-const FilterComponent = ({
-  teamFilter,
-  setTeamFilter,
-}: FilterComponentProps) => {
-  const handleKeyDown = (
-    event: KeyboardEvent<HTMLInputElement>,
-  ) => {
+const FilterComponent = ({ teamFilter, setTeamFilter }: FilterComponentProps) => {
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       event.preventDefault()
     }
@@ -30,12 +20,7 @@ const FilterComponent = ({
         value={teamFilter}
         name="teamFilter"
         onChange={(event) =>
-          setTeamFilter(
-            event.target.value.replace(
-              /[^a-z0-9\u00C0-\u017F]/gi,
-              '',
-            ),
-          )
+          setTeamFilter(event.target.value.replace(/[^a-z0-9\u00C0-\u017F]/gi, ''))
         }
         onKeyDown={handleKeyDown}
       />

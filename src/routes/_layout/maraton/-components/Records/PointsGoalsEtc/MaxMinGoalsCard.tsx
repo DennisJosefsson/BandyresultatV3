@@ -1,12 +1,7 @@
-import Date from '@/components/Common/Date'
 import type { MaxMinGoalGames } from '@/lib/types/records'
+import Date from '@/components/Common/Date'
 
-const MaxMinGoalsCard = ({
-  position,
-  teams,
-  result,
-  date,
-}: MaxMinGoalGames) => {
+const MaxMinGoalsCard = ({ position, teams, result, date }: MaxMinGoalGames) => {
   return (
     <div className="mb-1 flex max-w-100 flex-row items-center justify-between p-1 text-xs md:mb-2 md:p-2 lg:text-sm">
       <span className="mr-4 w-8 text-right text-base font-bold tabular-nums md:text-2xl">
@@ -14,9 +9,7 @@ const MaxMinGoalsCard = ({
       </span>
       <div className="flex grow flex-col">
         <div className="flex flex-row justify-between">
-          <span className="truncate font-semibold">
-            {teams}
-          </span>
+          <span className="truncate font-semibold">{teams}</span>
         </div>
         <div className="flex flex-row items-center justify-between text-[10px] md:text-xs">
           <span className="w-48 sm:w-64">

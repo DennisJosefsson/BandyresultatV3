@@ -1,15 +1,8 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/base/ui/card'
-import { createFileRoute } from '@tanstack/react-router'
 import { MessageCircleWarningIcon } from 'lucide-react'
+import { createFileRoute } from '@tanstack/react-router'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/base/ui/card'
 
-export const Route = createFileRoute(
-  '/_layout/unauthorized/',
-)({
+export const Route = createFileRoute('/_layout/unauthorized/')({
   loader: (context) => {
     return context.location.state.redirectCause
   },
@@ -18,24 +11,21 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
   const data = Route.useLoaderData()
-  const errorString =
-    data ?? 'Måste vara inloggad för att se sidan.'
+  const errorString = data ?? 'Måste vara inloggad för att se sidan.'
 
   return (
-    <div className="flex flex-row justify-center mt-8">
-      <Card className="w-60 xs:w-80 sm:w-100">
+    <div className="mt-8 flex flex-row justify-center">
+      <Card className="xs:w-80 w-60 sm:w-100">
         <CardHeader>
-          <div className="flex flex-row justify-between items-center">
-            <CardTitle className="text-red-500 font-semibold text-sm md:text-base">
+          <div className="flex flex-row items-center justify-between">
+            <CardTitle className="text-sm font-semibold text-red-500 md:text-base">
               Aj då!
             </CardTitle>
-            <MessageCircleWarningIcon className="text-red-500 animate-pulse" />
+            <MessageCircleWarningIcon className="animate-pulse text-red-500" />
           </div>
         </CardHeader>
         <CardContent>
-          <span className="mt-2 text-sm md:text-base">
-            {errorString}
-          </span>
+          <span className="mt-2 text-sm md:text-base">{errorString}</span>
         </CardContent>
       </Card>
     </div>

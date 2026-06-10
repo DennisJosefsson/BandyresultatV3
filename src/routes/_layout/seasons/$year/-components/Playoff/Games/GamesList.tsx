@@ -1,21 +1,15 @@
-import { Link, getRouteApi } from '@tanstack/react-router'
 import { LinkIcon } from 'lucide-react'
-
-import Date from '@/components/Common/Date'
+import { Link, getRouteApi } from '@tanstack/react-router'
 import type { Game, GameGroupBase } from '@/lib/types/game'
-
-import { columns } from './columns'
+import Date from '@/components/Common/Date'
 import DataTable from './DataTable'
+import { columns } from './columns'
 
 type GameListProps = {
-  gamesArray: Array<
-    GameGroupBase<Array<Omit<Game, 'season'>>>
-  >
+  gamesArray: Array<GameGroupBase<Array<Omit<Game, 'season'>>>>
 }
 
-const route = getRouteApi(
-  '/_layout/seasons/$year/playoff/games',
-)
+const route = getRouteApi('/_layout/seasons/$year/playoff/games')
 
 const GamesList = ({ gamesArray }: GameListProps) => {
   const year = route.useParams({
@@ -27,14 +21,8 @@ const GamesList = ({ gamesArray }: GameListProps) => {
       <div>
         {gamesArray.map((group) => {
           return (
-            <div
-              key={group.group}
-              className="mb-6"
-            >
-              <div
-                id={group.group}
-                className="group mb-0.5 flex flex-row items-center gap-1"
-              >
+            <div key={group.group} className="mb-6">
+              <div id={group.group} className="group mb-0.5 flex flex-row items-center gap-1">
                 <h3 className="text-primary text-[10px] font-bold tracking-wide md:text-xs xl:text-sm 2xl:text-base">
                   {group.name}
                 </h3>
@@ -63,14 +51,11 @@ const GamesList = ({ gamesArray }: GameListProps) => {
                     {},
                   )
                   return (
-                    <div
-                      key={date.date}
-                      className="mb-4"
-                    >
+                    <div key={date.date} className="mb-4">
                       {date.date !== 'null' && (
                         <div className="group mb-0.5 flex flex-row items-center gap-1">
                           <h3
-                            className="text-[10px] sm:text-xs font-semibold tracking-wide md:text-sm xl:text-base 2xl:text-lg"
+                            className="text-[10px] font-semibold tracking-wide sm:text-xs md:text-sm xl:text-base 2xl:text-lg"
                             id={`${group.group}-${date.date}`}
                           >
                             <Date>{date.date}</Date>
@@ -85,11 +70,7 @@ const GamesList = ({ gamesArray }: GameListProps) => {
                           </Link>
                         </div>
                       )}
-                      <DataTable
-                        teamObject={teamObject}
-                        columns={columns}
-                        data={date.games}
-                      />
+                      <DataTable teamObject={teamObject} columns={columns} data={date.games} />
                     </div>
                   )
                 })}

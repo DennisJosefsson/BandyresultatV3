@@ -1,29 +1,18 @@
-import { getRouteApi } from '@tanstack/react-router'
 import { useRef, useState } from 'react'
-
+import { getRouteApi } from '@tanstack/react-router'
 import ConfirmDialog from '@/components/Common/ConfirmDialog'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/base/ui/card'
 import { Button } from '@/components/base/ui/button'
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/base/ui/card'
-
 import { deleteTeamseasonMutation } from '../../-hooks/deleteTeamseasonMutation'
 
-const route = getRouteApi(
-  '/_layout/dashboard/season/$seasonId/',
-)
+const route = getRouteApi('/_layout/dashboard/season/$seasonId/')
 
 const TeamSeason = () => {
   const teams = route.useLoaderData({
     select: (s) => s.teams,
   })
   const dialogRef = useRef<HTMLDialogElement>(null)
-  const [teamseasonId, setTeamseasonId] = useState<
-    number | null
-  >(null)
+  const [teamseasonId, setTeamseasonId] = useState<number | null>(null)
   const mutation = deleteTeamseasonMutation(dialogRef)
 
   const seasonId = route.useParams({
@@ -56,9 +45,7 @@ const TeamSeason = () => {
       <Card>
         <CardHeader>
           <div className="flex flex-row items-center justify-between">
-            <CardTitle className="xl:text-lg">
-              Lag
-            </CardTitle>
+            <CardTitle className="xl:text-lg">Lag</CardTitle>
             <div className="flex flex-row gap-2">
               <Button
                 render={
@@ -81,18 +68,11 @@ const TeamSeason = () => {
             <div>
               {teams.map((team) => {
                 return (
-                  <div
-                    key={team.teamId}
-                    className="mb-1 flex flex-row justify-between"
-                  >
-                    <div className="xl:text-lg">
-                      {team.team.casualName}
-                    </div>
+                  <div key={team.teamId} className="mb-1 flex flex-row justify-between">
+                    <div className="xl:text-lg">{team.team.casualName}</div>
                     <div className="flex flex-row gap-2">
                       <Button
-                        onClick={() =>
-                          openDialog(team.teamseasonId)
-                        }
+                        onClick={() => openDialog(team.teamseasonId)}
                         size="sm"
                         variant="destructive"
                       >

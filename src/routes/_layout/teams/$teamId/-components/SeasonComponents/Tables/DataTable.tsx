@@ -1,14 +1,13 @@
 import type { SortingState } from '@tanstack/react-table'
+import { useState } from 'react'
 import {
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { useState } from 'react'
-
 import type { TeamTable } from '@/lib/types/table'
-
+import { cn } from '@/lib/utils/utils'
 // oxlint-disable no-unused-expressions
 import {
   Table,
@@ -18,8 +17,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/base/ui/table'
-import { cn } from '@/lib/utils/utils'
-
 import { columns } from './columns'
 
 interface DataTableProps {
@@ -28,11 +25,7 @@ interface DataTableProps {
   serieStructure: Array<number> | null | undefined
 }
 
-const DataTable = ({
-  data,
-  serieStructure,
-  casualName,
-}: DataTableProps) => {
+const DataTable = ({ data, serieStructure, casualName }: DataTableProps) => {
   const [sorting, setSorting] = useState<SortingState>([
     { id: 'totalPoints', desc: true },
     { id: 'totalGoalDifference', desc: true },
@@ -71,16 +64,10 @@ const DataTable = ({
               </TableHead>
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead
-                    key={header.id}
-                    className="px-0"
-                  >
+                  <TableHead key={header.id} className="px-0">
                     {header.isPlaceholder
                       ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
+                      : flexRender(header.column.columnDef.header, header.getContext())}
                   </TableHead>
                 )
               })}
@@ -93,19 +80,12 @@ const DataTable = ({
             table.getRowModel().rows.map((row, index) => (
               <TableRow
                 key={row.id}
-                data-state={
-                  row.getIsSelected() && 'selected'
-                }
+                data-state={row.getIsSelected() && 'selected'}
                 className={cn(
-                  casualName ===
-                    getString(
-                      row.getValue('team_casualName'),
-                    )
+                  casualName === getString(row.getValue('team_casualName'))
                     ? 'font-bold italic'
                     : null,
-                  serieStructure?.includes(index + 1)
-                    ? 'border-foreground border-b-2'
-                    : null,
+                  serieStructure?.includes(index + 1) ? 'border-foreground border-b-2' : null,
                 )}
               >
                 <TableCell
@@ -116,14 +96,8 @@ const DataTable = ({
                 </TableCell>
                 {row.getVisibleCells().map((cell) => {
                   return (
-                    <TableCell
-                      key={cell.id}
-                      className="px-0 py-1"
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
+                    <TableCell key={cell.id} className="px-0 py-1">
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   )
                 })}
@@ -131,10 +105,7 @@ const DataTable = ({
             ))
           ) : (
             <TableRow>
-              <TableCell
-                colSpan={columns.length}
-                className="h-24 text-center"
-              >
+              <TableCell colSpan={columns.length} className="h-24 text-center">
                 Inga resultat.
               </TableCell>
             </TableRow>

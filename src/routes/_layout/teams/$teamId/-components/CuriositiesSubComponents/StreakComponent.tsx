@@ -1,25 +1,11 @@
 import type { ReactNode } from 'react'
-
-import Date from '@/components/Common/Date'
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/base/ui/card'
-
 import type { TeamStreak } from '@/lib/types/team'
+import Date from '@/components/Common/Date'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/base/ui/card'
 
-const StreakComponent = ({
-  children,
-}: {
-  children: ReactNode
-}) => {
+const StreakComponent = ({ children }: { children: ReactNode }) => {
   return (
-    <Card
-      className="mb-2"
-      size="sm"
-    >
+    <Card className="mb-2" size="sm">
       {children}
     </Card>
   )
@@ -28,7 +14,7 @@ const StreakComponent = ({
 function Title({ children }: { children: ReactNode }) {
   return (
     <CardHeader>
-      <CardTitle className="group-data-[size=sm]/card:text-[10px] xs:group-data-[size=sm]/card:text-xs md:group-data-[size=sm]/card:text-sm">
+      <CardTitle className="xs:group-data-[size=sm]/card:text-xs group-data-[size=sm]/card:text-[10px] md:group-data-[size=sm]/card:text-sm">
         {children}
       </CardTitle>
     </CardHeader>
@@ -48,8 +34,7 @@ function Content({ streak }: { streak: Array<TeamStreak> }) {
               className="bg-muted-foreground/20 mb-1 flex flex-row justify-between rounded px-2 py-1 text-[10px] lg:text-sm"
             >
               <div>
-                <Date>{s.startDate}</Date> -{' '}
-                <Date>{s.endDate}</Date>
+                <Date>{s.startDate}</Date> - <Date>{s.endDate}</Date>
               </div>
               <div>{s.gameCount} matcher</div>
             </div>

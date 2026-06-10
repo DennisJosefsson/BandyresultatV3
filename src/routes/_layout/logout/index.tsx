@@ -1,6 +1,6 @@
-import { Button } from '@/components/base/ui/button'
-import { SignOutButton } from "@clerk/react"
 import { createFileRoute } from '@tanstack/react-router'
+import { SignOutButton } from '@clerk/react'
+import { Button } from '@/components/base/ui/button'
 
 export const Route = createFileRoute('/_layout/logout/')({
   component: RouteComponent,
@@ -8,12 +8,10 @@ export const Route = createFileRoute('/_layout/logout/')({
 
 function RouteComponent() {
   return (
-    <div className="flex flex-row items-center justify-center mt-20">
+    <div className="mt-20 flex flex-row items-center justify-center">
       <SignOutButton>
         <Button variant="outline">
-          <span className="text-base font-semibold">
-            Logga ut
-          </span>
+          <span className="text-base font-semibold">Logga ut</span>
         </Button>
       </SignOutButton>
     </div>

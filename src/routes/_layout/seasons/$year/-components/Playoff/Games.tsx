@@ -1,5 +1,4 @@
 import type { Game, GameGroupBase } from '@/lib/types/game'
-
 import GamesList from './Games/GamesList'
 
 type GamesProps = {

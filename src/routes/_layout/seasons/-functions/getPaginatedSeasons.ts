@@ -1,11 +1,10 @@
-import { createServerFn } from '@tanstack/react-start'
-import { zodValidator } from '@tanstack/zod-adapter'
-import { and, asc, eq, sql } from 'drizzle-orm'
 import { z } from 'zod'
-
-import { db } from '@/db'
-import { seasons, series } from '@/db/schema'
+import { and, asc, eq, sql } from 'drizzle-orm'
+import { zodValidator } from '@tanstack/zod-adapter'
+import { createServerFn } from '@tanstack/react-start'
 import { catchError } from '@/lib/middlewares/errors/catchError'
+import { seasons, series } from '@/db/schema'
+import { db } from '@/db'
 
 export const parsePage = z.number().optional().catch(1)
 
@@ -15,10 +14,7 @@ export const getPaginatedSeasons = createServerFn({
   .validator(zodValidator(parsePage))
   .handler(async ({ data }) => {
     try {
-      const count = await db.$count(
-        seasons,
-        eq(seasons.women, false),
-      )
+      const count = await db.$count(seasons, eq(seasons.women, false))
 
       const page = data ?? 1
 
@@ -35,16 +31,8 @@ export const getPaginatedSeasons = createServerFn({
                 .as('ranked_group'),
           })
           .from(series)
-          .leftJoin(
-            seasons,
-            eq(seasons.seasonId, series.seasonId),
-          )
-          .where(
-            and(
-              eq(series.level, 1),
-              eq(series.category, 'regular'),
-            ),
-          ),
+          .leftJoin(seasons, eq(seasons.seasonId, series.seasonId))
+          .where(and(eq(series.level, 1), eq(series.category, 'regular'))),
       )
 
       const groups = await db
@@ -56,21 +44,15 @@ export const getPaginatedSeasons = createServerFn({
 
       const pagSeasons = await db.query.seasons.findMany({
         columns: { seasonId: true, year: true },
-        where: (seasonsSchema, { eq: equal }) =>
-          equal(seasonsSchema.women, false),
+        where: (seasonsSchema, { eq: equal }) => equal(seasonsSchema.women, false),
         offset: (page - 1) * 12,
         limit: 12,
-        orderBy: (seasonsSchema, { desc }) =>
-          desc(seasonsSchema.seasonId),
+        orderBy: (seasonsSchema, { desc }) => desc(seasonsSchema.seasonId),
       })
 
       const combinedSeasons = pagSeasons.map((s) => {
-        const mensGroup = groups.find(
-          (g) => g.year === s.year && g.women === false,
-        )
-        const womensGroup = groups.find(
-          (g) => g.year === s.year && g.women === true,
-        )
+        const mensGroup = groups.find((g) => g.year === s.year && g.women === false)
+        const womensGroup = groups.find((g) => g.year === s.year && g.women === true)
         return {
           ...s,
           mensGroup: mensGroup?.group ?? undefined,

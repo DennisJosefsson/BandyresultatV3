@@ -1,14 +1,12 @@
-import { Outlet } from '@tanstack/react-router'
 import { useRef, useState } from 'react'
-
-import ConfirmDialog from '@/components/Common/ConfirmDialog'
+import { Outlet } from '@tanstack/react-router'
 import type { Game } from '@/lib/types/game'
-
-import { deleteGameMutation } from '../../-hooks/deleteGameMutation'
+import ConfirmDialog from '@/components/Common/ConfirmDialog'
 import SerieGamesListItem from './SerieGamesListItem'
+import { deleteGameMutation } from '../../-hooks/deleteGameMutation'
 
 type SerieGamesListProps = {
-  games: Omit<Game, 'season'>[] | undefined
+  games: Array<Omit<Game, 'season'>> | undefined
   title: string
 }
 
@@ -50,11 +48,7 @@ const SerieGamesList = ({ games, title }: SerieGamesListProps) => {
       <span className="text-base">{title}</span>
       {games.map((game) => {
         return (
-          <SerieGamesListItem
-            game={game}
-            key={game.gameId.toString()}
-            openDialog={openDialog}
-          />
+          <SerieGamesListItem game={game} key={game.gameId.toString()} openDialog={openDialog} />
         )
       })}
       <Outlet />

@@ -1,11 +1,8 @@
 import { getRouteApi } from '@tanstack/react-router'
-
-import { columns } from './tablecolumns'
 import DataTable from './TableDataTable'
+import { columns } from './tablecolumns'
 
-const route = getRouteApi(
-  '/_layout/seasons/$year/$group/development',
-)
+const route = getRouteApi('/_layout/seasons/$year/$group/development')
 
 const DevelopmentTable = () => {
   const index = route.useSearch({ select: (s) => s.index })

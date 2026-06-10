@@ -1,5 +1,4 @@
 import { Link, rootRouteId, useMatch, useSearch } from '@tanstack/react-router'
-
 import Header from '../Header/Header'
 
 const DefaultNotFound = () => {

@@ -1,14 +1,11 @@
 import { getRouteApi } from '@tanstack/react-router'
-
-import PlayoffAsSeriesTables from './PlayoffAsSeriesTables'
-import EightFinal from './PlayoffTree/EightFinal'
-import Final from './PlayoffTree/Final'
-import QuarterFinal from './PlayoffTree/QuarterFinal'
 import SemiFinal from './PlayoffTree/SemiFinal'
+import QuarterFinal from './PlayoffTree/QuarterFinal'
+import Final from './PlayoffTree/Final'
+import EightFinal from './PlayoffTree/EightFinal'
+import PlayoffAsSeriesTables from './PlayoffAsSeriesTables'
 
-const route = getRouteApi(
-  '/_layout/seasons/$year/playoff/table',
-)
+const route = getRouteApi('/_layout/seasons/$year/playoff/table')
 
 const SeasonPlayoffTables = () => {
   const data = route.useLoaderData()
@@ -21,9 +18,7 @@ const SeasonPlayoffTables = () => {
         <SemiFinal />
         <QuarterFinal />
         <EightFinal />
-        {data.playoffSeason.playoffAsSeries ? (
-          <PlayoffAsSeriesTables />
-        ) : null}
+        {data.playoffSeason.playoffAsSeries ? <PlayoffAsSeriesTables /> : null}
       </div>
     </div>
   )

@@ -1,9 +1,8 @@
 import { getRouteApi } from '@tanstack/react-router'
-
-import Metadata from './Metadata'
-import PlayoffSeason from './PlayoffSeason'
-import Series from './Series'
 import TeamSeason from './TeamSeason'
+import Series from './Series'
+import PlayoffSeason from './PlayoffSeason'
+import Metadata from './Metadata'
 
 const route = getRouteApi('/_layout/dashboard/season/$seasonId/')
 

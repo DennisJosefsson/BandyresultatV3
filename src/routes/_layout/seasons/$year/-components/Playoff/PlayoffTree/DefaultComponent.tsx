@@ -1,6 +1,5 @@
 import type { GroupPlayoffTable } from '@/lib/types/table'
 import { groupConstant } from '@/lib/utils/constants'
-
 import PlayoffCard from './PlayoffCard'
 type ColstartsType = {
   [key: string]: string
@@ -11,26 +10,16 @@ type DefaultComponentProps = {
   colStarts: ColstartsType
 }
 
-const DefaultComponent = ({
-  group,
-  colStarts,
-}: DefaultComponentProps) => {
+const DefaultComponent = ({ group, colStarts }: DefaultComponentProps) => {
   const styleClass = colStarts
     ? `${colStarts[group.group]} cursor-pointer`
     : 'cursor-pointer lg:col-start-4 lg:odd:col-start-2'
 
   return (
-    <PlayoffCard
-      styleClass={styleClass}
-      group={group.group}
-    >
+    <PlayoffCard styleClass={styleClass} group={group.group}>
       <PlayoffCard.Title>
-        <PlayoffCard.Group>
-          {groupConstant[group.group]}
-        </PlayoffCard.Group>
-        <PlayoffCard.Result>
-          {group.result}
-        </PlayoffCard.Result>
+        <PlayoffCard.Group>{groupConstant[group.group]}</PlayoffCard.Group>
+        <PlayoffCard.Result>{group.result}</PlayoffCard.Result>
       </PlayoffCard.Title>
       <PlayoffCard.Content>
         <PlayoffCard.Team teamId={group.homeTeam.teamId}>

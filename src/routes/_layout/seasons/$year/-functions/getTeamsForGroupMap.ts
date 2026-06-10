@@ -1,25 +1,17 @@
-import { createServerFn } from '@tanstack/react-start'
-import { zodValidator } from '@tanstack/zod-adapter'
 import type { SQL } from 'drizzle-orm'
 import { and, eq, getTableColumns } from 'drizzle-orm'
-
-import { db } from '@/db'
-import {
-  county,
-  municipality,
-  seasons,
-  series,
-  teams,
-  teamseries,
-} from '@/db/schema'
-import { catchError } from '@/lib/middlewares/errors/catchError'
-import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import type { County } from '@/lib/types/county'
-import type { Meta } from '@/lib/types/meta'
-import type { Municipality } from '@/lib/types/municipality'
+import { zodValidator } from '@tanstack/zod-adapter'
+import { createServerFn } from '@tanstack/react-start'
 import type { Team } from '@/lib/types/team'
-import { seasonIdCheck } from '@/lib/utils/utils'
+import type { Municipality } from '@/lib/types/municipality'
+import type { Meta } from '@/lib/types/meta'
+import type { County } from '@/lib/types/county'
 import { zd } from '@/lib/utils/zod'
+import { seasonIdCheck } from '@/lib/utils/utils'
+import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
+import { catchError } from '@/lib/middlewares/errors/catchError'
+import { county, municipality, seasons, series, teams, teamseries } from '@/db/schema'
+import { db } from '@/db'
 
 type TeamsForGroupMapReturn =
   | {
@@ -53,116 +45,84 @@ export const getTeamsForGroupMap = createServerFn({
       }),
     ),
   )
-  .handler(
-    async ({
-      data: { group, year, women },
-    }): Promise<TeamsForGroupMapReturn> => {
-      try {
-        const seasonYear = seasonIdCheck.parse(year)
-        const breadCrumb = 'Karta'
-        const title = `Bandyresultat - Karta - ${group} - ${women === true ? 'Damer' : 'Herrar'} ${seasonYear!}`
-        const url = `https://bandyresultat.se/seasons/${year}/${group}/map?women=${women}`
-        const description = `Karta ${group} ${seasonYear} ${women ? 'damer' : 'herrar'}`
-        const meta = {
-          title,
-          url,
-          description,
-        }
-        if (year < 1930) {
-          return {
-            status: 404,
-            message: `Enbart slutspelsmatcher ${seasonYear}, kartan finns under slutspel.`,
-            breadCrumb,
-            meta,
-          }
-        }
-
-        if (year < 1973 && women) {
-          return {
-            status: 404,
-            message:
-              'Damernas första säsong var 1972/1973.',
-            breadCrumb,
-            meta,
-          }
-        }
-
-        if (!seasonYear) {
-          return {
-            status: 404,
-            message: 'Säsongen finns inte.',
-            breadCrumb,
-            meta,
-          }
-        }
-
-        const serie = await db
-          .select({
-            ...getTableColumns(series),
-          })
-          .from(series)
-          .leftJoin(
-            seasons,
-            eq(seasons.seasonId, series.seasonId),
-          )
-          .where(
-            and(
-              eq(seasons.women, women),
-              eq(seasons.year, seasonYear),
-              eq(series.group, group),
-            ),
-          )
-          .then((res) => {
-            if (res.length > 0) return res[0]
-            else return undefined
-          })
-
-        if (!serie)
-          return {
-            status: 404,
-            message: `Ingen ${women ? 'dam' : 'herr'}serie med detta namn ${seasonYear}. Välj en ny i listan.`,
-            breadCrumb,
-            meta,
-          }
-
-        const teamArray = await db
-          .select({
-            team: getTableColumns(
-              teams,
-            ) as unknown as SQL<Team>,
-            county: getTableColumns(
-              county,
-            ) as unknown as SQL<County>,
-            municipality: getTableColumns(
-              municipality,
-            ) as unknown as SQL<Municipality>,
-          })
-          .from(teamseries)
-          .leftJoin(
-            teams,
-            eq(teams.teamId, teamseries.teamId),
-          )
-          .leftJoin(
-            municipality,
-            eq(
-              teams.municipalityId,
-              municipality.municipalityId,
-            ),
-          )
-          .leftJoin(
-            county,
-            eq(teams.countyId, county.countyId),
-          )
-          .where(eq(teamseries.serieId, serie.serieId))
-
+  .handler(async ({ data: { group, year, women } }): Promise<TeamsForGroupMapReturn> => {
+    try {
+      const seasonYear = seasonIdCheck.parse(year)
+      const breadCrumb = 'Karta'
+      const title = `Bandyresultat - Karta - ${group} - ${women === true ? 'Damer' : 'Herrar'} ${seasonYear!}`
+      const url = `https://bandyresultat.se/seasons/${year}/${group}/map?women=${women}`
+      const description = `Karta ${group} ${seasonYear} ${women ? 'damer' : 'herrar'}`
+      const meta = {
+        title,
+        url,
+        description,
+      }
+      if (year < 1930) {
         return {
-          status: 200,
-          teams: teamArray,
+          status: 404,
+          message: `Enbart slutspelsmatcher ${seasonYear}, kartan finns under slutspel.`,
           breadCrumb,
           meta,
         }
-      } catch (error) {
-        catchError(error)
       }
-    },
-  )
+
+      if (year < 1973 && women) {
+        return {
+          status: 404,
+          message: 'Damernas första säsong var 1972/1973.',
+          breadCrumb,
+          meta,
+        }
+      }
+
+      if (!seasonYear) {
+        return {
+          status: 404,
+          message: 'Säsongen finns inte.',
+          breadCrumb,
+          meta,
+        }
+      }
+
+      const serie = await db
+        .select({
+          ...getTableColumns(series),
+        })
+        .from(series)
+        .leftJoin(seasons, eq(seasons.seasonId, series.seasonId))
+        .where(and(eq(seasons.women, women), eq(seasons.year, seasonYear), eq(series.group, group)))
+        .then((res) => {
+          if (res.length > 0) return res[0]
+          else return undefined
+        })
+
+      if (!serie)
+        return {
+          status: 404,
+          message: `Ingen ${women ? 'dam' : 'herr'}serie med detta namn ${seasonYear}. Välj en ny i listan.`,
+          breadCrumb,
+          meta,
+        }
+
+      const teamArray = await db
+        .select({
+          team: getTableColumns(teams) as unknown as SQL<Team>,
+          county: getTableColumns(county) as unknown as SQL<County>,
+          municipality: getTableColumns(municipality) as unknown as SQL<Municipality>,
+        })
+        .from(teamseries)
+        .leftJoin(teams, eq(teams.teamId, teamseries.teamId))
+        .leftJoin(municipality, eq(teams.municipalityId, municipality.municipalityId))
+        .leftJoin(county, eq(teams.countyId, county.countyId))
+        .where(eq(teamseries.serieId, serie.serieId))
+
+      return {
+        status: 200,
+        teams: teamArray,
+        breadCrumb,
+        meta,
+      }
+    } catch (error) {
+      catchError(error)
+    }
+  })

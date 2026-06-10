@@ -1,34 +1,13 @@
 import type { SQL } from 'drizzle-orm'
-import {
-  and,
-  asc,
-  count,
-  desc,
-  eq,
-  gt,
-  gte,
-  sql,
-} from 'drizzle-orm'
-
-import { db } from '@/db'
-import {
-  seasons,
-  series,
-  teamgames,
-  teams,
-} from '@/db/schema'
+import { and, asc, count, desc, eq, gt, gte, sql } from 'drizzle-orm'
 import type { TeamBase } from '@/lib/types/team'
+import { seasons, series, teamgames, teams } from '@/db/schema'
+import { db } from '@/db'
 
-export async function getConcededData({
-  women,
-}: {
-  women: boolean
-}) {
+export async function getConcededData({ women }: { women: boolean }) {
   const averageConcededMax = await db
     .select({
-      data: sql`round(avg(teamgames.goals_conceded),2)`
-        .mapWith(Number)
-        .as('data'),
+      data: sql`round(avg(teamgames.goals_conceded),2)`.mapWith(Number).as('data'),
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
@@ -40,10 +19,7 @@ export async function getConcededData({
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
-    .leftJoin(
-      seasons,
-      eq(teamgames.seasonId, seasons.seasonId),
-    )
+    .leftJoin(seasons, eq(teamgames.seasonId, seasons.seasonId))
     .where(
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
@@ -55,13 +31,7 @@ export async function getConcededData({
     )
     .groupBy(teams.teamId, seasons.year)
     .having(gte(count(teamgames.teamGameId), 10))
-    .orderBy(
-      desc(
-        sql`round(avg(teamgames.goals_conceded),2)`
-          .mapWith(Number)
-          .as('data'),
-      ),
-    )
+    .orderBy(desc(sql`round(avg(teamgames.goals_conceded),2)`.mapWith(Number).as('data')))
     .limit(10)
     .then((res) => {
       const filteredResult = res.map((item, index) => {
@@ -71,11 +41,8 @@ export async function getConcededData({
         return {
           ...item,
           position:
-            index !== 0 &&
-            filteredResult[index - 1].data === item.data
-              ? filteredResult.find(
-                  (r) => r.data === item.data,
-                )?.position
+            index !== 0 && filteredResult[index - 1].data === item.data
+              ? filteredResult.find((r) => r.data === item.data)?.position
               : item.position,
         }
       })
@@ -83,9 +50,7 @@ export async function getConcededData({
 
   const averageConcededMaxHome = await db
     .select({
-      data: sql`round(avg(teamgames.goals_conceded),2)`
-        .mapWith(Number)
-        .as('data'),
+      data: sql`round(avg(teamgames.goals_conceded),2)`.mapWith(Number).as('data'),
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
@@ -97,10 +62,7 @@ export async function getConcededData({
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
-    .leftJoin(
-      seasons,
-      eq(teamgames.seasonId, seasons.seasonId),
-    )
+    .leftJoin(seasons, eq(teamgames.seasonId, seasons.seasonId))
     .where(
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
@@ -113,13 +75,7 @@ export async function getConcededData({
     )
     .groupBy(teams.teamId, seasons.year)
     .having(gte(count(teamgames.teamGameId), 5))
-    .orderBy(
-      desc(
-        sql`round(avg(teamgames.goals_conceded),2)`
-          .mapWith(Number)
-          .as('data'),
-      ),
-    )
+    .orderBy(desc(sql`round(avg(teamgames.goals_conceded),2)`.mapWith(Number).as('data')))
     .limit(10)
     .then((res) => {
       const filteredResult = res.map((item, index) => {
@@ -129,11 +85,8 @@ export async function getConcededData({
         return {
           ...item,
           position:
-            index !== 0 &&
-            filteredResult[index - 1].data === item.data
-              ? filteredResult.find(
-                  (r) => r.data === item.data,
-                )?.position
+            index !== 0 && filteredResult[index - 1].data === item.data
+              ? filteredResult.find((r) => r.data === item.data)?.position
               : item.position,
         }
       })
@@ -141,9 +94,7 @@ export async function getConcededData({
 
   const averageConcededMaxAway = await db
     .select({
-      data: sql`round(avg(teamgames.goals_conceded),2)`
-        .mapWith(Number)
-        .as('data'),
+      data: sql`round(avg(teamgames.goals_conceded),2)`.mapWith(Number).as('data'),
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
@@ -155,10 +106,7 @@ export async function getConcededData({
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
-    .leftJoin(
-      seasons,
-      eq(teamgames.seasonId, seasons.seasonId),
-    )
+    .leftJoin(seasons, eq(teamgames.seasonId, seasons.seasonId))
     .where(
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
@@ -171,13 +119,7 @@ export async function getConcededData({
     )
     .groupBy(teams.teamId, seasons.year)
     .having(gte(count(teamgames.teamGameId), 5))
-    .orderBy(
-      desc(
-        sql`round(avg(teamgames.goals_conceded),2)`
-          .mapWith(Number)
-          .as('data'),
-      ),
-    )
+    .orderBy(desc(sql`round(avg(teamgames.goals_conceded),2)`.mapWith(Number).as('data')))
     .limit(10)
     .then((res) => {
       const filteredResult = res.map((item, index) => {
@@ -187,11 +129,8 @@ export async function getConcededData({
         return {
           ...item,
           position:
-            index !== 0 &&
-            filteredResult[index - 1].data === item.data
-              ? filteredResult.find(
-                  (r) => r.data === item.data,
-                )?.position
+            index !== 0 && filteredResult[index - 1].data === item.data
+              ? filteredResult.find((r) => r.data === item.data)?.position
               : item.position,
         }
       })
@@ -199,9 +138,7 @@ export async function getConcededData({
 
   const averageConcededMin = await db
     .select({
-      data: sql`round(avg(teamgames.goals_conceded),2)`
-        .mapWith(Number)
-        .as('data'),
+      data: sql`round(avg(teamgames.goals_conceded),2)`.mapWith(Number).as('data'),
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
@@ -213,10 +150,7 @@ export async function getConcededData({
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
-    .leftJoin(
-      seasons,
-      eq(teamgames.seasonId, seasons.seasonId),
-    )
+    .leftJoin(seasons, eq(teamgames.seasonId, seasons.seasonId))
     .where(
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
@@ -228,13 +162,7 @@ export async function getConcededData({
     )
     .groupBy(teams.teamId, seasons.year)
     .having(gte(count(teamgames.teamGameId), 10))
-    .orderBy(
-      asc(
-        sql`round(avg(teamgames.goals_conceded),2)`
-          .mapWith(Number)
-          .as('data'),
-      ),
-    )
+    .orderBy(asc(sql`round(avg(teamgames.goals_conceded),2)`.mapWith(Number).as('data')))
     .limit(10)
     .then((res) => {
       const filteredResult = res.map((item, index) => {
@@ -244,11 +172,8 @@ export async function getConcededData({
         return {
           ...item,
           position:
-            index !== 0 &&
-            filteredResult[index - 1].data === item.data
-              ? filteredResult.find(
-                  (r) => r.data === item.data,
-                )?.position
+            index !== 0 && filteredResult[index - 1].data === item.data
+              ? filteredResult.find((r) => r.data === item.data)?.position
               : item.position,
         }
       })
@@ -256,9 +181,7 @@ export async function getConcededData({
 
   const averageConcededMinHome = await db
     .select({
-      data: sql`round(avg(teamgames.goals_conceded),2)`
-        .mapWith(Number)
-        .as('data'),
+      data: sql`round(avg(teamgames.goals_conceded),2)`.mapWith(Number).as('data'),
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
@@ -270,10 +193,7 @@ export async function getConcededData({
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
-    .leftJoin(
-      seasons,
-      eq(teamgames.seasonId, seasons.seasonId),
-    )
+    .leftJoin(seasons, eq(teamgames.seasonId, seasons.seasonId))
     .where(
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
@@ -286,13 +206,7 @@ export async function getConcededData({
     )
     .groupBy(teams.teamId, seasons.year)
     .having(gte(count(teamgames.teamGameId), 5))
-    .orderBy(
-      asc(
-        sql`round(avg(teamgames.goals_conceded),2)`
-          .mapWith(Number)
-          .as('data'),
-      ),
-    )
+    .orderBy(asc(sql`round(avg(teamgames.goals_conceded),2)`.mapWith(Number).as('data')))
     .limit(10)
     .then((res) => {
       const filteredResult = res.map((item, index) => {
@@ -302,11 +216,8 @@ export async function getConcededData({
         return {
           ...item,
           position:
-            index !== 0 &&
-            filteredResult[index - 1].data === item.data
-              ? filteredResult.find(
-                  (r) => r.data === item.data,
-                )?.position
+            index !== 0 && filteredResult[index - 1].data === item.data
+              ? filteredResult.find((r) => r.data === item.data)?.position
               : item.position,
         }
       })
@@ -314,9 +225,7 @@ export async function getConcededData({
 
   const averageConcededMinAway = await db
     .select({
-      data: sql`round(avg(teamgames.goals_conceded),2)`
-        .mapWith(Number)
-        .as('data'),
+      data: sql`round(avg(teamgames.goals_conceded),2)`.mapWith(Number).as('data'),
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
@@ -328,10 +237,7 @@ export async function getConcededData({
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
-    .leftJoin(
-      seasons,
-      eq(teamgames.seasonId, seasons.seasonId),
-    )
+    .leftJoin(seasons, eq(teamgames.seasonId, seasons.seasonId))
     .where(
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
@@ -344,13 +250,7 @@ export async function getConcededData({
     )
     .groupBy(teams.teamId, seasons.year)
     .having(gte(count(teamgames.teamGameId), 5))
-    .orderBy(
-      asc(
-        sql`round(avg(teamgames.goals_conceded),2)`
-          .mapWith(Number)
-          .as('data'),
-      ),
-    )
+    .orderBy(asc(sql`round(avg(teamgames.goals_conceded),2)`.mapWith(Number).as('data')))
     .limit(10)
     .then((res) => {
       const filteredResult = res.map((item, index) => {
@@ -360,11 +260,8 @@ export async function getConcededData({
         return {
           ...item,
           position:
-            index !== 0 &&
-            filteredResult[index - 1].data === item.data
-              ? filteredResult.find(
-                  (r) => r.data === item.data,
-                )?.position
+            index !== 0 && filteredResult[index - 1].data === item.data
+              ? filteredResult.find((r) => r.data === item.data)?.position
               : item.position,
         }
       })
@@ -372,9 +269,7 @@ export async function getConcededData({
 
   const sumConcededMax = await db
     .select({
-      data: sql`sum(teamgames.goals_conceded)`
-        .mapWith(Number)
-        .as('data'),
+      data: sql`sum(teamgames.goals_conceded)`.mapWith(Number).as('data'),
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
@@ -386,10 +281,7 @@ export async function getConcededData({
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
-    .leftJoin(
-      seasons,
-      eq(teamgames.seasonId, seasons.seasonId),
-    )
+    .leftJoin(seasons, eq(teamgames.seasonId, seasons.seasonId))
     .where(
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
@@ -401,13 +293,7 @@ export async function getConcededData({
     )
     .groupBy(teams.teamId, seasons.year)
     .having(gte(count(teamgames.teamGameId), 10))
-    .orderBy(
-      desc(
-        sql`sum(teamgames.goals_conceded)`
-          .mapWith(Number)
-          .as('data'),
-      ),
-    )
+    .orderBy(desc(sql`sum(teamgames.goals_conceded)`.mapWith(Number).as('data')))
     .limit(10)
     .then((res) => {
       const filteredResult = res.map((item, index) => {
@@ -417,11 +303,8 @@ export async function getConcededData({
         return {
           ...item,
           position:
-            index !== 0 &&
-            filteredResult[index - 1].data === item.data
-              ? filteredResult.find(
-                  (r) => r.data === item.data,
-                )?.position
+            index !== 0 && filteredResult[index - 1].data === item.data
+              ? filteredResult.find((r) => r.data === item.data)?.position
               : item.position,
         }
       })
@@ -429,9 +312,7 @@ export async function getConcededData({
 
   const sumConcededMaxHome = await db
     .select({
-      data: sql`sum(teamgames.goals_conceded)`
-        .mapWith(Number)
-        .as('data'),
+      data: sql`sum(teamgames.goals_conceded)`.mapWith(Number).as('data'),
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
@@ -443,10 +324,7 @@ export async function getConcededData({
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
-    .leftJoin(
-      seasons,
-      eq(teamgames.seasonId, seasons.seasonId),
-    )
+    .leftJoin(seasons, eq(teamgames.seasonId, seasons.seasonId))
     .where(
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
@@ -459,13 +337,7 @@ export async function getConcededData({
     )
     .groupBy(teams.teamId, seasons.year)
     .having(gte(count(teamgames.teamGameId), 5))
-    .orderBy(
-      desc(
-        sql`sum(teamgames.goals_conceded)`
-          .mapWith(Number)
-          .as('data'),
-      ),
-    )
+    .orderBy(desc(sql`sum(teamgames.goals_conceded)`.mapWith(Number).as('data')))
     .limit(10)
     .then((res) => {
       const filteredResult = res.map((item, index) => {
@@ -475,11 +347,8 @@ export async function getConcededData({
         return {
           ...item,
           position:
-            index !== 0 &&
-            filteredResult[index - 1].data === item.data
-              ? filteredResult.find(
-                  (r) => r.data === item.data,
-                )?.position
+            index !== 0 && filteredResult[index - 1].data === item.data
+              ? filteredResult.find((r) => r.data === item.data)?.position
               : item.position,
         }
       })
@@ -487,9 +356,7 @@ export async function getConcededData({
 
   const sumConcededMaxAway = await db
     .select({
-      data: sql`sum(teamgames.goals_conceded)`
-        .mapWith(Number)
-        .as('data'),
+      data: sql`sum(teamgames.goals_conceded)`.mapWith(Number).as('data'),
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
@@ -501,10 +368,7 @@ export async function getConcededData({
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
-    .leftJoin(
-      seasons,
-      eq(teamgames.seasonId, seasons.seasonId),
-    )
+    .leftJoin(seasons, eq(teamgames.seasonId, seasons.seasonId))
     .where(
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
@@ -517,13 +381,7 @@ export async function getConcededData({
     )
     .groupBy(teams.teamId, seasons.year)
     .having(gte(count(teamgames.teamGameId), 5))
-    .orderBy(
-      desc(
-        sql`sum(teamgames.goals_conceded)`
-          .mapWith(Number)
-          .as('data'),
-      ),
-    )
+    .orderBy(desc(sql`sum(teamgames.goals_conceded)`.mapWith(Number).as('data')))
     .limit(10)
     .then((res) => {
       const filteredResult = res.map((item, index) => {
@@ -533,11 +391,8 @@ export async function getConcededData({
         return {
           ...item,
           position:
-            index !== 0 &&
-            filteredResult[index - 1].data === item.data
-              ? filteredResult.find(
-                  (r) => r.data === item.data,
-                )?.position
+            index !== 0 && filteredResult[index - 1].data === item.data
+              ? filteredResult.find((r) => r.data === item.data)?.position
               : item.position,
         }
       })
@@ -545,9 +400,7 @@ export async function getConcededData({
 
   const sumConcededMin = await db
     .select({
-      data: sql`sum(teamgames.goals_conceded)`
-        .mapWith(Number)
-        .as('data'),
+      data: sql`sum(teamgames.goals_conceded)`.mapWith(Number).as('data'),
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
@@ -559,10 +412,7 @@ export async function getConcededData({
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
-    .leftJoin(
-      seasons,
-      eq(teamgames.seasonId, seasons.seasonId),
-    )
+    .leftJoin(seasons, eq(teamgames.seasonId, seasons.seasonId))
     .where(
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
@@ -574,13 +424,7 @@ export async function getConcededData({
     )
     .groupBy(teams.teamId, seasons.year)
     .having(gte(count(teamgames.teamGameId), 10))
-    .orderBy(
-      asc(
-        sql`sum(teamgames.goals_conceded)`
-          .mapWith(Number)
-          .as('data'),
-      ),
-    )
+    .orderBy(asc(sql`sum(teamgames.goals_conceded)`.mapWith(Number).as('data')))
     .limit(10)
     .then((res) => {
       const filteredResult = res.map((item, index) => {
@@ -590,11 +434,8 @@ export async function getConcededData({
         return {
           ...item,
           position:
-            index !== 0 &&
-            filteredResult[index - 1].data === item.data
-              ? filteredResult.find(
-                  (r) => r.data === item.data,
-                )?.position
+            index !== 0 && filteredResult[index - 1].data === item.data
+              ? filteredResult.find((r) => r.data === item.data)?.position
               : item.position,
         }
       })
@@ -602,9 +443,7 @@ export async function getConcededData({
 
   const sumConcededMinHome = await db
     .select({
-      data: sql`sum(teamgames.goals_conceded)`
-        .mapWith(Number)
-        .as('data'),
+      data: sql`sum(teamgames.goals_conceded)`.mapWith(Number).as('data'),
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
@@ -616,10 +455,7 @@ export async function getConcededData({
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
-    .leftJoin(
-      seasons,
-      eq(teamgames.seasonId, seasons.seasonId),
-    )
+    .leftJoin(seasons, eq(teamgames.seasonId, seasons.seasonId))
     .where(
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
@@ -632,13 +468,7 @@ export async function getConcededData({
     )
     .groupBy(teams.teamId, seasons.year)
     .having(gte(count(teamgames.teamGameId), 5))
-    .orderBy(
-      asc(
-        sql`sum(teamgames.goals_conceded)`
-          .mapWith(Number)
-          .as('data'),
-      ),
-    )
+    .orderBy(asc(sql`sum(teamgames.goals_conceded)`.mapWith(Number).as('data')))
     .limit(10)
     .then((res) => {
       const filteredResult = res.map((item, index) => {
@@ -648,11 +478,8 @@ export async function getConcededData({
         return {
           ...item,
           position:
-            index !== 0 &&
-            filteredResult[index - 1].data === item.data
-              ? filteredResult.find(
-                  (r) => r.data === item.data,
-                )?.position
+            index !== 0 && filteredResult[index - 1].data === item.data
+              ? filteredResult.find((r) => r.data === item.data)?.position
               : item.position,
         }
       })
@@ -660,9 +487,7 @@ export async function getConcededData({
 
   const sumConcededMinAway = await db
     .select({
-      data: sql`sum(teamgames.goals_conceded)`
-        .mapWith(Number)
-        .as('data'),
+      data: sql`sum(teamgames.goals_conceded)`.mapWith(Number).as('data'),
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
@@ -674,10 +499,7 @@ export async function getConcededData({
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
-    .leftJoin(
-      seasons,
-      eq(teamgames.seasonId, seasons.seasonId),
-    )
+    .leftJoin(seasons, eq(teamgames.seasonId, seasons.seasonId))
     .where(
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
@@ -690,13 +512,7 @@ export async function getConcededData({
     )
     .groupBy(teams.teamId, seasons.year)
     .having(gte(count(teamgames.teamGameId), 5))
-    .orderBy(
-      asc(
-        sql`sum(teamgames.goals_conceded)`
-          .mapWith(Number)
-          .as('data'),
-      ),
-    )
+    .orderBy(asc(sql`sum(teamgames.goals_conceded)`.mapWith(Number).as('data')))
     .limit(10)
     .then((res) => {
       const filteredResult = res.map((item, index) => {
@@ -706,11 +522,8 @@ export async function getConcededData({
         return {
           ...item,
           position:
-            index !== 0 &&
-            filteredResult[index - 1].data === item.data
-              ? filteredResult.find(
-                  (r) => r.data === item.data,
-                )?.position
+            index !== 0 && filteredResult[index - 1].data === item.data
+              ? filteredResult.find((r) => r.data === item.data)?.position
               : item.position,
         }
       })

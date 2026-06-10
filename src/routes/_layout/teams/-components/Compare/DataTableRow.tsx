@@ -1,7 +1,4 @@
-import {
-  TableCell,
-  TableRow,
-} from '@/components/base/ui/table'
+import { TableCell, TableRow } from '@/components/base/ui/table'
 
 interface TableRowData {
   team: {
@@ -33,9 +30,7 @@ const DataTableRow = ({ team }: { team: TableRowData }) => {
     <TableRow>
       <TableCell className="px-1 py-1 text-left text-[10px] md:py-2 lg:text-sm xl:text-base 2xl:text-lg">
         <span className="sm:hidden">{matchup}</span>
-        <span className="hidden sm:inline-block">
-          {smMatchup}
-        </span>
+        <span className="hidden sm:inline-block">{smMatchup}</span>
       </TableCell>
       <TableCell className="px-1 py-1 text-right text-[10px] tabular-nums md:py-2 lg:text-sm xl:text-base 2xl:text-lg">
         {team.totalGames}

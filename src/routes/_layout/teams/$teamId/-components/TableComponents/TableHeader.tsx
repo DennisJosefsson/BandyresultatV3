@@ -1,8 +1,4 @@
-import {
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/base/ui/table'
+import { TableHead, TableHeader, TableRow } from '@/components/base/ui/table'
 
 const TeamTableHeader = () => {
   return (

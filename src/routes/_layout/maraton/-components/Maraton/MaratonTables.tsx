@@ -1,5 +1,5 @@
-import MaratonTablesButtonList from './MaratonTablesButtonList'
 import TableList from './TableList'
+import MaratonTablesButtonList from './MaratonTablesButtonList'
 
 const MaratonTable = () => {
   return (

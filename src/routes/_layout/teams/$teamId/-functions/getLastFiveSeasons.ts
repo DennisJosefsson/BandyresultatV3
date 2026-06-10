@@ -1,40 +1,18 @@
 import type { SQL } from 'drizzle-orm'
-import {
-  and,
-  asc,
-  count,
-  desc,
-  eq,
-  inArray,
-  sql,
-  sum,
-} from 'drizzle-orm'
-
-import { db } from '@/db'
-import {
-  seasons,
-  series,
-  tables,
-  teamgames,
-  teamseasons,
-} from '@/db/schema'
+import { and, asc, count, desc, eq, inArray, sql, sum } from 'drizzle-orm'
 import type { FiveSeasonTableItem } from '@/lib/types/team'
 import { sortOrder } from '@/lib/utils/constants'
+import { seasons, series, tables, teamgames, teamseasons } from '@/db/schema'
+import { db } from '@/db'
 
-export const getLastFiveSeasons = async ({
-  teamId,
-}: {
-  teamId: number
-}) => {
+export const getLastFiveSeasons = async ({ teamId }: { teamId: number }) => {
   const seasonIdArray = await db
     .select({ seasonId: teamseasons.seasonId })
     .from(teamseasons)
     .where(eq(teamseasons.teamId, teamId))
     .orderBy(desc(teamseasons.seasonId))
     .limit(5)
-    .then((result) =>
-      result.map((season) => season.seasonId),
-    )
+    .then((result) => result.map((season) => season.seasonId))
 
   const getTables = await db
     .select({
@@ -42,36 +20,21 @@ export const getLastFiveSeasons = async ({
       group: teamgames.group,
       category: teamgames.category,
       totalGames: count(teamgames.teamGameId),
-      totalPoints: sum(teamgames.points)
-        .mapWith(Number)
-        .as('total_points'),
+      totalPoints: sum(teamgames.points).mapWith(Number).as('total_points'),
       totalGoalsScored: sum(teamgames.goalsScored)
         .mapWith(Number)
         .as('total_goals_scored') as unknown as SQL<number>,
       totalGoalsConceded: sum(teamgames.goalsConceded)
         .mapWith(Number)
-        .as(
-          'total_goals_conceded',
-        ) as unknown as SQL<number>,
+        .as('total_goals_conceded') as unknown as SQL<number>,
 
       totalGoalDifference: sum(teamgames.goalDifference)
         .mapWith(Number)
-        .as(
-          'total_goal_difference',
-        ) as unknown as SQL<number>,
+        .as('total_goal_difference') as unknown as SQL<number>,
 
-      totalWins:
-        sql<number>`cast(count(*) filter (where win) as int)`.as(
-          'totalWins',
-        ),
-      totalDraws:
-        sql<number>`cast(count(*) filter (where draw) as int)`.as(
-          'totalDraws',
-        ),
-      totalLost:
-        sql<number>`cast(count(*) filter (where lost) as int)`.as(
-          'totalLost',
-        ),
+      totalWins: sql<number>`cast(count(*) filter (where win) as int)`.as('totalWins'),
+      totalDraws: sql<number>`cast(count(*) filter (where draw) as int)`.as('totalDraws'),
+      totalLost: sql<number>`cast(count(*) filter (where lost) as int)`.as('totalLost'),
       serie: {
         serieName: series.serieName,
       } as unknown as SQL<{ serieName: string }>,
@@ -81,10 +44,7 @@ export const getLastFiveSeasons = async ({
     })
     .from(teamgames)
     .leftJoin(series, eq(teamgames.serieId, series.serieId))
-    .leftJoin(
-      seasons,
-      eq(teamgames.seasonId, seasons.seasonId),
-    )
+    .leftJoin(seasons, eq(teamgames.seasonId, seasons.seasonId))
     .where(
       and(
         eq(teamgames.teamId, teamId),
@@ -99,18 +59,11 @@ export const getLastFiveSeasons = async ({
       series.serieName,
       teamgames.category,
     )
-    .orderBy(
-      desc(teamgames.seasonId),
-      asc(teamgames.category),
-    )
+    .orderBy(desc(teamgames.seasonId), asc(teamgames.category))
 
-  const tableSeasons = new Set(
-    getTables.map((season) => season.seasonId),
-  )
+  const tableSeasons = new Set(getTables.map((season) => season.seasonId))
 
-  const unparsedSeasons = seasonIdArray.filter(
-    (id) => !tableSeasons.has(id),
-  )
+  const unparsedSeasons = seasonIdArray.filter((id) => !tableSeasons.has(id))
 
   if (unparsedSeasons.length === 0) {
     return tableSort(getTables)
@@ -137,22 +90,10 @@ export const getLastFiveSeasons = async ({
       })
       .from(tables)
       .leftJoin(series, eq(series.serieId, tables.serieId))
-      .leftJoin(
-        seasons,
-        eq(tables.seasonId, seasons.seasonId),
-      )
-      .where(
-        and(
-          eq(tables.teamId, teamId),
-          inArray(tables.seasonId, unparsedSeasons),
-        ),
-      )
+      .leftJoin(seasons, eq(tables.seasonId, seasons.seasonId))
+      .where(and(eq(tables.teamId, teamId), inArray(tables.seasonId, unparsedSeasons)))
 
-    return tableSort(
-      [...getTables, ...teamTables].sort(
-        (a, b) => b.seasonId - a.seasonId,
-      ),
-    )
+    return tableSort([...getTables, ...teamTables].sort((a, b) => b.seasonId - a.seasonId))
   }
 }
 
@@ -169,17 +110,13 @@ function tableSort(tableArray: Array<FiveSeasonTableItem>) {
     return season
   }, {} as SortedTables)
 
-  const sortedTables = Object.keys(seasonArray).map(
-    (season) => {
-      return {
-        season,
-        tables: seasonArray[season].sort(
-          (a, b) =>
-            sortOrder.indexOf(a.group) -
-            sortOrder.indexOf(b.group),
-        ),
-      }
-    },
-  )
+  const sortedTables = Object.keys(seasonArray).map((season) => {
+    return {
+      season,
+      tables: seasonArray[season].sort(
+        (a, b) => sortOrder.indexOf(a.group) - sortOrder.indexOf(b.group),
+      ),
+    }
+  })
   return sortedTables
 }

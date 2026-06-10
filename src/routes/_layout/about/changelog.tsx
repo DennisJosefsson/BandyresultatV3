@@ -1,17 +1,9 @@
-import { createFileRoute } from '@tanstack/react-router'
 import Markdown from 'react-markdown'
-
+import { createFileRoute } from '@tanstack/react-router'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/base/ui/card'
 import changelog from '@/assets/markdown/changelog.md'
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/base/ui/card'
 
-export const Route = createFileRoute(
-  '/_layout/about/changelog',
-)({
+export const Route = createFileRoute('/_layout/about/changelog')({
   staticData: { breadcrumb: 'Changelog' },
   head: () => ({
     meta: [
@@ -32,8 +24,7 @@ export const Route = createFileRoute(
       },
       {
         property: 'og:url',
-        content:
-          'https://www.bandyresultat.se/about/changelog',
+        content: 'https://www.bandyresultat.se/about/changelog',
       },
       {
         property: 'og:image',

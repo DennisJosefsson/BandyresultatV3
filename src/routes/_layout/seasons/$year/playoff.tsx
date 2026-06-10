@@ -1,20 +1,8 @@
-import {
-  CatchBoundary,
-  Link,
-  Outlet,
-  createFileRoute,
-} from '@tanstack/react-router'
-
+import { CatchBoundary, Link, Outlet, createFileRoute } from '@tanstack/react-router'
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
-import {
-  Tabs,
-  TabsList,
-  TabsTrigger,
-} from '@/components/base/ui/tabs'
+import { Tabs, TabsList, TabsTrigger } from '@/components/base/ui/tabs'
 
-export const Route = createFileRoute(
-  '/_layout/seasons/$year/playoff',
-)({
+export const Route = createFileRoute('/_layout/seasons/$year/playoff')({
   staticData: { breadcrumb: 'Slutspel' },
   head: () => ({
     meta: [
@@ -34,11 +22,7 @@ function RouteComponent() {
         console.error(error)
       }}
       errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent
-          id="playoff"
-          error={error}
-          reset={reset}
-        />
+        <SimpleErrorComponent id="playoff" error={error} reset={reset} />
       )}
     >
       <Playoff />

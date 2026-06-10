@@ -1,18 +1,9 @@
-import {
-  CatchBoundary,
-  Outlet,
-  createFileRoute,
-} from '@tanstack/react-router'
 import { z } from 'zod'
-
+import { CatchBoundary, Outlet, createFileRoute } from '@tanstack/react-router'
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
-import {
-  Card,
-  CardContent,
-} from '@/components/base/ui/card'
-
-import TeamsTabBar from './teams/-components/TeamsTabBar'
+import { Card, CardContent } from '@/components/base/ui/card'
 import { getTeams } from './teams/-functions/getTeams'
+import TeamsTabBar from './teams/-components/TeamsTabBar'
 
 const searchParams = z.object({
   women: z.boolean(),
@@ -47,11 +38,7 @@ function TeamsHeader() {
           console.error(error)
         }}
         errorComponent={({ error, reset }) => (
-          <SimpleErrorComponent
-            id="teams"
-            error={error}
-            reset={reset}
-          />
+          <SimpleErrorComponent id="teams" error={error} reset={reset} />
         )}
       >
         <Outlet />

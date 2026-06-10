@@ -1,24 +1,11 @@
 import type { ReactNode } from 'react'
-
-import Date from '@/components/Common/Date'
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/base/ui/card'
 import type { TeamStatItem } from '@/lib/types/team'
+import Date from '@/components/Common/Date'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/base/ui/card'
 
-const GameStatComponent = ({
-  children,
-}: {
-  children: ReactNode
-}) => {
+const GameStatComponent = ({ children }: { children: ReactNode }) => {
   return (
-    <Card
-      className="mb-2"
-      size="sm"
-    >
+    <Card className="mb-2" size="sm">
       {children}
     </Card>
   )
@@ -27,18 +14,14 @@ const GameStatComponent = ({
 function Title({ children }: { children: ReactNode }) {
   return (
     <CardHeader>
-      <CardTitle className="group-data-[size=sm]/card:text-[10px] xs:group-data-[size=sm]/card:text-xs md:group-data-[size=sm]/card:text-sm">
+      <CardTitle className="xs:group-data-[size=sm]/card:text-xs group-data-[size=sm]/card:text-[10px] md:group-data-[size=sm]/card:text-sm">
         {children}
       </CardTitle>
     </CardHeader>
   )
 }
 
-function Content({
-  statArray,
-}: {
-  statArray: Array<TeamStatItem>
-}) {
+function Content({ statArray }: { statArray: Array<TeamStatItem> }) {
   if (!statArray || statArray.length === 0) return null
 
   return (

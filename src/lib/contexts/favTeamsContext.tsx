@@ -1,9 +1,8 @@
+import type { PropsWithChildren } from 'react'
+import { createContext, use } from 'react'
 import { useRouter } from '@tanstack/react-router'
-import { createContext, use } from 'react';
-import type { PropsWithChildren } from 'react';
-
-import { setFavTeamsServerFn } from '@/lib/favTeams';
-import type { T as FavTeam } from '@/lib/favTeams';
+import type { T as FavTeam } from '@/lib/favTeams'
+import { setFavTeamsServerFn } from '@/lib/favTeams'
 
 type FavTeamContextVal = {
   favTeams: FavTeam
@@ -20,11 +19,7 @@ export function FavTeamsProvider({ children, favTeams }: Props) {
     setFavTeamsServerFn({ data: val }).then(() => router.invalidate())
   }
 
-  return (
-    <FavTeamContext value={{ favTeams, setFavTeams }}>
-      {children}
-    </FavTeamContext>
-  )
+  return <FavTeamContext value={{ favTeams, setFavTeams }}>{children}</FavTeamContext>
 }
 
 export function useFavTeam() {

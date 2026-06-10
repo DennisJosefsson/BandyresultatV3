@@ -1,19 +1,9 @@
+import { and, asc, desc, eq, inArray, ne, notInArray, sql } from 'drizzle-orm'
 import { createServerFn } from '@tanstack/react-start'
-import {
-  and,
-  asc,
-  desc,
-  eq,
-  inArray,
-  ne,
-  notInArray,
-  sql,
-} from 'drizzle-orm'
-
-import { db } from '@/db'
-import { games, seasons, series, teams } from '@/db/schema'
-import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
+import { catchError } from '@/lib/middlewares/errors/catchError'
+import { games, seasons, series, teams } from '@/db/schema'
+import { db } from '@/db'
 
 export const getSearchTeams = createServerFn({
   method: 'GET',
@@ -37,10 +27,7 @@ export const getSearchTeams = createServerFn({
                 teamId: games.homeTeamId,
               })
               .from(games)
-              .leftJoin(
-                series,
-                eq(games.serieId, series.serieId),
-              )
+              .leftJoin(series, eq(games.serieId, series.serieId))
               .where(
                 and(
                   eq(series.level, 1.0),
@@ -59,9 +46,7 @@ export const getSearchTeams = createServerFn({
               ),
           ),
         )
-        .orderBy(
-          asc(sql`casual_name collate "se-SE-x-icu"`),
-        )
+        .orderBy(asc(sql`casual_name collate "se-SE-x-icu"`))
 
       const allTeams = await db
         .select({
@@ -79,10 +64,7 @@ export const getSearchTeams = createServerFn({
                 teamId: games.homeTeamId,
               })
               .from(games)
-              .leftJoin(
-                series,
-                eq(games.serieId, series.serieId),
-              )
+              .leftJoin(series, eq(games.serieId, series.serieId))
               .where(
                 and(
                   eq(series.level, 1.0),
@@ -100,9 +82,7 @@ export const getSearchTeams = createServerFn({
               ),
           ),
         )
-        .orderBy(
-          asc(sql`casual_name collate "se-SE-x-icu"`),
-        )
+        .orderBy(asc(sql`casual_name collate "se-SE-x-icu"`))
 
       const teamArray = [...firstDivTeams, ...allTeams]
 

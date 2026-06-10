@@ -1,8 +1,7 @@
-import { and, eq, max, min } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
-
-import { db } from '@/db'
+import { and, eq, max, min } from 'drizzle-orm'
 import { games, teamgames, teams } from '@/db/schema'
+import { db } from '@/db'
 
 const home = alias(teams, 'home')
 const away = alias(teams, 'away')
@@ -190,9 +189,7 @@ const maxGoalDifferenceHome = async ({ teamId }: { teamId: number }) => {
     db
       .select({
         teamId: teamgames.teamId,
-        maxGoalDifference: max(teamgames.goalDifference).as(
-          'max_goal_difference',
-        ),
+        maxGoalDifference: max(teamgames.goalDifference).as('max_goal_difference'),
       })
       .from(teamgames)
       .where(and(eq(teamgames.teamId, teamId), eq(teamgames.homeGame, true)))
@@ -212,10 +209,7 @@ const maxGoalDifferenceHome = async ({ teamId }: { teamId: number }) => {
     .leftJoin(games, eq(games.gameId, teamgames.gameId))
     .leftJoin(home, eq(home.teamId, teamgames.teamId))
     .leftJoin(away, eq(away.teamId, teamgames.opponentId))
-    .leftJoin(
-      maxGoalDifferenceQuery,
-      eq(maxGoalDifferenceQuery.teamId, teamgames.teamId),
-    )
+    .leftJoin(maxGoalDifferenceQuery, eq(maxGoalDifferenceQuery.teamId, teamgames.teamId))
     .where(
       and(
         eq(teamgames.teamId, teamId),
@@ -232,9 +226,7 @@ const maxGoalDifferenceAway = async ({ teamId }: { teamId: number }) => {
     db
       .select({
         teamId: teamgames.teamId,
-        maxGoalDifference: max(teamgames.goalDifference).as(
-          'max_goal_difference',
-        ),
+        maxGoalDifference: max(teamgames.goalDifference).as('max_goal_difference'),
       })
       .from(teamgames)
       .where(and(eq(teamgames.teamId, teamId), eq(teamgames.homeGame, false)))
@@ -254,10 +246,7 @@ const maxGoalDifferenceAway = async ({ teamId }: { teamId: number }) => {
     .leftJoin(games, eq(games.gameId, teamgames.gameId))
     .leftJoin(home, eq(home.teamId, teamgames.opponentId))
     .leftJoin(away, eq(away.teamId, teamgames.teamId))
-    .leftJoin(
-      maxGoalDifferenceQuery,
-      eq(maxGoalDifferenceQuery.teamId, teamgames.teamId),
-    )
+    .leftJoin(maxGoalDifferenceQuery, eq(maxGoalDifferenceQuery.teamId, teamgames.teamId))
     .where(
       and(
         eq(teamgames.teamId, teamId),
@@ -274,9 +263,7 @@ const minGoalDifferenceHome = async ({ teamId }: { teamId: number }) => {
     db
       .select({
         teamId: teamgames.teamId,
-        minGoalDifference: min(teamgames.goalDifference).as(
-          'min_goal_difference',
-        ),
+        minGoalDifference: min(teamgames.goalDifference).as('min_goal_difference'),
       })
       .from(teamgames)
       .where(and(eq(teamgames.teamId, teamId), eq(teamgames.homeGame, true)))
@@ -296,10 +283,7 @@ const minGoalDifferenceHome = async ({ teamId }: { teamId: number }) => {
     .leftJoin(games, eq(games.gameId, teamgames.gameId))
     .leftJoin(home, eq(home.teamId, teamgames.teamId))
     .leftJoin(away, eq(away.teamId, teamgames.opponentId))
-    .leftJoin(
-      minGoalDifferenceQuery,
-      eq(minGoalDifferenceQuery.teamId, teamgames.teamId),
-    )
+    .leftJoin(minGoalDifferenceQuery, eq(minGoalDifferenceQuery.teamId, teamgames.teamId))
     .where(
       and(
         eq(teamgames.teamId, teamId),
@@ -316,9 +300,7 @@ const minGoalDifferenceAway = async ({ teamId }: { teamId: number }) => {
     db
       .select({
         teamId: teamgames.teamId,
-        minGoalDifference: min(teamgames.goalDifference).as(
-          'min_goal_difference',
-        ),
+        minGoalDifference: min(teamgames.goalDifference).as('min_goal_difference'),
       })
       .from(teamgames)
       .where(and(eq(teamgames.teamId, teamId), eq(teamgames.homeGame, false)))
@@ -338,10 +320,7 @@ const minGoalDifferenceAway = async ({ teamId }: { teamId: number }) => {
     .leftJoin(games, eq(games.gameId, teamgames.gameId))
     .leftJoin(home, eq(home.teamId, teamgames.opponentId))
     .leftJoin(away, eq(away.teamId, teamgames.teamId))
-    .leftJoin(
-      minGoalDifferenceQuery,
-      eq(minGoalDifferenceQuery.teamId, teamgames.teamId),
-    )
+    .leftJoin(minGoalDifferenceQuery, eq(minGoalDifferenceQuery.teamId, teamgames.teamId))
     .where(
       and(
         eq(teamgames.teamId, teamId),

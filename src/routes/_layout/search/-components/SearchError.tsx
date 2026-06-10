@@ -1,9 +1,6 @@
-import {
-  useNavigate,
-  useSearch,
-} from '@tanstack/react-router'
-
-import { Button } from '@/components/base/ui/button'
+import { useNavigate, useSearch } from '@tanstack/react-router'
+import type { SearchParamsFields, SearchResult } from '@/lib/types/search'
+import { cn } from '@/lib/utils/utils'
 import {
   Dialog,
   DialogClose,
@@ -12,11 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/base/ui/dialog'
-import type {
-  SearchParamsFields,
-  SearchResult,
-} from '@/lib/types/search'
-import { cn } from '@/lib/utils/utils'
+import { Button } from '@/components/base/ui/button'
 type SearchErrorProps = {
   searchResult:
     | {
@@ -32,10 +25,7 @@ type SearchErrorProps = {
   reset: () => void
 }
 
-const SearchError = ({
-  searchResult,
-  reset,
-}: SearchErrorProps) => {
+const SearchError = ({ searchResult, reset }: SearchErrorProps) => {
   const navigate = useNavigate({ from: '/search' })
   const searchFields = useSearch({
     from: '/_layout/search',
@@ -66,28 +56,18 @@ const SearchError = ({
   return (
     <Dialog defaultOpen={true}>
       <DialogContent
-        className={cn(
-          'bg-background',
-          searchResult.status === 400
-            ? 'bg-red-500'
-            : undefined,
-        )}
+        className={cn('bg-background', searchResult.status === 400 ? 'bg-red-500' : undefined)}
       >
         <DialogHeader>
           <DialogTitle>
-            {searchResult.status === 400
-              ? 'Oops, där blev det fel.'
-              : 'Inga resultat'}
+            {searchResult.status === 400 ? 'Oops, där blev det fel.' : 'Inga resultat'}
           </DialogTitle>
         </DialogHeader>
         {searchResult.message}
         <DialogFooter className="sm:justify-start">
           <DialogClose
             render={
-              <Button
-                className="bg-white text-black hover:bg-slate-300"
-                onClick={resetFn}
-              >
+              <Button className="bg-white text-black hover:bg-slate-300" onClick={resetFn}>
                 Stäng
               </Button>
             }

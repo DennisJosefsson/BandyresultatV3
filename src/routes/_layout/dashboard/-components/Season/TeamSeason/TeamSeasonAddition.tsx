@@ -1,14 +1,10 @@
-import { getRouteApi } from '@tanstack/react-router'
 import { useState } from 'react'
-
-import { Button } from '@/components/base/ui/button'
+import { getRouteApi } from '@tanstack/react-router'
 import { Input } from '@/components/base/ui/input'
-
+import { Button } from '@/components/base/ui/button'
 import { useAddTeamSeasonMutation } from '../../../-hooks/addTeamSeasonMutation'
 
-const route = getRouteApi(
-  '/_layout/dashboard/season/$seasonId/teamseason_/',
-)
+const route = getRouteApi('/_layout/dashboard/season/$seasonId/teamseason_/')
 
 const TeamSeasonAddition = () => {
   const { allTeams, teamSeasons } = route.useLoaderData()
@@ -21,12 +17,7 @@ const TeamSeasonAddition = () => {
   const [teamFilter, setTeamFilter] = useState('')
   const teamSelection = allTeams
     .filter((team) => team.women === women)
-    .filter(
-      (team) =>
-        teamSeasons.findIndex(
-          (t) => t.teamId === team.teamId,
-        ) === -1,
-    )
+    .filter((team) => teamSeasons.findIndex((t) => t.teamId === team.teamId) === -1)
     .map((team) => {
       return {
         value: team.teamId,
@@ -35,9 +26,7 @@ const TeamSeasonAddition = () => {
     })
 
   const onClickTeamButton = (teamId: number) => {
-    const exist = teamSeasons.find(
-      (team) => team.teamId === teamId,
-    )
+    const exist = teamSeasons.find((team) => team.teamId === teamId)
     if (exist) return
 
     addTeamSeasonMutation.mutate({
@@ -49,9 +38,7 @@ const TeamSeasonAddition = () => {
     <div className="flex flex-col">
       <div className="flex flex-row items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold">
-            Lägg till lag
-          </h3>
+          <h3 className="text-lg font-semibold">Lägg till lag</h3>
         </div>
         <div className="flex items-start justify-between p-5">
           <div className="flex items-center justify-end gap-2 p-6">
@@ -73,9 +60,7 @@ const TeamSeasonAddition = () => {
               placeholder="Filter"
               value={teamFilter}
               name="teamFilter"
-              onChange={(event) =>
-                setTeamFilter(event.target.value)
-              }
+              onChange={(event) => setTeamFilter(event.target.value)}
             />
           </div>
         </div>
@@ -83,18 +68,10 @@ const TeamSeasonAddition = () => {
       <div className="grid grid-cols-2">
         <div className="grid grid-cols-3 gap-8 place-self-start px-10">
           {teamSelection
-            .filter((team) =>
-              team.label.includes(teamFilter),
-            )
+            .filter((team) => team.label.includes(teamFilter))
             .map((team) => {
               return (
-                <Button
-                  key={team.value}
-                  size="sm"
-                  onClick={() =>
-                    onClickTeamButton(team.value)
-                  }
-                >
+                <Button key={team.value} size="sm" onClick={() => onClickTeamButton(team.value)}>
                   {team.label}
                 </Button>
               )
@@ -105,11 +82,7 @@ const TeamSeasonAddition = () => {
           <h6>Inlagda lag</h6>
           <div className="grid grid-cols-2">
             {teamSeasons.map((team) => {
-              return (
-                <div key={team.teamId}>
-                  {team.team.name}
-                </div>
-              )
+              return <div key={team.teamId}>{team.team.name}</div>
             })}
           </div>
         </div>

@@ -1,17 +1,10 @@
-import {
-  CatchBoundary,
-  createFileRoute,
-} from '@tanstack/react-router'
-
+import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
 import Loading from '@/components/Loading/Loading'
-
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
-import StatsComponent from '../-components/Stats/Stats'
 import { getPlayoffStats } from '../-functions/getPlayoffStats'
+import StatsComponent from '../-components/Stats/Stats'
 
-export const Route = createFileRoute(
-  '/_layout/seasons/$year/playoff/stats',
-)({
+export const Route = createFileRoute('/_layout/seasons/$year/playoff/stats')({
   loaderDeps: ({ search: { women } }) => ({ women }),
   loader: async ({ deps, params }) => {
     const data = await getPlayoffStats({
@@ -25,27 +18,19 @@ export const Route = createFileRoute(
   head: ({ loaderData }) => ({
     meta: [
       {
-        title:
-          loaderData?.meta.title ??
-          'Bandyresultat - Statistik',
+        title: loaderData?.meta.title ?? 'Bandyresultat - Statistik',
       },
       {
         name: 'description',
-        content:
-          loaderData?.meta.description ??
-          'Bandyresultat - Statistik',
+        content: loaderData?.meta.description ?? 'Bandyresultat - Statistik',
       },
       {
         property: 'og:description',
-        content:
-          loaderData?.meta.description ??
-          'Bandyresultat - Statistik',
+        content: loaderData?.meta.description ?? 'Bandyresultat - Statistik',
       },
       {
         property: 'og:title',
-        content:
-          loaderData?.meta.title ??
-          'Bandyresultat - Statistik',
+        content: loaderData?.meta.title ?? 'Bandyresultat - Statistik',
       },
       {
         property: 'og:type',
@@ -53,9 +38,7 @@ export const Route = createFileRoute(
       },
       {
         property: 'og:url',
-        content:
-          loaderData?.meta.url ??
-          'https://www.bandyresultat.se',
+        content: loaderData?.meta.url ?? 'https://www.bandyresultat.se',
       },
       {
         property: 'og:image',
@@ -74,7 +57,7 @@ function RouteComponent() {
     return (
       <div className="mt-4 flex flex-col justify-center text-sm">
         <div className="mb-4 flex flex-row justify-center">
-          <span className="text-[8px] xs:text-[10px] sm:text-xs lg:text-sm font-semibold">
+          <span className="xs:text-[10px] text-[8px] font-semibold sm:text-xs lg:text-sm">
             {data.message}
           </span>
         </div>
@@ -88,11 +71,7 @@ function RouteComponent() {
         console.error(error)
       }}
       errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent
-          id="playoffstats"
-          error={error}
-          reset={reset}
-        />
+        <SimpleErrorComponent id="playoffstats" error={error} reset={reset} />
       )}
     >
       <StatsComponent stats={data} />

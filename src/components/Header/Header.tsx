@@ -1,15 +1,11 @@
-import {
-  useRouter,
-  useSearch,
-} from '@tanstack/react-router'
 import { SidebarIcon } from 'lucide-react'
-
-import { Button } from '../base/ui/button.tsx'
-import { Label } from '../base/ui/label'
-import { useSidebar } from '../base/ui/sidebar'
-import { Switch } from '../base/ui/switch'
-import { RouterBreadcrumb } from './Breadcrumb.tsx'
+import { useRouter, useSearch } from '@tanstack/react-router'
 import ModeToggle from './ModeToggle'
+import { RouterBreadcrumb } from './Breadcrumb.tsx'
+import { Switch } from '../base/ui/switch'
+import { useSidebar } from '../base/ui/sidebar'
+import { Label } from '../base/ui/label'
+import { Button } from '../base/ui/button.tsx'
 
 const Header = () => {
   const { toggleSidebar } = useSidebar()
@@ -32,15 +28,10 @@ const Header = () => {
   }
 
   return (
-    <header className="bg-primary-foreground sticky top-0 z-50 flex w-full items-center border-b mb-2">
+    <header className="bg-primary-foreground sticky top-0 z-50 mb-2 flex w-full items-center border-b">
       <div className="flex h-(--header-height) w-full items-center justify-between gap-2">
         <div className="flex flex-row items-center gap-2">
-          <Button
-            className="h-8 w-8"
-            variant="ghost"
-            size="icon"
-            onClick={toggleSidebar}
-          >
+          <Button className="h-8 w-8" variant="ghost" size="icon" onClick={toggleSidebar}>
             <SidebarIcon className="size-3 sm:size-4" />
           </Button>
           <RouterBreadcrumb />
@@ -54,10 +45,7 @@ const Header = () => {
               checked={women}
               onCheckedChange={updateWomen}
             />
-            <Label
-              className="text-[10px] md:text-xs lg:text-sm"
-              htmlFor="women"
-            >
+            <Label className="text-[10px] md:text-xs lg:text-sm" htmlFor="women">
               {women ? 'Herrar' : 'Damer'}
             </Label>
           </div>

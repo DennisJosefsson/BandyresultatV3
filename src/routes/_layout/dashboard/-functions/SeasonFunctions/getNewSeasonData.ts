@@ -1,13 +1,6 @@
 import { desc, inArray } from 'drizzle-orm'
-
+import { metadata, playoffseason, seasons, series, teamseasons } from '@/db/schema'
 import { db } from '@/db'
-import {
-  metadata,
-  playoffseason,
-  seasons,
-  series,
-  teamseasons,
-} from '@/db/schema'
 
 export async function getNewSeasonData() {
   const seasonInfo = await db
@@ -25,8 +18,7 @@ export async function getNewSeasonData() {
       const nextYear = `${secondYear}/${secondYear + 1}`
       const currMenSeason = res.find((s) => s.women === false)
       const currWomenSeason = res.find((s) => s.women === true)
-      if (!currMenSeason || !currWomenSeason)
-        throw new Error('Nuvarande säsonger saknas.')
+      if (!currMenSeason || !currWomenSeason) throw new Error('Nuvarande säsonger saknas.')
       return {
         nextYear,
         currMenSeason,
@@ -46,8 +38,7 @@ export async function getNewSeasonData() {
   const menSeasonId = newSeasons.find((s) => s.women === false)?.seasonId
   const womenSeasonId = newSeasons.find((s) => s.women === true)?.seasonId
 
-  if (!menSeasonId || !womenSeasonId)
-    throw new Error('Nya säsonger har inte genererats.')
+  if (!menSeasonId || !womenSeasonId) throw new Error('Nya säsonger har inte genererats.')
 
   const newTeamSeasonsArrays = await db
     .select({

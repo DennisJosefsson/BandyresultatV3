@@ -1,13 +1,8 @@
+import type { Dispatch, RefObject, SetStateAction } from 'react'
 import type { LngLatLike } from 'maplibre-gl'
-import type {
-  Dispatch,
-  RefObject,
-  SetStateAction,
-} from 'react'
-import { useState } from 'react'
 import { useMediaQuery } from 'usehooks-ts'
-
-import { Button } from '@/components/base/ui/button'
+import { useState } from 'react'
+import type { MapRef } from '@/components/base/ui/map'
 import {
   Drawer,
   DrawerClose,
@@ -15,9 +10,7 @@ import {
   DrawerFooter,
   DrawerTrigger,
 } from '@/components/base/ui/drawer'
-
-import type { MapRef } from '@/components/base/ui/map'
-
+import { Button } from '@/components/base/ui/button'
 import CountyList from './CountyList'
 
 type County = {
@@ -58,21 +51,15 @@ const CountyListContainer = ({
         </div>
       ) : (
         <div>
-          <Drawer
-            open={open}
-            onOpenChange={setOpen}
-          >
+          <Drawer open={open} onOpenChange={setOpen}>
             <DrawerTrigger asChild>
-              <Button
-                variant="outline"
-                size="responsive"
-              >
+              <Button variant="outline" size="responsive">
                 Välj län
               </Button>
             </DrawerTrigger>
 
             <DrawerContent>
-              <div className="m-2 max-h-[2/3] px-2 xs:px-4 sm:px-10">
+              <div className="xs:px-4 m-2 max-h-[2/3] px-2 sm:px-10">
                 <CountyList
                   countyArray={countyArray}
                   setCounties={setCounties}

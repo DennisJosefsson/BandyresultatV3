@@ -1,9 +1,4 @@
 import {
-  Link,
-  useMatches,
-  useSearch,
-} from '@tanstack/react-router'
-import {
   CalendarSearchIcon,
   InfoIcon,
   LayoutDashboardIcon,
@@ -12,15 +7,10 @@ import {
   TableOfContentsIcon,
   User,
 } from 'lucide-react'
-
-import {
-  DefaultSeasonSidebar,
-  SeasonSidebar,
-} from '@/components/Common/Sidebar/SeasonSidebar'
-import {
-  Collapsible,
-  CollapsibleContent,
-} from '@/components/base/ui/collapsible'
+import { Link, useMatches, useSearch } from '@tanstack/react-router'
+import { Show } from '@clerk/react'
+import { useGetFirstAndLastSeason } from '@/routes/_layout/seasons/$year/-hooks/useGetFirstAndLastSeason'
+import { DefaultSeasonSidebar, SeasonSidebar } from '@/components/Common/Sidebar/SeasonSidebar'
 import {
   Sidebar,
   SidebarContent,
@@ -30,12 +20,10 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/base/ui/sidebar'
-import { useGetFirstAndLastSeason } from '@/routes/_layout/seasons/$year/-hooks/useGetFirstAndLastSeason'
-
-import { Show } from '@clerk/react'
-import { MaratonSidebar } from './MaratonSidebar'
-import { SearchSidebar } from './SearchSidebar'
+import { Collapsible, CollapsibleContent } from '@/components/base/ui/collapsible'
 import { TeamSidebar } from './TeamSidebar'
+import { SearchSidebar } from './SearchSidebar'
+import { MaratonSidebar } from './MaratonSidebar'
 
 const AppSidebar = () => {
   const women = useSearch({
@@ -45,23 +33,13 @@ const AppSidebar = () => {
 
   const { isMobile, setOpenMobile } = useSidebar()
 
-  const seasonRoute = useMatches().some(
-    (m) => m.routeId === '/_layout/seasons/$year',
-  )
+  const seasonRoute = useMatches().some((m) => m.routeId === '/_layout/seasons/$year')
 
-  const seasonListRoute = useMatches().some(
-    (m) => m.routeId === '/_layout/seasons/',
-  )
+  const seasonListRoute = useMatches().some((m) => m.routeId === '/_layout/seasons/')
 
-  const maratonRoute = useMatches().some((m) =>
-    m.routeId.includes('maraton'),
-  )
-  const teamsRoute = useMatches().some((m) =>
-    m.routeId.includes('/teams'),
-  )
-  const searchRoute = useMatches().some((m) =>
-    m.routeId.includes('/search'),
-  )
+  const maratonRoute = useMatches().some((m) => m.routeId.includes('maraton'))
+  const teamsRoute = useMatches().some((m) => m.routeId.includes('/teams'))
+  const searchRoute = useMatches().some((m) => m.routeId.includes('/search'))
   const defaultOpen = maratonRoute
     ? 'maraton'
     : seasonRoute || seasonListRoute
@@ -82,15 +60,12 @@ const AppSidebar = () => {
 
   return (
     <Sidebar
-      className="font-poppins top-(--header-height) h-[calc(100svh-var(--header-height))]! mt-2"
+      className="font-poppins top-(--header-height) mt-2 h-[calc(100svh-var(--header-height))]!"
       collapsible="icon"
     >
       <SidebarContent>
         <SidebarMenu>
-          <Collapsible
-            open={defaultOpen === 'season'}
-            className="group/collapsible"
-          >
+          <Collapsible open={defaultOpen === 'season'} className="group/collapsible">
             <SidebarMenuItem>
               <SidebarMenuButton
                 render={
@@ -103,9 +78,7 @@ const AppSidebar = () => {
                     <span>
                       <CalendarSearchIcon className="size-4" />
                     </span>
-                    <span className="text-base">
-                      Säsonger
-                    </span>
+                    <span className="text-base">Säsonger</span>
                     <span></span>
                   </Link>
                 }
@@ -113,20 +86,13 @@ const AppSidebar = () => {
 
               <CollapsibleContent>
                 {!seasonRoute && (
-                  <DefaultSeasonSidebar
-                    women={women}
-                    group="elitserien"
-                    year={lastSeason}
-                  />
+                  <DefaultSeasonSidebar women={women} group="elitserien" year={lastSeason} />
                 )}
                 {seasonRoute && <SeasonSidebar />}
               </CollapsibleContent>
             </SidebarMenuItem>
           </Collapsible>
-          <Collapsible
-            open={defaultOpen === 'teams'}
-            className="group/collapsible"
-          >
+          <Collapsible open={defaultOpen === 'teams'} className="group/collapsible">
             <SidebarMenuItem>
               <SidebarMenuButton
                 onClick={toggleOnMobile}
@@ -150,10 +116,7 @@ const AppSidebar = () => {
               </CollapsibleContent>
             </SidebarMenuItem>
           </Collapsible>
-          <Collapsible
-            open={defaultOpen === 'search'}
-            className="group/collapsible"
-          >
+          <Collapsible open={defaultOpen === 'search'} className="group/collapsible">
             <SidebarMenuItem>
               <SidebarMenuButton
                 onClick={toggleOnMobile}
@@ -178,10 +141,7 @@ const AppSidebar = () => {
             </SidebarMenuItem>
           </Collapsible>
 
-          <Collapsible
-            open={defaultOpen === 'maraton'}
-            className="group/collapsible"
-          >
+          <Collapsible open={defaultOpen === 'maraton'} className="group/collapsible">
             <SidebarMenuItem>
               <SidebarMenuButton
                 onClick={toggleOnMobile}
@@ -196,9 +156,7 @@ const AppSidebar = () => {
                     <span>
                       <TableOfContentsIcon className="size-4" />
                     </span>
-                    <span className="text-base">
-                      Maratontabeller
-                    </span>
+                    <span className="text-base">Maratontabeller</span>
                   </Link>
                 }
               />
@@ -221,9 +179,7 @@ const AppSidebar = () => {
                   <span>
                     <InfoIcon className="size-4" />
                   </span>
-                  <span className="text-base">
-                    Om sidan
-                  </span>
+                  <span className="text-base">Om sidan</span>
                 </Link>
               }
             />
@@ -242,9 +198,7 @@ const AppSidebar = () => {
                     <span>
                       <LayoutDashboardIcon className="size-4" />
                     </span>
-                    <span className="text-base">
-                      Dashboard
-                    </span>
+                    <span className="text-base">Dashboard</span>
                   </Link>
                 }
               />
@@ -266,13 +220,11 @@ const AppSidebar = () => {
                     className="text-foreground hover:text-foreground transition-colors"
                     activeProps={{ className: `font-bold` }}
                   >
-                    <div className="flex flex-row gap-2 items-center">
+                    <div className="flex flex-row items-center gap-2">
                       <span>
                         <User className="size-4" />
                       </span>
-                      <span className="text-base">
-                        Logga ut
-                      </span>
+                      <span className="text-base">Logga ut</span>
                     </div>
                   </Link>
                 }
@@ -289,13 +241,11 @@ const AppSidebar = () => {
                     className="text-foreground hover:text-foreground transition-colors"
                     activeProps={{ className: `font-bold` }}
                   >
-                    <div className="flex flex-row gap-2 items-center">
+                    <div className="flex flex-row items-center gap-2">
                       <span>
                         <User className="size-4" />
                       </span>
-                      <span className="text-base">
-                        Inloggning
-                      </span>
+                      <span className="text-base">Inloggning</span>
                     </div>
                   </Link>
                 }

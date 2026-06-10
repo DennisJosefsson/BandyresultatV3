@@ -1,9 +1,5 @@
 import type { LinkProps } from '@tanstack/react-router'
-import {
-  Link,
-  createFileRoute,
-} from '@tanstack/react-router'
-
+import { Link, createFileRoute } from '@tanstack/react-router'
 import { useGetFirstAndLastSeason } from './seasons/$year/-hooks/useGetFirstAndLastSeason'
 
 export const Route = createFileRoute('/_layout/')({
@@ -21,8 +17,7 @@ function App() {
         </div>
         <div className="w-[280px] pl-2 md:w-[500px] xl:w-full">
           <h2 className="text-primary mb-4 text-sm font-bold sm:text-base xl:text-2xl">
-            Samlade resultat från de högsta serierna - 1907
-            och framåt
+            Samlade resultat från de högsta serierna - 1907 och framåt
           </h2>
         </div>
       </div>
@@ -34,9 +29,7 @@ function App() {
 function IndexPageLinks() {
   const { lastSeason } = useGetFirstAndLastSeason()
 
-  const mensLinks: Array<
-    LinkProps & { key: string; linkName: string }
-  > = [
+  const mensLinks: Array<LinkProps & { key: string; linkName: string }> = [
     {
       to: '/seasons/$year/$group/games',
       params: { group: 'elitserien', year: lastSeason },
@@ -63,9 +56,7 @@ function IndexPageLinks() {
       linkName: 'Slutspel',
     },
   ]
-  const womensLinks: Array<
-    LinkProps & { key: string; linkName: string }
-  > = [
+  const womensLinks: Array<LinkProps & { key: string; linkName: string }> = [
     {
       to: '/seasons/$year/$group/games',
       params: { group: 'elitserien', year: lastSeason },
@@ -94,26 +85,17 @@ function IndexPageLinks() {
   ]
 
   return (
-    <div className="grid grid-cols-1 xl:grid-cols-2 gap-2">
-      <div className="border-muted flex flex-col gap-2 xl:gap-8 border-2 p-4 xl:p-10">
+    <div className="grid grid-cols-1 gap-2 xl:grid-cols-2">
+      <div className="border-muted flex flex-col gap-2 border-2 p-4 xl:gap-8 xl:p-10">
         <div className="flex flex-row justify-center">
-          <h4 className="text-sm md:text-base xl:text-lg font-bold">
-            Elitserien Herrar
-          </h4>
+          <h4 className="text-sm font-bold md:text-base xl:text-lg">Elitserien Herrar</h4>
         </div>
         <div className="grid grid-cols-3 gap-8">
           {mensLinks.map((link) => {
             return (
-              <div
-                key={link.key}
-                className="flex flex-row justify-center"
-              >
-                <Link
-                  to={link.to}
-                  params={link.params}
-                  search={link.search}
-                >
-                  <span className="text-xs md:text-sm xl:text-base font-semibold">
+              <div key={link.key} className="flex flex-row justify-center">
+                <Link to={link.to} params={link.params} search={link.search}>
+                  <span className="text-xs font-semibold md:text-sm xl:text-base">
                     {link.linkName}
                   </span>
                 </Link>
@@ -122,25 +104,16 @@ function IndexPageLinks() {
           })}
         </div>
       </div>
-      <div className="border-muted flex flex-col gap-2 xl:gap-8 border-2 p-4 xl:p-10">
+      <div className="border-muted flex flex-col gap-2 border-2 p-4 xl:gap-8 xl:p-10">
         <div className="flex flex-row justify-center">
-          <h4 className="text-sm md:text-base xl:text-lg font-bold">
-            Elitserien Damer
-          </h4>
+          <h4 className="text-sm font-bold md:text-base xl:text-lg">Elitserien Damer</h4>
         </div>
         <div className="grid grid-cols-3 gap-8">
           {womensLinks.map((link) => {
             return (
-              <div
-                key={link.key}
-                className="flex flex-row justify-center"
-              >
-                <Link
-                  to={link.to}
-                  params={link.params}
-                  search={link.search}
-                >
-                  <span className="text-xs md:text-sm xl:text-base font-semibold">
+              <div key={link.key} className="flex flex-row justify-center">
+                <Link to={link.to} params={link.params} search={link.search}>
+                  <span className="text-xs font-semibold md:text-sm xl:text-base">
                     {link.linkName}
                   </span>
                 </Link>

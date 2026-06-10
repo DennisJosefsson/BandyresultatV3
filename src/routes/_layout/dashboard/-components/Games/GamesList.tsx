@@ -1,8 +1,6 @@
-import { Outlet } from '@tanstack/react-router'
 import { useState } from 'react'
-
+import { Outlet } from '@tanstack/react-router'
 import type { InlineEditGame } from '@/lib/types/game'
-
 import GamesListItem from './GamesListItem'
 
 type GamesListProps = {
@@ -20,12 +18,7 @@ const GamesList = ({ games }: GamesListProps) => {
     <div className="mt-4 ml-4">
       {games.map((game) => {
         return (
-          <GamesListItem
-            game={game}
-            key={game.gameId.toString()}
-            edit={edit}
-            setEdit={setEdit}
-          />
+          <GamesListItem game={game} key={game.gameId.toString()} edit={edit} setEdit={setEdit} />
         )
       })}
       <Outlet />

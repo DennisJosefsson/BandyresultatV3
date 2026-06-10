@@ -1,14 +1,9 @@
-import { useForm } from '@tanstack/react-form'
-import { useMutation } from '@tanstack/react-query'
-import {
-  getRouteApi,
-  useRouter,
-} from '@tanstack/react-router'
 import { toast } from 'sonner'
-
-import { newTeam } from '@/lib/types/team'
+import { getRouteApi, useRouter } from '@tanstack/react-router'
+import { useMutation } from '@tanstack/react-query'
+import { useForm } from '@tanstack/react-form'
 import type { zd } from '@/lib/utils/zod'
-
+import { newTeam } from '@/lib/types/team'
 import { addTeam } from '../-functions/TeamFunctions/addTeam'
 
 type Data = Awaited<ReturnType<typeof addTeam>>
@@ -42,8 +37,7 @@ export const useNewTeamForm = () => {
       onChange: newTeam,
       onSubmit: newTeam,
     },
-    onSubmit: ({ value }) =>
-      mutation.mutateAsync({ data: value }),
+    onSubmit: ({ value }) => mutation.mutateAsync({ data: value }),
   })
 
   const onMutationSuccess = (data: Data) => {
@@ -52,8 +46,7 @@ export const useNewTeamForm = () => {
     } else {
       toast.success(data.message)
       router.invalidate({
-        filter: (r) =>
-          r.routeId === '/_layout/dashboard/teams/',
+        filter: (r) => r.routeId === '/_layout/dashboard/teams/',
       })
       navigate({
         to: '/dashboard/teams',

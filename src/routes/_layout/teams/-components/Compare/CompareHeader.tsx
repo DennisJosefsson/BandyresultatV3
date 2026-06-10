@@ -1,10 +1,5 @@
-import {
-  getRouteApi,
-  useLocation,
-  useNavigate,
-} from '@tanstack/react-router'
 import { useCopyToClipboard } from 'usehooks-ts'
-
+import { getRouteApi, useLocation, useNavigate } from '@tanstack/react-router'
 import { Button } from '@/components/base/ui/button'
 
 const Buttons = ({ length }: { length: number }) => {
@@ -28,18 +23,12 @@ const Buttons = ({ length }: { length: number }) => {
   return (
     <div className="mb-2 flex flex-row justify-end gap-2 xl:mb-6">
       {origin ? (
-        <Button
-          size="responsive"
-          onClick={goBack}
-        >
+        <Button size="responsive" onClick={goBack}>
           Tillbaka
         </Button>
       ) : null}
       {length > 0 && (
-        <Button
-          onClick={() => copy(copyLink)}
-          size="responsive"
-        >
+        <Button onClick={() => copy(copyLink)} size="responsive">
           {copiedText ? 'Kopierad!' : `Länk`}
         </Button>
       )}

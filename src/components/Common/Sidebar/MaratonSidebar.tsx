@@ -1,5 +1,4 @@
 import { Link, useSearch } from '@tanstack/react-router'
-
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -61,9 +60,7 @@ export function MaratonSidebar() {
                     activeOptions={{ includeSearch: false }}
                     activeProps={{ className: `font-bold` }}
                   >
-                    <span className="md:text-sm">
-                      Hemma
-                    </span>
+                    <span className="md:text-sm">Hemma</span>
                   </Link>
                 }
               />
@@ -81,9 +78,7 @@ export function MaratonSidebar() {
                     activeOptions={{ includeSearch: false }}
                     activeProps={{ className: `font-bold` }}
                   >
-                    <span className="md:text-sm">
-                      Borta
-                    </span>
+                    <span className="md:text-sm">Borta</span>
                   </Link>
                 }
               />
@@ -106,9 +101,7 @@ export function MaratonSidebar() {
                     activeOptions={{ includeSearch: false }}
                     activeProps={{ className: `font-bold` }}
                   >
-                    <span className="md:text-sm">
-                      Statistik
-                    </span>
+                    <span className="md:text-sm">Statistik</span>
                   </Link>
                 }
               />
@@ -123,9 +116,7 @@ export function MaratonSidebar() {
                     activeOptions={{ includeSearch: false }}
                     activeProps={{ className: `font-bold` }}
                   >
-                    <span className="md:text-sm">
-                      Poäng
-                    </span>
+                    <span className="md:text-sm">Poäng</span>
                   </Link>
                 }
               />
@@ -140,9 +131,7 @@ export function MaratonSidebar() {
                     activeOptions={{ includeSearch: false }}
                     activeProps={{ className: `font-bold` }}
                   >
-                    <span className="md:text-sm">
-                      Gjorda mål
-                    </span>
+                    <span className="md:text-sm">Gjorda mål</span>
                   </Link>
                 }
               />
@@ -157,9 +146,7 @@ export function MaratonSidebar() {
                     activeOptions={{ includeSearch: false }}
                     activeProps={{ className: `font-bold` }}
                   >
-                    <span className="md:text-sm">
-                      Insläppta mål
-                    </span>
+                    <span className="md:text-sm">Insläppta mål</span>
                   </Link>
                 }
               />
@@ -174,9 +161,7 @@ export function MaratonSidebar() {
                     activeOptions={{ includeSearch: false }}
                     activeProps={{ className: `font-bold` }}
                   >
-                    <span className="md:text-sm">
-                      Rekordsviter
-                    </span>
+                    <span className="md:text-sm">Rekordsviter</span>
                   </Link>
                 }
               />
@@ -198,9 +183,7 @@ export function MaratonSidebar() {
                     activeOptions={{ includeSearch: false }}
                     activeProps={{ className: `font-bold` }}
                   >
-                    <span className="md:text-sm">
-                      Hjälp
-                    </span>
+                    <span className="md:text-sm">Hjälp</span>
                   </Link>
                 }
               />

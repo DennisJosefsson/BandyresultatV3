@@ -1,5 +1,4 @@
 import { createSerializationAdapter } from '@tanstack/react-router'
-
 import { CustomError } from './CustomError'
 
 export default class ZodParsingError extends CustomError {

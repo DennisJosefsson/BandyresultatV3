@@ -1,5 +1,4 @@
 import type { RecordData } from '@/lib/types/records'
-
 import PointsGoalsCard from './PointsGoalsCard'
 
 type RenderPointsGoalsCardProps = {
@@ -11,12 +10,7 @@ const RenderPointsGoalsCard = ({ array, stat }: RenderPointsGoalsCardProps) => {
   return (
     <div>
       {array.map((item) => {
-        return (
-          <PointsGoalsCard
-            key={`${item.team.casualName}-${item.year}-${stat}`}
-            {...item}
-          />
-        )
+        return <PointsGoalsCard key={`${item.team.casualName}-${item.year}-${stat}`} {...item} />
       })}
     </div>
   )

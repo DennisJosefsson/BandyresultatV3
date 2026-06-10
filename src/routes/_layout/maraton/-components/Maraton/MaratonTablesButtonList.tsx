@@ -1,10 +1,7 @@
 import { Link, getRouteApi } from '@tanstack/react-router'
-
 import { Button } from '@/components/base/ui/button'
 
-const route = getRouteApi(
-  '/_layout/maraton/table/$maratonTable',
-)
+const route = getRouteApi('/_layout/maraton/table/$maratonTable')
 
 const MaratonTablesButtonList = () => {
   const women = route.useSearch({
@@ -31,11 +28,7 @@ const MaratonTablesButtonList = () => {
             {({ isActive, isTransitioning }) => (
               <Button
                 size="responsive"
-                variant={
-                  isActive || isTransitioning
-                    ? 'default'
-                    : 'outline'
-                }
+                variant={isActive || isTransitioning ? 'default' : 'outline'}
                 disabled={isTransitioning}
               >
                 Alla
@@ -55,11 +48,7 @@ const MaratonTablesButtonList = () => {
             {({ isActive, isTransitioning }) => (
               <Button
                 size="responsive"
-                variant={
-                  isActive || isTransitioning
-                    ? 'default'
-                    : 'outline'
-                }
+                variant={isActive || isTransitioning ? 'default' : 'outline'}
                 disabled={isTransitioning}
               >
                 Hemma
@@ -79,11 +68,7 @@ const MaratonTablesButtonList = () => {
             {({ isActive, isTransitioning }) => (
               <Button
                 size="responsive"
-                variant={
-                  isActive || isTransitioning
-                    ? 'default'
-                    : 'outline'
-                }
+                variant={isActive || isTransitioning ? 'default' : 'outline'}
                 disabled={isTransitioning}
               >
                 Borta

@@ -1,6 +1,5 @@
-import Date from '@/components/Common/Date'
 import type { Game } from '@/lib/types/game'
-
+import Date from '@/components/Common/Date'
 import PlayoffCard from './PlayoffCard'
 type FinalCardProps = {
   game: Omit<Game, 'season'>
@@ -19,18 +18,12 @@ const FinalCard = ({ game }: FinalCardProps) => {
         <PlayoffCard.Content>
           <div className="flex flex-row justify-between text-xs md:text-sm xl:text-base">
             <div>
-              <PlayoffCard.Team teamId={game.home.teamId}>
-                {game.home.name}
-              </PlayoffCard.Team>
+              <PlayoffCard.Team teamId={game.home.teamId}>{game.home.name}</PlayoffCard.Team>
               <span> - </span>
-              <PlayoffCard.Team teamId={game.awayTeamId}>
-                {game.away.name}
-              </PlayoffCard.Team>
+              <PlayoffCard.Team teamId={game.awayTeamId}>{game.away.name}</PlayoffCard.Team>
             </div>
             <div>
-              <PlayoffCard.Result>
-                {game.result}
-              </PlayoffCard.Result>
+              <PlayoffCard.Result>{game.result}</PlayoffCard.Result>
             </div>
           </div>
         </PlayoffCard.Content>

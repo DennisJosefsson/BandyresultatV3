@@ -1,25 +1,11 @@
 import { getRouteApi } from '@tanstack/react-router'
-
-import { Button } from '@/components/base/ui/button'
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/base/ui/card'
+import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/base/ui/field'
 import { Checkbox } from '@/components/base/ui/checkbox'
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from '@/components/base/ui/field'
-
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/base/ui/card'
+import { Button } from '@/components/base/ui/button'
 import { usePlayoffSeasonForm } from '../../../-hooks/usePlayoffSeasonForm'
 
-const route = getRouteApi(
-  '/_layout/dashboard/season/$seasonId/playoffseason/',
-)
+const route = getRouteApi('/_layout/dashboard/season/$seasonId/playoffseason/')
 
 const PlayoffSeasonForm = () => {
   const form = usePlayoffSeasonForm()
@@ -51,10 +37,7 @@ const PlayoffSeasonForm = () => {
               nativeButton={false}
             />
 
-            <Button
-              type="submit"
-              form="playoffseasonForm"
-            >
+            <Button type="submit" form="playoffseasonForm">
               Skicka
             </Button>
           </div>
@@ -74,37 +57,21 @@ const PlayoffSeasonForm = () => {
               <form.Field
                 name="hasEight"
                 children={(field) => {
-                  const isInvalid =
-                    field.state.meta.isTouched &&
-                    !field.state.meta.isValid
+                  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <Field
-                        orientation="horizontal"
-                        data-invalid={isInvalid}
-                      >
+                      <Field orientation="horizontal" data-invalid={isInvalid}>
                         <Checkbox
                           id={field.name}
                           name={field.name}
                           checked={field.state.value}
-                          onCheckedChange={(checked) =>
-                            field.handleChange(
-                              checked === true,
-                            )
-                          }
+                          onCheckedChange={(checked) => field.handleChange(checked === true)}
                         />
-                        <FieldLabel
-                          htmlFor={field.name}
-                          className="font-normal"
-                        >
+                        <FieldLabel htmlFor={field.name} className="font-normal">
                           hasEight
                         </FieldLabel>
                       </Field>
-                      {isInvalid && (
-                        <FieldError
-                          errors={field.state.meta.errors}
-                        />
-                      )}
+                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
                     </Field>
                   )
                 }}
@@ -112,37 +79,21 @@ const PlayoffSeasonForm = () => {
               <form.Field
                 name="hasQuarter"
                 children={(field) => {
-                  const isInvalid =
-                    field.state.meta.isTouched &&
-                    !field.state.meta.isValid
+                  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <Field
-                        orientation="horizontal"
-                        data-invalid={isInvalid}
-                      >
+                      <Field orientation="horizontal" data-invalid={isInvalid}>
                         <Checkbox
                           id={field.name}
                           name={field.name}
                           checked={field.state.value}
-                          onCheckedChange={(checked) =>
-                            field.handleChange(
-                              checked === true,
-                            )
-                          }
+                          onCheckedChange={(checked) => field.handleChange(checked === true)}
                         />
-                        <FieldLabel
-                          htmlFor={field.name}
-                          className="font-normal"
-                        >
+                        <FieldLabel htmlFor={field.name} className="font-normal">
                           hasQuarter
                         </FieldLabel>
                       </Field>
-                      {isInvalid && (
-                        <FieldError
-                          errors={field.state.meta.errors}
-                        />
-                      )}
+                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
                     </Field>
                   )
                 }}
@@ -150,37 +101,21 @@ const PlayoffSeasonForm = () => {
               <form.Field
                 name="playoffAsSeries"
                 children={(field) => {
-                  const isInvalid =
-                    field.state.meta.isTouched &&
-                    !field.state.meta.isValid
+                  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <Field
-                        orientation="horizontal"
-                        data-invalid={isInvalid}
-                      >
+                      <Field orientation="horizontal" data-invalid={isInvalid}>
                         <Checkbox
                           id={field.name}
                           name={field.name}
                           checked={field.state.value}
-                          onCheckedChange={(checked) =>
-                            field.handleChange(
-                              checked === true,
-                            )
-                          }
+                          onCheckedChange={(checked) => field.handleChange(checked === true)}
                         />
-                        <FieldLabel
-                          htmlFor={field.name}
-                          className="font-normal"
-                        >
+                        <FieldLabel htmlFor={field.name} className="font-normal">
                           playoffAsSeries
                         </FieldLabel>
                       </Field>
-                      {isInvalid && (
-                        <FieldError
-                          errors={field.state.meta.errors}
-                        />
-                      )}
+                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
                     </Field>
                   )
                 }}
@@ -188,37 +123,21 @@ const PlayoffSeasonForm = () => {
               <form.Field
                 name="uefaSorting"
                 children={(field) => {
-                  const isInvalid =
-                    field.state.meta.isTouched &&
-                    !field.state.meta.isValid
+                  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <Field
-                        orientation="horizontal"
-                        data-invalid={isInvalid}
-                      >
+                      <Field orientation="horizontal" data-invalid={isInvalid}>
                         <Checkbox
                           id={field.name}
                           name={field.name}
                           checked={field.state.value}
-                          onCheckedChange={(checked) =>
-                            field.handleChange(
-                              checked === true,
-                            )
-                          }
+                          onCheckedChange={(checked) => field.handleChange(checked === true)}
                         />
-                        <FieldLabel
-                          htmlFor={field.name}
-                          className="font-normal"
-                        >
+                        <FieldLabel htmlFor={field.name} className="font-normal">
                           uefaSorting
                         </FieldLabel>
                       </Field>
-                      {isInvalid && (
-                        <FieldError
-                          errors={field.state.meta.errors}
-                        />
-                      )}
+                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
                     </Field>
                   )
                 }}

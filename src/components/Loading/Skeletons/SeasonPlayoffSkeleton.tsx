@@ -1,9 +1,5 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-} from '@/components/base/ui/card'
 import { Skeleton } from '@/components/base/ui/skeleton'
+import { Card, CardContent, CardHeader } from '@/components/base/ui/card'
 
 const SeasonPlayoffSkeleton = () => {
   return (

@@ -1,9 +1,5 @@
-import {
-  useNavigate,
-  useSearch,
-} from '@tanstack/react-router'
 import { useEffect } from 'react'
-
+import { useNavigate, useSearch } from '@tanstack/react-router'
 import useSearchMutation from './useSearchMutation'
 
 export const useSearchResults = () => {
@@ -11,11 +7,7 @@ export const useSearchResults = () => {
     from: '/_layout/search',
   })
   const navigate = useNavigate({ from: '/search' })
-  const {
-    data: searchResult,
-    mutate,
-    reset,
-  } = useSearchMutation()
+  const { data: searchResult, mutate, reset } = useSearchMutation()
 
   useEffect(() => {
     if (searchParams.submit) {

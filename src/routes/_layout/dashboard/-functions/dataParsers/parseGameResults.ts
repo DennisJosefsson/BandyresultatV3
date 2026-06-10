@@ -5,9 +5,7 @@ export const parseGameResult = zd
     gameId: zd.number().int().positive(),
     homeTeamId: zd.number().int().positive(),
     awayTeamId: zd.number().int().positive(),
-    result: zd
-      .string()
-      .regex(/^\d{1,2}-\d{1,2}$/, { message: 'Fel resultatformat.' }),
+    result: zd.string().regex(/^\d{1,2}-\d{1,2}$/, { message: 'Fel resultatformat.' }),
     halftimeResult: zd
       .string()
       .regex(/^\d{1,2}-\d{1,2}$/, { message: 'Fel resultatformat.' })
@@ -24,15 +22,11 @@ export const parseGameResult = zd
     awayTeamGameId: zd.number().int().positive(),
   })
   .transform((obj) => {
-    const resultArray = obj.result
-      .split('-')
-      .map((item) => zd.coerce.number().parse(item))
+    const resultArray = obj.result.split('-').map((item) => zd.coerce.number().parse(item))
     const halftimeResultArray =
       obj.halftimeResult === ''
         ? null
-        : obj.halftimeResult
-            .split('-')
-            .map((item) => zd.coerce.number().parse(item))
+        : obj.halftimeResult.split('-').map((item) => zd.coerce.number().parse(item))
     const otResultArray =
       obj.otResult === ''
         ? null
@@ -50,10 +44,8 @@ export const parseGameResult = zd
     const goalsScoredByAwayTeam = awayGoal
     const goalsConcededByHomeTeam = awayGoal
     const goalsConcededByAwayTeam = homeGoal
-    const goalDifferenceHomeTeam =
-      goalsScoredByHomeTeam - goalsConcededByHomeTeam
-    const goalDifferenceAwayTeam =
-      goalsScoredByAwayTeam - goalsConcededByAwayTeam
+    const goalDifferenceHomeTeam = goalsScoredByHomeTeam - goalsConcededByHomeTeam
+    const goalDifferenceAwayTeam = goalsScoredByAwayTeam - goalsConcededByAwayTeam
     const homeWin = homeGoal > awayGoal
     const draw = homeGoal === awayGoal
     const awayWin = awayGoal > homeGoal
@@ -229,9 +221,7 @@ export const parseNewGameWithResult = zd
   .object({
     homeTeamId: zd.number().int().positive(),
     awayTeamId: zd.number().int().positive(),
-    result: zd
-      .string()
-      .regex(/^\d{1,2}-\d{1,2}$/, { message: 'Fel resultatformat.' }),
+    result: zd.string().regex(/^\d{1,2}-\d{1,2}$/, { message: 'Fel resultatformat.' }),
     halftimeResult: zd
       .string()
       .regex(/^\d{1,2}-\d{1,2}$/, { message: 'Fel resultatformat.' })
@@ -251,15 +241,11 @@ export const parseNewGameWithResult = zd
       .or(zd.literal('')),
   })
   .transform((obj) => {
-    const resultArray = obj.result
-      .split('-')
-      .map((item) => zd.coerce.number().parse(item))
+    const resultArray = obj.result.split('-').map((item) => zd.coerce.number().parse(item))
     const halftimeResultArray =
       obj.halftimeResult === ''
         ? null
-        : obj.halftimeResult
-            .split('-')
-            .map((item) => zd.coerce.number().parse(item))
+        : obj.halftimeResult.split('-').map((item) => zd.coerce.number().parse(item))
     const otResultArray =
       obj.otResult === ''
         ? null
@@ -277,10 +263,8 @@ export const parseNewGameWithResult = zd
     const goalsScoredByAwayTeam = awayGoal
     const goalsConcededByHomeTeam = awayGoal
     const goalsConcededByAwayTeam = homeGoal
-    const goalDifferenceHomeTeam =
-      goalsScoredByHomeTeam - goalsConcededByHomeTeam
-    const goalDifferenceAwayTeam =
-      goalsScoredByAwayTeam - goalsConcededByAwayTeam
+    const goalDifferenceHomeTeam = goalsScoredByHomeTeam - goalsConcededByHomeTeam
+    const goalDifferenceAwayTeam = goalsScoredByAwayTeam - goalsConcededByAwayTeam
     const homeWin = homeGoal > awayGoal
     const draw = homeGoal === awayGoal
     const awayWin = awayGoal > homeGoal

@@ -1,5 +1,5 @@
-import type { Game } from '@/lib/types/game'
 import type { Serie } from '@/lib/types/serie'
+import type { Game } from '@/lib/types/game'
 
 type SortedDates = {
   [key: string]: Array<Omit<Game, 'season'>>

@@ -1,5 +1,4 @@
 import { getRouteApi } from '@tanstack/react-router'
-
 import FiveSeasonTeamTable from './FiveSeasonTeamTable'
 
 const route = getRouteApi('/_layout/teams/$teamId')
@@ -10,9 +9,7 @@ const TeamFiveSeasonsTables = () => {
   if (data.fiveSeasons.length === 0) {
     return (
       <div className="mt-4 flex flex-row justify-center">
-        <h2 className="text-xs font-bold md:text-sm">
-          Tyvärr saknas tabelldata för detta lag.
-        </h2>
+        <h2 className="text-xs font-bold md:text-sm">Tyvärr saknas tabelldata för detta lag.</h2>
       </div>
     )
   }
@@ -21,10 +18,7 @@ const TeamFiveSeasonsTables = () => {
       {data.fiveSeasons.map((season) => {
         return (
           <div key={season.season}>
-            <FiveSeasonTeamTable
-              tables={season.tables}
-              season={season.season}
-            />
+            <FiveSeasonTeamTable tables={season.tables} season={season.season} />
           </div>
         )
       })}

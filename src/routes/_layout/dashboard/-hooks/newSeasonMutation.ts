@@ -1,15 +1,12 @@
-import { useMutation } from '@tanstack/react-query'
-import { useRouter } from '@tanstack/react-router'
 import type { RefObject } from 'react'
 import { toast } from 'sonner'
-
+import { useRouter } from '@tanstack/react-router'
+import { useMutation } from '@tanstack/react-query'
 import { generateNewSeason } from '../-functions/SeasonFunctions/generateNewSeason'
 
 type Data = Awaited<ReturnType<typeof generateNewSeason>>
 
-export const newSeasonMutation = (
-  dialogRef: RefObject<HTMLDialogElement | null>,
-) => {
+export const newSeasonMutation = (dialogRef: RefObject<HTMLDialogElement | null>) => {
   const router = useRouter()
   const mutation = useMutation({
     mutationFn: generateNewSeason,
