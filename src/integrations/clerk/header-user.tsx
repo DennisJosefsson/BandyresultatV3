@@ -1,4 +1,8 @@
-import { SignInButton, Show, UserButton } from "@clerk/react";
+import {
+  Show,
+  SignInButton,
+  UserButton,
+} from '@clerk/react'
 import { User } from 'lucide-react'
 
 import { Button } from '@/components/base/ui/button'
@@ -33,5 +37,5 @@ export default function HeaderUser() {
         </SignInButton>
       </Show>
     </div>
-  );
+  )
 }
