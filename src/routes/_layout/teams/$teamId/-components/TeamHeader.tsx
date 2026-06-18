@@ -1,4 +1,5 @@
 import { Button } from '@/components/base/ui/button'
+import TeamLogo from '@/components/Common/TeamLogo'
 import { useFavTeam } from '@/lib/contexts/favTeamsContext'
 import { Link, getRouteApi } from '@tanstack/react-router'
 
@@ -82,11 +83,14 @@ const TeamHeader = () => {
           </div>
         </div>
 
-        <div className="bg-accent rounded-full border border-accent-foreground overflow-hidden w-8 xs:w-16 md:w-24 lg:w-32">
-          <img
+        <div className="bg-accent rounded-full overflow-hidden w-8 xs:w-16 md:w-24 lg:w-32">
+          <TeamLogo
             className="w-8 xs:w-16 md:w-24 lg:w-32 object-scale-down"
-            src={`/logos/teams/128/${teamId}_128x128.png`}
-          ></img>
+            size={128}
+            teamId={teamId}
+            alt={data.team.name}
+            title={data.team.name}
+          ></TeamLogo>
         </div>
       </div>
     </div>

@@ -7,6 +7,7 @@ import {
   MarkerPopup,
   MarkerTooltip,
 } from '@/components/base/ui/map'
+import TeamLogo from '@/components/Common/TeamLogo'
 import type { MapTeam } from '@/lib/types/team'
 import { Link } from '@tanstack/react-router'
 import { ExternalLinkIcon } from 'lucide-react'
@@ -64,9 +65,12 @@ function MapItem({
               </span>
             </div>
             <div>
-              <img
+              <TeamLogo
+                size={128}
+                teamId={team.teamId}
                 className="object-scale-down w-4 xs:w-6"
-                src={`/logos/teams/128/${team.teamId}_128x128.png`}
+                alt={team.casualName}
+                title={team.name}
               />
             </div>
           </div>
@@ -150,9 +154,12 @@ function MapItem({
             </div>
           </div>
           <div className="hidden xs:inline">
-            <img
-              className="object-scale-down w-4 xs:w-12 sm:w-24 lg:w-32"
-              src={`/logos/teams/128/${team.teamId}_128x128.png`}
+            <TeamLogo
+              size={128}
+              teamId={team.teamId}
+              className="object-scale-down w-4 xs:w-6"
+              alt={team.casualName}
+              title={team.name}
             />
           </div>
         </div>

@@ -1,5 +1,6 @@
 import type { CheckedState } from '@/components/base/ui/checkbox'
 import { Checkbox } from '@/components/base/ui/checkbox'
+import TeamLogo from '@/components/Common/TeamLogo'
 import { cn } from '@/lib/utils/utils'
 import { Link } from '@tanstack/react-router'
 
@@ -33,9 +34,12 @@ const TeamsListItem = ({
       className="bg-muted data-[state=checked]:shadow-accent dark:bg-muted/50 data-[state=checked]:outline-primary/30 data-[state=checked]:bg-primary/10 dark:data-[state=checked]:outline-primary/20 dark:data-[state=checked]:bg-primary/10 flex flex-row items-center justify-between space-y-0 space-x-3 rounded p-2 text-sm data-[state=checked]:shadow-md data-[state=checked]:outline md:text-base 2xl:text-lg"
     >
       <div className="flex flex-row gap-2 items-center">
-        <img
-          className="rounded-full w-4 object-scale-down bg-accent"
-          src={`/logos/teams/32/${team.teamId}_32x32.png`}
+        <TeamLogo
+          className="w-4 object-scale-down"
+          size={32}
+          alt={team.casualName}
+          title={team.name}
+          teamId={team.teamId}
         />
         <span
           className={cn(

@@ -1,7 +1,12 @@
-import type { ColumnDef } from '@tanstack/react-table'
-import { ArrowDownIcon, ArrowUpIcon, ChevronsUpDownIcon } from 'lucide-react'
-import type { TeamTable } from '@/lib/types/table'
 import { Button } from '@/components/base/ui/button'
+import TeamLogo from '@/components/Common/TeamLogo'
+import type { TeamTable } from '@/lib/types/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import {
+  ArrowDownIcon,
+  ArrowUpIcon,
+  ChevronsUpDownIcon,
+} from 'lucide-react'
 
 export const showColumns = {
   totalDraws: true,
@@ -39,27 +44,42 @@ export const goalsColumns = {
   totalPoints: true,
 }
 
-export const columns: Array<ColumnDef<Omit<TeamTable, 'women' | 'group' | 'season'>>> = [
+export const columns: Array<
+  ColumnDef<Omit<TeamTable, 'women' | 'group' | 'season'>>
+> = [
   {
     accessorKey: 'team.casualName',
     header: () => (
-      <div className="xs:text-[8px] w-8 truncate text-left text-[7px] sm:w-20 sm:text-[10px] md:text-sm lg:w-32 xl:text-base 2xl:text-lg">
+      <div className="xs:text-[8px] w-8 truncate text-left text-[7px] sm:w-20 sm:text-[10px] md:text-sm lg:w-32 xl:text-base ">
         Lag
       </div>
     ),
     cell: ({ row }) => (
-      <div className="xs:text-[8px] w-8 truncate text-left text-[7px] sm:w-20 sm:text-[10px] md:text-sm lg:w-32 xl:text-base 2xl:text-lg">
-        {row.getValue('team_casualName')}
+      <div className="xs:text-[8px] w-12 xs:w-24 truncate text-left text-[7px] sm:w-20 sm:text-[10px] md:w-24 md:text-sm lg:w-32 xl:text-base flex flex-row items-center gap-1 sm:gap-2">
+        <TeamLogo
+          size={32}
+          teamId={row.original.teamId}
+          className="object-scale-down w-2 xs:w-3 sm:w-4 md:w-5"
+          alt={row.original.team.casualName}
+          title={row.original.team.casualName}
+        />
+        <span className="truncate">
+          {row.getValue('team_casualName')}
+        </span>
       </div>
     ),
   },
   {
     accessorKey: 'totalGames',
     header: ({ column }) => (
-      <div className="xs:text-[8px] max-w-10 text-center text-[7px] sm:text-[10px] md:text-sm">
+      <div className="xs:text-[8px] max-w-7 text-center text-[7px] sm:text-[10px] md:text-sm">
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
           className="xs:text-[8px] text-[7px] sm:text-[10px] md:text-sm"
         >
           M
@@ -74,7 +94,7 @@ export const columns: Array<ColumnDef<Omit<TeamTable, 'women' | 'group' | 'seaso
       </div>
     ),
     cell: ({ row }) => (
-      <div className="xs:text-[8px] max-w-10 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base 2xl:text-lg">
+      <div className="xs:text-[8px] max-w-7 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base ">
         {row.getValue('totalGames')}
       </div>
     ),
@@ -83,10 +103,14 @@ export const columns: Array<ColumnDef<Omit<TeamTable, 'women' | 'group' | 'seaso
   {
     accessorKey: 'totalWins',
     header: ({ column }) => (
-      <div className="xs:text-[8px] max-w-10 text-center text-[7px] sm:text-[10px] md:text-sm">
+      <div className="xs:text-[8px] max-w-7 text-center text-[7px] sm:text-[10px] md:text-sm">
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
           className="xs:text-[8px] text-[7px] sm:text-[10px] md:text-sm"
         >
           V
@@ -101,7 +125,7 @@ export const columns: Array<ColumnDef<Omit<TeamTable, 'women' | 'group' | 'seaso
       </div>
     ),
     cell: ({ row }) => (
-      <div className="xs:text-[8px] max-w-10 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base 2xl:text-lg">
+      <div className="xs:text-[8px] max-w-7 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base ">
         {row.getValue('totalWins')}
       </div>
     ),
@@ -110,10 +134,14 @@ export const columns: Array<ColumnDef<Omit<TeamTable, 'women' | 'group' | 'seaso
   {
     accessorKey: 'totalDraws',
     header: ({ column }) => (
-      <div className="xs:text-[8px] max-w-10 text-center text-[7px] sm:text-[10px] md:text-sm">
+      <div className="xs:text-[8px] max-w-7 text-center text-[7px] sm:text-[10px] md:text-sm">
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
           className="xs:text-[8px] text-[7px] sm:text-[10px] md:text-sm"
         >
           O
@@ -128,7 +156,7 @@ export const columns: Array<ColumnDef<Omit<TeamTable, 'women' | 'group' | 'seaso
       </div>
     ),
     cell: ({ row }) => (
-      <div className="xs:text-[8px] max-w-10 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base 2xl:text-lg">
+      <div className="xs:text-[8px] max-w-7 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base ">
         {row.getValue('totalDraws')}
       </div>
     ),
@@ -137,10 +165,14 @@ export const columns: Array<ColumnDef<Omit<TeamTable, 'women' | 'group' | 'seaso
   {
     accessorKey: 'totalLost',
     header: ({ column }) => (
-      <div className="xs:text-[8px] max-w-10 text-center text-[7px] sm:text-[10px] md:text-sm">
+      <div className="xs:text-[8px] max-w-7 text-center text-[7px] sm:text-[10px] md:text-sm">
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
           className="xs:text-[8px] text-[7px] sm:text-[10px] md:text-sm"
         >
           F
@@ -155,7 +187,7 @@ export const columns: Array<ColumnDef<Omit<TeamTable, 'women' | 'group' | 'seaso
       </div>
     ),
     cell: ({ row }) => (
-      <div className="xs:text-[8px] max-w-10 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base 2xl:text-lg">
+      <div className="xs:text-[8px] max-w-7 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base ">
         {row.getValue('totalLost')}
       </div>
     ),
@@ -164,10 +196,14 @@ export const columns: Array<ColumnDef<Omit<TeamTable, 'women' | 'group' | 'seaso
   {
     accessorKey: 'totalGoalsScored',
     header: ({ column }) => (
-      <div className="xs:text-[8px] max-w-10 text-center text-[7px] sm:text-[10px] md:text-sm">
+      <div className="xs:text-[8px] max-w-7 text-center text-[7px] sm:text-[10px] md:text-sm">
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
           className="xs:text-[8px] text-[7px] sm:text-[10px] md:text-sm"
         >
           GM
@@ -182,7 +218,7 @@ export const columns: Array<ColumnDef<Omit<TeamTable, 'women' | 'group' | 'seaso
       </div>
     ),
     cell: ({ row }) => (
-      <div className="xs:text-[8px] max-w-10 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base 2xl:text-lg">
+      <div className="xs:text-[8px] max-w-7 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base ">
         {row.getValue('totalGoalsScored')}
       </div>
     ),
@@ -191,10 +227,14 @@ export const columns: Array<ColumnDef<Omit<TeamTable, 'women' | 'group' | 'seaso
   {
     accessorKey: 'totalGoalsConceded',
     header: ({ column }) => (
-      <div className="xs:text-[8px] max-w-10 text-center text-[7px] sm:text-[10px] md:text-sm">
+      <div className="xs:text-[8px] max-w-7 text-center text-[7px] sm:text-[10px] md:text-sm">
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
           className="xs:text-[8px] text-[7px] sm:text-[10px] md:text-sm"
         >
           IM
@@ -209,7 +249,7 @@ export const columns: Array<ColumnDef<Omit<TeamTable, 'women' | 'group' | 'seaso
       </div>
     ),
     cell: ({ row }) => (
-      <div className="xs:text-[8px] max-w-10 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base 2xl:text-lg">
+      <div className="xs:text-[8px] max-w-7 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base ">
         {row.getValue('totalGoalsConceded')}
       </div>
     ),
@@ -218,10 +258,14 @@ export const columns: Array<ColumnDef<Omit<TeamTable, 'women' | 'group' | 'seaso
   {
     accessorKey: 'totalGoalDifference',
     header: ({ column }) => (
-      <div className="xs:text-[8px] max-w-10 text-center text-[7px] sm:text-[10px] md:text-sm">
+      <div className="xs:text-[8px] max-w-7 text-center text-[7px] sm:text-[10px] md:text-sm">
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
           className="xs:text-[8px] text-[7px] sm:text-[10px] md:text-sm"
         >
           MS
@@ -236,7 +280,7 @@ export const columns: Array<ColumnDef<Omit<TeamTable, 'women' | 'group' | 'seaso
       </div>
     ),
     cell: ({ row }) => (
-      <div className="xs:text-[8px] max-w-10 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base 2xl:text-lg">
+      <div className="xs:text-[8px] max-w-7 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base ">
         {row.getValue('totalGoalDifference')}
       </div>
     ),
@@ -245,10 +289,14 @@ export const columns: Array<ColumnDef<Omit<TeamTable, 'women' | 'group' | 'seaso
   {
     accessorKey: 'totalPoints',
     header: ({ column }) => (
-      <div className="xs:text-[8px] max-w-10 text-center text-[7px] sm:text-[10px] md:text-sm">
+      <div className="xs:text-[8px] max-w-7 text-center text-[7px] sm:text-[10px] md:text-sm">
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
           className="xs:text-[8px] text-[7px] sm:text-[10px] md:text-sm"
         >
           P
@@ -263,7 +311,7 @@ export const columns: Array<ColumnDef<Omit<TeamTable, 'women' | 'group' | 'seaso
       </div>
     ),
     cell: ({ row }) => (
-      <div className="xs:text-[8px] max-w-10 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base 2xl:text-lg">
+      <div className="xs:text-[8px] max-w-7 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base ">
         {row.getValue('totalPoints')}
       </div>
     ),
