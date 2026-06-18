@@ -1,7 +1,12 @@
-import type { ColumnDef } from '@tanstack/react-table'
-import { ArrowDownIcon, ArrowUpIcon, ChevronsUpDownIcon } from 'lucide-react'
-import type { MaratonTable } from '@/lib/types/table'
 import { Button } from '@/components/base/ui/button'
+import TeamLogo from '@/components/Common/TeamLogo'
+import type { MaratonTable } from '@/lib/types/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import {
+  ArrowDownIcon,
+  ArrowUpIcon,
+  ChevronsUpDownIcon,
+} from 'lucide-react'
 
 export const showColumns = {
   totalDraws: true,
@@ -43,26 +48,39 @@ export const goalsColumns = {
 
 export const columns: Array<ColumnDef<MaratonTable>> = [
   {
-    accessorKey: 'team.casualName',
+    accessorKey: 'team.name',
     header: () => (
-      <div className="xs:text-[8px] w-10 truncate text-left text-[7px] sm:w-20 sm:text-[10px] md:text-sm lg:w-40 xl:w-48 xl:text-base 2xl:text-lg">
+      <div className="xs:text-[10px] w-20 truncate text-left text-108px] sm:w-28 sm:text-[10px] md:text-sm lg:w-40 xl:w-48 xl:text-base ">
         Lag
       </div>
     ),
     cell: ({ row }) => (
-      <div className="xs:text-[8px] w-10 truncate text-left text-[7px] sm:w-20 sm:text-[10px] md:text-sm lg:w-40 xl:w-48 xl:text-base 2xl:text-lg">
-        {row.getValue('team_casualName')}
+      <div className="xs:text-[10px] w-20 truncate text-left text-[8px] sm:w-28 sm:text-[10px] md:text-sm lg:w-40 xl:w-48 xl:text-base flex flex-row items-center gap-1 sm:gap-2">
+        <TeamLogo
+          size={32}
+          teamId={row.original.teamId}
+          className="object-scale-down w-2 xs:w-3 sm:w-4 md:w-5"
+          alt={row.original.team.casualName}
+          title={row.original.team.casualName}
+        />
+        <span className="truncate">
+          {row.getValue('team_name')}
+        </span>
       </div>
     ),
   },
   {
     accessorKey: 'seasons',
     header: ({ column }) => (
-      <div className="xs:text-[8px] max-w-10 text-center text-[7px] sm:text-[10px] md:text-sm">
+      <div className="xs:text-[10px] max-w-7 text-center text-[8px] sm:text-[10px] md:text-sm">
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="xs:text-[8px] text-[7px] sm:text-[10px] md:text-sm"
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
+          className="xs:text-[10px] text-[8px] sm:text-[10px] md:text-sm"
         >
           S
           {column.getIsSorted() === 'desc' ? (
@@ -76,7 +94,7 @@ export const columns: Array<ColumnDef<MaratonTable>> = [
       </div>
     ),
     cell: ({ row }) => (
-      <div className="xs:text-[8px] max-w-10 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base 2xl:text-lg">
+      <div className="xs:text-[10px] max-w-7 text-center text-[8px] tabular-nums sm:text-[10px] md:text-sm xl:text-base ">
         {row.getValue('seasons')}
       </div>
     ),
@@ -85,11 +103,15 @@ export const columns: Array<ColumnDef<MaratonTable>> = [
   {
     accessorKey: 'totalGames',
     header: ({ column }) => (
-      <div className="xs:text-[8px] max-w-10 text-center text-[7px] sm:text-[10px] md:text-sm">
+      <div className="xs:text-[10px] max-w-7 text-center text-[8px] sm:text-[10px] md:text-sm">
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="xs:text-[8px] text-[7px] sm:text-[10px] md:text-sm"
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
+          className="xs:text-[10px] text-[8px] sm:text-[10px] md:text-sm"
         >
           M
           {column.getIsSorted() === 'desc' ? (
@@ -103,7 +125,7 @@ export const columns: Array<ColumnDef<MaratonTable>> = [
       </div>
     ),
     cell: ({ row }) => (
-      <div className="xs:text-[8px] max-w-10 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base 2xl:text-lg">
+      <div className="xs:text-[10px] max-w-7 text-center text-[8px] tabular-nums sm:text-[10px] md:text-sm xl:text-base ">
         {row.getValue('totalGames')}
       </div>
     ),
@@ -112,11 +134,15 @@ export const columns: Array<ColumnDef<MaratonTable>> = [
   {
     accessorKey: 'totalWins',
     header: ({ column }) => (
-      <div className="xs:text-[8px] max-w-10 text-center text-[7px] sm:text-[10px] md:text-sm">
+      <div className="xs:text-[10px] max-w-7 text-center text-[8px] sm:text-[10px] md:text-sm">
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="xs:text-[8px] text-[7px] sm:text-[10px] md:text-sm"
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
+          className="xs:text-[10px] text-[8px] sm:text-[10px] md:text-sm"
         >
           V
           {column.getIsSorted() === 'desc' ? (
@@ -130,7 +156,7 @@ export const columns: Array<ColumnDef<MaratonTable>> = [
       </div>
     ),
     cell: ({ row }) => (
-      <div className="xs:text-[8px] max-w-10 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base 2xl:text-lg">
+      <div className="xs:text-[10px] max-w-7 text-center text-[8px] tabular-nums sm:text-[10px] md:text-sm xl:text-base ">
         {row.getValue('totalWins')}
       </div>
     ),
@@ -139,11 +165,15 @@ export const columns: Array<ColumnDef<MaratonTable>> = [
   {
     accessorKey: 'totalDraws',
     header: ({ column }) => (
-      <div className="xs:text-[8px] max-w-10 text-center text-[7px] sm:text-[10px] md:text-sm">
+      <div className="xs:text-[10px] max-w-7 text-center text-[8px] sm:text-[10px] md:text-sm">
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="xs:text-[8px] text-[7px] sm:text-[10px] md:text-sm"
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
+          className="xs:text-[10px] text-[8px] sm:text-[10px] md:text-sm"
         >
           O
           {column.getIsSorted() === 'desc' ? (
@@ -157,7 +187,7 @@ export const columns: Array<ColumnDef<MaratonTable>> = [
       </div>
     ),
     cell: ({ row }) => (
-      <div className="xs:text-[8px] max-w-10 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base 2xl:text-lg">
+      <div className="xs:text-[10px] max-w-7 text-center text-[8px] tabular-nums sm:text-[10px] md:text-sm xl:text-base ">
         {row.getValue('totalDraws')}
       </div>
     ),
@@ -166,11 +196,15 @@ export const columns: Array<ColumnDef<MaratonTable>> = [
   {
     accessorKey: 'totalLost',
     header: ({ column }) => (
-      <div className="xs:text-[8px] max-w-10 text-center text-[7px] sm:text-[10px] md:text-sm">
+      <div className="xs:text-[10px] max-w-7 text-center text-[8px] sm:text-[10px] md:text-sm">
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="xs:text-[8px] text-[7px] sm:text-[10px] md:text-sm"
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
+          className="xs:text-[10px] text-[8px] sm:text-[10px] md:text-sm"
         >
           F
           {column.getIsSorted() === 'desc' ? (
@@ -184,7 +218,7 @@ export const columns: Array<ColumnDef<MaratonTable>> = [
       </div>
     ),
     cell: ({ row }) => (
-      <div className="xs:text-[8px] max-w-10 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base 2xl:text-lg">
+      <div className="xs:text-[10px] max-w-7 text-center text-[8px] tabular-nums sm:text-[10px] md:text-sm xl:text-base ">
         {row.getValue('totalLost')}
       </div>
     ),
@@ -193,11 +227,15 @@ export const columns: Array<ColumnDef<MaratonTable>> = [
   {
     accessorKey: 'totalGoalsScored',
     header: ({ column }) => (
-      <div className="xs:text-[8px] max-w-10 text-center text-[7px] sm:text-[10px] md:text-sm">
+      <div className="xs:text-[10px] max-w-7 text-center text-[8px] sm:text-[10px] md:text-sm">
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="xs:text-[8px] text-[7px] sm:text-[10px] md:text-sm"
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
+          className="xs:text-[10px] text-[8px] sm:text-[10px] md:text-sm"
         >
           GM
           {column.getIsSorted() === 'desc' ? (
@@ -211,7 +249,7 @@ export const columns: Array<ColumnDef<MaratonTable>> = [
       </div>
     ),
     cell: ({ row }) => (
-      <div className="xs:text-[8px] max-w-10 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base 2xl:text-lg">
+      <div className="xs:text-[10px] max-w-7 text-center text-[8px] tabular-nums sm:text-[10px] md:text-sm xl:text-base ">
         {row.getValue('totalGoalsScored')}
       </div>
     ),
@@ -220,11 +258,15 @@ export const columns: Array<ColumnDef<MaratonTable>> = [
   {
     accessorKey: 'totalGoalsConceded',
     header: ({ column }) => (
-      <div className="xs:text-[8px] max-w-10 text-center text-[7px] sm:text-[10px] md:text-sm">
+      <div className="xs:text-[10px] max-w-7 text-center text-[8px] sm:text-[10px] md:text-sm">
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="xs:text-[8px] text-[7px] sm:text-[10px] md:text-sm"
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
+          className="xs:text-[10px] text-[8px] sm:text-[10px] md:text-sm"
         >
           IM
           {column.getIsSorted() === 'desc' ? (
@@ -238,7 +280,7 @@ export const columns: Array<ColumnDef<MaratonTable>> = [
       </div>
     ),
     cell: ({ row }) => (
-      <div className="xs:text-[8px] max-w-10 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base 2xl:text-lg">
+      <div className="xs:text-[10px] max-w-7 text-center text-[8px] tabular-nums sm:text-[10px] md:text-sm xl:text-base ">
         {row.getValue('totalGoalsConceded')}
       </div>
     ),
@@ -247,11 +289,15 @@ export const columns: Array<ColumnDef<MaratonTable>> = [
   {
     accessorKey: 'totalGoalDifference',
     header: ({ column }) => (
-      <div className="xs:text-[8px] max-w-10 text-center text-[7px] sm:text-[10px] md:text-sm">
+      <div className="xs:text-[10px] max-w-7 text-center text-[8px] sm:text-[10px] md:text-sm">
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="xs:text-[8px] text-[7px] sm:text-[10px] md:text-sm"
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
+          className="xs:text-[10px] text-[8px] sm:text-[10px] md:text-sm"
         >
           MS
           {column.getIsSorted() === 'desc' ? (
@@ -265,7 +311,7 @@ export const columns: Array<ColumnDef<MaratonTable>> = [
       </div>
     ),
     cell: ({ row }) => (
-      <div className="xs:text-[8px] max-w-10 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base 2xl:text-lg">
+      <div className="xs:text-[10px] max-w-7 text-center text-[8px] tabular-nums sm:text-[10px] md:text-sm xl:text-base ">
         {row.getValue('totalGoalDifference')}
       </div>
     ),
@@ -274,11 +320,15 @@ export const columns: Array<ColumnDef<MaratonTable>> = [
   {
     accessorKey: 'totalPoints',
     header: ({ column }) => (
-      <div className="xs:text-[8px] max-w-10 text-center text-[7px] sm:text-[10px] md:text-sm">
+      <div className="xs:text-[10px] max-w-7 text-center text-[8px] sm:text-[10px] md:text-sm">
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="xs:text-[8px] text-[7px] sm:text-[10px] md:text-sm"
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
+          className="xs:text-[10px] text-[8px] sm:text-[10px] md:text-sm"
         >
           P
           {column.getIsSorted() === 'desc' ? (
@@ -292,7 +342,7 @@ export const columns: Array<ColumnDef<MaratonTable>> = [
       </div>
     ),
     cell: ({ row }) => (
-      <div className="xs:text-[8px] max-w-10 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base 2xl:text-lg">
+      <div className="xs:text-[10px] max-w-7 text-center text-[8px] tabular-nums sm:text-[10px] md:text-sm xl:text-base ">
         {row.getValue('totalPoints')}
       </div>
     ),

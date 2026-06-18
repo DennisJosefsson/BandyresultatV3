@@ -1,5 +1,6 @@
-import type { Game } from '@/lib/types/game'
 import Date from '@/components/Common/Date'
+import TeamLogo from '@/components/Common/TeamLogo'
+import type { Game } from '@/lib/types/game'
 import PlayoffCard from './PlayoffCard'
 type FinalCardProps = {
   game: Omit<Game, 'season'>
@@ -16,14 +17,33 @@ const FinalCard = ({ game }: FinalCardProps) => {
           </PlayoffCard.Result>
         </PlayoffCard.Title>
         <PlayoffCard.Content>
-          <div className="flex flex-row justify-between text-xs md:text-sm xl:text-base">
-            <div>
-              <PlayoffCard.Team teamId={game.home.teamId}>{game.home.name}</PlayoffCard.Team>
-              <span> - </span>
-              <PlayoffCard.Team teamId={game.awayTeamId}>{game.away.name}</PlayoffCard.Team>
+          <div className="flex flex-row justify-between text-sm xl:text-base">
+            <div className="flex flex-col gap-2">
+              <PlayoffCard.Team teamId={game.home.teamId}>
+                <TeamLogo
+                  size={32}
+                  teamId={game.home.teamId}
+                  className="object-scale-down w-3 sm:w-4 md:w-5"
+                  alt={game.home.casualName}
+                  title={game.home.casualName}
+                />
+                <span>{game.home.name}</span>
+              </PlayoffCard.Team>
+              <PlayoffCard.Team teamId={game.awayTeamId}>
+                <TeamLogo
+                  size={32}
+                  teamId={game.away.teamId}
+                  className="object-scale-down w-3 sm:w-4 md:w-5"
+                  alt={game.away.casualName}
+                  title={game.away.casualName}
+                />
+                <span>{game.away.name}</span>
+              </PlayoffCard.Team>
             </div>
             <div>
-              <PlayoffCard.Result>{game.result}</PlayoffCard.Result>
+              <PlayoffCard.Result>
+                {game.result}
+              </PlayoffCard.Result>
             </div>
           </div>
         </PlayoffCard.Content>

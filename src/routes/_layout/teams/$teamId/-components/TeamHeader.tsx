@@ -1,6 +1,7 @@
-import { Link, getRouteApi } from '@tanstack/react-router'
-import { useFavTeam } from '@/lib/contexts/favTeamsContext'
 import { Button } from '@/components/base/ui/button'
+import TeamLogo from '@/components/Common/TeamLogo'
+import { useFavTeam } from '@/lib/contexts/favTeamsContext'
+import { Link, getRouteApi } from '@tanstack/react-router'
 
 const route = getRouteApi('/_layout/teams/$teamId')
 
@@ -35,9 +36,12 @@ const TeamHeader = () => {
   return (
     <div className="mb-4">
       <div className="flex flex-row items-center justify-between">
-        <div className="flex flex-row flex-wrap gap-2 text-xs sm:text-sm md:text-base xl:text-lg">
-          <span>{data.team.name}</span>
-          <div className="flex flex-row gap-2">
+        <div className="flex flex-col gap-2">
+          <div className="flex flex-row flex-wrap gap-2 text-sm sm:text-nd md:text-lg xl:text-2xl tracking-wide xs:tracking-widest">
+            <span>{data.team.name}</span>
+          </div>
+
+          <div className="flex flex-row gap-2 items-center text-xs sm:text-sm md:text-base xl:text-lg">
             <span>[ </span>
             <Link
               to="/teams/$teamId"
@@ -59,25 +63,34 @@ const TeamHeader = () => {
             </Link>
             <span> ]</span>
           </div>
+          <div>
+            {favTeams.includes(teamId) && (
+              <Button
+                onClick={remove}
+                size="responsive"
+              >
+                Ta bort favorit
+              </Button>
+            )}
+            {!favTeams.includes(teamId) && (
+              <Button
+                onClick={add}
+                size="responsive"
+              >
+                Favoritlag
+              </Button>
+            )}
+          </div>
         </div>
 
-        <div className="flex flex-row items-center gap-1">
-          {/* {origin ? (
-            <Button onClick={goBack} size='responsive'>
-              Tillbaka
-            </Button>
-          ) : null} */}
-
-          {favTeams.includes(teamId) && (
-            <Button onClick={remove} size="responsive">
-              Ta bort favorit
-            </Button>
-          )}
-          {!favTeams.includes(teamId) && (
-            <Button onClick={add} size="responsive">
-              Favoritlag
-            </Button>
-          )}
+        <div className="bg-accent rounded-full overflow-hidden w-8 xs:w-16 md:w-24 lg:w-32">
+          <TeamLogo
+            className="w-8 xs:w-16 md:w-24 lg:w-32 object-scale-down"
+            size={128}
+            teamId={teamId}
+            alt={data.team.name}
+            title={data.team.name}
+          ></TeamLogo>
         </div>
       </div>
     </div>

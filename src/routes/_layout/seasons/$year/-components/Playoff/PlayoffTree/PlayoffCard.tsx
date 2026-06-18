@@ -1,6 +1,12 @@
-import type { ReactNode } from 'react'
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/base/ui/card'
 import { useFavTeam } from '@/lib/contexts/favTeamsContext'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/base/ui/card'
+import { cn } from '@/lib/utils/utils'
+import type { ReactNode } from 'react'
 
 const PlayoffCard = ({
   styleClass = '',
@@ -26,7 +32,7 @@ function Title({ children }: { children: ReactNode }) {
   return (
     <CardHeader>
       <CardTitle>
-        <div className="flex flex-row justify-between text-[10px] sm:text-xs lg:text-sm xl:text-base">
+        <div className="flex flex-row justify-between text-sm xl:text-base">
           {children}
         </div>
       </CardTitle>
@@ -35,20 +41,43 @@ function Title({ children }: { children: ReactNode }) {
 }
 
 function Group({ children }: { children: ReactNode }) {
-  return <span>{children}</span>
+  return <span className="mb-2">{children}</span>
 }
 
 function Result({ children }: { children: ReactNode }) {
-  return <span>{children}</span>
+  return (
+    <span className="font-bold tracking-widest">
+      {children}
+    </span>
+  )
 }
 
 function Content({ children }: { children: ReactNode }) {
-  return <CardContent className="text-[10px] sm:text-xs lg:text-sm">{children}</CardContent>
+  return (
+    <CardContent className="text-sm flex flex-col gap-2">
+      {children}
+    </CardContent>
+  )
 }
 
-function Team({ teamId, children }: { teamId: number; children: ReactNode }) {
+function Team({
+  teamId,
+  children,
+}: {
+  teamId: number
+  children: ReactNode
+}) {
   const { favTeams } = useFavTeam()
-  return <span className={favTeams.includes(teamId) ? 'font-bold' : undefined}>{children}</span>
+  return (
+    <span
+      className={cn(
+        'flex flex-row gap-2 sm:gap-2 items center',
+        favTeams.includes(teamId) ? 'font-bold' : undefined,
+      )}
+    >
+      {children}
+    </span>
+  )
 }
 
 PlayoffCard.Title = Title

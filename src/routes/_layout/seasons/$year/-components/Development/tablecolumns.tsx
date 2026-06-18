@@ -1,33 +1,47 @@
-import type { ColumnDef } from '@tanstack/react-table'
-import { ArrowDownRightIcon, ArrowUpRightIcon } from 'lucide-react'
+import TeamLogo from '@/components/Common/TeamLogo'
 import type { ReturnDevDataTableItem } from '@/lib/types/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import {
+  ArrowDownRightIcon,
+  ArrowUpRightIcon,
+} from 'lucide-react'
 
-const DirectionArrow = ({ direction }: { direction: 'up' | 'down' | null }) => {
+const DirectionArrow = ({
+  direction,
+}: {
+  direction: 'up' | 'down' | null
+}) => {
   if (direction === null) {
     return null
   }
 
   if (direction === 'up') {
-    return <ArrowUpRightIcon className="size-3 md:size-4 lg:size-5 2xl:size-6" />
+    return (
+      <ArrowUpRightIcon className="size-3 md:size-4 lg:size-5 2xl:size-6" />
+    )
   }
 
   if (direction === 'down') {
-    return <ArrowDownRightIcon className="size-3 md:size-4 lg:size-5 2xl:size-6" />
+    return (
+      <ArrowDownRightIcon className="size-3 md:size-4 lg:size-5 2xl:size-6" />
+    )
   }
 
   return null
 }
 
-export const columns: Array<ColumnDef<ReturnDevDataTableItem>> = [
+export const columns: Array<
+  ColumnDef<ReturnDevDataTableItem>
+> = [
   {
     accessorKey: 'position',
     header: () => (
-      <div className="xs:text-[10px] w-4 text-center text-[8px] sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12 2xl:text-lg">
+      <div className="xs:text-[10px] w-4 text-center text-[8px] sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12">
         Pos
       </div>
     ),
     cell: ({ row }) => (
-      <div className="xs:text-[10px] w-4 text-center text-[8px] tabular-nums sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12 2xl:text-lg">
+      <div className="xs:text-[10px] w-4 text-center text-[8px] tabular-nums sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12">
         {row.getValue('position')}
       </div>
     ),
@@ -36,13 +50,22 @@ export const columns: Array<ColumnDef<ReturnDevDataTableItem>> = [
   {
     accessorKey: 'team.casualName',
     header: () => (
-      <div className="xs:text-[10px] w-12 truncate text-left text-[8px] sm:w-16 sm:text-xs lg:w-32 lg:text-sm xl:text-base 2xl:text-lg">
+      <div className="xs:text-[10px] w-12 truncate text-left text-[8px] sm:w-16 sm:text-xs lg:w-32 lg:text-sm xl:text-base">
         Lag
       </div>
     ),
     cell: ({ row }) => (
-      <div className="xs:text-[10px] w-12 truncate text-left text-[8px] sm:w-28 sm:text-xs xl:text-base 2xl:text-lg">
-        {row.getValue('team_casualName')}
+      <div className="xs:text-[10px] w-20 truncate text-left text-[8px] sm:w-28 sm:text-xs xl:text-base flex flex-row items-center gap-1 sm:gap-2">
+        <TeamLogo
+          size={32}
+          teamId={row.original.teamId}
+          className="object-scale-down w-2 xs:w-3 sm:w-4 md:w-5"
+          alt={row.original.team.casualName}
+          title={row.original.team.casualName}
+        />
+        <span className="truncate">
+          {row.getValue('team_casualName')}
+        </span>
       </div>
     ),
     maxSize: 160,
@@ -50,13 +73,15 @@ export const columns: Array<ColumnDef<ReturnDevDataTableItem>> = [
   {
     accessorKey: 'arrowDirection',
     header: () => (
-      <div className="xs:text-[10px] text-[8px] sm:text-xs lg:text-sm xl:text-base 2xl:text-lg">
+      <div className="xs:text-[10px] text-[8px] sm:text-xs lg:text-sm xl:text-base">
         För
       </div>
     ),
     cell: ({ row }) => (
-      <div className="xs:text-[10px] ml-1 text-[8px] tabular-nums sm:text-xs lg:text-sm xl:text-base 2xl:text-lg">
-        <DirectionArrow direction={row.getValue('arrowDirection')} />
+      <div className="xs:text-[10px] ml-1 text-[8px] tabular-nums sm:text-xs lg:text-sm xl:text-base">
+        <DirectionArrow
+          direction={row.getValue('arrowDirection')}
+        />
       </div>
     ),
     maxSize: 16,
@@ -64,12 +89,12 @@ export const columns: Array<ColumnDef<ReturnDevDataTableItem>> = [
   {
     accessorKey: 'totalGames',
     header: () => (
-      <div className="xs:text-[10px] w-4 text-center text-[8px] sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12 2xl:text-lg">
+      <div className="xs:text-[10px] w-4 text-center text-[8px] sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12">
         M
       </div>
     ),
     cell: ({ row }) => (
-      <div className="xs:text-[10px] w-4 text-center text-[8px] tabular-nums sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12 2xl:text-lg">
+      <div className="xs:text-[10px] w-4 text-center text-[8px] tabular-nums sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12">
         {row.getValue('totalGames')}
       </div>
     ),
@@ -78,12 +103,12 @@ export const columns: Array<ColumnDef<ReturnDevDataTableItem>> = [
   {
     accessorKey: 'totalWins',
     header: () => (
-      <div className="xs:text-[10px] w-4 text-center text-[8px] sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12 2xl:text-lg">
+      <div className="xs:text-[10px] w-4 text-center text-[8px] sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12">
         V
       </div>
     ),
     cell: ({ row }) => (
-      <div className="xs:text-[10px] w-4 text-center text-[8px] tabular-nums sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12 2xl:text-lg">
+      <div className="xs:text-[10px] w-4 text-center text-[8px] tabular-nums sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12">
         {row.getValue('totalWins')}
       </div>
     ),
@@ -92,12 +117,12 @@ export const columns: Array<ColumnDef<ReturnDevDataTableItem>> = [
   {
     accessorKey: 'totalDraws',
     header: () => (
-      <div className="xs:text-[10px] w-4 text-center text-[8px] sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12 2xl:text-lg">
+      <div className="xs:text-[10px] w-4 text-center text-[8px] sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12">
         O
       </div>
     ),
     cell: ({ row }) => (
-      <div className="xs:text-[10px] w-4 text-center text-[8px] tabular-nums sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12 2xl:text-lg">
+      <div className="xs:text-[10px] w-4 text-center text-[8px] tabular-nums sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12">
         {row.getValue('totalDraws')}
       </div>
     ),
@@ -106,12 +131,12 @@ export const columns: Array<ColumnDef<ReturnDevDataTableItem>> = [
   {
     accessorKey: 'totalLost',
     header: () => (
-      <div className="xs:text-[10px] w-4 text-center text-[8px] sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12 2xl:text-lg">
+      <div className="xs:text-[10px] w-4 text-center text-[8px] sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12">
         F
       </div>
     ),
     cell: ({ row }) => (
-      <div className="xs:text-[10px] w-4 text-center text-[8px] tabular-nums sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12 2xl:text-lg">
+      <div className="xs:text-[10px] w-4 text-center text-[8px] tabular-nums sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12">
         {row.getValue('totalLost')}
       </div>
     ),
@@ -120,12 +145,12 @@ export const columns: Array<ColumnDef<ReturnDevDataTableItem>> = [
   {
     accessorKey: 'totalGoalsScored',
     header: () => (
-      <div className="xs:text-[10px] w-4 text-center text-[8px] sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12 2xl:text-lg">
+      <div className="xs:text-[10px] w-4 text-center text-[8px] sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12">
         GM
       </div>
     ),
     cell: ({ row }) => (
-      <div className="xs:text-[10px] w-4 text-center text-[8px] tabular-nums sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12 2xl:text-lg">
+      <div className="xs:text-[10px] w-4 text-center text-[8px] tabular-nums sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12">
         {row.getValue('totalGoalsScored')}
       </div>
     ),
@@ -134,12 +159,12 @@ export const columns: Array<ColumnDef<ReturnDevDataTableItem>> = [
   {
     accessorKey: 'totalGoalsConceded',
     header: () => (
-      <div className="xs:text-[10px] w-4 text-center text-[8px] sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12 2xl:text-lg">
+      <div className="xs:text-[10px] w-4 text-center text-[8px] sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12">
         IM
       </div>
     ),
     cell: ({ row }) => (
-      <div className="xs:text-[10px] w-4 text-center text-[8px] tabular-nums sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12 2xl:text-lg">
+      <div className="xs:text-[10px] w-4 text-center text-[8px] tabular-nums sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12">
         {row.getValue('totalGoalsConceded')}
       </div>
     ),
@@ -148,12 +173,12 @@ export const columns: Array<ColumnDef<ReturnDevDataTableItem>> = [
   {
     accessorKey: 'totalGoalDifference',
     header: () => (
-      <div className="xs:text-[10px] w-4 text-center text-[8px] sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12 2xl:text-lg">
+      <div className="xs:text-[10px] w-4 text-center text-[8px] sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12">
         MS
       </div>
     ),
     cell: ({ row }) => (
-      <div className="xs:text-[10px] w-4 text-center text-[8px] tabular-nums sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12 2xl:text-lg">
+      <div className="xs:text-[10px] w-4 text-center text-[8px] tabular-nums sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12">
         {row.getValue('totalGoalDifference')}
       </div>
     ),
@@ -162,12 +187,12 @@ export const columns: Array<ColumnDef<ReturnDevDataTableItem>> = [
   {
     accessorKey: 'totalPoints',
     header: () => (
-      <div className="xs:text-[10px] w-4 text-center text-[8px] sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12 2xl:text-lg">
+      <div className="xs:text-[10px] w-4 text-center text-[8px] sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12">
         P
       </div>
     ),
     cell: ({ row }) => (
-      <div className="xs:text-[10px] w-4 text-center text-[8px] tabular-nums sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12 2xl:text-lg">
+      <div className="xs:text-[10px] w-4 text-center text-[8px] tabular-nums sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12">
         {row.getValue('totalPoints')}
       </div>
     ),

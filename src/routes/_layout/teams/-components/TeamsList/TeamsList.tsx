@@ -1,22 +1,35 @@
-import { useState } from 'react'
-import { useLoaderData, useNavigate, useSearch } from '@tanstack/react-router'
 import type { CheckedState } from '@/components/base/ui/checkbox'
-import TeamsListItem from './TeamsListItem'
+import {
+  useLoaderData,
+  useNavigate,
+  useSearch,
+} from '@tanstack/react-router'
+import { useState } from 'react'
 import FilterComponent from './FilterComponent'
+import TeamsListItem from './TeamsListItem'
 
 const TeamsList = () => {
   const [teamFilter, setTeamFilter] = useState<string>('')
   const { teamArray } = useSearch({
     from: '/_layout/teams/',
   })
-  const [selectedTeams, setSelectedTeams] = useState<Array<number>>(teamArray ?? [])
+  const [selectedTeams, setSelectedTeams] = useState<
+    Array<number>
+  >(teamArray ?? [])
   const data = useLoaderData({ from: '/_layout/teams' })
 
   const navigate = useNavigate({ from: '/teams/' })
 
-  const teams = data.filter((team) => team.name.toLowerCase().includes(teamFilter.toLowerCase()))
+  const teams = data.filter((team) =>
+    team.name
+      .toLowerCase()
+      .includes(teamFilter.toLowerCase()),
+  )
 
-  const onCheckedChange = (checked: CheckedState, teamId: number) => {
+  const onCheckedChange = (
+    checked: CheckedState,
+    teamId: number,
+  ) => {
     if (checked) {
       setSelectedTeams((prev) => [...prev, teamId])
       navigate({
@@ -33,14 +46,23 @@ const TeamsList = () => {
         },
       })
     } else {
-      setSelectedTeams((prev) => prev.filter((team) => team !== teamId))
+      setSelectedTeams((prev) =>
+        prev.filter((team) => team !== teamId),
+      )
       navigate({
         resetScroll: false,
         search: (prev) => {
-          if (prev.teamArray && prev.teamArray.includes(teamId)) {
+          if (
+            prev.teamArray &&
+            prev.teamArray.includes(teamId)
+          ) {
             return {
               ...prev,
-              teamArray: [...prev.teamArray.filter((team) => team !== teamId)],
+              teamArray: [
+                ...prev.teamArray.filter(
+                  (team) => team !== teamId,
+                ),
+              ],
             }
           } else {
             return { ...prev, teamArray: [] }
@@ -51,8 +73,11 @@ const TeamsList = () => {
   }
   return (
     <div>
-      <FilterComponent teamFilter={teamFilter} setTeamFilter={setTeamFilter} />
-      <div className="grid grid-cols-1 gap-x-8 gap-y-2 pt-2 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
+      <FilterComponent
+        teamFilter={teamFilter}
+        setTeamFilter={setTeamFilter}
+      />
+      <div className="grid grid-cols-1 gap-x-8 gap-y-2 pt-2 sm:grid-cols-2 lg:grid-cols-3">
         {teams.map((team) => {
           return (
             <TeamsListItem
