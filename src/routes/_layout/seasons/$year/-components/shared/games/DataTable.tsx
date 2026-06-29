@@ -48,7 +48,7 @@ const DataTable = <TData, TValue>({
       const original = row.original as Omit<Game, 'season'>
       const penalties = !!original.penalties
       const extraTime = !!original.extraTime
-      console.log({ penalties, extraTime })
+
       return penalties || extraTime
     },
   })
