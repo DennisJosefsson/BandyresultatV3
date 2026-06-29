@@ -1,7 +1,7 @@
 import { Button } from '@/components/base/ui/button'
 import TeamLogo from '@/components/Common/TeamLogo'
 import { useFavTeam } from '@/lib/contexts/favTeamsContext'
-import { Link, getRouteApi } from '@tanstack/react-router'
+import { getRouteApi } from '@tanstack/react-router'
 
 const route = getRouteApi('/_layout/teams/$teamId')
 
@@ -11,7 +11,6 @@ const TeamHeader = () => {
   const teamId = route.useParams({
     select: (params) => params.teamId,
   })
-  const women = route.useSearch({ select: (s) => s.women })
 
   const { favTeams, setFavTeams } = useFavTeam()
   if (data.status === 404) return null
@@ -37,32 +36,15 @@ const TeamHeader = () => {
     <div className="mb-4">
       <div className="flex flex-row items-center justify-between">
         <div className="flex flex-col gap-2">
-          <div className="flex flex-row flex-wrap gap-2 text-sm sm:text-nd md:text-lg xl:text-2xl tracking-wide xs:tracking-widest">
-            <span>{data.team.name}</span>
+          <div className="flex flex-col gap-1">
+            <span className="text-sm sm:text-md md:text-lg xl:text-2xl tracking-wide xs:tracking-widest">
+              {data.team.name}
+            </span>
+            <span className="text-xs md:text-sm xl:text-base">
+              {data.team.city}
+            </span>
           </div>
 
-          <div className="flex flex-row gap-2 items-center text-xs sm:text-sm md:text-base xl:text-lg">
-            <span>[ </span>
-            <Link
-              to="/teams/$teamId"
-              params={{ teamId: data.team.teamId }}
-              search={{ women }}
-              activeOptions={{ exact: true }}
-              className="font-normal"
-            >
-              Statistik
-            </Link>
-            <span> | </span>
-            <Link
-              to="/teams/$teamId/seasons"
-              params={{ teamId: data.team.teamId }}
-              search={{ women }}
-              className="font-normal"
-            >
-              Säsonger
-            </Link>
-            <span> ]</span>
-          </div>
           <div>
             {favTeams.includes(teamId) && (
               <Button
