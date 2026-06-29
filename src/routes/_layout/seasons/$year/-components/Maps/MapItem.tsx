@@ -61,7 +61,7 @@ function MapItem({
           <div className="flex flex-row justify-between items-center">
             <Link
               from="/teams/map"
-              to="/teams/$teamId"
+              to="/teams/$teamId/tables"
               params={{ teamId: team.team.teamId }}
               search={(prev) => ({ women: prev.women })}
               className="mr-1.5"
@@ -81,7 +81,7 @@ function MapItem({
                 </span>
                 <Link
                   from="/teams/map"
-                  to="/teams/$teamId"
+                  to="/teams/$teamId/tables"
                   params={{ teamId: team.team.teamId }}
                   search={(prev) => ({ women: prev.women })}
                 >
