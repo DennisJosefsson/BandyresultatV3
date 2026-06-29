@@ -39,7 +39,7 @@ const MobileDataTable = <TData, TValue>({
     { id: 'totalPoints', desc: true },
     { id: 'totalGoalDifference', desc: true },
     { id: 'totalGoalsScored', desc: true },
-    { id: 'team_casualName', desc: false },
+    { id: 'team_name', desc: false },
   ])
   const [columnVisibility, setColumnVisibility] =
     useState<VisibilityState>(goalsColumns)
