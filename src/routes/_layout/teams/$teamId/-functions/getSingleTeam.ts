@@ -1,26 +1,11 @@
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import type { Meta } from '@/lib/types/meta'
-import type { SingleTeamTables } from '@/lib/types/table'
-import type {
-  FiveSeason,
-  SingleTeam,
-  TeamPlayoffStreak,
-  TeamStatItem,
-  TeamStreak,
-} from '@/lib/types/team'
+import type { SingleTeam } from '@/lib/types/team'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
 import { zodValidator } from '@tanstack/zod-adapter'
-import { getLastFiveSeasons } from './getLastFiveSeasons'
-import { getStats } from './getStats'
-import { getStreaks } from './getStreaks'
-import { getTables } from './getTables'
-import {
-  getAllTeamsSeasons,
-  getStrings,
-  getTeam,
-} from './singleTeamQueries'
+import { getTeam } from './singleTeamQueries'
 
 type TeamReturn =
   | {
@@ -34,36 +19,6 @@ type TeamReturn =
       meta: Meta
       breadCrumb: string
       team: SingleTeam
-      tables: SingleTeamTables
-      strings: {
-        seasonString: string
-        finalsAndWinsString: string
-        playoffCountString: string
-      }
-      streaks: {
-        losingStreak: Array<TeamStreak>
-        drawStreak: Array<TeamStreak>
-        winStreak: Array<TeamStreak>
-        noWinStreak: Array<TeamStreak>
-        unbeatenStreak: Array<TeamStreak>
-        streakObjectsLength: number
-        playoffStreak: Array<TeamPlayoffStreak>
-      }
-      stats: {
-        maxScoredHomeGames: Array<TeamStatItem>
-        maxScoredAwayGames: Array<TeamStatItem>
-        maxGoalDifferenceHomeGames: Array<TeamStatItem>
-        maxGoalDifferenceAwayGames: Array<TeamStatItem>
-        minGoalDifferenceHomeGames: Array<TeamStatItem>
-        minGoalDifferenceAwayGames: Array<TeamStatItem>
-        maxConcededHomeGames: Array<TeamStatItem>
-        maxConcededAwayGames: Array<TeamStatItem>
-        maxTotalHomeGames: Array<TeamStatItem>
-        maxTotalAwayGames: Array<TeamStatItem>
-        minTotalHomeGames: Array<TeamStatItem>
-        minTotalAwayGames: Array<TeamStatItem>
-      }
-      fiveSeasons: Array<FiveSeason>
     }
   | undefined
 
@@ -84,7 +39,6 @@ export const getSingleTeam = createServerFn({
   .handler(
     async ({ data: teamId }): Promise<TeamReturn> => {
       try {
-        const start = performance.now()
         const team = await getTeam(teamId)
         let breadCrumb = `Lag`
         let title = `Bandyresultat - Laget finns ej`
@@ -98,43 +52,6 @@ export const getSingleTeam = createServerFn({
             message: 'Det laget finns inte.',
           }
         }
-        const teamCheckTime = performance.now()
-
-        const allSeasons = await getAllTeamsSeasons(teamId)
-
-        const allSeasonsTime = performance.now()
-
-        const strings = await getStrings({
-          team,
-          allSeasons,
-        })
-
-        const stringsTime = performance.now()
-
-        const tables = await getTables({
-          teamId,
-          seasonIdArray: allSeasons.rows.map(
-            (season) => season.seasonId,
-          ),
-        })
-
-        const tablesTime = performance.now()
-
-        const streaks = await getStreaks({
-          teamId,
-        })
-
-        const streaksTime = performance.now()
-
-        const stats = await getStats({ teamId })
-
-        const statsTime = performance.now()
-
-        const fiveSeasons = await getLastFiveSeasons({
-          teamId,
-        })
-
-        const fiveSeasonsTime = performance.now()
 
         breadCrumb = `${team.name}`
         title = `Bandyresultat - ${team.name} - ${team.women === true ? 'Damer' : 'Herrar'}`
@@ -147,27 +64,9 @@ export const getSingleTeam = createServerFn({
           description,
         }
 
-        const end = performance.now()
-        const time = end - start
-        console.log('Execution times: ', {
-          teamCheckTime: teamCheckTime - start,
-          allSeasonsTime: allSeasonsTime - teamCheckTime,
-          stringsTime: stringsTime - allSeasonsTime,
-          tablesTime: tablesTime - stringsTime,
-          streaksTime: streaksTime - tablesTime,
-          statsTime: statsTime - streaksTime,
-          fiveSeasonsTime: fiveSeasonsTime - statsTime,
-          executionTime: time,
-        })
-
         return {
           status: 200,
           team,
-          tables,
-          strings,
-          streaks,
-          stats,
-          fiveSeasons,
           breadCrumb,
           meta,
         }
