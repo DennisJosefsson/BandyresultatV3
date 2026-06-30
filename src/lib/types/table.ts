@@ -36,11 +36,17 @@ export type GroupTable = {
   tables: Array<TeamTable>
 }
 
-export type MaratonTable = Omit<TeamTable, 'season' | 'women' | 'group'> & {
+export type MaratonTable = Omit<
+  TeamTable,
+  'season' | 'women' | 'group'
+> & {
   seasons: number
 }
 
-export type DevDataTableItem = Omit<TeamTable, 'season' | 'women' | 'group'> & {
+export type DevDataTableItem = Omit<
+  TeamTable,
+  'season' | 'women' | 'group'
+> & {
   position: number
   date: string
 }
@@ -48,7 +54,10 @@ export type ReturnDevDataTableItem = DevDataTableItem & {
   arrowDirection: 'up' | 'down' | null
 }
 
-export type PlayoffTable = Omit<TeamTable, 'women' | 'season'> & {
+export type PlayoffTable = Omit<
+  TeamTable,
+  'women' | 'season'
+> & {
   awayGoals: number
 }
 
@@ -114,7 +123,7 @@ export type SingleTeamTables = Array<{
   tables: Array<{
     category: string
     categoryName: string
-    tables: SingleTeamTableItem
+    tables: Array<SingleTeamTableItem>
   }>
 }>
 

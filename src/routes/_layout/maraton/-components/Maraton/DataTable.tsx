@@ -36,7 +36,7 @@ const DataTable = <TData, TValue>({
     { id: 'totalPoints', desc: true },
     { id: 'totalGoalDifference', desc: true },
     { id: 'totalGoalsScored', desc: true },
-    { id: 'team_casualName', desc: false },
+    { id: 'team_name', desc: false },
   ])
   const table = useReactTable({
     data,
@@ -99,9 +99,7 @@ const DataTable = <TData, TValue>({
                 className={`${
                   favTeams.includes(
                     teamObject[
-                      getString(
-                        row.getValue('team_name'),
-                      )
+                      getString(row.getValue('team_name'))
                     ],
                   )
                     ? 'font-bold'

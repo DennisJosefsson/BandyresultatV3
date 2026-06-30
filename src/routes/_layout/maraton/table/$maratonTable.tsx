@@ -30,12 +30,11 @@ export const Route = createFileRoute(
       },
     })
     if (!data) throw new Error('Missing data')
-    console.log('maratonloader', { data })
+
     return data
   },
   staticData: {
     breadcrumb: (match) => {
-      console.log('maratonstaticdata', { match })
       return match.loaderData.breadCrumb ?? 'Maratontabell'
     },
   },

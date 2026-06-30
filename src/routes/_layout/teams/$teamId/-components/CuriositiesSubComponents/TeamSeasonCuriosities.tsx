@@ -1,39 +1,79 @@
 import { getRouteApi } from '@tanstack/react-router'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/base/ui/card'
-const route = getRouteApi('/_layout/teams/$teamId')
+const route = getRouteApi('/_layout/teams/$teamId/stats/')
 
 const TeamSeasonCuriosities = () => {
   const data = route.useLoaderData()
   if (data.status === 404) return null
 
   return (
-    <Card className="mb-2" size="sm">
-      <CardHeader>
-        <CardTitle className="xs:group-data-[size=sm]/card:text-xs group-data-[size=sm]/card:text-[10px] md:group-data-[size=sm]/card:text-sm">
-          Kuriosa
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="mb-1">{data.strings.seasonString}</div>
+    <div>
+      <div className="xs:text-xs text-[10px] md:text-sm">
+        Kuriosa
+      </div>
 
-        <div className="mb-1">{data.strings.finalsAndWinsString}</div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 xs:text-xs text-[10px] md:text-sm mb-4">
+        <div className="mb-1">
+          <span>
+            Säsonger i högsta serien:{' '}
+            {data.statCounts.firstDivSeasonsCount}.{' '}
+            {data.statCounts.firstDivSeasonsCount > 0
+              ? data.statCounts.firstDivSeasonsCount === 1
+                ? `Säsongen ${data.statCounts.firstFirstDivisionSeason?.year}.`
+                : `Första säsongen ${data.statCounts.firstFirstDivisionSeason?.year} och senaste ${data.statCounts.latestFirstDivisionSeason?.year}.`
+              : null}
+          </span>
+        </div>
 
-        <div className="mb-1">{data.strings.playoffCountString}</div>
+        <div className="mb-1">
+          <span>
+            {data.statCounts.qualificationSeasonsCount > 0
+              ? `Kval till högsta serien i databasen: ${data.statCounts.qualificationSeasonsCount}.`
+              : null}
+          </span>
+        </div>
+
+        <div className="mb-1">
+          <span>
+            Antal slutspel: {data.statCounts.playoffCount}.
+          </span>
+        </div>
+
+        <div className="mb-1">
+          <span>
+            Antal finaler: {data.statCounts.finalCount}.{' '}
+            {data.statCounts.finalCount > 0
+              ? `Senast ${data.statCounts.latestFinal}.`
+              : null}
+          </span>
+        </div>
+
+        <div className="mb-1">
+          <span>
+            Antal finalvinster:{' '}
+            {data.statCounts.finalWinCount}.{' '}
+            {data.statCounts.finalWinCount > 0
+              ? `(${data.statCounts.finalWins.join(', ')}).`
+              : null}
+          </span>
+        </div>
 
         {data.streaks.playoffStreak.length > 0 ? (
           <div className="mb-1 sm:mb-2 lg:mb-3">
-            {data.streaks.playoffStreak.map((streak, index) => {
-              return (
-                <div key={`${streak.startYear}-${index}`}>
-                  {data.team.casualName} spelade slutspel {streak.streakLength} år på raken mellan{' '}
-                  {streak.startYear} och {streak.endYear}.
-                </div>
-              )
-            })}
+            {data.streaks.playoffStreak.map(
+              (streak, index) => {
+                return (
+                  <div key={`${streak.startYear}-${index}`}>
+                    {data.team.casualName} spelade slutspel{' '}
+                    {streak.streakLength} år på raken mellan{' '}
+                    {streak.startYear} och {streak.endYear}.
+                  </div>
+                )
+              },
+            )}
           </div>
         ) : null}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }
 

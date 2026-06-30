@@ -15,6 +15,7 @@
     "source.fixAll.oxc": "always"
   },
   "js/ts.preferences.autoImportFileExcludePatterns": [
+    "@base-ui/react",
     "@radix*",
     "drizzle-orm/gel-core",
     "drizzle-orm/mysql-core",

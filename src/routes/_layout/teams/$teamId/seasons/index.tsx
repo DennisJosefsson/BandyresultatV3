@@ -1,4 +1,3 @@
-import { CatchBoundary, Link, createFileRoute } from '@tanstack/react-router'
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import {
   Accordion,
@@ -6,9 +5,15 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/base/ui/accordion'
-import { getTeamSeasons } from './-functions/teamSeasons'
+import {
+  CatchBoundary,
+  createFileRoute,
+} from '@tanstack/react-router'
+import { getTeamSeasons } from '../-functions/teamSeasons'
 
-export const Route = createFileRoute('/_layout/teams/$teamId/seasons')({
+export const Route = createFileRoute(
+  '/_layout/teams/$teamId/seasons/',
+)({
   loader: async ({ params }) => {
     const data = await getTeamSeasons({
       data: params.teamId,
@@ -23,19 +28,27 @@ export const Route = createFileRoute('/_layout/teams/$teamId/seasons')({
   head: ({ loaderData }) => ({
     meta: [
       {
-        title: loaderData?.meta.title ?? 'Bandyresultat - Lagsäsonger',
+        title:
+          loaderData?.meta.title ??
+          'Bandyresultat - Lagsäsonger',
       },
       {
         name: 'description',
-        content: loaderData?.meta.description ?? 'Bandyresultat - Lagsäsonger',
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - Lagsäsonger',
       },
       {
         property: 'og:description',
-        content: loaderData?.meta.description ?? 'Bandyresultat - Lagsäsonger',
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - Lagsäsonger',
       },
       {
         property: 'og:title',
-        content: loaderData?.meta.title ?? 'Bandyresultat - Lagsäsonger',
+        content:
+          loaderData?.meta.title ??
+          'Bandyresultat - Lagsäsonger',
       },
       {
         property: 'og:type',
@@ -43,7 +56,9 @@ export const Route = createFileRoute('/_layout/teams/$teamId/seasons')({
       },
       {
         property: 'og:url',
-        content: loaderData?.meta.url ?? 'https://www.bandyresultat.se',
+        content:
+          loaderData?.meta.url ??
+          'https://www.bandyresultat.se',
       },
       {
         property: 'og:image',
@@ -72,7 +87,11 @@ function RouteComponent() {
         console.error(error)
       }}
       errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent id="seasons" error={error} reset={reset} />
+        <SimpleErrorComponent
+          id="seasons"
+          error={error}
+          reset={reset}
+        />
       )}
     >
       <Seasons />
@@ -86,27 +105,31 @@ function Seasons() {
 
   return (
     <div>
-      <Accordion defaultValue={['seasons']} className="border">
+      <Accordion
+        defaultValue={['seasons']}
+        className="border"
+      >
         <AccordionItem
           value="seasons"
           className="mb-2 rounded-md border-b p-2 shadow-md last:border-b-0"
         >
-          <AccordionTrigger className="text-sm md:text-base">Senaste säsongerna</AccordionTrigger>
+          <AccordionTrigger className="text-sm md:text-base">
+            Senaste säsongerna
+          </AccordionTrigger>
           <AccordionContent>
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 xl:grid-cols-8">
               {data.seasons.map((season) => {
                 return (
-                  <Link
+                  <Route.Link
                     key={season.seasonId}
-                    from="/teams/$teamId/seasons"
-                    to="/teams/$teamId/$seasonId"
+                    to="/teams/$teamId/seasons/$seasonId"
                     params={{ seasonId: season.seasonId }}
                     search={(prev) => ({ ...prev })}
                   >
                     <div className="flex items-center justify-center rounded p-2 text-[10px] font-semibold sm:text-sm md:text-base">
                       {season.year}
                     </div>
-                  </Link>
+                  </Route.Link>
                 )
               })}
             </div>
@@ -117,22 +140,23 @@ function Seasons() {
             value="rest"
             className="mb-2 rounded-md border-b p-2 shadow-md last:border-b-0"
           >
-            <AccordionTrigger className="text-sm md:text-base">Övriga</AccordionTrigger>
+            <AccordionTrigger className="text-sm md:text-base">
+              Övriga
+            </AccordionTrigger>
             <AccordionContent>
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 xl:grid-cols-8">
                 {data.rest.map((season) => {
                   return (
-                    <Link
+                    <Route.Link
                       key={season.seasonId}
-                      from="/teams/$teamId/seasons"
-                      to="/teams/$teamId/$seasonId"
+                      to="/teams/$teamId/seasons/$seasonId"
                       params={{ seasonId: season.seasonId }}
                       search={(prev) => ({ ...prev })}
                     >
                       <div className="flex items-center justify-center rounded p-2 text-[10px] font-semibold sm:text-sm md:text-base">
                         {season.year}
                       </div>
-                    </Link>
+                    </Route.Link>
                   )
                 })}
               </div>

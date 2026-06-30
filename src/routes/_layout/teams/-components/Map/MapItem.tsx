@@ -98,7 +98,7 @@ function MapItem({
             </div>
             <Link
               from="/teams/map"
-              to="/teams/$teamId"
+              to="/teams/$teamId/tables"
               params={{ teamId: team.teamId }}
               search={(prev) => ({ women: prev.women })}
               className="mr-1.5"
@@ -118,7 +118,7 @@ function MapItem({
                 </span>
                 <Link
                   from="/teams/map"
-                  to="/teams/$teamId"
+                  to="/teams/$teamId/tables"
                   params={{ teamId: team.teamId }}
                   search={(prev) => ({ women: prev.women })}
                 >

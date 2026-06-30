@@ -48,7 +48,7 @@ const TeamsListItem = ({
         >
           <Link
             from="/teams"
-            to="/teams/$teamId"
+            to="/teams/$teamId/tables"
             params={{ teamId: team.teamId }}
             search={(prev) => ({ ...prev })}
           >

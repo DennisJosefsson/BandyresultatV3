@@ -1,16 +1,8 @@
-import { Fragment } from 'react/jsx-runtime'
-import type { GroupGames } from '@/lib/types/game'
 import Date from '@/components/Common/Date'
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/base/ui/table'
-import GamesListItem from './GamesListItem'
+import type { GroupGames } from '@/lib/types/game'
+import { Fragment } from 'react/jsx-runtime'
+import DataTable from './DataTable'
+import { columns } from './columns'
 
 type GameListProps = {
   gamesArray: Array<GroupGames>
@@ -18,18 +10,25 @@ type GameListProps = {
   hasGames: boolean
 }
 
-const GamesList = ({ gamesArray, tab, hasGames }: GameListProps) => {
+const GamesList = ({
+  gamesArray,
+  tab,
+  hasGames,
+}: GameListProps) => {
   if (!hasGames) {
     return (
       <div className="mt-2 flex flex-row justify-center font-semibold">
-        Inga inlagda matcher denna säsong, men tabell ska finnas.
+        Inga inlagda matcher denna säsong, men tabell ska
+        finnas.
       </div>
     )
   }
   if (gamesArray.length === 0) {
     return (
       <div className="mt-2 flex flex-row justify-center font-semibold">
-        {tab === 'upcoming' ? 'Inga ospelade matcher.' : 'Inga spelade matcher än.'}
+        {tab === 'upcoming'
+          ? 'Inga ospelade matcher.'
+          : 'Inga spelade matcher än.'}
       </div>
     )
   }
@@ -38,7 +37,10 @@ const GamesList = ({ gamesArray, tab, hasGames }: GameListProps) => {
       <div>
         {gamesArray.map((group) => {
           return (
-            <div key={group.group} className="mb-6 w-full">
+            <div
+              key={group.group}
+              className="mb-6 w-full"
+            >
               <div
                 id={group.group}
                 className="group mb-0.5 flex flex-row items-center gap-1 lg:mb-1 2xl:mb-2"
@@ -47,50 +49,36 @@ const GamesList = ({ gamesArray, tab, hasGames }: GameListProps) => {
                   {group.name}
                 </h3>
               </div>
-              <Table className="w-full table-fixed xl:w-4/5 2xl:w-2/3">
-                {group.comment && <TableCaption>{group.comment}</TableCaption>}
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="xs:w-18 h-8 w-12 px-0 text-[8px] sm:text-sm lg:text-base">
-                      Hemma
-                    </TableHead>
-                    <TableHead className="h-8 w-4 px-0 text-[8px] sm:text-sm lg:text-base"></TableHead>
-                    <TableHead className="xs:w-18 h-8 w-12 px-0 text-[8px] sm:text-sm lg:text-base">
-                      Borta
-                    </TableHead>
-                    <TableHead className="xs:w-18 h-8 w-12 px-0 text-[8px] sm:text-sm lg:text-base">
-                      Resultat
-                    </TableHead>
-                    <TableHead className="h-8 w-12 px-0 text-[8px] sm:text-sm lg:text-base">
-                      Halvtid
-                    </TableHead>
-                    <TableHead className="h-8 w-12 px-0 text-center text-[8px] sm:text-sm lg:text-base">
-                      Avgörande
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {group.dates.map((date) => {
-                    return (
-                      <Fragment key={date.date}>
-                        {date.date !== 'null' && (
-                          <TableRow>
-                            <TableCell
-                              colSpan={6}
-                              className="w-24 p-0 py-1 text-[8px] sm:text-sm lg:text-base"
-                            >
-                              <Date>{date.date}</Date>
-                            </TableCell>
-                          </TableRow>
-                        )}
-                        {date.games.map((game) => {
-                          return <GamesListItem key={game.gameId} game={game} />
-                        })}
-                      </Fragment>
-                    )
-                  })}
-                </TableBody>
-              </Table>
+              <div className="w-full table-fixed xl:w-4/5 2xl:w-2/3 ml-2 md:ml-4">
+                {group.comment && (
+                  <span>{group.comment}</span>
+                )}
+
+                {group.dates.map((date) => {
+                  const teamObject = date.games.reduce(
+                    (o, key) => ({
+                      ...o,
+                      [key.home.casualName]: key.homeTeamId,
+                      [key.away.casualName]: key.awayTeamId,
+                    }),
+                    {},
+                  )
+                  return (
+                    <Fragment key={date.date}>
+                      {date.date !== 'null' && (
+                        <span className="w-24 p-0 py-1 text-[8px] sm:text-sm lg:text-base">
+                          <Date>{date.date}</Date>
+                        </span>
+                      )}
+                      <DataTable
+                        teamObject={teamObject}
+                        columns={columns}
+                        data={date.games}
+                      />
+                    </Fragment>
+                  )
+                })}
+              </div>
             </div>
           )
         })}

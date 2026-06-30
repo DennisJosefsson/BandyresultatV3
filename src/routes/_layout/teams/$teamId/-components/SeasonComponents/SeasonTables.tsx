@@ -1,7 +1,9 @@
 import { getRouteApi } from '@tanstack/react-router'
 import TableList from './Tables/TableList'
 
-const route = getRouteApi('/_layout/teams/$teamId/$seasonId')
+const route = getRouteApi(
+  '/_layout/teams/$teamId/seasons/$seasonId/',
+)
 
 const SeasonTables = () => {
   const data = route.useLoaderData()
@@ -18,10 +20,16 @@ const SeasonTables = () => {
   return (
     <div>
       {data.tables.length > 0 ? (
-        <TableList tableArray={data.tables} casualName={data.team.casualName} />
+        <TableList
+          tableArray={data.tables}
+          casualName={data.team.casualName}
+        />
       ) : null}
       {data.staticTables.length > 0 ? (
-        <TableList casualName={data.team.casualName} tableArray={data.staticTables} />
+        <TableList
+          casualName={data.team.casualName}
+          tableArray={data.staticTables}
+        />
       ) : null}
     </div>
   )

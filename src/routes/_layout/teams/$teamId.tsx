@@ -1,3 +1,12 @@
+import {
+  Card,
+  CardContent,
+} from '@/components/base/ui/card'
+import {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+} from '@/components/base/ui/tabs'
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import Loading from '@/components/Loading/Loading'
 import { zd } from '@/lib/utils/zod'
@@ -82,6 +91,9 @@ export const Route = createFileRoute(
 
 function SingleTeam() {
   const data = Route.useLoaderData()
+  const teamId = Route.useParams({
+    select: (s) => s.teamId,
+  })
   if (data.status === 404) {
     return (
       <div className="mt-2 flex flex-row justify-center">
@@ -124,7 +136,88 @@ function SingleTeam() {
       >
         <div className="font-inter text-foreground mt-6 flex min-h-screen flex-col">
           <TeamHeader />
-          <Outlet />
+          <Tabs>
+            <TabsList>
+              <TabsTrigger
+                className="text-[8px] xs:text-[10px] md:text-sm"
+                value="tables"
+                nativeButton={false}
+                render={
+                  <Route.Link
+                    to="/teams/$teamId/tables"
+                    params={{ teamId }}
+                    search={(prev) => ({
+                      women: prev.women,
+                    })}
+                  >
+                    <span className="truncate">
+                      Tabeller
+                    </span>
+                  </Route.Link>
+                }
+              />
+
+              <TabsTrigger
+                className="text-[10px] md:text-sm"
+                value="fiveSeasons"
+                nativeButton={false}
+                render={
+                  <Route.Link
+                    to="/teams/$teamId/latest"
+                    params={{ teamId }}
+                    search={(prev) => ({
+                      women: prev.women,
+                    })}
+                  >
+                    <span className="truncate max-w-12 xs:max-w-fit">
+                      5 senaste säsongerna
+                    </span>
+                  </Route.Link>
+                }
+              />
+              <TabsTrigger
+                className="text-[10px] md:text-sm"
+                value="allSeasons"
+                nativeButton={false}
+                render={
+                  <Route.Link
+                    to="/teams/$teamId/seasons"
+                    params={{ teamId }}
+                    search={(prev) => ({
+                      women: prev.women,
+                    })}
+                  >
+                    <span className="truncate">
+                      Alla säsonger
+                    </span>
+                  </Route.Link>
+                }
+              />
+              <TabsTrigger
+                className="text-[10px] md:text-sm"
+                value="stats"
+                nativeButton={false}
+                render={
+                  <Route.Link
+                    to="/teams/$teamId/stats"
+                    params={{ teamId }}
+                    search={(prev) => ({
+                      women: prev.women,
+                    })}
+                  >
+                    <span className="truncate">
+                      Statistik
+                    </span>
+                  </Route.Link>
+                }
+              />
+            </TabsList>
+          </Tabs>
+          <Card>
+            <CardContent>
+              <Outlet />
+            </CardContent>
+          </Card>
         </div>
       </CatchBoundary>
     </div>

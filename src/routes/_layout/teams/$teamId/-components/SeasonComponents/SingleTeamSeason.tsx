@@ -1,11 +1,21 @@
-import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
-import { Link, getRouteApi } from '@tanstack/react-router'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/base/ui/tabs'
 import { Button } from '@/components/base/ui/button'
-import SeasonTables from './SeasonTables'
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/components/base/ui/tabs'
+import { getRouteApi } from '@tanstack/react-router'
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+} from 'lucide-react'
 import GamesList from './Games/GamesList'
+import SeasonTables from './SeasonTables'
 
-const route = getRouteApi('/_layout/teams/$teamId/$seasonId')
+const route = getRouteApi(
+  '/_layout/teams/$teamId/seasons/$seasonId/',
+)
 
 const SingleTeamSeason = () => {
   const data = route.useLoaderData()
@@ -14,51 +24,77 @@ const SingleTeamSeason = () => {
     <div>
       <div className="flex flex-col gap-2">
         <div className="flex flex-row items-center justify-between">
-          <Link
-            from="/teams/$teamId/$seasonId"
-            to="/teams/$teamId/$seasonId"
+          <route.Link
+            to="/teams/$teamId/seasons/$seasonId"
             search={(prev) => ({ ...prev })}
             params={(prev) => ({
               ...prev,
-              seasonId: data.previousSeason?.seasonId ?? data.lastSeason?.seasonId,
+              seasonId:
+                data.previousSeason?.seasonId ??
+                data.lastSeason?.seasonId,
             })}
           >
-            <Button variant="ghost" aria-label="Gå till föregående säsong">
+            <Button
+              variant="ghost"
+              aria-label="Gå till föregående säsong"
+            >
               <div className="inline-flex items-center gap-1">
                 <ChevronLeftIcon className="h-4 w-4" />
-                <span className="hidden sm:block">Föregående</span>
+                <span className="hidden sm:block">
+                  Föregående
+                </span>
               </div>
             </Button>
-          </Link>
-          <h4 className="text-xs font-semibold sm:text-sm md:text-base">{data.seasonYear}</h4>
-          <Link
-            from="/teams/$teamId/$seasonId"
-            to="/teams/$teamId/$seasonId"
+          </route.Link>
+          <h4 className="text-xs font-semibold sm:text-sm md:text-base">
+            {data.seasonYear}
+          </h4>
+          <route.Link
+            to="/teams/$teamId/seasons/$seasonId"
             search={(prev) => ({ ...prev })}
             params={(prev) => ({
               ...prev,
-              seasonId: data.nextSeason?.seasonId ?? data.firstSeason?.seasonId,
+              seasonId:
+                data.nextSeason?.seasonId ??
+                data.firstSeason?.seasonId,
             })}
           >
-            <Button variant="ghost" aria-label="Gå till nästa säsong">
+            <Button
+              variant="ghost"
+              aria-label="Gå till nästa säsong"
+            >
               <div className="inline-flex items-center gap-1">
-                <span className="hidden sm:block">Nästa</span>
+                <span className="hidden sm:block">
+                  Nästa
+                </span>
                 <ChevronRightIcon className="h-4 w-4" />
               </div>
             </Button>
-          </Link>
+          </route.Link>
         </div>
         <div>
-          <Tabs defaultValue="tables" className="flex flex-col">
+          <Tabs
+            defaultValue="tables"
+            className="flex flex-col"
+          >
             <TabsList>
-              <TabsTrigger className="text-[10px] md:text-sm" value="tables">
+              <TabsTrigger
+                className="text-[10px] md:text-sm"
+                value="tables"
+              >
                 Tabeller
               </TabsTrigger>
-              <TabsTrigger className="text-[10px] md:text-sm" value="games">
+              <TabsTrigger
+                className="text-[10px] md:text-sm"
+                value="games"
+              >
                 Matcher
               </TabsTrigger>
 
-              <TabsTrigger className="text-[10px] md:text-sm" value="upcoming">
+              <TabsTrigger
+                className="text-[10px] md:text-sm"
+                value="upcoming"
+              >
                 Ospelade matcher
               </TabsTrigger>
             </TabsList>
@@ -66,7 +102,11 @@ const SingleTeamSeason = () => {
               <SeasonTables />
             </TabsContent>
             <TabsContent value="games">
-              <GamesList hasGames={data.hasGames} gamesArray={data.games.playedGames} tab="games" />
+              <GamesList
+                hasGames={data.hasGames}
+                gamesArray={data.games.playedGames}
+                tab="games"
+              />
             </TabsContent>
 
             <TabsContent value="upcoming">
