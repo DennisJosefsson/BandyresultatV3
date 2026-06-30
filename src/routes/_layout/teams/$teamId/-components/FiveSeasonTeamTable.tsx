@@ -1,9 +1,3 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/base/ui/card'
 import type { FiveSeason } from '@/lib/types/team'
 import type { VisibilityState } from '@tanstack/react-table'
 import type { Dispatch, SetStateAction } from 'react'
@@ -31,17 +25,16 @@ const FiveSeasonTeamTable = ({
       <div>
         {tables.map((table) => {
           return (
-            <Card
+            <div
               key={table.group}
               className="mb-2"
-              size="sm"
             >
-              <CardHeader>
-                <CardTitle className="xs:group-data-[size=sm]/card:text-xs group-data-[size=sm]/card:text-[10px] md:group-data-[size=sm]/card:text-sm">
+              <div>
+                <span className="font-semibold xs:text-xs text-[10px] md:text-sm">
                   {`${table.serie.serieName} ${season}`}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
+                </span>
+              </div>
+              <div>
                 <div className="hidden sm:block max-w-3xl p-2">
                   <DataTable
                     columns={columns}
@@ -58,8 +51,8 @@ const FiveSeasonTeamTable = ({
                     }
                   />
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           )
         })}
       </div>

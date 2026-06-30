@@ -1,10 +1,4 @@
 import { Button } from '@/components/base/ui/button'
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/base/ui/card'
 import { getRouteApi } from '@tanstack/react-router'
 import type { VisibilityState } from '@tanstack/react-table'
 import { useState } from 'react'
@@ -61,17 +55,16 @@ const TeamTable = () => {
       <div>
         {data.tables.map((level) => {
           return (
-            <Card
+            <div
               key={level.level}
-              size="sm"
               className="mb-2"
             >
-              <CardHeader>
-                <CardTitle className="text-[10px] md:text-sm">
+              <div className="mb-2">
+                <span className="text-[10px] md:text-sm font-semibold">
                   {level.levelName}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
+                </span>
+              </div>
+              <div>
                 {level.tables.map((table) => {
                   return (
                     <div key={table.category}>
@@ -99,8 +92,8 @@ const TeamTable = () => {
                     </div>
                   )
                 })}
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           )
         })}
       </div>
