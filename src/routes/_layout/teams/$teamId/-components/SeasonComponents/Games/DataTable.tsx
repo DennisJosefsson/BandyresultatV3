@@ -5,9 +5,7 @@ import {
   TableCell,
   TableRow,
 } from '@/components/base/ui/table'
-import { useFavTeam } from '@/lib/contexts/favTeamsContext'
 import type { Game } from '@/lib/types/game'
-import { cn } from '@/lib/utils/utils'
 import {
   getRouteApi,
   useLocation,
@@ -53,8 +51,6 @@ const DataTable = <TData, TValue>({
     },
   })
 
-  const { favTeams } = useFavTeam()
-
   const origin = useLocation().pathname
 
   const getString = (x: unknown): string => {
@@ -82,27 +78,6 @@ const DataTable = <TData, TValue>({
                     data-state={
                       row.getIsSelected() && 'selected'
                     }
-                    className={cn(
-                      '',
-                      favTeams.includes(
-                        teamObject[
-                          getString(
-                            row.getValue('home_casualName'),
-                          )
-                        ],
-                      ) ||
-                        favTeams.includes(
-                          teamObject[
-                            getString(
-                              row.getValue(
-                                'away_casualName',
-                              ),
-                            )
-                          ],
-                        )
-                        ? 'font-bold'
-                        : undefined,
-                    )}
                   >
                     {row.getVisibleCells().map((cell) => {
                       return (
