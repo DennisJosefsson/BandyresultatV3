@@ -1,27 +1,28 @@
+import { serverEnv } from '@/lib/env/serverEnv.ts'
+import { config } from 'dotenv'
+import { drizzle } from 'drizzle-orm/node-postgres'
 import type { PoolConfig } from 'pg'
 import { Pool } from 'pg'
-import { drizzle } from 'drizzle-orm/node-postgres'
-import { config } from 'dotenv'
 import * as schema from './schema.ts'
 
 config()
 
 const dbConnectionString =
-  process.env.NODE_ENV === 'development'
-    ? process.env.DB_DEVELOPMENT_URL
-    : process.env.DB_PRODUCTION_URL
+  serverEnv.NODE_ENV === 'development'
+    ? serverEnv.DB_DEVELOPMENT_URL
+    : undefined
 
 const prodConfig = {
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
-  user: process.env.DB_USERNAME,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  ssl: { ca: process.env.PEM },
+  host: serverEnv.DB_HOST,
+  port: serverEnv.DB_PORT,
+  user: serverEnv.DB_USERNAME,
+  password: serverEnv.DB_PASSWORD,
+  database: serverEnv.DB_NAME,
+  ssl: { ca: serverEnv.PEM },
 } satisfies PoolConfig
 
 const dbConfig =
-  process.env.NODE_ENV === 'development'
+  serverEnv.NODE_ENV === 'development'
     ? {
         connectionString: dbConnectionString,
       }
