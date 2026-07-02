@@ -6,7 +6,7 @@ const route = getRouteApi('/_layout/teams/$teamId/stats/')
 const GameStats = () => {
   const data = route.useLoaderData()
   if (data.status === 404) return null
-
+  console.log({ executionTime: data.executionTime })
   return (
     <div className="grid grid-cols-1 gap-1 md:grid-cols-2 md:gap-2">
       {data.stats.maxScoredHomeGames.length > 0 ? (

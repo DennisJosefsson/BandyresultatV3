@@ -1,7 +1,3 @@
-import { Label, Pie, PieChart } from 'recharts'
-import type { Stats } from '@/lib/types/stats'
-import type { ChartConfig } from '@/components/base/ui/chart'
-import { ChartContainer, ChartLegend, ChartLegendContent } from '@/components/base/ui/chart'
 import {
   Card,
   CardContent,
@@ -9,8 +5,19 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/base/ui/card'
+import type { ChartConfig } from '@/components/base/ui/chart'
+import {
+  ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
+} from '@/components/base/ui/chart'
+import type { Stats } from '@/lib/types/stats'
+import { Pie, PieChart } from 'recharts'
 type GoalDataProps = {
-  goalData: Pick<Stats, 'awayGoalData' | 'homeGoalData' | 'goalData' | 'serie'>
+  goalData: Pick<
+    Stats,
+    'awayGoalData' | 'homeGoalData' | 'goalData' | 'serie'
+  >
 }
 
 const GoalData = ({ goalData }: GoalDataProps) => {
@@ -49,46 +56,30 @@ const GoalData = ({ goalData }: GoalDataProps) => {
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Målstatistik</CardTitle>
-        <CardDescription>{goalData.serie?.serieName ?? 'Slutspel'}</CardDescription>
+        <CardTitle className="text-[10px] xs:text-xs sm:text-sm">{`Målstatistik - ${goalData.goalData.goalsScoredTotal.toLocaleString(
+          'sv-SE',
+        )} mål (${goalData.goalData.goalsScoredAvg.toFixed(2)} per match)`}</CardTitle>
+        <CardDescription>
+          {goalData.serie?.serieName ?? 'Slutspel'}
+        </CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
-        <ChartContainer config={resultChartConfig} className="mx-auto aspect-square max-h-80">
+        <ChartContainer
+          config={resultChartConfig}
+          className="mx-auto aspect-square max-h-80 min-h-40"
+        >
           <PieChart>
-            <Pie data={chartData} dataKey="value" nameKey="goals" innerRadius={60} strokeWidth={5}>
-              <Label
-                content={({ viewBox }) => {
-                  if (viewBox && 'cx' in viewBox && 'cy' in viewBox) {
-                    return (
-                      <text
-                        x={viewBox.cx}
-                        y={viewBox.cy}
-                        textAnchor="middle"
-                        dominantBaseline="middle"
-                      >
-                        <tspan
-                          x={viewBox.cx}
-                          y={viewBox.cy}
-                          className="fill-foreground text-3xl font-bold"
-                        >
-                          {goalData.goalData.goalsScoredTotal.toLocaleString('sv-SE')}
-                        </tspan>
-                        <tspan
-                          x={viewBox.cx}
-                          y={(viewBox.cy || 0) + 24}
-                          className="fill-muted-foreground"
-                        >
-                          mål
-                        </tspan>
-                      </text>
-                    )
-                  }
-                }}
-              />
-            </Pie>
+            <Pie
+              data={chartData}
+              dataKey="value"
+              nameKey="goals"
+              strokeWidth={5}
+            />
 
             <ChartLegend
-              content={<ChartLegendContent className="flex-col items-center-safe md:text-sm" />}
+              content={
+                <ChartLegendContent className="flex-col justify-items-center text-[10px] xs:text-xs sm:text-sm gap-0.5" />
+              }
             />
           </PieChart>
         </ChartContainer>

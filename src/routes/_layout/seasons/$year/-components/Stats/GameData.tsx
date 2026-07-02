@@ -1,7 +1,3 @@
-import { Label, Pie, PieChart } from 'recharts'
-import type { Stats } from '@/lib/types/stats'
-import type { ChartConfig } from '@/components/base/ui/chart'
-import { ChartContainer, ChartLegend, ChartLegendContent } from '@/components/base/ui/chart'
 import {
   Card,
   CardContent,
@@ -9,8 +5,23 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/base/ui/card'
+import type { ChartConfig } from '@/components/base/ui/chart'
+import {
+  ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
+} from '@/components/base/ui/chart'
+import type { Stats } from '@/lib/types/stats'
+import { Pie, PieChart } from 'recharts'
 type GameDataProps = {
-  gameData: Pick<Stats, 'awayGameData' | 'homeGameData' | 'gameCount' | 'drawData' | 'serie'>
+  gameData: Pick<
+    Stats,
+    | 'awayGameData'
+    | 'homeGameData'
+    | 'gameCount'
+    | 'drawData'
+    | 'serie'
+  >
 }
 
 const GameData = ({ gameData }: GameDataProps) => {
@@ -25,7 +36,7 @@ const GameData = ({ gameData }: GameDataProps) => {
       color: 'var(--chart-1)',
     },
     away: {
-      label: `Bortseger ${gameData.awayGameData.winTotal.toLocaleString(
+      label: `Bortaseger ${gameData.awayGameData.winTotal.toLocaleString(
         'sv-SE',
       )} (${gameData.awayGameData.winAvg} %)`,
       color: 'var(--chart-2)',
@@ -59,46 +70,30 @@ const GameData = ({ gameData }: GameDataProps) => {
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Matchstatistik</CardTitle>
-        <CardDescription>{gameData.serie?.serieName ?? 'Slutspel'}</CardDescription>
+        <CardTitle className="text-[10px] xs:text-xs sm:text-sm">{`Matchstatistik - ${gameData.gameCount.toLocaleString(
+          'sv-SE',
+        )} matcher`}</CardTitle>
+        <CardDescription>
+          {gameData.serie?.serieName ?? 'Slutspel'}
+        </CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
-        <ChartContainer config={resultChartConfig} className="mx-auto aspect-square max-h-80">
+        <ChartContainer
+          config={resultChartConfig}
+          className="mx-auto aspect-square max-h-80 min-h-40"
+        >
           <PieChart>
-            <Pie data={chartData} dataKey="value" nameKey="result" innerRadius={60} strokeWidth={5}>
-              <Label
-                content={({ viewBox }) => {
-                  if (viewBox && 'cx' in viewBox && 'cy' in viewBox) {
-                    return (
-                      <text
-                        x={viewBox.cx}
-                        y={viewBox.cy}
-                        textAnchor="middle"
-                        dominantBaseline="middle"
-                      >
-                        <tspan
-                          x={viewBox.cx}
-                          y={viewBox.cy}
-                          className="fill-foreground text-3xl font-bold"
-                        >
-                          {gameData.gameCount.toLocaleString('sv-SE')}
-                        </tspan>
-                        <tspan
-                          x={viewBox.cx}
-                          y={(viewBox.cy || 0) + 24}
-                          className="fill-muted-foreground"
-                        >
-                          matcher
-                        </tspan>
-                      </text>
-                    )
-                  }
-                }}
-              />
-            </Pie>
+            <Pie
+              data={chartData}
+              dataKey="value"
+              nameKey="result"
+              strokeWidth={5}
+            />
 
             <ChartLegend
-              content={<ChartLegendContent className="flex-col items-center-safe md:text-sm" />}
+              content={
+                <ChartLegendContent className="flex-col items-center-safe text-[10px] xs:text-xs sm:text-sm gap-0.5" />
+              }
             />
           </PieChart>
         </ChartContainer>

@@ -1,15 +1,20 @@
-import type { MaxMinGoals } from '@/lib/types/stats'
 import Date from '@/components/Common/Date'
+import type { MaxMinGoals } from '@/lib/types/stats'
 
 type MaxMinGoalsStatsCardProps = {
   maxMinGoals: Array<MaxMinGoals>
   title: string
 }
 
-const MaxMinGoalsStatsCard = ({ maxMinGoals, title }: MaxMinGoalsStatsCardProps) => {
+const MaxMinGoalsStatsCard = ({
+  maxMinGoals,
+  title,
+}: MaxMinGoalsStatsCardProps) => {
   return (
     <div>
-      <h6 className="mb-2 text-xs font-semibold sm:text-sm">{title}</h6>
+      <h6 className="mb-2 text-xs font-semibold sm:text-sm">
+        {title}
+      </h6>
 
       <div>
         {maxMinGoals.map((game, index) => {
@@ -19,13 +24,15 @@ const MaxMinGoalsStatsCard = ({ maxMinGoals, title }: MaxMinGoalsStatsCardProps)
               className="bg-muted mb-2 flex flex-col gap-1 rounded-md p-2"
             >
               <div className="flex flex-row justify-between">
-                <div className="text-xs sm:text-sm">
+                <div className="text-[10px] xs:text-xs sm:text-sm">
                   {game.home.name}-{game.away.name}
                 </div>
-                <div className="text-xs sm:text-sm">{game.result}</div>
+                <div className="text-[10px] xs:text-xs sm:text-sm">
+                  {game.result}
+                </div>
               </div>
               <div className="flex flex-row">
-                <div className="text-xs sm:text-sm">
+                <div className="text-[10px] xs:text-xs sm:text-sm">
                   <Date>{game.date}</Date>
                 </div>
               </div>
