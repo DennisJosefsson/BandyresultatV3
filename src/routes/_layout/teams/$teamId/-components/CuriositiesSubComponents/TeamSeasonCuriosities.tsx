@@ -4,7 +4,7 @@ const route = getRouteApi('/_layout/teams/$teamId/stats/')
 const TeamSeasonCuriosities = () => {
   const data = route.useLoaderData()
   if (data.status === 404) return null
-
+  console.log({ executionTime: data.executionTime })
   return (
     <div>
       <div className="xs:text-xs text-[10px] md:text-sm">
