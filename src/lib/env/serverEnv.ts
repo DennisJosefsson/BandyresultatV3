@@ -6,6 +6,7 @@ export const serverEnv = createEnv({
     NODE_ENV: zd
       .enum(['production', 'development'])
       .default('development'),
+    CLERK_SECRET_KEY: zd.string().min(1),
     DB_DEVELOPMENT_URL: zd.string().min(1).optional(),
     DB_HOST: zd.string().min(1),
     DB_PORT: zd.coerce.number().positive().int(),
