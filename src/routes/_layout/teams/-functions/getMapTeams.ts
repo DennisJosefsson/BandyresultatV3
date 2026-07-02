@@ -1,10 +1,9 @@
-import { z } from 'zod'
-import { asc, sql } from 'drizzle-orm'
-import { zodValidator } from '@tanstack/zod-adapter'
-import { createServerFn } from '@tanstack/react-start'
-import type { MapTeam } from '@/lib/types/team'
-import { catchError } from '@/lib/middlewares/errors/catchError'
 import { db } from '@/db'
+import { catchError } from '@/lib/middlewares/errors/catchError'
+import type { MapTeam } from '@/lib/types/team'
+import { createServerFn } from '@tanstack/react-start'
+import { asc, sql } from 'drizzle-orm'
+import { z } from 'zod'
 
 const women = z.boolean()
 
@@ -13,16 +12,19 @@ type SortedTeamGroups = {
 }
 
 export const getMapTeams = createServerFn({ method: 'GET' })
-  .validator(zodValidator(women))
+  .validator(women)
   .handler(async ({ data }) => {
     try {
       const mapTeams = await db.query.teams.findMany({
-        where: (teams, { eq, ne, and }) => and(eq(teams.women, data), ne(teams.teamId, 176)),
+        where: (teams, { eq, ne, and }) =>
+          and(eq(teams.women, data), ne(teams.teamId, 176)),
         with: {
           county: true,
           municipality: true,
         },
-        orderBy: [asc(sql`casual_name collate "se-SE-x-icu"`)],
+        orderBy: [
+          asc(sql`casual_name collate "se-SE-x-icu"`),
+        ],
       })
 
       const sortedTeams = sortMapTeams(mapTeams)

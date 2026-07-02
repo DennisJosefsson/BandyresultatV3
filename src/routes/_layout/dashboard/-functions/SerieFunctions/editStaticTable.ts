@@ -1,18 +1,17 @@
-import { eq } from 'drizzle-orm'
-import { zodValidator } from '@tanstack/zod-adapter'
-import { createServerFn } from '@tanstack/react-start'
-import { editStaticTableArray } from '@/lib/types/table'
-import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import { catchError } from '@/lib/middlewares/errors/catchError'
-import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
-import { tables } from '@/db/schema'
 import { db } from '@/db'
+import { tables } from '@/db/schema'
+import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
+import { catchError } from '@/lib/middlewares/errors/catchError'
+import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
+import { editStaticTableArray } from '@/lib/types/table'
+import { createServerFn } from '@tanstack/react-start'
+import { eq } from 'drizzle-orm'
 
 export const editStaticTable = createServerFn({
   method: 'POST',
 })
   .middleware([authMiddleware, errorMiddleware])
-  .validator(zodValidator(editStaticTableArray))
+  .validator(editStaticTableArray)
   .handler(async ({ data: { tableArray } }) => {
     try {
       if (tableArray.length === 0) {
@@ -21,7 +20,10 @@ export const editStaticTable = createServerFn({
 
       const queries = tableArray.map((table) => {
         const { tableId, teamName, ...rest } = table
-        return db.update(tables).set(rest).where(eq(tables.tableId, tableId))
+        return db
+          .update(tables)
+          .set(rest)
+          .where(eq(tables.tableId, tableId))
       })
 
       await Promise.all(queries)

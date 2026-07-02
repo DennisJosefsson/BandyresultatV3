@@ -1,16 +1,15 @@
-import { eq } from 'drizzle-orm'
-import { zodValidator } from '@tanstack/zod-adapter'
-import { createServerFn } from '@tanstack/react-start'
-import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import { catchError } from '@/lib/middlewares/errors/catchError'
-import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
-import { games, teamgames } from '@/db/schema'
 import { db } from '@/db'
+import { games, teamgames } from '@/db/schema'
+import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
+import { catchError } from '@/lib/middlewares/errors/catchError'
+import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
+import { createServerFn } from '@tanstack/react-start'
+import { eq } from 'drizzle-orm'
 import { parseUpdateDate } from '../dataParsers/parseUpdateDate'
 
 export const updateDate = createServerFn({ method: 'POST' })
   .middleware([authMiddleware, errorMiddleware])
-  .validator(zodValidator(parseUpdateDate))
+  .validator(parseUpdateDate)
   .handler(async ({ data }) => {
     try {
       const updatedGame = await db
@@ -30,7 +29,9 @@ export const updateDate = createServerFn({ method: 'POST' })
         .set({
           date: data.date,
         })
-        .where(eq(teamgames.teamGameId, data.homeTeamGameId))
+        .where(
+          eq(teamgames.teamGameId, data.homeTeamGameId),
+        )
         .returning()
 
       const updatedAwayTeamGame = await db
@@ -38,10 +39,15 @@ export const updateDate = createServerFn({ method: 'POST' })
         .set({
           date: data.date,
         })
-        .where(eq(teamgames.teamGameId, data.awayTeamGameId))
+        .where(
+          eq(teamgames.teamGameId, data.awayTeamGameId),
+        )
         .returning()
 
-      if (updatedHomeTeamGame.length === 0 || updatedAwayTeamGame.length === 0) {
+      if (
+        updatedHomeTeamGame.length === 0 ||
+        updatedAwayTeamGame.length === 0
+      ) {
         return { status: 404, message: 'Teamgames saknas.' }
       }
 

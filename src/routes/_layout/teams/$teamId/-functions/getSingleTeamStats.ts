@@ -8,7 +8,6 @@ import type {
 } from '@/lib/types/team'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
-import { zodValidator } from '@tanstack/zod-adapter'
 import { getStats } from './getStats'
 import { getStreaks } from './getStreaks'
 import {
@@ -65,6 +64,7 @@ type TablesResponse =
         minTotalHomeGames: Array<TeamStatItem>
         minTotalAwayGames: Array<TeamStatItem>
       }
+      executionTime: number
     }
   | undefined
 
@@ -72,19 +72,18 @@ export const getSingleTeamStats = createServerFn({
   method: 'GET',
 })
   .validator(
-    zodValidator(
-      zd
-        .number('Lag-id måste vara en siffra.')
-        .int('Lag-id måste vara ett heltal.')
-        .positive(
-          'Lag-id får ej vara ett minustal eller noll.',
-        ),
-    ),
+    zd
+      .number('Lag-id måste vara en siffra.')
+      .int('Lag-id måste vara ett heltal.')
+      .positive(
+        'Lag-id får ej vara ett minustal eller noll.',
+      ),
   )
   .middleware([errorMiddleware])
   .handler(
     async ({ data: teamId }): Promise<TablesResponse> => {
       try {
+        const start = performance.now()
         const team = await getTeam(teamId)
         if (!team) {
           return {
@@ -100,13 +99,14 @@ export const getSingleTeamStats = createServerFn({
         })
 
         const stats = await getStats({ teamId })
-
+        const end = performance.now()
         return {
           status: 200,
           statCounts,
           stats,
           streaks,
           team,
+          executionTime: end - start,
         }
       } catch (error) {
         catchError(error)

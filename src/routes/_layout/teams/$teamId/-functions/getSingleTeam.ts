@@ -4,7 +4,6 @@ import type { Meta } from '@/lib/types/meta'
 import type { SingleTeam } from '@/lib/types/team'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
-import { zodValidator } from '@tanstack/zod-adapter'
 import { getTeam } from './singleTeamQueries'
 
 type TeamReturn =
@@ -26,14 +25,12 @@ export const getSingleTeam = createServerFn({
   method: 'GET',
 })
   .validator(
-    zodValidator(
-      zd
-        .number('Lag-id måste vara en siffra.')
-        .int('Lag-id måste vara ett heltal.')
-        .positive(
-          'Lag-id får ej vara ett minustal eller noll.',
-        ),
-    ),
+    zd
+      .number('Lag-id måste vara en siffra.')
+      .int('Lag-id måste vara ett heltal.')
+      .positive(
+        'Lag-id får ej vara ett minustal eller noll.',
+      ),
   )
   .middleware([errorMiddleware])
   .handler(

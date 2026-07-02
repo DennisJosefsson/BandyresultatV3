@@ -14,7 +14,6 @@ import {
   createRootRouteWithContext,
   retainSearchParams,
 } from '@tanstack/react-router'
-import { zodValidator } from '@tanstack/zod-adapter'
 import { z } from 'zod'
 import ClerkProvider from '../integrations/clerk/provider'
 import appCss from '../styles.css?url'
@@ -96,7 +95,7 @@ export const Route =
         },
       ],
     }),
-    validateSearch: zodValidator(searchWomen),
+    validateSearch: searchWomen,
     search: {
       middlewares: [retainSearchParams(['women'])],
     },

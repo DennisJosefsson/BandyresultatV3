@@ -1,18 +1,17 @@
-import { and, eq } from 'drizzle-orm'
-import { zodValidator } from '@tanstack/zod-adapter'
-import { createServerFn } from '@tanstack/react-start'
-import { metadataObject } from '@/lib/types/metadata'
-import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import { catchError } from '@/lib/middlewares/errors/catchError'
-import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
-import { metadata, seasons, teams } from '@/db/schema'
 import { db } from '@/db'
+import { metadata, seasons, teams } from '@/db/schema'
+import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
+import { catchError } from '@/lib/middlewares/errors/catchError'
+import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
+import { metadataObject } from '@/lib/types/metadata'
+import { createServerFn } from '@tanstack/react-start'
+import { and, eq } from 'drizzle-orm'
 
 export const updateMetadata = createServerFn({
   method: 'POST',
 })
   .middleware([authMiddleware, errorMiddleware])
-  .validator(zodValidator(metadataObject))
+  .validator(metadataObject)
   .handler(async ({ data: { metadataId, ...rest } }) => {
     try {
       let winnerId = null
@@ -28,7 +27,9 @@ export const updateMetadata = createServerFn({
                 db
                   .select({ women: seasons.women })
                   .from(seasons)
-                  .where(eq(seasons.seasonId, rest.seasonId)),
+                  .where(
+                    eq(seasons.seasonId, rest.seasonId),
+                  ),
               ),
             ),
           )
@@ -37,7 +38,10 @@ export const updateMetadata = createServerFn({
 
       const newMetadata = { winnerId, ...rest }
 
-      await db.update(metadata).set(newMetadata).where(eq(metadata.metadataId, metadataId))
+      await db
+        .update(metadata)
+        .set(newMetadata)
+        .where(eq(metadata.metadataId, metadataId))
 
       return {
         status: 200,

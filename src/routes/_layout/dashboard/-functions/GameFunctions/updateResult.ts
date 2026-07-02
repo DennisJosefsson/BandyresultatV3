@@ -1,18 +1,17 @@
-import { eq } from 'drizzle-orm'
-import { zodValidator } from '@tanstack/zod-adapter'
-import { createServerFn } from '@tanstack/react-start'
-import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import { catchError } from '@/lib/middlewares/errors/catchError'
-import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
-import { games, teamgames } from '@/db/schema'
 import { db } from '@/db'
+import { games, teamgames } from '@/db/schema'
+import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
+import { catchError } from '@/lib/middlewares/errors/catchError'
+import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
+import { createServerFn } from '@tanstack/react-start'
+import { eq } from 'drizzle-orm'
 import { parseGameResult } from '../dataParsers/parseGameResults'
 
 export const updateResult = createServerFn({
   method: 'POST',
 })
   .middleware([authMiddleware, errorMiddleware])
-  .validator(zodValidator(parseGameResult))
+  .validator(parseGameResult)
   .handler(async ({ data }) => {
     try {
       const currChamp = await db.query.teamgames.findFirst({
@@ -21,7 +20,8 @@ export const updateResult = createServerFn({
             equal(teamgamesSchema.currInoffChamp, true),
             equal(teamgamesSchema.women, data.women),
           ),
-        orderBy: (teamgamesSchema, { desc }) => desc(teamgamesSchema.date),
+        orderBy: (teamgamesSchema, { desc }) =>
+          desc(teamgamesSchema.date),
       })
 
       let currInoffChamp: number | null
@@ -58,9 +58,14 @@ export const updateResult = createServerFn({
         .set({
           ...data.homeTeamTeamGame,
           currInoffChamp:
-            data.homeTeamTeamGame.win && currInoffChamp === data.awayTeamId ? true : false,
+            data.homeTeamTeamGame.win &&
+            currInoffChamp === data.awayTeamId
+              ? true
+              : false,
         })
-        .where(eq(teamgames.teamGameId, data.homeTeamGameId))
+        .where(
+          eq(teamgames.teamGameId, data.homeTeamGameId),
+        )
         .returning()
 
       const updatedAwayTeamGame = await db
@@ -68,12 +73,20 @@ export const updateResult = createServerFn({
         .set({
           ...data.awayTeamTeamGame,
           currInoffChamp:
-            data.awayTeamTeamGame.win && currInoffChamp === data.homeTeamId ? true : false,
+            data.awayTeamTeamGame.win &&
+            currInoffChamp === data.homeTeamId
+              ? true
+              : false,
         })
-        .where(eq(teamgames.teamGameId, data.awayTeamGameId))
+        .where(
+          eq(teamgames.teamGameId, data.awayTeamGameId),
+        )
         .returning()
 
-      if (updatedHomeTeamGame.length === 0 || updatedAwayTeamGame.length === 0) {
+      if (
+        updatedHomeTeamGame.length === 0 ||
+        updatedAwayTeamGame.length === 0
+      ) {
         return { status: 404, message: 'Teamgames saknas.' }
       }
 

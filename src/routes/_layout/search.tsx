@@ -1,12 +1,15 @@
-import { zodValidator } from '@tanstack/zod-adapter'
-import { CatchBoundary, Outlet, createFileRoute } from '@tanstack/react-router'
-import { clientSearchParams } from '@/lib/types/search'
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
+import { clientSearchParams } from '@/lib/types/search'
+import {
+  CatchBoundary,
+  Outlet,
+  createFileRoute,
+} from '@tanstack/react-router'
 import { getSearchTeams } from './search/-functions/getSearchTeams'
 
 export const Route = createFileRoute('/_layout/search')({
   staticData: { breadcrumb: 'Sök' },
-  validateSearch: zodValidator(clientSearchParams),
+  validateSearch: clientSearchParams,
   loader: async () => {
     const teams = await getSearchTeams()
     if (!teams) throw new Error('Missing teams data')
@@ -25,7 +28,11 @@ function RouteComponent() {
           console.error(error)
         }}
         errorComponent={({ error, reset }) => (
-          <SimpleErrorComponent id="Sök" error={error} reset={reset} />
+          <SimpleErrorComponent
+            id="Sök"
+            error={error}
+            reset={reset}
+          />
         )}
       >
         <Outlet />

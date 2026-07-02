@@ -1,18 +1,17 @@
-import { zodValidator } from '@tanstack/zod-adapter'
-import { createServerFn } from '@tanstack/react-start'
-import { generatedGameObjectArray } from '@/lib/types/game'
-import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import { catchError } from '@/lib/middlewares/errors/catchError'
-import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
-import { games, teamgames } from '@/db/schema'
 import { db } from '@/db'
+import { games, teamgames } from '@/db/schema'
+import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
+import { catchError } from '@/lib/middlewares/errors/catchError'
+import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
+import { generatedGameObjectArray } from '@/lib/types/game'
+import { createServerFn } from '@tanstack/react-start'
 
 type TeamGame = typeof teamgames.$inferInsert
 
 export const insertFromGeneratedSchedule = createServerFn({
   method: 'POST',
 })
-  .validator(zodValidator(generatedGameObjectArray))
+  .validator(generatedGameObjectArray)
   .middleware([authMiddleware, errorMiddleware])
   .handler(async ({ data: { gameArray } }) => {
     try {

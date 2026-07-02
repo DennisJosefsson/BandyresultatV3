@@ -1,17 +1,18 @@
-import { eq } from 'drizzle-orm'
-import { zodValidator } from '@tanstack/zod-adapter'
-import { createServerFn } from '@tanstack/react-start'
-import { zd } from '@/lib/utils/zod'
-import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import { catchError } from '@/lib/middlewares/errors/catchError'
-import { municipality } from '@/db/schema'
 import { db } from '@/db'
+import { municipality } from '@/db/schema'
+import { catchError } from '@/lib/middlewares/errors/catchError'
+import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
+import { zd } from '@/lib/utils/zod'
+import { createServerFn } from '@tanstack/react-start'
+import { eq } from 'drizzle-orm'
 
 export const getMunicipalitiesForTeamForm = createServerFn({
   method: 'GET',
 })
   .middleware([errorMiddleware])
-  .validator(zodValidator(zd.object({ countyId: zd.number().int().positive() })))
+  .validator(
+    zd.object({ countyId: zd.number().int().positive() }),
+  )
   .handler(async ({ data: { countyId } }) => {
     try {
       const muniList = await db

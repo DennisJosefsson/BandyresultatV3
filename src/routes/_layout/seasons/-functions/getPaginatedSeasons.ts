@@ -2,7 +2,6 @@ import { db } from '@/db'
 import { seasons } from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { createServerFn } from '@tanstack/react-start'
-import { zodValidator } from '@tanstack/zod-adapter'
 import { eq } from 'drizzle-orm'
 import { z } from 'zod'
 import {
@@ -15,7 +14,7 @@ export const parsePage = z.number().optional().catch(1)
 export const getPaginatedSeasons = createServerFn({
   method: 'GET',
 })
-  .validator(zodValidator(parsePage))
+  .validator(parsePage)
   .handler(async ({ data }) => {
     try {
       const count = await db.$count(

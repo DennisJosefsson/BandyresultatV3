@@ -3,7 +3,6 @@ import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import type { FiveSeason } from '@/lib/types/team'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
-import { zodValidator } from '@tanstack/zod-adapter'
 import { getLastFiveSeasons } from './getLastFiveSeasons'
 
 type TablesResponse =
@@ -21,14 +20,12 @@ export const getSingleTeamFiveTables = createServerFn({
   method: 'GET',
 })
   .validator(
-    zodValidator(
-      zd
-        .number('Lag-id måste vara en siffra.')
-        .int('Lag-id måste vara ett heltal.')
-        .positive(
-          'Lag-id får ej vara ett minustal eller noll.',
-        ),
-    ),
+    zd
+      .number('Lag-id måste vara en siffra.')
+      .int('Lag-id måste vara ett heltal.')
+      .positive(
+        'Lag-id får ej vara ett minustal eller noll.',
+      ),
   )
   .middleware([errorMiddleware])
   .handler(

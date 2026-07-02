@@ -1,13 +1,12 @@
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { createServerFn } from '@tanstack/react-start'
-import { zodValidator } from '@tanstack/zod-adapter'
 import { z } from 'zod'
 import { preparedTeamsList } from './preparedQueries/preparedTeamsList'
 
 const women = z.boolean()
 
 export const getTeams = createServerFn({ method: 'GET' })
-  .validator(zodValidator(women))
+  .validator(women)
   .handler(async ({ data }) => {
     try {
       const teamArray = await preparedTeamsList.execute({

@@ -1,17 +1,16 @@
-import { zodValidator } from '@tanstack/zod-adapter'
-import { createServerFn } from '@tanstack/react-start'
-import { newSeriesObject } from '@/lib/types/serie'
-import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import { catchError } from '@/lib/middlewares/errors/catchError'
-import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
-import { series } from '@/db/schema'
 import { db } from '@/db'
+import { series } from '@/db/schema'
+import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
+import { catchError } from '@/lib/middlewares/errors/catchError'
+import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
+import { newSeriesObject } from '@/lib/types/serie'
+import { createServerFn } from '@tanstack/react-start'
 
 export const newSerieInput = createServerFn({
   method: 'POST',
 })
   .middleware([authMiddleware, errorMiddleware])
-  .validator(zodValidator(newSeriesObject))
+  .validator(newSeriesObject)
   .handler(async ({ data }) => {
     try {
       const newSerie = await db

@@ -1,18 +1,19 @@
-import { eq } from 'drizzle-orm'
-import { zodValidator } from '@tanstack/zod-adapter'
-import { createServerFn } from '@tanstack/react-start'
-import { zd } from '@/lib/utils/zod'
-import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import { catchError } from '@/lib/middlewares/errors/catchError'
-import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
-import { series } from '@/db/schema'
 import { db } from '@/db'
+import { series } from '@/db/schema'
+import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
+import { catchError } from '@/lib/middlewares/errors/catchError'
+import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
+import { zd } from '@/lib/utils/zod'
+import { createServerFn } from '@tanstack/react-start'
+import { eq } from 'drizzle-orm'
 
 export const removeSerie = createServerFn({
   method: 'POST',
 })
   .middleware([authMiddleware, errorMiddleware])
-  .validator(zodValidator(zd.object({ serieId: zd.number().int().positive() })))
+  .validator(
+    zd.object({ serieId: zd.number().int().positive() }),
+  )
   .handler(async ({ data }) => {
     try {
       const editSerie = await db
