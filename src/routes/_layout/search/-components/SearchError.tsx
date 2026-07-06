@@ -1,15 +1,13 @@
-import { useNavigate, useSearch } from '@tanstack/react-router'
-import type { SearchParamsFields, SearchResult } from '@/lib/types/search'
+import { Button } from '@/components/base/ui/button'
+import type {
+  SearchParamsFields,
+  SearchResult,
+} from '@/lib/types/search'
 import { cn } from '@/lib/utils/utils'
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/base/ui/dialog'
-import { Button } from '@/components/base/ui/button'
+  useNavigate,
+  useSearch,
+} from '@tanstack/react-router'
 type SearchErrorProps = {
   searchResult:
     | {
@@ -25,7 +23,10 @@ type SearchErrorProps = {
   reset: () => void
 }
 
-const SearchError = ({ searchResult, reset }: SearchErrorProps) => {
+const SearchError = ({
+  searchResult,
+  reset,
+}: SearchErrorProps) => {
   const navigate = useNavigate({ from: '/search' })
   const searchFields = useSearch({
     from: '/_layout/search',
@@ -54,27 +55,37 @@ const SearchError = ({ searchResult, reset }: SearchErrorProps) => {
   if (searchResult.status === 200) return null
 
   return (
-    <Dialog defaultOpen={true}>
-      <DialogContent
-        className={cn('bg-background', searchResult.status === 400 ? 'bg-red-500' : undefined)}
-      >
-        <DialogHeader>
-          <DialogTitle>
-            {searchResult.status === 400 ? 'Oops, där blev det fel.' : 'Inga resultat'}
-          </DialogTitle>
-        </DialogHeader>
-        {searchResult.message}
-        <DialogFooter className="sm:justify-start">
-          <DialogClose
-            render={
-              <Button className="bg-white text-black hover:bg-slate-300" onClick={resetFn}>
-                Stäng
-              </Button>
-            }
-          />
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+    <div
+      className={cn(
+        'flex flex-col p-2 m-4',
+        searchResult.status === 400
+          ? 'bg-red-500'
+          : 'undefined',
+      )}
+    >
+      <div>
+        <span className="text-[8px] xs:text-[10px] sm:text-sm">
+          {searchResult.status === 400
+            ? 'Oops, där blev det fel.'
+            : 'Inga resultat'}
+        </span>
+      </div>
+      <div className="flex flex-row gap-2 items-center">
+        <span className="text-[8px] xs:text-[10px] sm:text-sm">
+          {searchResult.message}
+        </span>
+        <div>
+          {searchResult.status === 400 ? (
+            <Button
+              size="responsive"
+              onClick={resetFn}
+            >
+              Nollställ sökfel
+            </Button>
+          ) : null}
+        </div>
+      </div>
+    </div>
   )
 }
 

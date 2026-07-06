@@ -1,6 +1,9 @@
-import { useNavigate, useSearch } from '@tanstack/react-router'
-import type { SearchParamsFields } from '@/lib/types/search'
 import RadioBadges from '@/components/Common/RadioBadge'
+import type { SearchParamsFields } from '@/lib/types/search'
+import {
+  useNavigate,
+  useSearch,
+} from '@tanstack/react-router'
 
 type RadioComponentProps = {
   array: Array<{
@@ -8,12 +11,20 @@ type RadioComponentProps = {
     label: string
     description: string
   }>
-  field: Extract<SearchParamsFields, 'homeGame' | 'selectedGender' | 'gameResult'>
+  field: Extract<
+    SearchParamsFields,
+    'homeGame' | 'selectedGender' | 'gameResult'
+  >
   label: string
   defaultValue: string
 }
 
-const RadioComponent = ({ array, field, label, defaultValue }: RadioComponentProps) => {
+const RadioComponent = ({
+  array,
+  field,
+  label,
+  defaultValue,
+}: RadioComponentProps) => {
   const searchField = useSearch({
     from: '/_layout/search',
     select: (search) => search[field],
@@ -23,7 +34,7 @@ const RadioComponent = ({ array, field, label, defaultValue }: RadioComponentPro
 
   const handleOnChange = (value: string) => {
     navigate({
-      resetScroll: false,
+      resetScroll: true,
       search: (prev) => ({ ...prev, [field]: value }),
     })
   }

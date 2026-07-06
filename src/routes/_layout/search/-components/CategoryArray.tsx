@@ -1,7 +1,10 @@
-import { useNavigate, useSearch } from '@tanstack/react-router'
-import type { Categories } from '@/lib/types/search'
 import type { CheckedState } from '@/components/base/ui/checkbox'
 import CheckboxBadge from '@/components/Common/CheckboxBadge'
+import type { Categories } from '@/lib/types/search'
+import {
+  useNavigate,
+  useSearch,
+} from '@tanstack/react-router'
 import { categoryArrayValues } from './arrays/arrays'
 
 const initCategories = [
@@ -22,14 +25,21 @@ const CategoryArray = () => {
 
   const navigate = useNavigate({ from: '/search' })
 
-  const onCheckedChange = (checked: CheckedState, category: Categories) => {
+  const onCheckedChange = (
+    checked: CheckedState,
+    category: Categories,
+  ) => {
     if (checked) {
       navigate({
+        resetScroll: false,
         search: (prev) => {
           if (prev.categoryArray) {
             return {
               ...prev,
-              categoryArray: [...prev.categoryArray, category],
+              categoryArray: [
+                ...prev.categoryArray,
+                category,
+              ],
             }
           } else {
             return {
@@ -41,16 +51,26 @@ const CategoryArray = () => {
       })
     } else {
       navigate({
+        resetScroll: false,
         search: (prev) => {
-          if (prev.categoryArray && prev.categoryArray.includes(category)) {
+          if (
+            prev.categoryArray &&
+            prev.categoryArray.includes(category)
+          ) {
             return {
               ...prev,
-              categoryArray: [...prev.categoryArray.filter((cat) => cat !== category)],
+              categoryArray: [
+                ...prev.categoryArray.filter(
+                  (cat) => cat !== category,
+                ),
+              ],
             }
           } else {
             return {
               ...prev,
-              categoryArray: initCategories.filter((cat) => cat !== category),
+              categoryArray: initCategories.filter(
+                (cat) => cat !== category,
+              ),
             }
           }
         },
@@ -62,7 +82,9 @@ const CategoryArray = () => {
       <div className="flex flex-col gap-4">
         <div className="mb-2 flex flex-col gap-2">
           <h4 className="text-sm">Matchkategorier</h4>
-          <h6 className="text-[10px[">Välj minst en kategori.</h6>
+          <h6 className="text-[10px[">
+            Välj minst en kategori.
+          </h6>
         </div>
         <div>
           <div className="grid grid-cols-1 gap-y-2 md:grid-cols-2 lg:grid-cols-3 lg:gap-x-12">
@@ -75,9 +97,13 @@ const CategoryArray = () => {
                   checked={
                     categoryArray
                       ? categoryArray.includes(cat.category)
-                      : initCategories.includes(cat.category)
+                      : initCategories.includes(
+                          cat.category,
+                        )
                   }
-                  onCheckedChange={(checked) => onCheckedChange(checked, cat.category)}
+                  onCheckedChange={(checked) =>
+                    onCheckedChange(checked, cat.category)
+                  }
                   title={cat.name}
                   orientation="horizontal"
                 />
