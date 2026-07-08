@@ -2,7 +2,8 @@
 
 interface ImportMetaEnv {
   // Client-side environment variables
-  readonly VITE_CLERK_PUBLISHABLE_KEY: string
+  readonly VITE_CLERK_PUBLISHABLE_KEY_DEV: string
+  readonly VITE_CLERK_PUBLISHABLE_KEY_PROD: string
   readonly VITE_SITE_LOCALHOST_URL: string
   readonly VITE_SITE_DEV_URL: string
   readonly VITE_SITE_PROD_URL: string
@@ -23,8 +24,13 @@ declare global {
     interface ProcessEnv {
       readonly DB_PRODUCTION_URL: string
       readonly DB_DEVELOPMENT_URL: string
-      readonly NODE_ENV: 'development' | 'production' | 'test'
+      readonly NODE_ENV:
+        | 'development'
+        | 'production'
+        | 'test'
       readonly CLERK_SECRET_KEY: string
+      readonly CLERK_FAPI: string
+      readonly CLERK_PROXY_URL: string
       readonly PEM: string
       readonly DB_HOST: string
       readonly DB_NAME: string

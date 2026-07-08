@@ -64,7 +64,7 @@ const SearchError = ({
       )}
     >
       <div>
-        <span className="text-[8px] xs:text-[10px] sm:text-sm">
+        <span className="text-[8px] xs:text-[10px] sm:text-sm font-semibold">
           {searchResult.status === 400
             ? 'Oops, där blev det fel.'
             : 'Inga resultat'}

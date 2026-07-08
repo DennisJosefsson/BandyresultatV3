@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as LayoutRouteImport } from './routes/_layout'
 import { Route as LayoutIndexRouteImport } from './routes/_layout/index'
+import { Route as Proxy_clerkRouteImport } from './routes/proxy/__clerk'
 import { Route as LayoutTeamsRouteImport } from './routes/_layout/teams'
 import { Route as LayoutSeasonsRouteImport } from './routes/_layout/seasons'
 import { Route as LayoutSearchRouteImport } from './routes/_layout/search'
@@ -92,6 +93,11 @@ const LayoutIndexRoute = LayoutIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => LayoutRoute,
+} as any)
+const Proxy_clerkRoute = Proxy_clerkRouteImport.update({
+  id: '/proxy/__clerk',
+  path: '/proxy',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const LayoutTeamsRoute = LayoutTeamsRouteImport.update({
   id: '/teams',
@@ -511,6 +517,7 @@ export interface FileRoutesByFullPath {
   '/search': typeof LayoutSearchRouteWithChildren
   '/seasons': typeof LayoutSeasonsRouteWithChildren
   '/teams': typeof LayoutTeamsRouteWithChildren
+  '/proxy': typeof Proxy_clerkRoute
   '/about/changelog': typeof LayoutAboutChangelogRoute
   '/maraton/records': typeof LayoutMaratonRecordsRouteWithChildren
   '/maraton/table': typeof LayoutMaratonTableRouteWithChildren
@@ -581,6 +588,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/season/$seasonId/games/$serieId/edit/': typeof LayoutDashboardSeasonSeasonIdGamesSerieIdEditIndexRoute
 }
 export interface FileRoutesByTo {
+  '/proxy': typeof Proxy_clerkRoute
   '/': typeof LayoutIndexRoute
   '/about/changelog': typeof LayoutAboutChangelogRoute
   '/maraton/records': typeof LayoutMaratonRecordsRouteWithChildren
@@ -656,6 +664,7 @@ export interface FileRoutesById {
   '/_layout/search': typeof LayoutSearchRouteWithChildren
   '/_layout/seasons': typeof LayoutSeasonsRouteWithChildren
   '/_layout/teams': typeof LayoutTeamsRouteWithChildren
+  '/proxy/__clerk': typeof Proxy_clerkRoute
   '/_layout/': typeof LayoutIndexRoute
   '/_layout/about/changelog': typeof LayoutAboutChangelogRoute
   '/_layout/maraton/records': typeof LayoutMaratonRecordsRouteWithChildren
@@ -734,6 +743,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/seasons'
     | '/teams'
+    | '/proxy'
     | '/about/changelog'
     | '/maraton/records'
     | '/maraton/table'
@@ -804,6 +814,7 @@ export interface FileRouteTypes {
     | '/dashboard/season/$seasonId/games/$serieId/edit/'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/proxy'
     | '/'
     | '/about/changelog'
     | '/maraton/records'
@@ -878,6 +889,7 @@ export interface FileRouteTypes {
     | '/_layout/search'
     | '/_layout/seasons'
     | '/_layout/teams'
+    | '/proxy/__clerk'
     | '/_layout/'
     | '/_layout/about/changelog'
     | '/_layout/maraton/records'
@@ -951,6 +963,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   LayoutRoute: typeof LayoutRouteWithChildren
+  Proxy_clerkRoute: typeof Proxy_clerkRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -968,6 +981,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof LayoutIndexRouteImport
       parentRoute: typeof LayoutRoute
+    }
+    '/proxy/__clerk': {
+      id: '/proxy/__clerk'
+      path: '/proxy'
+      fullPath: '/proxy'
+      preLoaderRoute: typeof Proxy_clerkRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_layout/teams': {
       id: '/_layout/teams'
@@ -1804,6 +1824,7 @@ const LayoutRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   LayoutRoute: LayoutRouteWithChildren,
+  Proxy_clerkRoute: Proxy_clerkRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
