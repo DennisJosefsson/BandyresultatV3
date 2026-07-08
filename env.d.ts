@@ -29,8 +29,6 @@ declare global {
         | 'production'
         | 'test'
       readonly CLERK_SECRET_KEY: string
-      readonly CLERK_FAPI: string
-      readonly CLERK_PROXY_URL: string
       readonly PEM: string
       readonly DB_HOST: string
       readonly DB_NAME: string
