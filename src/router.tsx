@@ -15,7 +15,11 @@ export const getRouter = () => {
     routeTree,
     context: { ...rqContext },
     defaultPreload: false,
-    scrollRestoration: true,
+    scrollRestoration: (opts) => {
+      if (opts.location.pathname.includes('/search'))
+        return false
+      return true
+    },
     scrollRestorationBehavior: 'smooth',
     defaultNotFoundComponent: DefaultNotFound,
     defaultErrorComponent: (errorProps) => (
