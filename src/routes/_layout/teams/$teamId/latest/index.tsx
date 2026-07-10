@@ -13,5 +13,6 @@ export const Route = createFileRoute(
       throw new Error('Något oväntat gick fel.')
     return fiveSeasons
   },
+  staticData: { breadcrumb: '5 senaste säsongerna' },
   component: TeamFiveSeasonsTables,
 })

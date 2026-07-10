@@ -12,5 +12,6 @@ export const Route = createFileRoute(
     if (!tables) throw new Error('Något oväntat gick fel.')
     return tables
   },
+  staticData: { breadcrumb: 'Tabeller' },
   component: TeamTable,
 })

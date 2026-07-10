@@ -1,8 +1,13 @@
+import {
+  eightColStarts,
+  eightColStartsFourTeams,
+} from '@/lib/utils/constants'
 import { getRouteApi } from '@tanstack/react-router'
-import { eightColStarts, eightColStartsFourTeams } from '@/lib/utils/constants'
 import DefaultComponent from './DefaultComponent'
 
-const route = getRouteApi('/_layout/seasons/$year/playoff/table')
+const route = getRouteApi(
+  '/_layout/seasons/$year/playoff/table',
+)
 
 const EightFinal = () => {
   const data = route.useLoaderData()
@@ -10,7 +15,7 @@ const EightFinal = () => {
   if (data.status === 404 || !data.eightTables) return null
   if (data.eightTables.length === 2) {
     return (
-      <div className="grid grid-cols-1 gap-2 lg:grid-cols-5">
+      <div className="grid grid-cols-1 gap-2 sm:gap-4 lg:grid-cols-5">
         {data.eightTables.map((group, index) => {
           return (
             <DefaultComponent
@@ -25,7 +30,7 @@ const EightFinal = () => {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-2 lg:grid-cols-4">
+    <div className="grid grid-cols-1 gap-2 sm:gap-4 lg:grid-cols-4">
       {data.eightTables.map((group, index) => {
         return (
           <DefaultComponent

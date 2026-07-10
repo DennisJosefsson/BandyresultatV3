@@ -12,5 +12,6 @@ export const Route = createFileRoute(
     if (!stats) throw new Error('Något oväntat gick fel.')
     return stats
   },
+  staticData: { breadcrumb: 'Statistik' },
   component: TeamCuriosities,
 })

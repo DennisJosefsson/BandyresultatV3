@@ -1,19 +1,30 @@
-import { CatchBoundary, Outlet, createFileRoute, useChildMatches } from '@tanstack/react-router'
-import { zd } from '@/lib/utils/zod'
-import Loading from '@/components/Loading/Loading'
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
-import { getGroups } from './$year/-functions/getGroups'
+import Loading from '@/components/Loading/Loading'
+import { zd } from '@/lib/utils/zod'
+import {
+  CatchBoundary,
+  Outlet,
+  createFileRoute,
+  useChildMatches,
+} from '@tanstack/react-router'
 import SeasonHeader from './$year/-components/SeasonHeader'
+import { getGroups } from './$year/-functions/getGroups'
 
 const yearParser = zd.object({
   year: zd.number().int().min(1907),
 })
 
-export const Route = createFileRoute('/_layout/seasons/$year')({
+export const Route = createFileRoute(
+  '/_layout/seasons/$year',
+)({
   loaderDeps: ({ search: { women } }) => ({ women }),
   params: {
     parse: (params) => ({
-      year: zd.number().int().min(1907).parse(Number(params.year)),
+      year: zd
+        .number()
+        .int()
+        .min(1907)
+        .parse(Number(params.year)),
     }),
     stringify: ({ year }) => ({
       year: `${year}`,
@@ -36,19 +47,27 @@ export const Route = createFileRoute('/_layout/seasons/$year')({
   head: ({ loaderData }) => ({
     meta: [
       {
-        title: loaderData?.meta.title ?? 'Bandyresultat - Säsong',
+        title:
+          loaderData?.meta.title ??
+          'Bandyresultat - Säsong',
       },
       {
         name: 'description',
-        content: loaderData?.meta.description ?? 'Bandyresultat - Säsong',
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - Säsong',
       },
       {
         property: 'og:description',
-        content: loaderData?.meta.description ?? 'Bandyresultat - Säsong',
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - Säsong',
       },
       {
         property: 'og:title',
-        content: loaderData?.meta.title ?? 'Bandyresultat - Säsong',
+        content:
+          loaderData?.meta.title ??
+          'Bandyresultat - Säsong',
       },
       {
         property: 'og:type',
@@ -56,7 +75,9 @@ export const Route = createFileRoute('/_layout/seasons/$year')({
       },
       {
         property: 'og:url',
-        content: loaderData?.meta.url ?? 'https://www.bandyresultat.se/seasons',
+        content:
+          loaderData?.meta.url ??
+          'https://www.bandyresultat.se/seasons',
       },
       {
         property: 'og:image',
@@ -77,7 +98,9 @@ function Season() {
       <div className="flex flex-col gap-4">
         <SeasonHeader />
         <div className="flex flex-row justify-center">
-          <h3 className="text-sm font-semibold md:text-base">Välj grupp</h3>
+          <h3 className="text-xs sm:text-sm font-semibold md:text-base">
+            Välj grupp
+          </h3>
         </div>
         <GroupList />
       </div>
@@ -91,7 +114,11 @@ function Season() {
           console.error(error)
         }}
         errorComponent={({ error, reset }) => (
-          <SimpleErrorComponent id="Enskild säsong" error={error} reset={reset} />
+          <SimpleErrorComponent
+            id="Enskild säsong"
+            error={error}
+            reset={reset}
+          />
         )}
       >
         <div className="flex flex-col gap-4">
@@ -114,7 +141,11 @@ function NotFound() {
     )
   }
 
-  return <div className="flex flex-row justify-center">Den länken finns inte.</div>
+  return (
+    <div className="flex flex-row justify-center">
+      Den länken finns inte.
+    </div>
+  )
 }
 
 function GroupList() {
@@ -124,7 +155,7 @@ function GroupList() {
   if (data.status === 204) return null
 
   return (
-    <div className="grid grid-cols-2 gap-4 md:gap-8 lg:grid-cols-4 xl:gap-16 2xl:grid-cols-6">
+    <div className="grid grid-cols-2 gap-4 md:gap-8 lg:grid-cols-4 xl:gap-10 2xl:grid-cols-6">
       {data.groups.map((group) => {
         return (
           <Route.Link
@@ -132,12 +163,11 @@ function GroupList() {
             to="/seasons/$year/$group"
             params={{ group: group.group, year: year }}
             search={{ women: women }}
+            className="flex w-full flex-row items-center justify-center border px-4 py-2 shadow-md"
           >
-            <div className="flex w-full flex-row items-center justify-center border px-4 py-2">
-              <span className="xs:text-[10px] text-center text-[8px] font-semibold md:text-sm">
-                {group.name}
-              </span>
-            </div>
+            <span className="xs:text-[10px] text-center text-[8px] font-semibold md:text-sm">
+              {group.name}
+            </span>
           </Route.Link>
         )
       })}

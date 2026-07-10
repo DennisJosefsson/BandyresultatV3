@@ -10,15 +10,23 @@ type NilComponentProps = {
   colStarts: ColstartsType
 }
 
-const NilComponent = ({ group, colStarts }: NilComponentProps) => {
+const NilComponent = ({
+  group,
+  colStarts,
+}: NilComponentProps) => {
   const styleClass = colStarts
-    ? `${colStarts[group]} rounded bg-background p-2 shadow-md`
-    : 'rounded bg-background p-2 shadow-md md:col-start-4 md:odd:col-start-2'
+    ? `${colStarts[group]} bg-background p-2`
+    : 'bg-background p-2 md:col-start-4 md:odd:col-start-2'
 
   return (
-    <PlayoffCard group={group} styleClass={styleClass}>
+    <PlayoffCard
+      group={group}
+      styleClass={styleClass}
+    >
       <PlayoffCard.Title>
-        <PlayoffCard.Group>{groupConstant[group]}</PlayoffCard.Group>
+        <PlayoffCard.Group>
+          {groupConstant[group]}
+        </PlayoffCard.Group>
       </PlayoffCard.Title>
       <PlayoffCard.Content>
         <h4 className="text-sm">Inga matcher än</h4>

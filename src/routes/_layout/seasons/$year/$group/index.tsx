@@ -1,3 +1,10 @@
+import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
+import {
+  CatchBoundary,
+  Outlet,
+  createFileRoute,
+  useChildMatches,
+} from '@tanstack/react-router'
 import {
   CalendarIcon,
   ChartLineIcon,
@@ -7,19 +14,23 @@ import {
   MapIcon,
   TrophyIcon,
 } from 'lucide-react'
-import { CatchBoundary, Outlet, createFileRoute, useChildMatches } from '@tanstack/react-router'
-import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
-import { validateGroup } from '../-functions/validateGroup'
 import GroupListForErrorComponent from '../-components/GroupListForErrorComponent'
+import { validateGroup } from '../-functions/validateGroup'
 
-export const Route = createFileRoute('/_layout/seasons/$year/$group/')({
+export const Route = createFileRoute(
+  '/_layout/seasons/$year/$group/',
+)({
   loaderDeps: ({ search: { women } }) => ({ women }),
-  loader: async ({ params: { year, group }, deps: { women } }) => {
+  loader: async ({
+    params: { year, group },
+    deps: { women },
+  }) => {
     const data = await validateGroup({
       data: { year, group, women },
     })
 
-    if (!data) throw new Error('Missing groupValidation data')
+    if (!data)
+      throw new Error('Missing groupValidation data')
 
     return data
   },
@@ -27,19 +38,27 @@ export const Route = createFileRoute('/_layout/seasons/$year/$group/')({
   head: ({ loaderData }) => ({
     meta: [
       {
-        title: loaderData?.meta.title ?? 'Bandyresultat - Sektioner',
+        title:
+          loaderData?.meta.title ??
+          'Bandyresultat - Sektioner',
       },
       {
         name: 'description',
-        content: loaderData?.meta.description ?? 'Bandyresultat - Sektioner',
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - Sektioner',
       },
       {
         property: 'og:description',
-        content: loaderData?.meta.description ?? 'Bandyresultat - Sektioner',
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - Sektioner',
       },
       {
         property: 'og:title',
-        content: loaderData?.meta.title ?? 'Bandyresultat - Sektioner',
+        content:
+          loaderData?.meta.title ??
+          'Bandyresultat - Sektioner',
       },
       {
         property: 'og:type',
@@ -47,7 +66,9 @@ export const Route = createFileRoute('/_layout/seasons/$year/$group/')({
       },
       {
         property: 'og:url',
-        content: loaderData?.meta.url ?? 'https://www.bandyresultat.se',
+        content:
+          loaderData?.meta.url ??
+          'https://www.bandyresultat.se',
       },
       {
         property: 'og:image',
@@ -69,7 +90,9 @@ function RouteComponent() {
           </span>
         </div>
 
-        {data.message.includes('Välj en ny i listan') ? <GroupListForErrorComponent /> : null}
+        {data.message.includes('Välj en ny i listan') ? (
+          <GroupListForErrorComponent />
+        ) : null}
       </div>
     )
   }
@@ -80,7 +103,11 @@ function RouteComponent() {
         console.error(error)
       }}
       errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent id="groupIndexRoute" error={error} reset={reset} />
+        <SimpleErrorComponent
+          id="groupIndexRoute"
+          error={error}
+          reset={reset}
+        />
       )}
     >
       <IndexRoute />
@@ -109,12 +136,17 @@ function SectionMenu() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-row justify-center">
-        <h3 className="text-xs font-semibold sm:text-sm xl:text-base">{data.serieName}</h3>
+        <h3 className="text-xs font-semibold sm:text-sm xl:text-base">
+          {data.serieName}
+        </h3>
       </div>
-      <div className="flex flex-col gap-4 sm:gap-10 2xl:gap-16">
+      <div className="flex flex-col gap-4 sm:gap-10 2xl:gap-12">
         <div className="grid grid-cols-2 gap-2 sm:gap-8 lg:grid-cols-3 xl:gap-x-16 xl:gap-y-8 2xl:grid-cols-6">
-          <Route.Link to="/seasons/$year/$group/games" search={{ women }}>
-            <div className="flex w-full flex-row items-center gap-4 border px-4 py-2 sm:gap-8">
+          <Route.Link
+            to="/seasons/$year/$group/games"
+            search={{ women }}
+          >
+            <div className="flex w-full flex-row justify-center items-center gap-4 border px-4 py-2 sm:gap-8 shadow-md">
               <span>
                 <CalendarIcon className="size-3 sm:size-4" />
               </span>
@@ -128,7 +160,7 @@ function SectionMenu() {
             params={{ table: 'all' }}
             search={{ women }}
           >
-            <div className="flex w-full flex-row items-center gap-4 border px-4 py-2 sm:gap-8">
+            <div className="flex w-full flex-row justify-center items-center gap-4 border px-4 py-2 sm:gap-8 shadow-md">
               <span>
                 <ListIcon className="size-3 sm:size-4" />
               </span>
@@ -137,8 +169,11 @@ function SectionMenu() {
               </span>
             </div>
           </Route.Link>
-          <Route.Link to="/seasons/$year/$group/development" search={{ women, index: 0 }}>
-            <div className="flex w-full flex-row items-center gap-4 border px-4 py-2 sm:gap-8">
+          <Route.Link
+            to="/seasons/$year/$group/development"
+            search={{ women, index: 0 }}
+          >
+            <div className="flex w-full flex-row justify-center items-center gap-4 border px-4 py-2 sm:gap-8 shadow-md">
               <span>
                 <ChartLineIcon className="size-3 sm:size-4" />
               </span>
@@ -147,8 +182,11 @@ function SectionMenu() {
               </span>
             </div>
           </Route.Link>
-          <Route.Link to="/seasons/$year/$group/interval" search={{ women, start: 0 }}>
-            <div className="flex w-full flex-row items-center gap-4 border px-4 py-2 sm:gap-8">
+          <Route.Link
+            to="/seasons/$year/$group/interval"
+            search={{ women, start: 0 }}
+          >
+            <div className="flex w-full flex-row justify-center items-center gap-4 border px-4 py-2 sm:gap-8 shadow-md">
               <span>
                 <ChevronsLeftRightEllipsisIcon className="size-3 sm:size-4" />
               </span>
@@ -157,8 +195,11 @@ function SectionMenu() {
               </span>
             </div>
           </Route.Link>
-          <Route.Link to="/seasons/$year/$group/stats" search={{ women }}>
-            <div className="flex w-full flex-row items-center gap-4 border px-4 py-2 sm:gap-8">
+          <Route.Link
+            to="/seasons/$year/$group/stats"
+            search={{ women }}
+          >
+            <div className="flex w-full flex-row justify-center items-center gap-4 border px-4 py-2 sm:gap-8 shadow-md">
               <span>
                 <FolderKanbanIcon className="size-3 sm:size-4" />
               </span>
@@ -167,8 +208,11 @@ function SectionMenu() {
               </span>
             </div>
           </Route.Link>
-          <Route.Link to="/seasons/$year/$group/map" search={{ women }}>
-            <div className="flex w-full flex-row items-center gap-4 border px-4 py-2 sm:gap-8">
+          <Route.Link
+            to="/seasons/$year/$group/map"
+            search={{ women }}
+          >
+            <div className="flex w-full flex-row justify-center items-center gap-4 border px-4 py-2 sm:gap-8 shadow-md">
               <span>
                 <MapIcon className="size-3 sm:size-4" />
               </span>
@@ -179,8 +223,11 @@ function SectionMenu() {
           </Route.Link>
         </div>
         <div className="grid grid-cols-2 gap-2 sm:gap-8 xl:grid-cols-4 xl:gap-16">
-          <Route.Link to="/seasons/$year/playoff/table" search={{ women }}>
-            <div className="flex w-full flex-row items-center gap-4 border px-4 py-2 sm:gap-8">
+          <Route.Link
+            to="/seasons/$year/playoff/table"
+            search={{ women }}
+          >
+            <div className="flex w-full flex-row justify-center items-center gap-4 border px-4 py-2 sm:gap-8 shadow-md">
               <span>
                 <TrophyIcon className="size-3 sm:size-4" />
               </span>
@@ -189,8 +236,11 @@ function SectionMenu() {
               </span>
             </div>
           </Route.Link>
-          <Route.Link to="/seasons/$year/playoff/games" search={{ women }}>
-            <div className="flex w-full flex-row items-center gap-4 border px-4 py-2 sm:gap-8">
+          <Route.Link
+            to="/seasons/$year/playoff/games"
+            search={{ women }}
+          >
+            <div className="flex w-full flex-row justify-center items-center gap-4 border px-4 py-2 sm:gap-8 shadow-md">
               <span>
                 <CalendarIcon className="size-3 sm:size-4" />
               </span>
@@ -199,8 +249,11 @@ function SectionMenu() {
               </span>
             </div>
           </Route.Link>
-          <Route.Link to="/seasons/$year/playoff/stats" search={{ women }}>
-            <div className="flex w-full flex-row items-center gap-4 border px-4 py-2 sm:gap-8">
+          <Route.Link
+            to="/seasons/$year/playoff/stats"
+            search={{ women }}
+          >
+            <div className="flex w-full flex-row justify-center items-center gap-4 border px-4 py-2 sm:gap-8 shadow-md">
               <span>
                 <FolderKanbanIcon className="size-3 sm:size-4" />
               </span>
@@ -209,8 +262,11 @@ function SectionMenu() {
               </span>
             </div>
           </Route.Link>
-          <Route.Link to="/seasons/$year/playoff/map" search={{ women }}>
-            <div className="flex w-full flex-row items-center gap-4 border px-4 py-2 sm:gap-8">
+          <Route.Link
+            to="/seasons/$year/playoff/map"
+            search={{ women }}
+          >
+            <div className="flex w-full flex-row justify-center items-center gap-4 border px-4 py-2 sm:gap-8 shadow-md">
               <span>
                 <MapIcon className="size-3 sm:size-4" />
               </span>

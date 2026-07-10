@@ -18,11 +18,11 @@ const PlayoffCard = ({
   group: string
 }) => {
   if (group === 'final') {
-    return <Card>{children}</Card>
+    return <Card className="shadow-2xl">{children}</Card>
   }
 
   return (
-    <Card className={styleClass}>
+    <Card className={cn('shadow-2xl', styleClass)}>
       <div>{children}</div>
     </Card>
   )

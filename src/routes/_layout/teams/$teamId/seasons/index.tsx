@@ -105,15 +105,12 @@ function Seasons() {
 
   return (
     <div>
-      <Accordion
-        defaultValue={['seasons']}
-        className="border"
-      >
+      <Accordion defaultValue={['seasons']}>
         <AccordionItem
           value="seasons"
           className="mb-2 rounded-md border-b p-2 shadow-md last:border-b-0"
         >
-          <AccordionTrigger className="text-sm md:text-base">
+          <AccordionTrigger className="text-[10px] sm:text-xs md:text-sm">
             Senaste säsongerna
           </AccordionTrigger>
           <AccordionContent>
@@ -126,7 +123,7 @@ function Seasons() {
                     params={{ seasonId: season.seasonId }}
                     search={(prev) => ({ ...prev })}
                   >
-                    <div className="flex items-center justify-center rounded p-2 text-[10px] font-semibold sm:text-sm md:text-base">
+                    <div className="flex items-center justify-center rounded p-2 text-[10px] sm:text-xs md:text-sm font-semibold">
                       {season.year}
                     </div>
                   </Route.Link>
@@ -140,7 +137,7 @@ function Seasons() {
             value="rest"
             className="mb-2 rounded-md border-b p-2 shadow-md last:border-b-0"
           >
-            <AccordionTrigger className="text-sm md:text-base">
+            <AccordionTrigger className="text-[10px] sm:text-xs md:text-sm">
               Övriga
             </AccordionTrigger>
             <AccordionContent>
@@ -153,7 +150,7 @@ function Seasons() {
                       params={{ seasonId: season.seasonId }}
                       search={(prev) => ({ ...prev })}
                     >
-                      <div className="flex items-center justify-center rounded p-2 text-[10px] font-semibold sm:text-sm md:text-base">
+                      <div className="flex items-center justify-center rounded p-2 text-[10px] sm:text-xs md:text-sm font-semibold">
                         {season.year}
                       </div>
                     </Route.Link>
