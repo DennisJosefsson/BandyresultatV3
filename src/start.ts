@@ -1,6 +1,7 @@
 import { clerkMiddleware } from '@clerk/tanstack-react-start/server'
 import {
   createCsrfMiddleware,
+  createMiddleware,
   createStart,
 } from '@tanstack/react-start'
 import { compareRequestErrorAdapter } from './lib/middlewares/errors/CompareRequestError'
@@ -10,6 +11,17 @@ import { zodParsingErrorAdapter } from './lib/middlewares/errors/ZodParsingError
 import { errorMiddleware } from './lib/middlewares/errors/errorMiddleware'
 
 const SECRET_KEY = process.env.CLERK_SECRET_KEY
+
+const headerMiddleware = createMiddleware({
+  type: 'function',
+}).client(({ next }) => {
+  return next({
+    headers: {
+      'Cross-Origin-Opener-Policy':
+        'same-origin-allow-popups',
+    },
+  })
+})
 
 const csrfMiddleware = createCsrfMiddleware({
   filter: (ctx) => ctx.handlerType === 'serverFn',
@@ -29,6 +41,6 @@ export const startInstance = createStart(() => {
       dbErrorAdapter,
       unauthorizedErrorAdapter,
     ],
-    functionMiddleware: [errorMiddleware],
+    functionMiddleware: [headerMiddleware, errorMiddleware],
   }
 })
