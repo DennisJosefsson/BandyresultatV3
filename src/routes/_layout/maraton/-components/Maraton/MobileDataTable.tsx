@@ -97,7 +97,7 @@ const MobileDataTable = <TData, TValue>({
             <TableRow key={headerGroup.id}>
               <TableHead
                 key={'position'}
-                className="xs:table-cell xs:text-[8px] hidden max-w-10 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base 2xl:text-lg"
+                className="text-[8px] xs:text-[10px] max-w-7 text-center tabular-nums sm:text-[10px] md:text-sm xl:text-base 2xl:text-lg"
               >
                 P
               </TableHead>
@@ -140,7 +140,7 @@ const MobileDataTable = <TData, TValue>({
               >
                 <TableCell
                   key={`index-${index}`}
-                  className="xs:table-cell xs:text-[8px] hidden max-w-10 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base 2xl:text-lg"
+                  className="text-[8px] xs:text-[10px] max-w-7 text-center tabular-nums md:text-sm xl:text-base 2xl:text-lg"
                 >
                   {index + 1}
                 </TableCell>

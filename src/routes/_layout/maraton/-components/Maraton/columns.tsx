@@ -50,7 +50,7 @@ export const columns: Array<ColumnDef<MaratonTable>> = [
   {
     accessorKey: 'team.name',
     header: () => (
-      <div className="xs:text-[10px] w-20 truncate text-left text-108px] sm:w-28 sm:text-[10px] md:text-sm lg:w-40 xl:w-48 xl:text-base ">
+      <div className="text-[8px] xs:text-[10px]  w-20 truncate text-left text-108px] sm:w-28 sm:text-[10px] md:text-sm lg:w-40 xl:w-48 xl:text-base ">
         Lag
       </div>
     ),
@@ -59,7 +59,7 @@ export const columns: Array<ColumnDef<MaratonTable>> = [
         <TeamLogo
           size={32}
           teamId={row.original.teamId}
-          className="object-scale-down w-2 xs:w-3 sm:w-4 md:w-5"
+          className="hidden xs:block object-scale-down w-2 xs:w-3 sm:w-4 md:w-5"
           alt={row.original.team.casualName}
           title={row.original.team.casualName}
         />
