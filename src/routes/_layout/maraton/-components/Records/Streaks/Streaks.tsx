@@ -51,7 +51,7 @@ const Streaks = () => {
             })}
           </div>
           <div>
-            <p className="w-[292px] p-1 text-xs font-bold md:w-88">
+            <p className="w-73 p-1 text-xs font-bold md:w-88">
               Totalt {data.currInoffChamps.count}{' '}
               <a
                 href="https://sv.wikipedia.org/wiki/Inofficiella_v%C3%A4rldsm%C3%A4sterskapet_i_fotboll"
