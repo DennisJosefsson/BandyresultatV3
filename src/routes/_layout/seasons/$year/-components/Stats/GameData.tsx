@@ -1,10 +1,3 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/base/ui/card'
 import type { ChartConfig } from '@/components/base/ui/chart'
 import {
   ChartContainer,
@@ -13,6 +6,7 @@ import {
 } from '@/components/base/ui/chart'
 import type { Stats } from '@/lib/types/stats'
 import { Pie, PieChart } from 'recharts'
+import GameAndGoalCard from './GameAndGoalCard'
 type GameDataProps = {
   gameData: Pick<
     Stats,
@@ -68,16 +62,16 @@ const GameData = ({ gameData }: GameDataProps) => {
   ]
 
   return (
-    <Card className="flex flex-col">
-      <CardHeader className="items-center pb-0">
-        <CardTitle className="text-[10px] xs:text-xs sm:text-sm">{`Matchstatistik - ${gameData.gameCount.toLocaleString(
+    <GameAndGoalCard>
+      <GameAndGoalCard.Header>
+        <GameAndGoalCard.Title>{`Matchstatistik - ${gameData.gameCount.toLocaleString(
           'sv-SE',
-        )} matcher`}</CardTitle>
-        <CardDescription>
+        )} matcher`}</GameAndGoalCard.Title>
+        <GameAndGoalCard.Description>
           {gameData.serie?.serieName ?? 'Slutspel'}
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="flex-1 pb-0">
+        </GameAndGoalCard.Description>
+      </GameAndGoalCard.Header>
+      <GameAndGoalCard.Content>
         <ChartContainer
           config={resultChartConfig}
           className="mx-auto aspect-square max-h-80 min-h-40"
@@ -97,8 +91,8 @@ const GameData = ({ gameData }: GameDataProps) => {
             />
           </PieChart>
         </ChartContainer>
-      </CardContent>
-    </Card>
+      </GameAndGoalCard.Content>
+    </GameAndGoalCard>
   )
 }
 

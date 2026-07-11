@@ -9,19 +9,19 @@ const GoalStats = ({ goalData }: GoalStatsProps) => {
     <div>
       {goalData.maxGoals.games.length > 0 ? (
         <ScoreStatsCard
-          title="Match(er) med flest antal mål:"
+          title="Match(er) med flest antal mål"
           maxMinGoals={goalData.maxGoals.games}
         />
       ) : null}
       {goalData.minGoals.games.length > 0 ? (
         <ScoreStatsCard
-          title="Match(er) med minst antal mål:"
+          title="Match(er) med minst antal mål"
           maxMinGoals={goalData.minGoals.games}
         />
       ) : null}
       {goalData.maxDiff.games.length > 0 ? (
         <ScoreStatsCard
-          title="Match(er) med störst målskillnad:"
+          title="Match(er) med störst målskillnad"
           maxMinGoals={goalData.maxDiff.games}
         />
       ) : null}

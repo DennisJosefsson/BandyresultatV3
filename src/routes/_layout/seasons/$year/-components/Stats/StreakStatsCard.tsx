@@ -1,5 +1,6 @@
 import Date from '@/components/Common/Date'
 import type { StreakData } from '@/lib/types/stats'
+import StatsCard from './StatsCard'
 
 type StreakStatsCard = {
   streak: Array<StreakData>
@@ -11,32 +12,31 @@ const StreakStatsCard = ({
   title,
 }: StreakStatsCard) => {
   return (
-    <div>
+    <div className="mb-6">
       <h6 className="mb-2 text-xs font-semibold sm:text-sm">
         {title}
       </h6>
 
       {streak?.map((team, index) => {
         return (
-          <div
+          <StatsCard
             key={`${team.name}-${team.gameCount}-${team.startDate}-${Math.random()}-${index}`}
-            className="bg-secondary mb-2 flex flex-col gap-1 rounded-md p-2"
           >
-            <div className="flex flex-row justify-between">
-              <div className="text-[10px] xs:text-xs sm:text-sm">
+            <StatsCard.Upper>
+              <StatsCard.Content>
                 {team.name}
-              </div>
-              <div className="text-[10px] xs:text-xs sm:text-sm">
+              </StatsCard.Content>
+              <StatsCard.Content>
                 {team.gameCount}
-              </div>
-            </div>
-            <div className="flex flex-row">
-              <div className="text-[10px] xs:text-xs sm:text-sm">
+              </StatsCard.Content>
+            </StatsCard.Upper>
+            <StatsCard.Lower>
+              <StatsCard.Content>
                 <Date>{team.startDate}</Date> -{' '}
                 <Date>{team.endDate}</Date>
-              </div>
-            </div>
-          </div>
+              </StatsCard.Content>
+            </StatsCard.Lower>
+          </StatsCard>
         )
       })}
     </div>

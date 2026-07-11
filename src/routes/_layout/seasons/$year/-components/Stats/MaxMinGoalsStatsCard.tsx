@@ -1,5 +1,6 @@
 import Date from '@/components/Common/Date'
 import type { MaxMinGoals } from '@/lib/types/stats'
+import StatsCard from './StatsCard'
 
 type MaxMinGoalsStatsCardProps = {
   maxMinGoals: Array<MaxMinGoals>
@@ -11,7 +12,7 @@ const MaxMinGoalsStatsCard = ({
   title,
 }: MaxMinGoalsStatsCardProps) => {
   return (
-    <div>
+    <div className="mb-6">
       <h6 className="mb-2 text-xs font-semibold sm:text-sm">
         {title}
       </h6>
@@ -19,24 +20,21 @@ const MaxMinGoalsStatsCard = ({
       <div>
         {maxMinGoals.map((game, index) => {
           return (
-            <div
-              key={`${index}-${Math.random()}`}
-              className="bg-muted mb-2 flex flex-col gap-1 rounded-md p-2"
-            >
-              <div className="flex flex-row justify-between">
-                <div className="text-[10px] xs:text-xs sm:text-sm">
+            <StatsCard key={`${index}-${Math.random()}`}>
+              <StatsCard.Upper>
+                <StatsCard.Content>
                   {game.home.name}-{game.away.name}
-                </div>
-                <div className="text-[10px] xs:text-xs sm:text-sm">
+                </StatsCard.Content>
+                <StatsCard.Content>
                   {game.result}
-                </div>
-              </div>
-              <div className="flex flex-row">
-                <div className="text-[10px] xs:text-xs sm:text-sm">
+                </StatsCard.Content>
+              </StatsCard.Upper>
+              <StatsCard.Lower>
+                <StatsCard.Content>
                   <Date>{game.date}</Date>
-                </div>
-              </div>
-            </div>
+                </StatsCard.Content>
+              </StatsCard.Lower>
+            </StatsCard>
           )
         })}
       </div>
