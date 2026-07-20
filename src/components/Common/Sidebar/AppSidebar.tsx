@@ -163,6 +163,7 @@ const AppSidebar = () => {
                     search={{ women }}
                     className="text-foreground hover:text-foreground transition-colors"
                     activeProps={{ className: `font-bold` }}
+                    resetScroll={true}
                   >
                     <span>
                       <SearchIcon className="size-4" />
