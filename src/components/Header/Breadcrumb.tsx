@@ -9,7 +9,9 @@ import {
 import type { AnyRouteMatch } from '@tanstack/react-router'
 import { Link, useMatches } from '@tanstack/react-router'
 import { HouseIcon } from 'lucide-react'
+import type { ReactNode } from 'react'
 import { Fragment } from 'react'
+import { Button } from '../base/ui/button'
 
 export type BreadcrumbValue =
   | string
@@ -19,6 +21,14 @@ export type BreadcrumbValue =
 type ResolvedBreadcrumbItem = {
   path: string
   label: string
+}
+
+function Label({ children }: { children: ReactNode }) {
+  return (
+    <span className="text-[6px]/3 xxs:text-[8px]/4 xs:text-[10px]/5 msm:text-xs/6 md:text-sm/6 lg:text-base/6 font-semibold truncate">
+      {children}
+    </span>
+  )
 }
 
 export function RouterBreadcrumb() {
@@ -57,16 +67,20 @@ export function RouterBreadcrumb() {
           <BreadcrumbLink
             render={
               <Link to={breadcrumbs[0].path}>
-                <span className="xs:text-[8px] hidden truncate text-[6px] font-semibold sm:block md:text-xs">
+                <span className="hidden md:block text-[6px]/3 xxs:text-[8px]/4 xs:text-[10px]/5 msm:text-xs/6 md:text-sm/6 lg:text-base/6 font-semibold">
                   {breadcrumbs[0].label}
                 </span>
-                <span className="sm:hidden">
-                  <HouseIcon className="size-2 xs:size-3" />
-                </span>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="md:hidden"
+                >
+                  <HouseIcon className="size-[1lh]" />
+                </Button>
               </Link>
             }
           />
-          <BreadcrumbSeparator className="[&>svg]:size-2 md:[&>svg]:size-3.5" />
+          <BreadcrumbSeparator />
 
           {lastTwo.map((crumb, index) => {
             const isLast = index === lastTwo.length - 1
@@ -75,27 +89,21 @@ export function RouterBreadcrumb() {
               <Fragment key={`${crumb.path}-${index}`}>
                 <BreadcrumbItem>
                   {isLast ? (
-                    <BreadcrumbPage>
-                      <span className="w-10 xs:w-fit xs:text-[8px] truncate text-[6px] font-semibold md:text-xs">
-                        {crumb.label}
-                      </span>
+                    <BreadcrumbPage className="max-w-9 xxs:max-w-15 msm:max-w-26 sm:max-w-none truncate">
+                      <Label>{crumb.label}</Label>
                     </BreadcrumbPage>
                   ) : (
                     <BreadcrumbLink
+                      className="max-w-9 xxs:max-w-15 msm:max-w-26 sm:max-w-none truncate"
                       render={
-                        <Link
-                          to={crumb.path}
-                          className="w-10 xs:w-fit xs:text-[8px] truncate text-[6px] font-semibold md:text-xs"
-                        >
-                          {crumb.label}
+                        <Link to={crumb.path}>
+                          <Label>{crumb.label}</Label>
                         </Link>
                       }
                     />
                   )}
                 </BreadcrumbItem>
-                {!isLast && (
-                  <BreadcrumbSeparator className="[&>svg]:size-2 md:[&>svg]:size-3.5" />
-                )}
+                {!isLast && <BreadcrumbSeparator />}
               </Fragment>
             )
           })}
@@ -109,31 +117,41 @@ export function RouterBreadcrumb() {
       <BreadcrumbList>
         {breadcrumbs.map((crumb, index) => {
           const isLast = index === breadcrumbs.length - 1
-
+          const isFirst = index === 0
           return (
             <Fragment key={`${crumb.path}-${index}`}>
               <BreadcrumbItem>
                 {isLast ? (
-                  <BreadcrumbPage>
-                    <span className="xs:text-[8px] truncate text-[6px] font-semibold md:text-xs">
-                      {crumb.label}
-                    </span>
+                  <BreadcrumbPage className="max-w-9 xxs:max-w-15 msm:max-w-26 sm:max-w-none truncate">
+                    <Label>{crumb.label}</Label>
                   </BreadcrumbPage>
                 ) : (
                   <BreadcrumbLink
+                    className="max-w-9 xxs:max-w-15 msm:max-w-26 sm:max-w-none truncate"
                     render={
-                      <Link to={crumb.path}>
-                        <span className="xs:text-[8px] truncate text-[6px] font-semibold md:text-xs">
-                          {crumb.label}
-                        </span>
-                      </Link>
+                      isFirst ? (
+                        <Link to={crumb.path}>
+                          <span className="hidden md:block text-[6px]/3 xxs:text-[8px]/4 xs:text-[10px]/5 msm:text-xs/6 md:text-sm/6 lg:text-base/6 font-semibold">
+                            {crumb.label}
+                          </span>
+                          <Button
+                            size="icon"
+                            variant="ghost"
+                            className="md:hidden"
+                          >
+                            <HouseIcon className="size-[1lh]" />
+                          </Button>
+                        </Link>
+                      ) : (
+                        <Link to={crumb.path}>
+                          <Label> {crumb.label}</Label>
+                        </Link>
+                      )
                     }
                   />
                 )}
               </BreadcrumbItem>
-              {!isLast && (
-                <BreadcrumbSeparator className="[&>svg]:size-2 md:[&>svg]:size-3.5" />
-              )}
+              {!isLast && <BreadcrumbSeparator />}
             </Fragment>
           )
         })}

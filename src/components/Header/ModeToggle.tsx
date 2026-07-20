@@ -1,11 +1,11 @@
-import { Moon, Sun } from 'lucide-react'
-import { useTheme } from '@/lib/contexts/themeContext'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/base/ui/dropdown-menu'
+import { useTheme } from '@/lib/contexts/themeContext'
+import { Moon, Sun } from 'lucide-react'
 import { Button } from '../base/ui/button'
 
 const ModeToggle = () => {
@@ -14,7 +14,7 @@ const ModeToggle = () => {
     <DropdownMenu>
       <DropdownMenuTrigger
         render={
-          <Button variant="outline" size="icon-xs">
+          <Button variant="ghost">
             <Sun className="scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
             <Moon className="absolute scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
             <span className="sr-only">Byt tema</span>
@@ -23,8 +23,12 @@ const ModeToggle = () => {
       />
 
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme('light')}>Ljus</DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme('dark')}>Mörk</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme('light')}>
+          Ljus
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme('dark')}>
+          Mörk
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )
