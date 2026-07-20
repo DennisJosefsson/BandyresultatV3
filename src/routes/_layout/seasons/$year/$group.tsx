@@ -179,6 +179,24 @@ function Group() {
                 }
                 nativeButton={false}
               />
+              <TabsTrigger
+                value="grouplist"
+                render={
+                  <Route.Link
+                    to="/seasons/$year"
+                    params={(prev) => ({
+                      year: prev.year,
+                    })}
+                    search={(prev) => ({
+                      women: prev.women,
+                    })}
+                    activeProps={{ 'data-state': 'active' }}
+                  >
+                    Serier
+                  </Route.Link>
+                }
+                nativeButton={false}
+              />
             </TabsList>
           </Tabs>
         </div>
