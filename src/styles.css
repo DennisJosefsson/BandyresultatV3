@@ -91,7 +91,9 @@ code {
 }
 
 @theme {
+  --breakpoint-xxs: 20rem;
   --breakpoint-xs: 27rem;
+  --breakpoint-msm: 32rem;
 }
 
 @theme inline {
