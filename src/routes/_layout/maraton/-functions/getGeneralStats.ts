@@ -35,7 +35,7 @@ export const getGeneralStats = createServerFn({
         const generalStatsData = await getGeneralStatsData({
           women,
         })
-        const breadCrumb = `Statistik ${women === true ? 'Damer' : 'Herrar'}`
+        const breadCrumb = `Statistik`
         const title = `Bandyresultat - Statistik Elitserien - ${women === true ? 'Damer' : 'Herrar'}`
         const url = `https://bandyresultat.se/maraton/records/stats?women=${women}`
         const description = `Statistik för bandyns Elitserie för ${women ? 'damer' : 'herrar'}`

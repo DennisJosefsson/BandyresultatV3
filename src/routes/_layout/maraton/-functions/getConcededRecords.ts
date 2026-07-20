@@ -35,7 +35,7 @@ export const getConcededRecords = createServerFn({
         const concededData = await getConcededData({
           women,
         })
-        const breadCrumb = `Insläppta mål ${women === true ? 'Damer' : 'Herrar'}`
+        const breadCrumb = `Insläppta mål`
         const title = `Bandyresultat - Rekord insläppta mål - ${women === true ? 'Damer' : 'Herrar'}`
         const url = `https://bandyresultat.se/maraton/records/conceded?women=${women}`
         const description = `Rekord i antalet insläppta mål i bandyns Elitserie för ${women ? 'damer' : 'herrar'}`

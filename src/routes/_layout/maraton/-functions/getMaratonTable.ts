@@ -247,7 +247,7 @@ export const getMaratonTables = createServerFn({
             asc(result.seasons),
           )
 
-        const breadCrumb = `${table === 'all' ? 'Alla matcher' : table === 'home' ? 'Hemmamatcher' : 'Bortamatcher'} ${women === true ? 'Damer' : 'Herrar'}`
+        const breadCrumb = `${table === 'all' ? 'Alla matcher' : table === 'home' ? 'Hemmamatcher' : 'Bortamatcher'}`
         const title = `Bandyresultat - Maratontabell ${table === 'all' ? 'Alla' : table === 'home' ? 'Hemmamatcher' : 'Bortamatcher'} ${women === true ? 'Damer' : 'Herrar'}`
         const url = `https://bandyresultat.se/maraton/table/${table}?women=${women}`
 

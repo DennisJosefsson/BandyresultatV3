@@ -33,7 +33,7 @@ export const getStreakRecords = createServerFn({
     }): Promise<RecordStreakReturn> => {
       try {
         const streakData = await getStreakData({ women })
-        const breadCrumb = `Sviter ${women === true ? 'Damer' : 'Herrar'}`
+        const breadCrumb = `Sviter`
         const title = `Bandyresultat - Sviter - ${women === true ? 'Damer' : 'Herrar'}`
         const url = `https://bandyresultat.se/maraton/records/streaks?women=${women}`
         const description = `Rekordsviter i bandyns Elitserie för ${women ? 'damer' : 'herrar'}`

@@ -33,7 +33,7 @@ export const getScoredRecords = createServerFn({
     }): Promise<RecordStreakReturn> => {
       try {
         const scoredData = await getScoredData({ women })
-        const breadCrumb = `Gjorda mål ${women === true ? 'Damer' : 'Herrar'}`
+        const breadCrumb = `Gjorda mål`
         const title = `Bandyresultat - Rekord gjorda mål - ${women === true ? 'Damer' : 'Herrar'}`
         const url = `https://bandyresultat.se/maraton/records/scored?women=${women}`
         const description = `Rekord i antalet gjorda mål i bandyns Elitserie för ${women ? 'damer' : 'herrar'}`
