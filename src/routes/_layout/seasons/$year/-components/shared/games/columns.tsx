@@ -9,14 +9,7 @@ export const columns: Array<
     accessorKey: 'home.casualName',
 
     cell: ({ row }) => (
-      <div className="w-12 xs:w-16 text-left text-[8px] sm:w-28 sm:text-sm md:text-sm lg:text-base 2xl:w-32 flex flex-row gap-1 sm:gap-2 items-center">
-        <TeamLogo
-          size={32}
-          teamId={row.original.homeTeamId}
-          className="object-scale-down w-2 xs:w-3 sm:w-4 md:w-5"
-          alt={row.original.home.casualName}
-          title={row.original.home.casualName}
-        />
+      <div className="w-12 xs:w-16 text-left text-[8px] sm:w-28 sm:text-sm md:text-sm lg:text-base 2xl:w-32">
         <span className="truncate">
           {row.getValue('home_casualName')}
         </span>
@@ -26,25 +19,31 @@ export const columns: Array<
   {
     accessorKey: 'game_id',
 
-    cell: () => (
-      <div className="w-4 text-[8px] sm:text-sm md:text-sm lg:text-base">
-        <span>-</span>
+    cell: ({ row }) => (
+      <div className="text-[8px] sm:text-sm md:text-sm lg:text-base flex flex-row justify-evenly gap-0.5 xxs:gap-1 msm:gap-2 items-center">
+        <TeamLogo
+          size={32}
+          teamId={row.original.homeTeamId}
+          className="hidden xxs:block object-scale-down w-2 xs:w-3 sm:w-4 md:w-5"
+          alt={row.original.home.casualName}
+          title={row.original.home.casualName}
+        />
+        <span className="w-4 text-center">-</span>
+        <TeamLogo
+          size={32}
+          teamId={row.original.awayTeamId}
+          className="hidden xxs:block object-scale-down w-2 xs:w-3 sm:w-4 md:w-5"
+          alt={row.original.away.casualName}
+          title={row.original.away.casualName}
+        />
       </div>
     ),
-    maxSize: 16,
   },
   {
     accessorKey: 'away.casualName',
 
     cell: ({ row }) => (
-      <div className="w-12 xs:w-16 text-left text-[8px] sm:w-28 sm:text-sm md:text-sm lg:text-base 2xl:w-32 flex flex-row gap-1 sm:gap-2 items-center">
-        <TeamLogo
-          size={32}
-          teamId={row.original.awayTeamId}
-          className="object-scale-down w-2 xs:w-3 sm:w-4 md:w-5"
-          alt={row.original.away.casualName}
-          title={row.original.away.casualName}
-        />
+      <div className="w-12 xs:w-16 text-left text-[8px] sm:w-28 sm:text-sm md:text-sm lg:text-base 2xl:w-32">
         <span className="truncate">
           {row.getValue('away_casualName')}
         </span>
@@ -58,7 +57,7 @@ export const columns: Array<
       return row.result
     },
     cell: ({ row }) => (
-      <div className="w-6 text-center text-[10px] sm:text-xs md:w-8 md:text-sm lg:w-10 lg:text-base 2xl:w-12 2xl:text-lg">
+      <div className="w-6 text-center text-[8px] sm:text-sm md:w-8 lg:w-10 lg:text-base 2xl:w-12 2xl:text-lg">
         {row.getValue('result')}
       </div>
     ),
@@ -66,7 +65,7 @@ export const columns: Array<
   {
     accessorKey: 'halftimeResult',
     cell: ({ row }) => (
-      <div className="w-6 text-center text-[10px] sm:text-xs md:w-8 md:text-sm lg:w-10 lg:text-base 2xl:w-12 2xl:text-lg">
+      <div className="w-6 text-center text-[8px] sm:text-sm md:w-8 lg:w-10 lg:text-base 2xl:w-12 2xl:text-lg">
         <span>
           {row.getValue('halftimeResult') === null ||
           row.getValue('halftimeResult') === ''

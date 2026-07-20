@@ -31,7 +31,7 @@ function Content({
         return (
           <div
             key={`${s.startDate}-${index}`}
-            className="bg-muted-foreground/20 mb-1 flex flex-row justify-between rounded px-2 py-1 xs:text-xs text-[8px] lg:text-sm max-w-md"
+            className="border shadow-md mb-1 flex flex-row justify-between rounded px-2 py-1 xs:text-xs text-[8px] lg:text-sm max-w-md"
           >
             <div>
               <Date>{s.startDate}</Date> -{' '}

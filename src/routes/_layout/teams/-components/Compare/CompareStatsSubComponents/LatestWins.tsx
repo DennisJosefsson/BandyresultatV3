@@ -1,5 +1,5 @@
 import Date from '@/components/Common/Date'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/base/ui/card'
+import StatsCard from './StatsCard'
 
 type LatestWinsProps = {
   latestWins: Array<{
@@ -12,36 +12,37 @@ type LatestWinsProps = {
   title: string
 }
 
-const LatestWins = ({ latestWins, title }: LatestWinsProps) => {
+const LatestWins = ({
+  latestWins,
+  title,
+}: LatestWinsProps) => {
   if (latestWins.length === 0) return null
   return (
-    <Card className="mt-2 w-full" size="sm">
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div>
-          {latestWins.map((game) => {
-            return (
-              <div
-                key={game.gameId}
-                className="bg-muted-foreground/20 my-2 flex w-full flex-col rounded px-3 py-1"
-              >
-                <div className="mb-0.5 font-semibold">
-                  <Date>{game.date}</Date>
+    <StatsCard>
+      <StatsCard.Title>{title}</StatsCard.Title>
+      <StatsCard.Content>
+        {latestWins.map((game) => {
+          return (
+            <div
+              key={game.gameId}
+              className="bg-muted-foreground/20 my-2 flex w-full flex-col rounded px-3 py-1"
+            >
+              <div className="mb-0.5 font-semibold">
+                <Date>{game.date}</Date>
+              </div>
+              <div className="flex flex-row justify-between">
+                <div>
+                  {game.homeName}-{game.awayName}
                 </div>
-                <div className="flex flex-row justify-between">
-                  <div>
-                    {game.homeName}-{game.awayName}
-                  </div>
-                  <div className="tabular-nums">{game.result}</div>
+                <div className="tabular-nums">
+                  {game.result}
                 </div>
               </div>
-            )
-          })}
-        </div>
-      </CardContent>
-    </Card>
+            </div>
+          )
+        })}
+      </StatsCard.Content>
+    </StatsCard>
   )
 }
 

@@ -1,9 +1,11 @@
-import { getRouteApi } from '@tanstack/react-router'
 import { Slider } from '@/components/base/ui/slider'
-import IntervalTable from './IntervalTable'
+import { getRouteApi } from '@tanstack/react-router'
 import { getCurrentIntervalTable } from '../../-functions/getCurrentIntervalTable'
+import IntervalTable from './IntervalTable'
 
-const route = getRouteApi('/_layout/seasons/$year/$group/interval')
+const route = getRouteApi(
+  '/_layout/seasons/$year/$group/interval',
+)
 
 const RangeData = () => {
   const data = route.useLoaderData()
@@ -11,6 +13,7 @@ const RangeData = () => {
   const start = route.useSearch({ select: (s) => s.start })
   const end = route.useSearch({ select: (s) => s.end })
   if (data.status === 404) return null
+
   const range = [start, end ?? data.dates.length - 1]
 
   const valueChange = (value: Array<number>) => {
@@ -32,20 +35,36 @@ const RangeData = () => {
   return (
     <div className="mx-1 flex flex-col gap-4 sm:mx-4">
       <div className="xs:text-[10px] flex flex-row justify-between text-[8px] sm:text-xs lg:text-base">
-        <span className="w-24">{currTable.startDate}</span>
-        <span className="font-semibold">{data.serie.serieName}</span>
-        <span className="w-24 text-right">{currTable.endDate}</span>
+        <span className="w-24">
+          {data.dates.length < 2
+            ? null
+            : currTable.startDate}
+        </span>
+        <span className="font-semibold">
+          {data.serie.serieName}
+        </span>
+        <span className="w-24 text-right">
+          {data.dates.length < 2 ? null : currTable.endDate}
+        </span>
       </div>
-      <Slider
-        value={range}
-        onValueChange={(value) => valueChange(value as Array<number>)}
-        minStepsBetweenValues={1}
-        min={0}
-        max={data.dates.length - 1}
-        orientation="horizontal"
-        // Höjden sätts explicit med "h-1" på track i slider.tsx för att synas.
+      {data.dates.length < 2 ? null : (
+        <Slider
+          value={range}
+          onValueChange={(value) =>
+            valueChange(value as Array<number>)
+          }
+          minStepsBetweenValues={1}
+          min={0}
+          max={data.dates.length - 1}
+          orientation="horizontal"
+          // Höjden sätts explicit med "h-1" på track i slider.tsx för att synas.
+        />
+      )}
+
+      <IntervalTable
+        table={currTable.table}
+        serie={data.serie}
       />
-      <IntervalTable table={currTable.table} serie={data.serie} />
     </div>
   )
 }

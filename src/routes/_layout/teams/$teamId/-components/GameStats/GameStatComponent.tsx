@@ -31,7 +31,7 @@ function Content({
         return (
           <div
             key={`${stat.gameId}-${index}`}
-            className="bg-muted-foreground/20 xs:p-2 mb-1 flex flex-col gap-1 rounded p-1 xs:text-xs text-[8px] lg:text-sm max-w-md"
+            className="border shadow-md xs:p-2 mb-1 flex flex-col gap-1 rounded p-1 xs:text-xs text-[8px] lg:text-sm max-w-md"
           >
             <div className="flex flex-row justify-between">
               <span>

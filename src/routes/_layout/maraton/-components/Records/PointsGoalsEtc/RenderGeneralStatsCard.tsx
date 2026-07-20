@@ -6,11 +6,19 @@ type RenderGeneralStatsCardProps = {
   stat: string
 }
 
-const RenderGeneralStatsCard = ({ array, stat }: RenderGeneralStatsCardProps) => {
+const RenderGeneralStatsCard = ({
+  array,
+  stat,
+}: RenderGeneralStatsCardProps) => {
   return (
-    <div>
+    <div className="border shadow-md max-w-90">
       {array.map((item) => {
-        return <GeneralStatsCard key={`${item.team.name}-${item.count}-${stat}`} {...item} />
+        return (
+          <GeneralStatsCard
+            key={`${item.team.name}-${item.count}-${stat}`}
+            {...item}
+          />
+        )
       })}
     </div>
   )

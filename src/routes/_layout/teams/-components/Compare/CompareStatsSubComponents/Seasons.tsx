@@ -1,6 +1,6 @@
 import { getRouteApi } from '@tanstack/react-router'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/base/ui/card'
 import CompareStatsCard from './CompareStatsCard'
+import StatsCard from './StatsCard'
 const route = getRouteApi('/_layout/teams/compare')
 
 const Seasons = () => {
@@ -10,47 +10,62 @@ const Seasons = () => {
     },
   })
   const data = route.useLoaderData()
-  if (data.status === 400 || data.status === 404) return null
+  if (data.status === 400 || data.status === 404)
+    return null
   return (
     <>
-      <Card className="mt-2 w-full" size="sm">
-        <CardHeader>
-          <CardTitle>Säsonger i databasen</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="mb-2">
-            {data.allDbSeasons.map((stat) => {
-              return <CompareStatsCard stat={stat} key={stat.teamId} />
-            })}
-          </div>
-        </CardContent>
-      </Card>
-      <Card className="mt-2 w-full" size="sm">
-        <CardHeader>
-          <CardTitle>Säsonger i högsta serien</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="mb-2">
-            {data.firstDivisionSeasons.map((stat) => {
-              return <CompareStatsCard stat={stat} key={stat.teamId} />
-            })}
-          </div>
-        </CardContent>
-      </Card>
+      <StatsCard>
+        <StatsCard.Title>
+          Säsonger i databasen
+        </StatsCard.Title>
+
+        <StatsCard.Content>
+          {data.allDbSeasons.map((stat) => {
+            return (
+              <CompareStatsCard
+                stat={stat}
+                key={stat.teamId}
+              />
+            )
+          })}
+        </StatsCard.Content>
+      </StatsCard>
+      <StatsCard>
+        <StatsCard.Title>
+          Säsonger i högsta serien
+        </StatsCard.Title>
+
+        <StatsCard.Content>
+          {data.firstDivisionSeasons.map((stat) => {
+            return (
+              <CompareStatsCard
+                stat={stat}
+                key={stat.teamId}
+              />
+            )
+          })}
+        </StatsCard.Content>
+      </StatsCard>
       {!women && (
         <>
-          <Card className="mt-2 w-full" size="sm">
-            <CardHeader>
-              <CardTitle>Säsonger i högsta serien sedan 1931</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="mb-2">
-                {data.firstDivisionSeasonsSince1931.map((stat) => {
-                  return <CompareStatsCard stat={stat} key={stat.teamId} />
-                })}
-              </div>
-            </CardContent>
-          </Card>
+          <StatsCard>
+            <StatsCard.Title>
+              Säsonger i högsta serien sedan 1931
+            </StatsCard.Title>
+
+            <StatsCard.Content>
+              {data.firstDivisionSeasonsSince1931.map(
+                (stat) => {
+                  return (
+                    <CompareStatsCard
+                      stat={stat}
+                      key={stat.teamId}
+                    />
+                  )
+                },
+              )}
+            </StatsCard.Content>
+          </StatsCard>
         </>
       )}
     </>

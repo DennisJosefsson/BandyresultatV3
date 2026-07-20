@@ -6,11 +6,19 @@ type RenderPointsGoalsCardProps = {
   stat: string
 }
 
-const RenderPointsGoalsCard = ({ array, stat }: RenderPointsGoalsCardProps) => {
+const RenderPointsGoalsCard = ({
+  array,
+  stat,
+}: RenderPointsGoalsCardProps) => {
   return (
-    <div>
+    <div className="border shadow-md">
       {array.map((item) => {
-        return <PointsGoalsCard key={`${item.team.casualName}-${item.year}-${stat}`} {...item} />
+        return (
+          <PointsGoalsCard
+            key={`${item.team.casualName}-${item.year}-${stat}`}
+            {...item}
+          />
+        )
       })}
     </div>
   )
