@@ -36,13 +36,25 @@ function MapItem({
         <div className="size-4 rounded-full border-2 border-orange-500 bg-orange-500 opacity-75 shadow-lg" />
       </MarkerContent>
       <MarkerTooltip>{team.team.name}</MarkerTooltip>
-      <MarkerPopup className="w-35 sm:w-85 md:w-100">
+      <MarkerPopup className="w-fit sm:w-85 md:w-100 lg:w-120 border shadow-md">
         <div className="flex flex-col gap-2 sm:hidden">
-          <div className="flex flex-row justify-between items-center">
+          <div className="flex flex-row justify-between items-center gap-2">
             <div className="flex flex-col">
-              <span className="text-[8px] font-bold sm:text-sm md:text-base lg:text-lg">
-                {team.team.name}
-              </span>
+              <div className="flex flex-row items-center justify-between">
+                <Link
+                  from="/teams/map"
+                  to="/teams/$teamId/tables"
+                  params={{ teamId: team.team.teamId }}
+                  search={(prev) => ({ women: prev.women })}
+                  className="mr-1.5"
+                >
+                  <span className="text-[8px] font-bold sm:text-sm md:text-base lg:text-lg truncate">
+                    {team.team.name}
+                  </span>
+                </Link>
+
+                <ExternalLinkIcon className="size-2 xs:size-2.5 sm:size-3 md:size-4" />
+              </div>
               <span className="text-[8px] sm:text-sm">
                 {team.team.city}, {team.county.name}
               </span>
@@ -57,44 +69,8 @@ function MapItem({
               />
             </div>
           </div>
-
-          <div className="flex flex-row justify-between items-center">
-            <Link
-              from="/teams/map"
-              to="/teams/$teamId/tables"
-              params={{ teamId: team.team.teamId }}
-              search={(prev) => ({ women: prev.women })}
-              className="mr-1.5"
-            >
-              <span>
-                <ExternalLinkIcon className="size-2 xs:size-2.5 sm:size-3 md:size-4" />
-              </span>
-            </Link>
-          </div>
         </div>
         <div className="hidden sm:flex flex-row items-center justify-between gap-8">
-          <div className="flex w-full flex-col gap-2 sm:gap-4">
-            <div className="flex flex-col">
-              <div className="flex flex-row items-center">
-                <span className="text-[8px] font-bold sm:text-sm md:text-base lg:text-lg w-54 md:w-64 truncate">
-                  {team.team.name}
-                </span>
-                <Link
-                  from="/teams/map"
-                  to="/teams/$teamId/tables"
-                  params={{ teamId: team.team.teamId }}
-                  search={(prev) => ({ women: prev.women })}
-                >
-                  <span>
-                    <ExternalLinkIcon className="size-2 xs:size-2.5 sm:size-3 md:size-4" />
-                  </span>
-                </Link>
-              </div>
-              <span className="text-[8px] sm:text-sm truncate">
-                {team.team.city}, {team.county.name}
-              </span>
-            </div>
-          </div>
           <div className="hidden xs:inline">
             <TeamLogo
               size={128}
@@ -103,6 +79,27 @@ function MapItem({
               alt={team.team.casualName}
               title={team.team.name}
             />
+          </div>
+          <div className="flex w-full flex-col gap-2 sm:gap-4">
+            <div className="flex flex-col">
+              <div className="flex flex-row items-center justify-between">
+                <Link
+                  from="/teams/map"
+                  to="/teams/$teamId/tables"
+                  params={{ teamId: team.team.teamId }}
+                  search={(prev) => ({ women: prev.women })}
+                  className="peer"
+                >
+                  <span className="text-[8px] font-bold sm:text-sm md:text-base lg:text-lg w-54 md:w-64 truncate">
+                    {team.team.name}
+                  </span>
+                </Link>
+                <ExternalLinkIcon className="invisible peer-hover:visible size-2 xs:size-2.5 sm:size-3 md:size-4" />
+              </div>
+              <span className="text-[8px] sm:text-sm truncate">
+                {team.team.city}, {team.county.name}
+              </span>
+            </div>
           </div>
         </div>
       </MarkerPopup>
