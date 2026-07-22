@@ -6,6 +6,7 @@ import {
   desc,
   eq,
   gt,
+  gte,
   inArray,
   or,
   sql,
@@ -22,7 +23,7 @@ const season_order = db.$with('season_order').as(
       year: seasons.year,
     })
     .from(seasons)
-    .where(gt(seasons.seasonId, 25)),
+    .where(gte(seasons.seasonId, 25)),
 )
 
 const playoff_seasons = db.$with('playoff_seasons').as(
@@ -31,6 +32,7 @@ const playoff_seasons = db.$with('playoff_seasons').as(
     .from(teamgames)
     .where(
       and(
+        gte(teamgames.seasonId, 25),
         eq(teamgames.teamId, sql.placeholder('teamId')),
         or(
           inArray(teamgames.category, [
@@ -86,9 +88,10 @@ const group_array = db.$with('group_array').as(
         sql<number>`mode() within group (order by grouped)`.as(
           'max_count',
         ),
-      years: sql`array_agg("year" order by "year")`.as(
-        'years',
-      ),
+      years:
+        sql`array_agg(grouped_playoffs."year" order by "year")`.as(
+          'years',
+        ),
     })
     .from(grouped_playoffs)
     .groupBy(grouped_playoffs.grouped),
@@ -104,6 +107,7 @@ export const preparedPlayoffStreaks = db
     endYear: sql<string>`years[array_upper(years,1)]`.as(
       'end_year',
     ),
+    years: group_array.years,
   })
   .from(group_array)
   .where(
