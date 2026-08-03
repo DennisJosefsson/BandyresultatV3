@@ -1,6 +1,6 @@
 import { db } from '@/db'
 import { games, teamgames, teams } from '@/db/schema'
-import { and, eq, max, sql } from 'drizzle-orm'
+import { and, desc, eq, max, sql } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
 
 const home = alias(teams, 'home')
@@ -51,4 +51,5 @@ export const preparedMaxConcededHome = db
       ),
     ),
   )
+  .orderBy(desc(teamgames.date))
   .prepare('maxConcededHome')

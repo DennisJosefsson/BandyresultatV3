@@ -4,6 +4,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/base/ui/c
 import changelog from '@/assets/markdown/changelog.md'
 
 export const Route = createFileRoute('/_layout/about/changelog')({
+  beforeLoad: () => {
+    return { sidebarSection: 'about' }
+  },
   staticData: { breadcrumb: 'Changelog' },
   head: () => ({
     meta: [

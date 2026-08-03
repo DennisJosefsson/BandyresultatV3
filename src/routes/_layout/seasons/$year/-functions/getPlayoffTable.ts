@@ -1,10 +1,10 @@
 import { db } from '@/db'
-import { games, playoffseason, seasons } from '@/db/schema'
+import { playoffseason, seasons } from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import type { Game } from '@/lib/types/game'
 import type {
-  GroupPlayoffTable,
+  PlayoffCategoryArray,
   PlayoffSeriesTable,
 } from '@/lib/types/table'
 import { seasonIdCheck } from '@/lib/utils/utils'
@@ -23,9 +23,7 @@ type PlayoffTableReturn =
   | {
       status: 200
       finalGames: Array<Omit<Game, 'season'>>
-      semiTables: Array<GroupPlayoffTable> | undefined
-      quarterTables: Array<GroupPlayoffTable> | undefined
-      eightTables: Array<GroupPlayoffTable> | undefined
+      playoffTables: Array<PlayoffCategoryArray>
       playoffSeriesTables:
         | Array<PlayoffSeriesTable>
         | undefined
@@ -114,22 +112,22 @@ export const getPlayoffTable = createServerFn({
 
         const playoffSeason = playoffSeasonArr[0]
 
-        const playoffGamesCount = await db.$count(
-          games,
-          and(
-            eq(games.seasonId, playoffSeason.seasonId),
-            eq(games.playoff, true),
-          ),
-        )
+        // const playoffGamesCount = await db.$count(
+        //   games,
+        //   and(
+        //     eq(games.seasonId, playoffSeason.seasonId),
+        //     eq(games.playoff, true),
+        //   ),
+        // )
 
-        if (playoffGamesCount === 0) {
-          return {
-            status: 404,
-            message: 'Inga slutspelsmatcher är inlagda.',
-            breadCrumb,
-            meta,
-          }
-        }
+        // if (playoffGamesCount === 0) {
+        //   return {
+        //     status: 404,
+        //     message: 'Inga slutspelsmatcher är inlagda.',
+        //     breadCrumb,
+        //     meta,
+        //   }
+        // }
 
         const playoffData = await getPlayoffTableData({
           playoffSeason,

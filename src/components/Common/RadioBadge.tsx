@@ -6,7 +6,7 @@ interface RadioBadgesProps extends RadioGroupProps {
   array: Array<{
     value: string
     label: string
-    description: string
+    description?: string
   }>
   orientation?: 'vertical' | 'horizontal' | 'responsive' | null | undefined
 }
@@ -26,10 +26,16 @@ const RadioBadges = ({
           <FieldLabel htmlFor={name} key={name}>
             <Field orientation={orientation}>
               <FieldContent>
-                <FieldTitle>{rb.label}</FieldTitle>
-                <FieldDescription>{rb.description}</FieldDescription>
+                <FieldTitle className="text-[10px] sm:text-xs">{rb.label}</FieldTitle>
+                <FieldDescription className="text-[10px] sm:text-xs">
+                  {rb.description}
+                </FieldDescription>
               </FieldContent>
-              <RadioGroupItem value={rb.value} id={name} />
+              <RadioGroupItem
+                value={rb.value}
+                id={name}
+                className="focus-visible:ring-2 md:focus-visible:ring-3"
+              />
             </Field>
           </FieldLabel>
         )

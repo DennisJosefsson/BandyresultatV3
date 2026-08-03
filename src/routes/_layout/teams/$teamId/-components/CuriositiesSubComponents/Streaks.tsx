@@ -7,7 +7,7 @@ const Streaks = () => {
   const data = route.useLoaderData()
   if (data.status === 404) return null
   return (
-    <div className="grid grid-cols-1 gap-1 md:grid-cols-2 md:gap-2">
+    <div className="grid grid-cols-1 gap-2 md:gap-4 justify-start h-fit">
       {data.streaks.unbeatenStreak.length > 0 ? (
         <StreakComponent>
           <StreakComponent.Title>
@@ -44,7 +44,7 @@ const Streaks = () => {
       {data.streaks.losingStreak.length > 0 ? (
         <StreakComponent>
           <StreakComponent.Title>
-            Förlustermatcher i rad
+            Förlustmatcher i rad
           </StreakComponent.Title>
           <StreakComponent.Content
             streak={data.streaks.losingStreak}

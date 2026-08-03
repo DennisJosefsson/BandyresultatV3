@@ -1,4 +1,4 @@
-import Date from '@/components/Common/Date'
+import { Datum } from '@/components/Common/Date'
 import type { TeamStreak } from '@/lib/types/team'
 import type { ReactNode } from 'react'
 
@@ -12,7 +12,7 @@ const StreakComponent = ({
 
 function Title({ children }: { children: ReactNode }) {
   return (
-    <div className="xs:text-xs text-[8px] md:text-sm mb-1">
+    <div className="xs:text-xs mb-1 text-[8px] md:text-sm">
       {children}
     </div>
   )
@@ -31,11 +31,11 @@ function Content({
         return (
           <div
             key={`${s.startDate}-${index}`}
-            className="border shadow-md mb-1 flex flex-row justify-between rounded px-2 py-1 xs:text-xs text-[8px] lg:text-sm max-w-md"
+            className="xs:text-xs mb-2 flex max-w-lg flex-row justify-between rounded border px-2 py-1 text-[8px] shadow-xs md:shadow-sm lg:text-sm"
           >
             <div>
-              <Date>{s.startDate}</Date> -{' '}
-              <Date>{s.endDate}</Date>
+              <Datum>{s.startDate}</Datum> -{' '}
+              <Datum>{s.endDate}</Datum>
             </div>
             <div>{s.gameCount}</div>
           </div>

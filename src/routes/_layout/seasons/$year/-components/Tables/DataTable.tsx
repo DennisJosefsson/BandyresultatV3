@@ -1,3 +1,14 @@
+import type { ColumnDef, SortingState } from '@tanstack/react-table'
+import { useState } from 'react'
+import {
+  flexRender,
+  getCoreRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from '@tanstack/react-table'
+import type { TeamTable } from '@/lib/types/table'
+import { useCookies } from '@/lib/contexts/cookieContext'
+import { PositionCell, PositionHeader } from '@/components/Common/Tables/Number'
 import {
   Table,
   TableBody,
@@ -6,32 +17,16 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/base/ui/table'
-import { useFavTeam } from '@/lib/contexts/favTeamsContext'
-import type {
-  ColumnDef,
-  SortingState,
-} from '@tanstack/react-table'
-import {
-  flexRender,
-  getCoreRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from '@tanstack/react-table'
-import { useState } from 'react'
 
 interface DataTableProps<TData, TValue> {
   columns: Array<ColumnDef<TData, TValue>>
   data: Array<TData>
-  teamObject: {
-    [x: string]: number
-  }
   serieStructure: Array<number> | null | undefined
 }
 
 const DataTable = <TData, TValue>({
   columns,
   data,
-  teamObject,
   serieStructure,
 }: DataTableProps<TData, TValue>) => {
   const [sorting, setSorting] = useState<SortingState>([
@@ -52,38 +47,21 @@ const DataTable = <TData, TValue>({
     },
   })
 
-  const { favTeams } = useFavTeam()
-
-  const getString = (x: unknown): string => {
-    if (!x) throw new Error('Missing string')
-
-    return x as string
-  }
+  const { favTeams } = useCookies()
 
   return (
-    <div>
-      <Table className="text-[10px] lg:text-sm xl:text-base">
+    <div className="border p-2 shadow-xs md:shadow-sm">
+      <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
-              <TableHead
-                key={'position'}
-                className="hidden px-2 py-1 sm:table-cell w-4 sm:w-6 xl:text-base "
-              >
-                P
-              </TableHead>
+              <PositionHeader key={'position'}>P</PositionHeader>
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead
-                    key={header.id}
-                    className="px-0"
-                  >
+                  <TableHead key={header.id} className="px-0">
                     {header.isPlaceholder
                       ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
+                      : flexRender(header.column.columnDef.header, header.getContext())}
                   </TableHead>
                 )
               })}
@@ -93,51 +71,30 @@ const DataTable = <TData, TValue>({
 
         <TableBody>
           {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row, index) => (
-              <TableRow
-                key={row.id}
-                data-state={
-                  row.getIsSelected() && 'selected'
-                }
-                className={`${
-                  favTeams.includes(
-                    teamObject[
-                      getString(
-                        row.getValue('team_casualName'),
-                      )
-                    ],
-                  )
-                    ? 'font-bold'
-                    : null
-                } ${serieStructure?.includes(index + 1) ? 'border-foreground border-b-2' : null}`}
-              >
-                <TableCell
-                  key={`index-${index}`}
-                  className="hidden tabular-nums sm:table-cell w-4 sm:w-6 xl:text-base "
+            table.getRowModel().rows.map((row, index) => {
+              const original = row.original as Omit<TeamTable, 'women' | 'group' | 'season'>
+              return (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && 'selected'}
+                  data-favteam={favTeams.includes(original.teamId) ? true : false}
+                  data-tabledivider={serieStructure?.includes(index + 1) ? true : false}
+                  className="data-[tabledivider=true]:border-foreground data-[favteam=true]:font-semibold data-[tabledivider=true]:border-b-2"
                 >
-                  {index + 1}
-                </TableCell>
-                {row.getVisibleCells().map((cell) => {
-                  return (
-                    <TableCell
-                      key={cell.id}
-                      className="px-0 py-1"
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </TableCell>
-                  )
-                })}
-              </TableRow>
-            ))
+                  <PositionCell key={`index-${index}`}>{index + 1}</PositionCell>
+                  {row.getVisibleCells().map((cell) => {
+                    return (
+                      <TableCell key={cell.id}>
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </TableCell>
+                    )
+                  })}
+                </TableRow>
+              )
+            })
           ) : (
             <TableRow>
-              <TableCell
-                colSpan={columns.length}
-                className="h-24 text-center"
-              >
+              <TableCell colSpan={columns.length} className="h-24 text-center">
                 Inga resultat.
               </TableCell>
             </TableRow>

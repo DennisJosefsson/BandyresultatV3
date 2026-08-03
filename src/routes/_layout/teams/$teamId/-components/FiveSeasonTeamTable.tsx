@@ -1,17 +1,15 @@
-import type { FiveSeason } from '@/lib/types/team'
-import type { VisibilityState } from '@tanstack/react-table'
 import type { Dispatch, SetStateAction } from 'react'
-import DataTable from './TableComponents/DataTable'
-import { columns } from './TableComponents/fiveSeasonsColumns'
+import type { VisibilityState } from '@tanstack/react-table'
+import type { FiveSeason } from '@/lib/types/team'
 import MobileDataTable from './TableComponents/MobileDataTable'
+import { columns } from './TableComponents/fiveSeasonsColumns'
+import DataTable from './TableComponents/DataTable'
 
 type ComponentProps = {
   tables: FiveSeason['tables']
   season?: string
   columnVisibility: VisibilityState
-  setColumnVisibility: Dispatch<
-    SetStateAction<VisibilityState>
-  >
+  setColumnVisibility: Dispatch<SetStateAction<VisibilityState>>
 }
 
 const FiveSeasonTeamTable = ({
@@ -25,30 +23,22 @@ const FiveSeasonTeamTable = ({
       <div>
         {tables.map((table) => {
           return (
-            <div
-              key={table.group}
-              className="mb-2"
-            >
+            <div key={table.group} className="mb-2">
               <div>
-                <span className="font-semibold xs:text-xs text-[10px] md:text-sm">
+                <span className="xs:text-xs text-[10px] font-semibold md:text-sm">
                   {`${table.serie.serieName} ${season}`}
                 </span>
               </div>
               <div>
-                <div className="hidden sm:block max-w-3xl p-2">
-                  <DataTable
-                    columns={columns}
-                    data={[table]}
-                  />
+                <div className="msm:block hidden max-w-3xl p-2">
+                  <DataTable columns={columns} data={[table]} />
                 </div>
-                <div className="sm:hidden">
+                <div className="msm:hidden">
                   <MobileDataTable
                     columns={columns}
                     data={[table]}
                     columnVisibility={columnVisibility}
-                    setColumnVisibility={
-                      setColumnVisibility
-                    }
+                    setColumnVisibility={setColumnVisibility}
                   />
                 </div>
               </div>

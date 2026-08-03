@@ -1,13 +1,13 @@
-import { db } from '@/db'
-import { games, teams, teamseries } from '@/db/schema'
-import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
-import { catchError } from '@/lib/middlewares/errors/catchError'
-import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import type { generatedGameObject } from '@/lib/types/game'
-import { zd } from '@/lib/utils/zod'
-import { createServerFn } from '@tanstack/react-start'
 import type { SQL } from 'drizzle-orm'
 import { eq } from 'drizzle-orm'
+import { createServerFn } from '@tanstack/react-start'
+import type { generatedGameObject } from '@/lib/types/game'
+import { zd } from '@/lib/utils/zod'
+import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
+import { catchError } from '@/lib/middlewares/errors/catchError'
+import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
+import { games, teams, teamseries } from '@/db/schema'
+import { db } from '@/db'
 
 type GameObject = zd.infer<typeof generatedGameObject>
 
@@ -15,14 +15,11 @@ export const generateSchedule = createServerFn({
   method: 'GET',
 })
   .middleware([authMiddleware, errorMiddleware])
-  .validator(
-    zd.object({ serieId: zd.number().int().positive() }),
-  )
+  .validator(zd.object({ serieId: zd.number().int().positive() }))
   .handler(async ({ data: { serieId } }) => {
     try {
       const serie = await db.query.series.findFirst({
-        where: (series, { eq: equal }) =>
-          equal(series.serieId, serieId),
+        where: (series, { eq: equal }) => equal(series.serieId, serieId),
         with: {
           season: {
             columns: { women: true },
@@ -32,12 +29,7 @@ export const generateSchedule = createServerFn({
 
       if (!serie) throw new Error('Serien finns inte.')
 
-      const playoff = [
-        'eight',
-        'quarter',
-        'semi',
-        'final',
-      ].includes(serie.category)
+      const playoff = ['eight', 'quarter', 'semi', 'final'].includes(serie.category)
 
       const teamArray = await db
         .select({
@@ -45,16 +37,10 @@ export const generateSchedule = createServerFn({
           name: teams.name as unknown as SQL<string>,
         })
         .from(teamseries)
-        .leftJoin(
-          teams,
-          eq(teams.teamId, teamseries.teamId),
-        )
+        .leftJoin(teams, eq(teams.teamId, teamseries.teamId))
         .where(eq(teamseries.serieId, serieId))
 
-      const currentGames = await db
-        .select()
-        .from(games)
-        .where(eq(games.serieId, serieId))
+      const currentGames = await db.select().from(games).where(eq(games.serieId, serieId))
 
       const gameArray: Array<GameObject> = []
 
@@ -63,11 +49,7 @@ export const generateSchedule = createServerFn({
           if (home.teamId === away.teamId) return
 
           if (
-            currentGames.some(
-              (g) =>
-                g.homeTeamId === home.teamId &&
-                g.awayTeamId === away.teamId,
-            )
+            currentGames.some((g) => g.homeTeamId === home.teamId && g.awayTeamId === away.teamId)
           )
             return
 
@@ -91,9 +73,7 @@ export const generateSchedule = createServerFn({
 
       return {
         status: 200,
-        games: playoff
-          ? [...gameArray, ...gameArray, ...gameArray]
-          : gameArray,
+        games: playoff ? [...gameArray, ...gameArray, ...gameArray] : gameArray,
       }
     } catch (error) {
       catchError(error)

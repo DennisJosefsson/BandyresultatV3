@@ -1,16 +1,15 @@
-import { Outlet, getRouteApi } from '@tanstack/react-router'
-import { Card } from '@/components/base/ui/card'
 import { Button } from '@/components/base/ui/button'
-import EditTeamSerie from './EditTeamserie'
-import EditSerie from './EditSerie'
+import { Card } from '@/components/base/ui/card'
+import { Outlet, getRouteApi } from '@tanstack/react-router'
 import AddTeamToSerie from './AddTeamToSerie'
+import EditSerie from './EditSerie'
+import EditTeamSerie from './EditTeamserie'
 
-const route = getRouteApi('/_layout/dashboard/season/$seasonId/info_/$serieId/edit')
+const route = getRouteApi(
+  '/_layout/dashboard/season/$seasonId/info_/$serieId/edit',
+)
 
 const EditSerieForms = () => {
-  const data = route.useLoaderData()
-
-  const disabled = data.teamsInSerie.length === 0
   return (
     <div className="flex flex-col gap-4">
       <EditSerie />
@@ -26,6 +25,7 @@ const EditSerieForms = () => {
               <route.Link
                 to="/dashboard/season/$seasonId/info/$serieId/edit/newParentId"
                 search={(prev) => ({ women: prev.women })}
+                resetScroll={false}
               >
                 Lägg till ParentId
               </route.Link>
@@ -38,6 +38,7 @@ const EditSerieForms = () => {
               <route.Link
                 to="/dashboard/season/$seasonId/info/$serieId/edit/editParentId"
                 search={(prev) => ({ women: prev.women })}
+                resetScroll={false}
               >
                 Redigera ParentId
               </route.Link>
@@ -50,13 +51,12 @@ const EditSerieForms = () => {
               <route.Link
                 to="/dashboard/season/$seasonId/info/$serieId/edit/games"
                 search={(prev) => ({ women: prev.women })}
-                disabled={disabled}
+                resetScroll={false}
               >
                 Matcher
               </route.Link>
             }
             nativeButton={false}
-            disabled={disabled}
           />
 
           <Button
@@ -64,13 +64,12 @@ const EditSerieForms = () => {
               <route.Link
                 to="/dashboard/season/$seasonId/info/$serieId/edit/generateschedule"
                 search={(prev) => ({ women: prev.women })}
-                disabled={disabled}
+                resetScroll={false}
               >
                 Generera spelschema
               </route.Link>
             }
             nativeButton={false}
-            disabled={disabled}
           />
 
           <Button
@@ -78,13 +77,12 @@ const EditSerieForms = () => {
               <route.Link
                 to="/dashboard/season/$seasonId/info/$serieId/edit/singlegame"
                 search={(prev) => ({ women: prev.women })}
-                disabled={disabled}
+                resetScroll={false}
               >
                 Lägg till match
               </route.Link>
             }
             nativeButton={false}
-            disabled={disabled}
           />
 
           <Button
@@ -92,13 +90,12 @@ const EditSerieForms = () => {
               <route.Link
                 to="/dashboard/season/$seasonId/info/$serieId/edit/addGames"
                 search={(prev) => ({ women: prev.women })}
-                disabled={disabled}
+                resetScroll={false}
               >
                 Lägg till matcher
               </route.Link>
             }
             nativeButton={false}
-            disabled={disabled}
           />
 
           <Button
@@ -106,13 +103,12 @@ const EditSerieForms = () => {
               <route.Link
                 to="/dashboard/season/$seasonId/info/$serieId/edit/addTable"
                 search={(prev) => ({ women: prev.women })}
-                disabled={disabled}
+                resetScroll={false}
               >
                 Lägg till tabell
               </route.Link>
             }
             nativeButton={false}
-            disabled={disabled}
           />
 
           <Button
@@ -120,18 +116,21 @@ const EditSerieForms = () => {
               <route.Link
                 to="/dashboard/season/$seasonId/info/$serieId/edit/editTable"
                 search={(prev) => ({ women: prev.women })}
-                disabled={disabled}
+                resetScroll={false}
               >
                 Ändra tabell
               </route.Link>
             }
             nativeButton={false}
-            disabled={disabled}
           />
 
           <Button
             render={
-              <route.Link to="." search={(prev) => ({ women: prev.women })}>
+              <route.Link
+                to="."
+                search={(prev) => ({ women: prev.women })}
+                resetScroll={false}
+              >
                 Tillbaka
               </route.Link>
             }

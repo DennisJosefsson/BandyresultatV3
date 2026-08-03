@@ -6,8 +6,10 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
+import { getRouteApi } from '@tanstack/react-router'
 import type { TeamTable } from '@/lib/types/table'
-import { cn } from '@/lib/utils/utils'
+import { useCookies } from '@/lib/contexts/cookieContext'
+import { PositionCell, PositionHeader } from '@/components/Common/Tables/Number'
 import {
   Table,
   TableBody,
@@ -21,11 +23,12 @@ import { columns, gameColumns, goalsColumns } from './columns'
 
 interface MobileDataTableProps {
   data: Array<TeamTable>
-  casualName: string
   serieStructure: Array<number> | null | undefined
 }
 
-const MobileDataTable = ({ data, serieStructure, casualName }: MobileDataTableProps) => {
+const route = getRouteApi('/_layout/teams/$teamId/seasons/$seasonId/')
+
+const MobileDataTable = ({ data, serieStructure }: MobileDataTableProps) => {
   const [sorting, setSorting] = useState<SortingState>([
     { id: 'totalPoints', desc: true },
     { id: 'totalGoalDifference', desc: true },
@@ -47,11 +50,11 @@ const MobileDataTable = ({ data, serieStructure, casualName }: MobileDataTablePr
     onColumnVisibilityChange: setColumnVisibility,
   })
 
-  const getString = (x: unknown): string => {
-    if (!x) throw new Error('Missing string')
+  const teamId = route.useParams({
+    select: (s) => s.teamId,
+  })
 
-    return x as string
-  }
+  const { favTeams } = useCookies()
 
   const onClickHandler = () => {
     if (visibleColumns === 'goals') {
@@ -70,54 +73,63 @@ const MobileDataTable = ({ data, serieStructure, casualName }: MobileDataTablePr
           {visibleColumns === 'games' ? 'Visa målkolumner' : 'Visa matchkolumner'}
         </Button>
       </div>
-      <Table>
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <TableHead key={header.id} className="px-0">
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(header.column.columnDef.header, header.getContext())}
-                  </TableHead>
-                )
-              })}
-            </TableRow>
-          ))}
-        </TableHeader>
-
-        <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row, index) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && 'selected'}
-                className={cn(
-                  casualName === getString(row.getValue('team_casualName'))
-                    ? 'font-bold italic'
-                    : null,
-                  serieStructure?.includes(index + 1) ? 'border-foreground border-b-2' : null,
-                )}
-              >
-                {row.getVisibleCells().map((cell) => {
+      <div className="border px-1 py-0.5 shadow-xs md:shadow-sm">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                <PositionHeader key={'position'} className="xxs:table-cell hidden">
+                  P
+                </PositionHeader>
+                {headerGroup.headers.map((header) => {
                   return (
-                    <TableCell key={cell.id} className="px-0 py-1">
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
+                    <TableHead key={header.id} className="h-6 px-0">
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(header.column.columnDef.header, header.getContext())}
+                    </TableHead>
                   )
                 })}
               </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
-                Inga resultat.
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+            ))}
+          </TableHeader>
+
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row, index) => {
+                const original = row.original as TeamTable
+                return (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && 'selected'}
+                    data-currentteam={teamId === original.teamId ? true : false}
+                    data-tabledivider={serieStructure?.includes(index + 1) ? true : false}
+                    data-favteam={favTeams.includes(original.teamId) ? true : false}
+                    className="data-[currentteam=true]:bg-muted/50 data-[tabledivider=true]:border-foreground data-[favteam=true]:font-semibold data-[tabledivider=true]:border-b-2"
+                  >
+                    <PositionCell key={`index-${index}`} className="xxs:table-cell hidden">
+                      {index + 1}
+                    </PositionCell>
+                    {row.getVisibleCells().map((cell) => {
+                      return (
+                        <TableCell key={cell.id} className="px-0 py-1">
+                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        </TableCell>
+                      )
+                    })}
+                  </TableRow>
+                )
+              })
+            ) : (
+              <TableRow>
+                <TableCell colSpan={columns.length} className="h-24 text-center">
+                  Inga resultat.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   )
 }

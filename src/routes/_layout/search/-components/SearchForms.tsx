@@ -4,22 +4,16 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/base/ui/accordion'
-import OrderFormComponent from './OrderFormComponent'
-import PreferenceFormComponent from './PreferenceFormComponent'
-import ResultFormComponent from './ResultFormComponent'
 import SeasonFormComponent from './SeasonFormComponent'
+import ResultFormComponent from './ResultFormComponent'
+import PreferenceFormComponent from './PreferenceFormComponent'
+import OrderFormComponent from './OrderFormComponent'
 
 const SearchForms = () => {
   return (
     <div>
-      <Accordion
-        className="border"
-        defaultValue={['resultForm']}
-      >
-        <AccordionItem
-          value="resultform"
-          className="mb-2 rounded-md border-b p-2 shadow-md last:border-b-0"
-        >
+      <Accordion className="border" defaultValue={['resultForm']}>
+        <AccordionItem value="resultform" className="mb-2 rounded-md border-b p-2 last:border-b-0">
           <AccordionTrigger className="text-[10px] sm:text-xs md:text-sm">
             Resultatformulär
           </AccordionTrigger>
@@ -27,10 +21,7 @@ const SearchForms = () => {
             <ResultFormComponent />
           </AccordionContent>
         </AccordionItem>
-        <AccordionItem
-          value="orderform"
-          className="mb-2 rounded-md border-b p-2 shadow-md last:border-b-0"
-        >
+        <AccordionItem value="orderform" className="mb-2 rounded-md border-b p-2 last:border-b-0">
           <AccordionTrigger className="text-[10px] sm:text-xs md:text-sm">
             Sorteringsval
           </AccordionTrigger>
@@ -38,10 +29,7 @@ const SearchForms = () => {
             <OrderFormComponent />
           </AccordionContent>
         </AccordionItem>
-        <AccordionItem
-          value="seasonform"
-          className="mb-2 rounded-md border-b p-2 shadow-md last:border-b-0"
-        >
+        <AccordionItem value="seasonform" className="mb-2 rounded-md border-b p-2 last:border-b-0">
           <AccordionTrigger className="text-[10px] sm:text-xs md:text-sm">
             Säsongsinställningar
           </AccordionTrigger>
@@ -51,7 +39,7 @@ const SearchForms = () => {
         </AccordionItem>
         <AccordionItem
           value="preferenceform"
-          className="mb-2 rounded-md border-b p-2 shadow-md last:border-b-0"
+          className="mb-2 rounded-md border-b p-2 last:border-b-0"
         >
           <AccordionTrigger className="text-[10px] sm:text-xs md:text-sm">
             Matchinställningar

@@ -31,15 +31,7 @@ export const parseSearchRequest = (
         .min(1, {
           message: 'Måste ange minst en matchkategori.',
         })
-        .catch([
-          'final',
-          'semi',
-          'quarter',
-          'eight',
-          'regular',
-          'qualification',
-          'playoffseries',
-        ]),
+        .catch(['final', 'semi', 'quarter', 'eight', 'regular', 'qualification', 'playoffseries']),
       order: zd.enum(['asc', 'desc']).catch('desc'),
       limit: zd.coerce.number().max(50).catch(10),
       result: zd
@@ -50,9 +42,7 @@ export const parseSearchRequest = (
         .optional()
         .nullable()
         .or(zd.literal('')),
-      gameResult: zd
-        .enum(['win', 'lost', 'draw', 'all'])
-        .catch('all'),
+      gameResult: zd.enum(['win', 'lost', 'draw', 'all']).catch('all'),
       goalsScored: zd.coerce
         .number({
           message: 'Gjorda mål måste vara en siffra.',
@@ -61,13 +51,10 @@ export const parseSearchRequest = (
           message: 'Gjorda mål måste vara ett heltal.',
         })
         .nonnegative({
-          message:
-            'Gjorda mål måste vara 0 eller större än 0.',
+          message: 'Gjorda mål måste vara 0 eller större än 0.',
         })
         .optional(),
-      goalsScoredOperator: zd
-        .enum(['eq', 'lte', 'gte'])
-        .catch('gte'),
+      goalsScoredOperator: zd.enum(['eq', 'lte', 'gte']).catch('gte'),
       goalsConceded: zd.coerce
         .number({
           message: 'Insläppta mål måste vara en siffra.',
@@ -76,13 +63,10 @@ export const parseSearchRequest = (
           message: 'Insläppta mål måste vara ett heltal.',
         })
         .nonnegative({
-          message:
-            'Insläppta mål måste vara 0 eller större än 0.',
+          message: 'Insläppta mål måste vara 0 eller större än 0.',
         })
         .optional(),
-      goalsConcededOperator: zd
-        .enum(['eq', 'lte', 'gte'])
-        .catch('lte'),
+      goalsConcededOperator: zd.enum(['eq', 'lte', 'gte']).catch('lte'),
       goalDiff: zd.coerce
         .number({
           message: 'Målskillnaden måste vara en siffra.',
@@ -91,9 +75,7 @@ export const parseSearchRequest = (
           message: 'Målskillnaden måste vara ett heltal.',
         })
         .optional(),
-      goalDiffOperator: zd
-        .enum(['eq', 'lte', 'gte'])
-        .catch('gte'),
+      goalDiffOperator: zd.enum(['eq', 'lte', 'gte']).catch('gte'),
       startSeason: zd
         .preprocess(
           (val) => {
@@ -112,14 +94,12 @@ export const parseSearchRequest = (
                 return true
               },
               {
-                message:
-                  'Första året kan inte vara före 1907',
+                message: 'Första året kan inte vara före 1907',
               },
             )
             .refine(
               (arg) => {
-                if (Number(arg) > parseInt(maxYear))
-                  return false
+                if (Number(arg) > parseInt(maxYear)) return false
                 return true
               },
               {
@@ -175,33 +155,17 @@ export const parseSearchRequest = (
         .optional()
         .nullable()
         .or(zd.literal('')),
-      homeGame: zd
-        .enum(['home', 'away', 'all'])
-        .catch('all'),
+      homeGame: zd.enum(['home', 'away', 'all']).catch('all'),
 
-      selectedGender: zd
-        .enum(['men', 'women', 'all'])
-        .catch('all'),
+      selectedGender: zd.enum(['men', 'women', 'all']).catch('all'),
       orderVar: zd
-        .enum([
-          'date',
-          'goalsScored',
-          'goalsConceded',
-          'goalDifference',
-          'totalGoals',
-        ])
+        .enum(['date', 'goalsScored', 'goalsConceded', 'goalDifference', 'totalGoals'])
         .catch('date'),
     })
-    .refine(
-      (arg) =>
-        Number(arg.endSeason) >=
-        Number(arg.startSeason) + 1,
-      {
-        message:
-          '"Första år" kan inte komma efter "Sista år"',
-        path: ['startSeason'],
-      },
-    )
+    .refine((arg) => Number(arg.endSeason) >= Number(arg.startSeason) + 1, {
+      message: '"Första år" kan inte komma efter "Sista år"',
+      path: ['startSeason'],
+    })
     .refine(
       (arg) => {
         if (arg.teamId && arg.opponentId) {
@@ -220,8 +184,7 @@ export const parseSearchRequest = (
         return true
       },
       {
-        message:
-          'Kan inte välja motståndare utan att välja lag.',
+        message: 'Kan inte välja motståndare utan att välja lag.',
         path: ['opponent'],
       },
     )

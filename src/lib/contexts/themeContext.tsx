@@ -1,8 +1,8 @@
 import type { PropsWithChildren } from 'react'
 import { createContext, use } from 'react'
 import { useRouter } from '@tanstack/react-router'
-import type { T as Theme } from '@/lib/theme'
-import { setThemeServerFn } from '@/lib/theme'
+import type { T as Theme } from '@/lib/cookieFunctions/theme'
+import { setThemeServerFn } from '@/lib/cookieFunctions/theme'
 
 type ThemeContextVal = {
   theme: Theme

@@ -58,10 +58,12 @@ export type PlayoffTable = Omit<
   TeamTable,
   'women' | 'season'
 > & {
+  category: string
   awayGoals: number
 }
 
 export type GroupPlayoffTable = {
+  category: string
   group: string
   result: string
   homeTeam: {
@@ -77,6 +79,17 @@ export type GroupPlayoffTable = {
     casualName: string
   }
   tables: Array<PlayoffTable>
+}
+
+export type PlayoffGroups = {
+  category: string
+  group: string
+  table: GroupPlayoffTable | undefined
+}
+
+export type PlayoffCategoryArray = {
+  category: string
+  groups: Array<PlayoffGroups>
 }
 
 export type PlayoffSeriesTable = {

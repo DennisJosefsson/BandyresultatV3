@@ -14,13 +14,7 @@ const TableList = ({ data }: TableListProps) => {
       </div>
     )
   }
-  const teamObject = data.tables.reduce(
-    (o, key) => ({
-      ...o,
-      [key.team.casualName]: key.teamId,
-    }),
-    {},
-  )
+
   return (
     <div className="mb-6">
       <div id={data.group} className="group mb-0.5 flex flex-row items-center gap-1">
@@ -33,7 +27,6 @@ const TableList = ({ data }: TableListProps) => {
         <MobileDataTable
           columns={columns}
           data={data.tables}
-          teamObject={teamObject}
           serieStructure={data.serieStructure}
         />
         {data.comment && <p className="bg-background p-1 text-[8px] md:text-xs">{data.comment}</p>}

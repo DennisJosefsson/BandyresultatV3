@@ -1,0 +1,7 @@
+export const mapObj = new Map()
+mapObj.set('year', 'år')
+mapObj.set('years', 'år')
+mapObj.set('mons', 'månader')
+mapObj.set('mon', 'månad')
+mapObj.set('days', 'dagar')
+mapObj.set('day', 'dag')

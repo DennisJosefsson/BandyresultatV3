@@ -1,15 +1,16 @@
+import TeamLogo from '@/components/Common/TeamLogo'
+import { Button } from '@/components/base/ui/button'
 import {
   MapMarker,
   MarkerContent,
   MarkerPopup,
   MarkerTooltip,
 } from '@/components/base/ui/map'
-import TeamLogo from '@/components/Common/TeamLogo'
 import type { County } from '@/lib/types/county'
 import type { Municipality } from '@/lib/types/municipality'
 import type { Team } from '@/lib/types/team'
 import { Link } from '@tanstack/react-router'
-import { ExternalLinkIcon } from 'lucide-react'
+import { ExternalLink } from 'lucide-react'
 
 type MapItemProps = {
   team: {
@@ -36,70 +37,39 @@ function MapItem({
         <div className="size-4 rounded-full border-2 border-orange-500 bg-orange-500 opacity-75 shadow-lg" />
       </MarkerContent>
       <MarkerTooltip>{team.team.name}</MarkerTooltip>
-      <MarkerPopup className="w-fit sm:w-85 md:w-100 lg:w-120 border shadow-md">
-        <div className="flex flex-col gap-2 sm:hidden">
-          <div className="flex flex-row justify-between items-center gap-2">
-            <div className="flex flex-col">
-              <div className="flex flex-row items-center justify-between">
-                <Link
-                  from="/teams/map"
-                  to="/teams/$teamId/tables"
-                  params={{ teamId: team.team.teamId }}
-                  search={(prev) => ({ women: prev.women })}
-                  className="mr-1.5"
-                >
-                  <span className="text-[8px] font-bold sm:text-sm md:text-base lg:text-lg truncate">
-                    {team.team.name}
-                  </span>
-                </Link>
-
-                <ExternalLinkIcon className="size-2 xs:size-2.5 sm:size-3 md:size-4" />
-              </div>
-              <span className="text-[8px] sm:text-sm">
-                {team.team.city}, {team.county.name}
-              </span>
-            </div>
-            <div>
-              <TeamLogo
-                size={128}
-                teamId={team.team.teamId}
-                className="object-scale-down w-4 xs:w-6"
-                alt={team.team.casualName}
-                title={team.team.name}
-              />
-            </div>
-          </div>
+      <MarkerPopup className="data-[state=checked]:bg-primary/10 border w-40 xs:w-62 p-0">
+        <div className="relative h-20 xs:h-32 overflow-hidden">
+          <TeamLogo
+            teamId={team.team.teamId}
+            size={256}
+            alt={team.team.name}
+            className="object-cover -translate-y-5 xs:-translate-y-3.5"
+          />
         </div>
-        <div className="hidden sm:flex flex-row items-center justify-between gap-8">
-          <div className="hidden xs:inline">
-            <TeamLogo
-              size={128}
-              teamId={team.team.teamId}
-              className="object-scale-down w-4 xs:w-12 sm:w-24 lg:w-32"
-              alt={team.team.casualName}
-              title={team.team.name}
-            />
+        <div className="space-y-2 p-3">
+          <div>
+            <h3 className="text-foreground pb-0.5 text-[8px] xs:text-xs tracking-wide uppercase  font-semibold">
+              {team.team.name}
+            </h3>
+            <h4 className="text-[8px] xs:text-xs text-muted-foreground leading-tight font-medium">
+              {`${team.team.city}, ${team.county.name}`}
+            </h4>
           </div>
-          <div className="flex w-full flex-col gap-2 sm:gap-4">
-            <div className="flex flex-col">
-              <div className="flex flex-row items-center justify-between">
+          <div className="flex flex-col gap-1 pt-1">
+            <Button
+              className="w-full"
+              render={
                 <Link
                   from="/teams/map"
                   to="/teams/$teamId/tables"
                   params={{ teamId: team.team.teamId }}
                   search={(prev) => ({ women: prev.women })}
-                  className="peer"
                 >
-                  <span className="text-[8px] font-bold sm:text-sm md:text-base lg:text-lg w-54 md:w-64 truncate">
-                    {team.team.name}
-                  </span>
+                  <ExternalLink />
                 </Link>
-                <ExternalLinkIcon className="invisible peer-hover:visible size-2 xs:size-2.5 sm:size-3 md:size-4" />
-              </div>
-              <span className="text-[8px] sm:text-sm truncate">
-                {team.team.city}, {team.county.name}
-              </span>
-            </div>
+              }
+              nativeButton={false}
+            />
           </div>
         </div>
       </MarkerPopup>

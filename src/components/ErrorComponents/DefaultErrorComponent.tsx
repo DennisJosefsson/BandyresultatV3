@@ -1,15 +1,13 @@
 import type { ErrorComponentProps } from '@tanstack/react-router'
 
-function DefaultErrorComponent({
-  ...errorProps
-}: ErrorComponentProps) {
+function DefaultErrorComponent({ ...errorProps }: ErrorComponentProps) {
   console.log(errorProps.error.name)
 
   const message = errorProps.error.message.includes('query')
     ? 'Möjligtvis saknas databaskoppling, hör gärna av dig till dennis@bandyresultat.se.'
     : 'Oklart vad, hör gärna av dig till dennis@bandyresultat.se.'
   return (
-    <div className="flex flex-row justify-center mt-10">
+    <div className="mt-10 flex flex-row justify-center">
       <span>Nu gick något fel... {message}</span>
     </div>
   )

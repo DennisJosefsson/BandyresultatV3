@@ -2,6 +2,9 @@ import { CatchBoundary, Outlet, createFileRoute } from '@tanstack/react-router'
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 
 export const Route = createFileRoute('/_layout/maraton/table')({
+  beforeLoad: () => {
+    return { sidebarSection: 'maraton' }
+  },
   staticData: { breadcrumb: 'Maratontabeller' },
   head: () => ({
     meta: [

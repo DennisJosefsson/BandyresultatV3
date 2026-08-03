@@ -1,4 +1,4 @@
-import Date from '@/components/Common/Date'
+import { Datum } from '@/components/Common/Date'
 import type { MaxMinGoals } from '@/lib/types/stats'
 import StatsCard from './StatsCard'
 
@@ -31,7 +31,7 @@ const MaxMinGoalsStatsCard = ({
               </StatsCard.Upper>
               <StatsCard.Lower>
                 <StatsCard.Content>
-                  <Date>{game.date}</Date>
+                  <Datum>{game.date}</Datum>
                 </StatsCard.Content>
               </StatsCard.Lower>
             </StatsCard>

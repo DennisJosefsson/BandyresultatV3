@@ -1,19 +1,18 @@
-import dayjs from 'dayjs'
-import 'dayjs/locale/sv'
-dayjs.locale('sv')
-
-const Date = ({
+export function Datum({
   children,
   className,
 }: {
   children: string | number | undefined | null
   className?: string | undefined
-}) => {
+}) {
   if (!children) {
     return <span>Saknar speldatum</span>
   }
 
-  return <span className={className}>{dayjs(children).format('D MMMM YYYY')}</span>
-}
+  const date = new Date(children)
+  const datum = new Intl.DateTimeFormat('sv-SE', {
+    dateStyle: 'long',
+  }).format(date)
 
-export default Date
+  return <span className={className}>{datum}</span>
+}

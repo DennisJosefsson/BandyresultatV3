@@ -49,7 +49,9 @@ export const getDevelopmentData = async ({ serie }: FunctionProps) => {
               inArray(
                 teamgames.serieId,
                 db
-                  .select({ parentId: parentchildseries.parentId })
+                  .select({
+                    parentId: parentchildseries.parentId,
+                  })
                   .from(parentchildseries)
                   .where(eq(parentchildseries.childId, serie.serieId)),
               ),
@@ -206,8 +208,11 @@ export const getDevelopmentData = async ({ serie }: FunctionProps) => {
     .leftJoin(teams, eq(teams.teamId, startTable.teamId))
   const gameDates = await db
     .with(seriesGames)
-    .selectDistinctOn([seriesGames.date], { date: seriesGames.date })
+    .selectDistinctOn([seriesGames.date], {
+      date: seriesGames.date,
+    })
     .from(seriesGames)
+    .orderBy(asc(seriesGames.date))
     .then((arr) => arr.map((d) => d.date))
 
   const home = alias(teams, 'home')
@@ -326,7 +331,10 @@ function tableSorting({ startTable, tableArray, dateArray }: TableSortingProps):
     if (index === 0)
       return {
         date: date.date,
-        table: date.table.map((tbl) => ({ ...tbl, arrowDirection: null })),
+        table: date.table.map((tbl) => ({
+          ...tbl,
+          arrowDirection: null,
+        })),
       }
     return {
       date: date.date,

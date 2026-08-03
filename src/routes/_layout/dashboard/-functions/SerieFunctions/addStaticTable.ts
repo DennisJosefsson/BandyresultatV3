@@ -1,11 +1,11 @@
-import { db } from '@/db'
-import { series, tables } from '@/db/schema'
-import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
-import { catchError } from '@/lib/middlewares/errors/catchError'
-import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import { newStaticTableArray } from '@/lib/types/table'
-import { createServerFn } from '@tanstack/react-start'
 import { eq } from 'drizzle-orm'
+import { createServerFn } from '@tanstack/react-start'
+import { newStaticTableArray } from '@/lib/types/table'
+import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
+import { catchError } from '@/lib/middlewares/errors/catchError'
+import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
+import { series, tables } from '@/db/schema'
+import { db } from '@/db'
 
 export const addStaticTable = createServerFn({
   method: 'POST',
@@ -16,10 +16,7 @@ export const addStaticTable = createServerFn({
     try {
       await db.insert(tables).values(data.tableArray)
       const serieId = data.tableArray[0].serieId
-      await db
-        .update(series)
-        .set({ hasStatic: true })
-        .where(eq(series.serieId, serieId))
+      await db.update(series).set({ hasStatic: true }).where(eq(series.serieId, serieId))
       return { status: 200, message: 'Tabeller inlagda.' }
     } catch (error) {
       catchError(error)

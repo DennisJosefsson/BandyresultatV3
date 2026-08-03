@@ -4,6 +4,8 @@ import FinalCard from './FinalCard'
 
 const route = getRouteApi('/_layout/seasons/$year/playoff/table')
 
+
+
 const Final = () => {
   const data = route.useLoaderData()
 
@@ -14,7 +16,7 @@ const Final = () => {
   return (
     <>
       {data.finalGames.map((game) => {
-        return <FinalCard key={game.gameId} game={game} />
+        return <FinalCard  key={game.gameId} game={game} />
       })}
     </>
   )

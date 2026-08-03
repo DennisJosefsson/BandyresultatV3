@@ -1,25 +1,31 @@
-import type { Serie } from '@/lib/types/serie'
 import type { Game } from '@/lib/types/game'
+import type { Serie } from '@/lib/types/serie'
 
 type SortedDates = {
   [key: string]: Array<Omit<Game, 'season'>>
 }
 
 export const sortGames = ({
-  gamesArray,
+  playedGamesArray,
+  unplayedGamesArray,
   serie,
 }: {
-  gamesArray: Array<Omit<Game, 'season'>>
+  playedGamesArray: Array<Omit<Game, 'season'>>
+  unplayedGamesArray: Array<Omit<Game, 'season'>>
   serie: Serie
 }) => {
-  const playedGames = gamesArray.filter((game) => game.played === true)
-  const unplayedGames = gamesArray.filter((game) => !game.played)
-  const unplayedGamesLength = unplayedGames.length
-  const playedGamesLength = playedGames.length
+  const playedGamesLength = playedGamesArray.length
+  const unplayedGamesLength = unplayedGamesArray.length
 
   return {
-    played: gameSortFunction({ gamesArray: playedGames, serie, played: true }),
-    unplayed: gameSortFunction({ gamesArray: unplayedGames, serie }),
+    played: gameSortFunction({
+      gamesArray: playedGamesArray,
+      serie,
+    }),
+    unplayed: gameSortFunction({
+      gamesArray: unplayedGamesArray,
+      serie,
+    }),
     unplayedLength: unplayedGamesLength,
     playedLength: playedGamesLength,
   }
@@ -28,7 +34,6 @@ export const sortGames = ({
 const gameSortFunction = ({
   gamesArray,
   serie,
-  played = false,
 }: {
   gamesArray: Array<Omit<Game, 'season'>>
   serie: Serie
@@ -42,18 +47,20 @@ const gameSortFunction = ({
     return dates
   }, {} as SortedDates)
 
-  const sortedGameDates = Object.keys(sortDates).map((date) => {
-    return {
-      date,
-      games: sortDates[date],
-    }
-  })
+  const sortedGameDates = Object.keys(sortDates).map(
+    (date) => {
+      return {
+        date,
+        games: sortDates[date],
+      }
+    },
+  )
 
   return {
     group: serie.group,
     name: serie.serieName,
     comment: serie.comment,
     level: serie.level,
-    dates: played ? sortedGameDates.reverse() : sortedGameDates,
+    dates: sortedGameDates,
   }
 }

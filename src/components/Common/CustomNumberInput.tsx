@@ -36,28 +36,43 @@ const CustomNumberInput = ({
   ...props
 }: CustomNumberInputProps) => {
   return (
-    <InputGroup>
+    <InputGroup className="xs:w-3xs w-50">
       <InputGroupInput
         {...props}
         type="number"
         className={cn(
-          'appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none items-center',
+          'max-w-48 appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none items-center placeholder:truncate',
           className,
         )}
       />
       <InputGroupAddon align="inline-end">
-        <InputGroupButton type="button" variant="ghost" onClick={() => decrementer()}>
+        <InputGroupButton
+          type="button"
+          variant="ghost"
+          onClick={() => decrementer()}
+          className="size-[1lh]"
+        >
           -
         </InputGroupButton>
       </InputGroupAddon>
       <InputGroupAddon align="inline-end">
-        <InputGroupButton type="button" variant="ghost" onClick={() => incrementer()}>
+        <InputGroupButton
+          type="button"
+          variant="ghost"
+          onClick={() => incrementer()}
+          className="size-[1lh]"
+        >
           +
         </InputGroupButton>
       </InputGroupAddon>
       {resetter ? (
         <InputGroupAddon align="inline-end">
-          <InputGroupButton type="button" variant="ghost" onClick={() => resetter()}>
+          <InputGroupButton
+            type="button"
+            variant="ghost"
+            onClick={() => resetter()}
+            className="size-[1lh]"
+          >
             <CircleXIcon className="size-3" />
           </InputGroupButton>
         </InputGroupAddon>

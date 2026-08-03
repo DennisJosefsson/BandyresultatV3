@@ -1,11 +1,22 @@
-import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
-import Loading from '@/components/Loading/Loading'
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
-import { getGames } from '../-functions/getGames'
-import { SeasonGames } from '../-components/SeasonGames'
+import Loading from '@/components/Loading/Loading'
+import { zd } from '@/lib/utils/zod'
+import {
+  CatchBoundary,
+  createFileRoute,
+} from '@tanstack/react-router'
 import GroupListForErrorComponent from '../-components/GroupListForErrorComponent'
+import { SeasonGames } from '../-components/SeasonGames'
+import { getGames } from '../-functions/getGames'
 
-export const Route = createFileRoute('/_layout/seasons/$year/$group/games')({
+export const Route = createFileRoute(
+  '/_layout/seasons/$year/$group/games',
+)({
+  validateSearch: zd.object({
+    teams: zd
+      .array(zd.number().int().positive())
+      .optional(),
+  }),
   loaderDeps: ({ search: { women } }) => ({ women }),
   loader: async ({ deps, params }) => {
     const data = await getGames({
@@ -20,26 +31,37 @@ export const Route = createFileRoute('/_layout/seasons/$year/$group/games')({
     return data
   },
   component: RouteComponent,
-  pendingComponent: () => <Loading page="seasonGamesList" />,
+  pendingComponent: () => (
+    <Loading page="seasonGamesList" />
+  ),
   staticData: {
-    breadcrumb: (match) => match.loaderData.breadCrumb ?? 'Matcher',
+    breadcrumb: (match) =>
+      match.loaderData.breadCrumb ?? 'Matcher',
   },
   head: ({ loaderData }) => ({
     meta: [
       {
-        title: loaderData?.meta.title ?? 'Bandyresultat - Matcher',
+        title:
+          loaderData?.meta.title ??
+          'Bandyresultat - Matcher',
       },
       {
         name: 'description',
-        content: loaderData?.meta.description ?? 'Bandyresultat - Matcher',
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - Matcher',
       },
       {
         property: 'og:description',
-        content: loaderData?.meta.description ?? 'Bandyresultat - Matcher',
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - Matcher',
       },
       {
         property: 'og:title',
-        content: loaderData?.meta.title ?? 'Bandyresultat - Matcher',
+        content:
+          loaderData?.meta.title ??
+          'Bandyresultat - Matcher',
       },
       {
         property: 'og:type',
@@ -47,7 +69,9 @@ export const Route = createFileRoute('/_layout/seasons/$year/$group/games')({
       },
       {
         property: 'og:url',
-        content: loaderData?.meta.url ?? 'https://www.bandyresultat.se',
+        content:
+          loaderData?.meta.url ??
+          'https://www.bandyresultat.se',
       },
       {
         property: 'og:image',
@@ -69,7 +93,9 @@ function RouteComponent() {
           </span>
         </div>
 
-        {data.message.includes('Välj en ny i listan') ? <GroupListForErrorComponent /> : null}
+        {data.message.includes('Välj en ny i listan') ? (
+          <GroupListForErrorComponent />
+        ) : null}
       </div>
     )
   }
@@ -80,7 +106,11 @@ function RouteComponent() {
         console.error(error)
       }}
       errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent id="seasonGames" error={error} reset={reset} />
+        <SimpleErrorComponent
+          id="seasonGames"
+          error={error}
+          reset={reset}
+        />
       )}
     >
       <SeasonGames />

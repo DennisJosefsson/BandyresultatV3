@@ -5,13 +5,9 @@ import {
   TableCell,
   TableRow,
 } from '@/components/base/ui/table'
-import { useFavTeam } from '@/lib/contexts/favTeamsContext'
+import { useCookies } from '@/lib/contexts/cookieContext'
 import type { Game } from '@/lib/types/game'
-import { cn } from '@/lib/utils/utils'
-import {
-  getRouteApi,
-  useLocation,
-} from '@tanstack/react-router'
+import { Link, useLocation } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
 import {
   flexRender,
@@ -24,19 +20,11 @@ import { Fragment } from 'react/jsx-runtime'
 interface DataTableProps<TData, TValue> {
   columns: Array<ColumnDef<TData, TValue>>
   data: Array<TData>
-  teamObject: {
-    [x: string]: number
-  }
 }
-
-const route = getRouteApi(
-  '/_layout/seasons/$year/playoff/games',
-)
 
 const DataTable = <TData, TValue>({
   columns,
   data,
-  teamObject,
 }: DataTableProps<TData, TValue>) => {
   const table = useReactTable({
     data,
@@ -53,18 +41,12 @@ const DataTable = <TData, TValue>({
     },
   })
 
-  const { favTeams } = useFavTeam()
+  const { favTeams } = useCookies()
 
   const origin = useLocation().pathname
 
-  const getString = (x: unknown): string => {
-    if (!x) throw new Error('Missing string')
-
-    return x as string
-  }
-
   return (
-    <div>
+    <div className="border p-1 shadow-xs sm:p-2 md:shadow-sm">
       <Table>
         <TableBody>
           {table.getRowModel().rows?.length ? (
@@ -83,33 +65,24 @@ const DataTable = <TData, TValue>({
                     data-state={
                       row.getIsSelected() && 'selected'
                     }
-                    className={cn(
-                      '',
+                    data-expandedinfo={
+                      expandedInfo ? true : false
+                    }
+                    data-favteam={
                       favTeams.includes(
-                        teamObject[
-                          getString(
-                            row.getValue('home_casualName'),
-                          )
-                        ],
+                        original.homeTeamId,
                       ) ||
-                        favTeams.includes(
-                          teamObject[
-                            getString(
-                              row.getValue(
-                                'away_casualName',
-                              ),
-                            )
-                          ],
-                        )
-                        ? 'font-bold'
-                        : undefined,
-                    )}
+                      favTeams.includes(original.awayTeamId)
+                        ? true
+                        : false
+                    }
+                    className="px-0.5 data-[expandedinfo=true]:border-none data-[favteam=true]:font-semibold"
                   >
                     {row.getVisibleCells().map((cell) => {
                       return (
                         <TableCell
                           key={cell.id}
-                          className="px-0 py-1"
+                          className="p-0"
                         >
                           {flexRender(
                             cell.column.columnDef.cell,
@@ -118,36 +91,25 @@ const DataTable = <TData, TValue>({
                         </TableCell>
                       )
                     })}
-                    <TableCell className="w-12">
+                    <TableCell className="w-8">
                       <Button
                         size="responsive"
                         variant="default"
                         render={
-                          <route.Link
+                          <Link
+                            from="/seasons/$year"
                             to="/teams/compare"
                             search={(prev) => ({
                               ...prev,
                               teamArray: [
-                                teamObject[
-                                  getString(
-                                    row.getValue(
-                                      'home_casualName',
-                                    ),
-                                  )
-                                ],
-                                teamObject[
-                                  getString(
-                                    row.getValue(
-                                      'away_casualName',
-                                    ),
-                                  )
-                                ],
+                                original.homeTeamId,
+                                original.awayTeamId,
                               ],
                             })}
                             state={{ origin: origin }}
                           >
                             <span>H2H</span>
-                          </route.Link>
+                          </Link>
                         }
                         nativeButton={false}
                       />
@@ -157,7 +119,7 @@ const DataTable = <TData, TValue>({
                     <TableRow key={`${row.id}-expandedRow`}>
                       <TableCell
                         colSpan={6}
-                        className="text-[8px] sm:text-[10px] md:text-xs xl:text-sm"
+                        className="xs:text-[7px] p-0 text-[6px] break-all sm:text-[10px] md:text-xs xl:text-sm"
                       >
                         Matchen slutade {original.result}{' '}
                         efter full tid och avgjordes{' '}

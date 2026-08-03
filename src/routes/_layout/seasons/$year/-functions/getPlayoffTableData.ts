@@ -6,7 +6,10 @@ import {
   teamgames,
   teams,
 } from '@/db/schema'
-import type { PlayoffTable } from '@/lib/types/table'
+import type {
+  PlayoffGroups,
+  PlayoffTable,
+} from '@/lib/types/table'
 import { sortOrder } from '@/lib/utils/constants'
 import type { SQL } from 'drizzle-orm'
 import {
@@ -28,12 +31,44 @@ type FunctionProps = {
 export const getPlayoffTableData = async ({
   playoffSeason,
 }: FunctionProps) => {
+  const playoffGroups = await db
+    .select()
+    .from(series)
+    .where(
+      and(
+        eq(series.seasonId, playoffSeason.seasonId),
+        inArray(series.category, [
+          'eight',
+          'quarter',
+          'semi',
+        ]),
+      ),
+    )
+    .then((res) =>
+      res.sort((a, b) => {
+        if (
+          sortOrder.indexOf(a.group) >
+          sortOrder.indexOf(b.group)
+        ) {
+          return 1
+        } else if (
+          sortOrder.indexOf(a.group) <
+          sortOrder.indexOf(b.group)
+        ) {
+          return -1
+        } else {
+          return 0
+        }
+      }),
+    )
+
   const playoffCte = db.$with('playoff_cte').as(
     db
       .select({
         teamId: teamgames.teamId,
         group: teamgames.group,
         category: teamgames.category,
+        serieId: teamgames.serieId,
         totalGames: count(teamgames.teamGameId).as(
           'total_games',
         ),
@@ -73,6 +108,10 @@ export const getPlayoffTableData = async ({
             .as('away_goals'),
       })
       .from(teamgames)
+      .leftJoin(
+        series,
+        eq(teamgames.serieId, series.serieId),
+      )
       .where(
         and(
           eq(teamgames.seasonId, playoffSeason.seasonId),
@@ -87,10 +126,11 @@ export const getPlayoffTableData = async ({
         teamgames.group,
         teamgames.teamId,
         teamgames.category,
+        teamgames.serieId,
       ),
   )
 
-  const table = await db
+  const playoffTables = await db
     .with(playoffCte)
     .select({
       teamId: playoffCte.teamId,
@@ -119,11 +159,31 @@ export const getPlayoffTableData = async ({
     })
     .from(playoffCte)
     .leftJoin(teams, eq(teams.teamId, playoffCte.teamId))
-
-  const playoffTables = sortPlayoffTables({
-    tableArray: table,
-    uefaSorting: playoffSeason.uefaSorting,
-  })
+    .leftJoin(
+      series,
+      eq(series.serieId, playoffCte.serieId),
+    )
+    .then((res) =>
+      sortPlayoffTables({
+        tableArray: res,
+        uefaSorting: playoffSeason.uefaSorting,
+      }),
+    )
+    .then((res) => {
+      const array: Array<PlayoffGroups> = []
+      playoffGroups.forEach((group) => {
+        const table = res.find(
+          (grp) => grp.group === group.group,
+        )
+        array.push({
+          group: group.group,
+          category: group.category,
+          table,
+        })
+      })
+      return array
+    })
+    .then((res) => sortCategories({ sortedTables: res }))
 
   const home = alias(teams, 'home')
   const away = alias(teams, 'away')
@@ -165,29 +225,14 @@ export const getPlayoffTableData = async ({
     )
     .orderBy(desc(games.date))
 
-  const playoffSeriesTable = playoffSeason.playoffAsSeries
+  const playoffSeriesTables = playoffSeason.playoffAsSeries
     ? await getPlayoffAsSeriesTable(playoffSeason.seasonId)
     : undefined
 
-  const semiTables = playoffTables.filter((tbl) =>
-    ['S1', 'S2'].includes(tbl.group),
-  )
-  const quarterTables = playoffTables.filter((tbl) =>
-    ['Q1', 'Q2', 'Q3', 'Q4'].includes(tbl.group),
-  )
-  const eightTables = playoffTables.filter((tbl) =>
-    ['E1', 'E2', 'E3', 'E4'].includes(tbl.group),
-  )
-
   return {
-    finalGames: finalGames,
-    semiTables:
-      semiTables.length > 0 ? semiTables : undefined,
-    quarterTables:
-      quarterTables.length > 0 ? quarterTables : undefined,
-    eightTables:
-      eightTables.length > 0 ? eightTables : undefined,
-    playoffSeriesTables: playoffSeriesTable,
+    finalGames,
+    playoffTables,
+    playoffSeriesTables,
   }
 }
 
@@ -197,7 +242,14 @@ type SortPlayoffTables = {
 }
 
 type SortedTableGroups = {
-  [key: string]: Array<PlayoffTable>
+  [key: string]: {
+    table: Array<PlayoffTable>
+    category: string
+  }
+}
+
+type SortedCategories = {
+  [key: string]: Array<PlayoffGroups>
 }
 
 const eightGroupIds = ['E1', 'E2', 'E3', 'E4']
@@ -208,22 +260,23 @@ function sortPlayoffTables({
 }: SortPlayoffTables) {
   const groupArray = tableArray.reduce((groups, table) => {
     if (!groups[table.group]) {
-      groups[table.group] = []
+      groups[table.group] = {
+        table: [],
+        category: table.category,
+      }
     }
-    groups[table.group].push(table)
+
+    groups[table.group].table.push(table)
     return groups
   }, {} as SortedTableGroups)
 
-  const sortedTables = Object.keys(groupArray).map(
-    (group) => {
+  const sortedTables = Object.keys(groupArray)
+    .map((group) => {
       return {
         group,
         tables: groupArray[group],
       }
-    },
-  )
-
-  return sortedTables
+    })
     .sort((a, b) => {
       if (
         sortOrder.indexOf(a.group) >
@@ -242,7 +295,7 @@ function sortPlayoffTables({
     .map((grp) => {
       const sortTables =
         eightGroupIds.includes(grp.group) && uefaSorting
-          ? grp.tables.sort((a, b) => {
+          ? grp.tables.table.sort((a, b) => {
               if (a.totalPoints === b.totalPoints) {
                 if (a.awayGoals === b.awayGoals) {
                   return (
@@ -253,7 +306,7 @@ function sortPlayoffTables({
               }
               return b.totalPoints - a.totalPoints
             })
-          : grp.tables.sort((a, b) => {
+          : grp.tables.table.sort((a, b) => {
               if (a.totalPoints === b.totalPoints) {
                 if (
                   b.totalGoalDifference ===
@@ -272,6 +325,7 @@ function sortPlayoffTables({
             })
 
       return {
+        category: grp.tables.category,
         group: grp.group,
         result: `${sortTables[0].totalWins}-${sortTables[1].totalWins}`,
         homeTeam: sortTables[0].team,
@@ -279,6 +333,50 @@ function sortPlayoffTables({
         tables: sortTables,
       }
     })
+
+  return sortedTables
+}
+
+const sortCategories = ({
+  sortedTables,
+}: {
+  sortedTables: Array<PlayoffGroups>
+}) => {
+  const categoryArray = sortedTables.reduce(
+    (category, group) => {
+      if (!category[group.category]) {
+        category[group.category] = []
+      }
+      category[group.category].push(group)
+      return category
+    },
+    {} as SortedCategories,
+  )
+
+  const sortedCategories = Object.keys(categoryArray).map(
+    (c) => {
+      return {
+        category: c,
+        groups: categoryArray[c],
+      }
+    },
+  )
+
+  return sortedCategories.sort((a, b) => {
+    if (
+      sortOrder.indexOf(a.category) >
+      sortOrder.indexOf(b.category)
+    ) {
+      return 1
+    } else if (
+      sortOrder.indexOf(a.category) <
+      sortOrder.indexOf(b.category)
+    ) {
+      return -1
+    } else {
+      return 0
+    }
+  })
 }
 
 async function getPlayoffAsSeriesTable(seasonId: number) {
@@ -288,6 +386,7 @@ async function getPlayoffAsSeriesTable(seasonId: number) {
         teamId: teamgames.teamId,
         group: teamgames.group,
         category: teamgames.category,
+        serieId: teamgames.serieId,
         totalGames: count(teamgames.teamGameId).as(
           'total_games',
         ),
@@ -337,6 +436,7 @@ async function getPlayoffAsSeriesTable(seasonId: number) {
         teamgames.group,
         teamgames.teamId,
         teamgames.category,
+        teamgames.serieId,
       ),
   )
 
@@ -366,9 +466,20 @@ async function getPlayoffAsSeriesTable(seasonId: number) {
         shortName: string
         casualName: string
       }>,
+      serie: {
+        level: series.level,
+        serieName: series.serieName,
+      } as unknown as SQL<{
+        level: number
+        serieName: string
+      }>,
     })
     .from(playoffCte)
     .leftJoin(teams, eq(teams.teamId, playoffCte.teamId))
+    .leftJoin(
+      series,
+      eq(series.serieId, playoffCte.serieId),
+    )
 
   const seriesData = await db
     .select()

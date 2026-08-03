@@ -1,14 +1,11 @@
-import { ArrowLeftIcon, ArrowRightIcon } from 'lucide-react'
-import { Link, useParams, useSearch } from '@tanstack/react-router'
 import { Button } from '@/components/base/ui/button'
+import { Link, useParams } from '@tanstack/react-router'
+import { ArrowLeftIcon, ArrowRightIcon } from 'lucide-react'
 import { useGetFirstAndLastSeason } from '../-hooks/useGetFirstAndLastSeason'
 
 const SeasonHeader = () => {
-  const { firstSeason, lastSeason } = useGetFirstAndLastSeason()
-  const women = useSearch({
-    from: '/_layout',
-    select: (search) => search.women,
-  })
+  const { firstSeason, lastSeason } =
+    useGetFirstAndLastSeason()
 
   const year = useParams({
     from: '/_layout/seasons/$year',
@@ -21,26 +18,38 @@ const SeasonHeader = () => {
         to="."
         search={(prev) => ({ ...prev })}
         params={{
-          year: year === firstSeason ? lastSeason : year - 1,
+          year:
+            year === firstSeason ? lastSeason : year - 1,
         }}
       >
-        <Button variant="outline" size="icon" className="h-3 w-3 lg:h-6 lg:w-6">
-          <ArrowLeftIcon className="h-4 w-4" />
+        <Button
+          variant="outline"
+          size="icon"
+          className="size-3 lg:size-6"
+          aria-label="Gå till föregående säsong"
+        >
+          <ArrowLeftIcon className="size-3 lg:size-6" />
           <span className="sr-only">Tidigare säsong</span>
         </Button>
       </Link>
-      <span className="w-24 text-center font-semibold md:text-base">
+      <span className="w-24 text-center text-sm font-semibold md:text-base">
         {year > 1963 ? `${year - 1}/${year}` : `${year}`}
       </span>
       <Link
         to="."
-        search={{ women }}
+        search={(prev) => ({ ...prev })}
         params={{
-          year: year === lastSeason ? firstSeason : year + 1,
+          year:
+            year === lastSeason ? firstSeason : year + 1,
         }}
       >
-        <Button variant="outline" size="icon" className="h-3 w-3 lg:h-6 lg:w-6">
-          <ArrowRightIcon className="h-4 w-4" />
+        <Button
+          variant="outline"
+          size="icon"
+          className="size-3 lg:size-6"
+          aria-label="Gå till nästa säsong"
+        >
+          <ArrowRightIcon className="size-3 lg:size-6" />
           <span className="sr-only">Senare säsong</span>
         </Button>
       </Link>

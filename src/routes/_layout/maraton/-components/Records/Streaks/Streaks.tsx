@@ -1,5 +1,6 @@
-import Date from '@/components/Common/Date'
+import { Datum } from '@/components/Common/Date'
 import { getRouteApi } from '@tanstack/react-router'
+import { H1, H3 } from '../Headers'
 import StreakCard from './StreakCard'
 
 const route = getRouteApi(
@@ -11,7 +12,8 @@ const Streaks = () => {
     select: (s) => s.streaks,
   })
   return (
-    <div>
+    <div className="flex flex-col gap-2">
+      <H1>Rekordsviter</H1>
       <div className="grid grid-cols-1 gap-y-4 lg:grid-cols-2 lg:gap-4 xl:grid-cols-3 2xl:gap-10">
         <StreakCard
           streak={data.unbeatenStreak}
@@ -34,19 +36,17 @@ const Streaks = () => {
           title="Matcher i rad utan seger"
         />
 
-        <div className="p-2">
-          <h3 className="mb-2 text-xs leading-4 font-bold sm:text-base xl:text-lg">
-            Inofficiella Svenska Mästare
-          </h3>
-          <div className="border shadow-md mb-2">
+        <div>
+          <H3>Inofficiella Svenska Mästare</H3>
+          <div className="mb-2 max-w-105 border shadow-xs md:shadow-sm">
             {data.currInoffChamps.games.map(
               (team, index) => {
                 return (
                   <div
-                    className="mb-1 flex max-w-100 flex-row items-center justify-between p-1 text-[10px] md:mb-2 md:p-2 md:text-sm"
+                    className="mb-1 flex max-w-100 flex-row items-center justify-between p-1 text-[8px] msm:text-[10px] md:mb-2 md:p-2 md:text-sm"
                     key={`${team.team.name}-${Math.random()}`}
                   >
-                    <span className="mr-4 w-8 text-right text-base font-bold tabular-nums md:text-2xl">
+                    <span className="mr-2 msm:mr-4 w-6 msm:w-8 text-right text-base font-bold tabular-nums md:text-2xl">
                       {index + 1}
                     </span>
                     <div className="mr-4 flex grow flex-col">
@@ -58,10 +58,10 @@ const Streaks = () => {
                           {team.result}
                         </span>
                       </div>
-                      <div className="flex flex-row items-center justify-between text-[10px] md:text-xs">
+                      <div className="flex flex-row items-center justify-between">
                         <div>
                           <span className="w-48 sm:w-64">
-                            <Date>{team.date}</Date>
+                            <Datum>{team.date}</Datum>
                           </span>
                         </div>
 

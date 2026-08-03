@@ -2,13 +2,13 @@ import { Button } from '@/components/base/ui/button'
 import { getRouteApi } from '@tanstack/react-router'
 import type { VisibilityState } from '@tanstack/react-table'
 import { useState } from 'react'
+import DataTable from './TableComponents/DataTable'
+import MobileDataTable from './TableComponents/MobileDataTable'
 import {
   columns,
   gameColumns,
   goalsColumns,
 } from './TableComponents/columns'
-import DataTable from './TableComponents/DataTable'
-import MobileDataTable from './TableComponents/MobileDataTable'
 
 const route = getRouteApi('/_layout/teams/$teamId/tables/')
 
@@ -39,8 +39,8 @@ const TeamTable = () => {
     )
   }
   return (
-    <div className="flex flex-col gap-2">
-      <div className="sm:hidden">
+    <div className="flex flex-col gap-2 mt-2 sm:mt-4">
+      <div className="msm:hidden">
         <Button
           className="w-full"
           variant="outline"
@@ -60,7 +60,7 @@ const TeamTable = () => {
               className="mb-2"
             >
               <div className="mb-2">
-                <span className="text-[10px] md:text-sm font-semibold">
+                <span className="text-[10px] font-semibold md:text-sm">
                   {level.levelName}
                 </span>
               </div>
@@ -68,16 +68,16 @@ const TeamTable = () => {
                 {level.tables.map((table) => {
                   return (
                     <div key={table.category}>
-                      <h6 className="text-[10px] md:text-xs lg:text-sm xl:text-base font-semibold">
+                      <h6 className="text-[10px] font-semibold md:text-xs lg:text-sm xl:text-base">
                         {table.categoryName}
                       </h6>
-                      <div className="hidden sm:block max-w-3xl p-2">
+                      <div className="msm:block hidden w-full p-2 sm:w-140 md:w-160">
                         <DataTable
                           columns={columns}
                           data={table.tables}
                         />
                       </div>
-                      <div className="sm:hidden">
+                      <div className="msm:hidden">
                         <MobileDataTable
                           columns={columns}
                           data={table.tables}

@@ -1,6 +1,8 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
-import { useFavTeam } from '@/lib/contexts/favTeamsContext'
+import type { ReturnDevDataTableItem } from '@/lib/types/table'
+import { useCookies } from '@/lib/contexts/cookieContext'
+import { PositionCell, PositionHeader } from '@/components/Common/Tables/Number'
 import {
   Table,
   TableBody,
@@ -14,9 +16,6 @@ import {
 interface DataTableProps<TData, TValue> {
   columns: Array<ColumnDef<TData, TValue>>
   data: Array<TData>
-  teamObject: {
-    [x: string]: number
-  }
   serieStructure: Array<number> | null | undefined
   comment: string | null
 }
@@ -24,7 +23,6 @@ interface DataTableProps<TData, TValue> {
 const DataTable = <TData, TValue>({
   columns,
   data,
-  teamObject,
   serieStructure,
   comment,
 }: DataTableProps<TData, TValue>) => {
@@ -34,27 +32,16 @@ const DataTable = <TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
   })
 
-  const { favTeams } = useFavTeam()
-
-  const getString = (x: unknown): string => {
-    if (!x) throw new Error('Missing string')
-
-    return x as string
-  }
+  const { favTeams } = useCookies()
 
   return (
-    <div>
+    <div className="border px-1 py-0.5 shadow-xs sm:p-2 md:shadow-sm">
       <Table>
         <TableCaption>{comment}</TableCaption>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
-              <TableHead
-                key={'position'}
-                className="hidden px-0 py-1 sm:table-cell sm:w-12 sm:px-2 xl:text-base 2xl:text-lg"
-              >
-                P
-              </TableHead>
+              <PositionHeader key={'position'}>P</PositionHeader>
               {headerGroup.headers.map((header) => {
                 return (
                   <TableHead key={header.id} className="px-0">
@@ -70,31 +57,27 @@ const DataTable = <TData, TValue>({
 
         <TableBody>
           {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row, index) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && 'selected'}
-                className={`${
-                  favTeams.includes(teamObject[getString(row.getValue('team_casualName'))])
-                    ? 'font-bold'
-                    : null
-                } ${serieStructure?.includes(index + 1) ? 'border-foreground border-b-2' : null}`}
-              >
-                <TableCell
-                  key={`index-${index}`}
-                  className="hidden tabular-nums sm:table-cell sm:w-12 xl:text-base 2xl:text-lg"
+            table.getRowModel().rows.map((row, index) => {
+              const original = row.original as ReturnDevDataTableItem
+              return (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && 'selected'}
+                  data-favteam={favTeams.includes(original.teamId) ? true : false}
+                  data-tabledivider={serieStructure?.includes(index + 1) ? true : false}
+                  className="data-[tabledivider=true]:border-foreground data-[favteam=true]:font-semibold data-[tabledivider=true]:border-b-2"
                 >
-                  {index + 1}
-                </TableCell>
-                {row.getVisibleCells().map((cell) => {
-                  return (
-                    <TableCell key={cell.id} className="px-0 py-1">
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
-                  )
-                })}
-              </TableRow>
-            ))
+                  <PositionCell key={`index-${index}`}>{index + 1}</PositionCell>
+                  {row.getVisibleCells().map((cell) => {
+                    return (
+                      <TableCell key={cell.id} className="px-0 py-1">
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </TableCell>
+                    )
+                  })}
+                </TableRow>
+              )
+            })
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">

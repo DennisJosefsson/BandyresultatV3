@@ -97,7 +97,9 @@ const NumberInput = ({ field, label, placeholder, min, max }: NumberInputProps) 
 
   return (
     <div className="grid w-full max-w-sm items-center gap-1.5 px-1">
-      <Label htmlFor={field}>{label}</Label>
+      <Label htmlFor={field} className="font-semibold md:text-sm">
+        {label}
+      </Label>
       <CustomNumberInput
         value={searchField ?? ''}
         onChange={handleOnChange}

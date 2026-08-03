@@ -1,15 +1,11 @@
-import { preparedDrawStreaks } from './preparedQueries/streaks/preparedDrawStreak'
-import { preparedLosingStreak } from './preparedQueries/streaks/preparedLosingStreak'
-import { preparedNoWinStreaks } from './preparedQueries/streaks/preparedNoWinStreak'
-import { preparedPlayoffStreaks } from './preparedQueries/streaks/preparedPlayoffStreaks'
-import { preparedUnbeatenStreaks } from './preparedQueries/streaks/preparedUnbeatenStreak'
 import { preparedWinStreaks } from './preparedQueries/streaks/preparedWinStreaks'
+import { preparedUnbeatenStreaks } from './preparedQueries/streaks/preparedUnbeatenStreak'
+import { preparedPlayoffStreaks } from './preparedQueries/streaks/preparedPlayoffStreaks'
+import { preparedNoWinStreaks } from './preparedQueries/streaks/preparedNoWinStreak'
+import { preparedLosingStreak } from './preparedQueries/streaks/preparedLosingStreak'
+import { preparedDrawStreaks } from './preparedQueries/streaks/preparedDrawStreak'
 
-export const getStreaks = async ({
-  teamId,
-}: {
-  teamId: number
-}) => {
+export const getStreaks = async ({ teamId }: { teamId: number }) => {
   const losingStreak = await preparedLosingStreak.execute({
     teamId,
   })
@@ -26,13 +22,11 @@ export const getStreaks = async ({
     teamId,
   })
 
-  const unbeatenStreak =
-    await preparedUnbeatenStreaks.execute({
-      teamId,
-    })
+  const unbeatenStreak = await preparedUnbeatenStreaks.execute({
+    teamId,
+  })
 
-  const playoffStreak =
-    await preparedPlayoffStreaks.execute({ teamId })
+  const playoffStreak = await preparedPlayoffStreaks.execute({ teamId })
 
   const streakObjectsLength =
     losingStreak.length +

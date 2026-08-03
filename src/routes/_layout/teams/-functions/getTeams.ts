@@ -1,6 +1,6 @@
-import { catchError } from '@/lib/middlewares/errors/catchError'
-import { createServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
+import { createServerFn } from '@tanstack/react-start'
+import { catchError } from '@/lib/middlewares/errors/catchError'
 import { preparedTeamsList } from './preparedQueries/preparedTeamsList'
 
 const women = z.boolean()

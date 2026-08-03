@@ -61,7 +61,9 @@ const TeamSelection = ({ field, label }: TeamSelectionProps) => {
   return (
     <div className="flex flex-col gap-1">
       <div>
-        <Label htmlFor={field}>{label}</Label>
+        <Label htmlFor={field} className="font-semibold md:text-sm">
+          {label}
+        </Label>
       </div>
       <div className="flex flex-row items-center gap-x-2">
         <div>
@@ -72,7 +74,7 @@ const TeamSelection = ({ field, label }: TeamSelectionProps) => {
             id={field}
             name={field}
           >
-            <SelectTrigger className="w-62">
+            <SelectTrigger className="xs:w-67 w-53">
               <SelectValue placeholder="Välj">{selectedLabel}</SelectValue>
             </SelectTrigger>
             <SelectContent alignItemWithTrigger={false}>

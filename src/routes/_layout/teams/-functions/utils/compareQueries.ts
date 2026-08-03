@@ -1,5 +1,11 @@
+import { db } from '@/db'
+import {
+  games,
+  series,
+  teamgames,
+  teams,
+} from '@/db/schema'
 import type { SQL } from 'drizzle-orm'
-import { alias } from 'drizzle-orm/pg-core'
 import {
   and,
   asc,
@@ -15,26 +21,27 @@ import {
   sql,
   sum,
 } from 'drizzle-orm'
-import type { TeamBase } from '@/lib/types/team'
-import { games, series, teamgames, teams } from '@/db/schema'
-import { db } from '@/db'
+import { alias } from 'drizzle-orm/pg-core'
+import { mapObj } from './ageFormatMap'
 
-const team = alias(teams, 'team')
-const opponent = alias(teams, 'opponent')
 const s1 = alias(series, 's1')
 
 type GetCatTables = {
-  teamArray: Array<number>
+  homeTeamId: number
+  awayTeamId: number
 }
 
-export const getCatTables = ({ teamArray }: GetCatTables) =>
+export const getCatTables = ({
+  homeTeamId,
+  awayTeamId,
+}: GetCatTables) =>
   db
     .select({
-      teamId: teamgames.teamId,
-      opponentId: teamgames.opponentId,
       category: teamgames.category,
       totalGames: count(teamgames.teamGameId),
-      totalPoints: sum(teamgames.points).as('total_points') as unknown as SQL<number>,
+      totalPoints: sum(teamgames.points).as(
+        'total_points',
+      ) as unknown as SQL<number>,
       totalGoalsScored: sum(teamgames.goalsScored).as(
         'total_goals_scored',
       ) as unknown as SQL<number>,
@@ -46,60 +53,43 @@ export const getCatTables = ({ teamArray }: GetCatTables) =>
         'total_goal_difference',
       ) as unknown as SQL<number>,
 
-      totalWins: sql<number>`cast(count(*) filter (where win) as int)`.as('totalWins'),
-      totalDraws: sql<number>`cast(count(*) filter (where draw) as int)`.as('totalDraws'),
-      totalLost: sql<number>`cast(count(*) filter (where lost) as int)`.as('totalLost'),
-      team: {
-        teamId: team.teamId,
-        name: team.name,
-        casualName: team.casualName,
-        shortName: team.shortName,
-      } as unknown as SQL<TeamBase>,
-      opponent: {
-        teamId: opponent.teamId,
-        name: opponent.name,
-        casualName: opponent.casualName,
-        shortName: opponent.shortName,
-      } as unknown as SQL<TeamBase>,
+      totalWins:
+        sql<number>`cast(count(*) filter (where win) as int)`.as(
+          'totalWins',
+        ),
+      totalDraws:
+        sql<number>`cast(count(*) filter (where draw) as int)`.as(
+          'totalDraws',
+        ),
+      totalLost:
+        sql<number>`cast(count(*) filter (where lost) as int)`.as(
+          'totalLost',
+        ),
       serie: {
         level: s1.level,
       } as unknown as SQL<{ level: number }>,
     })
     .from(teamgames)
-    .leftJoin(team, eq(teamgames.teamId, team.teamId))
-    .leftJoin(opponent, eq(teamgames.opponentId, opponent.teamId))
     .leftJoin(s1, eq(teamgames.serieId, s1.serieId))
     .where(
       and(
-        inArray(teamgames.teamId, teamArray),
-        inArray(teamgames.opponentId, teamArray),
-
+        eq(teamgames.teamId, homeTeamId),
+        eq(teamgames.opponentId, awayTeamId),
         eq(teamgames.played, true),
       ),
     )
-    .groupBy(
-      teamgames.teamId,
-      teamgames.opponentId,
-      s1.level,
-      teamgames.category,
-      team.name,
-      team.teamId,
-      team.casualName,
-      team.shortName,
-      opponent.name,
-      opponent.teamId,
-      opponent.casualName,
-      opponent.shortName,
-    )
-    .orderBy(desc(teamgames.teamId))
+    .groupBy(s1.level, teamgames.category)
 
-export const getAllGamesTables = ({ teamArray }: GetCatTables) =>
+export const getAllGamesTables = ({
+  homeTeamId,
+  awayTeamId,
+}: GetCatTables) =>
   db
     .select({
-      teamId: teamgames.teamId,
-      opponentId: teamgames.opponentId,
       totalGames: count(teamgames.teamGameId),
-      totalPoints: sum(teamgames.points).as('total_points') as unknown as SQL<number>,
+      totalPoints: sum(teamgames.points).as(
+        'total_points',
+      ) as unknown as SQL<number>,
       totalGoalsScored: sum(teamgames.goalsScored).as(
         'total_goals_scored',
       ) as unknown as SQL<number>,
@@ -111,48 +101,31 @@ export const getAllGamesTables = ({ teamArray }: GetCatTables) =>
         'total_goal_difference',
       ) as unknown as SQL<number>,
 
-      totalWins: sql<number>`cast(count(*) filter (where win) as int)`.as('totalWins'),
-      totalDraws: sql<number>`cast(count(*) filter (where draw) as int)`.as('totalDraws'),
-      totalLost: sql<number>`cast(count(*) filter (where lost) as int)`.as('totalLost'),
-      team: {
-        teamId: team.teamId,
-        name: team.name,
-        casualName: team.casualName,
-        shortName: team.shortName,
-      } as unknown as SQL<TeamBase>,
-      opponent: {
-        teamId: opponent.teamId,
-        name: opponent.name,
-        casualName: opponent.casualName,
-        shortName: opponent.shortName,
-      } as unknown as SQL<TeamBase>,
+      totalWins:
+        sql<number>`cast(count(*) filter (where win) as int)`.as(
+          'totalWins',
+        ),
+      totalDraws:
+        sql<number>`cast(count(*) filter (where draw) as int)`.as(
+          'totalDraws',
+        ),
+      totalLost:
+        sql<number>`cast(count(*) filter (where lost) as int)`.as(
+          'totalLost',
+        ),
     })
     .from(teamgames)
-    .leftJoin(team, eq(teamgames.teamId, team.teamId))
-    .leftJoin(opponent, eq(teamgames.opponentId, opponent.teamId))
     .where(
       and(
-        inArray(teamgames.teamId, teamArray),
-        inArray(teamgames.opponentId, teamArray),
-
+        eq(teamgames.teamId, homeTeamId),
+        eq(teamgames.opponentId, awayTeamId),
         eq(teamgames.played, true),
       ),
     )
-    .groupBy(
-      teamgames.teamId,
-      teamgames.opponentId,
-      team.name,
-      team.teamId,
-      team.casualName,
-      team.shortName,
-      opponent.name,
-      opponent.teamId,
-      opponent.casualName,
-      opponent.shortName,
-    )
-    .orderBy(desc(teamgames.teamId))
 
-export const getFirstAndLastGames = async (teamArray: Array<number>) => {
+export const getFirstAndLastGames = async (
+  teamArray: Array<number>,
+) => {
   const first_games = db.$with('first_games').as(
     db
       .select({
@@ -197,25 +170,52 @@ export const getFirstAndLastGames = async (teamArray: Array<number>) => {
     .from(first_games)
     .leftJoin(home, eq(first_games.homeTeamId, home.teamId))
     .leftJoin(away, eq(first_games.awayTeamId, away.teamId))
-    .where(or(eq(first_games.rankedFirstGames, 1), lt(first_games.rankedLastGames, 11)))
+    .where(
+      or(
+        eq(first_games.rankedFirstGames, 1),
+        lt(first_games.rankedLastGames, 11),
+      ),
+    )
     .orderBy(asc(first_games.date))
 
-  const firstGames = firstAndLastGames.filter((game) => game.rankedFirstGames === 1)
+  const firstGames = firstAndLastGames.filter(
+    (game) => game.rankedFirstGames === 1,
+  )
 
   const latestGames =
     teamArray.length === 2
       ? firstAndLastGames
           .filter((game) => game.rankedFirstGames !== 1)
-          .sort((a, b) => getTime(new Date(b.date)) - getTime(new Date(a.date)))
+          .sort(
+            (a, b) =>
+              getTime(new Date(b.date)) -
+              getTime(new Date(a.date)),
+          )
           .slice(0, 10) || []
       : firstAndLastGames
           .filter((game) => game.rankedLastGames === 1)
-          .sort((a, b) => getTime(new Date(b.date)) - getTime(new Date(a.date))) || []
+          .sort(
+            (a, b) =>
+              getTime(new Date(b.date)) -
+              getTime(new Date(a.date)),
+          ) || []
 
   return { firstGames, latestGames }
 }
 
-export const getLatestHomeWin = async (teamArray: Array<number>) => {
+function formatAge(ageString: string) {
+  ageString =
+    ageString.replace(
+      /\b(?:year|years|month|mons|day|days)\b/gi,
+      (matched) => mapObj.get(matched),
+    ) + ' sedan'
+
+  return ageString
+}
+
+export const getLatestHomeWin = async (
+  teamArray: Array<number>,
+) => {
   const latest_home_win = db.$with('latest_home_win').as(
     db
       .select({
@@ -258,18 +258,28 @@ export const getLatestHomeWin = async (teamArray: Array<number>) => {
       homeName: home.casualName,
       awayName: away.casualName,
       date: games.date,
+      age: sql`age(games."date") as time_since`.mapWith(
+        String,
+      ),
     })
     .from(games)
-    .leftJoin(selected_id, eq(selected_id.gameId, games.gameId))
+    .leftJoin(
+      selected_id,
+      eq(selected_id.gameId, games.gameId),
+    )
     .leftJoin(home, eq(games.homeTeamId, home.teamId))
     .leftJoin(away, eq(games.awayTeamId, away.teamId))
     .where(eq(selected_id.gameId, games.gameId))
     .orderBy(asc(games.date))
 
-  return latestHomeWin
+  return latestHomeWin.map((g) => {
+    return { ...g, age: formatAge(g.age) }
+  })
 }
 
-export const getLatestAwayWin = async (teamArray: Array<number>) => {
+export const getLatestAwayWin = async (
+  teamArray: Array<number>,
+) => {
   const latest_away_win = db.$with('latest_away_win').as(
     db
       .select({
@@ -312,20 +322,31 @@ export const getLatestAwayWin = async (teamArray: Array<number>) => {
       homeName: home.casualName,
       awayName: away.casualName,
       date: games.date,
+      age: sql`age(games."date") as time_since`.mapWith(
+        String,
+      ),
     })
     .from(games)
-    .leftJoin(selected_id, eq(selected_id.gameId, games.gameId))
+    .leftJoin(
+      selected_id,
+      eq(selected_id.gameId, games.gameId),
+    )
     .leftJoin(home, eq(games.homeTeamId, home.teamId))
     .leftJoin(away, eq(games.awayTeamId, away.teamId))
     .where(eq(selected_id.gameId, games.gameId))
     .orderBy(asc(games.date))
 
-  return latestAwayWin
+  return latestAwayWin.map((g) => {
+    return { ...g, age: formatAge(g.age) }
+  })
 }
 
 const getTime = (date?: Date): number => {
   return date != null ? date.getTime() : 0
 }
+
+
+
 
 export const getGolds = (teamArray: Array<number>) =>
   db
@@ -372,8 +393,15 @@ export const getPlayoffs = (teamArray: Array<number>) =>
         inArray(teamgames.teamId, teamArray),
         gte(teamgames.seasonId, 25),
         or(
-          inArray(teamgames.category, ['quarter', 'semi', 'final']),
-          inArray(teamgames.group, ['SlutspelA', 'SlutspelB']),
+          inArray(teamgames.category, [
+            'quarter',
+            'semi',
+            'final',
+          ]),
+          inArray(teamgames.group, [
+            'SlutspelA',
+            'SlutspelB',
+          ]),
         ),
       ),
     )
@@ -399,15 +427,24 @@ export const getAllPlayoffs = (teamArray: Array<number>) =>
       and(
         inArray(teamgames.teamId, teamArray),
         or(
-          inArray(teamgames.category, ['quarter', 'semi', 'final']),
-          inArray(teamgames.group, ['SlutspelA', 'SlutspelB']),
+          inArray(teamgames.category, [
+            'quarter',
+            'semi',
+            'final',
+          ]),
+          inArray(teamgames.group, [
+            'SlutspelA',
+            'SlutspelB',
+          ]),
         ),
       ),
     )
     .groupBy(teams.casualName, teams.name, teamgames.teamId)
     .orderBy(desc(sql`data`))
 
-export const getFirstDivisionSeasonsSince1931 = (teamArray: Array<number>) =>
+export const getFirstDivisionSeasonsSince1931 = (
+  teamArray: Array<number>,
+) =>
   db
     .select({
       teamId: teamgames.teamId,
@@ -454,7 +491,9 @@ export const getAllDbSeasons = (teamArray: Array<number>) =>
     .groupBy(teams.casualName, teams.name, teamgames.teamId)
     .orderBy(desc(sql`data`))
 
-export const getFirstDivisionSeasons = (teamArray: Array<number>) =>
+export const getFirstDivisionSeasons = (
+  teamArray: Array<number>,
+) =>
   db
     .select({
       teamId: teamgames.teamId,
@@ -479,3 +518,30 @@ export const getFirstDivisionSeasons = (teamArray: Array<number>) =>
     )
     .groupBy(teams.casualName, teams.name, teamgames.teamId)
     .orderBy(desc(sql`data`))
+
+
+    export const getCompareStats = async (teamArray:Array<number>) => {
+  const golds = await getGolds(teamArray)
+
+      const playoffs = await getPlayoffs(teamArray)
+
+      const allPlayoffs = await getAllPlayoffs(teamArray)
+
+      const firstDivisionSeasonsSince1931 =
+        await getFirstDivisionSeasonsSince1931(teamArray)
+
+     
+
+      const firstDivisionSeasons =
+        await getFirstDivisionSeasons(teamArray)
+
+      const { firstGames, latestGames } =
+        await getFirstAndLastGames(teamArray)
+
+      const latestHomeWin =
+        await getLatestHomeWin(teamArray)
+      const latestAwayWin =
+        await getLatestAwayWin(teamArray)
+
+      return {golds,playoffs,allPlayoffs,firstDivisionSeasonsSince1931,firstDivisionSeasons,firstGames,latestGames,latestHomeWin,latestAwayWin}
+}

@@ -1,4 +1,4 @@
-import Date from '@/components/Common/Date'
+import { Datum } from '@/components/Common/Date'
 import type { Game, GameGroupBase } from '@/lib/types/game'
 import { getRouteApi } from '@tanstack/react-router'
 import { LinkIcon } from 'lucide-react'
@@ -7,13 +7,18 @@ import { columns } from '../shared/games/columns'
 type GameListProps = {
   group: GameGroupBase<Array<Omit<Game, 'season'>>>
   title: string
+  teams: Array<number> | undefined
 }
 
 const route = getRouteApi(
   '/_layout/seasons/$year/$group/games',
 )
 
-const GamesList = ({ group, title }: GameListProps) => {
+const GamesList = ({
+  group,
+  title,
+  teams,
+}: GameListProps) => {
   const year = route.useParams({
     select: (params) => params.year,
   })
@@ -52,14 +57,27 @@ const GamesList = ({ group, title }: GameListProps) => {
           )}
           <div>
             {group.dates.map((date) => {
-              const teamObject = date.games.reduce(
-                (o, key) => ({
-                  ...o,
-                  [key.home.casualName]: key.homeTeamId,
-                  [key.away.casualName]: key.awayTeamId,
-                }),
-                {},
-              )
+              const games = date.games.filter((g) => {
+                if (!teams || teams.length === 0)
+                  return true
+                if (teams.length === 1) {
+                  if (
+                    teams.includes(g.homeTeamId) ||
+                    teams.includes(g.awayTeamId)
+                  )
+                    return true
+                } else if (teams.length > 1) {
+                  if (
+                    teams.includes(g.homeTeamId) &&
+                    teams.includes(g.awayTeamId)
+                  )
+                    return true
+                  return false
+                } else return false
+              })
+
+              if (games.length === 0) return null
+
               return (
                 <div
                   key={date.date}
@@ -71,7 +89,7 @@ const GamesList = ({ group, title }: GameListProps) => {
                         className="text-[10px] font-semibold tracking-wide sm:text-xs md:text-sm xl:text-base"
                         id={`${group.group}-${date.date}`}
                       >
-                        <Date>{date.date}</Date>
+                        <Datum>{date.date}</Datum>
                       </h3>
                       <route.Link
                         from="/seasons/$year/$group/games"
@@ -87,9 +105,8 @@ const GamesList = ({ group, title }: GameListProps) => {
                     </div>
                   )}
                   <DataTable
-                    teamObject={teamObject}
                     columns={columns}
-                    data={date.games}
+                    data={games}
                   />
                 </div>
               )

@@ -1,27 +1,29 @@
 import TeamLogo from '@/components/Common/TeamLogo'
 import type { GroupPlayoffTable } from '@/lib/types/table'
 import { groupConstant } from '@/lib/utils/constants'
+import type {
+  DetailedHTMLProps,
+  HTMLAttributes,
+} from 'react'
 import PlayoffCard from './PlayoffCard'
-type ColstartsType = {
-  [key: string]: string
-}
 
-type DefaultComponentProps = {
-  group: GroupPlayoffTable
-  colStarts: ColstartsType
+interface DefaultComponentProps extends DetailedHTMLProps<
+  HTMLAttributes<HTMLDivElement>,
+  HTMLDivElement
+> {
+  group: GroupPlayoffTable | undefined
+  
 }
 
 const DefaultComponent = ({
   group,
-  colStarts,
+  className,
+  
 }: DefaultComponentProps) => {
-  const styleClass = colStarts
-    ? `${colStarts[group.group]}`
-    : 'lg:col-start-4 lg:odd:col-start-2'
-
+  if (group === undefined) return null
   return (
     <PlayoffCard
-      styleClass={styleClass}
+      className={className}
       group={group.group}
     >
       <PlayoffCard.Title>
@@ -33,24 +35,30 @@ const DefaultComponent = ({
         </PlayoffCard.Result>
       </PlayoffCard.Title>
       <PlayoffCard.Content>
-        <PlayoffCard.Team teamId={group.homeTeam.teamId}>
+        <PlayoffCard.Team
+          teamId={group.homeTeam.teamId}
+          
+        >
           <TeamLogo
             size={32}
             teamId={group.homeTeam.teamId}
-            className="object-scale-down w-3 sm:w-4 md:w-5"
-            alt={group.homeTeam.casualName}
-            title={group.homeTeam.casualName}
+            className="size-[1lh] object-scale-down"
+            alt={group.homeTeam.name}
+            title={group.homeTeam.name}
           />
           <span>{group.homeTeam.casualName}</span>
         </PlayoffCard.Team>
 
-        <PlayoffCard.Team teamId={group.awayTeam.teamId}>
+        <PlayoffCard.Team
+          teamId={group.awayTeam.teamId}
+          
+        >
           <TeamLogo
             size={32}
             teamId={group.awayTeam.teamId}
-            className="object-scale-down w-3 sm:w-4 md:w-5"
-            alt={group.awayTeam.casualName}
-            title={group.awayTeam.casualName}
+            className="size-[1lh] object-scale-down"
+            alt={group.awayTeam.name}
+            title={group.awayTeam.name}
           />
           <span>{group.awayTeam.casualName}</span>
         </PlayoffCard.Team>

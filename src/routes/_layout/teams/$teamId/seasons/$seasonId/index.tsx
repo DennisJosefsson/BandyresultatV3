@@ -1,21 +1,13 @@
-import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
+import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
 import { zd } from '@/lib/utils/zod'
-import {
-  CatchBoundary,
-  createFileRoute,
-} from '@tanstack/react-router'
-import SingleTeamSeason from '../../-components/SeasonComponents/SingleTeamSeason'
+import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import { getSingleTeamSeason } from '../../-functions/getSingleTeamSeason'
+import SingleTeamSeason from '../../-components/SeasonComponents/SingleTeamSeason'
 
-export const Route = createFileRoute(
-  '/_layout/teams/$teamId/seasons/$seasonId/',
-)({
+export const Route = createFileRoute('/_layout/teams/$teamId/seasons/$seasonId/')({
   params: {
     parse: (params) => ({
-      seasonId: zd
-        .number()
-        .int()
-        .parse(Number(params.seasonId)),
+      seasonId: zd.number().int().parse(Number(params.seasonId)),
     }),
     stringify: ({ seasonId }) => ({
       seasonId: `${seasonId}`,
@@ -33,33 +25,24 @@ export const Route = createFileRoute(
   },
   component: RouteComponent,
   staticData: {
-    breadcrumb: (match) =>
-      match.loaderData.seasonYear ?? 'Säsong',
+    breadcrumb: (match) => match.loaderData.seasonYear ?? 'Säsong',
   },
   head: ({ loaderData }) => ({
     meta: [
       {
-        title:
-          loaderData?.meta.title ??
-          'Bandyresultat - Lagsäsong',
+        title: loaderData?.meta.title ?? 'Bandyresultat - Lagsäsong',
       },
       {
         name: 'description',
-        content:
-          loaderData?.meta.description ??
-          'Bandyresultat - Lagsäsong',
+        content: loaderData?.meta.description ?? 'Bandyresultat - Lagsäsong',
       },
       {
         property: 'og:description',
-        content:
-          loaderData?.meta.description ??
-          'Bandyresultat - Lagsäsong',
+        content: loaderData?.meta.description ?? 'Bandyresultat - Lagsäsong',
       },
       {
         property: 'og:title',
-        content:
-          loaderData?.meta.title ??
-          'Bandyresultat - Lagsäsong',
+        content: loaderData?.meta.title ?? 'Bandyresultat - Lagsäsong',
       },
       {
         property: 'og:type',
@@ -67,9 +50,7 @@ export const Route = createFileRoute(
       },
       {
         property: 'og:url',
-        content:
-          loaderData?.meta.url ??
-          'https://www.bandyresultat.se',
+        content: loaderData?.meta.url ?? 'https://www.bandyresultat.se',
       },
       {
         property: 'og:image',
@@ -98,11 +79,7 @@ function RouteComponent() {
         console.error(error)
       }}
       errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent
-          id="singleTeamSeason"
-          error={error}
-          reset={reset}
-        />
+        <SimpleErrorComponent id="singleTeamSeason" error={error} reset={reset} />
       )}
     >
       <SingleTeamSeason />

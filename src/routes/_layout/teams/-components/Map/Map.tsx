@@ -1,12 +1,15 @@
-import { useEffect, useRef, useState } from 'react'
-import { getRouteApi } from '@tanstack/react-router'
-import type { MapRef } from '@/components/base/ui/map'
-import type { CheckedState } from '@/components/base/ui/checkbox'
-import { calcBoundsFromCoordinates } from '@/routes/_layout/teams/$teamId/-functions/calcLongLatBounds'
-import { Map as MapCn, MapControls } from '@/components/base/ui/map'
 import { Card } from '@/components/base/ui/card'
+import type { CheckedState } from '@/components/base/ui/checkbox'
+import type { MapRef } from '@/components/base/ui/map'
+import {
+  Map as MapCn,
+  MapControls,
+} from '@/components/base/ui/map'
+import { calcBoundsFromCoordinates } from '@/routes/_layout/teams/$teamId/-functions/calcLongLatBounds'
+import { getRouteApi } from '@tanstack/react-router'
+import { useEffect, useRef, useState } from 'react'
+import CountyList from './CountyList'
 import MapItem from './MapItem'
-import CountyListContainer from './CountyListContainer'
 
 type County = {
   county: string
@@ -16,16 +19,22 @@ const route = getRouteApi('/_layout/teams/map')
 
 const Map = () => {
   const mapRef = useRef<MapRef>(null)
-  const [counties, setCounties] = useState<Array<County>>([])
+  const [counties, setCounties] = useState<Array<County>>(
+    [],
+  )
   const { teamArray } = route.useSearch()
-  const [selectedTeams, setSelectedTeams] = useState<Array<number>>(teamArray ?? [])
+  const [selectedTeams, setSelectedTeams] = useState<
+    Array<number>
+  >(teamArray ?? [])
 
   const teams = route.useLoaderData()
 
   const navigate = route.useNavigate()
 
   const countyArray = teams.map((team) => {
-    const bounds = calcBoundsFromCoordinates(team.teams.map((t) => [t.long, t.lat]))
+    const bounds = calcBoundsFromCoordinates(
+      team.teams.map((t) => [t.long, t.lat]),
+    )
     return {
       county: team.county,
       center: bounds.getCenter(),
@@ -40,7 +49,10 @@ const Map = () => {
     )
   }, [teams])
 
-  const onCheckedChange = (checked: CheckedState, teamId: number) => {
+  const onCheckedChange = (
+    checked: CheckedState,
+    teamId: number,
+  ) => {
     if (checked) {
       setSelectedTeams((prev) => [...prev, teamId])
       navigate({
@@ -57,14 +69,23 @@ const Map = () => {
         },
       })
     } else {
-      setSelectedTeams((prev) => prev.filter((team) => team !== teamId))
+      setSelectedTeams((prev) =>
+        prev.filter((team) => team !== teamId),
+      )
       navigate({
         resetScroll: false,
         search: (prev) => {
-          if (prev.teamArray && prev.teamArray.includes(teamId)) {
+          if (
+            prev.teamArray &&
+            prev.teamArray.includes(teamId)
+          ) {
             return {
               ...prev,
-              teamArray: [...prev.teamArray.filter((team) => team !== teamId)],
+              teamArray: [
+                ...prev.teamArray.filter(
+                  (team) => team !== teamId,
+                ),
+              ],
             }
           } else {
             return { ...prev, teamArray: [] }
@@ -75,21 +96,21 @@ const Map = () => {
   }
 
   return (
-    <div className="font-inter text-foreground mx-auto my-6 flex min-h-screen flex-col gap-2 px-1 xl:flex-row-reverse xl:justify-end xl:gap-8 xl:px-0">
-      <div className="md:p-2">
-        <CountyListContainer
-          countyArray={countyArray}
-          setCounties={setCounties}
-          counties={counties}
-          mapRef={mapRef}
-        />
-      </div>
-
+    <div className="flex min-h-screen flex-col xl:flex-row gap-6 p-1">
       <div>
-        <Card className="xs:max-w-[360px] h-[400px] w-screen max-w-[280px] p-2 sm:h-160 sm:max-w-xl 2xl:max-w-4xl">
-          <MapCn ref={mapRef} center={[15, 62]} zoom={4} fadeDuration={0}>
+        <Card className="mx-auto h-[80vh] xl:h-[85vh] p-2 sm:w-125 xl:w-150 ">
+          <MapCn
+            ref={mapRef}
+            center={[15, 62]}
+            zoom={4}
+            fadeDuration={0}
+          >
             {teams
-              .filter((team) => counties.map((county) => county.county).includes(team.county))
+              .filter((team) =>
+                counties
+                  .map((county) => county.county)
+                  .includes(team.county),
+              )
               .map((county) => {
                 return (
                   <div key={county.county}>
@@ -112,6 +133,14 @@ const Map = () => {
             <MapControls />
           </MapCn>
         </Card>
+      </div>
+      <div className="mx-auto w-full sm:w-125 xl:mx-2">
+        <CountyList
+          countyArray={countyArray}
+          setCounties={setCounties}
+          counties={counties}
+          mapRef={mapRef}
+        />
       </div>
     </div>
   )

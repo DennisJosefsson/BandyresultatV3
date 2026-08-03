@@ -1,4 +1,4 @@
-import Date from '@/components/Common/Date'
+import { Datum } from '@/components/Common/Date'
 import type { TeamStatItem } from '@/lib/types/team'
 import type { ReactNode } from 'react'
 
@@ -12,7 +12,7 @@ const GameStatComponent = ({
 
 function Title({ children }: { children: ReactNode }) {
   return (
-    <div className="xs:text-xs text-[8px] md:text-sm mb-1">
+    <div className="xs:text-xs mb-1 text-[8px] md:text-sm">
       {children}
     </div>
   )
@@ -31,7 +31,7 @@ function Content({
         return (
           <div
             key={`${stat.gameId}-${index}`}
-            className="border shadow-md xs:p-2 mb-1 flex flex-col gap-1 rounded p-1 xs:text-xs text-[8px] lg:text-sm max-w-md"
+            className="xs:p-2 xs:text-xs mb-2 flex max-w-lg flex-col gap-1 rounded border p-1 text-[8px] shadow-xs md:shadow-sm lg:text-sm"
           >
             <div className="flex flex-row justify-between">
               <span>
@@ -40,7 +40,7 @@ function Content({
               <span>{stat.result}</span>
             </div>
             <div>
-              <Date>{stat.date}</Date>
+              <Datum>{stat.date}</Datum>
             </div>
           </div>
         )

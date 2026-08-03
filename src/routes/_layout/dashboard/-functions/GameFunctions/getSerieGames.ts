@@ -1,12 +1,12 @@
-import { db } from '@/db'
-import { games, seasons, teams } from '@/db/schema'
-import { catchError } from '@/lib/middlewares/errors/catchError'
-import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import { zd } from '@/lib/utils/zod'
-import { createServerFn } from '@tanstack/react-start'
 import type { SQL } from 'drizzle-orm'
-import { asc, eq, getTableColumns } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
+import { asc, eq, getTableColumns } from 'drizzle-orm'
+import { createServerFn } from '@tanstack/react-start'
+import { zd } from '@/lib/utils/zod'
+import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
+import { catchError } from '@/lib/middlewares/errors/catchError'
+import { games, seasons, teams } from '@/db/schema'
+import { db } from '@/db'
 
 const home = alias(teams, 'home')
 const away = alias(teams, 'away')
@@ -16,7 +16,9 @@ export const getSerieGames = createServerFn({
 })
   .middleware([errorMiddleware])
   .validator(
-    zd.object({ serieId: zd.number().positive().int() }),
+    zd.object({
+      serieId: zd.number().positive().int(),
+    }),
   )
   .handler(async ({ data: { serieId } }) => {
     try {
@@ -47,10 +49,7 @@ export const getSerieGames = createServerFn({
           }>,
         })
         .from(games)
-        .leftJoin(
-          seasons,
-          eq(seasons.seasonId, games.seasonId),
-        )
+        .leftJoin(seasons, eq(seasons.seasonId, games.seasonId))
         .leftJoin(home, eq(games.homeTeamId, home.teamId))
         .leftJoin(away, eq(games.awayTeamId, away.teamId))
         .where(eq(games.serieId, serieId))
@@ -63,12 +62,8 @@ export const getSerieGames = createServerFn({
         }
       }
 
-      const playedGames = gamesArray.filter(
-        (game) => game.played === true,
-      )
-      const unplayedGames = gamesArray.filter(
-        (game) => game.played === false,
-      )
+      const playedGames = gamesArray.filter((game) => game.played === true)
+      const unplayedGames = gamesArray.filter((game) => game.played === false)
 
       return { status: 200, playedGames, unplayedGames }
     } catch (error) {

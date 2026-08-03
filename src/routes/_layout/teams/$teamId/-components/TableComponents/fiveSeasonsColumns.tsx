@@ -1,5 +1,5 @@
-import type { FiveSeasonTableItem } from '@/lib/types/team'
 import type { ColumnDef } from '@tanstack/react-table'
+import type { FiveSeasonTableItem } from '@/lib/types/team'
 
 export const showColumns = {
   totalDraws: true,
@@ -35,18 +35,14 @@ export const goalsColumns = {
   totalPoints: true,
 }
 
-export const columns: Array<
-  ColumnDef<FiveSeasonTableItem>
-> = [
+export const columns: Array<ColumnDef<FiveSeasonTableItem>> = [
   {
     accessorKey: 'totalGames',
     header: () => (
-      <div className="xs:text-[8px] w-8 text-center text-[7px] sm:text-[10px] md:text-sm">
-        M
-      </div>
+      <div className="xs:text-[8px] w-8 text-center text-[7px] sm:text-[10px] md:text-sm">M</div>
     ),
     cell: ({ row }) => (
-      <div className="xs:text-[8px] w-8 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base ">
+      <div className="xs:text-[8px] w-8 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base">
         {row.getValue('totalGames')}
       </div>
     ),
@@ -55,12 +51,10 @@ export const columns: Array<
   {
     accessorKey: 'totalWins',
     header: () => (
-      <div className="xs:text-[8px] w-8 text-center text-[7px] sm:text-[10px] md:text-sm">
-        V
-      </div>
+      <div className="xs:text-[8px] w-8 text-center text-[7px] sm:text-[10px] md:text-sm">V</div>
     ),
     cell: ({ row }) => (
-      <div className="xs:text-[8px] w-8 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base ">
+      <div className="xs:text-[8px] w-8 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base">
         {row.getValue('totalWins')}
       </div>
     ),
@@ -69,12 +63,10 @@ export const columns: Array<
   {
     accessorKey: 'totalDraws',
     header: () => (
-      <div className="xs:text-[8px] w-8 text-center text-[7px] sm:text-[10px] md:text-sm">
-        O
-      </div>
+      <div className="xs:text-[8px] w-8 text-center text-[7px] sm:text-[10px] md:text-sm">O</div>
     ),
     cell: ({ row }) => (
-      <div className="xs:text-[8px] w-8 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base ">
+      <div className="xs:text-[8px] w-8 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base">
         {row.getValue('totalDraws')}
       </div>
     ),
@@ -83,12 +75,10 @@ export const columns: Array<
   {
     accessorKey: 'totalLost',
     header: () => (
-      <div className="xs:text-[8px] w-8 text-center text-[7px] sm:text-[10px] md:text-sm">
-        F
-      </div>
+      <div className="xs:text-[8px] w-8 text-center text-[7px] sm:text-[10px] md:text-sm">F</div>
     ),
     cell: ({ row }) => (
-      <div className="xs:text-[8px] w-8 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base ">
+      <div className="xs:text-[8px] w-8 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base">
         {row.getValue('totalLost')}
       </div>
     ),
@@ -97,12 +87,10 @@ export const columns: Array<
   {
     accessorKey: 'totalGoalsScored',
     header: () => (
-      <div className="xs:text-[8px] w-8 text-center text-[7px] sm:text-[10px] md:text-sm">
-        GM
-      </div>
+      <div className="xs:text-[8px] w-8 text-center text-[7px] sm:text-[10px] md:text-sm">GM</div>
     ),
     cell: ({ row }) => (
-      <div className="xs:text-[8px] w-8 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base ">
+      <div className="xs:text-[8px] w-8 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base">
         {row.getValue('totalGoalsScored')}
       </div>
     ),
@@ -111,12 +99,10 @@ export const columns: Array<
   {
     accessorKey: 'totalGoalsConceded',
     header: () => (
-      <div className="xs:text-[8px] w-8 text-center text-[7px] sm:text-[10px] md:text-sm">
-        IM
-      </div>
+      <div className="xs:text-[8px] w-8 text-center text-[7px] sm:text-[10px] md:text-sm">IM</div>
     ),
     cell: ({ row }) => (
-      <div className="xs:text-[8px] w-8 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base ">
+      <div className="xs:text-[8px] w-8 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base">
         {row.getValue('totalGoalsConceded')}
       </div>
     ),
@@ -125,12 +111,10 @@ export const columns: Array<
   {
     accessorKey: 'totalGoalDifference',
     header: () => (
-      <div className="xs:text-[8px] w-8 text-center text-[7px] sm:text-[10px] md:text-sm">
-        MS
-      </div>
+      <div className="xs:text-[8px] w-8 text-center text-[7px] sm:text-[10px] md:text-sm">MS</div>
     ),
     cell: ({ row }) => (
-      <div className="xs:text-[8px] w-8 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base ">
+      <div className="xs:text-[8px] w-8 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base">
         {row.getValue('totalGoalDifference')}
       </div>
     ),
@@ -139,12 +123,10 @@ export const columns: Array<
   {
     accessorKey: 'totalPoints',
     header: () => (
-      <div className="xs:text-[8px] w-8 text-center text-[7px] sm:text-[10px] md:text-sm">
-        P
-      </div>
+      <div className="xs:text-[8px] w-8 text-center text-[7px] sm:text-[10px] md:text-sm">P</div>
     ),
     cell: ({ row }) => (
-      <div className="xs:text-[8px] w-8 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base ">
+      <div className="xs:text-[8px] w-8 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base">
         {row.getValue('totalPoints')}
       </div>
     ),

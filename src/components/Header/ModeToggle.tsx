@@ -6,7 +6,7 @@ import {
 } from '@/components/base/ui/dropdown-menu'
 import { useTheme } from '@/lib/contexts/themeContext'
 import { Moon, Sun } from 'lucide-react'
-import { Button } from '../base/ui/button'
+import { SidebarMenuButton } from '../base/ui/sidebar'
 
 const ModeToggle = () => {
   const { setTheme } = useTheme()
@@ -14,11 +14,11 @@ const ModeToggle = () => {
     <DropdownMenu>
       <DropdownMenuTrigger
         render={
-          <Button variant="ghost">
+          <SidebarMenuButton tooltip="Tema">
             <Sun className="scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
             <Moon className="absolute scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
-            <span className="sr-only">Byt tema</span>
-          </Button>
+            <span className="md:text-sm">Tema</span>
+          </SidebarMenuButton>
         }
       />
 

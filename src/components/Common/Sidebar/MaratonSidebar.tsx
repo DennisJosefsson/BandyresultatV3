@@ -1,4 +1,3 @@
-import { Link, useSearch } from '@tanstack/react-router'
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -8,6 +7,7 @@ import {
   SidebarMenuSubItem,
   useSidebar,
 } from '@/components/base/ui/sidebar'
+import { Link, useSearch } from '@tanstack/react-router'
 
 export function MaratonSidebar() {
   const women = useSearch({
@@ -40,7 +40,9 @@ export function MaratonSidebar() {
                     }}
                     search={{ women }}
                     activeOptions={{ includeSearch: false }}
-                    activeProps={{ className: `font-bold` }}
+                    activeProps={{
+                      className: `underline underline-offset-auto`,
+                    }}
                   >
                     <span className="md:text-sm">Alla</span>
                   </Link>
@@ -58,9 +60,13 @@ export function MaratonSidebar() {
                     }}
                     search={{ women }}
                     activeOptions={{ includeSearch: false }}
-                    activeProps={{ className: `font-bold` }}
+                    activeProps={{
+                      className: `underline underline-offset-auto`,
+                    }}
                   >
-                    <span className="md:text-sm">Hemma</span>
+                    <span className="md:text-sm">
+                      Hemma
+                    </span>
                   </Link>
                 }
               />
@@ -76,9 +82,13 @@ export function MaratonSidebar() {
                     }}
                     search={{ women }}
                     activeOptions={{ includeSearch: false }}
-                    activeProps={{ className: `font-bold` }}
+                    activeProps={{
+                      className: `underline underline-offset-auto`,
+                    }}
                   >
-                    <span className="md:text-sm">Borta</span>
+                    <span className="md:text-sm">
+                      Borta
+                    </span>
                   </Link>
                 }
               />
@@ -99,9 +109,13 @@ export function MaratonSidebar() {
                     to="/maraton/records/stats"
                     search={{ women }}
                     activeOptions={{ includeSearch: false }}
-                    activeProps={{ className: `font-bold` }}
+                    activeProps={{
+                      className: `underline underline-offset-auto`,
+                    }}
                   >
-                    <span className="md:text-sm">Statistik</span>
+                    <span className="md:text-sm">
+                      Statistik
+                    </span>
                   </Link>
                 }
               />
@@ -114,9 +128,13 @@ export function MaratonSidebar() {
                     to="/maraton/records/points"
                     search={{ women }}
                     activeOptions={{ includeSearch: false }}
-                    activeProps={{ className: `font-bold` }}
+                    activeProps={{
+                      className: `underline underline-offset-auto`,
+                    }}
                   >
-                    <span className="md:text-sm">Poäng</span>
+                    <span className="md:text-sm">
+                      Poäng
+                    </span>
                   </Link>
                 }
               />
@@ -129,9 +147,13 @@ export function MaratonSidebar() {
                     to="/maraton/records/scored"
                     search={{ women }}
                     activeOptions={{ includeSearch: false }}
-                    activeProps={{ className: `font-bold` }}
+                    activeProps={{
+                      className: `underline underline-offset-auto`,
+                    }}
                   >
-                    <span className="md:text-sm">Gjorda mål</span>
+                    <span className="md:text-sm">
+                      Gjorda mål
+                    </span>
                   </Link>
                 }
               />
@@ -144,9 +166,13 @@ export function MaratonSidebar() {
                     to="/maraton/records/conceded"
                     search={{ women }}
                     activeOptions={{ includeSearch: false }}
-                    activeProps={{ className: `font-bold` }}
+                    activeProps={{
+                      className: `underline underline-offset-auto`,
+                    }}
                   >
-                    <span className="md:text-sm">Insläppta mål</span>
+                    <span className="md:text-sm">
+                      Insläppta mål
+                    </span>
                   </Link>
                 }
               />
@@ -159,9 +185,13 @@ export function MaratonSidebar() {
                     to="/maraton/records/streaks"
                     search={{ women }}
                     activeOptions={{ includeSearch: false }}
-                    activeProps={{ className: `font-bold` }}
+                    activeProps={{
+                      className: `underline underline-offset-auto`,
+                    }}
                   >
-                    <span className="md:text-sm">Rekordsviter</span>
+                    <span className="md:text-sm">
+                      Rekordsviter
+                    </span>
                   </Link>
                 }
               />
@@ -181,9 +211,13 @@ export function MaratonSidebar() {
                     to="/maraton/help"
                     search={{ women }}
                     activeOptions={{ includeSearch: false }}
-                    activeProps={{ className: `font-bold` }}
+                    activeProps={{
+                      className: `underline underline-offset-auto`,
+                    }}
                   >
-                    <span className="md:text-sm">Hjälp</span>
+                    <span className="md:text-sm">
+                      Hjälp
+                    </span>
                   </Link>
                 }
               />

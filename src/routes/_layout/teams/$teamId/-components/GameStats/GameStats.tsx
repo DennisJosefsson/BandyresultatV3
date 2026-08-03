@@ -8,7 +8,7 @@ const GameStats = () => {
   if (data.status === 404) return null
   console.log({ executionTime: data.executionTime })
   return (
-    <div className="grid grid-cols-1 gap-1 md:grid-cols-2 md:gap-2">
+    <div className="grid grid-cols-1 gap-2 md:gap-4 justify-start">
       {data.stats.maxScoredHomeGames.length > 0 ? (
         <GameStatComponent>
           <GameStatComponent.Title>

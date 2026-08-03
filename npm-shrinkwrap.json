@@ -11683,10 +11683,7 @@
     "node_modules/.pnpm/es-toolkit@1.49.0/node_modules/es-toolkit": {
       "version": "1.49.0",
       "license": "MIT",
-      "workspaces": [
-        "docs",
-        "benchmarks"
-      ],
+      "workspaces": ["docs", "benchmarks"],
       "devDependencies": {
         "@arethetypeswrong/cli": "^0.15.3",
         "@changesets/changelog-github": "^0.5.0",
@@ -12087,9 +12084,7 @@
       "dev": true,
       "license": "MIT",
       "peer": true,
-      "workspaces": [
-        "packages/*"
-      ],
+      "workspaces": ["packages/*"],
       "dependencies": {
         "@eslint-community/eslint-utils": "^4.8.0",
         "@eslint-community/regexpp": "^4.12.2",
@@ -18010,10 +18005,7 @@
     "node_modules/.pnpm/obug@2.1.3/node_modules/obug": {
       "version": "2.1.3",
       "dev": true,
-      "funding": [
-        "https://github.com/sponsors/sxzz",
-        "https://opencollective.com/debug"
-      ],
+      "funding": ["https://github.com/sponsors/sxzz", "https://opencollective.com/debug"],
       "license": "MIT",
       "devDependencies": {
         "@sxzz/eslint-config": "^8.1.0",
@@ -19760,9 +19752,7 @@
     "node_modules/.pnpm/recharts@3.8.0_@types+react@19.2.17_react-dom@19.2.7_react@19.2.7__react-is@18.3.1_react@19.2.7_redux@5.0.1/node_modules/recharts": {
       "version": "3.8.0",
       "license": "MIT",
-      "workspaces": [
-        "www"
-      ],
+      "workspaces": ["www"],
       "dependencies": {
         "@reduxjs/toolkit": "^1.9.0 || 2.x.x",
         "clsx": "^2.1.1",
@@ -22194,10 +22184,7 @@
     "node_modules/.pnpm/uuid@14.0.1/node_modules/uuid": {
       "version": "14.0.1",
       "dev": true,
-      "funding": [
-        "https://github.com/sponsors/broofa",
-        "https://github.com/sponsors/ctavan"
-      ],
+      "funding": ["https://github.com/sponsors/broofa", "https://github.com/sponsors/ctavan"],
       "license": "MIT",
       "bin": {
         "uuid": "dist-node/bin/uuid"
@@ -22523,11 +22510,7 @@
     "node_modules/.pnpm/vitefu@1.1.3_vite@8.1.0_@types+node@22.20.0_esbuild@0.28.1_jiti@2.7.0_terser@5.48.0_tsx@4.22.4_yaml@2.9.0_/node_modules/vitefu": {
       "version": "1.1.3",
       "license": "MIT",
-      "workspaces": [
-        "tests/deps/*",
-        "tests/projects/*",
-        "tests/projects/workspace/packages/*"
-      ],
+      "workspaces": ["tests/deps/*", "tests/projects/*", "tests/projects/workspace/packages/*"],
       "peerDependencies": {
         "vite": "^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0"
       },

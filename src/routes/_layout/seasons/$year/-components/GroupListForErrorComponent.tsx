@@ -6,11 +6,11 @@ const GroupListForErrorComponent = () => {
   })
   if (data.status !== 200) return null
   return (
-    <div className="mt-4 grid grid-cols-2 gap-2 sm:gap-8 lg:grid-cols-3 xl:gap-x-16 xl:gap-y-8 2xl:grid-cols-6">
+    <div className="mx-auto mt-4 grid grid-cols-1 gap-2">
       {data.groups.map((item) => {
         return (
           <div
-            className="flex w-full flex-row items-center justify-center gap-4 border px-4 py-2 sm:gap-8"
+            className="flex w-full flex-row items-center justify-center gap-4 border shadow-xs md:shadow-sm px-4 py-2 sm:gap-8"
             key={item.group}
           >
             <Link
@@ -21,7 +21,7 @@ const GroupListForErrorComponent = () => {
               })}
               search={(prev) => ({ women: prev.women })}
             >
-              <span className="xs:text-[10px] text-[8px] font-semibold sm:text-xs lg:text-sm">
+              <span className="xs:text-[10px] text-[8px] sm:text-xs lg:text-sm">
                 {item.name}
               </span>
             </Link>

@@ -1,6 +1,6 @@
+import TeamLogo from '@/components/Common/TeamLogo'
 import type { CheckedState } from '@/components/base/ui/checkbox'
 import { Checkbox } from '@/components/base/ui/checkbox'
-import TeamLogo from '@/components/Common/TeamLogo'
 import { cn } from '@/lib/utils/utils'
 import { Link } from '@tanstack/react-router'
 
@@ -12,7 +12,7 @@ type Team = {
 
 type TeamsListItemProps = {
   team: Team
-  selectedTeams: Array<number>
+  selectedTeams: Array<number> | undefined
   onCheckedChange: (
     checked: CheckedState,
     teamId: number,
@@ -27,15 +27,15 @@ const TeamsListItem = ({
   return (
     <div
       data-state={
-        selectedTeams.includes(team.teamId)
+        selectedTeams?.includes(team.teamId)
           ? 'checked'
           : 'unchecked'
       }
-      className="bg-muted data-[state=checked]:shadow-accent dark:bg-muted/50 data-[state=checked]:outline-primary/30 data-[state=checked]:bg-primary/10 dark:data-[state=checked]:outline-primary/20 dark:data-[state=checked]:bg-primary/10 flex flex-row items-center justify-between space-y-0 space-x-3 rounded p-2 text-sm data-[state=checked]:shadow-md data-[state=checked]:outline md:text-base 2xl:text-lg"
+      className="bg-muted data-[state=checked]:shadow-accent dark:bg-muted/50 data-[state=checked]:outline-primary/30 data-[state=checked]:bg-primary/10 dark:data-[state=checked]:outline-primary/20 dark:data-[state=checked]:bg-primary/10 flex flex-row items-center justify-between space-y-0 space-x-3 rounded p-2 text-sm data-[state=checked]:shadow-sm data-[state=checked]:outline md:text-base 2xl:text-lg"
     >
-      <div className="flex flex-row gap-2 items-center">
+      <div className="flex flex-row items-center gap-2">
         <TeamLogo
-          className="w-4 object-scale-down"
+          className="size-[1lh] object-scale-down"
           size={32}
           alt={team.casualName}
           title={team.name}
@@ -58,7 +58,11 @@ const TeamsListItem = ({
       </div>
       <Checkbox
         name="teamArray"
-        checked={selectedTeams.includes(team.teamId)}
+        checked={
+          selectedTeams?.includes(team.teamId)
+            ? true
+            : false
+        }
         onCheckedChange={(checked) =>
           team.teamId &&
           onCheckedChange(checked, team.teamId)

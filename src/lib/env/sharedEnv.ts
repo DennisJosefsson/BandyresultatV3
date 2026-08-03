@@ -5,9 +5,7 @@ export const sharedEnv = createEnv({
   clientPrefix: 'VITE_',
   client: {},
   shared: {
-    NODE_ENV: zd
-      .enum(['production', 'development'])
-      .default('development'),
+    NODE_ENV: zd.enum(['production', 'development']).default('development'),
     CLERK_SECRET_KEY: zd.string().min(1),
   },
   runtimeEnv: process.env,

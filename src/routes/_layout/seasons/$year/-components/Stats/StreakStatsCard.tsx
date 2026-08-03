@@ -1,4 +1,4 @@
-import Date from '@/components/Common/Date'
+import { Datum } from '@/components/Common/Date'
 import type { StreakData } from '@/lib/types/stats'
 import StatsCard from './StatsCard'
 
@@ -32,8 +32,8 @@ const StreakStatsCard = ({
             </StatsCard.Upper>
             <StatsCard.Lower>
               <StatsCard.Content>
-                <Date>{team.startDate}</Date> -{' '}
-                <Date>{team.endDate}</Date>
+                <Datum>{team.startDate}</Datum> -{' '}
+                <Datum>{team.endDate}</Datum>
               </StatsCard.Content>
             </StatsCard.Lower>
           </StatsCard>

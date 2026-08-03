@@ -1,21 +1,10 @@
-import type { ChartConfig } from '@/components/base/ui/chart'
-import {
-  ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
-} from '@/components/base/ui/chart'
-import type { Stats } from '@/lib/types/stats'
 import { Pie, PieChart } from 'recharts'
+import type { Stats } from '@/lib/types/stats'
+import type { ChartConfig } from '@/components/base/ui/chart'
+import { ChartContainer, ChartLegend, ChartLegendContent } from '@/components/base/ui/chart'
 import GameAndGoalCard from './GameAndGoalCard'
 type GameDataProps = {
-  gameData: Pick<
-    Stats,
-    | 'awayGameData'
-    | 'homeGameData'
-    | 'gameCount'
-    | 'drawData'
-    | 'serie'
-  >
+  gameData: Pick<Stats, 'awayGameData' | 'homeGameData' | 'gameCount' | 'drawData' | 'serie'>
 }
 
 const GameData = ({ gameData }: GameDataProps) => {
@@ -77,16 +66,11 @@ const GameData = ({ gameData }: GameDataProps) => {
           className="mx-auto aspect-square max-h-80 min-h-40"
         >
           <PieChart>
-            <Pie
-              data={chartData}
-              dataKey="value"
-              nameKey="result"
-              strokeWidth={5}
-            />
+            <Pie data={chartData} dataKey="value" nameKey="result" strokeWidth={5} />
 
             <ChartLegend
               content={
-                <ChartLegendContent className="flex-col items-center-safe text-[10px] xs:text-xs sm:text-sm gap-0.5" />
+                <ChartLegendContent className="xs:text-xs flex-col items-center-safe gap-0.5 text-[10px] sm:text-sm" />
               }
             />
           </PieChart>

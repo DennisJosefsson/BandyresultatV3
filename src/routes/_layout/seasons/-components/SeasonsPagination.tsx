@@ -194,6 +194,81 @@ const SeasonsPagination = () => {
   })
   const maxPage = Math.ceil(count / 12)
 
+  if (maxPage < 6) {
+    const array = Array.from({ length: maxPage }, (_, index) => index + 1)
+
+    return (
+      <div className="flex w-full flex-row items-center justify-center gap-1">
+        <Link
+          from="/seasons"
+          to="/seasons"
+          search={(prev) => ({
+            ...prev,
+            page: prev.page && prev.page - 1,
+          })}
+          disabled={page === 1 ? true : false}
+        >
+          <Button
+            variant="ghost"
+            disabled={page === 1 ? true : false}
+            aria-label="Gå till föregående sida"
+            aria-disabled={page === 1 ? true : false}
+          >
+            <div className="inline-flex items-center gap-1 pl-2.5">
+              <ChevronLeftIcon className="h-4 w-4" />
+              <span className="hidden sm:block">Föregående</span>
+            </div>
+          </Button>
+        </Link>
+        {array.map((pageNumber) => {
+          return (
+            <Link
+              key={`page-${pageNumber}`}
+              from="/seasons"
+              to="/seasons"
+              search={(prev) => ({
+                ...prev,
+                page: pageNumber,
+              })}
+            >
+              {({ isActive }) => (
+                <Button
+                  className="xs:size-7 xs:[&_svg:not([class*='size-'])]:size-3.5 size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5"
+                  variant={isActive ? 'outline' : 'ghost'}
+                  aria-label={`Sida ${pageNumber}`}
+                >
+                  {pageNumber}
+                </Button>
+              )}
+            </Link>
+          )
+        })}
+
+        <Link
+          from="/seasons"
+          to="/seasons"
+          search={(prev) => ({
+            ...prev,
+            page: prev.page && prev.page + 1,
+          })}
+          disabled={page === maxPage ? true : false}
+        >
+          <Button
+            variant="ghost"
+            disabled={page === maxPage ? true : false}
+            aria-label="Gå till nästa sida"
+            aria-disabled={page === maxPage ? true : false}
+          >
+            <div className="inline-flex items-center gap-1 pr-2.5">
+              <span className="hidden sm:block">Nästa</span>
+              <ChevronRightIcon className="h-4 w-4" />
+            </div>
+          </Button>
+        </Link>
+      </div>
+    )
+  }
+
   return (
     <div className="flex w-full flex-row items-center justify-center gap-1">
       <Link

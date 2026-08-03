@@ -17,12 +17,12 @@ const SeasonTablesButtonList = () => {
 
   if (year < 1930) return null
   return (
-    <div>
-      <h1 className="xs:text-sm mb-2 text-center text-xs leading-4 font-bold sm:text-base md:mb-4 lg:text-xl">
+    <div className="xs:mb-3 mb-2 sm:mb-4 lg:mb-6">
+      <h1 className="xs:text-sm xs:mb-2 mb-1 text-center text-xs leading-4 font-bold sm:text-base md:mb-4 lg:text-xl">
         Serietabell {women ? 'Damer' : 'Herrar'}
       </h1>
       <div className="flex flex-row justify-center">
-        <div className="mb-6 flex flex-row justify-center gap-4">
+        <div className="flex flex-row justify-center gap-4">
           <Link
             from="/seasons/$year/$group/tables/$table"
             to="."

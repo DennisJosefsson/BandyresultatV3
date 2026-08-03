@@ -1,14 +1,9 @@
-import Date from '@/components/Common/Date'
+import { Datum } from '@/components/Common/Date'
+import type { CompareLatestWinStats } from '@/lib/types/compare'
 import StatsCard from './StatsCard'
 
 type LatestWinsProps = {
-  latestWins: Array<{
-    gameId: number
-    result: string | null
-    homeName: string | null
-    awayName: string | null
-    date: string
-  }>
+  latestWins: Array<CompareLatestWinStats>
   title: string
 }
 
@@ -25,11 +20,14 @@ const LatestWins = ({
           return (
             <div
               key={game.gameId}
-              className="bg-muted-foreground/20 my-2 flex w-full flex-col rounded px-3 py-1"
+              className="bg-muted-foreground/20 my-2 flex w-full flex-col rounded px-3 py-1 text-[8px] xs:text-[10px] sm:text-xs md:text-sm"
             >
-              <div className="mb-0.5 font-semibold">
-                <Date>{game.date}</Date>
+              <div className="mb-0.5 flex flex-col">
+                <span className="font-semibold">
+                  <Datum>{game.date}</Datum>
+                </span>
               </div>
+
               <div className="flex flex-row justify-between">
                 <div>
                   {game.homeName}-{game.awayName}
@@ -37,6 +35,9 @@ const LatestWins = ({
                 <div className="tabular-nums">
                   {game.result}
                 </div>
+              </div>
+              <div>
+                <span>{game.age}</span>
               </div>
             </div>
           )

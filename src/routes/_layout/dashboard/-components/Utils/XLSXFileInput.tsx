@@ -1,8 +1,8 @@
-import { Input } from '@/components/base/ui/input'
-import type { BulkGameFileParser } from '@/lib/types/game'
-import { bulkGameFileParser } from '@/lib/types/game'
 import type { Dispatch, SetStateAction } from 'react'
 import XLSX from 'xlsx'
+import type { BulkGameFileParser } from '@/lib/types/game'
+import { bulkGameFileParser } from '@/lib/types/game'
+import { Input } from '@/components/base/ui/input'
 
 type DataError =
   | {
@@ -12,9 +12,7 @@ type DataError =
   | { error: false }
 
 type FileInputProps = {
-  setGameData: Dispatch<
-    SetStateAction<BulkGameFileParser | null>
-  >
+  setGameData: Dispatch<SetStateAction<BulkGameFileParser | null>>
   setDataError: Dispatch<SetStateAction<DataError>>
 }
 
@@ -41,19 +39,11 @@ const process = (ab: ArrayBuffer) => {
 
 //
 
-const FileInput = ({
-  setGameData,
-  setDataError,
-}: FileInputProps) => {
-  const onChange = async (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+const FileInput = ({ setGameData, setDataError }: FileInputProps) => {
+  const onChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
-      const parsedData = await process(
-        await event.target.files[0].arrayBuffer(),
-      )
-      const gameData =
-        bulkGameFileParser.safeParse(parsedData)
+      const parsedData = await process(await event.target.files[0].arrayBuffer())
+      const gameData = bulkGameFileParser.safeParse(parsedData)
       if (!gameData.success) {
         const errorString = gameData.error.message
         console.log('ERROR', gameData.error)

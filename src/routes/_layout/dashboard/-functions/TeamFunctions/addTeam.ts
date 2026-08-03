@@ -1,20 +1,17 @@
-import { db } from '@/db'
-import { teams } from '@/db/schema'
-import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
-import { catchError } from '@/lib/middlewares/errors/catchError'
-import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import { newTeam } from '@/lib/types/team'
 import { createServerFn } from '@tanstack/react-start'
+import { newTeam } from '@/lib/types/team'
+import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
+import { catchError } from '@/lib/middlewares/errors/catchError'
+import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
+import { teams } from '@/db/schema'
+import { db } from '@/db'
 
 export const addTeam = createServerFn({ method: 'POST' })
   .middleware([authMiddleware, errorMiddleware])
   .validator(newTeam)
   .handler(async ({ data }) => {
     try {
-      const returnTeam = await db
-        .insert(teams)
-        .values(data)
-        .returning()
+      const returnTeam = await db.insert(teams).values(data).returning()
 
       return {
         status: 200,

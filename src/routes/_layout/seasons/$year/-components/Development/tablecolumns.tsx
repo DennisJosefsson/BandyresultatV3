@@ -1,201 +1,95 @@
-import TeamLogo from '@/components/Common/TeamLogo'
-import type { ReturnDevDataTableItem } from '@/lib/types/table'
 import type { ColumnDef } from '@tanstack/react-table'
-import {
-  ArrowDownRightIcon,
-  ArrowUpRightIcon,
-} from 'lucide-react'
+import { ArrowDownRightIcon, ArrowUpRightIcon } from 'lucide-react'
+import type { ReturnDevDataTableItem } from '@/lib/types/table'
+import TeamLogo from '@/components/Common/TeamLogo'
+import { TeamnameHeader, TeamnameLabel } from '@/components/Common/Tables/Teamname'
+import { NumberCell, NumberHeader } from '@/components/Common/Tables/Number'
 
-const DirectionArrow = ({
-  direction,
-}: {
-  direction: 'up' | 'down' | null
-}) => {
+const DirectionArrow = ({ direction }: { direction: 'up' | 'down' | null }) => {
   if (direction === null) {
     return null
   }
 
   if (direction === 'up') {
-    return (
-      <ArrowUpRightIcon className="size-3 md:size-4 lg:size-5 2xl:size-6" />
-    )
+    return <ArrowUpRightIcon className="size-[1lh] object-scale-down" />
   }
 
   if (direction === 'down') {
-    return (
-      <ArrowDownRightIcon className="size-3 md:size-4 lg:size-5 2xl:size-6" />
-    )
+    return <ArrowDownRightIcon className="size-[1lh] object-scale-down" />
   }
 
   return null
 }
 
-export const columns: Array<
-  ColumnDef<ReturnDevDataTableItem>
-> = [
+export const columns: Array<ColumnDef<ReturnDevDataTableItem>> = [
   {
     accessorKey: 'position',
-    header: () => (
-      <div className="xs:text-[10px] w-4 text-center text-[8px] sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12">
-        Pos
-      </div>
-    ),
-    cell: ({ row }) => (
-      <div className="xs:text-[10px] w-4 text-center text-[8px] tabular-nums sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12">
-        {row.getValue('position')}
-      </div>
-    ),
-    maxSize: 16,
+    header: () => <NumberHeader>Pos</NumberHeader>,
+    cell: ({ row }) => <NumberCell>{row.getValue('position')}</NumberCell>,
   },
   {
     accessorKey: 'team.casualName',
-    header: () => (
-      <div className="xs:text-[10px] w-12 truncate text-left text-[8px] sm:w-16 sm:text-xs lg:w-32 lg:text-sm xl:text-base">
-        Lag
-      </div>
-    ),
+    header: () => <TeamnameHeader>Lag</TeamnameHeader>,
     cell: ({ row }) => (
-      <div className="xs:text-[10px] w-20 truncate text-left text-[8px] sm:w-28 sm:text-xs xl:text-base flex flex-row items-center gap-1 sm:gap-2">
+      <TeamnameLabel>
         <TeamLogo
           size={32}
           teamId={row.original.teamId}
-          className="object-scale-down w-2 xs:w-3 sm:w-4 md:w-5"
+          className="size-[1lh] object-scale-down"
           alt={row.original.team.casualName}
           title={row.original.team.casualName}
         />
-        <span className="truncate">
-          {row.getValue('team_casualName')}
-        </span>
-      </div>
+        <span className="truncate">{row.getValue('team_casualName')}</span>
+      </TeamnameLabel>
     ),
-    maxSize: 160,
   },
   {
     accessorKey: 'arrowDirection',
-    header: () => (
-      <div className="xs:text-[10px] text-[8px] sm:text-xs lg:text-sm xl:text-base">
-        För
-      </div>
-    ),
+    header: () => <NumberHeader className="text-center">För</NumberHeader>,
     cell: ({ row }) => (
-      <div className="xs:text-[10px] ml-1 text-[8px] tabular-nums sm:text-xs lg:text-sm xl:text-base">
-        <DirectionArrow
-          direction={row.getValue('arrowDirection')}
-        />
-      </div>
+      <NumberCell className="text-center">
+        <DirectionArrow direction={row.getValue('arrowDirection')} />
+      </NumberCell>
     ),
-    maxSize: 16,
   },
   {
     accessorKey: 'totalGames',
-    header: () => (
-      <div className="xs:text-[10px] w-4 text-center text-[8px] sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12">
-        M
-      </div>
-    ),
-    cell: ({ row }) => (
-      <div className="xs:text-[10px] w-4 text-center text-[8px] tabular-nums sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12">
-        {row.getValue('totalGames')}
-      </div>
-    ),
-    maxSize: 16,
+    header: () => <NumberHeader>M</NumberHeader>,
+    cell: ({ row }) => <NumberCell>{row.getValue('totalGames')}</NumberCell>,
   },
   {
     accessorKey: 'totalWins',
-    header: () => (
-      <div className="xs:text-[10px] w-4 text-center text-[8px] sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12">
-        V
-      </div>
-    ),
-    cell: ({ row }) => (
-      <div className="xs:text-[10px] w-4 text-center text-[8px] tabular-nums sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12">
-        {row.getValue('totalWins')}
-      </div>
-    ),
-    maxSize: 16,
+    header: () => <NumberHeader>V</NumberHeader>,
+    cell: ({ row }) => <NumberCell>{row.getValue('totalWins')}</NumberCell>,
   },
   {
     accessorKey: 'totalDraws',
-    header: () => (
-      <div className="xs:text-[10px] w-4 text-center text-[8px] sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12">
-        O
-      </div>
-    ),
-    cell: ({ row }) => (
-      <div className="xs:text-[10px] w-4 text-center text-[8px] tabular-nums sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12">
-        {row.getValue('totalDraws')}
-      </div>
-    ),
-    maxSize: 16,
+    header: () => <NumberHeader>O</NumberHeader>,
+    cell: ({ row }) => <NumberCell>{row.getValue('totalDraws')}</NumberCell>,
   },
   {
     accessorKey: 'totalLost',
-    header: () => (
-      <div className="xs:text-[10px] w-4 text-center text-[8px] sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12">
-        F
-      </div>
-    ),
-    cell: ({ row }) => (
-      <div className="xs:text-[10px] w-4 text-center text-[8px] tabular-nums sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12">
-        {row.getValue('totalLost')}
-      </div>
-    ),
-    maxSize: 16,
+    header: () => <NumberHeader>F</NumberHeader>,
+    cell: ({ row }) => <NumberCell>{row.getValue('totalLost')}</NumberCell>,
   },
   {
     accessorKey: 'totalGoalsScored',
-    header: () => (
-      <div className="xs:text-[10px] w-4 text-center text-[8px] sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12">
-        GM
-      </div>
-    ),
-    cell: ({ row }) => (
-      <div className="xs:text-[10px] w-4 text-center text-[8px] tabular-nums sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12">
-        {row.getValue('totalGoalsScored')}
-      </div>
-    ),
-    maxSize: 16,
+    header: () => <NumberHeader>GM</NumberHeader>,
+    cell: ({ row }) => <NumberCell>{row.getValue('totalGoalsScored')}</NumberCell>,
   },
   {
     accessorKey: 'totalGoalsConceded',
-    header: () => (
-      <div className="xs:text-[10px] w-4 text-center text-[8px] sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12">
-        IM
-      </div>
-    ),
-    cell: ({ row }) => (
-      <div className="xs:text-[10px] w-4 text-center text-[8px] tabular-nums sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12">
-        {row.getValue('totalGoalsConceded')}
-      </div>
-    ),
-    maxSize: 16,
+    header: () => <NumberHeader>IM</NumberHeader>,
+    cell: ({ row }) => <NumberCell>{row.getValue('totalGoalsConceded')}</NumberCell>,
   },
   {
     accessorKey: 'totalGoalDifference',
-    header: () => (
-      <div className="xs:text-[10px] w-4 text-center text-[8px] sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12">
-        MS
-      </div>
-    ),
-    cell: ({ row }) => (
-      <div className="xs:text-[10px] w-4 text-center text-[8px] tabular-nums sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12">
-        {row.getValue('totalGoalDifference')}
-      </div>
-    ),
-    maxSize: 16,
+    header: () => <NumberHeader>MS</NumberHeader>,
+    cell: ({ row }) => <NumberCell>{row.getValue('totalGoalDifference')}</NumberCell>,
   },
   {
     accessorKey: 'totalPoints',
-    header: () => (
-      <div className="xs:text-[10px] w-4 text-center text-[8px] sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12">
-        P
-      </div>
-    ),
-    cell: ({ row }) => (
-      <div className="xs:text-[10px] w-4 text-center text-[8px] tabular-nums sm:text-xs lg:w-9 lg:text-sm xl:text-base 2xl:w-12">
-        {row.getValue('totalPoints')}
-      </div>
-    ),
-    maxSize: 16,
+    header: () => <NumberHeader>P</NumberHeader>,
+    cell: ({ row }) => <NumberCell>{row.getValue('totalPoints')}</NumberCell>,
   },
 ]

@@ -1,34 +1,26 @@
-import { ZodError } from 'zod'
-import { createServerFn } from '@tanstack/react-start'
-import type { Team } from '@/lib/types/team'
-import type { Meta } from '@/lib/types/meta'
+import { db } from '@/db'
+import { catchError } from '@/lib/middlewares/errors/catchError'
+import CompareRequestError from '@/lib/middlewares/errors/CompareRequestError'
+import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import type {
-  CompareAllTableRow,
   CompareBaseTable,
   CompareCategoryData,
   CompareGameStat,
   CompareLatestWinStats,
   CompareSeasonStat,
 } from '@/lib/types/compare'
+import type { Meta } from '@/lib/types/meta'
+import type { Team } from '@/lib/types/team'
 import { zd } from '@/lib/utils/zod'
-import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import { catchError } from '@/lib/middlewares/errors/catchError'
-import { db } from '@/db'
-import getCompareHeaderText from './utils/getCompareHeaderText'
-import { compareAllTeamData, compareSortLevelFunction } from './utils/compareSortFunctions'
+import { createServerFn } from '@tanstack/react-start'
+import { ZodError } from 'zod'
 import {
-  getAllDbSeasons,
   getAllGamesTables,
-  getAllPlayoffs,
   getCatTables,
-  getFirstAndLastGames,
-  getFirstDivisionSeasons,
-  getFirstDivisionSeasonsSince1931,
-  getGolds,
-  getLatestAwayWin,
-  getLatestHomeWin,
-  getPlayoffs,
+  getCompareStats,
 } from './utils/compareQueries'
+import { compareSortLevelFunction } from './utils/compareSortFunctions'
+import getCompareHeaderText from './utils/getCompareHeaderText'
 
 type CompareReturn =
   | {
@@ -36,27 +28,28 @@ type CompareReturn =
       meta: Meta
       breadCrumb: string
       message: string
+      teamArray?: Array<number>
     }
   | {
       status: 400
       meta: Meta
       breadCrumb: string
       message: string
+      teamArray?: Array<number>
     }
   | {
       status: 200
       meta: Meta
       breadCrumb: string
-      compareTeams: Array<Team>
+      homeTeam: Team
+      awayTeam: Team
       categoryData: CompareCategoryData
-      allData: Array<CompareAllTableRow>
-      sortedData: Array<CompareBaseTable>
+      allData: Array<CompareBaseTable>
       gameCount: number
       golds: Array<CompareSeasonStat>
       playoffs: Array<CompareSeasonStat>
       allPlayoffs: Array<CompareSeasonStat>
       firstDivisionSeasonsSince1931: Array<CompareSeasonStat>
-      allDbSeasons: Array<CompareSeasonStat>
       firstDivisionSeasons: Array<CompareSeasonStat>
       firstGames: Array<CompareGameStat>
       latestGames: Array<CompareGameStat>
@@ -71,7 +64,9 @@ export const getCompareTeams = createServerFn({
 })
   .validator(
     zd.object({
-      teamArray: zd.array(zd.number().int().positive()).optional(),
+      teamArray: zd
+        .array(zd.number().int().positive())
+        .optional(),
 
       women: zd.boolean(),
     }),
@@ -81,110 +76,116 @@ export const getCompareTeams = createServerFn({
     try {
       const { teamArray, women } = data
 
-      if (!teamArray) {
-        const breadCrumb = `H2H`
-        const title = `Bandyresultat - ${breadCrumb}`
-        const description = `Lag måste väljas.`
-        const url = `https://bandyresultat.se/teams?women=${data.women}`
+      const array = zd
+        .array(
+          zd
+            .int('Lag-id måste vara heltal.')
+            .positive(
+              'Lag-id ska vara ett positivt nummer.',
+            )
+            .max(10000, 'Lag-id för stort.'),
+          'Fel antal lag, exakt två lag ska vara valda.',
+        )
+        .length(
+          2,
+          'Fel antal lag, exakt två lag ska vara valda.',
+        )
+        .parse(teamArray)
 
-        return {
-          message: 'Lag måste väljas.',
-          breadCrumb,
-          meta: { title, description, url },
-          status: 400,
-        }
+      const compareHomeTeam =
+        await db.query.teams.findFirst({
+          where: (teams, { and, eq, ne }) =>
+            and(
+              eq(teams.teamId, array[0]),
+              ne(teams.teamId, 176),
+            ),
+        })
+
+      if (!compareHomeTeam) {
+        const item = array.at(-1)
+        const newTeamArray =
+          item === undefined ? [] : [item]
+        throw new CompareRequestError({
+          message: 'Hemmalaget finns inte i databasen.',
+          code: 404,
+          teamArray: newTeamArray,
+        })
       }
 
-      if (teamArray.length !== 2) {
-        const breadCrumb = `H2H`
-        const title = `Bandyresultat - ${breadCrumb}`
-        const description = `Två lag ska väljas.`
-        const url = `https://bandyresultat.se/teams?women=${data.women}`
+      const compareAwayTeam =
+        await db.query.teams.findFirst({
+          where: (teams, { and, eq, ne }) =>
+            and(
+              eq(teams.teamId, array[1]),
+              ne(teams.teamId, 176),
+            ),
+        })
 
-        return {
-          message: 'Välj två lag.',
-          breadCrumb,
-          meta: { title, description, url },
-          status: 400,
-        }
+      if (!compareAwayTeam) {
+        const item = array.at(0)
+        const newTeamArray =
+          item === undefined ? [] : [item]
+        throw new CompareRequestError({
+          message: 'Bortalaget finns inte i databasen.',
+          code: 404,
+          teamArray: newTeamArray,
+        })
       }
-
-      const compareTeams = await db.query.teams.findMany({
-        where: (teams, { inArray }) => inArray(teams.teamId, teamArray),
-      })
 
       const catTables = await getCatTables({
-        teamArray,
+        homeTeamId: compareHomeTeam.teamId,
+        awayTeamId: compareAwayTeam.teamId,
       })
 
       if (catTables.length === 0) {
-        const teamStrings = compareTeams.map((team) => team.name).join(' och ')
-        const breadCrumb = `H2H`
-        const title = `Bandyresultat - ${breadCrumb}`
-        const description = `${teamStrings} har inga spelade matcher mot varandra i databasen.`
-        const url = `https://bandyresultat.se/teams/compare?women=${women}&teamArray=[${compareTeams.map((team) => team.teamId).join(',')}]`
+        const teamStrings = `${compareHomeTeam.name} och ${compareAwayTeam.name}`
+        const breadCrumb = `H2H: ${compareHomeTeam.name} - ${compareAwayTeam.name}`
 
-        return {
-          message: description,
+        const message = `${teamStrings} har inga spelade matcher mot varandra i databasen.`
+        const url = `https://bandyresultat.se/teams/compare?women=${women}&teamArray=[$${compareHomeTeam.teamId},${compareAwayTeam.teamId}]`
+
+        throw new CompareRequestError({
+          message: message,
+          code: 404,
+          url,
           breadCrumb,
-          meta: { title, description, url },
-          status: 404,
-        }
+          teamArray,
+        })
       }
 
-      const categoryData = compareSortLevelFunction(catTables)
+      const categoryData =
+        compareSortLevelFunction(catTables)
 
       const allData = await getAllGamesTables({
-        teamArray,
+        homeTeamId: compareHomeTeam.teamId,
+        awayTeamId: compareAwayTeam.teamId,
       })
 
       const gameCount = allData.length
 
-      const sortedData = compareAllTeamData(allData)
+      const stats = await getCompareStats([
+        compareHomeTeam.teamId,
+        compareAwayTeam.teamId,
+      ])
 
-      const golds = await getGolds(teamArray)
-
-      const playoffs = await getPlayoffs(teamArray)
-
-      const allPlayoffs = await getAllPlayoffs(teamArray)
-
-      const firstDivisionSeasonsSince1931 = await getFirstDivisionSeasonsSince1931(teamArray)
-
-      const allDbSeasons = await getAllDbSeasons(teamArray)
-
-      const firstDivisionSeasons = await getFirstDivisionSeasons(teamArray)
-
-      const { firstGames, latestGames } = await getFirstAndLastGames(teamArray)
-
-      const latestHomeWin = await getLatestHomeWin(teamArray)
-      const latestAwayWin = await getLatestAwayWin(teamArray)
-
-      const breadCrumb = `H2H:  ${compareTeams.map((team) => team.name).join(' - ')}`
+      const breadCrumb = `H2H:  ${compareHomeTeam.name} - ${compareAwayTeam.name}`
       const title = `Bandyresultat - ${breadCrumb}`
-      const description = `Möten mellan ${compareTeams.map((team) => team.name).join(' och ')}`
-      const url = `https://bandyresultat.se/teams/compare?women=${women}&teamArray=[${compareTeams.map((team) => team.teamId).join(',')}]`
+      const description = `Möten mellan $${compareHomeTeam.name} och ${compareAwayTeam.name}`
+      const url = `https://bandyresultat.se/teams/compare?women=${women}&teamArray=[$${compareHomeTeam.teamId},${compareAwayTeam.teamId}]`
 
       const compareHeaderText = getCompareHeaderText({
-        teams: compareTeams,
+        homeTeam: compareHomeTeam,
+        awayTeam: compareAwayTeam,
         gameCount,
       })
 
       return {
-        compareTeams,
+        homeTeam: compareHomeTeam,
+        awayTeam: compareAwayTeam,
         categoryData,
         allData,
-        sortedData,
         gameCount,
-        golds,
-        playoffs,
-        allPlayoffs,
-        firstDivisionSeasonsSince1931,
-        allDbSeasons,
-        firstDivisionSeasons,
-        firstGames,
-        latestGames,
-        latestHomeWin,
-        latestAwayWin,
+        ...stats,
         compareHeaderText,
         breadCrumb,
         meta: { description, url, title },
@@ -196,14 +197,35 @@ export const getCompareTeams = createServerFn({
         const title = `Bandyresultat - ${breadCrumb}`
         const description = ``
         const url = `https://bandyresultat.se/teams?women=${data.women}`
-        const errorString = error.issues.map((issue) => issue.message).join(',')
+        const errorString = error.issues
+          .map((issue) => issue.message)
+          .join(',')
         return {
           message: errorString,
           breadCrumb,
           meta: { title, description, url },
           status: 400,
+          teamArray: undefined,
         }
-      } else {
+      } else if (error instanceof CompareRequestError) {
+        const breadCrumb = error.breadCrumb ?? `H2H`
+        const title = `Bandyresultat - ${breadCrumb}`
+        const description = error.message
+        const teamArray = error.teamArray
+        const url =
+          error.url ??
+          `https://bandyresultat.se/teams?women=${data.women}`
+        const errorString = error.message
+        const status = error.statusCode
+        return {
+          message: errorString,
+          breadCrumb,
+          meta: { title, description, url },
+          status,
+          teamArray,
+        }
+      }
+      {
         catchError(error)
       }
     }

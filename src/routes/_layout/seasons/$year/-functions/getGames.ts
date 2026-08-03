@@ -1,5 +1,13 @@
 import { db } from '@/db'
-import { games, seasons, series, teams } from '@/db/schema'
+import {
+  games,
+  seasons,
+  series,
+  teams,
+  teamseries,
+} from '@/db/schema'
+import { getSortPlayedGamesServerFn } from '@/lib/cookieFunctions/sortPlayedGames'
+import { getSortUnplayedGamesServerFn } from '@/lib/cookieFunctions/sortUnplayedGames'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import type { Games } from '@/lib/types/game'
@@ -11,12 +19,19 @@ import type { SQL } from 'drizzle-orm'
 import {
   and,
   asc,
+  desc,
   eq,
   getTableColumns,
   inArray,
+  sql,
 } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
 import { sortGames } from './gameSortFunction'
+
+type TeamArray = {
+  teamId: number
+  casualName: string
+}
 
 type GamesReturn =
   | {
@@ -24,6 +39,7 @@ type GamesReturn =
       games: Games
       breadCrumb: string
       meta: Meta
+      teamArray: Array<TeamArray>
     }
   | {
       status: 404
@@ -61,8 +77,29 @@ export const getGames = createServerFn({ method: 'GET' })
           description,
         }
         if (!seasonYear)
-          throw new Error('Säsongen finns inte.')
-        const gamesArray = await db
+          return {
+            status: 404,
+            message: 'Säsongen finns inte.',
+            breadCrumb,
+            meta,
+          }
+
+        if (year < 1930) {
+          return {
+            status: 404,
+            message:
+              'Inga seriematcher inlagda denna säsong.',
+            breadCrumb,
+            meta,
+          }
+        }
+
+        const sortPlayedGames =
+          await getSortPlayedGamesServerFn()
+        const sortUnplayedGames =
+          await getSortUnplayedGamesServerFn()
+
+        const playedGamesArray = await db
           .select({
             ...getTableColumns(games),
             home: {
@@ -97,14 +134,70 @@ export const getGames = createServerFn({ method: 'GET' })
           .leftJoin(away, eq(games.awayTeamId, away.teamId))
           .where(
             and(
+              eq(games.played, true),
               eq(seasons.year, seasonYear),
               eq(games.women, women),
               inArray(games.group, [group, 'mix']),
             ),
           )
-          .orderBy(asc(games.date))
+          .orderBy(
+            sortPlayedGames === 'asc'
+              ? asc(games.date)
+              : desc(games.date),
+          )
 
-        if (!gamesArray || gamesArray.length === 0) {
+        const unplayedGamesArray = await db
+          .select({
+            ...getTableColumns(games),
+            home: {
+              teamId: home.teamId,
+              name: home.name,
+              casualName: home.casualName,
+              shortName: home.shortName,
+            } as unknown as SQL<{
+              teamId: number
+              name: string
+              casualName: string
+              shortName: string
+            }>,
+            away: {
+              teamId: away.teamId,
+              name: away.name,
+              casualName: away.casualName,
+              shortName: away.shortName,
+            } as unknown as SQL<{
+              teamId: number
+              name: string
+              casualName: string
+              shortName: string
+            }>,
+          })
+          .from(games)
+          .leftJoin(
+            seasons,
+            eq(seasons.seasonId, games.seasonId),
+          )
+          .leftJoin(home, eq(games.homeTeamId, home.teamId))
+          .leftJoin(away, eq(games.awayTeamId, away.teamId))
+          .where(
+            and(
+              eq(games.played, false),
+              eq(seasons.year, seasonYear),
+              eq(games.women, women),
+              inArray(games.group, [group, 'mix']),
+            ),
+          )
+          .orderBy(
+            sortUnplayedGames === 'asc'
+              ? asc(games.date)
+              : desc(games.date),
+          )
+
+        if (
+          playedGamesArray.length +
+            unplayedGamesArray.length ===
+          0
+        ) {
           return {
             status: 404,
             message: 'Inga matcher än denna säsong.',
@@ -154,11 +247,32 @@ export const getGames = createServerFn({ method: 'GET' })
             meta,
           }
 
-        const sortedGames = sortGames({ gamesArray, serie })
+        const sortedGames = sortGames({
+          playedGamesArray,
+          unplayedGamesArray,
+          serie,
+        })
+
+        const teamArray = await db
+          .select({
+            teamId: teams.teamId as unknown as SQL<number>,
+            casualName:
+              teams.casualName as unknown as SQL<string>,
+          })
+          .from(teamseries)
+          .leftJoin(
+            teams,
+            eq(teamseries.teamId, teams.teamId),
+          )
+          .where(eq(teamseries.serieId, serie.serieId))
+          .orderBy(
+            asc(sql`casual_name collate "se-SE-x-icu"`),
+          )
 
         return {
           status: 200,
           games: sortedGames,
+          teamArray,
           breadCrumb,
           meta,
         }

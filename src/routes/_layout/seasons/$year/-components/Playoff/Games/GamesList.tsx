@@ -1,4 +1,4 @@
-import Date from '@/components/Common/Date'
+import { Datum } from '@/components/Common/Date'
 import type { Game, GameGroupBase } from '@/lib/types/game'
 import { Link, getRouteApi } from '@tanstack/react-router'
 import { LinkIcon } from 'lucide-react'
@@ -52,14 +52,6 @@ const GamesList = ({ gamesArray }: GameListProps) => {
               )}
               <div>
                 {group.dates.map((date) => {
-                  const teamObject = date.games.reduce(
-                    (o, key) => ({
-                      ...o,
-                      [key.home.casualName]: key.homeTeamId,
-                      [key.away.casualName]: key.awayTeamId,
-                    }),
-                    {},
-                  )
                   return (
                     <div
                       key={date.date}
@@ -71,7 +63,7 @@ const GamesList = ({ gamesArray }: GameListProps) => {
                             className="text-[10px] font-semibold tracking-wide sm:text-xs md:text-sm xl:text-base 2xl:text-lg"
                             id={`${group.group}-${date.date}`}
                           >
-                            <Date>{date.date}</Date>
+                            <Datum>{date.date}</Datum>
                           </h3>
                           <Link
                             from="/seasons/$year/playoff/games"
@@ -84,7 +76,6 @@ const GamesList = ({ gamesArray }: GameListProps) => {
                         </div>
                       )}
                       <DataTable
-                        teamObject={teamObject}
                         columns={columns}
                         data={date.games}
                       />

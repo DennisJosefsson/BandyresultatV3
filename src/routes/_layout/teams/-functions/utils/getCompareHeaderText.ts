@@ -1,22 +1,26 @@
 import type { teams } from '@/db/schema'
 
 type GetCompareHeaderText = {
-  teams: Array<typeof teams.$inferSelect>
+  homeTeam: typeof teams.$inferSelect
+  awayTeam: typeof teams.$inferSelect
   gameCount: number
 }
 
-const getCompareHeaderText = ({ teams, gameCount }: GetCompareHeaderText): string => {
-  const teamStringArray = [...new Set(teams.map((team) => team.casualName))]
+const getCompareHeaderText = ({
+  homeTeam,
+  awayTeam,
+  gameCount,
+}: GetCompareHeaderText): string => {
+  const teamString = `${homeTeam.casualName} och ${awayTeam.casualName}`
 
-  const lastTeam = teamStringArray.pop()
-  const teamString = teamStringArray.join(', ') + ' och ' + lastTeam
+  const matchup = `${homeTeam.name} - ${awayTeam.name}`
 
   let compareHeaderText = ''
 
   if (gameCount === 0) {
     compareHeaderText = `${teamString} har inga tidigare inbördes matcher i databasen.`
   } else {
-    compareHeaderText = `Möten mellan ${teamString}`
+    compareHeaderText = matchup
   }
 
   return compareHeaderText

@@ -1,6 +1,7 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
-import { useFavTeam } from '@/lib/contexts/favTeamsContext'
+import type { ReturnDevDataTableItem } from '@/lib/types/table'
+import { useCookies } from '@/lib/contexts/cookieContext'
 import {
   Table,
   TableBody,
@@ -14,9 +15,6 @@ import {
 interface DataTableProps<TData, TValue> {
   columns: Array<ColumnDef<TData, TValue>>
   data: Array<TData>
-  teamObject: {
-    [x: string]: number
-  }
   serieStructure: Array<number> | null | undefined
   comment: string | null
 }
@@ -24,7 +22,6 @@ interface DataTableProps<TData, TValue> {
 const DataTable = <TData, TValue>({
   columns,
   data,
-  teamObject,
   serieStructure,
   comment,
 }: DataTableProps<TData, TValue>) => {
@@ -34,16 +31,10 @@ const DataTable = <TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
   })
 
-  const { favTeams } = useFavTeam()
-
-  const getString = (x: unknown): string => {
-    if (!x) throw new Error('Missing string')
-
-    return x as string
-  }
+  const { favTeams } = useCookies()
 
   return (
-    <div>
+    <div className="border p-2 shadow-xs md:shadow-sm xl:mt-2">
       <Table>
         <TableCaption>{comment}</TableCaption>
         <TableHeader>
@@ -64,29 +55,30 @@ const DataTable = <TData, TValue>({
 
         <TableBody>
           {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row, index) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && 'selected'}
-                className={`${
-                  favTeams.includes(teamObject[getString(row.getValue('team_casualName'))])
-                    ? 'font-bold'
-                    : null
-                } ${serieStructure?.includes(index + 1) ? 'border-foreground border-b-2' : null}`}
-              >
-                {row.getVisibleCells().map((cell) => {
-                  return (
-                    <TableCell key={cell.id} className="px-0 py-1">
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
-                  )
-                })}
-              </TableRow>
-            ))
+            table.getRowModel().rows.map((row, index) => {
+              const original = row.original as ReturnDevDataTableItem
+              return (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && 'selected'}
+                  data-favteam={favTeams.includes(original.teamId) ? true : false}
+                  data-tabledivider={serieStructure?.includes(index + 1) ? true : false}
+                  className="data-[tabledivider=true]:border-foreground data-[favteam=true]:font-semibold data-[tabledivider=true]:border-b-2"
+                >
+                  {row.getVisibleCells().map((cell) => {
+                    return (
+                      <TableCell key={cell.id} className="px-0 py-1">
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </TableCell>
+                    )
+                  })}
+                </TableRow>
+              )
+            })
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
-                Inga resultat.
+                Inga tabeller.
               </TableCell>
             </TableRow>
           )}

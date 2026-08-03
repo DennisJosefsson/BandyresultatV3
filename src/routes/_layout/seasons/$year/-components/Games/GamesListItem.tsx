@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from '@tanstack/react-router'
 import type { Game } from '@/lib/types/game'
 import { cn } from '@/lib/utils/utils'
-import { useFavTeam } from '@/lib/contexts/favTeamsContext'
+import { useCookies } from '@/lib/contexts/cookieContext'
 import { Button } from '@/components/base/ui/button'
 
 type GamesListItemProps = {
@@ -9,7 +9,7 @@ type GamesListItemProps = {
 }
 
 const GamesListItem = ({ game }: GamesListItemProps) => {
-  const { favTeams } = useFavTeam()
+  const { favTeams } = useCookies()
   const navigate = useNavigate({
     from: '/seasons/$year/$group/games',
   })

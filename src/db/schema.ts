@@ -1,3 +1,4 @@
+import { relations, sql } from 'drizzle-orm'
 import type { AnyPgColumn } from 'drizzle-orm/pg-core'
 import {
   boolean,
@@ -14,7 +15,6 @@ import {
   unique,
   varchar,
 } from 'drizzle-orm/pg-core'
-import { relations, sql } from 'drizzle-orm'
 
 export const county = pgTable('county', {
   countyId: integer('county_id').primaryKey().notNull(),
@@ -28,10 +28,20 @@ export const teams = pgTable(
     name: varchar().notNull(),
     city: varchar({ length: 255 }).notNull(),
     women: boolean().default(false).notNull(),
-    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }),
-    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }),
-    casualName: varchar('casual_name', { length: 255 }).notNull(),
-    shortName: varchar('short_name', { length: 255 }).notNull(),
+    createdAt: timestamp('created_at', {
+      withTimezone: true,
+      mode: 'string',
+    }),
+    updatedAt: timestamp('updated_at', {
+      withTimezone: true,
+      mode: 'string',
+    }),
+    casualName: varchar('casual_name', {
+      length: 255,
+    }).notNull(),
+    shortName: varchar('short_name', {
+      length: 255,
+    }).notNull(),
     lat: real().notNull(),
     long: real().notNull(),
     countyId: integer('county_id').notNull(),
@@ -77,9 +87,17 @@ export const games = pgTable(
     awayGoal: integer('away_goal'),
     round: integer(),
     category: varchar().notNull(),
-    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }),
-    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }),
-    halftimeResult: varchar('halftime_result', { length: 255 }),
+    createdAt: timestamp('created_at', {
+      withTimezone: true,
+      mode: 'string',
+    }),
+    updatedAt: timestamp('updated_at', {
+      withTimezone: true,
+      mode: 'string',
+    }),
+    halftimeResult: varchar('halftime_result', {
+      length: 255,
+    }),
     halftimeHomeGoal: integer('halftime_home_goal'),
     halftimeAwayGoal: integer('halftime_away_goal'),
     playoff: boolean().default(false),
@@ -123,7 +141,9 @@ export const games = pgTable(
 export const metadata = pgTable(
   'metadata',
   {
-    metadataId: serial('metadata_id').primaryKey().notNull(),
+    metadataId: serial('metadata_id')
+      .primaryKey()
+      .notNull(),
     seasonId: integer('season_id').notNull(),
     name: varchar({ length: 255 }).notNull(),
     year: varchar({ length: 255 }).notNull(),
@@ -132,7 +152,9 @@ export const metadata = pgTable(
     hostCity: varchar('host_city', { length: 255 }),
     finalDate: varchar('final_date', { length: 255 }),
     northSouth: boolean('north_south').notNull(),
-    multipleGroupStages: boolean('multiple_group_stages').notNull(),
+    multipleGroupStages: boolean(
+      'multiple_group_stages',
+    ).notNull(),
     eight: boolean().notNull(),
     quarter: boolean().notNull(),
     semi: boolean().notNull(),
@@ -157,7 +179,9 @@ export const metadata = pgTable(
 export const municipality = pgTable(
   'municipality',
   {
-    municipalityId: integer('municipality_id').primaryKey().notNull(),
+    municipalityId: integer('municipality_id')
+      .primaryKey()
+      .notNull(),
     name: varchar().notNull(),
     countyId: integer('county_id').notNull(),
   },
@@ -174,8 +198,14 @@ export const seasons = pgTable('seasons', {
   seasonId: serial('season_id').primaryKey().notNull(),
   year: varchar({ length: 255 }).notNull(),
   women: boolean().default(false),
-  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }),
-  updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }),
+  createdAt: timestamp('created_at', {
+    withTimezone: true,
+    mode: 'string',
+  }),
+  updatedAt: timestamp('updated_at', {
+    withTimezone: true,
+    mode: 'string',
+  }),
   seasonStructure: varchar('season_structure'),
 })
 
@@ -200,10 +230,14 @@ export const series = pgTable(
     comment: text(),
     level: decimalNumber().notNull(),
     hasMix: boolean('has_mix'),
-    parentSerieId: integer('parent_serie_id').references((): AnyPgColumn => series.serieId),
+    parentSerieId: integer('parent_serie_id').references(
+      (): AnyPgColumn => series.serieId,
+    ),
     hasStatic: boolean('has_static').default(false),
     hasParent: boolean('has_parent').default(false),
-    allParentGames: boolean('all_parent_games').default(false),
+    allParentGames: boolean('all_parent_games').default(
+      false,
+    ),
     uefaSorting: boolean('uefa_sorting').default(false),
   },
   (table) => [
@@ -231,8 +265,14 @@ export const tables = pgTable(
     goalDifference: integer('goal_difference').notNull(),
     points: integer().notNull(),
     qualification: boolean().default(false),
-    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }),
-    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }),
+    createdAt: timestamp('created_at', {
+      withTimezone: true,
+      mode: 'string',
+    }),
+    updatedAt: timestamp('updated_at', {
+      withTimezone: true,
+      mode: 'string',
+    }),
     women: boolean().default(false).notNull(),
     group: varchar().default('elitserien').notNull(),
     category: varchar().notNull(),
@@ -260,7 +300,9 @@ export const tables = pgTable(
 export const tableseasons = pgTable(
   'tableseasons',
   {
-    tableseasonId: serial('tableseason_id').primaryKey().notNull(),
+    tableseasonId: serial('tableseason_id')
+      .primaryKey()
+      .notNull(),
     seasonId: integer('season_id').notNull(),
     tableId: integer('table_id').notNull(),
   },
@@ -281,19 +323,33 @@ export const tableseasons = pgTable(
 export const teamgames = pgTable(
   'teamgames',
   {
-    teamGameId: serial('team_game_id').primaryKey().notNull(),
+    teamGameId: serial('team_game_id')
+      .primaryKey()
+      .notNull(),
     gameId: integer('game_id').notNull(),
     teamId: integer('team').notNull(),
     opponentId: integer('opponent').notNull(),
     goalsScored: integer('goals_scored'),
     goalsConceded: integer('goals_conceded'),
     goalDifference: integer('goal_difference'),
-    firstHalfGoalsScored: integer('first_half_goals_scored'),
-    firstHalfGoalsConceded: integer('first_half_goals_conceded'),
-    firstHalfGoalDifference: integer('first_half_goal_difference'),
-    secondHalfGoalsScored: integer('second_half_goals_scored'),
-    secondHalfGoalsConceded: integer('second_half_goals_conceded'),
-    secondHalfGoalDifference: integer('second_half_goal_difference'),
+    firstHalfGoalsScored: integer(
+      'first_half_goals_scored',
+    ),
+    firstHalfGoalsConceded: integer(
+      'first_half_goals_conceded',
+    ),
+    firstHalfGoalDifference: integer(
+      'first_half_goal_difference',
+    ),
+    secondHalfGoalsScored: integer(
+      'second_half_goals_scored',
+    ),
+    secondHalfGoalsConceded: integer(
+      'second_half_goals_conceded',
+    ),
+    secondHalfGoalDifference: integer(
+      'second_half_goal_difference',
+    ),
     points: integer(),
     firstHalfPoints: integer('first_half_points'),
     secondHalfPoints: integer('second_half_points'),
@@ -318,11 +374,17 @@ export const teamgames = pgTable(
     seasonId: integer('season_id').notNull(),
     homeGame: boolean('home_game').default(false),
     serieId: integer('serie_id').notNull(),
-    totalGoals: integer('total_goals').generatedAlwaysAs(sql`(goals_scored + goals_conceded)`),
-    firstHalfTotalGoals: integer('total_first_half_goals').generatedAlwaysAs(
+    totalGoals: integer('total_goals').generatedAlwaysAs(
+      sql`(goals_scored + goals_conceded)`,
+    ),
+    firstHalfTotalGoals: integer(
+      'total_first_half_goals',
+    ).generatedAlwaysAs(
       sql`(first_half_goals_scored + first_half_goals_conceded)`,
     ),
-    secondHalfTotalGoals: integer('total_second_half_goals').generatedAlwaysAs(
+    secondHalfTotalGoals: integer(
+      'total_second_half_goals',
+    ).generatedAlwaysAs(
       sql`(second_half_goals_scored + second_half_goals_conceded)`,
     ),
     played: boolean(),
@@ -360,7 +422,9 @@ export const teamgames = pgTable(
 export const teamseasons = pgTable(
   'teamseasons',
   {
-    teamseasonId: serial('teamseason_id').primaryKey().notNull(),
+    teamseasonId: serial('teamseason_id')
+      .primaryKey()
+      .notNull(),
     seasonId: integer('season_id').notNull(),
     teamId: integer('team_id').notNull(),
     tableId: integer('table_id'),
@@ -376,7 +440,9 @@ export const teamseasons = pgTable(
     semi: boolean().default(false),
     final: boolean().default(false),
     gold: boolean().default(false),
-    negQualification: boolean('neg_qualification').default(false),
+    negQualification: boolean('neg_qualification').default(
+      false,
+    ),
   },
   (table) => [
     foreignKey({
@@ -400,7 +466,9 @@ export const teamseasons = pgTable(
 export const teamseries = pgTable(
   'teamseries',
   {
-    teamseriesId: serial('teamseries_id').primaryKey().notNull(),
+    teamseriesId: serial('teamseries_id')
+      .primaryKey()
+      .notNull(),
     teamId: integer('team_id').notNull(),
     serieId: integer('serie_id').notNull(),
     bonusPoints: integer('bonus_points'),
@@ -438,10 +506,15 @@ export const parentchildseries = pgTable(
 export const playoffseason = pgTable(
   'playoffseason',
   {
-    playoffSeasonId: serial('playoff_season_id').primaryKey().notNull(),
+    playoffSeasonId: serial('playoff_season_id')
+      .primaryKey()
+      .notNull(),
     seasonId: integer('season_id').notNull(),
     women: boolean().default(false),
-    playoffAsSeries: boolean('playoff_as_series').default(false),
+    playoffAsSeries: boolean('playoff_as_series').default(
+      false,
+    ),
+    hasSemi: boolean('has_semi').default(true),
     hasEight: boolean('has_eight').default(false),
     hasQuarter: boolean('has_quarter').default(false),
     uefaSorting: boolean('uefa_sorting').default(false),
@@ -463,183 +536,222 @@ export const users = pgTable('users', {
   password: varchar().notNull(),
 })
 
-export const tablesRelations = relations(tables, ({ one, many }) => ({
-  season: one(seasons, {
-    fields: [tables.seasonId],
-    references: [seasons.seasonId],
+export const tablesRelations = relations(
+  tables,
+  ({ one, many }) => ({
+    season: one(seasons, {
+      fields: [tables.seasonId],
+      references: [seasons.seasonId],
+    }),
+    series: one(series, {
+      fields: [tables.serieId],
+      references: [series.serieId],
+    }),
+    team: one(teams, {
+      fields: [tables.teamId],
+      references: [teams.teamId],
+    }),
+    tableseasons: many(tableseasons),
+    teamseasons: many(teamseasons),
   }),
-  series: one(series, {
-    fields: [tables.serieId],
-    references: [series.serieId],
-  }),
-  team: one(teams, {
-    fields: [tables.teamId],
-    references: [teams.teamId],
-  }),
-  tableseasons: many(tableseasons),
-  teamseasons: many(teamseasons),
-}))
+)
 
-export const seasonsRelations = relations(seasons, ({ many }) => ({
-  tables: many(tables),
-  metadata: many(metadata),
-  series: many(series),
-  tableseasons: many(tableseasons),
-  teamseasons: many(teamseasons),
-  games: many(games),
-  teamgames: many(teamgames),
-}))
+export const seasonsRelations = relations(
+  seasons,
+  ({ many }) => ({
+    tables: many(tables),
+    metadata: many(metadata),
+    series: many(series),
+    tableseasons: many(tableseasons),
+    teamseasons: many(teamseasons),
+    games: many(games),
+    teamgames: many(teamgames),
+  }),
+)
 
-export const seriesRelations = relations(series, ({ one, many }) => ({
-  tables: many(tables),
-  season: one(seasons, {
-    fields: [series.seasonId],
-    references: [seasons.seasonId],
+export const seriesRelations = relations(
+  series,
+  ({ one, many }) => ({
+    tables: many(tables),
+    season: one(seasons, {
+      fields: [series.seasonId],
+      references: [seasons.seasonId],
+    }),
+    teamseries: many(teamseries),
+    games: many(games),
+    teamgames: many(teamgames),
   }),
-  teamseries: many(teamseries),
-  games: many(games),
-  teamgames: many(teamgames),
-}))
+)
 
-export const teamsRelations = relations(teams, ({ one, many }) => ({
-  tables: many(tables),
-  metadata: many(metadata),
-  teamseasons: many(teamseasons),
-  games_awayTeamId: many(games, {
-    relationName: 'games_awayTeamId_teams_teamId',
+export const teamsRelations = relations(
+  teams,
+  ({ one, many }) => ({
+    tables: many(tables),
+    metadata: many(metadata),
+    teamseasons: many(teamseasons),
+    games_awayTeamId: many(games, {
+      relationName: 'games_awayTeamId_teams_teamId',
+    }),
+    games_homeTeamId: many(games, {
+      relationName: 'games_homeTeamId_teams_teamId',
+    }),
+    teamgames_opponent: many(teamgames, {
+      relationName: 'teamgames_opponent_teams_teamId',
+    }),
+    teamgames_team: many(teamgames, {
+      relationName: 'teamgames_team_teams_teamId',
+    }),
+    county: one(county, {
+      fields: [teams.countyId],
+      references: [county.countyId],
+    }),
+    municipality: one(municipality, {
+      fields: [teams.municipalityId],
+      references: [municipality.municipalityId],
+    }),
   }),
-  games_homeTeamId: many(games, {
-    relationName: 'games_homeTeamId_teams_teamId',
-  }),
-  teamgames_opponent: many(teamgames, {
-    relationName: 'teamgames_opponent_teams_teamId',
-  }),
-  teamgames_team: many(teamgames, {
-    relationName: 'teamgames_team_teams_teamId',
-  }),
-  county: one(county, {
-    fields: [teams.countyId],
-    references: [county.countyId],
-  }),
-  municipality: one(municipality, {
-    fields: [teams.municipalityId],
-    references: [municipality.municipalityId],
-  }),
-}))
+)
 
-export const metadataRelations = relations(metadata, ({ one }) => ({
-  season: one(seasons, {
-    fields: [metadata.seasonId],
-    references: [seasons.seasonId],
+export const metadataRelations = relations(
+  metadata,
+  ({ one }) => ({
+    season: one(seasons, {
+      fields: [metadata.seasonId],
+      references: [seasons.seasonId],
+    }),
+    team: one(teams, {
+      fields: [metadata.winnerId],
+      references: [teams.teamId],
+    }),
   }),
-  team: one(teams, {
-    fields: [metadata.winnerId],
-    references: [teams.teamId],
-  }),
-}))
+)
 
-export const municipalityRelations = relations(municipality, ({ one, many }) => ({
-  county: one(county, {
-    fields: [municipality.countyId],
-    references: [county.countyId],
+export const municipalityRelations = relations(
+  municipality,
+  ({ one, many }) => ({
+    county: one(county, {
+      fields: [municipality.countyId],
+      references: [county.countyId],
+    }),
+    teams: many(teams),
   }),
-  teams: many(teams),
-}))
+)
 
-export const countyRelations = relations(county, ({ many }) => ({
-  municipalities: many(municipality),
-  teams: many(teams),
-}))
+export const countyRelations = relations(
+  county,
+  ({ many }) => ({
+    municipalities: many(municipality),
+    teams: many(teams),
+  }),
+)
 
-export const tableseasonsRelations = relations(tableseasons, ({ one }) => ({
-  season: one(seasons, {
-    fields: [tableseasons.seasonId],
-    references: [seasons.seasonId],
+export const tableseasonsRelations = relations(
+  tableseasons,
+  ({ one }) => ({
+    season: one(seasons, {
+      fields: [tableseasons.seasonId],
+      references: [seasons.seasonId],
+    }),
+    table: one(tables, {
+      fields: [tableseasons.tableId],
+      references: [tables.tableId],
+    }),
   }),
-  table: one(tables, {
-    fields: [tableseasons.tableId],
-    references: [tables.tableId],
-  }),
-}))
+)
 
-export const teamseasonsRelations = relations(teamseasons, ({ one }) => ({
-  season: one(seasons, {
-    fields: [teamseasons.seasonId],
-    references: [seasons.seasonId],
+export const teamseasonsRelations = relations(
+  teamseasons,
+  ({ one }) => ({
+    season: one(seasons, {
+      fields: [teamseasons.seasonId],
+      references: [seasons.seasonId],
+    }),
+    table: one(tables, {
+      fields: [teamseasons.tableId],
+      references: [tables.tableId],
+    }),
+    team: one(teams, {
+      fields: [teamseasons.teamId],
+      references: [teams.teamId],
+    }),
   }),
-  table: one(tables, {
-    fields: [teamseasons.tableId],
-    references: [tables.tableId],
-  }),
-  team: one(teams, {
-    fields: [teamseasons.teamId],
-    references: [teams.teamId],
-  }),
-}))
+)
 
-export const teamseriesRelations = relations(teamseries, ({ one }) => ({
-  series: one(series, {
-    fields: [teamseries.serieId],
-    references: [series.serieId],
+export const teamseriesRelations = relations(
+  teamseries,
+  ({ one }) => ({
+    series: one(series, {
+      fields: [teamseries.serieId],
+      references: [series.serieId],
+    }),
   }),
-}))
+)
 
-export const gamesRelations = relations(games, ({ one, many }) => ({
-  series: one(series, {
-    fields: [games.serieId],
-    references: [series.serieId],
+export const gamesRelations = relations(
+  games,
+  ({ one, many }) => ({
+    series: one(series, {
+      fields: [games.serieId],
+      references: [series.serieId],
+    }),
+    team_awayTeamId: one(teams, {
+      fields: [games.awayTeamId],
+      references: [teams.teamId],
+      relationName: 'games_awayTeamId_teams_teamId',
+    }),
+    team_homeTeamId: one(teams, {
+      fields: [games.homeTeamId],
+      references: [teams.teamId],
+      relationName: 'games_homeTeamId_teams_teamId',
+    }),
+    season: one(seasons, {
+      fields: [games.seasonId],
+      references: [seasons.seasonId],
+    }),
+    teamgames: many(teamgames),
   }),
-  team_awayTeamId: one(teams, {
-    fields: [games.awayTeamId],
-    references: [teams.teamId],
-    relationName: 'games_awayTeamId_teams_teamId',
-  }),
-  team_homeTeamId: one(teams, {
-    fields: [games.homeTeamId],
-    references: [teams.teamId],
-    relationName: 'games_homeTeamId_teams_teamId',
-  }),
-  season: one(seasons, {
-    fields: [games.seasonId],
-    references: [seasons.seasonId],
-  }),
-  teamgames: many(teamgames),
-}))
+)
 
-export const teamgamesRelations = relations(teamgames, ({ one }) => ({
-  series: one(series, {
-    fields: [teamgames.serieId],
-    references: [series.serieId],
+export const teamgamesRelations = relations(
+  teamgames,
+  ({ one }) => ({
+    series: one(series, {
+      fields: [teamgames.serieId],
+      references: [series.serieId],
+    }),
+    game: one(games, {
+      fields: [teamgames.gameId],
+      references: [games.gameId],
+    }),
+    team_opponent: one(teams, {
+      fields: [teamgames.opponentId],
+      references: [teams.teamId],
+      relationName: 'opponent',
+    }),
+    season: one(seasons, {
+      fields: [teamgames.seasonId],
+      references: [seasons.seasonId],
+    }),
+    team_team: one(teams, {
+      fields: [teamgames.teamId],
+      references: [teams.teamId],
+      relationName: 'team',
+    }),
   }),
-  game: one(games, {
-    fields: [teamgames.gameId],
-    references: [games.gameId],
-  }),
-  team_opponent: one(teams, {
-    fields: [teamgames.opponentId],
-    references: [teams.teamId],
-    relationName: 'opponent',
-  }),
-  season: one(seasons, {
-    fields: [teamgames.seasonId],
-    references: [seasons.seasonId],
-  }),
-  team_team: one(teams, {
-    fields: [teamgames.teamId],
-    references: [teams.teamId],
-    relationName: 'team',
-  }),
-}))
+)
 
-export const parentchildseriesRelations = relations(parentchildseries, ({ one }) => ({
-  parent: one(series, {
-    fields: [parentchildseries.parentId],
-    references: [series.serieId],
-    relationName: 'parent',
+export const parentchildseriesRelations = relations(
+  parentchildseries,
+  ({ one }) => ({
+    parent: one(series, {
+      fields: [parentchildseries.parentId],
+      references: [series.serieId],
+      relationName: 'parent',
+    }),
+    child: one(series, {
+      fields: [parentchildseries.parentId],
+      references: [series.serieId],
+      relationName: 'child',
+    }),
   }),
-  child: one(series, {
-    fields: [parentchildseries.parentId],
-    references: [series.serieId],
-    relationName: 'child',
-  }),
-}))
+)

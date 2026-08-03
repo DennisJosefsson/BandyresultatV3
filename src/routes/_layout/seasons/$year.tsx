@@ -17,6 +17,9 @@ const yearParser = zd.object({
 export const Route = createFileRoute(
   '/_layout/seasons/$year',
 )({
+  beforeLoad: () => {
+    return { sidebarSection: 'year' }
+  },
   loaderDeps: ({ search: { women } }) => ({ women }),
   params: {
     parse: (params) => ({
@@ -98,8 +101,8 @@ function Season() {
       <div className="flex flex-col gap-4">
         <SeasonHeader />
         <div className="flex flex-row justify-center">
-          <h3 className="text-xs sm:text-sm font-semibold md:text-base">
-            Välj grupp
+          <h3 className="text-xs font-semibold sm:text-sm md:text-base">
+            Välj serie
           </h3>
         </div>
         <GroupList />
@@ -121,7 +124,7 @@ function Season() {
           />
         )}
       >
-        <div className="flex flex-col gap-4">
+        <div className="xs:gap-2 msm:p-1 mt-2 flex flex-col gap-1 px-0.5 sm:mt-4 sm:p-2 md:gap-4">
           <SeasonHeader />
           <Outlet />
         </div>
@@ -152,25 +155,33 @@ function GroupList() {
   const data = Route.useLoaderData()
   const year = Route.useParams({ select: (s) => s.year })
   const women = Route.useSearch({ select: (s) => s.women })
-  if (data.status === 204) return null
 
+  if (data.status === 200) {
+    return (
+      <div className="grid grid-cols-2 gap-4 md:gap-8 lg:grid-cols-4 xl:gap-10 2xl:grid-cols-6">
+        {data.groups.map((group) => {
+          return (
+            <Route.Link
+              key={group.serieId.toString()}
+              to="/seasons/$year/$group"
+              params={{ group: group.group, year: year }}
+              search={{ women: women }}
+              className="flex w-full flex-row items-center justify-center border px-4 py-2 shadow-xs md:shadow-sm"
+            >
+              <span className="xs:text-[10px] text-center text-[8px] font-semibold md:text-sm">
+                {group.name}
+              </span>
+            </Route.Link>
+          )
+        })}
+      </div>
+    )
+  }
   return (
-    <div className="grid grid-cols-2 gap-4 md:gap-8 lg:grid-cols-4 xl:gap-10 2xl:grid-cols-6">
-      {data.groups.map((group) => {
-        return (
-          <Route.Link
-            key={group.serieId.toString()}
-            to="/seasons/$year/$group"
-            params={{ group: group.group, year: year }}
-            search={{ women: women }}
-            className="flex w-full flex-row items-center justify-center border px-4 py-2 shadow-md"
-          >
-            <span className="xs:text-[10px] text-center text-[8px] font-semibold md:text-sm">
-              {group.name}
-            </span>
-          </Route.Link>
-        )
-      })}
+    <div className="mt-4 flex flex-col justify-center text-sm">
+      <span className="xs:text-[10px] text-[8px] font-semibold sm:text-xs lg:text-sm">
+        {data.message}
+      </span>
     </div>
   )
 }

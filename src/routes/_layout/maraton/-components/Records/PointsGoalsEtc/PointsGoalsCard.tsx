@@ -7,18 +7,18 @@ const PointsGoalsCard = ({
   team,
 }: RecordData) => {
   return (
-    <div className="mb-1 flex max-w-100 flex-row items-center justify-between p-1 text-xs md:mb-2 md:p-2 lg:text-sm">
-      <span className="mr-4 w-8 text-right text-base font-bold tabular-nums md:text-2xl">
+    <div className="msm:text-xs flex max-w-100 flex-row items-center justify-between p-1 text-[8px] msm:text-[10px] md:p-2 lg:text-sm">
+      <span className="mr-2 msm:mr-4 w-6 msm:w-8 text-right text-base font-bold tabular-nums md:text-2xl">
         {position}
       </span>
       <div className="flex grow flex-col">
-        <div className="flex flex-row justify-between max-w-10 xxs:max-w-none">
+        <div className="xxs:w-40 flex w-16 flex-row justify-between">
           <span className="truncate font-semibold">
             {team.name}
           </span>
         </div>
-        <div className="flex flex-row items-center justify-between text-[10px] md:text-xs">
-          <span className="w-48 sm:w-64">{year}</span>
+        <div>
+          <span className="w-12">{year}</span>
         </div>
       </div>
       <div>

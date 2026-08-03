@@ -1,8 +1,12 @@
-import type { Dispatch, RefObject, SetStateAction } from 'react'
-import type { LngLatLike } from 'maplibre-gl'
-import type { MapRef } from '@/components/base/ui/map'
 import type { CheckedState } from '@/components/base/ui/checkbox'
-import { Checkbox } from '@/components/base/ui/checkbox'
+import type { MapRef } from '@/components/base/ui/map'
+import CheckboxBadge from '@/components/Common/CheckboxBadge'
+import type { LngLatLike } from 'maplibre-gl'
+import type {
+  Dispatch,
+  RefObject,
+  SetStateAction,
+} from 'react'
 
 type County = {
   county: string
@@ -20,13 +24,25 @@ type CountyListProp = {
   mapRef: RefObject<MapRef | null>
 }
 
-const CountyList = ({ countyArray, counties, setCounties, mapRef }: CountyListProp) => {
+const CountyList = ({
+  countyArray,
+  counties,
+  setCounties,
+  mapRef,
+}: CountyListProp) => {
   if (!mapRef) return null
-  const onCheckedChange = (checked: CheckedState, county: County) => {
+  const onCheckedChange = (
+    checked: CheckedState,
+    county: County,
+  ) => {
     if (checked) {
       setCounties((prev) => [...prev, county])
     } else {
-      setCounties((prev) => prev.filter((name) => name.county !== county.county))
+      setCounties((prev) =>
+        prev.filter(
+          (name) => name.county !== county.county,
+        ),
+      )
     }
   }
 
@@ -43,46 +59,38 @@ const CountyList = ({ countyArray, counties, setCounties, mapRef }: CountyListPr
   }
 
   const isChecked = (county: string) => {
-    const countyObject = counties.find((item) => item.county === county)
+    const countyObject = counties.find(
+      (item) => item.county === county,
+    )
 
     if (!countyObject) return false
     return true
   }
 
-  const onClick = (center: LngLatLike, zoom: number = 7.5) => {
-    mapRef.current?.easeTo({ center, zoom })
-  }
-
   return (
-    <div className="grid w-full grid-cols-2 gap-4 sm:w-80">
-      <div className="text-primary mb-2 flex flex-row items-center justify-between text-[10px] md:text-sm">
-        <span
-          className="cursor-pointer truncate"
-          onClick={() => onClick([15, 62] as LngLatLike, 4)}
-        >
-          Alla
-        </span>
-        <Checkbox
-          name="all"
-          checked={counties.length === countyArray.length}
-          onCheckedChange={onCheckedAllChange}
-        />
-      </div>
+    <div className="grid w-full grid-cols-2 gap-4">
+      <CheckboxBadge
+        name="all"
+        title="Alla"
+        checked={counties.length === countyArray.length}
+        onCheckedChange={onCheckedAllChange}
+        orientation="horizontal"
+        className="xl:max-w-60"
+      />
+
       {countyArray.map((county) => {
         return (
-          <div
+          <CheckboxBadge
             key={county.county}
-            className="text-primary mb-2 flex flex-row items-center justify-between text-[10px] md:text-sm"
-          >
-            <span className="cursor-pointer truncate" onClick={() => onClick(county.center)}>
-              {county.county}
-            </span>
-            <Checkbox
-              name={county.county}
-              checked={isChecked(county.county)}
-              onCheckedChange={(checked) => onCheckedChange(checked, county)}
-            />
-          </div>
+            title={county.county}
+            name={county.county}
+            checked={isChecked(county.county)}
+            onCheckedChange={(checked) =>
+              onCheckedChange(checked, county)
+            }
+            orientation="horizontal"
+            className="xl:max-w-60"
+          />
         )
       })}
     </div>

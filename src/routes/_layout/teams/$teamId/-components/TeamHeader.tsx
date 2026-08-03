@@ -1,7 +1,7 @@
-import { Button } from '@/components/base/ui/button'
-import TeamLogo from '@/components/Common/TeamLogo'
-import { useFavTeam } from '@/lib/contexts/favTeamsContext'
 import { getRouteApi } from '@tanstack/react-router'
+import { useCookies } from '@/lib/contexts/cookieContext'
+import TeamLogo from '@/components/Common/TeamLogo'
+import { Button } from '@/components/base/ui/button'
 
 const route = getRouteApi('/_layout/teams/$teamId')
 
@@ -12,7 +12,7 @@ const TeamHeader = () => {
     select: (params) => params.teamId,
   })
 
-  const { favTeams, setFavTeams } = useFavTeam()
+  const { favTeams, setFavTeams } = useCookies()
   if (data.status === 404) return null
   //   const { origin } = getOrigin()
   //   const navigate = useNavigate()
@@ -37,37 +37,29 @@ const TeamHeader = () => {
       <div className="flex flex-row items-center justify-between">
         <div className="flex flex-col gap-2">
           <div className="flex flex-col gap-1">
-            <span className="text-sm sm:text-md md:text-lg xl:text-2xl tracking-wide xs:tracking-widest">
+            <span className="sm:text-md xs:tracking-widest text-sm tracking-wide md:text-lg xl:text-2xl">
               {data.team.name}
             </span>
-            <span className="text-xs md:text-sm xl:text-base">
-              {data.team.city}
-            </span>
+            <span className="text-xs md:text-sm xl:text-base">{data.team.city}</span>
           </div>
 
           <div>
             {favTeams.includes(teamId) && (
-              <Button
-                onClick={remove}
-                size="responsive"
-              >
+              <Button onClick={remove} size="responsive">
                 Ta bort favorit
               </Button>
             )}
             {!favTeams.includes(teamId) && (
-              <Button
-                onClick={add}
-                size="responsive"
-              >
+              <Button onClick={add} size="responsive">
                 Favoritlag
               </Button>
             )}
           </div>
         </div>
 
-        <div className="bg-accent rounded-full overflow-hidden w-8 xs:w-16 md:w-24 lg:w-32">
+        <div>
           <TeamLogo
-            className="w-8 xs:w-16 md:w-24 lg:w-32 object-scale-down"
+            className="xs:w-16 w-8 object-scale-down md:w-24 lg:w-32"
             size={128}
             teamId={teamId}
             alt={data.team.name}

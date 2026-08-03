@@ -1,13 +1,7 @@
-import { Button } from '@/components/base/ui/button'
-import type {
-  SearchParamsFields,
-  SearchResult,
-} from '@/lib/types/search'
+import { useNavigate, useSearch } from '@tanstack/react-router'
+import type { SearchParamsFields, SearchResult } from '@/lib/types/search'
 import { cn } from '@/lib/utils/utils'
-import {
-  useNavigate,
-  useSearch,
-} from '@tanstack/react-router'
+import { Button } from '@/components/base/ui/button'
 type SearchErrorProps = {
   searchResult:
     | {
@@ -23,10 +17,7 @@ type SearchErrorProps = {
   reset: () => void
 }
 
-const SearchError = ({
-  searchResult,
-  reset,
-}: SearchErrorProps) => {
+const SearchError = ({ searchResult, reset }: SearchErrorProps) => {
   const navigate = useNavigate({ from: '/search' })
   const searchFields = useSearch({
     from: '/_layout/search',
@@ -58,28 +49,19 @@ const SearchError = ({
     <div
       className={cn(
         'flex flex-col p-2 m-4',
-        searchResult.status === 400
-          ? 'bg-red-500'
-          : 'undefined',
+        searchResult.status === 400 ? 'bg-red-500' : 'undefined',
       )}
     >
       <div>
-        <span className="text-[8px] xs:text-[10px] sm:text-sm font-semibold">
-          {searchResult.status === 400
-            ? 'Oops, där blev det fel.'
-            : 'Inga resultat'}
+        <span className="xs:text-[10px] text-[8px] font-semibold sm:text-sm">
+          {searchResult.status === 400 ? 'Oops, där blev det fel.' : 'Inga resultat'}
         </span>
       </div>
-      <div className="flex flex-row gap-2 items-center">
-        <span className="text-[8px] xs:text-[10px] sm:text-sm">
-          {searchResult.message}
-        </span>
+      <div className="flex flex-row items-center gap-2">
+        <span className="xs:text-[10px] text-[8px] sm:text-sm">{searchResult.message}</span>
         <div>
           {searchResult.status === 400 ? (
-            <Button
-              size="responsive"
-              onClick={resetFn}
-            >
+            <Button size="responsive" onClick={resetFn}>
               Nollställ sökfel
             </Button>
           ) : null}

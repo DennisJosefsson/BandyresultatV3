@@ -1,10 +1,10 @@
-import { Link, useSearch } from '@tanstack/react-router'
 import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
   useSidebar,
 } from '@/components/base/ui/sidebar'
+import { Link, useSearch } from '@tanstack/react-router'
 
 export function SearchSidebar() {
   const women = useSearch({
@@ -33,7 +33,9 @@ export function SearchSidebar() {
                 includeSearch: false,
                 exact: true,
               }}
-              activeProps={{ className: `font-bold` }}
+              activeProps={{
+                className: `underline underline-offset-auto`,
+              }}
             >
               <span className="md:text-sm">Sök</span>
             </Link>
@@ -48,7 +50,9 @@ export function SearchSidebar() {
               to="/search/help"
               search={{ women }}
               activeOptions={{ includeSearch: false }}
-              activeProps={{ className: `font-bold` }}
+              activeProps={{
+                className: `underline underline-offset-auto`,
+              }}
             >
               <span className="md:text-sm">Hjälp</span>
             </Link>

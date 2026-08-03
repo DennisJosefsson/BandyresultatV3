@@ -1,5 +1,5 @@
-import { SignIn } from '@clerk/react'
 import { createFileRoute } from '@tanstack/react-router'
+import { SignIn } from '@clerk/react'
 
 export const Route = createFileRoute('/_layout/login/')({
   staticData: { breadcrumb: 'Inloggning' },

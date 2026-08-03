@@ -1,3 +1,14 @@
+import type { ColumnDef, SortingState } from '@tanstack/react-table'
+import { useState } from 'react'
+import {
+  flexRender,
+  getCoreRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from '@tanstack/react-table'
+import type { MaratonTable } from '@/lib/types/table'
+import { useCookies } from '@/lib/contexts/cookieContext'
+import { PositionCell, PositionHeader } from '@/components/Common/Tables/Number'
 import {
   Table,
   TableBody,
@@ -6,32 +17,13 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/base/ui/table'
-import { useFavTeam } from '@/lib/contexts/favTeamsContext'
-import type {
-  ColumnDef,
-  SortingState,
-} from '@tanstack/react-table'
-import {
-  flexRender,
-  getCoreRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from '@tanstack/react-table'
-import { useState } from 'react'
 
 interface DataTableProps<TData, TValue> {
   columns: Array<ColumnDef<TData, TValue>>
   data: Array<TData>
-  teamObject: {
-    [x: string]: number
-  }
 }
 
-const DataTable = <TData, TValue>({
-  columns,
-  data,
-  teamObject,
-}: DataTableProps<TData, TValue>) => {
+const DataTable = <TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) => {
   const [sorting, setSorting] = useState<SortingState>([
     { id: 'totalPoints', desc: true },
     { id: 'totalGoalDifference', desc: true },
@@ -49,38 +41,21 @@ const DataTable = <TData, TValue>({
     },
   })
 
-  const { favTeams } = useFavTeam()
-
-  const getString = (x: unknown): string => {
-    if (!x) throw new Error('Missing string')
-
-    return x as string
-  }
+  const { favTeams } = useCookies()
 
   return (
-    <div>
+    <div className="border p-2 shadow-xs md:shadow-sm">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
-              <TableHead
-                key={'position'}
-                className="xs:text-[8px] w-4 sm:w-8 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base"
-              >
-                P
-              </TableHead>
+              <PositionHeader key={'position'}>P</PositionHeader>
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead
-                    key={header.id}
-                    className="px-0"
-                  >
+                  <TableHead key={header.id} className="px-0">
                     {header.isPlaceholder
                       ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
+                      : flexRender(header.column.columnDef.header, header.getContext())}
                   </TableHead>
                 )
               })}
@@ -90,49 +65,31 @@ const DataTable = <TData, TValue>({
 
         <TableBody>
           {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row, index) => (
-              <TableRow
-                key={row.id}
-                data-state={
-                  row.getIsSelected() && 'selected'
-                }
-                className={`${
-                  favTeams.includes(
-                    teamObject[
-                      getString(row.getValue('team_name'))
-                    ],
-                  )
-                    ? 'font-bold'
-                    : null
-                }`}
-              >
-                <TableCell
-                  key={`index-${index}`}
-                  className="xs:text-[8px] w-4 sm:w-8 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base"
+            table.getRowModel().rows.map((row, index) => {
+              const original = row.original as MaratonTable
+              return (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && 'selected'}
+                  data-favteam={favTeams.includes(original.teamId) ? true : false}
+                  className="data-[favteam=true]:font-semibold"
                 >
-                  {index + 1}
-                </TableCell>
-                {row.getVisibleCells().map((cell) => {
-                  return (
-                    <TableCell
-                      key={cell.id}
-                      className="px-0 py-1"
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </TableCell>
-                  )
-                })}
-              </TableRow>
-            ))
+                  <PositionCell key={`index-${index}`} className="xxs:table-cell hidden">
+                    {index + 1}
+                  </PositionCell>
+                  {row.getVisibleCells().map((cell) => {
+                    return (
+                      <TableCell key={cell.id}>
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </TableCell>
+                    )
+                  })}
+                </TableRow>
+              )
+            })
           ) : (
             <TableRow>
-              <TableCell
-                colSpan={columns.length}
-                className="h-24 text-center"
-              >
+              <TableCell colSpan={columns.length} className="h-24 text-center">
                 Inga resultat.
               </TableCell>
             </TableRow>

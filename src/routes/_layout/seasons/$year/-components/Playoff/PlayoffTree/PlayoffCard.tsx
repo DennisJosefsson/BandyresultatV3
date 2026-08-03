@@ -4,25 +4,42 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/base/ui/card'
-import { useFavTeam } from '@/lib/contexts/favTeamsContext'
+import { useCookies } from '@/lib/contexts/cookieContext'
 import { cn } from '@/lib/utils/utils'
-import type { ReactNode } from 'react'
+import type {
+  DetailedHTMLProps,
+  HTMLAttributes,
+  ReactNode,
+} from 'react'
+
+interface PlayoffCardProps extends DetailedHTMLProps<
+  HTMLAttributes<HTMLDivElement>,
+  HTMLDivElement
+> {
+  group: string
+}
 
 const PlayoffCard = ({
-  styleClass = '',
+  className,
   children,
   group,
-}: {
-  styleClass?: string
-  children: ReactNode
-  group: string
-}) => {
+}: PlayoffCardProps) => {
   if (group === 'final') {
-    return <Card className="shadow-2xl">{children}</Card>
+    return (
+      <Card
+        size="sm"
+        className="shadow-lg"
+      >
+        {children}
+      </Card>
+    )
   }
 
   return (
-    <Card className={cn('shadow-2xl', styleClass)}>
+    <Card
+      size="sm"
+      className={cn('shadow-lg', className)}
+    >
       <div>{children}</div>
     </Card>
   )
@@ -54,26 +71,27 @@ function Result({ children }: { children: ReactNode }) {
 
 function Content({ children }: { children: ReactNode }) {
   return (
-    <CardContent className="text-sm flex flex-col gap-2">
+    <CardContent className="flex flex-col gap-2 text-sm">
       {children}
     </CardContent>
   )
 }
 
-function Team({
-  teamId,
-  children,
-}: {
+interface TeamProps extends DetailedHTMLProps<
+  HTMLAttributes<HTMLSpanElement>,
+  HTMLSpanElement
+> {
   teamId: number
-  children: ReactNode
-}) {
-  const { favTeams } = useFavTeam()
+}
+
+function Team({ teamId, children }: TeamProps) {
+  const { favTeams } = useCookies()
   return (
     <span
-      className={cn(
-        'flex flex-row gap-2 sm:gap-2 items center',
-        favTeams.includes(teamId) ? 'font-bold' : undefined,
-      )}
+      data-favteam={
+        favTeams.includes(teamId) ? true : false
+      }
+      className="items center flex flex-row gap-2 p-0.5 data-[favteam=true]:font-semibold sm:gap-2"
     >
       {children}
     </span>

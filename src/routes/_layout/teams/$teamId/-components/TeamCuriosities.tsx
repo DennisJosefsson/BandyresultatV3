@@ -1,13 +1,15 @@
-import GameStats from './GameStats/GameStats'
-import TeamSeasonCuriosities from './CuriositiesSubComponents/TeamSeasonCuriosities'
 import Streaks from './CuriositiesSubComponents/Streaks'
+import TeamSeasonCuriosities from './CuriositiesSubComponents/TeamSeasonCuriosities'
+import GameStats from './GameStats/GameStats'
 
 const TeamCuriosities = () => {
   return (
-    <div>
+    <div className="mt-2 sm:mt-4">
       <TeamSeasonCuriosities />
-      <GameStats />
-      <Streaks />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4">
+        <GameStats />
+        <Streaks />
+      </div>
     </div>
   )
 }

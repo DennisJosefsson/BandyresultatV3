@@ -37,7 +37,7 @@ const TeamFiveSeasonsTables = () => {
     )
   }
   return (
-    <div className="my-4 flex flex-col gap-2">
+    <div className="mt-2 sm:mt-4 flex flex-col gap-2">
       <div className="sm:hidden">
         <Button
           className="w-full"

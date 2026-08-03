@@ -1,3 +1,4 @@
+import { Button } from '@/components/base/ui/button'
 import type { CheckedState } from '@/components/base/ui/checkbox'
 import { Checkbox } from '@/components/base/ui/checkbox'
 import {
@@ -15,9 +16,8 @@ import {
 import TeamLogo from '@/components/Common/TeamLogo'
 import type { MapTeam } from '@/lib/types/team'
 import type { CheckboxRootProps } from '@base-ui/react'
-
 import { Link } from '@tanstack/react-router'
-import { ExternalLinkIcon } from 'lucide-react'
+import { ExternalLink } from 'lucide-react'
 
 type MapItemProps = {
   team: MapTeam
@@ -93,47 +93,31 @@ function MapItem({
       </MarkerContent>
       <MarkerTooltip>{team.name}</MarkerTooltip>
       <MarkerPopup
-        className="data-[state=checked]:bg-primary/10 w-fit sm:w-85 md:w-100 lg:w-120 border shadow-md"
+        className="data-[state=checked]:bg-primary/10 border w-40 xs:w-62 p-0"
         data-state={
           selectedTeams.includes(team.teamId)
             ? 'checked'
             : 'unchecked'
         }
       >
-        <div className="flex flex-col gap-2 sm:hidden">
-          <div className="flex flex-row justify-between items-center">
-            <div className="flex flex-col">
-              <div className="flex flex-row items-center justify-between">
-                <Link
-                  from="/teams/map"
-                  to="/teams/$teamId/tables"
-                  params={{ teamId: team.teamId }}
-                  search={(prev) => ({ women: prev.women })}
-                  className="mr-1.5"
-                >
-                  <span className="text-[8px] font-bold sm:text-sm md:text-base lg:text-lg">
-                    {team.name}
-                  </span>
-                </Link>
-
-                <ExternalLinkIcon className="size-2 xs:size-2.5 sm:size-3 md:size-4" />
-              </div>
-              <span className="text-[8px] sm:text-sm">
-                {team.city}, {team.county.name}
-              </span>
-            </div>
-            <div>
-              <TeamLogo
-                size={128}
-                teamId={team.teamId}
-                className="object-scale-down w-4 xs:w-6"
-                alt={team.casualName}
-                title={team.name}
-              />
-            </div>
+        <div className="relative h-20 xs:h-32 overflow-hidden">
+          <TeamLogo
+            teamId={team.teamId}
+            size={256}
+            alt={team.name}
+            className="object-cover -translate-y-5 xs:-translate-y-3.5"
+          />
+        </div>
+        <div className="space-y-2 p-3">
+          <div>
+            <h3 className="text-foreground pb-0.5 text-[8px] xs:text-xs tracking-wide uppercase  font-semibold">
+              {team.name}
+            </h3>
+            <h4 className="text-[8px] xs:text-xs text-muted-foreground leading-tight font-medium">
+              {`${team.city}, ${team.county.name}`}
+            </h4>
           </div>
-
-          <div className="w-full">
+          <div className="flex flex-col gap-1 pt-1">
             <CheckboxBadge
               name="teamArray"
               id={`id-${team.teamId}`}
@@ -143,55 +127,22 @@ function MapItem({
                 onCheckedChange(checked, team.teamId)
               }
               orientation="horizontal"
+              className="size-5"
             />
-          </div>
-        </div>
-        <div className="hidden sm:flex flex-row items-center justify-between gap-8">
-          <div className="hidden xs:inline">
-            <TeamLogo
-              size={128}
-              teamId={team.teamId}
-              className="object-scale-down w-4 xs:w-12 sm:w-24 lg:w-32"
-              alt={team.casualName}
-              title={team.name}
-            />
-          </div>
-          <div className="flex w-full flex-col gap-2 sm:gap-4">
-            <div className="flex flex-col">
-              <div className="flex flex-row items-center justify-between">
+            <Button
+              className="w-full"
+              render={
                 <Link
                   from="/teams/map"
                   to="/teams/$teamId/tables"
                   params={{ teamId: team.teamId }}
                   search={(prev) => ({ women: prev.women })}
-                  className="peer"
                 >
-                  <span className="text-[8px] font-bold sm:text-sm md:text-base lg:text-lg w-54 md:w-64 truncate">
-                    {team.name}
-                  </span>
+                  <ExternalLink />
                 </Link>
-
-                <ExternalLinkIcon className="invisible peer-hover:visible size-2 xs:size-2.5 sm:size-3 md:size-4 mr-2" />
-              </div>
-              <span className="text-[8px] sm:text-sm truncate">
-                {team.city}, {team.county.name}
-              </span>
-            </div>
-
-            <div className="flex flex-row items-center">
-              <CheckboxBadge
-                name="teamArray"
-                id={`id-${team.teamId}`}
-                checked={selectedTeams.includes(
-                  team.teamId,
-                )}
-                onCheckedChange={(checked) =>
-                  team.teamId &&
-                  onCheckedChange(checked, team.teamId)
-                }
-                orientation="horizontal"
-              />
-            </div>
+              }
+              nativeButton={false}
+            />
           </div>
         </div>
       </MarkerPopup>

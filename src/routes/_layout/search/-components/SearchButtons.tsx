@@ -1,16 +1,11 @@
+import { useNavigate, useSearch } from '@tanstack/react-router'
 import { Button } from '@/components/base/ui/button'
-import {
-  useNavigate,
-  useSearch,
-} from '@tanstack/react-router'
 
 type SearchButtonsProps = {
   sendSearchRequest: () => void
 }
 
-const SearchButtons = ({
-  sendSearchRequest,
-}: SearchButtonsProps) => {
+const SearchButtons = ({ sendSearchRequest }: SearchButtonsProps) => {
   const searchParams = useSearch({
     from: '/_layout/search',
   })
@@ -29,17 +24,11 @@ const SearchButtons = ({
 
   return (
     <div className="flex max-h-40 flex-row gap-2">
-      <Button
-        size="responsive"
-        onClick={handleOnClick}
-      >
+      <Button size="responsive" onClick={handleOnClick}>
         Skicka
       </Button>
 
-      <Button
-        size="responsive"
-        onClick={reset}
-      >
+      <Button size="responsive" onClick={reset}>
         Nollställ
       </Button>
     </div>

@@ -4,6 +4,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/base/ui/c
 import about from '@/assets/markdown/about.md'
 
 export const Route = createFileRoute('/_layout/about/')({
+  beforeLoad: () => {
+    return { sidebarSection: 'about' }
+  },
   staticData: { breadcrumb: 'Om sidan' },
   head: () => ({
     meta: [

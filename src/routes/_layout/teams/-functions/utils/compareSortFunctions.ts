@@ -1,11 +1,14 @@
-import type { CompareAllTableRow, CompareBaseTable, CompareCatTableRow } from '@/lib/types/compare'
+import type {
+  CompareBaseTable,
+  CompareCatTableRow,
+} from '@/lib/types/compare'
 
 type SortedCompareCategoryTables = {
   [key: string]: Array<CompareCatTableRow>
 }
 
 type SortedTables = {
-  [key: string]: Array<CompareCatTableRow>
+  [key: string]: Array<CompareBaseTable>
 }
 
 type LevelName = {
@@ -20,7 +23,23 @@ const levelName: LevelName = {
   '5': 'Femte divisionen',
 }
 
-export const compareSortLevelFunction = (gamesArray: Array<CompareCatTableRow>) => {
+type CategoryName = {
+  [key: string]: string
+}
+
+const categoryName: CategoryName = {
+  final: 'Final',
+  semi: 'Semifinal',
+  quarter: 'Kvartsfinal',
+  eight: 'Åttondelsfinal',
+  playoffseries: 'Slutspelsserie',
+  regular: 'Grundserie',
+  qualification: 'Kvalserie',
+}
+
+export const compareSortLevelFunction = (
+  gamesArray: Array<CompareCatTableRow>,
+) => {
   const sortLevels = gamesArray.reduce((levels, table) => {
     if (!levels[table.serie.level]) {
       levels[table.serie.level] = []
@@ -29,79 +48,91 @@ export const compareSortLevelFunction = (gamesArray: Array<CompareCatTableRow>) 
     return levels
   }, {} as SortedCompareCategoryTables)
 
-  const sortedLevels = Object.keys(sortLevels).map((level) => {
-    return {
-      level,
-      categories: sortLevels[level],
-    }
-  })
-
-  const sortLevelsAndTables = sortedLevels.map((levelObject) => {
-    const sortCats = levelObject.categories.reduce((category, table) => {
-      if (!category[table.category]) {
-        category[table.category] = []
-      }
-      category[table.category].push(table)
-      return category
-    }, {} as SortedTables)
-
-    const sortedTables = Object.keys(sortCats).map((cat) => {
+  const sortedLevels = Object.keys(sortLevels).map(
+    (level) => {
       return {
-        category: cat,
-        tables: sortCats[cat],
+        level,
+        categories: sortLevels[level],
       }
-    })
-    return {
-      level: levelObject['level'],
-      levelName: levelName[levelObject['level']],
-      tables: sortedTables,
-    }
-  })
+    },
+  )
 
-  return sortLevelsAndTables.sort((a, b) => parseInt(a.level) - parseInt(b.level))
-}
-
-export const compareAllTeamData = (allDataArray: Array<CompareAllTableRow>) => {
-  const newArray: Array<CompareBaseTable> = []
-
-  allDataArray.forEach((team) => {
-    if (!newArray.find((teamItem) => team.teamId === teamItem.teamId)) {
-      newArray.push({
-        teamId: team.teamId,
-        team: {
-          casualName: team.team.casualName,
-          name: team.team.name,
-          teamId: team.team.teamId,
-          shortName: team.team.shortName,
+  const sortLevelsAndTables = sortedLevels.map(
+    (levelObject) => {
+      const sortCats = levelObject.categories.reduce(
+        (category, table) => {
+          if (!category[table.category]) {
+            category[table.category] = []
+          }
+          category[table.category].push(table)
+          return category
         },
-        totalGames: 0,
-        totalWins: 0,
-        totalDraws: 0,
-        totalLost: 0,
-        totalGoalDifference: 0,
-        totalGoalsScored: 0,
-        totalGoalsConceded: 0,
-        totalPoints: 0,
-      })
-    }
-    const teamIndex = newArray.findIndex((teamItem) => team.teamId === teamItem.teamId)
-    newArray[teamIndex].totalGames += team.totalGames
-    newArray[teamIndex].totalWins += team.totalWins
-    newArray[teamIndex].totalDraws += team.totalDraws
-    newArray[teamIndex].totalLost += team.totalLost
-    newArray[teamIndex].totalGoalsScored += team.totalGoalsScored
-    newArray[teamIndex].totalGoalsConceded += team.totalGoalsConceded
-    newArray[teamIndex].totalGoalDifference += team.totalGoalDifference
-    newArray[teamIndex].totalPoints += team.totalPoints
-  })
+        {} as SortedTables,
+      )
 
-  return newArray.sort((a, b) => {
-    if (a.totalPoints < b.totalPoints) {
-      return 1
-    } else if (a.totalPoints > b.totalPoints) {
-      return -1
-    } else {
-      return 0
-    }
-  })
+      const sortedTables = Object.keys(sortCats).map(
+        (cat) => {
+          return {
+            category: cat,
+            categoryName: categoryName[cat],
+            tables: sortCats[cat],
+          }
+        },
+      )
+      return {
+        level: levelObject['level'],
+        levelName: levelName[levelObject['level']],
+        tables: sortedTables,
+      }
+    },
+  )
+
+  return sortLevelsAndTables.sort(
+    (a, b) => parseInt(a.level) - parseInt(b.level),
+  )
 }
+
+// export const compareAllTeamData = (allDataArray: Array<CompareAllTableRow>) => {
+//   const newArray: Array<CompareBaseTable> = []
+
+//   allDataArray.forEach((team) => {
+//     if (!newArray.find((teamItem) => team.teamId === teamItem.teamId)) {
+//       newArray.push({
+//         teamId: team.teamId,
+//         team: {
+//           casualName: team.team.casualName,
+//           name: team.team.name,
+//           teamId: team.team.teamId,
+//           shortName: team.team.shortName,
+//         },
+//         totalGames: 0,
+//         totalWins: 0,
+//         totalDraws: 0,
+//         totalLost: 0,
+//         totalGoalDifference: 0,
+//         totalGoalsScored: 0,
+//         totalGoalsConceded: 0,
+//         totalPoints: 0,
+//       })
+//     }
+//     const teamIndex = newArray.findIndex((teamItem) => team.teamId === teamItem.teamId)
+//     newArray[teamIndex].totalGames += team.totalGames
+//     newArray[teamIndex].totalWins += team.totalWins
+//     newArray[teamIndex].totalDraws += team.totalDraws
+//     newArray[teamIndex].totalLost += team.totalLost
+//     newArray[teamIndex].totalGoalsScored += team.totalGoalsScored
+//     newArray[teamIndex].totalGoalsConceded += team.totalGoalsConceded
+//     newArray[teamIndex].totalGoalDifference += team.totalGoalDifference
+//     newArray[teamIndex].totalPoints += team.totalPoints
+//   })
+
+//   return newArray.sort((a, b) => {
+//     if (a.totalPoints < b.totalPoints) {
+//       return 1
+//     } else if (a.totalPoints > b.totalPoints) {
+//       return -1
+//     } else {
+//       return 0
+//     }
+//   })
+// }

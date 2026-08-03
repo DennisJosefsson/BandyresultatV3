@@ -6,19 +6,11 @@ type RenderMaxMinGoalsCardProps = {
   stat: string
 }
 
-const RenderMaxMinGoalsCard = ({
-  array,
-  stat,
-}: RenderMaxMinGoalsCardProps) => {
+const RenderMaxMinGoalsCard = ({ array, stat }: RenderMaxMinGoalsCardProps) => {
   return (
-    <div className="border shadow-md">
+    <div className="max-w-105 border shadow-xs md:shadow-sm">
       {array.map((item) => {
-        return (
-          <MaxMinGoalsCard
-            key={`${item.teams}-${item.result}-${stat}`}
-            {...item}
-          />
-        )
+        return <MaxMinGoalsCard key={`${item.teams}-${item.result}-${stat}`} {...item} />
       })}
     </div>
   )

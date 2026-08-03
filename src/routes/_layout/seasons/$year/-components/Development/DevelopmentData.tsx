@@ -13,7 +13,7 @@ const DevelopmentData = () => {
           <div className="xl:col-span-3">
             <DevelopmentGamesList />
           </div>
-          <div className="hidden sm:block xl:col-span-4">
+          <div className="hidden sm:block xl:col-span-4 xl:mt-6">
             <DevelopmentTable />
           </div>
           <div className="sm:hidden">

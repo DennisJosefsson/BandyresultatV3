@@ -1,11 +1,11 @@
-import { db } from '@/db'
-import { teamseasons } from '@/db/schema'
-import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
-import { catchError } from '@/lib/middlewares/errors/catchError'
-import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import { zd } from '@/lib/utils/zod'
-import { createServerFn } from '@tanstack/react-start'
 import { eq } from 'drizzle-orm'
+import { createServerFn } from '@tanstack/react-start'
+import { zd } from '@/lib/utils/zod'
+import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
+import { catchError } from '@/lib/middlewares/errors/catchError'
+import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
+import { teamseasons } from '@/db/schema'
+import { db } from '@/db'
 
 export const deleteTeamSeason = createServerFn({
   method: 'POST',
@@ -18,9 +18,7 @@ export const deleteTeamSeason = createServerFn({
   )
   .handler(async ({ data: { teamseasonId } }) => {
     try {
-      await db
-        .delete(teamseasons)
-        .where(eq(teamseasons.teamseasonId, teamseasonId))
+      await db.delete(teamseasons).where(eq(teamseasons.teamseasonId, teamseasonId))
 
       return {
         status: 200,

@@ -1,6 +1,10 @@
-import { useCopyToClipboard } from 'usehooks-ts'
-import { getRouteApi, useLocation, useNavigate } from '@tanstack/react-router'
 import { Button } from '@/components/base/ui/button'
+import {
+  getRouteApi,
+  useLocation,
+  useNavigate,
+} from '@tanstack/react-router'
+import { useCopyToClipboard } from 'usehooks-ts'
 
 const Buttons = ({ length }: { length: number }) => {
   const [copiedText, copy] = useCopyToClipboard()
@@ -23,12 +27,18 @@ const Buttons = ({ length }: { length: number }) => {
   return (
     <div className="mb-2 flex flex-row justify-end gap-2 xl:mb-6">
       {origin ? (
-        <Button size="responsive" onClick={goBack}>
+        <Button
+          size="responsive"
+          onClick={goBack}
+        >
           Tillbaka
         </Button>
       ) : null}
       {length > 0 && (
-        <Button onClick={() => copy(copyLink)} size="responsive">
+        <Button
+          onClick={() => copy(copyLink)}
+          size="responsive"
+        >
           {copiedText ? 'Kopierad!' : `Länk`}
         </Button>
       )}
@@ -48,9 +58,9 @@ const CompareHeader = () => {
     return (
       <>
         {allData.length === 0 && (
-          <div className="p-1 md:p-2">
+          <div>
             <div className="flex flex-row items-center justify-between">
-              <span className="mb-2 text-xs md:text-base xl:text-lg 2xl:text-xl">
+              <span className="mb-2 text-foreground text-[10px] md:text-sm xl:text-base 2xl:text-lg">
                 {compareHeaderText}
               </span>
 
@@ -59,7 +69,7 @@ const CompareHeader = () => {
           </div>
         )}
         {allData.length > 0 && (
-          <div className="md:p-2">
+          <div>
             <div className="w-full">
               <div className="flex flex-row items-center justify-between">
                 <span className="mb-2 text-xs font-semibold sm:text-sm md:text-base xl:text-lg 2xl:text-xl">

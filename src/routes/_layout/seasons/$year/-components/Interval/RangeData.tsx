@@ -1,11 +1,9 @@
-import { Slider } from '@/components/base/ui/slider'
 import { getRouteApi } from '@tanstack/react-router'
-import { getCurrentIntervalTable } from '../../-functions/getCurrentIntervalTable'
+import { Slider } from '@/components/base/ui/slider'
 import IntervalTable from './IntervalTable'
+import { getCurrentIntervalTable } from '../../-functions/getCurrentIntervalTable'
 
-const route = getRouteApi(
-  '/_layout/seasons/$year/$group/interval',
-)
+const route = getRouteApi('/_layout/seasons/$year/$group/interval')
 
 const RangeData = () => {
   const data = route.useLoaderData()
@@ -35,24 +33,14 @@ const RangeData = () => {
   return (
     <div className="mx-1 flex flex-col gap-4 sm:mx-4">
       <div className="xs:text-[10px] flex flex-row justify-between text-[8px] sm:text-xs lg:text-base">
-        <span className="w-24">
-          {data.dates.length < 2
-            ? null
-            : currTable.startDate}
-        </span>
-        <span className="font-semibold">
-          {data.serie.serieName}
-        </span>
-        <span className="w-24 text-right">
-          {data.dates.length < 2 ? null : currTable.endDate}
-        </span>
+        <span className="w-24">{data.dates.length < 2 ? null : currTable.startDate}</span>
+        <span className="font-semibold">{data.serie.serieName}</span>
+        <span className="w-24 text-right">{data.dates.length < 2 ? null : currTable.endDate}</span>
       </div>
       {data.dates.length < 2 ? null : (
         <Slider
           value={range}
-          onValueChange={(value) =>
-            valueChange(value as Array<number>)
-          }
+          onValueChange={(value) => valueChange(value as Array<number>)}
           minStepsBetweenValues={1}
           min={0}
           max={data.dates.length - 1}
@@ -61,10 +49,7 @@ const RangeData = () => {
         />
       )}
 
-      <IntervalTable
-        table={currTable.table}
-        serie={data.serie}
-      />
+      <IntervalTable table={currTable.table} serie={data.serie} />
     </div>
   )
 }

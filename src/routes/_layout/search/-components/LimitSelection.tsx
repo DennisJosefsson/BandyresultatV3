@@ -31,14 +31,16 @@ const LimitSelection = () => {
   }
   return (
     <div className="grid w-full max-w-sm items-center gap-1.5 px-1">
-      <Label htmlFor="limit">Antal träffar</Label>
+      <Label htmlFor="limit" className="font-semibold md:text-sm">
+        Antal träffar
+      </Label>
       <Select
         value={limit?.toString() ?? '10'}
         onValueChange={onValueChange}
         name="limit"
         id="limit"
       >
-        <SelectTrigger className="w-62">
+        <SelectTrigger className="xs:w-64 w-50">
           <SelectValue placeholder="Välj" />
         </SelectTrigger>
         <SelectContent>

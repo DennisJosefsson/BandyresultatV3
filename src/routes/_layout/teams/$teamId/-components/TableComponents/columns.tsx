@@ -1,3 +1,7 @@
+import {
+  NumberCell,
+  NumberHeader,
+} from '@/components/Common/Tables/Number'
 import type { SingleTeamTableItem } from '@/lib/types/table'
 import type { ColumnDef } from '@tanstack/react-table'
 
@@ -40,114 +44,64 @@ export const columns: Array<
 > = [
   {
     accessorKey: 'totalGames',
-    header: () => (
-      <div className="xs:text-[8px] w-8 text-center text-[7px] sm:text-[10px] md:text-sm">
-        M
-      </div>
-    ),
+    header: () => <NumberHeader>M</NumberHeader>,
     cell: ({ row }) => (
-      <div className="xs:text-[8px] w-8 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base ">
-        {row.getValue('totalGames')}
-      </div>
+      <NumberCell>{row.getValue('totalGames')}</NumberCell>
     ),
-    maxSize: 16,
   },
   {
     accessorKey: 'totalWins',
-    header: () => (
-      <div className="xs:text-[8px] w-8 text-center text-[7px] sm:text-[10px] md:text-sm">
-        V
-      </div>
-    ),
+    header: () => <NumberHeader>V</NumberHeader>,
     cell: ({ row }) => (
-      <div className="xs:text-[8px] w-8 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base ">
-        {row.getValue('totalWins')}
-      </div>
+      <NumberCell>{row.getValue('totalWins')}</NumberCell>
     ),
-    maxSize: 16,
   },
   {
     accessorKey: 'totalDraws',
-    header: () => (
-      <div className="xs:text-[8px] w-8 text-center text-[7px] sm:text-[10px] md:text-sm">
-        O
-      </div>
-    ),
+    header: () => <NumberHeader>O</NumberHeader>,
     cell: ({ row }) => (
-      <div className="xs:text-[8px] w-8 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base ">
-        {row.getValue('totalDraws')}
-      </div>
+      <NumberCell>{row.getValue('totalDraws')}</NumberCell>
     ),
-    maxSize: 16,
   },
   {
     accessorKey: 'totalLost',
-    header: () => (
-      <div className="xs:text-[8px] w-8 text-center text-[7px] sm:text-[10px] md:text-sm">
-        F
-      </div>
-    ),
+    header: () => <NumberHeader>F</NumberHeader>,
     cell: ({ row }) => (
-      <div className="xs:text-[8px] w-8 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base ">
-        {row.getValue('totalLost')}
-      </div>
+      <NumberCell>{row.getValue('totalLost')}</NumberCell>
     ),
-    maxSize: 16,
   },
   {
     accessorKey: 'totalGoalsScored',
-    header: () => (
-      <div className="xs:text-[8px] w-8 text-center text-[7px] sm:text-[10px] md:text-sm">
-        GM
-      </div>
-    ),
+    header: () => <NumberHeader>GM</NumberHeader>,
     cell: ({ row }) => (
-      <div className="xs:text-[8px] w-8 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base ">
+      <NumberCell>
         {row.getValue('totalGoalsScored')}
-      </div>
+      </NumberCell>
     ),
-    maxSize: 16,
   },
   {
     accessorKey: 'totalGoalsConceded',
-    header: () => (
-      <div className="xs:text-[8px] w-8 text-center text-[7px] sm:text-[10px] md:text-sm">
-        IM
-      </div>
-    ),
+    header: () => <NumberHeader>IM</NumberHeader>,
     cell: ({ row }) => (
-      <div className="xs:text-[8px] w-8 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base ">
+      <NumberCell>
         {row.getValue('totalGoalsConceded')}
-      </div>
+      </NumberCell>
     ),
-    maxSize: 16,
   },
   {
     accessorKey: 'totalGoalDifference',
-    header: () => (
-      <div className="xs:text-[8px] w-8 text-center text-[7px] sm:text-[10px] md:text-sm">
-        MS
-      </div>
-    ),
+    header: () => <NumberHeader>MS</NumberHeader>,
     cell: ({ row }) => (
-      <div className="xs:text-[8px] w-8 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base ">
+      <NumberCell>
         {row.getValue('totalGoalDifference')}
-      </div>
+      </NumberCell>
     ),
-    maxSize: 16,
   },
   {
     accessorKey: 'totalPoints',
-    header: () => (
-      <div className="xs:text-[8px] w-8 text-center text-[7px] sm:text-[10px] md:text-sm">
-        P
-      </div>
-    ),
+    header: () => <NumberHeader>P</NumberHeader>,
     cell: ({ row }) => (
-      <div className="xs:text-[8px] w-8 text-center text-[7px] tabular-nums sm:text-[10px] md:text-sm xl:text-base ">
-        {row.getValue('totalPoints')}
-      </div>
+      <NumberCell>{row.getValue('totalPoints')}</NumberCell>
     ),
-    maxSize: 16,
   },
 ]

@@ -4,7 +4,6 @@ import MobileDataTable from './MobileDataTable'
 
 type TableListProps = {
   tableArray: Array<GroupTable>
-  casualName: string
 }
 
 const Comment = ({ comment }: { comment: string }) => {
@@ -13,10 +12,7 @@ const Comment = ({ comment }: { comment: string }) => {
   )
 }
 
-const TableList = ({
-  tableArray,
-  casualName,
-}: TableListProps) => {
+const TableList = ({ tableArray }: TableListProps) => {
   if (tableArray.length === 0) {
     return (
       <div className="font-inter text-foreground mx-auto mt-4 grid place-items-center py-5 text-sm font-bold md:text-base">
@@ -38,25 +34,23 @@ const TableList = ({
               id={group.group}
               className="group mb-0.5 flex flex-row items-center gap-1"
             >
-              <h2 className="text-sm font-bold tracking-wide lg:text-base xl:text-xl">
+              <h3 className="text-primary text-[10px] font-semibold tracking-wide md:text-xs xl:text-sm 2xl:text-base">
                 {group.name}
-              </h2>
+              </h3>
             </div>
 
-            <div className="hidden sm:block">
+            <div className="hidden flex-col gap-2 sm:flex">
               <DataTable
                 data={group.tables}
-                casualName={casualName}
                 serieStructure={group.serieStructure}
               />
               {group.comment ? (
                 <Comment comment={group.comment} />
               ) : null}
             </div>
-            <div className="sm:hidden">
+            <div className="flex flex-col gap-2 sm:hidden">
               <MobileDataTable
                 data={group.tables}
-                casualName={casualName}
                 serieStructure={group.serieStructure}
               />
               {group.comment ? (

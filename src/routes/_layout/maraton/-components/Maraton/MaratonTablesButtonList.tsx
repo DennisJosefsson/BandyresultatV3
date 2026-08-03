@@ -10,11 +10,11 @@ const MaratonTablesButtonList = () => {
 
   return (
     <div>
-      <h1 className="mb-2 text-center text-sm leading-4 font-bold sm:text-base md:mb-4 lg:text-xl">
+      <h1 className="xs:text-sm mb-1 text-center text-xs leading-4 font-bold sm:mb-2 sm:text-base md:mb-4 lg:text-lg">
         Maratontabell {women ? 'Damer' : 'Herrar'}
       </h1>
       <div className="flex flex-row justify-center">
-        <div className="mb-6 flex flex-row justify-center gap-4">
+        <div className="mb-1 flex flex-row justify-center gap-4 sm:mb-2 md:mb-4 lg:mb-6">
           <Link
             from="/maraton/table/$maratonTable"
             to="."

@@ -12,41 +12,42 @@ const Playoffs = () => {
   if (data.status === 400 || data.status === 404)
     return null
   return (
-    <>
-      <StatsCard>
-        <StatsCard.Title>Slutspel</StatsCard.Title>
-        <StatsCard.Content>
-          {data.allPlayoffs.map((stat) => {
-            return (
-              <CompareStatsCard
-                stat={stat}
-                key={stat.teamId}
-              />
-            )
-          })}
-        </StatsCard.Content>
-      </StatsCard>
-      {!women && (
-        <>
-          <StatsCard>
-            <StatsCard.Title>
-              Slutspel sedan 1931
-            </StatsCard.Title>
+    <div>
+      {data.allPlayoffs.length > 0 ? (
+        <StatsCard>
+          <StatsCard.Title>Slutspel</StatsCard.Title>
+          <StatsCard.Content>
+            {data.allPlayoffs.map((stat) => {
+              return (
+                <CompareStatsCard
+                  stat={stat}
+                  key={stat.teamId}
+                />
+              )
+            })}
+          </StatsCard.Content>
+        </StatsCard>
+      ) : null}
 
-            <StatsCard.Content>
-              {data.playoffs.map((stat) => {
-                return (
-                  <CompareStatsCard
-                    stat={stat}
-                    key={stat.teamId}
-                  />
-                )
-              })}
-            </StatsCard.Content>
-          </StatsCard>
-        </>
-      )}
-    </>
+      {!women && data.playoffs.length > 0 ? (
+        <StatsCard>
+          <StatsCard.Title>
+            Slutspel sedan 1931
+          </StatsCard.Title>
+
+          <StatsCard.Content>
+            {data.playoffs.map((stat) => {
+              return (
+                <CompareStatsCard
+                  stat={stat}
+                  key={stat.teamId}
+                />
+              )
+            })}
+          </StatsCard.Content>
+        </StatsCard>
+      ) : null}
+    </div>
   )
 }
 

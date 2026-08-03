@@ -1,10 +1,13 @@
 import DefaultNotFound from '@/components/ErrorComponents/DefaultNotFound'
 import Header from '@/components/Header/Header'
 import { TooltipProvider } from '@/components/base/ui/tooltip'
-import { FavTeamsProvider } from '@/lib/contexts/favTeamsContext'
+import { CookieProvider } from '@/lib/contexts/cookieContext'
 import { ThemeProvider } from '@/lib/contexts/themeContext'
-import { getFavTeamsServerFn } from '@/lib/favTeams'
-import { getThemeServerFn } from '@/lib/theme'
+import { getFavTeamsServerFn } from '@/lib/cookieFunctions/favTeams'
+import { getSortGamesServerFn } from '@/lib/cookieFunctions/sortGames'
+import { getSortPlayedGamesServerFn } from '@/lib/cookieFunctions/sortPlayedGames'
+import { getSortUnplayedGamesServerFn } from '@/lib/cookieFunctions/sortUnplayedGames'
+import { getThemeServerFn } from '@/lib/cookieFunctions/theme'
 import type { QueryClient } from '@tanstack/react-query'
 import {
   HeadContent,
@@ -20,6 +23,16 @@ import appCss from '../styles.css?url'
 
 interface MyRouterContext {
   queryClient: QueryClient
+  sidebarSection:
+    | 'seasons'
+    | 'year'
+    | 'teams'
+    | 'singleTeam'
+    | 'search'
+    | 'dashboard'
+    | 'about'
+    | 'maraton'
+    | undefined
 }
 
 const searchWomen = z.object({
@@ -101,8 +114,19 @@ export const Route =
     },
     loader: async () => {
       const favTeams = await getFavTeamsServerFn()
+      const sortGames = await getSortGamesServerFn()
+      const sortPlayedGames =
+        await getSortPlayedGamesServerFn()
+      const sortUnplayedGames =
+        await getSortUnplayedGamesServerFn()
       const theme = await getThemeServerFn()
-      return { favTeams, theme }
+      return {
+        favTeams,
+        theme,
+        sortGames,
+        sortPlayedGames,
+        sortUnplayedGames,
+      }
     },
     notFoundComponent: DefaultNotFound,
     errorComponent: ErrorComponent,
@@ -110,7 +134,13 @@ export const Route =
   })
 
 function RootDocument() {
-  const { favTeams, theme } = Route.useLoaderData()
+  const {
+    favTeams,
+    theme,
+    sortGames,
+    sortPlayedGames,
+    sortUnplayedGames,
+  } = Route.useLoaderData()
 
   return (
     <html
@@ -124,11 +154,16 @@ function RootDocument() {
       <body>
         <ClerkProvider>
           <ThemeProvider theme={theme}>
-            <FavTeamsProvider favTeams={favTeams}>
+            <CookieProvider
+              favTeams={favTeams}
+              sortGames={sortGames}
+              sortPlayedGames={sortPlayedGames}
+              sortUnplayedGames={sortUnplayedGames}
+            >
               <TooltipProvider>
                 <Outlet />
               </TooltipProvider>
-            </FavTeamsProvider>
+            </CookieProvider>
           </ThemeProvider>
         </ClerkProvider>
 

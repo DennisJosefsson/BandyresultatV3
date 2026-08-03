@@ -45,14 +45,16 @@ const OperatorSelector = ({ array, field, defaultValue, label }: OperatorSelecto
 
   return (
     <div className="grid w-full max-w-sm items-center gap-1.5 px-1">
-      <Label htmlFor={field}>{label}</Label>
+      <Label htmlFor={field} className="font-semibold md:text-sm">
+        {label}
+      </Label>
       <Select
         value={searchField ?? defaultValue}
         onValueChange={onValueChange}
         name={field}
         id={field}
       >
-        <SelectTrigger className="w-62">
+        <SelectTrigger className="xs:w-64 w-50">
           <SelectValue placeholder="Välj">{arrayLabel}</SelectValue>
         </SelectTrigger>
         <SelectContent alignItemWithTrigger={true}>

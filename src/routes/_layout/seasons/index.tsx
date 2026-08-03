@@ -38,10 +38,13 @@ export const Route = createFileRoute('/_layout/seasons/')({
     ],
   }),
 
-  loaderDeps: ({ search: { page } }) => ({ page }),
+  loaderDeps: ({ search: { page, women } }) => ({
+    page,
+    women,
+  }),
   loader: async ({ deps }) => {
     const data = await getPaginatedSeasons({
-      data: deps.page,
+      data: { page: deps.page, women: deps.women },
     })
     if (!data) throw new Error('Missing seasons data')
     return data

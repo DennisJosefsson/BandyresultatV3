@@ -1,5 +1,6 @@
 import type { ReturnDevDataTableItem } from '@/lib/types/table'
 import type { Serie } from '@/lib/types/serie'
+import MobileDataTable from './MobileDataTable'
 import DataTable from './DataTable'
 import { columns } from './columns'
 
@@ -10,22 +11,25 @@ type IntervalTableProps = {
 }
 
 const IntervalTable = ({ table, serie }: IntervalTableProps) => {
-  const teamObject = table.reduce(
-    (o, key) => ({
-      ...o,
-      [key.team.casualName]: key.teamId,
-    }),
-    {},
-  )
-
   return (
-    <DataTable
-      serieStructure={serie.serieStructure}
-      columns={columns}
-      data={table}
-      comment={serie.comment}
-      teamObject={teamObject}
-    />
+    <div>
+      <div className="hidden sm:block">
+        <DataTable
+          serieStructure={serie.serieStructure}
+          columns={columns}
+          data={table}
+          comment={serie.comment}
+        />
+      </div>
+      <div className="sm:hidden">
+        <MobileDataTable
+          serieStructure={serie.serieStructure}
+          columns={columns}
+          data={table}
+          comment={serie.comment}
+        />
+      </div>
+    </div>
   )
 }
 

@@ -1,5 +1,6 @@
-import Date from '@/components/Common/Date'
+import { Datum } from '@/components/Common/Date'
 import type { RecordStreak } from '@/lib/types/records'
+import { H3 } from '../Headers'
 type StreakCardProps = {
   streak: Array<RecordStreak>
   title: string
@@ -8,17 +9,15 @@ type StreakCardProps = {
 const StreakCard = ({ streak, title }: StreakCardProps) => {
   return (
     <div className="mt-2">
-      <h3 className="mb-2 text-xs leading-4 font-bold sm:text-base xl:text-lg">
-        {title}
-      </h3>
-      <div className="border shadow-md">
+      <H3>{title}</H3>
+      <div className="max-w-105 border shadow-sm">
         {streak.map((s) => {
           return (
             <div
-              className="mb-1 flex max-w-100 flex-row items-center justify-between p-1 text-[10px] md:mb-2 md:p-2 md:text-sm"
+              className="mb-1 flex max-w-100 flex-row items-center justify-between p-1 text-[8px] msm:text-[10px] md:mb-2 md:p-2 md:text-sm"
               key={`${s.name}-${s.startDate}`}
             >
-              <span className="mr-4 w-8 text-right text-base font-bold tabular-nums md:text-2xl">
+              <span className="mr-2 msm:mr-4 w-6 msm:w-8 text-right text-base font-bold tabular-nums md:text-2xl">
                 {s.position}
               </span>
               <div className="flex grow flex-col">
@@ -27,10 +26,10 @@ const StreakCard = ({ streak, title }: StreakCardProps) => {
                     {s.name}
                   </span>
                 </div>
-                <div className="flex flex-row items-center justify-between text-[10px] md:text-xs">
+                <div className="flex flex-row items-center justify-between">
                   <span className="w-48 sm:w-64">
-                    <Date>{s.startDate}</Date> -{' '}
-                    <Date>{s.endDate}</Date>
+                    <Datum>{s.startDate}</Datum> -{' '}
+                    <Datum>{s.endDate}</Datum>
                   </span>
                 </div>
               </div>

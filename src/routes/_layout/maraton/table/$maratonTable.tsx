@@ -1,21 +1,13 @@
-import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
+import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
 import { zd } from '@/lib/utils/zod'
-import {
-  CatchBoundary,
-  createFileRoute,
-} from '@tanstack/react-router'
-import MaratonTable from '../-components/Maraton/MaratonTables'
+import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import { getMaratonTables } from '../-functions/getMaratonTable'
+import MaratonTable from '../-components/Maraton/MaratonTables'
 
-export const Route = createFileRoute(
-  '/_layout/maraton/table/$maratonTable',
-)({
+export const Route = createFileRoute('/_layout/maraton/table/$maratonTable')({
   params: {
     parse: (params) => ({
-      maratonTable: zd
-        .enum(['all', 'away', 'home'])
-        .catch('all')
-        .parse(params.maratonTable),
+      maratonTable: zd.enum(['all', 'away', 'home']).catch('all').parse(params.maratonTable),
     }),
     stringify: ({ maratonTable }) => ({
       maratonTable: `${maratonTable}`,
@@ -41,9 +33,7 @@ export const Route = createFileRoute(
   head: ({ loaderData }) => ({
     meta: [
       {
-        title:
-          loaderData?.meta.title ??
-          'Bandyresultat - Maratontabell',
+        title: loaderData?.meta.title ?? 'Bandyresultat - Maratontabell',
       },
       {
         name: 'description',
@@ -55,9 +45,7 @@ export const Route = createFileRoute(
       },
       {
         property: 'og:title',
-        content:
-          loaderData?.meta.title ??
-          'Bandyresultat - Maratontabell',
+        content: loaderData?.meta.title ?? 'Bandyresultat - Maratontabell',
       },
       {
         property: 'og:type',
@@ -65,9 +53,7 @@ export const Route = createFileRoute(
       },
       {
         property: 'og:url',
-        content:
-          loaderData?.meta.url ??
-          'https://www.bandyresultat.se/maraton/table/all',
+        content: loaderData?.meta.url ?? 'https://www.bandyresultat.se/maraton/table/all',
       },
       {
         property: 'og:image',
@@ -87,11 +73,7 @@ function RouteComponent() {
         console.error(error)
       }}
       errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent
-          id="maratonTable"
-          error={error}
-          reset={reset}
-        />
+        <SimpleErrorComponent id="maratonTable" error={error} reset={reset} />
       )}
     >
       <MaratonTable />

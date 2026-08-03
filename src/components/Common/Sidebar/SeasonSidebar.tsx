@@ -1,15 +1,4 @@
 import {
-  CalendarIcon,
-  CalendarSearchIcon,
-  ChartLineIcon,
-  ChevronsLeftRightEllipsisIcon,
-  FolderKanbanIcon,
-  ListIcon,
-  MapIcon,
-  TrophyIcon,
-} from 'lucide-react'
-import { Link, Navigate, getRouteApi, useParams } from '@tanstack/react-router'
-import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -18,6 +7,14 @@ import {
   SidebarMenuSubItem,
   useSidebar,
 } from '@/components/base/ui/sidebar'
+import { groupConstant } from '@/lib/utils/constants'
+import {
+  Link,
+  getRouteApi,
+  useMatches,
+  useParams,
+  useSearch,
+} from '@tanstack/react-router'
 import { useGetFirstAndLastSeason } from '../../../routes/_layout/seasons/$year/-hooks/useGetFirstAndLastSeason'
 
 const route = getRouteApi('/_layout/seasons/$year')
@@ -33,58 +30,124 @@ export function SeasonSidebar() {
 
   const data = route.useLoaderData()
 
+  const playoffRoute = useMatches()
+    .map((m) => m.context.sidebarSection)
+    .some((r) => r === 'playoff')
+
   const toggleOnMobile = () => {
     if (isMobile) {
       setOpenMobile(false)
     }
   }
 
-  if (data === undefined || data.status === 204 || data.groups.length === 0) {
-    return <Navigate to="." params={{ group: 'elitserien' }} />
+  if (data.status === 200) {
+    if (!open) return null
+    const groupFromData = data.groups[0].group
+
+    const group = params.group ?? groupFromData
+    const year = params.year ?? lastSeason
+    return (
+      <>
+        <DefaultSeasonSidebar
+          year={year}
+          women={women}
+          group={group}
+        />
+        {data.status === 200 && (
+          <SidebarGroup>
+            <SidebarGroupLabel>Serier</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenuSub>
+                {data.groups.map((item) => {
+                  return (
+                    <SidebarMenuSubItem
+                      key={item.serieId.toString()}
+                    >
+                      {playoffRoute ? (
+                        <SidebarMenuSubButton
+                          onClick={toggleOnMobile}
+                          render={
+                            <Link
+                              to="/seasons/$year/$group/tables/$table"
+                              params={{
+                                year,
+                                group: item.group,
+                                table: 'all',
+                              }}
+                              search={{
+                                women: women,
+                              }}
+                            >
+                              <span className="truncate md:text-sm">
+                                {item.name}
+                              </span>
+                            </Link>
+                          }
+                        />
+                      ) : (
+                        <SidebarMenuSubButton
+                          onClick={toggleOnMobile}
+                          render={
+                            <Link
+                              to="."
+                              params={(prev) => ({
+                                ...prev,
+                                group: item.group,
+                              })}
+                              search={(prev) => ({
+                                women: prev.women,
+                              })}
+                            >
+                              <span className="truncate md:text-sm">
+                                {item.name}
+                              </span>
+                            </Link>
+                          }
+                        />
+                      )}
+                    </SidebarMenuSubItem>
+                  )
+                })}
+              </SidebarMenuSub>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
+      </>
+    )
   }
-  const groupFromData = data.groups[0].group
 
-  const group = params.group ?? groupFromData
-
-  const year = params.year ?? lastSeason
-  if (!open) return null
-  return (
-    <>
-      <DefaultSeasonSidebar year={year} women={women} group={group} />
-      {data.status === 200 && (
-        <SidebarGroup>
-          <SidebarGroupLabel>Serier</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenuSub>
-              {data.groups.map((item) => {
-                return (
-                  <SidebarMenuSubItem key={item.serieId.toString()}>
-                    <SidebarMenuSubButton
-                      onClick={toggleOnMobile}
-                      render={
-                        <Link
-                          to="."
-                          params={(prev) => ({
-                            ...prev,
-                            group: item.group,
-                          })}
-                          search={(prev) => ({
-                            women: prev.women,
-                          })}
-                        >
-                          <span className="truncate md:text-sm">{item.name}</span>
-                        </Link>
-                      }
-                    />
-                  </SidebarMenuSubItem>
-                )
-              })}
-            </SidebarMenuSub>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      )}
-    </>
-  )
+  if (data.status === 404 || data.status === 204) {
+    return (
+      <>
+        {/* <SidebarMenuSub>
+          <SidebarMenuSubItem>
+            <SidebarMenuSubButton
+              onClick={toggleOnMobile}
+              render={
+                <Link
+                  to="/seasons"
+                  params={{ page: 1 }}
+                  search={{ women }}
+                  activeOptions={{
+                    includeSearch: false,
+                    exact: true,
+                  }}
+                  activeProps={{
+                    className: `underline underline-offset-auto`,
+                  }}
+                >
+                  <span className="md:text-sm">
+                    Säsongslista
+                  </span>
+                </Link>
+              }
+            />
+          </SidebarMenuSubItem>
+        </SidebarMenuSub> */}
+        <PlayoffSidebar />
+      </>
+    )
+  }
 }
 
 export function DefaultSeasonSidebar({
@@ -103,154 +166,291 @@ export function DefaultSeasonSidebar({
     }
   }
   return (
-    <SidebarMenuSub>
-      <SidebarMenuSubItem>
-        <SidebarMenuSubButton
-          onClick={toggleOnMobile}
-          render={
-            <Link
-              to="/seasons"
-              params={{ page: 1 }}
-              search={{ women }}
-              activeOptions={{
-                includeSearch: false,
-                exact: true,
-              }}
-              activeProps={{ className: `font-bold` }}
-            >
-              <span>
-                <CalendarSearchIcon className="size-4" />
-              </span>
-              <span className="md:text-sm">Säsongslista</span>
-            </Link>
-          }
-        />
-      </SidebarMenuSubItem>
-      <SidebarMenuSubItem>
-        <SidebarMenuSubButton
-          onClick={toggleOnMobile}
-          render={
-            <Link
-              to="/seasons/$year/$group/games"
-              params={{ year, group }}
-              search={{ women }}
-              activeOptions={{ includeSearch: false }}
-              activeProps={{ className: `font-bold` }}
-            >
-              <span>
-                <CalendarIcon className="size-4" />
-              </span>
-              <span className="md:text-sm">Matcher</span>
-            </Link>
-          }
-        />
-      </SidebarMenuSubItem>
-      <SidebarMenuSubItem>
-        <SidebarMenuSubButton
-          onClick={toggleOnMobile}
-          render={
-            <Link
-              to="/seasons/$year/$group/tables/$table"
-              params={{
-                year,
-                group,
-                table: 'all',
-              }}
-              search={{ women }}
-              activeOptions={{ includeSearch: false }}
-              activeProps={{ className: `font-bold` }}
-            >
-              <span>
-                <ListIcon className="size-4" />
-              </span>
-              <span className="md:text-sm">Tabell</span>
-            </Link>
-          }
-        />
+    <>
+      {/* <SidebarMenuSub>
+        <SidebarMenuSubItem>
+          <SidebarMenuSubButton
+            onClick={toggleOnMobile}
+            render={
+              <Link
+                to="/seasons"
+                params={{ page: 1 }}
+                search={{ women }}
+                activeOptions={{
+                  includeSearch: false,
+                  exact: true,
+                }}
+                activeProps={{
+                  className: `underline underline-offset-auto`,
+                }}
+              >
+                <span className="md:text-sm">
+                  Säsongslista
+                </span>
+              </Link>
+            }
+          />
+        </SidebarMenuSubItem>
+      </SidebarMenuSub> */}
+      <SidebarGroup>
+        <SidebarGroupLabel>
+          {groupConstant[group]}
+        </SidebarGroupLabel>
+        <SidebarGroupContent>
+          <SidebarMenuSub>
+            <SidebarMenuSubItem>
+              <SidebarMenuSubButton
+                onClick={toggleOnMobile}
+                render={
+                  <Link
+                    to="/seasons/$year/$group/games"
+                    params={{ year, group }}
+                    search={{ women }}
+                    activeOptions={{ includeSearch: false }}
+                    activeProps={{
+                      className: `underline underline-offset-auto`,
+                    }}
+                  >
+                    <span className="md:text-sm">
+                      Matcher
+                    </span>
+                  </Link>
+                }
+              />
+            </SidebarMenuSubItem>
+            <SidebarMenuSubItem>
+              <SidebarMenuSubButton
+                onClick={toggleOnMobile}
+                render={
+                  <Link
+                    to="/seasons/$year/$group/tables/$table"
+                    params={{
+                      year,
+                      group,
+                      table: 'all',
+                    }}
+                    search={{ women }}
+                    activeOptions={{ includeSearch: false }}
+                    activeProps={{
+                      className: `underline underline-offset-auto`,
+                    }}
+                  >
+                    <span className="md:text-sm">
+                      Tabell
+                    </span>
+                  </Link>
+                }
+              />
 
+              <SidebarMenuSub>
+                <SidebarMenuSubItem>
+                  <SidebarMenuSubButton
+                    onClick={toggleOnMobile}
+                    render={
+                      <Link
+                        to="/seasons/$year/$group/tables/$table"
+                        params={{
+                          year: year,
+                          group,
+                          table: 'all',
+                        }}
+                        search={{ women }}
+                        activeOptions={{
+                          includeSearch: false,
+                        }}
+                        activeProps={{
+                          className: `underline underline-offset-auto`,
+                        }}
+                      >
+                        <span className="md:text-sm">
+                          Alla
+                        </span>
+                      </Link>
+                    }
+                  />
+                </SidebarMenuSubItem>
+                <SidebarMenuSubItem>
+                  <SidebarMenuSubButton
+                    onClick={toggleOnMobile}
+                    render={
+                      <Link
+                        to="/seasons/$year/$group/tables/$table"
+                        params={{
+                          year,
+                          group,
+                          table: 'home',
+                        }}
+                        search={{ women }}
+                        activeOptions={{
+                          includeSearch: false,
+                        }}
+                        activeProps={{
+                          className: `underline underline-offset-auto`,
+                        }}
+                      >
+                        <span className="md:text-sm">
+                          Hemma
+                        </span>
+                      </Link>
+                    }
+                  />
+                </SidebarMenuSubItem>
+                <SidebarMenuSubItem>
+                  <SidebarMenuSubButton
+                    onClick={toggleOnMobile}
+                    render={
+                      <Link
+                        to="/seasons/$year/$group/tables/$table"
+                        params={{
+                          year,
+                          group,
+                          table: 'away',
+                        }}
+                        search={{ women }}
+                        activeOptions={{
+                          includeSearch: false,
+                        }}
+                        activeProps={{
+                          className: `underline underline-offset-auto`,
+                        }}
+                      >
+                        <span className="md:text-sm">
+                          Borta
+                        </span>
+                      </Link>
+                    }
+                  />
+                </SidebarMenuSubItem>
+              </SidebarMenuSub>
+            </SidebarMenuSubItem>
+
+            <SidebarMenuSubItem>
+              <SidebarMenuSubButton
+                onClick={toggleOnMobile}
+                render={
+                  <Link
+                    to="/seasons/$year/$group/development"
+                    params={{ year, group }}
+                    search={{ women, index: 0 }}
+                    activeOptions={{ includeSearch: false }}
+                    activeProps={{
+                      className: `underline underline-offset-auto`,
+                    }}
+                  >
+                    <span className="md:text-sm">
+                      Utveckling
+                    </span>
+                  </Link>
+                }
+              />
+            </SidebarMenuSubItem>
+            <SidebarMenuSubItem>
+              <SidebarMenuSubButton
+                onClick={toggleOnMobile}
+                render={
+                  <Link
+                    to="/seasons/$year/$group/interval"
+                    params={{ year, group }}
+                    search={{ women, start: 0 }}
+                    activeOptions={{ includeSearch: false }}
+                    activeProps={{
+                      className: `underline underline-offset-auto`,
+                    }}
+                  >
+                    <span className="md:text-sm">
+                      Intervall
+                    </span>
+                  </Link>
+                }
+              />
+            </SidebarMenuSubItem>
+            <SidebarMenuSubItem>
+              <SidebarMenuSubButton
+                onClick={toggleOnMobile}
+                render={
+                  <Link
+                    to="/seasons/$year/$group/stats"
+                    params={{ year, group }}
+                    search={{ women }}
+                    activeOptions={{ includeSearch: false }}
+                    activeProps={{
+                      className: `underline underline-offset-auto`,
+                    }}
+                  >
+                    <span className="md:text-sm">
+                      Statistik
+                    </span>
+                  </Link>
+                }
+              />
+            </SidebarMenuSubItem>
+            <SidebarMenuSubItem>
+              <SidebarMenuSubButton
+                onClick={toggleOnMobile}
+                render={
+                  <Link
+                    to="/seasons/$year/$group/map"
+                    params={{ year, group }}
+                    search={{ women }}
+                    activeOptions={{ includeSearch: false }}
+                    activeProps={{
+                      className: `underline underline-offset-auto`,
+                    }}
+                  >
+                    <span className="md:text-sm">
+                      Karta
+                    </span>
+                  </Link>
+                }
+              />
+            </SidebarMenuSubItem>
+          </SidebarMenuSub>
+        </SidebarGroupContent>
+      </SidebarGroup>
+
+      <PlayoffSidebar />
+    </>
+  )
+}
+
+function PlayoffSidebar() {
+  const women = useSearch({
+    from: '/_layout',
+    select: (search) => search.women,
+  })
+  const { isMobile, setOpenMobile } = useSidebar()
+
+  const { lastSeason } = useGetFirstAndLastSeason()
+  const params = useParams({ strict: false })
+  const year = params.year ?? lastSeason
+  const toggleOnMobile = () => {
+    if (isMobile) {
+      setOpenMobile(false)
+    }
+  }
+  return (
+    <SidebarGroup>
+      <SidebarGroupLabel>Slutspel</SidebarGroupLabel>
+      <SidebarGroupContent>
         <SidebarMenuSub>
           <SidebarMenuSubItem>
             <SidebarMenuSubButton
               onClick={toggleOnMobile}
               render={
                 <Link
-                  to="/seasons/$year/$group/tables/$table"
-                  params={{
-                    year: year,
-                    group,
-                    table: 'all',
-                  }}
+                  to="/seasons/$year/playoff/table"
+                  params={{ year }}
                   search={{ women }}
                   activeOptions={{ includeSearch: false }}
-                  activeProps={{ className: `font-bold` }}
+                  activeProps={{
+                    className: `underline underline-offset-auto`,
+                  }}
                 >
-                  <span className="md:text-sm">Alla</span>
+                  <span className="md:text-sm">Tabell</span>
                 </Link>
               }
             />
           </SidebarMenuSubItem>
-          <SidebarMenuSubItem>
-            <SidebarMenuSubButton
-              onClick={toggleOnMobile}
-              render={
-                <Link
-                  to="/seasons/$year/$group/tables/$table"
-                  params={{
-                    year,
-                    group,
-                    table: 'home',
-                  }}
-                  search={{ women }}
-                  activeOptions={{ includeSearch: false }}
-                  activeProps={{ className: `font-bold` }}
-                >
-                  <span className="md:text-sm">Hemma</span>
-                </Link>
-              }
-            />
-          </SidebarMenuSubItem>
-          <SidebarMenuSubItem>
-            <SidebarMenuSubButton
-              onClick={toggleOnMobile}
-              render={
-                <Link
-                  to="/seasons/$year/$group/tables/$table"
-                  params={{
-                    year,
-                    group,
-                    table: 'away',
-                  }}
-                  search={{ women }}
-                  activeOptions={{ includeSearch: false }}
-                  activeProps={{ className: `font-bold` }}
-                >
-                  <span className="md:text-sm">Borta</span>
-                </Link>
-              }
-            />
-          </SidebarMenuSubItem>
-        </SidebarMenuSub>
-      </SidebarMenuSubItem>
-      <SidebarMenuSubItem>
-        <SidebarMenuSubButton
-          onClick={toggleOnMobile}
-          render={
-            <Link
-              to="/seasons/$year/playoff/table"
-              params={{ year }}
-              search={{ women }}
-              activeOptions={{ includeSearch: false }}
-              activeProps={{ className: `font-bold` }}
-            >
-              <span>
-                <TrophyIcon className="size-4" />
-              </span>
-              <span className="md:text-sm">Slutspel</span>
-            </Link>
-          }
-        />
-
-        <SidebarMenuSub>
           <SidebarMenuSubItem>
             <SidebarMenuSubButton
               onClick={toggleOnMobile}
@@ -260,9 +460,13 @@ export function DefaultSeasonSidebar({
                   params={{ year }}
                   search={{ women }}
                   activeOptions={{ includeSearch: false }}
-                  activeProps={{ className: `font-bold` }}
+                  activeProps={{
+                    className: `underline underline-offset-auto`,
+                  }}
                 >
-                  <span className="md:text-sm">Matcher</span>
+                  <span className="md:text-sm">
+                    Matcher
+                  </span>
                 </Link>
               }
             />
@@ -276,9 +480,13 @@ export function DefaultSeasonSidebar({
                   params={{ year }}
                   search={{ women }}
                   activeOptions={{ includeSearch: false }}
-                  activeProps={{ className: `font-bold` }}
+                  activeProps={{
+                    className: `underline underline-offset-auto`,
+                  }}
                 >
-                  <span className="md:text-sm">Statistik</span>
+                  <span className="md:text-sm">
+                    Statistik
+                  </span>
                 </Link>
               }
             />
@@ -292,7 +500,9 @@ export function DefaultSeasonSidebar({
                   params={{ year }}
                   search={{ women }}
                   activeOptions={{ includeSearch: false }}
-                  activeProps={{ className: `font-bold` }}
+                  activeProps={{
+                    className: `underline underline-offset-auto`,
+                  }}
                 >
                   <span className="md:text-sm">Karta</span>
                 </Link>
@@ -300,83 +510,7 @@ export function DefaultSeasonSidebar({
             />
           </SidebarMenuSubItem>
         </SidebarMenuSub>
-      </SidebarMenuSubItem>
-      <SidebarMenuSubItem>
-        <SidebarMenuSubButton
-          onClick={toggleOnMobile}
-          render={
-            <Link
-              to="/seasons/$year/$group/development"
-              params={{ year, group }}
-              search={{ women, index: 0 }}
-              activeOptions={{ includeSearch: false }}
-              activeProps={{ className: `font-bold` }}
-            >
-              <span>
-                <ChartLineIcon className="size-4" />
-              </span>
-              <span className="md:text-sm">Utveckling</span>
-            </Link>
-          }
-        />
-      </SidebarMenuSubItem>
-      <SidebarMenuSubItem>
-        <SidebarMenuSubButton
-          onClick={toggleOnMobile}
-          render={
-            <Link
-              to="/seasons/$year/$group/interval"
-              params={{ year, group }}
-              search={{ women, start: 0 }}
-              activeOptions={{ includeSearch: false }}
-              activeProps={{ className: `font-bold` }}
-            >
-              <span>
-                <ChevronsLeftRightEllipsisIcon className="size-4" />
-              </span>
-              <span className="md:text-sm">Intervall</span>
-            </Link>
-          }
-        />
-      </SidebarMenuSubItem>
-      <SidebarMenuSubItem>
-        <SidebarMenuSubButton
-          onClick={toggleOnMobile}
-          render={
-            <Link
-              to="/seasons/$year/$group/stats"
-              params={{ year, group }}
-              search={{ women }}
-              activeOptions={{ includeSearch: false }}
-              activeProps={{ className: `font-bold` }}
-            >
-              <span>
-                <FolderKanbanIcon className="size-4" />
-              </span>
-              <span className="md:text-sm">Statistik</span>
-            </Link>
-          }
-        />
-      </SidebarMenuSubItem>
-      <SidebarMenuSubItem>
-        <SidebarMenuSubButton
-          onClick={toggleOnMobile}
-          render={
-            <Link
-              to="/seasons/$year/$group/map"
-              params={{ year, group }}
-              search={{ women }}
-              activeOptions={{ includeSearch: false }}
-              activeProps={{ className: `font-bold` }}
-            >
-              <span>
-                <MapIcon className="size-4" />
-              </span>
-              <span className="md:text-sm">Karta</span>
-            </Link>
-          }
-        />
-      </SidebarMenuSubItem>
-    </SidebarMenuSub>
+      </SidebarGroupContent>
+    </SidebarGroup>
   )
 }

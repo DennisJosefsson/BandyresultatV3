@@ -1,15 +1,16 @@
-import {
-  eightColStarts,
-  eightColStartsFourTeams,
-} from '@/lib/utils/constants'
 import { getRouteApi } from '@tanstack/react-router'
+import { eightColStarts, eightColStartsFourTeams } from '@/lib/utils/constants'
 import DefaultComponent from './DefaultComponent'
 
-const route = getRouteApi(
-  '/_layout/seasons/$year/playoff/table',
-)
+const route = getRouteApi('/_layout/seasons/$year/playoff/table')
 
-const EightFinal = () => {
+type ComponentProps = {
+  hoverTeam: number | null
+  handleOnMouseEnter: (teamId: number) => void
+  handleOnMouseLeave: () => void
+}
+
+const EightFinal = (props: ComponentProps) => {
   const data = route.useLoaderData()
 
   if (data.status === 404 || !data.eightTables) return null
@@ -22,6 +23,7 @@ const EightFinal = () => {
               key={`${group.group}-${index}`}
               group={group}
               colStarts={eightColStarts}
+              {...props}
             />
           )
         })}
@@ -37,6 +39,7 @@ const EightFinal = () => {
             key={`${group.group}-${index}`}
             group={group}
             colStarts={eightColStartsFourTeams}
+            {...props}
           />
         )
       })}

@@ -1,12 +1,11 @@
 import { getRouteApi } from '@tanstack/react-router'
-import CompareStatsCard from './CompareStatsCard'
 import StatsCard from './StatsCard'
+import CompareStatsCard from './CompareStatsCard'
 const route = getRouteApi('/_layout/teams/compare')
 
 const Golds = () => {
   const data = route.useLoaderData()
-  if (data.status === 400 || data.status === 404)
-    return null
+  if (data.status === 400 || data.status === 404) return null
 
   if (data.golds.length === 0) return null
   return (
@@ -15,12 +14,7 @@ const Golds = () => {
 
       <StatsCard.Content>
         {data.golds.map((stat) => {
-          return (
-            <CompareStatsCard
-              stat={stat}
-              key={stat.teamId}
-            />
-          )
+          return <CompareStatsCard stat={stat} key={stat.teamId} />
         })}
       </StatsCard.Content>
     </StatsCard>

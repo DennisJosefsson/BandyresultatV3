@@ -1,6 +1,6 @@
-import { useGetFirstAndLastSeason } from '../../seasons/$year/-hooks/useGetFirstAndLastSeason'
-import NumberInput from './NumberInput'
 import StringInput from './StringInput'
+import NumberInput from './NumberInput'
+import { useGetFirstAndLastSeason } from '../../seasons/$year/-hooks/useGetFirstAndLastSeason'
 
 const SeasonFormComponent = () => {
   const seasons = useGetFirstAndLastSeason()
@@ -26,11 +26,7 @@ const SeasonFormComponent = () => {
           />
         </div>
         <div className="flex max-w-[16rem] flex-col">
-          <StringInput
-            field="inputDate"
-            label="Matchdatum"
-            placeholder="T.ex. 26/12"
-          />
+          <StringInput field="inputDate" label="Matchdatum" placeholder="T.ex. 26/12" />
         </div>
       </div>
     </div>

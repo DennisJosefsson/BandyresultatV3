@@ -1,17 +1,15 @@
-import { serverEnv } from '@/lib/env/serverEnv.ts'
-import { sharedEnv } from '@/lib/env/sharedEnv.ts'
-import { config } from 'dotenv'
-import { drizzle } from 'drizzle-orm/node-postgres'
 import type { PoolConfig } from 'pg'
 import { Pool } from 'pg'
+import { drizzle } from 'drizzle-orm/node-postgres'
+import { config } from 'dotenv'
+import { sharedEnv } from '@/lib/env/sharedEnv.ts'
+import { serverEnv } from '@/lib/env/serverEnv.ts'
 import * as schema from './schema.ts'
 
 config()
 
 const dbConnectionString =
-  sharedEnv.NODE_ENV === 'development'
-    ? serverEnv.DB_DEVELOPMENT_URL
-    : undefined
+  sharedEnv.NODE_ENV === 'development' ? serverEnv.DB_DEVELOPMENT_URL : undefined
 
 const prodConfig = {
   host: serverEnv.DB_HOST,

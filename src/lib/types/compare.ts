@@ -1,7 +1,6 @@
 import type { TeamBase } from './team'
 
 export type CompareBaseTable = {
-  teamId: number
   totalGames: number
   totalPoints: number
   totalGoalsScored: number
@@ -10,13 +9,10 @@ export type CompareBaseTable = {
   totalWins: number
   totalDraws: number
   totalLost: number
-  team: TeamBase
 }
 
 export type CompareCatTableRow = CompareBaseTable & {
-  opponentId: number
   category: string
-  opponent: TeamBase
   serie: {
     level: number
   }
@@ -32,7 +28,8 @@ export type CompareCategoryData = Array<{
   levelName: string
   tables: Array<{
     category: string
-    tables: Array<CompareCatTableRow>
+    categoryName: string
+    tables: Array<CompareBaseTable>
   }>
 }>
 
@@ -61,4 +58,5 @@ export type CompareLatestWinStats = {
   homeName: string | null
   awayName: string | null
   date: string
+  age: string
 }

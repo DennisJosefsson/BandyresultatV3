@@ -1,19 +1,19 @@
-import {
-  quarterColStarts,
-  quarterColStartsTwoQuarter,
-} from '@/lib/utils/constants'
 import { getRouteApi } from '@tanstack/react-router'
+import { quarterColStarts, quarterColStartsTwoQuarter } from '@/lib/utils/constants'
 import DefaultComponent from './DefaultComponent'
 
-const route = getRouteApi(
-  '/_layout/seasons/$year/playoff/table',
-)
+const route = getRouteApi('/_layout/seasons/$year/playoff/table')
 
-const QuarterFinal = () => {
+type ComponentProps = {
+  hoverTeam: number | null
+  handleOnMouseEnter: (teamId: number) => void
+  handleOnMouseLeave: () => void
+}
+
+const QuarterFinal = (props: ComponentProps) => {
   const data = route.useLoaderData()
 
-  if (data.status === 404 || !data.quarterTables)
-    return null
+  if (data.status === 404 || !data.quarterTables) return null
 
   if (data.quarterTables.length === 2) {
     return (
@@ -24,6 +24,7 @@ const QuarterFinal = () => {
               key={`${group.group}-${index}`}
               group={group}
               colStarts={quarterColStartsTwoQuarter}
+              {...props}
             />
           )
         })}
@@ -38,6 +39,7 @@ const QuarterFinal = () => {
           key={`${group.group}-${index}`}
           group={group}
           colStarts={quarterColStarts}
+          {...props}
         />
       ))}
     </div>

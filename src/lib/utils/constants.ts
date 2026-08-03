@@ -122,10 +122,8 @@ export const groupConstant: GroupConstant = {
   DamAllsvNorr: 'Damallsvenskan Norra',
   DamAllsvSyd: 'Damallsvenskan Södra',
   DamAllsvMitt: 'Damallsvenskan Mitt',
-  DamAllsvNorrForts:
-    'Damallsvenskan Norra Fortsättningsserie',
-  DamAllsvSydForts:
-    'Damallsvenskan Södra Fortsättningsserie',
+  DamAllsvNorrForts: 'Damallsvenskan Norra Fortsättningsserie',
+  DamAllsvSydForts: 'Damallsvenskan Södra Fortsättningsserie',
   ElitNorr: 'Elitserien Norra',
   ElitSyd: 'Elitserien Södra',
   top: 'Toppen',

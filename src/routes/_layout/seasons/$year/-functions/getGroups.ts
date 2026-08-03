@@ -27,8 +27,8 @@ type GroupReturn = Promise<
       meta: Meta
     }
   | {
-      status: 204
-      groups: undefined
+      status: 204 | 404
+      message: string
       breadCrumb: string
       meta: Meta
     }
@@ -52,16 +52,35 @@ export const getGroups = createServerFn({ method: 'GET' })
           url,
           description,
         }
-        if (year < 1973 && women) {
+
+        if (!seasonYear) {
           return {
-            status: 204,
-            groups: undefined,
+            status: 404,
+            message: 'Säsongen finns inte.',
             breadCrumb,
             meta,
           }
         }
 
-        if (!seasonYear) throw new Error('Error!')
+        if (year < 1973 && women) {
+          return {
+            status: 204,
+            message:
+              'Damerna har ingen säsong före 1972/1973.',
+            breadCrumb,
+            meta,
+          }
+        }
+
+        if (year < 1930) {
+          return {
+            status: 204,
+            message: 'Inga seriematcher före 1931.',
+            breadCrumb,
+            meta,
+          }
+        }
+
         const groups = await db
           .select({
             group: series.group,

@@ -1,6 +1,6 @@
 import { db } from '@/db'
 import { games, teamgames, teams } from '@/db/schema'
-import { and, eq, min, sql } from 'drizzle-orm'
+import { and, desc, eq, min, sql } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
 
 const home = alias(teams, 'home')
@@ -46,4 +46,5 @@ export const preparedMinTotalHome = db
       eq(teamgames.totalGoals, minTotalQuery.minTotal),
     ),
   )
+  .orderBy(desc(teamgames.date))
   .prepare('minTotalHome')

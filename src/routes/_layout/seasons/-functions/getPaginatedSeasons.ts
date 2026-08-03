@@ -1,51 +1,60 @@
-import { db } from '@/db'
-import { seasons } from '@/db/schema'
-import { catchError } from '@/lib/middlewares/errors/catchError'
-import { createServerFn } from '@tanstack/react-start'
 import { eq } from 'drizzle-orm'
-import { z } from 'zod'
-import {
-  preparedGroupsForPaginatedSeasons,
-  preparedPagSeasons,
-} from './preparedPaginatedSeasons'
+import { createServerFn } from '@tanstack/react-start'
+import { zd } from '@/lib/utils/zod'
+import { catchError } from '@/lib/middlewares/errors/catchError'
+import { seasons } from '@/db/schema'
+import { db } from '@/db'
+import { preparedPagSeasons } from './preparedPaginatedSeasons'
 
-export const parsePage = z.number().optional().catch(1)
+export const searchParams = zd.object({
+  page: zd.number().optional().catch(1),
+  women: zd.boolean(),
+})
+
+type SeasonsReturn =
+  | {
+      status: 200
+      count: number
+      seasons: Array<{
+        year: string
+        seasonId: number
+        group: string | null
+      }>
+    }
+  | { status: 404; count: number; message: string }
+  | undefined
 
 export const getPaginatedSeasons = createServerFn({
   method: 'GET',
 })
-  .validator(parsePage)
-  .handler(async ({ data }) => {
+  .validator(searchParams)
+  .handler(async ({ data }): Promise<SeasonsReturn> => {
     try {
-      const count = await db.$count(
-        seasons,
-        eq(seasons.women, false),
-      )
+      const count = await db.$count(seasons, eq(seasons.women, data.women))
 
-      const page = data ?? 1
-
-      const groups =
-        await preparedGroupsForPaginatedSeasons.execute()
+      const page = data.page ?? 1
 
       const pagSeasons = await preparedPagSeasons.execute({
         offset: (page - 1) * 12,
+        women: data.women,
       })
 
-      const combinedSeasons = pagSeasons.map((s) => {
-        const mensGroup = groups.find(
-          (g) => g.year === s.year && g.women === false,
-        )
-        const womensGroup = groups.find(
-          (g) => g.year === s.year && g.women === true,
-        )
-        return {
-          ...s,
-          mensGroup: mensGroup?.group ?? undefined,
-          womensGroup: womensGroup?.group ?? undefined,
+      if (pagSeasons.length === 0) {
+        if (data.women) {
+          return {
+            status: 404,
+            count,
+            message: 'Damernas första säsong är 1972/1973.',
+          }
         }
-      })
+        return {
+          status: 404,
+          count,
+          message: 'Hittade inte fler säsonger.',
+        }
+      }
 
-      return { count, seasons: combinedSeasons }
+      return { status: 200, count, seasons: pagSeasons }
     } catch (error) {
       catchError(error)
     }

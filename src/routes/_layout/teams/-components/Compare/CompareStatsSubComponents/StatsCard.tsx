@@ -6,7 +6,7 @@ const StatsCard = ({
   children: ReactNode
 }) => {
   return (
-    <div className="border shadow-md mt-2 w-full p-2 mb-2">
+    <div className="mt-2 mb-2 border p-2 shadow-xs md:shadow-sm sm:w-140 md:w-160">
       {children}
     </div>
   )
@@ -15,7 +15,7 @@ const StatsCard = ({
 function Title({ children }: { children: ReactNode }) {
   return (
     <div>
-      <span className="text-sm font-medium ">
+      <span className="text-sm font-medium">
         {children}
       </span>
     </div>

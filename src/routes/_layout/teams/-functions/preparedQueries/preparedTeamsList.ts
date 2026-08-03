@@ -1,5 +1,5 @@
-import { db } from '@/db'
 import { asc, sql } from 'drizzle-orm'
+import { db } from '@/db'
 
 export const preparedTeamsList = db.query.teams
   .findMany({
@@ -9,10 +9,7 @@ export const preparedTeamsList = db.query.teams
       casualName: true,
     },
     where: (teams, { eq, ne, and }) =>
-      and(
-        eq(teams.women, sql.placeholder('women')),
-        ne(teams.teamId, 176),
-      ),
+      and(eq(teams.women, sql.placeholder('women')), ne(teams.teamId, 176)),
     orderBy: [asc(sql`casual_name collate "se-SE-x-icu"`)],
   })
   .prepare('teamListQuery')
