@@ -76,14 +76,11 @@ const DataTable = <TData, TValue>({
                         ? true
                         : false
                     }
-                    className="px-0.5 data-[expandedinfo=true]:border-none data-[favteam=true]:font-semibold"
+                    className="data-[expandedinfo=true]:border-none data-[favteam=true]:font-semibold"
                   >
                     {row.getVisibleCells().map((cell) => {
                       return (
-                        <TableCell
-                          key={cell.id}
-                          className="p-0"
-                        >
+                        <TableCell key={cell.id}>
                           {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext(),
