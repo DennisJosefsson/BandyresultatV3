@@ -29,8 +29,8 @@ const DataTable = <TData, TValue>({
   })
 
   return (
-    <div className="border p-2 shadow-xs md:shadow-sm">
-      <Table className="text-[10px] lg:text-sm xl:text-base">
+    <div className="border p-1 shadow-xs md:shadow-sm">
+      <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>

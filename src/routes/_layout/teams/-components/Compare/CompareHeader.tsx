@@ -28,7 +28,7 @@ const Buttons = ({ length }: { length: number }) => {
     <div className="mb-2 flex flex-row justify-end gap-2 xl:mb-6">
       {origin ? (
         <Button
-          size="responsive"
+          // size="sm"
           onClick={goBack}
         >
           Tillbaka
@@ -37,7 +37,7 @@ const Buttons = ({ length }: { length: number }) => {
       {length > 0 && (
         <Button
           onClick={() => copy(copyLink)}
-          size="responsive"
+          // size="sm"
         >
           {copiedText ? 'Kopierad!' : `Länk`}
         </Button>

@@ -65,7 +65,7 @@ const CompareTables = () => {
         </div>
         <div>
           <div className="mb-4 xs:mb-6">
-            <div className="xs:block hidden w-full p-2 sm:w-140 md:w-160">
+            <div className="xs:block hidden w-fpy-2 sm:w-120 xl:w-full xl:max-w-160">
               <DataTable
                 columns={columns}
                 data={allData}
@@ -101,7 +101,7 @@ const CompareTables = () => {
                         <h6 className="text-[8px] xs:text-[10px] font-semibold sm:text-xs xl:text-sm">
                           {table.categoryName}
                         </h6>
-                        <div className="xs:block hidden w-full p-2 sm:w-140 md:w-160">
+                        <div className="xs:block hidden w-full py-2 sm:w-120 xl:w-full xl:max-w-160">
                           <DataTable
                             columns={columns}
                             data={table.tables}

@@ -20,7 +20,7 @@ const LatestWins = ({
           return (
             <div
               key={game.gameId}
-              className="bg-muted-foreground/20 my-2 flex w-full flex-col rounded px-3 py-1 text-[8px] xs:text-[10px] sm:text-xs md:text-sm"
+              className="bg-muted-foreground/20 mb-4 last:mb-1 flex w-full flex-col rounded px-3 py-1 text-[8px] xs:text-[10px] sm:text-xs md:text-sm"
             >
               <div className="mb-0.5 flex flex-col">
                 <span className="font-semibold">

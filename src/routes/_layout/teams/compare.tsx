@@ -124,14 +124,14 @@ function Compare() {
   return (
     <div className="mt-2">
       <CompareHeader />
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4 mt-2 sm:mt-4">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-2 xl:gap-4 mt-2 sm:mt-4">
         <CompareTables />
-        <div className="grid grid-cols-1 gap-4">
+        <div className="flex flex-col gap-2 xl:gap-4 xl:mt-13">
           <Seasons />
           <Playoffs />
           <Golds />
         </div>
-        <div className="grid grid-cols-1 gap-4">
+        <div className="flex flex-col gap-2">
           <LatestWins
             latestWins={data.latestHomeWin}
             title="Senaste hemmavinsten"
@@ -141,7 +141,7 @@ function Compare() {
             title="Senaste bortavinsten"
           />
         </div>
-        <div className="grid grid-cols-1 gap-4">
+        <div className="flex flex-col gap-2 xl:gap-4">
           <FirstGames />
           <LatestGames />
         </div>

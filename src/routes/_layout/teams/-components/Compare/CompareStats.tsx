@@ -19,14 +19,16 @@ const CompareStats = () => {
     <>
       <TabsContent value="games">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          <LatestWins
-            latestWins={data.latestHomeWin}
-            title="Senaste hemmavinsten"
-          />
-          <LatestWins
-            latestWins={data.latestAwayWin}
-            title="Senaste bortavinsten"
-          />
+          <div>
+            <LatestWins
+              latestWins={data.latestHomeWin}
+              title="Senaste hemmavinsten"
+            />
+            <LatestWins
+              latestWins={data.latestAwayWin}
+              title="Senaste bortavinsten"
+            />
+          </div>
           <FirstGames />
           <LatestGames />
         </div>

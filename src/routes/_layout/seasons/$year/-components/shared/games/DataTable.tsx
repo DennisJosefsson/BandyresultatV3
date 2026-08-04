@@ -93,7 +93,7 @@ const DataTable = <TData, TValue>({
                     })}
                     <TableCell className="w-8">
                       <Button
-                        size="responsive"
+                        size="sm"
                         variant="default"
                         render={
                           <Link

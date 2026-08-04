@@ -12,7 +12,7 @@ const Playoffs = () => {
   if (data.status === 400 || data.status === 404)
     return null
   return (
-    <div>
+    <div className="flex flex-col gap-2">
       {data.allPlayoffs.length > 0 ? (
         <StatsCard>
           <StatsCard.Title>Slutspel</StatsCard.Title>
