@@ -2,6 +2,7 @@ import type {
   CompareBaseTable,
   CompareCatTableRow,
 } from '@/lib/types/compare'
+import { getCategoryName, getLevelName } from './nameUtils'
 
 type SortedCompareCategoryTables = {
   [key: string]: Array<CompareCatTableRow>
@@ -9,32 +10,6 @@ type SortedCompareCategoryTables = {
 
 type SortedTables = {
   [key: string]: Array<CompareBaseTable>
-}
-
-type LevelName = {
-  [key: string]: string
-}
-
-const levelName: LevelName = {
-  '1': 'Högsta divisionen',
-  '2': 'Näst högsta divisionen',
-  '3': 'Tredje divisionen',
-  '4': 'Fjärde divisionen',
-  '5': 'Femte divisionen',
-}
-
-type CategoryName = {
-  [key: string]: string
-}
-
-const categoryName: CategoryName = {
-  final: 'Final',
-  semi: 'Semifinal',
-  quarter: 'Kvartsfinal',
-  eight: 'Åttondelsfinal',
-  playoffseries: 'Slutspelsserie',
-  regular: 'Grundserie',
-  qualification: 'Kvalserie',
 }
 
 export const compareSortLevelFunction = (
@@ -74,14 +49,14 @@ export const compareSortLevelFunction = (
         (cat) => {
           return {
             category: cat,
-            categoryName: categoryName[cat],
+            categoryName: getCategoryName(cat),
             tables: sortCats[cat],
           }
         },
       )
       return {
         level: levelObject['level'],
-        levelName: levelName[levelObject['level']],
+        levelName: getLevelName(levelObject['level']),
         tables: sortedTables,
       }
     },
