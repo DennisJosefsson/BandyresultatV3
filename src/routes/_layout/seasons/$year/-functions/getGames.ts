@@ -94,6 +94,43 @@ export const getGames = createServerFn({ method: 'GET' })
           }
         }
 
+        const serie = await db
+          .select({
+            ...getTableColumns(series),
+          })
+          .from(series)
+          .leftJoin(
+            seasons,
+            eq(seasons.seasonId, series.seasonId),
+          )
+          .where(
+            and(
+              eq(series.group, group),
+              eq(seasons.women, women),
+              eq(seasons.year, seasonYear),
+            ),
+          )
+          .then((res) => {
+            if (res.length > 0) return res[0]
+            else return undefined
+          })
+        if (!serie)
+          return {
+            status: 404,
+            message: `Ingen ${women ? 'dam' : 'herr'}serie med detta namn det här året. Välj en ny i listan.`,
+            breadCrumb,
+            meta,
+          }
+
+        if (serie.hasStatic) {
+          return {
+            status: 404,
+            message: `Inga matcher inlagda för den här serien det här året, enbart sluttabell.`,
+            breadCrumb,
+            meta,
+          }
+        }
+
         const sortPlayedGames =
           await getSortPlayedGamesServerFn()
         const sortUnplayedGames =
@@ -216,33 +253,6 @@ export const getGames = createServerFn({ method: 'GET' })
           return {
             status: 404,
             message: 'Säsongen finns inte.',
-            breadCrumb,
-            meta,
-          }
-        const serie = await db
-          .select({
-            ...getTableColumns(series),
-          })
-          .from(series)
-          .leftJoin(
-            seasons,
-            eq(seasons.seasonId, series.seasonId),
-          )
-          .where(
-            and(
-              eq(series.group, group),
-              eq(seasons.women, women),
-              eq(seasons.year, seasonYear),
-            ),
-          )
-          .then((res) => {
-            if (res.length > 0) return res[0]
-            else return undefined
-          })
-        if (!serie)
-          return {
-            status: 404,
-            message: `Ingen ${women ? 'dam' : 'herr'}serie med detta namn det här året. Välj en ny i listan.`,
             breadCrumb,
             meta,
           }

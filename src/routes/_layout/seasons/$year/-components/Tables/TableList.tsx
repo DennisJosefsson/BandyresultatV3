@@ -14,7 +14,7 @@ const TableList = () => {
 
   if (data.tables.length === 0) {
     return (
-      <div className="font-inter text-foreground mx-auto mt-4 grid place-items-center py-5 text-sm font-bold md:text-base">
+      <div className="grid py-5 mx-auto mt-4 text-sm font-bold font-inter text-foreground place-items-center md:text-base">
         <p className="mx-10 text-center">
           Serietabeller saknas för denna säsong.
         </p>
@@ -38,7 +38,7 @@ const TableList = () => {
           serieStructure={data.serie.serieStructure}
         />
         {data.serie.comment ? (
-          <Comment>data.serie.comment</Comment>
+          <Comment>{data.serie.comment}</Comment>
         ) : null}
       </div>
     </div>
