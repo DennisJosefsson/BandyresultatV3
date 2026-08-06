@@ -38,11 +38,11 @@
     "stopPRODUCTION": "bash ./.scripts/stopPRODUCTION.sh"
   },
   "dependencies": {
-    "@base-ui/react": "^1.6.0",
-    "@clerk/localizations": "^3.37.7",
-    "@clerk/react": "^6.11.4",
-    "@clerk/tanstack-react-start": "^1.4.13",
-    "@clerk/ui": "^1.24.2",
+    "@base-ui/react": "^1.7.0",
+    "@clerk/localizations": "^4.14.1",
+    "@clerk/react": "^6.12.11",
+    "@clerk/tanstack-react-start": "^1.4.26",
+    "@clerk/ui": "^1.28.0",
     "@rolldown/plugin-babel": "^0.2.2",
     "@t3-oss/env-core": "^0.13.11",
     "@tailwindcss/vite": "^4.2.2",
