@@ -67,17 +67,20 @@ const TeamTable = () => {
               <div>
                 {level.tables.map((table) => {
                   return (
-                    <div key={table.category}>
+                    <div
+                      key={table.category}
+                      className="@container/teamtable"
+                    >
                       <h6 className="text-[10px] font-semibold md:text-xs lg:text-sm xl:text-base">
                         {table.categoryName}
                       </h6>
-                      <div className="msm:block hidden w-full p-2 sm:w-140 md:w-160">
+                      <div className="@lg:block hidden w-full p-2 @3xl:w-160">
                         <DataTable
                           columns={columns}
                           data={table.tables}
                         />
                       </div>
-                      <div className="msm:hidden">
+                      <div className="@lg:hidden">
                         <MobileDataTable
                           columns={columns}
                           data={table.tables}

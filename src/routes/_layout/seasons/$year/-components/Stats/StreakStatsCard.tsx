@@ -13,7 +13,7 @@ const StreakStatsCard = ({
 }: StreakStatsCard) => {
   return (
     <div className="mb-6">
-      <h6 className="mb-2 text-xs font-semibold sm:text-sm">
+      <h6 className="mb-2 text-[8px] xxs:text-[10px] xs:text-xs sm:text-sm xl:text-base font-semibold">
         {title}
       </h6>
 

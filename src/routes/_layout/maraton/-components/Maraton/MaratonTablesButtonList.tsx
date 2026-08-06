@@ -1,7 +1,9 @@
-import { Link, getRouteApi } from '@tanstack/react-router'
 import { Button } from '@/components/base/ui/button'
+import { Link, getRouteApi } from '@tanstack/react-router'
 
-const route = getRouteApi('/_layout/maraton/table/$maratonTable')
+const route = getRouteApi(
+  '/_layout/maraton/table/$maratonTable',
+)
 
 const MaratonTablesButtonList = () => {
   const women = route.useSearch({
@@ -10,7 +12,7 @@ const MaratonTablesButtonList = () => {
 
   return (
     <div>
-      <h1 className="xs:text-sm mb-1 text-center text-xs leading-4 font-bold sm:mb-2 sm:text-base md:mb-4 lg:text-lg">
+      <h1 className="xs:text-sm mb-1 text-center text-xs leading-6 font-bold sm:mb-2 sm:text-base md:mb-4">
         Maratontabell {women ? 'Damer' : 'Herrar'}
       </h1>
       <div className="flex flex-row justify-center">
@@ -28,7 +30,11 @@ const MaratonTablesButtonList = () => {
             {({ isActive, isTransitioning }) => (
               <Button
                 size="responsive"
-                variant={isActive || isTransitioning ? 'default' : 'outline'}
+                variant={
+                  isActive || isTransitioning
+                    ? 'default'
+                    : 'outline'
+                }
                 disabled={isTransitioning}
               >
                 Alla
@@ -48,7 +54,11 @@ const MaratonTablesButtonList = () => {
             {({ isActive, isTransitioning }) => (
               <Button
                 size="responsive"
-                variant={isActive || isTransitioning ? 'default' : 'outline'}
+                variant={
+                  isActive || isTransitioning
+                    ? 'default'
+                    : 'outline'
+                }
                 disabled={isTransitioning}
               >
                 Hemma
@@ -68,7 +78,11 @@ const MaratonTablesButtonList = () => {
             {({ isActive, isTransitioning }) => (
               <Button
                 size="responsive"
-                variant={isActive || isTransitioning ? 'default' : 'outline'}
+                variant={
+                  isActive || isTransitioning
+                    ? 'default'
+                    : 'outline'
+                }
                 disabled={isTransitioning}
               >
                 Borta

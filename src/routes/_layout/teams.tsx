@@ -27,7 +27,6 @@ export const Route = createFileRoute('/_layout/teams')({
     return data
   },
   component: TeamsHeader,
-  staticData: { breadcrumb: 'Laglista' },
 })
 
 function TeamsHeader() {

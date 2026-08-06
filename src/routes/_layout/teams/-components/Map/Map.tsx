@@ -79,6 +79,12 @@ const Map = () => {
             prev.teamArray &&
             prev.teamArray.includes(teamId)
           ) {
+            if (prev.teamArray.length === 1)
+              return {
+                ...prev,
+                error: undefined,
+                teamArray: undefined,
+              }
             return {
               ...prev,
               teamArray: [

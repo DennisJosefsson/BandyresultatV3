@@ -18,6 +18,7 @@ import {
   getExpandedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
+import { GitCompareArrowsIcon } from 'lucide-react'
 import { Fragment } from 'react/jsx-runtime'
 
 interface DataTableProps<TData, TValue> {
@@ -53,8 +54,8 @@ const DataTable = <TData, TValue>({
   const origin = useLocation().pathname
 
   return (
-    <div className="mb-1 ml-1 border px-1 shadow-xs sm:px-2 md:mb-3 md:ml-2 md:shadow-sm">
-      <Table>
+    <div className="border px-1 py-0.5 @2xl:px-2 shadow-xs @3xl:shadow-sm">
+      <Table className="text-[8px] @xs:text-[10px] @sm:text-xs @2xl:text-sm">
         <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => {
@@ -94,10 +95,10 @@ const DataTable = <TData, TValue>({
                         </TableCell>
                       )
                     })}
-                    <TableCell className="w-12">
+                    <TableCell className="w-8">
                       <Button
-                        size="responsive"
-                        variant="default"
+                        size="sm"
+                        variant="outline"
                         render={
                           <route.Link
                             to="/teams/compare"
@@ -110,7 +111,10 @@ const DataTable = <TData, TValue>({
                             })}
                             state={{ origin: origin }}
                           >
-                            <span>H2H</span>
+                            <GitCompareArrowsIcon className="@2xl:hidden" />
+                            <span className="hidden @2xl:block">
+                              H2H
+                            </span>
                           </route.Link>
                         }
                         nativeButton={false}

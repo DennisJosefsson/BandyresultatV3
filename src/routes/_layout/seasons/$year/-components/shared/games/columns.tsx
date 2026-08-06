@@ -1,26 +1,35 @@
-import type { ColumnDef } from '@tanstack/react-table'
-import type { Game } from '@/lib/types/game'
+import {
+  Divider,
+  Result,
+  TeamName,
+} from '@/components/Common/Tables/GamesListItems'
 import TeamLogo from '@/components/Common/TeamLogo'
+import type { Game } from '@/lib/types/game'
+import type { ColumnDef } from '@tanstack/react-table'
 
-export const columns: Array<ColumnDef<Omit<Game, 'season'>>> = [
+export const columns: Array<
+  ColumnDef<Omit<Game, 'season'>>
+> = [
   {
     accessorKey: 'home.casualName',
 
     cell: ({ row }) => (
-      <div className="xs:w-16 w-8 text-left text-[8px] sm:w-28 sm:text-sm md:text-sm lg:text-base 2xl:w-32">
-        <span className="truncate">{row.getValue('home_casualName')}</span>
-      </div>
+      <TeamName>
+        <span className="truncate">
+          {row.getValue('home_casualName')}
+        </span>
+      </TeamName>
     ),
   },
   {
     accessorKey: 'game_id',
 
     cell: ({ row }) => (
-      <div className="xxs:gap-1 msm:gap-2 flex flex-row items-center justify-evenly gap-0.5 text-[8px] sm:text-sm md:text-sm lg:text-base">
+      <Divider>
         <TeamLogo
           size={32}
           teamId={row.original.homeTeamId}
-          className="xxs:block hidden size-[1lh] object-scale-down"
+          className="@sm:block hidden size-[1lh] object-scale-down"
           alt={row.original.home.casualName}
           title={row.original.home.casualName}
         />
@@ -28,20 +37,22 @@ export const columns: Array<ColumnDef<Omit<Game, 'season'>>> = [
         <TeamLogo
           size={32}
           teamId={row.original.awayTeamId}
-          className="xxs:block hidden size-[1lh] object-scale-down"
+          className="@sm:block hidden size-[1lh] object-scale-down"
           alt={row.original.away.casualName}
           title={row.original.away.casualName}
         />
-      </div>
+      </Divider>
     ),
   },
   {
     accessorKey: 'away.casualName',
 
     cell: ({ row }) => (
-      <div className="xs:w-16 w-8 text-left text-[8px] sm:w-28 sm:text-sm md:text-sm lg:text-base 2xl:w-32">
-        <span className="truncate">{row.getValue('away_casualName')}</span>
-      </div>
+      <TeamName>
+        <span className="truncate">
+          {row.getValue('away_casualName')}
+        </span>
+      </TeamName>
     ),
   },
   {
@@ -51,21 +62,20 @@ export const columns: Array<ColumnDef<Omit<Game, 'season'>>> = [
       return row.result
     },
     cell: ({ row }) => (
-      <div className="w-6 text-center text-[8px] sm:text-sm md:w-8 lg:w-10 lg:text-base 2xl:w-12 2xl:text-lg">
-        {row.getValue('result')}
-      </div>
+      <Result>{row.getValue('result')}</Result>
     ),
   },
   {
     accessorKey: 'halftimeResult',
     cell: ({ row }) => (
-      <div className="w-6 text-center text-[8px] sm:text-sm md:w-8 lg:w-10 lg:text-base 2xl:w-12 2xl:text-lg">
-        <span>
-          {row.getValue('halftimeResult') === null || row.getValue('halftimeResult') === ''
+      <Result>
+        <span className="hidden @3xs:block">
+          {row.getValue('halftimeResult') === null ||
+          row.getValue('halftimeResult') === ''
             ? null
             : `(${row.getValue('halftimeResult')})`}
         </span>
-      </div>
+      </Result>
     ),
   },
 ]

@@ -1,7 +1,3 @@
-import type { ColumnDef } from '@tanstack/react-table'
-import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
-import type { ReturnDevDataTableItem } from '@/lib/types/table'
-import { useCookies } from '@/lib/contexts/cookieContext'
 import {
   Table,
   TableBody,
@@ -11,6 +7,14 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/base/ui/table'
+import { useCookies } from '@/lib/contexts/cookieContext'
+import type { ReturnDevDataTableItem } from '@/lib/types/table'
+import type { ColumnDef } from '@tanstack/react-table'
+import {
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from '@tanstack/react-table'
 
 interface DataTableProps<TData, TValue> {
   columns: Array<ColumnDef<TData, TValue>>
@@ -34,18 +38,21 @@ const DataTable = <TData, TValue>({
   const { favTeams } = useCookies()
 
   return (
-    <div className="border p-2 shadow-xs md:shadow-sm xl:mt-2">
-      <Table>
+    <div className="border px-1 py-0.5 shadow-xs @xl/dev:px-2 @3xl/dev:shadow-sm mt-1">
+      <Table className="text-[8px] @xs:text-[10px] @sm:text-xs @2xl:text-sm">
         <TableCaption>{comment}</TableCaption>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead key={header.id} className="px-0">
+                  <TableHead key={header.id}>
                     {header.isPlaceholder
                       ? null
-                      : flexRender(header.column.columnDef.header, header.getContext())}
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
                   </TableHead>
                 )
               })}
@@ -56,19 +63,33 @@ const DataTable = <TData, TValue>({
         <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row, index) => {
-              const original = row.original as ReturnDevDataTableItem
+              const original =
+                row.original as ReturnDevDataTableItem
               return (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && 'selected'}
-                  data-favteam={favTeams.includes(original.teamId) ? true : false}
-                  data-tabledivider={serieStructure?.includes(index + 1) ? true : false}
+                  data-state={
+                    row.getIsSelected() && 'selected'
+                  }
+                  data-favteam={
+                    favTeams.includes(original.teamId)
+                      ? true
+                      : false
+                  }
+                  data-tabledivider={
+                    serieStructure?.includes(index + 1)
+                      ? true
+                      : false
+                  }
                   className="data-[tabledivider=true]:border-foreground data-[favteam=true]:font-semibold data-[tabledivider=true]:border-b-2"
                 >
                   {row.getVisibleCells().map((cell) => {
                     return (
-                      <TableCell key={cell.id} className="px-0 py-1">
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
                       </TableCell>
                     )
                   })}
@@ -77,7 +98,10 @@ const DataTable = <TData, TValue>({
             })
           ) : (
             <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
+              <TableCell
+                colSpan={columns.length}
+                className="h-24 text-center"
+              >
                 Inga tabeller.
               </TableCell>
             </TableRow>

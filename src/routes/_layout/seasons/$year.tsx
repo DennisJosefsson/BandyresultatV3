@@ -124,7 +124,7 @@ function Season() {
           />
         )}
       >
-        <div className="xs:gap-2 msm:p-1 mt-2 flex flex-col gap-1 px-0.5 sm:mt-4 sm:p-2 md:gap-4">
+        <div className="xs:gap-2 mt-2 flex flex-col gap-1 px-0.5 sm:mt-4 md:gap-4">
           <SeasonHeader />
           <Outlet />
         </div>

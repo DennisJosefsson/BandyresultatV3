@@ -12,8 +12,8 @@ const PlayoffAsSeriesTables = () => {
   if (data.status === 404 || !data.playoffSeriesTables)
     return null
   return (
-    <div>
-      <div className="hidden sm:block">
+    <div className="@container/playoffseries">
+      <div className="hidden @md:block">
         {data.playoffSeriesTables.map((group) => {
           return (
             <TableList
@@ -23,7 +23,7 @@ const PlayoffAsSeriesTables = () => {
           )
         })}
       </div>
-      <div className="sm:hidden">
+      <div className="@md:hidden">
         {data.playoffSeriesTables.map((group) => {
           return (
             <MobileTableList

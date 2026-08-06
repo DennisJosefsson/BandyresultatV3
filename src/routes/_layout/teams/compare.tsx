@@ -87,7 +87,7 @@ function RouteComponent() {
     return (
       <Navigate
         from="/teams/compare"
-        to="/teams"
+        to="/teams/list"
         search={(prev) => ({
           women: prev.women,
           teamArray: data.teamArray,

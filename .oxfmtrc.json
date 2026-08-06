@@ -4,7 +4,9 @@
   "singleQuote": true,
   "trailingComma": "all",
   "sortTailwindcss": {
-    "functions": ["clsx"]
+    "stylesheet":"./src/styles.css",
+    "functions": ["clsx","cn"],
+    "preserveWhitespace": false
   },
   "printWidth": 100,
   "sortImports": {

@@ -4,15 +4,11 @@ import type { Game } from '@/lib/types/game'
 import PlayoffCard from './PlayoffCard'
 type FinalCardProps = {
   game: Omit<Game, 'season'>
-  
 }
 
-const FinalCard = ({
-  game,
-  
-}: FinalCardProps) => {
+const FinalCard = ({ game }: FinalCardProps) => {
   return (
-    <div className="grid w-auto min-w-[33%] grid-cols-1 justify-center bg-red-50 lg:mx-auto">
+    <div className="grid w-auto min-w-[33%] grid-cols-1 justify-center @2xl/playoff:mx-auto">
       <PlayoffCard group="final">
         <PlayoffCard.Title>
           <PlayoffCard.Group>Final</PlayoffCard.Group>
@@ -21,12 +17,9 @@ const FinalCard = ({
           </PlayoffCard.Result>
         </PlayoffCard.Title>
         <PlayoffCard.Content>
-          <div className="flex flex-row justify-between text-sm xl:text-base">
+          <div className="flex flex-row justify-between text-xs @2xs/playoff:text-sm @2xl/playoff:text-xs @4xl/playoff:text-base">
             <div className="flex flex-col gap-2">
-              <PlayoffCard.Team
-                teamId={game.home.teamId}
-                
-              >
+              <PlayoffCard.Team teamId={game.home.teamId}>
                 <TeamLogo
                   size={32}
                   teamId={game.home.teamId}
@@ -36,10 +29,7 @@ const FinalCard = ({
                 />
                 <span>{game.home.name}</span>
               </PlayoffCard.Team>
-              <PlayoffCard.Team
-                teamId={game.awayTeamId}
-                
-              >
+              <PlayoffCard.Team teamId={game.awayTeamId}>
                 <TeamLogo
                   size={32}
                   teamId={game.away.teamId}
@@ -52,7 +42,7 @@ const FinalCard = ({
             </div>
             <div>
               <PlayoffCard.Result>
-                {game.result}
+                <span className="mr-2">{game.result}</span>
               </PlayoffCard.Result>
             </div>
           </div>

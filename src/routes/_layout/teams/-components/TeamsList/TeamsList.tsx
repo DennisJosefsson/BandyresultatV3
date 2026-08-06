@@ -1,21 +1,15 @@
 import { Button } from '@/components/base/ui/button'
 import type { CheckedState } from '@/components/base/ui/checkbox'
-import {
-  Link,
-  getRouteApi,
-  useSearch,
-} from '@tanstack/react-router'
+import { Link, getRouteApi } from '@tanstack/react-router'
 import { useState } from 'react'
 import FilterComponent from './FilterComponent'
 import TeamsListItem from './TeamsListItem'
 
-const route = getRouteApi('/_layout/teams')
+const route = getRouteApi('/_layout/teams/list')
 
 const TeamsList = () => {
   const [teamFilter, setTeamFilter] = useState<string>('')
-  const { teamArray } = useSearch({
-    from: '/_layout/teams/',
-  })
+  const { teamArray } = route.useSearch()
 
   const error = route.useSearch({ select: (s) => s.error })
 
@@ -60,6 +54,12 @@ const TeamsList = () => {
             prev.teamArray &&
             prev.teamArray.includes(teamId)
           ) {
+            if (prev.teamArray.length === 1)
+              return {
+                ...prev,
+                error: undefined,
+                teamArray: undefined,
+              }
             return {
               ...prev,
               error: undefined,
@@ -93,23 +93,23 @@ const TeamsList = () => {
   }
 
   return (
-    <div className="mt-2 flex flex-col gap-2">
+    <div className="flex flex-col gap-2 mt-2">
       {error ? (
         <div className="flex flex-row justify-center">
-          <span className="w-full bg-accent-foreground text-red-600 sm:text-sm lg:text-base py-1 px-2 text-center font-semibold">
+          <span className="w-full px-2 py-1 font-semibold text-center text-red-600 bg-accent-foreground sm:text-sm">
             {error}
           </span>
         </div>
       ) : null}
 
-      <div className="flex flex-col sm:flex-row gap-2 sm:items-center sm:justify-evenly">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-evenly">
         <div className="grow">
           <FilterComponent
             teamFilter={teamFilter}
             setTeamFilter={setTeamFilter}
           />
         </div>
-        <div className="flex flex-col sm:flex-row items-center gap-2">
+        <div className="flex flex-col items-center gap-2 sm:flex-row">
           <Button
             onClick={emptyArray}
             className="h-8 w-full sm:w-40 px-2.5 py-1"
@@ -146,7 +146,7 @@ const TeamsList = () => {
           />
         </div>
       </div>
-      <div className="grid grid-cols-1 gap-x-8 gap-y-2 pt-2 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 pt-2 gap-x-8 gap-y-2 sm:grid-cols-2 lg:grid-cols-3">
         {teams.map((team) => {
           return (
             <TeamsListItem

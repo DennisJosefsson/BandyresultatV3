@@ -1,6 +1,3 @@
-import type { Dispatch, SetStateAction } from 'react'
-import type { ColumnDef, VisibilityState } from '@tanstack/react-table'
-import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import {
   Table,
   TableBody,
@@ -9,13 +6,25 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/base/ui/table'
+import type {
+  ColumnDef,
+  VisibilityState,
+} from '@tanstack/react-table'
+import {
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from '@tanstack/react-table'
+import type { Dispatch, SetStateAction } from 'react'
 
 interface DataTableProps<TData, TValue> {
   columns: Array<ColumnDef<TData, TValue>>
   data: Array<TData>
 
   columnVisibility: VisibilityState
-  setColumnVisibility: Dispatch<SetStateAction<VisibilityState>>
+  setColumnVisibility: Dispatch<
+    SetStateAction<VisibilityState>
+  >
 }
 
 const MobileDataTable = <TData, TValue>({
@@ -38,16 +47,22 @@ const MobileDataTable = <TData, TValue>({
 
   return (
     <div className="mb-2 border p-0.5 shadow-xs md:shadow-sm">
-      <Table className="text-[10px] lg:text-sm xl:text-base">
+      <Table className="text-[8px] @xs:text-[10px] @sm:text-xs @2xl:text-sm">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead key={header.id} className="h-6 px-0">
+                  <TableHead
+                    key={header.id}
+                    className="py-1"
+                  >
                     {header.isPlaceholder
                       ? null
-                      : flexRender(header.column.columnDef.header, header.getContext())}
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
                   </TableHead>
                 )
               })}
@@ -58,11 +73,22 @@ const MobileDataTable = <TData, TValue>({
         <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
+              <TableRow
+                key={row.id}
+                data-state={
+                  row.getIsSelected() && 'selected'
+                }
+              >
                 {row.getVisibleCells().map((cell) => {
                   return (
-                    <TableCell key={cell.id} className="px-0 py-1">
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    <TableCell
+                      key={cell.id}
+                      className="py-1"
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
                     </TableCell>
                   )
                 })}
@@ -70,7 +96,10 @@ const MobileDataTable = <TData, TValue>({
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
+              <TableCell
+                colSpan={columns.length}
+                className="h-24 text-center"
+              >
                 Inga resultat.
               </TableCell>
             </TableRow>

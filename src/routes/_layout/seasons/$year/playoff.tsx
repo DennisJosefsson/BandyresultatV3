@@ -1,13 +1,6 @@
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
 import {
-  Menubar,
-  MenubarMenu,
-  MenubarTrigger,
-} from '@/components/base/ui/menubar'
-import { useSidebar } from '@/components/base/ui/sidebar'
-import {
   CatchBoundary,
-  Link,
   Outlet,
   createFileRoute,
   useChildMatches,
@@ -18,6 +11,7 @@ import {
   MapIcon,
   TrophyIcon,
 } from 'lucide-react'
+import PlayoffMenubar from './-components/Menubar/PlayoffMenubar'
 
 export const Route = createFileRoute(
   '/_layout/seasons/$year/playoff',
@@ -58,7 +52,7 @@ function RouteComponent() {
 
 function Playoff() {
   const women = Route.useSearch({ select: (s) => s.women })
-  const sidebar = useSidebar()
+
   const childMatches = useChildMatches()
   if (childMatches.length === 0) {
     return (
@@ -127,89 +121,7 @@ function Playoff() {
   }
   return (
     <div className="flex flex-col gap-2">
-      {sidebar.open ? null : (
-        <div>
-          <Menubar>
-            <MenubarMenu>
-              <MenubarTrigger
-                className="sm:text-sm"
-                value="table"
-                render={
-                  <Link
-                    from="/seasons/$year/playoff"
-                    to="/seasons/$year/playoff/table"
-                    params={(prev) => ({ year: prev.year })}
-                    search={(prev) => ({
-                      women: prev.women,
-                    })}
-                    activeProps={{ 'data-state': 'active' }}
-                  >
-                    Slutspel
-                  </Link>
-                }
-                nativeButton={false}
-              />
-
-              <MenubarTrigger
-                className="sm:text-sm"
-                value="games"
-                render={
-                  <Link
-                    from="/seasons/$year/playoff"
-                    to="/seasons/$year/playoff/games"
-                    params={(prev) => ({ year: prev.year })}
-                    search={(prev) => ({
-                      women: prev.women,
-                    })}
-                    activeProps={{ 'data-state': 'active' }}
-                  >
-                    Matcher
-                  </Link>
-                }
-                nativeButton={false}
-              />
-
-              <MenubarTrigger
-                className="sm:text-sm"
-                value="stats"
-                render={
-                  <Link
-                    from="/seasons/$year/playoff"
-                    to="/seasons/$year/playoff/stats"
-                    params={(prev) => ({ year: prev.year })}
-                    search={(prev) => ({
-                      women: prev.women,
-                    })}
-                    activeProps={{ 'data-state': 'active' }}
-                  >
-                    Statistik
-                  </Link>
-                }
-                nativeButton={false}
-              />
-              <MenubarTrigger
-                className="sm:text-sm"
-                value="grouplist"
-                render={
-                  <Route.Link
-                    to="/seasons/$year"
-                    params={(prev) => ({
-                      year: prev.year,
-                    })}
-                    search={(prev) => ({
-                      women: prev.women,
-                    })}
-                    activeProps={{ 'data-state': 'active' }}
-                  >
-                    Serier
-                  </Route.Link>
-                }
-                nativeButton={false}
-              />
-            </MenubarMenu>
-          </Menubar>
-        </div>
-      )}
+      <PlayoffMenubar />
 
       <div>
         <Outlet />

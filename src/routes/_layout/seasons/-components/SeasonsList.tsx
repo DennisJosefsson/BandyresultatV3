@@ -43,7 +43,7 @@ const SeasonsList = () => {
                     })}
                     params={{ year }}
                   >
-                    <span className="hover:underline hover:underline-offset-auto text-[10px] font-semibold sm:text-xs xl:text-sm 2xl:text-base">
+                    <span className="hover:underline hover:underline-offset-auto text-[10px] font-semibold sm:text-xs xl:text-sm">
                       {season.year}
                     </span>
                   </route.Link>
@@ -59,7 +59,7 @@ const SeasonsList = () => {
                     search={{ women }}
                     className="hover:text-primary font-medium tabular-nums hover:underline hover:underline-offset-auto lg:font-normal"
                   >
-                    <span className="text-[10px] sm:text-xs xl:text-sm 2xl:text-base">
+                    <span className="text-[10px] sm:text-xs xl:text-sm">
                       Tabeller
                     </span>
                   </route.Link>
@@ -73,7 +73,7 @@ const SeasonsList = () => {
                     search={{ women }}
                     className="hover:text-primary font-medium hover:underline hover:underline-offset-auto lg:font-normal"
                   >
-                    <span className="text-[10px] sm:text-xs xl:text-sm 2xl:text-base">
+                    <span className="text-[10px] sm:text-xs xl:text-sm">
                       Matcher
                     </span>
                   </route.Link>
@@ -86,7 +86,7 @@ const SeasonsList = () => {
                     search={{ women }}
                     className="hover:text-primary font-medium hover:underline hover:underline-offset-auto lg:font-normal"
                   >
-                    <span className="text-[10px] sm:text-xs xl:text-sm 2xl:text-base">
+                    <span className="text-[10px] sm:text-xs xl:text-sm">
                       Slutspel
                     </span>
                   </route.Link>
@@ -108,7 +108,7 @@ const SeasonsList = () => {
                     })}
                     params={{ year }}
                   >
-                    <span className="hover:underline hover:underline-offset-auto text-[10px] font-semibold sm:text-xs xl:text-sm 2xl:text-base">
+                    <span className="hover:underline hover:underline-offset-auto text-[10px] font-semibold sm:text-xs xl:text-sm">
                       {season.year}
                     </span>
                   </route.Link>
@@ -122,7 +122,7 @@ const SeasonsList = () => {
                     search={{ women }}
                     className="hover:text-primary font-medium hover:underline hover:underline-offset-auto lg:font-normal"
                   >
-                    <span className="text-[10px] sm:text-xs xl:text-sm 2xl:text-base">
+                    <span className="text-[10px] sm:text-xs xl:text-sm">
                       Slutspelsträd
                     </span>
                   </route.Link>
@@ -134,7 +134,7 @@ const SeasonsList = () => {
                     search={{ women }}
                     className="hover:text-primary font-medium hover:underline hover:underline-offset-auto lg:font-normal"
                   >
-                    <span className="text-[10px] sm:text-xs xl:text-sm 2xl:text-base">
+                    <span className="text-[10px] sm:text-xs xl:text-sm">
                       Matcher
                     </span>
                   </route.Link>
@@ -154,7 +154,7 @@ const SeasonsList = () => {
                   search={(prev) => ({ women: prev.women })}
                   params={{ year }}
                 >
-                  <span className="hover:underline hover:underline-offset-auto text-[10px] font-semibold sm:text-xs xl:text-sm 2xl:text-base">
+                  <span className="hover:underline hover:underline-offset-auto text-[10px] font-semibold sm:text-xs xl:text-sm">
                     {season.year}
                   </span>
                 </route.Link>
@@ -170,7 +170,7 @@ const SeasonsList = () => {
                   search={{ women }}
                   className="hover:text-primary font-medium tabular-nums hover:underline hover:underline-offset-auto lg:font-normal"
                 >
-                  <span className="text-[10px] sm:text-xs xl:text-sm 2xl:text-base">
+                  <span className="text-[10px] sm:text-xs xl:text-sm">
                     Tabeller
                   </span>
                 </route.Link>
@@ -184,7 +184,7 @@ const SeasonsList = () => {
                   search={{ women }}
                   className="hover:text-primary font-medium hover:underline hover:underline-offset-auto lg:font-normal"
                 >
-                  <span className="text-[10px] sm:text-xs xl:text-sm 2xl:text-base">
+                  <span className="text-[10px] sm:text-xs xl:text-sm">
                     Matcher
                   </span>
                 </route.Link>
@@ -197,7 +197,7 @@ const SeasonsList = () => {
                   search={{ women }}
                   className="hover:text-primary font-medium hover:underline hover:underline-offset-auto lg:font-normal"
                 >
-                  <span className="text-[10px] sm:text-xs xl:text-sm 2xl:text-base">
+                  <span className="text-[10px] sm:text-xs xl:text-sm">
                     Slutspel
                   </span>
                 </route.Link>

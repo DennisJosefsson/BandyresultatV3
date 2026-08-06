@@ -58,7 +58,7 @@ const AppSidebar = () => {
 
   return (
     <Sidebar
-      className="font-header top-(--header-height) h-[calc(100svh-var(--header-height))]! mt-2"
+      className="font-header font-medium top-(--header-height) h-[calc(100svh-var(--header-height))]! mt-2"
       collapsible="icon"
     >
       <HeaderForSidebar />
@@ -115,8 +115,13 @@ const AppSidebar = () => {
                   onClick={toggleOnMobile}
                   render={
                     <Link
-                      to="/teams"
-                      search={{ women }}
+                      to="/teams/list"
+                      search={(prev) => ({
+                        women,
+                        teamArray: prev.teamArray
+                          ? prev.teamArray
+                          : undefined,
+                      })}
                     >
                       <ShieldUserIcon />
 

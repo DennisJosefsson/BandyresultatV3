@@ -38,7 +38,7 @@ export function TeamSidebar() {
             render={
               <Link
                 from="/teams"
-                to="/teams"
+                to="/teams/list"
                 search={(prev) => ({ ...prev })}
                 activeOptions={{
                   includeSearch: false,

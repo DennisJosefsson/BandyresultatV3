@@ -6,6 +6,7 @@ import { ThemeProvider } from '@/lib/contexts/themeContext'
 import { getFavTeamsServerFn } from '@/lib/cookieFunctions/favTeams'
 import { getSortGamesServerFn } from '@/lib/cookieFunctions/sortGames'
 import { getSortPlayedGamesServerFn } from '@/lib/cookieFunctions/sortPlayedGames'
+import { getSortPlayoffGamesServerFn } from '@/lib/cookieFunctions/sortPlayoffGames'
 import { getSortUnplayedGamesServerFn } from '@/lib/cookieFunctions/sortUnplayedGames'
 import { getThemeServerFn } from '@/lib/cookieFunctions/theme'
 import type { QueryClient } from '@tanstack/react-query'
@@ -115,6 +116,8 @@ export const Route =
     loader: async () => {
       const favTeams = await getFavTeamsServerFn()
       const sortGames = await getSortGamesServerFn()
+      const sortPlayoffGames =
+        await getSortPlayoffGamesServerFn()
       const sortPlayedGames =
         await getSortPlayedGamesServerFn()
       const sortUnplayedGames =
@@ -124,6 +127,7 @@ export const Route =
         favTeams,
         theme,
         sortGames,
+        sortPlayoffGames,
         sortPlayedGames,
         sortUnplayedGames,
       }
@@ -138,6 +142,7 @@ function RootDocument() {
     favTeams,
     theme,
     sortGames,
+    sortPlayoffGames,
     sortPlayedGames,
     sortUnplayedGames,
   } = Route.useLoaderData()
@@ -157,6 +162,7 @@ function RootDocument() {
             <CookieProvider
               favTeams={favTeams}
               sortGames={sortGames}
+              sortPlayoffGames={sortPlayoffGames}
               sortPlayedGames={sortPlayedGames}
               sortUnplayedGames={sortUnplayedGames}
             >

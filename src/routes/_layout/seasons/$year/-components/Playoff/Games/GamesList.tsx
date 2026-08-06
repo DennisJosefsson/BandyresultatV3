@@ -33,7 +33,7 @@ const GamesList = ({ gamesArray }: GameListProps) => {
                 id={group.group}
                 className="group mb-0.5 flex flex-row items-center gap-1"
               >
-                <h3 className="text-primary text-[10px] font-bold tracking-wide md:text-xs xl:text-sm 2xl:text-base">
+                <h3 className="text-primary text-[10px] font-bold tracking-wide @sm/playoff:text-xs @3xl/playoff:text-sm @5xl/playoff:text-base">
                   {group.name}
                 </h3>
                 <Link
@@ -46,7 +46,7 @@ const GamesList = ({ gamesArray }: GameListProps) => {
                 </Link>
               </div>
               {group.comment && (
-                <p className="bg-background my-2 max-w-xl p-1 text-[10px] font-bold md:text-xs xl:text-sm 2xl:text-base">
+                <p className="bg-background my-2 max-w-xl p-1 text-[10px] font-bold @3xl/playoff:text-xs @5xl/playoff:text-sm">
                   {group.comment}
                 </p>
               )}
@@ -58,9 +58,9 @@ const GamesList = ({ gamesArray }: GameListProps) => {
                       className="mb-4"
                     >
                       {date.date !== 'null' && (
-                        <div className="group mb-0.5 flex flex-row items-center gap-1">
+                        <div className="group mb-1 flex flex-row items-center gap-1">
                           <h3
-                            className="text-[10px] font-semibold tracking-wide sm:text-xs md:text-sm xl:text-base 2xl:text-lg"
+                            className="text-[10px] font-semibold tracking-wide @sm/playoff:text-xs @3xl/playoff:text-sm"
                             id={`${group.group}-${date.date}`}
                           >
                             <Datum>{date.date}</Datum>

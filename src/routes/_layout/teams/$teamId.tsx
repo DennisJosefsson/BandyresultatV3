@@ -92,7 +92,7 @@ export const Route = createFileRoute(
 })
 
 function SingleTeam() {
-  const { open } = useSidebar()
+  const { open, isMobile } = useSidebar()
   const data = Route.useLoaderData()
   const teamId = Route.useParams({
     select: (s) => s.teamId,
@@ -133,7 +133,6 @@ function SingleTeam() {
         to="/teams/$teamId/tables"
         search={(prev) => ({ ...prev })}
         params={(prev) => ({ teamId: prev.teamId })}
-        
       />
     )
   }
@@ -155,11 +154,11 @@ function SingleTeam() {
       >
         <div className="font-inter text-foreground mt-6 flex min-h-screen flex-col">
           <TeamHeader />
-          {open ? null : (
+          {isMobile || !open ? (
             <Menubar>
               <MenubarMenu>
                 <MenubarTrigger
-                  className="xs:text-[10px] text-[8px] md:text-sm"
+                  className="text-[8px] xs:text-[10px] md:text-sm"
                   value="tables"
                   nativeButton={false}
                   render={
@@ -178,7 +177,7 @@ function SingleTeam() {
                 />
 
                 <MenubarTrigger
-                  className="text-[10px] md:text-sm"
+                  className="text-[8px] xs:text-[10px] md:text-sm"
                   value="latest"
                   nativeButton={false}
                   render={
@@ -196,7 +195,7 @@ function SingleTeam() {
                   }
                 />
                 <MenubarTrigger
-                  className="text-[10px] md:text-sm"
+                  className="text-[8px] xs:text-[10px] md:text-sm"
                   value="seasons"
                   nativeButton={false}
                   render={
@@ -214,7 +213,7 @@ function SingleTeam() {
                   }
                 />
                 <MenubarTrigger
-                  className="text-[10px] md:text-sm"
+                  className="text-[8px] xs:text-[10px] md:text-sm"
                   value="stats"
                   nativeButton={false}
                   render={
@@ -233,7 +232,7 @@ function SingleTeam() {
                 />
               </MenubarMenu>
             </Menubar>
-          )}
+          ) : null}
           <div>
             <Outlet />
           </div>

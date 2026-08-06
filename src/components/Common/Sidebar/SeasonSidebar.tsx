@@ -159,12 +159,13 @@ export function DefaultSeasonSidebar({
   women: boolean
   group: string
 }) {
-  const { isMobile, setOpenMobile } = useSidebar()
+  const { open, isMobile, setOpenMobile } = useSidebar()
   const toggleOnMobile = () => {
     if (isMobile) {
       setOpenMobile(false)
     }
   }
+  if (!open) return null
   return (
     <>
       {/* <SidebarMenuSub>
@@ -418,7 +419,7 @@ function PlayoffSidebar() {
     from: '/_layout',
     select: (search) => search.women,
   })
-  const { isMobile, setOpenMobile } = useSidebar()
+  const { open, isMobile, setOpenMobile } = useSidebar()
 
   const { lastSeason } = useGetFirstAndLastSeason()
   const params = useParams({ strict: false })
@@ -428,6 +429,7 @@ function PlayoffSidebar() {
       setOpenMobile(false)
     }
   }
+  if (!open) return null
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Slutspel</SidebarGroupLabel>

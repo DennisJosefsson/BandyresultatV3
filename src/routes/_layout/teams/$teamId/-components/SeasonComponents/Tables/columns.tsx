@@ -1,10 +1,14 @@
-import { ArrowDownIcon, ArrowUpIcon, ChevronsUpDownIcon } from 'lucide-react'
-import { createColumnHelper } from '@tanstack/react-table'
-import type { TeamTable } from '@/lib/types/table'
-import TeamLogo from '@/components/Common/TeamLogo'
-import { TeamnameHeader, TeamnameLabel } from '@/components/Common/Tables/Teamname'
-import { NumberCell, NumberHeader } from '@/components/Common/Tables/Number'
+import {
+  NumberCell,
+  NumberHeader,
+} from '@/components/Common/Tables/Number'
+import {
+  TeamnameHeader,
+  TeamnameLabel,
+} from '@/components/Common/Tables/Teamname'
 import { Button } from '@/components/base/ui/button'
+import type { TeamTable } from '@/lib/types/table'
+import { createColumnHelper } from '@tanstack/react-table'
 
 export const showColumns = {
   totalDraws: true,
@@ -46,16 +50,13 @@ const columnHelper = createColumnHelper<TeamTable>()
 
 export const columns = [
   columnHelper.accessor('team.casualName' as const, {
-    header: () => <TeamnameHeader>Lag</TeamnameHeader>,
+    header: () => (
+      <TeamnameHeader>
+        <span className="invisible">Lag</span>
+      </TeamnameHeader>
+    ),
     cell: ({ row }) => (
       <TeamnameLabel>
-        <TeamLogo
-          size={32}
-          teamId={row.original.teamId}
-          className="xs:block hidden size-[1lh] object-scale-down"
-          alt={row.original.team.casualName}
-          title={row.original.team.casualName}
-        />
         {row.getValue('team_casualName')}
       </TeamnameLabel>
     ),
@@ -64,184 +65,174 @@ export const columns = [
     header: ({ column }) => (
       <NumberHeader>
         <Button
+          className="p-0 text-[8px] @xs:text-[10px] @sm:text-xs @2xl:text-sm"
           variant="ghost"
-          size="responsive"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="xs:text-[8px] text-[7px] sm:text-[10px] md:text-sm"
+          size="sm"
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
         >
           M
-          {column.getIsSorted() === 'desc' ? (
-            <ArrowDownIcon />
-          ) : column.getIsSorted() === 'asc' ? (
-            <ArrowUpIcon />
-          ) : (
-            <ChevronsUpDownIcon />
-          )}
         </Button>
       </NumberHeader>
     ),
-    cell: ({ row }) => <NumberCell>{row.getValue('totalGames')}</NumberCell>,
-    maxSize: 16,
+    cell: ({ row }) => (
+      <NumberCell>{row.getValue('totalGames')}</NumberCell>
+    ),
   }),
   columnHelper.accessor('totalWins' as const, {
     header: ({ column }) => (
       <NumberHeader>
         <Button
+          className="p-0 text-[8px] @xs:text-[10px] @sm:text-xs @2xl:text-sm"
           variant="ghost"
-          size="responsive"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="xs:text-[8px] text-[7px] sm:text-[10px] md:text-sm"
+          size="sm"
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
         >
           V
-          {column.getIsSorted() === 'desc' ? (
-            <ArrowDownIcon />
-          ) : column.getIsSorted() === 'asc' ? (
-            <ArrowUpIcon />
-          ) : (
-            <ChevronsUpDownIcon />
-          )}
         </Button>
       </NumberHeader>
     ),
-    cell: ({ row }) => <NumberCell>{row.getValue('totalWins')}</NumberCell>,
-    maxSize: 16,
+    cell: ({ row }) => (
+      <NumberCell>{row.getValue('totalWins')}</NumberCell>
+    ),
   }),
   columnHelper.accessor('totalDraws' as const, {
     header: ({ column }) => (
       <NumberHeader>
         <Button
+          className="p-0 text-[8px] @xs:text-[10px] @sm:text-xs @2xl:text-sm"
           variant="ghost"
-          size="responsive"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="xs:text-[8px] text-[7px] sm:text-[10px] md:text-sm"
+          size="sm"
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
         >
           O
-          {column.getIsSorted() === 'desc' ? (
-            <ArrowDownIcon />
-          ) : column.getIsSorted() === 'asc' ? (
-            <ArrowUpIcon />
-          ) : (
-            <ChevronsUpDownIcon />
-          )}
         </Button>
       </NumberHeader>
     ),
-    cell: ({ row }) => <NumberCell>{row.getValue('totalDraws')}</NumberCell>,
-    maxSize: 16,
+    cell: ({ row }) => (
+      <NumberCell>{row.getValue('totalDraws')}</NumberCell>
+    ),
   }),
   columnHelper.accessor('totalLost' as const, {
     header: ({ column }) => (
       <NumberHeader>
         <Button
+          className="p-0 text-[8px] @xs:text-[10px] @sm:text-xs @2xl:text-sm"
           variant="ghost"
-          size="responsive"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="xs:text-[8px] text-[7px] sm:text-[10px] md:text-sm"
+          size="sm"
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
         >
           F
-          {column.getIsSorted() === 'desc' ? (
-            <ArrowDownIcon />
-          ) : column.getIsSorted() === 'asc' ? (
-            <ArrowUpIcon />
-          ) : (
-            <ChevronsUpDownIcon />
-          )}
         </Button>
       </NumberHeader>
     ),
-    cell: ({ row }) => <NumberCell>{row.getValue('totalLost')}</NumberCell>,
-    maxSize: 16,
+    cell: ({ row }) => (
+      <NumberCell>{row.getValue('totalLost')}</NumberCell>
+    ),
   }),
   columnHelper.accessor('totalGoalsScored' as const, {
     header: ({ column }) => (
       <NumberHeader>
         <Button
+          className="p-0 text-[8px] @xs:text-[10px] @sm:text-xs @2xl:text-sm"
           variant="ghost"
-          size="responsive"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="xs:text-[8px] text-[7px] sm:text-[10px] md:text-sm"
+          size="sm"
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
         >
           GM
-          {column.getIsSorted() === 'desc' ? (
-            <ArrowDownIcon />
-          ) : column.getIsSorted() === 'asc' ? (
-            <ArrowUpIcon />
-          ) : (
-            <ChevronsUpDownIcon />
-          )}
         </Button>
       </NumberHeader>
     ),
-    cell: ({ row }) => <NumberCell>{row.getValue('totalGoalsScored')}</NumberCell>,
-    maxSize: 16,
+    cell: ({ row }) => (
+      <NumberCell>
+        {row.getValue('totalGoalsScored')}
+      </NumberCell>
+    ),
   }),
   columnHelper.accessor('totalGoalsConceded' as const, {
     header: ({ column }) => (
       <NumberHeader>
         <Button
+          className="p-0 text-[8px] @xs:text-[10px] @sm:text-xs @2xl:text-sm"
           variant="ghost"
-          size="responsive"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="xs:text-[8px] text-[7px] sm:text-[10px] md:text-sm"
+          size="sm"
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
         >
           IM
-          {column.getIsSorted() === 'desc' ? (
-            <ArrowDownIcon />
-          ) : column.getIsSorted() === 'asc' ? (
-            <ArrowUpIcon />
-          ) : (
-            <ChevronsUpDownIcon />
-          )}
         </Button>
       </NumberHeader>
     ),
-    cell: ({ row }) => <NumberCell>{row.getValue('totalGoalsConceded')}</NumberCell>,
-    maxSize: 16,
+    cell: ({ row }) => (
+      <NumberCell>
+        {row.getValue('totalGoalsConceded')}
+      </NumberCell>
+    ),
   }),
   columnHelper.accessor('totalGoalDifference' as const, {
     header: ({ column }) => (
       <NumberHeader>
         <Button
+          className="p-0 text-[8px] @xs:text-[10px] @sm:text-xs @2xl:text-sm"
           variant="ghost"
-          size="responsive"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="xs:text-[8px] text-[7px] sm:text-[10px] md:text-sm"
+          size="sm"
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
         >
           MS
-          {column.getIsSorted() === 'desc' ? (
-            <ArrowDownIcon />
-          ) : column.getIsSorted() === 'asc' ? (
-            <ArrowUpIcon />
-          ) : (
-            <ChevronsUpDownIcon />
-          )}
         </Button>
       </NumberHeader>
     ),
-    cell: ({ row }) => <NumberCell>{row.getValue('totalGoalDifference')}</NumberCell>,
-    maxSize: 16,
+    cell: ({ row }) => (
+      <NumberCell>
+        {row.getValue('totalGoalDifference')}
+      </NumberCell>
+    ),
   }),
   columnHelper.accessor('totalPoints' as const, {
     header: ({ column }) => (
       <NumberHeader>
         <Button
+          className="p-0 text-[8px] @xs:text-[10px] @sm:text-xs @2xl:text-sm"
           variant="ghost"
-          size="responsive"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="xs:text-[8px] text-[7px] sm:text-[10px] md:text-sm"
+          size="sm"
+          onClick={() =>
+            column.toggleSorting(
+              column.getIsSorted() === 'asc',
+            )
+          }
         >
           P
-          {column.getIsSorted() === 'desc' ? (
-            <ArrowDownIcon />
-          ) : column.getIsSorted() === 'asc' ? (
-            <ArrowUpIcon />
-          ) : (
-            <ChevronsUpDownIcon />
-          )}
         </Button>
       </NumberHeader>
     ),
-    cell: ({ row }) => <NumberCell>{row.getValue('totalPoints')}</NumberCell>,
-    maxSize: 16,
+    cell: ({ row }) => (
+      <NumberCell>{row.getValue('totalPoints')}</NumberCell>
+    ),
   }),
 ]

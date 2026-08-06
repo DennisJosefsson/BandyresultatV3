@@ -15,6 +15,7 @@ import {
   getExpandedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
+import { GitCompareArrowsIcon } from 'lucide-react'
 import { Fragment } from 'react/jsx-runtime'
 
 interface DataTableProps<TData, TValue> {
@@ -46,8 +47,8 @@ const DataTable = <TData, TValue>({
   const origin = useLocation().pathname
 
   return (
-    <div className="border p-1 shadow-xs sm:p-2 md:shadow-sm">
-      <Table>
+    <div className="border px-1 py-0.5 @2xl:px-2 shadow-xs @3xl:shadow-sm">
+      <Table className="text-[8px] @xs:text-[10px] @sm:text-xs @2xl:text-sm">
         <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => {
@@ -91,7 +92,7 @@ const DataTable = <TData, TValue>({
                     <TableCell className="w-8">
                       <Button
                         size="sm"
-                        variant="default"
+                        variant="outline"
                         render={
                           <Link
                             from="/seasons/$year"
@@ -105,7 +106,10 @@ const DataTable = <TData, TValue>({
                             })}
                             state={{ origin: origin }}
                           >
-                            <span>H2H</span>
+                            <GitCompareArrowsIcon className="@2xl:hidden" />
+                            <span className="hidden @2xl:block">
+                              H2H
+                            </span>
                           </Link>
                         }
                         nativeButton={false}
@@ -116,16 +120,18 @@ const DataTable = <TData, TValue>({
                     <TableRow key={`${row.id}-expandedRow`}>
                       <TableCell
                         colSpan={6}
-                        className="xs:text-[7px] p-0 text-[6px] break-all sm:text-[10px] md:text-xs xl:text-sm"
+                        className="px-1 py-0 text-[8px] xxs:text-[10px] xs:text-xs sm:text-sm 2xl:text-base break-all"
                       >
-                        Matchen slutade {original.result}{' '}
-                        efter full tid och avgjordes{' '}
-                        {original.penalties
-                          ? 'på straffar'
-                          : original.extraTime
-                            ? 'i förlängningen'
-                            : 'på okänt vis'}
-                        .
+                        <p>
+                          {original.result} vid full tid och
+                          matchen avgjordes{' '}
+                          {original.penalties
+                            ? 'på straffar'
+                            : original.extraTime
+                              ? 'i förlängningen'
+                              : 'på okänt vis'}
+                          .
+                        </p>
                       </TableCell>
                     </TableRow>
                   )}

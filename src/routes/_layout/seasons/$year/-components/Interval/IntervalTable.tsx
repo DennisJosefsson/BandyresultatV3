@@ -1,7 +1,7 @@
-import type { ReturnDevDataTableItem } from '@/lib/types/table'
 import type { Serie } from '@/lib/types/serie'
-import MobileDataTable from './MobileDataTable'
+import type { ReturnDevDataTableItem } from '@/lib/types/table'
 import DataTable from './DataTable'
+import MobileDataTable from './MobileDataTable'
 import { columns } from './columns'
 
 type IntervalTableProps = {
@@ -10,9 +10,12 @@ type IntervalTableProps = {
   serie: Serie
 }
 
-const IntervalTable = ({ table, serie }: IntervalTableProps) => {
+const IntervalTable = ({
+  table,
+  serie,
+}: IntervalTableProps) => {
   return (
-    <div>
+    <div className="@container/interval">
       <div className="hidden sm:block">
         <DataTable
           serieStructure={serie.serieStructure}

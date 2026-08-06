@@ -1,15 +1,27 @@
-import type { ColumnDef } from '@tanstack/react-table'
-import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
-import type { Game } from '@/lib/types/game'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+} from '@/components/base/ui/table'
 import { useCookies } from '@/lib/contexts/cookieContext'
-import { Table, TableBody, TableCell, TableRow } from '@/components/base/ui/table'
+import type { Game } from '@/lib/types/game'
+import type { ColumnDef } from '@tanstack/react-table'
+import {
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from '@tanstack/react-table'
 
 interface DataTableProps<TData, TValue> {
   columns: Array<ColumnDef<TData, TValue>>
   data: Array<TData>
 }
 
-const GamesDataTable = <TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) => {
+const GamesDataTable = <TData, TValue>({
+  columns,
+  data,
+}: DataTableProps<TData, TValue>) => {
   const table = useReactTable({
     data,
     columns,
@@ -19,18 +31,26 @@ const GamesDataTable = <TData, TValue>({ columns, data }: DataTableProps<TData, 
   const { favTeams } = useCookies()
 
   return (
-    <div className="border px-1 py-0.5 shadow-xs sm:p-2 md:shadow-sm">
-      <Table>
+    <div className="border px-1 py-0.5 shadow-xs @xl/dev:px-2 @3xl/dev:shadow-sm">
+      <Table className="text-[8px] @xs:text-[10px] @sm:text-xs @2xl:text-sm">
         <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => {
-              const original = row.original as Omit<Game, 'season'>
+              const original = row.original as Omit<
+                Game,
+                'season'
+              >
               return (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && 'selected'}
+                  data-state={
+                    row.getIsSelected() && 'selected'
+                  }
                   data-favteam={
-                    favTeams.includes(original.homeTeamId) || favTeams.includes(original.awayTeamId)
+                    favTeams.includes(
+                      original.homeTeamId,
+                    ) ||
+                    favTeams.includes(original.awayTeamId)
                       ? true
                       : false
                   }
@@ -38,8 +58,14 @@ const GamesDataTable = <TData, TValue>({ columns, data }: DataTableProps<TData, 
                 >
                   {row.getVisibleCells().map((cell) => {
                     return (
-                      <TableCell key={cell.id} className="px-0 py-1">
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      <TableCell
+                        key={cell.id}
+                        className="px-0 py-1"
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
                       </TableCell>
                     )
                   })}
@@ -48,7 +74,10 @@ const GamesDataTable = <TData, TValue>({ columns, data }: DataTableProps<TData, 
             })
           ) : (
             <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
+              <TableCell
+                colSpan={columns.length}
+                className="h-24 text-center"
+              >
                 Inga matcher.
               </TableCell>
             </TableRow>

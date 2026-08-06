@@ -1,6 +1,15 @@
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldLabel,
+  FieldTitle,
+} from '../base/ui/field'
 import type { RadioGroupProps } from '../base/ui/radio-group'
-import { RadioGroup, RadioGroupItem } from '../base/ui/radio-group'
-import { Field, FieldContent, FieldDescription, FieldLabel, FieldTitle } from '../base/ui/field'
+import {
+  RadioGroup,
+  RadioGroupItem,
+} from '../base/ui/radio-group'
 
 interface RadioBadgesProps extends RadioGroupProps {
   array: Array<{
@@ -8,7 +17,12 @@ interface RadioBadgesProps extends RadioGroupProps {
     label: string
     description?: string
   }>
-  orientation?: 'vertical' | 'horizontal' | 'responsive' | null | undefined
+  orientation?:
+    | 'vertical'
+    | 'horizontal'
+    | 'responsive'
+    | null
+    | undefined
 }
 
 const RadioBadges = ({
@@ -23,10 +37,15 @@ const RadioBadges = ({
         const name = `${rb.value}-${index}`
 
         return (
-          <FieldLabel htmlFor={name} key={name}>
+          <FieldLabel
+            htmlFor={name}
+            key={name}
+          >
             <Field orientation={orientation}>
               <FieldContent>
-                <FieldTitle className="text-[10px] sm:text-xs">{rb.label}</FieldTitle>
+                <FieldTitle className="text-[8px] xxs:text-[10px] sm:text-xs">
+                  {rb.label}
+                </FieldTitle>
                 <FieldDescription className="text-[10px] sm:text-xs">
                   {rb.description}
                 </FieldDescription>

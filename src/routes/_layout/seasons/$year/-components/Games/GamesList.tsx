@@ -26,7 +26,7 @@ const GamesList = ({
   if (group.dates.length === 0) return null
   return (
     <div className="font-inter mb-6 w-full">
-      <h1 className="text-primary text-xs font-semibold tracking-wider md:text-base xl:text-lg 2xl:text-xl">
+      <h1 className="text-primary text-xs font-semibold tracking-wider @md/games:text-sm @xl/games:text-base">
         {title}
       </h1>
       <div>
@@ -38,7 +38,7 @@ const GamesList = ({
             id={group.group}
             className="group mb-0.5 flex flex-row items-center gap-1"
           >
-            <h3 className="text-primary text-[10px] font-bold tracking-wide md:text-xs xl:text-sm 2xl:text-base">
+            <h3 className="text-primary text-[10px] font-bold tracking-wide @sm/games:text-xs @3xl/games:text-sm @5xl/games:text-base">
               {group.name}
             </h3>
             <route.Link
@@ -51,7 +51,7 @@ const GamesList = ({
             </route.Link>
           </div>
           {group.comment && (
-            <p className="bg-background my-2 max-w-xl p-1 text-[10px] font-bold md:text-xs xl:text-sm 2xl:text-base">
+            <p className="bg-background my-2 max-w-xl p-1 text-[10px] font-bold @3xl/games:text-xs @5xl/games:text-sm">
               {group.comment}
             </p>
           )}
@@ -86,7 +86,7 @@ const GamesList = ({
                   {date.date !== 'null' && (
                     <div className="group mb-0.5 flex flex-row items-center gap-1">
                       <h3
-                        className="text-[10px] font-semibold tracking-wide sm:text-xs md:text-sm xl:text-base"
+                        className="text-[10px] font-semibold tracking-wide @sm/games:text-xs @3xl/games:text-sm"
                         id={`${group.group}-${date.date}`}
                       >
                         <Datum>{date.date}</Datum>

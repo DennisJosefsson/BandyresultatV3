@@ -148,7 +148,7 @@ export function RouterBreadcrumb() {
             <DotIcon className="sm:hidden" />
           </BreadcrumbSeparator>
           <BreadcrumbItem>
-            <BreadcrumbPage className="max-w-18 xxs:max-w-24 sm:max-w-none truncate sm:tracking-wider">
+            <BreadcrumbPage className="max-w-15 xxs:max-w-24 sm:max-w-none truncate sm:tracking-wider">
               <span className="text-xs font-semibold sm:tracking-wider md:text-sm truncate">
                 {last?.label}
               </span>
@@ -169,14 +169,14 @@ export function RouterBreadcrumb() {
             <Fragment key={`${crumb.path}-${index}`}>
               <BreadcrumbItem>
                 {isLast ? (
-                  <BreadcrumbPage className="max-w-18 xxs:max-w-24 sm:max-w-none truncate sm:tracking-wider">
+                  <BreadcrumbPage className="max-w-15 xxs:max-w-24 sm:max-w-none truncate sm:tracking-wider">
                     <span className="text-xs font-semibold sm:tracking-wider md:text-sm truncate">
                       {crumb.label}
                     </span>
                   </BreadcrumbPage>
                 ) : (
                   <BreadcrumbLink
-                    className="max-w-18 xxs:max-w-24 sm:max-w-none truncate sm:tracking-wider"
+                    className="max-w-15 xxs:max-w-24 sm:max-w-none truncate sm:tracking-wider"
                     render={
                       isFirst ? (
                         <Link to={crumb.path}>

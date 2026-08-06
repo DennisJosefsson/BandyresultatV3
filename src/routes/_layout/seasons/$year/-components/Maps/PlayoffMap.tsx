@@ -12,7 +12,7 @@ const PlayoffMap = () => {
   if (data.status === 404) return null
   return (
     <div>
-      <Card className="mx-auto h-[80vh] p-2 sm:w-125 xl:w-150">
+      <Card className="@container/map mx-auto h-[70vh] p-2 sm:w-125 xl:w-150">
         <Map
           center={[15, 62]}
           zoom={4}

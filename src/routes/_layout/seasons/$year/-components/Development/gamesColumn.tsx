@@ -1,12 +1,15 @@
-import type { ColumnDef } from '@tanstack/react-table'
+import { Result } from '@/components/Common/Tables/GamesListItems'
 import type { Game } from '@/lib/types/game'
+import type { ColumnDef } from '@tanstack/react-table'
 
-export const columns: Array<ColumnDef<Omit<Game, 'season'>>> = [
+export const columns: Array<
+  ColumnDef<Omit<Game, 'season'>>
+> = [
   {
     accessorKey: 'home.casualName',
 
     cell: ({ row }) => (
-      <div className="xs:text-[10px] w-16 truncate text-left text-[8px] sm:w-24 sm:text-xs lg:text-sm xl:w-32 xl:text-base">
+      <div className="ml-2 @md:ml-4 @xs:w-16 w-8 text-left @xl:w-28 @5xl:w-32">
         {row.getValue('home_casualName')}
       </div>
     ),
@@ -15,17 +18,16 @@ export const columns: Array<ColumnDef<Omit<Game, 'season'>>> = [
     accessorKey: 'game_id',
 
     cell: () => (
-      <div className="xs:text-[10px] w-4 text-center text-[8px] tabular-nums sm:text-xs lg:text-sm xl:text-base">
+      <div className="w-4">
         <span>-</span>
       </div>
     ),
-    maxSize: 16,
   },
   {
     accessorKey: 'away.casualName',
 
     cell: ({ row }) => (
-      <div className="xs:text-[10px] w-16 truncate text-left text-[8px] sm:w-24 sm:text-xs lg:text-sm xl:w-32 xl:text-base">
+      <div className="@xs:w-16 w-8 text-left @xl:w-28 @5xl:w-32">
         {row.getValue('away_casualName')}
       </div>
     ),
@@ -34,9 +36,7 @@ export const columns: Array<ColumnDef<Omit<Game, 'season'>>> = [
     accessorKey: 'result',
 
     cell: ({ row }) => (
-      <div className="xs:text-[10px] w-12 text-center text-[8px] tabular-nums sm:text-xs lg:text-sm xl:text-base">
-        {row.getValue('result')}
-      </div>
+      <Result>{row.getValue('result')}</Result>
     ),
   },
 ]

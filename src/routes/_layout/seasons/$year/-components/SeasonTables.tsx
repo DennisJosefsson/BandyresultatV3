@@ -1,15 +1,15 @@
-import TableList from './Tables/TableList'
-import SeasonTablesButtonList from './Tables/SeasonTablesButtonList'
 import MobileTableList from './Tables/MobileTableList'
+import SeasonTablesButtonList from './Tables/SeasonTablesButtonList'
+import TableList from './Tables/TableList'
 
 const SeasonTables = () => {
   return (
-    <div>
+    <div className="@container/tables">
       <SeasonTablesButtonList />
-      <div className="hidden sm:block">
+      <div className="hidden @md/tables:block">
         <TableList />
       </div>
-      <div className="sm:hidden">
+      <div className="@md/tables:hidden">
         <MobileTableList />
       </div>
     </div>

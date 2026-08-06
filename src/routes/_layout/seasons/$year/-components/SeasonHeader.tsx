@@ -23,7 +23,7 @@ const SeasonHeader = () => {
         }}
       >
         <Button
-          variant="outline"
+          variant="ghost"
           size="icon"
           className="size-3 lg:size-6"
           aria-label="Gå till föregående säsong"
@@ -44,7 +44,7 @@ const SeasonHeader = () => {
         }}
       >
         <Button
-          variant="outline"
+          variant="ghost"
           size="icon"
           className="size-3 lg:size-6"
           aria-label="Gå till nästa säsong"

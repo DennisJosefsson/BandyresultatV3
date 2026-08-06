@@ -28,7 +28,7 @@ const TableList = ({ tableArray }: TableListProps) => {
         return (
           <div
             key={group.group}
-            className="mb-6"
+            className="mb-6 @container/teamseasontable"
           >
             <div
               id={group.group}
@@ -39,7 +39,7 @@ const TableList = ({ tableArray }: TableListProps) => {
               </h3>
             </div>
 
-            <div className="hidden flex-col gap-2 sm:flex">
+            <div className="hidden flex-col gap-2 @lg:flex">
               <DataTable
                 data={group.tables}
                 serieStructure={group.serieStructure}
@@ -48,7 +48,7 @@ const TableList = ({ tableArray }: TableListProps) => {
                 <Comment comment={group.comment} />
               ) : null}
             </div>
-            <div className="flex flex-col gap-2 sm:hidden">
+            <div className="flex flex-col gap-2 @lg:hidden">
               <MobileDataTable
                 data={group.tables}
                 serieStructure={group.serieStructure}

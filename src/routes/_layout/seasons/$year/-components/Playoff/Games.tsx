@@ -9,7 +9,7 @@ type GamesProps = {
 const Games = ({ games, title }: GamesProps) => {
   return (
     <div>
-      <h1 className="text-primary text-xs font-semibold tracking-wider md:text-base xl:text-lg 2xl:text-xl">
+      <h1 className="text-primary text-xs font-semibold tracking-wider @md/playoff:text-sm @xl/playoff:text-base">
         {title}
       </h1>
       <div className="w-full xl:px-2">

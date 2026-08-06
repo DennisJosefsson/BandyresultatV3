@@ -4,6 +4,8 @@ import type { T as SortGames } from '@/lib/cookieFunctions/sortGames'
 import { setSortGamesServerFn } from '@/lib/cookieFunctions/sortGames'
 import type { T as SortPlayedGames } from '@/lib/cookieFunctions/sortPlayedGames'
 import { setSortPlayedGamesServerFn } from '@/lib/cookieFunctions/sortPlayedGames'
+import type { T as SortPlayoffGames } from '@/lib/cookieFunctions/sortPlayoffGames'
+import { setSortPlayoffGamesServerFn } from '@/lib/cookieFunctions/sortPlayoffGames'
 import type { T as SortUnplayedGames } from '@/lib/cookieFunctions/sortUnplayedGames'
 import { setSortUnplayedGamesServerFn } from '@/lib/cookieFunctions/sortUnplayedGames'
 import { useRouter } from '@tanstack/react-router'
@@ -16,6 +18,11 @@ type CookieContext = {
   sortGames: SortGames
   setSortGames: (
     val: SortGames,
+    route: RoutesToInvalidate,
+  ) => void
+  sortPlayoffGames: SortPlayoffGames
+  setSortPlayoffGames: (
+    val: SortPlayoffGames,
     route: RoutesToInvalidate,
   ) => void
   sortPlayedGames: SortPlayedGames
@@ -32,6 +39,7 @@ type CookieContext = {
 type Props = PropsWithChildren<{
   favTeams: FavTeam
   sortGames: SortGames
+  sortPlayoffGames: SortPlayoffGames
   sortPlayedGames: SortPlayedGames
   sortUnplayedGames: SortUnplayedGames
 }>
@@ -48,6 +56,7 @@ export function CookieProvider({
   children,
   favTeams,
   sortGames,
+  sortPlayoffGames,
   sortPlayedGames,
   sortUnplayedGames,
 }: Props) {
@@ -64,6 +73,17 @@ export function CookieProvider({
     route: RoutesToInvalidate,
   ) {
     setSortGamesServerFn({ data: val }).then(() =>
+      router.invalidate({
+        filter: (r) => r.routeId === route,
+      }),
+    )
+  }
+
+  function setSortPlayoffGames(
+    val: SortGames,
+    route: RoutesToInvalidate,
+  ) {
+    setSortPlayoffGamesServerFn({ data: val }).then(() =>
       router.invalidate({
         filter: (r) => r.routeId === route,
       }),
@@ -99,6 +119,8 @@ export function CookieProvider({
         setFavTeams,
         sortGames,
         setSortGames,
+        sortPlayoffGames,
+        setSortPlayoffGames,
         sortPlayedGames,
         setSortPlayedGames,
         sortUnplayedGames,

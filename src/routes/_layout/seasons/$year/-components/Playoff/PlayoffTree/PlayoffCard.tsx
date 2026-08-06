@@ -28,7 +28,7 @@ const PlayoffCard = ({
     return (
       <Card
         size="sm"
-        className="shadow-lg"
+        className="shadow-lg text-xs @2xs/playoff:text-sm @2xl/playoff:text-xs @4xl/playoff:text-sm data-[size=sm]:py-1.5 data-[size=sm]:@4xl/playoff:py-2"
       >
         {children}
       </Card>
@@ -38,7 +38,10 @@ const PlayoffCard = ({
   return (
     <Card
       size="sm"
-      className={cn('shadow-lg', className)}
+      className={cn(
+        'shadow-lg text-xs @2xs/playoff:text-sm @2xl/playoff:text-xs @4xl/playoff:text-sm data-[size=sm]:py-1.5 data-[size=sm]:@4xl/playoff:py-2',
+        className,
+      )}
     >
       <div>{children}</div>
     </Card>
@@ -49,7 +52,7 @@ function Title({ children }: { children: ReactNode }) {
   return (
     <CardHeader>
       <CardTitle>
-        <div className="flex flex-row justify-between text-sm xl:text-base">
+        <div className="flex flex-row justify-between text-xs @2xs/playoff:text-sm @2xl/playoff:text-xs @4xl/playoff:text-sm">
           {children}
         </div>
       </CardTitle>
@@ -71,7 +74,7 @@ function Result({ children }: { children: ReactNode }) {
 
 function Content({ children }: { children: ReactNode }) {
   return (
-    <CardContent className="flex flex-col gap-2 text-sm">
+    <CardContent className="flex flex-col gap-2 group-data-[size=sm]/card:p-1 text-xs @2xs/playoff:text-sm @2xl/playoff:text-xs @4xl/playoff:text-sm group-data-[size=sm]/card:@2xl/playoff:p-2">
       {children}
     </CardContent>
   )
@@ -91,7 +94,7 @@ function Team({ teamId, children }: TeamProps) {
       data-favteam={
         favTeams.includes(teamId) ? true : false
       }
-      className="items center flex flex-row gap-2 p-0.5 data-[favteam=true]:font-semibold sm:gap-2"
+      className="items center flex flex-row gap-2 p-0.5 text-xs @2xs/playoff:text-sm @2xl/playoff:text-xs @4xl/playoff:text-sm data-[favteam=true]:font-semibold sm:gap-2"
     >
       {children}
     </span>

@@ -15,7 +15,7 @@ const DevelopmentGamesList = () => {
 
   return (
     <div>
-      <div className="xs:text-[10px] mt-2 ml-1.5 text-[8px] sm:ml-2 sm:text-xs lg:text-sm xl:text-base">
+      <div className="text-[10px] font-semibold tracking-wide @sm/dev:text-xs @3xl/dev:text-sm mt-2 ml-1.5 @xl/dev:ml-2">
         <Datum>{data.games[index]?.date}</Datum>
       </div>
       <GamesDataTable
