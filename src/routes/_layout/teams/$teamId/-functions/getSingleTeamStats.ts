@@ -1,11 +1,19 @@
-import { createServerFn } from '@tanstack/react-start'
-import type { SingleTeam, TeamPlayoffStreak, TeamStatItem, TeamStreak } from '@/lib/types/team'
-import { zd } from '@/lib/utils/zod'
-import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import { catchError } from '@/lib/middlewares/errors/catchError'
-import { getStatsCounts, getTeam } from './singleTeamQueries'
-import { getStreaks } from './getStreaks'
+import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
+import type {
+  SingleTeam,
+  TeamPlayoffStreak,
+  TeamStatItem,
+  TeamStreak,
+} from '@/lib/types/team'
+import { zd } from '@/lib/utils/zod'
+import { createServerFn } from '@tanstack/react-start'
 import { getStats } from './getStats'
+import { getStreaks } from './getStreaks'
+import {
+  getStatsCounts,
+  getTeam,
+} from './singleTeamQueries'
 
 type TablesResponse =
   | {
@@ -67,37 +75,42 @@ export const getSingleTeamStats = createServerFn({
     zd
       .number('Lag-id måste vara en siffra.')
       .int('Lag-id måste vara ett heltal.')
-      .positive('Lag-id får ej vara ett minustal eller noll.'),
+      .positive(
+        'Lag-id får ej vara ett minustal eller noll.',
+      ),
   )
   .middleware([errorMiddleware])
-  .handler(async ({ data: teamId }): Promise<TablesResponse> => {
-    try {
-      const start = performance.now()
-      const team = await getTeam(teamId)
-      if (!team) {
-        return {
-          status: 404,
-          message: 'Laget finns inte.',
+  .handler(
+    async ({ data: teamId }): Promise<TablesResponse> => {
+      try {
+        const start = performance.now()
+        const team = await getTeam(teamId)
+        if (!team) {
+          return {
+            status: 404,
+            message: 'Laget finns inte.',
+          }
         }
+
+        const statCounts = await getStatsCounts({ team })
+
+        const streaks = await getStreaks({
+          teamId,
+        })
+
+        const stats = await getStats({ teamId })
+        const end = performance.now()
+
+        return {
+          status: 200,
+          statCounts,
+          stats,
+          streaks,
+          team,
+          executionTime: end - start,
+        }
+      } catch (error) {
+        catchError(error)
       }
-
-      const statCounts = await getStatsCounts({ team })
-
-      const streaks = await getStreaks({
-        teamId,
-      })
-
-      const stats = await getStats({ teamId })
-      const end = performance.now()
-      return {
-        status: 200,
-        statCounts,
-        stats,
-        streaks,
-        team,
-        executionTime: end - start,
-      }
-    } catch (error) {
-      catchError(error)
-    }
-  })
+    },
+  )
