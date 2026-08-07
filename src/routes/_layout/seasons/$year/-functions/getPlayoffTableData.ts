@@ -91,7 +91,7 @@ export const getPlayoffTableData = async ({
             'total_goal_difference',
           ) as unknown as SQL<number>,
         totalWins:
-          sql<number>`cast(count(*) filter (where win) as int)`.as(
+          sql<number>`cast(count(*) filter (where win or ot_win) as int)`.as(
             'totalWins',
           ),
         totalDraws:
@@ -99,7 +99,7 @@ export const getPlayoffTableData = async ({
             'totalDraws',
           ),
         totalLost:
-          sql<number>`cast(count(*) filter (where lost) as int)`.as(
+          sql<number>`cast(count(*) filter (where lost or ot_lost) as int)`.as(
             'totalLost',
           ),
         awayGoals:
