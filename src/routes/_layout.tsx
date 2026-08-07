@@ -23,7 +23,7 @@ function RouteComponent() {
         <div className="flex flex-1">
           <AppSidebar />
           <SidebarInset className="size-full lg:peer-data-[state=collapsed]:max-w-[calc(100vw-var(--sidebar-width-icon))] lg:peer-data-[state=expanded]:max-w-[calc(100vw-var(--sidebar-width))]">
-            <div className="bg-main-background mx-0 min-h-screen p-0.5 sm:p-1 md:mx-2 lg:p-2">
+            <div className="bg-main-background mx-0 min-h-screen p-0.5 sm:p-1 md:ml-2 lg:p-2">
               <CatchBoundary
                 getResetKey={() => 'reset'}
                 onCatch={(error) => {

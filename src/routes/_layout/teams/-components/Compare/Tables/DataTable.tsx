@@ -30,7 +30,7 @@ const DataTable = <TData, TValue>({
 
   return (
     <div className="border p-1 shadow-xs md:shadow-sm">
-      <Table>
+      <Table className="text-[8px] @xs:text-[10px] @sm:text-xs @2xl:text-sm/6">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>

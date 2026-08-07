@@ -38,18 +38,18 @@ const Streaks = () => {
 
         <div>
           <H3>Inofficiella Svenska Mästare</H3>
-          <div className="mb-2 max-w-105 border shadow-xs md:shadow-sm">
+          <div className="mb-2 @3xl:mb-4 max-w-65 @xs:max-w-70 @2xl:max-w-90 @7xl:max-w-105  border shadow-xs md:shadow-sm">
             {data.currInoffChamps.games.map(
               (team, index) => {
                 return (
                   <div
-                    className="mb-1 flex max-w-100 flex-row items-center justify-between p-1 text-[8px] msm:text-[10px] md:mb-2 md:p-2 md:text-sm"
+                    className="text-[8px] @xs:text-[10px] @sm:text-xs @2xl:text-sm/6 flex w-full flex-row items-center justify-between p-1 md:p-2 border-b border-accent last:border-none"
                     key={`${team.team.name}-${Math.random()}`}
                   >
-                    <span className="mr-2 msm:mr-4 w-6 msm:w-8 text-right text-base font-bold tabular-nums md:text-2xl">
+                    <span className="mr-2 @lg:mr-4 w-4 @sm:w-6 @lg:w-8 text-right text-sm @xs:text-base font-bold tabular-nums @md:text-2xl">
                       {index + 1}
                     </span>
-                    <div className="mr-4 flex grow flex-col">
+                    <div className="mr-2 @sm:mr-4 flex grow flex-col">
                       <div className="flex flex-row justify-between">
                         <span className="truncate font-semibold">
                           {team.team.name}
@@ -60,7 +60,7 @@ const Streaks = () => {
                       </div>
                       <div className="flex flex-row items-center justify-between">
                         <div>
-                          <span className="w-48 sm:w-64">
+                          <span>
                             <Datum>{team.date}</Datum>
                           </span>
                         </div>
@@ -76,7 +76,7 @@ const Streaks = () => {
             )}
           </div>
           <div>
-            <p className="w-73 p-1 text-xs font-bold md:w-88">
+            <p className="p-1 text-[8px] @xs:text-[10px] @sm:text-xs @2xl:text-sm/6">
               Totalt {data.currInoffChamps.count}{' '}
               <a
                 href="https://sv.wikipedia.org/wiki/Inofficiella_v%C3%A4rldsm%C3%A4sterskapet_i_fotboll"

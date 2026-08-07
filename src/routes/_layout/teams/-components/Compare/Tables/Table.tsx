@@ -44,10 +44,10 @@ const CompareTables = () => {
       data
     return (
       <div className="flex flex-col gap-2">
-        <h3 className="font-semibold text-xs sm:text-sm xl:text-base">
+        <h3 className="font-semibold text-[8px] @xs:text-[10px] @sm:text-xs @2xl:text-sm/6">
           Alla matcher
         </h3>
-        <span className="text-[8px] xs:text-[10px] sm:text-xs xl:text-sm">
+        <span className="text-[8px] @xs:text-[10px] @sm:text-xs @2xl:text-sm/6">
           Tabeller för {homeTeam.casualName} med{' '}
           {awayTeam.casualName} som motståndare.
         </span>
@@ -65,7 +65,7 @@ const CompareTables = () => {
         </div>
         <div>
           <div className="mb-4 xs:mb-6">
-            <div className="xs:block hidden w-fpy-2 sm:w-120 xl:w-full xl:max-w-160">
+            <div className="xs:block hidden w-full py-2 sm:w-120 xl:w-full xl:max-w-160">
               <DataTable
                 columns={columns}
                 data={allData}
@@ -80,7 +80,7 @@ const CompareTables = () => {
               />
             </div>
           </div>
-          <h3 className="font-semibold text-xs sm:text-sm xl:text-base">
+          <h3 className="font-semibold text-[8px] @xs:text-[10px] @sm:text-xs @2xl:text-sm/6">
             Tabeller per division och serie
           </h3>
           {categoryData.map((level) => {
@@ -90,7 +90,7 @@ const CompareTables = () => {
                 className="mb-4"
               >
                 <div>
-                  <h5 className="text-[8px] xs:text-[10px] font-semibold sm:text-xs xl:text-sm">
+                  <h5 className="text-[8px] @xs:text-[10px] @sm:text-xs @2xl:text-sm/6">
                     {level.levelName}
                   </h5>
                 </div>
@@ -98,7 +98,7 @@ const CompareTables = () => {
                   {level.tables.map((table) => {
                     return (
                       <div key={table.category}>
-                        <h6 className="text-[8px] xs:text-[10px] font-semibold sm:text-xs xl:text-sm">
+                        <h6 className="text-[8px] @xs:text-[10px] @sm:text-xs @2xl:text-sm/6">
                           {table.categoryName}
                         </h6>
                         <div className="xs:block hidden w-full py-2 sm:w-120 xl:w-full xl:max-w-160">

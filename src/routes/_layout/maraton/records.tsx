@@ -1,7 +1,13 @@
-import { CatchBoundary, Outlet, createFileRoute } from '@tanstack/react-router'
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
+import {
+  CatchBoundary,
+  Outlet,
+  createFileRoute,
+} from '@tanstack/react-router'
 
-export const Route = createFileRoute('/_layout/maraton/records')({
+export const Route = createFileRoute(
+  '/_layout/maraton/records',
+)({
   beforeLoad: () => {
     return { sidebarSection: 'maraton' }
   },
@@ -13,11 +19,13 @@ export const Route = createFileRoute('/_layout/maraton/records')({
       },
       {
         name: 'description',
-        content: 'Rekord för Elitserien i bandy, damer och herrar.',
+        content:
+          'Rekord för Elitserien i bandy, damer och herrar.',
       },
       {
         property: 'og:description',
-        content: 'Rekord för Elitserien i bandy, damer och herrar.',
+        content:
+          'Rekord för Elitserien i bandy, damer och herrar.',
       },
       {
         property: 'og:title',
@@ -29,7 +37,8 @@ export const Route = createFileRoute('/_layout/maraton/records')({
       },
       {
         property: 'og:url',
-        content: 'https://www.bandyresultat.se/maraton/records',
+        content:
+          'https://www.bandyresultat.se/maraton/records',
       },
       {
         property: 'og:image',
@@ -49,10 +58,14 @@ function RouteComponent() {
         console.error(error)
       }}
       errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent id="records" error={error} reset={reset} />
+        <SimpleErrorComponent
+          id="records"
+          error={error}
+          reset={reset}
+        />
       )}
     >
-      <div className="xs:p-2 p-1 sm:p-3">
+      <div className="xs:p-2 p-1 sm:p-3 @container/records">
         <Outlet />
       </div>
     </CatchBoundary>
