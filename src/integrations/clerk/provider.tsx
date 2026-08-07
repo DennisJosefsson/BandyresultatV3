@@ -1,21 +1,28 @@
-import { dark, shadcn } from '@clerk/ui/themes'
-import { ClerkProvider } from '@clerk/react'
-import { svSE } from '@clerk/localizations'
 import { clientEnv } from '@/lib/env/clientEnv'
+import { svSE } from '@clerk/localizations'
+import { ClerkProvider } from '@clerk/react'
+import { shadesOfPurple } from '@clerk/ui/themes'
+// import '@clerk/ui/themes/shadcn.css'
 
 const PUBLISHABLE_KEY = clientEnv.VITE_CLERK_PUBLISHABLE_KEY
 if (!PUBLISHABLE_KEY) {
-  throw new Error('Add your Clerk Publishable Key to the .env.local file')
+  throw new Error(
+    'Add your Clerk Publishable Key to the .env.local file',
+  )
 }
 
-export default function AppClerkProvider({ children }: { children: React.ReactNode }) {
+export default function AppClerkProvider({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
     <ClerkProvider
       publishableKey={PUBLISHABLE_KEY}
       afterSignOutUrl="/"
       appearance={{
         cssLayerName: 'clerk',
-        theme: [dark, shadcn],
+        theme: shadesOfPurple,
         elements: {
           userButtonAvatarBox: {
             width: '1.125rem',

@@ -3,9 +3,9 @@
 
 @import 'tailwindcss';
 @import 'tw-animate-css';
-@import '@clerk/ui/themes/shadcn.css';
+/* @import '@clerk/ui/themes/shadcn.css'; */
 @plugin '@tailwindcss/typography';
-@layer clerk;
+/* @layer clerk; */
 @custom-variant dark (&:is(.dark *));
 
 body {
@@ -147,7 +147,7 @@ code {
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply font-sans bg-background text-foreground;
   }
   html {
     @apply font-sans;
