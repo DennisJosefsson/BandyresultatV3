@@ -1,4 +1,5 @@
 import { Button } from '@/components/base/ui/button'
+import { clientEnv } from '@/lib/env/clientEnv'
 import {
   getRouteApi,
   useLocation,
@@ -11,9 +12,11 @@ const Buttons = ({ length }: { length: number }) => {
 
   const navigate = useNavigate()
 
-  const copyLink = useLocation({
+  const href = useLocation({
     select: (location) => location.href,
   })
+
+  const copyLink = clientEnv.VITE_SITE_PROD_URL + href
 
   const origin = useLocation().state.origin
   const goBack = () => {
@@ -60,7 +63,7 @@ const CompareHeader = () => {
         {allData.length === 0 && (
           <div>
             <div className="flex flex-row items-center justify-between">
-              <span className="mb-2 text-foreground text-[10px] md:text-sm xl:text-base 2xl:text-lg">
+              <span className="mb-2 text-foreground text-[8px] @xs:text-[10px] @sm:text-xs @2xl:text-sm/6">
                 {compareHeaderText}
               </span>
 
@@ -72,13 +75,13 @@ const CompareHeader = () => {
           <div>
             <div className="w-full">
               <div className="flex flex-row items-center justify-between">
-                <span className="mb-2 text-xs font-semibold sm:text-sm md:text-base xl:text-lg 2xl:text-xl">
+                <span className="mb-2 text-xs font-semibold text-[8px] @xs:text-[10px] @sm:text-xs @2xl:text-sm/6">
                   Inbördes möten
                 </span>
                 <Buttons length={allData.length} />
               </div>
 
-              <span className="text-foreground text-[10px] md:text-sm xl:text-base 2xl:text-lg">
+              <span className="text-foreground text-[8px] @xs:text-[10px] @sm:text-xs @2xl:text-sm/6">
                 {compareHeaderText}
               </span>
             </div>
