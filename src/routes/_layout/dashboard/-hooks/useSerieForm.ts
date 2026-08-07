@@ -1,14 +1,22 @@
-import { toast } from 'sonner'
-import { useNavigate, useRouter, useSearch } from '@tanstack/react-router'
-import { useMutation } from '@tanstack/react-query'
-import { useForm } from '@tanstack/react-form'
-import type { zd } from '@/lib/utils/zod'
 import { newSeriesObject } from '@/lib/types/serie'
+import type { zd } from '@/lib/utils/zod'
+import { useForm } from '@tanstack/react-form'
+import { useMutation } from '@tanstack/react-query'
+import {
+  useNavigate,
+  useRouter,
+  useSearch,
+} from '@tanstack/react-router'
+import { toast } from 'sonner'
 import { newSerieInput } from '../-functions/SerieFunctions/newSerie'
 
 type Data = Awaited<ReturnType<typeof newSerieInput>>
 
-export const useNewSerieForm = ({ seasonId }: { seasonId: number }) => {
+export const useNewSerieForm = ({
+  seasonId,
+}: {
+  seasonId: number
+}) => {
   const router = useRouter()
   const navigate = useNavigate({
     from: '/dashboard/season/$seasonId/info/newSerie',
@@ -30,7 +38,8 @@ export const useNewSerieForm = ({ seasonId }: { seasonId: number }) => {
     serieName: '',
     serieStructure: [],
     comment: '',
-    level: 1,
+    level: 200,
+    division: 1,
     hasMix: false,
     hasParent: false,
     allParentGames: false,
@@ -42,7 +51,8 @@ export const useNewSerieForm = ({ seasonId }: { seasonId: number }) => {
       onSubmit: newSeriesObject,
     },
     defaultValues: { ...defaultValues },
-    onSubmit: ({ value }) => mutation.mutateAsync({ data: value }),
+    onSubmit: ({ value }) =>
+      mutation.mutateAsync({ data: value }),
   })
 
   const onMutationSuccess = (data: Data) => {
@@ -51,7 +61,9 @@ export const useNewSerieForm = ({ seasonId }: { seasonId: number }) => {
     } else {
       toast.success(data.message)
       router.invalidate({
-        filter: (route) => route.routeId === '/_layout/dashboard/season/$seasonId',
+        filter: (route) =>
+          route.routeId ===
+          '/_layout/dashboard/season/$seasonId',
       })
       navigate({
         to: '/dashboard/season/$seasonId/info/$serieId/edit',

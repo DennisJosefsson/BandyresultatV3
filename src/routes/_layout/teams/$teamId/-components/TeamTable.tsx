@@ -53,19 +53,19 @@ const TeamTable = () => {
         </Button>
       </div>
       <div>
-        {data.tables.map((level) => {
+        {data.tables.map((division) => {
           return (
             <div
-              key={level.level}
+              key={division.division}
               className="mb-2"
             >
               <div className="mb-2">
                 <span className="text-[10px] font-semibold md:text-sm">
-                  {level.levelName}
+                  {division.divisionName}
                 </span>
               </div>
               <div>
-                {level.tables.map((table) => {
+                {division.tables.map((table) => {
                   return (
                     <div
                       key={table.category}

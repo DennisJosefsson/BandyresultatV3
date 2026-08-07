@@ -111,7 +111,7 @@ export type SingleTeamTableItem = {
   totalGoalDifference: number
   totalPoints: number
   serie: {
-    level: number
+    division: number
   }
 }
 
@@ -125,14 +125,14 @@ export const singleTeamTableItem = zd.object({
   totalLost: zd.coerce.number(),
   totalPoints: zd.coerce.number(),
   totalWins: zd.coerce.number(),
-  serie: zd.object({ level: zd.number() }),
+  serie: zd.object({ division: zd.number() }),
 })
 
 export const singleTeamTable = zd.array(singleTeamTableItem)
 
 export type SingleTeamTables = Array<{
-  level: string
-  levelName: string
+  division: string
+  divisionName: string
   tables: Array<{
     category: string
     categoryName: string

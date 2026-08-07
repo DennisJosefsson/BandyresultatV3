@@ -83,19 +83,19 @@ const CompareTables = () => {
           <h3 className="font-semibold text-[8px] @xs:text-[10px] @sm:text-xs @2xl:text-sm/6">
             Tabeller per division och serie
           </h3>
-          {categoryData.map((level) => {
+          {categoryData.map((division) => {
             return (
               <div
-                key={level.level}
+                key={division.division}
                 className="mb-4"
               >
                 <div>
                   <h5 className="text-[8px] @xs:text-[10px] @sm:text-xs @2xl:text-sm/6">
-                    {level.levelName}
+                    {division.divisionName}
                   </h5>
                 </div>
                 <div>
-                  {level.tables.map((table) => {
+                  {division.tables.map((table) => {
                     return (
                       <div key={table.category}>
                         <h6 className="text-[8px] @xs:text-[10px] @sm:text-xs @2xl:text-sm/6">

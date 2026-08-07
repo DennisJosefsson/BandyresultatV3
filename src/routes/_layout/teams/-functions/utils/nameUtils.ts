@@ -17,14 +17,14 @@ const categoryNames: CategoryName = {
   qualification: 'Kvalserie',
 }
 
-export function getLevelName(level: string) {
+export function getDivisionName(level: string) {
   const levelNum = Number(level)
-  if (levelNum < 300) return 'Högsta divisionen'
-  if (levelNum > 999) return 'Svenska Cupen'
-  if (levelNum < 400) return 'Näst högsta divisionen'
-  if (levelNum > 1100) return 'Allsvensk cup'
-  if (levelNum < 500) return 'Tredje divisionen'
-  if (levelNum < 600) return 'Fjärde divisionen'
+  if (levelNum <= 1.5) return 'Högsta divisionen'
+  if (levelNum <= 2.5) return 'Näst högsta divisionen'
+  if (levelNum < 4) return 'Tredje divisionen'
+  if (levelNum < 5) return 'Fjärde divisionen'
+  if (levelNum === 10) return 'Svenska Cupen'
+  if (levelNum === 11) return 'Allsvensk cup'
   return 'Lägsta divisionen'
 }
 

@@ -19,7 +19,7 @@ import {
   getCatTables,
   getCompareStats,
 } from './utils/compareQueries'
-import { compareSortLevelFunction } from './utils/compareSortFunctions'
+import { compareSortDivisionFunction } from './utils/compareSortFunctions'
 import getCompareHeaderText from './utils/getCompareHeaderText'
 
 type CompareReturn =
@@ -154,7 +154,7 @@ export const getCompareTeams = createServerFn({
       }
 
       const categoryData =
-        compareSortLevelFunction(catTables)
+        compareSortDivisionFunction(catTables)
 
       const allData = await getAllGamesTables({
         homeTeamId: compareHomeTeam.teamId,

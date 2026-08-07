@@ -17,10 +17,15 @@ export const newSeriesObject = zd.object({
   seasonId: zd.number().int().positive(),
   group: zd.string().min(2, 'Måste ange en gruppkod.'),
   category: categoryEnum,
-  serieName: zd.string().min(5, 'Måste ange ett gruppnamn.'),
-  serieStructure: zd.array(zd.number().int().positive()).optional(),
+  serieName: zd
+    .string()
+    .min(5, 'Måste ange ett gruppnamn.'),
+  serieStructure: zd
+    .array(zd.number().int().positive())
+    .optional(),
   comment: zd.string().optional(),
   level: zd.number().positive(),
+  division: zd.number().positive(),
   hasMix: zd.boolean().default(false).optional(),
   hasStatic: zd.boolean().default(false).optional(),
   hasParent: zd.boolean().default(false).optional(),
@@ -33,8 +38,12 @@ export const editSeriesObject = zd.object({
   seasonId: zd.number().int().positive(),
   group: zd.string().min(2, 'Måste ange en gruppkod.'),
   category: categoryEnum,
-  serieName: zd.string().min(5, 'Måste ange ett gruppnamn.'),
-  serieStructure: zd.array(zd.number().int().positive()).optional(),
+  serieName: zd
+    .string()
+    .min(5, 'Måste ange ett gruppnamn.'),
+  serieStructure: zd
+    .array(zd.number().int().positive())
+    .optional(),
   comment: zd.string().optional(),
   level: zd.number().positive(),
   hasMix: zd.boolean().default(false).optional(),
@@ -68,9 +77,17 @@ export const editTeamSeriesArray = zd.object({
   teamserie: zd.array(editTeamSeriesObject),
 })
 
-export type SerieData = Pick<Serie, 'category' | 'group' | 'comment' | 'serieName' | 'level'>
+export type SerieData = Pick<
+  Serie,
+  'category' | 'group' | 'comment' | 'serieName' | 'level'
+>
 
 export type SerieDataWithSerieStructure = Pick<
   Serie,
-  'category' | 'group' | 'comment' | 'serieName' | 'level' | 'serieStructure'
+  | 'category'
+  | 'group'
+  | 'comment'
+  | 'serieName'
+  | 'level'
+  | 'serieStructure'
 >

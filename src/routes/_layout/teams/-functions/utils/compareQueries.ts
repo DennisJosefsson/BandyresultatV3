@@ -66,8 +66,8 @@ export const getCatTables = ({
           'totalLost',
         ),
       serie: {
-        level: s1.level,
-      } as unknown as SQL<{ level: number }>,
+        division: s1.division,
+      } as unknown as SQL<{ division: number }>,
     })
     .from(teamgames)
     .leftJoin(s1, eq(teamgames.serieId, s1.serieId))
@@ -78,7 +78,7 @@ export const getCatTables = ({
         eq(teamgames.played, true),
       ),
     )
-    .groupBy(s1.level, teamgames.category)
+    .groupBy(s1.division, teamgames.category)
 
 export const getAllGamesTables = ({
   homeTeamId,

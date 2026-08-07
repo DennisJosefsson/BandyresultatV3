@@ -14,7 +14,7 @@ export type CompareBaseTable = {
 export type CompareCatTableRow = CompareBaseTable & {
   category: string
   serie: {
-    level: number
+    division: number
   }
 }
 
@@ -24,8 +24,8 @@ export type CompareAllTableRow = CompareBaseTable & {
 }
 
 export type CompareCategoryData = Array<{
-  level: string
-  levelName: string
+  division: string
+  divisionName: string
   tables: Array<{
     category: string
     categoryName: string

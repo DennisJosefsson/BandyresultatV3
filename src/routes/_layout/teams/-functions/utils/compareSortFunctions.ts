@@ -2,7 +2,10 @@ import type {
   CompareBaseTable,
   CompareCatTableRow,
 } from '@/lib/types/compare'
-import { getCategoryName, getLevelName } from './nameUtils'
+import {
+  getCategoryName,
+  getDivisionName,
+} from './nameUtils'
 
 type SortedCompareCategoryTables = {
   [key: string]: Array<CompareCatTableRow>
@@ -12,29 +15,32 @@ type SortedTables = {
   [key: string]: Array<CompareBaseTable>
 }
 
-export const compareSortLevelFunction = (
+export const compareSortDivisionFunction = (
   gamesArray: Array<CompareCatTableRow>,
 ) => {
-  const sortLevels = gamesArray.reduce((levels, table) => {
-    if (!levels[table.serie.level]) {
-      levels[table.serie.level] = []
-    }
-    levels[table.serie.level].push(table)
-    return levels
-  }, {} as SortedCompareCategoryTables)
+  const sortDivisions = gamesArray.reduce(
+    (divisions, table) => {
+      if (!divisions[table.serie.division]) {
+        divisions[table.serie.division] = []
+      }
+      divisions[table.serie.division].push(table)
+      return divisions
+    },
+    {} as SortedCompareCategoryTables,
+  )
 
-  const sortedLevels = Object.keys(sortLevels).map(
-    (level) => {
+  const sortedDivisions = Object.keys(sortDivisions).map(
+    (division) => {
       return {
-        level,
-        categories: sortLevels[level],
+        division,
+        categories: sortDivisions[division],
       }
     },
   )
 
-  const sortLevelsAndTables = sortedLevels.map(
-    (levelObject) => {
-      const sortCats = levelObject.categories.reduce(
+  const sortDivisionsAndTables = sortedDivisions.map(
+    (divisionObject) => {
+      const sortCats = divisionObject.categories.reduce(
         (category, table) => {
           if (!category[table.category]) {
             category[table.category] = []
@@ -55,15 +61,17 @@ export const compareSortLevelFunction = (
         },
       )
       return {
-        level: levelObject['level'],
-        levelName: getLevelName(levelObject['level']),
+        division: divisionObject['division'],
+        divisionName: getDivisionName(
+          divisionObject['division'],
+        ),
         tables: sortedTables,
       }
     },
   )
 
-  return sortLevelsAndTables.sort(
-    (a, b) => parseInt(a.level) - parseInt(b.level),
+  return sortDivisionsAndTables.sort(
+    (a, b) => parseInt(a.division) - parseInt(b.division),
   )
 }
 

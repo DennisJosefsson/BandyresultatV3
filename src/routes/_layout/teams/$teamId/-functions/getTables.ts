@@ -9,6 +9,7 @@ import type { zd } from '@/lib/utils/zod'
 import type { SQL } from 'drizzle-orm'
 import {
   and,
+  asc,
   count,
   desc,
   eq,
@@ -16,7 +17,7 @@ import {
   sql,
   sum,
 } from 'drizzle-orm'
-import { getLevelName } from '../../-functions/utils/nameUtils'
+import { getDivisionName } from '../../-functions/utils/nameUtils'
 
 export const getTables = async ({
   teamId,
@@ -60,8 +61,12 @@ export const getTables = async ({
           'totalLost',
         ),
       serie: {
+        division: series.division,
         level: series.level,
-      } as unknown as SQL<{ level: number }>,
+      } as unknown as SQL<{
+        division: number
+        level: number
+      }>,
     })
     .from(teamgames)
     .leftJoin(series, eq(teamgames.serieId, series.serieId))
@@ -71,9 +76,13 @@ export const getTables = async ({
         eq(teamgames.played, true),
       ),
     )
-    .groupBy(series.level, teamgames.category)
+    .groupBy(
+      series.division,
+      teamgames.category,
+      series.level,
+    )
     .orderBy(
-      desc(teamgames.category),
+      asc(series.level),
       desc(sql`total_points`),
       desc(sql`total_goal_difference`),
       desc(sql`total_goals_scored`),
@@ -101,8 +110,12 @@ export const getTables = async ({
       totalGoalDifference: tables.goalDifference,
       totalPoints: tables.points,
       serie: {
+        division: series.division,
         level: series.level,
-      } as unknown as SQL<{ level: number }>,
+      } as unknown as SQL<{
+        division: number
+        level: number
+      }>,
     })
     .from(tables)
     .leftJoin(series, eq(series.serieId, tables.serieId))
@@ -127,26 +140,29 @@ type SortedTables = {
 function sortTables(
   tableArray: zd.infer<typeof singleTeamTable>,
 ) {
-  const sortLevels = tableArray.reduce((levels, table) => {
-    if (!levels[table.serie.level]) {
-      levels[table.serie.level] = []
-    }
-    levels[table.serie.level].push(table)
-    return levels
-  }, {} as SortedCompareCategoryTables)
+  const sortDivisions = tableArray.reduce(
+    (divisions, table) => {
+      if (!divisions[table.serie.division]) {
+        divisions[table.serie.division] = []
+      }
+      divisions[table.serie.division].push(table)
+      return divisions
+    },
+    {} as SortedCompareCategoryTables,
+  )
 
-  const sortedLevels = Object.keys(sortLevels).map(
-    (level) => {
+  const sortedDivisions = Object.keys(sortDivisions).map(
+    (division) => {
       return {
-        level,
-        categories: sortLevels[level],
+        division,
+        categories: sortDivisions[division],
       }
     },
   )
 
-  const sortLevelsAndTables = sortedLevels.map(
-    (levelObject) => {
-      const sortCats = levelObject.categories.reduce(
+  const sortDivisionsAndTables = sortedDivisions.map(
+    (divisionObject) => {
+      const sortCats = divisionObject.categories.reduce(
         (category, table) => {
           if (!category[table.category]) {
             category[table.category] = []
@@ -191,7 +207,7 @@ function sortTables(
                 },
                 {
                   category: cat,
-                  serie: { level: 1 },
+                  serie: { division: 1 },
                   totalGames: 0,
                   totalWins: 0,
                   totalDraws: 0,
@@ -207,14 +223,16 @@ function sortTables(
         },
       )
       return {
-        level: levelObject['level'],
-        levelName: getLevelName(levelObject['level']),
+        division: divisionObject['division'],
+        divisionName: getDivisionName(
+          divisionObject['division'],
+        ),
         tables: sortedTables,
       }
     },
   )
 
-  return sortLevelsAndTables.sort(
-    (a, b) => parseInt(a.level) - parseInt(b.level),
+  return sortDivisionsAndTables.sort(
+    (a, b) => parseInt(a.division) - parseInt(b.division),
   )
 }

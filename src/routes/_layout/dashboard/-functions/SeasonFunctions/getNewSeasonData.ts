@@ -136,6 +136,7 @@ export async function getNewSeasonData() {
       category: 'final',
       serieName: 'Final',
       level: 100,
+      division: 1,
     },
     {
       seasonId: menSeasonId,
@@ -143,6 +144,7 @@ export async function getNewSeasonData() {
       category: 'final',
       serieName: 'Final',
       level: 100,
+      division: 1,
     },
     {
       seasonId: womenSeasonId,
@@ -150,6 +152,7 @@ export async function getNewSeasonData() {
       category: 'semi',
       serieName: 'Semifinal 1',
       level: 110,
+      division: 1,
     },
     {
       seasonId: menSeasonId,
@@ -157,6 +160,7 @@ export async function getNewSeasonData() {
       category: 'semi',
       serieName: 'Semifinal 1',
       level: 110,
+      division: 1,
     },
     {
       seasonId: womenSeasonId,
@@ -164,6 +168,7 @@ export async function getNewSeasonData() {
       category: 'semi',
       serieName: 'Semifinal 2',
       level: 110,
+      division: 1,
     },
     {
       seasonId: menSeasonId,
@@ -171,6 +176,7 @@ export async function getNewSeasonData() {
       category: 'semi',
       serieName: 'Semifinal 2',
       level: 110,
+      division: 1,
     },
     {
       seasonId: womenSeasonId,
@@ -178,6 +184,7 @@ export async function getNewSeasonData() {
       category: 'quarter',
       serieName: 'Kvartsfinal 1',
       level: 120,
+      division: 1,
     },
     {
       seasonId: menSeasonId,
@@ -185,6 +192,7 @@ export async function getNewSeasonData() {
       category: 'quarter',
       serieName: 'Kvartsfinal 1',
       level: 120,
+      division: 1,
     },
     {
       seasonId: womenSeasonId,
@@ -192,6 +200,7 @@ export async function getNewSeasonData() {
       category: 'quarter',
       serieName: 'Kvartsfinal 2',
       level: 120,
+      division: 1,
     },
     {
       seasonId: menSeasonId,
@@ -199,6 +208,7 @@ export async function getNewSeasonData() {
       category: 'quarter',
       serieName: 'Kvartsfinal 2',
       level: 120,
+      division: 1,
     },
     {
       seasonId: womenSeasonId,
@@ -206,6 +216,7 @@ export async function getNewSeasonData() {
       category: 'quarter',
       serieName: 'Kvartsfinal 3',
       level: 120,
+      division: 1,
     },
     {
       seasonId: menSeasonId,
@@ -213,6 +224,7 @@ export async function getNewSeasonData() {
       category: 'quarter',
       serieName: 'Kvartsfinal 3',
       level: 120,
+      division: 1,
     },
     {
       seasonId: womenSeasonId,
@@ -220,6 +232,7 @@ export async function getNewSeasonData() {
       category: 'quarter',
       serieName: 'Kvartsfinal 4',
       level: 120,
+      division: 1,
     },
     {
       seasonId: menSeasonId,
@@ -227,6 +240,7 @@ export async function getNewSeasonData() {
       category: 'quarter',
       serieName: 'Kvartsfinal 4',
       level: 120,
+      division: 1,
     },
     {
       seasonId: menSeasonId,
@@ -234,6 +248,7 @@ export async function getNewSeasonData() {
       category: 'eight',
       serieName: 'Åttondel 1',
       level: 130,
+      division: 1,
     },
     {
       seasonId: menSeasonId,
@@ -241,6 +256,7 @@ export async function getNewSeasonData() {
       category: 'eight',
       serieName: 'Åttondel 2',
       level: 130,
+      division: 1,
     },
     {
       seasonId: womenSeasonId,
@@ -248,6 +264,7 @@ export async function getNewSeasonData() {
       category: 'regular',
       serieName: 'Elitserien',
       level: 200,
+      division: 1,
     },
     {
       seasonId: menSeasonId,
@@ -255,6 +272,7 @@ export async function getNewSeasonData() {
       category: 'regular',
       serieName: 'Elitserien',
       level: 200,
+      division: 1,
     },
   ]
 
