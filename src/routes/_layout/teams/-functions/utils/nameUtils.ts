@@ -19,12 +19,12 @@ const categoryNames: CategoryName = {
 
 export function getLevelName(level: string) {
   const levelNum = Number(level)
-  if (levelNum <= 1.5) return 'Högsta divisionen'
-  if (levelNum <= 1.9) return 'Svenska Cupen'
-  if (levelNum <= 2.5) return 'Näst högsta divisionen'
-  if (levelNum <= 2.9) return 'Allsvensk cup'
-  if (levelNum < 4) return 'Tredje divisionen'
-  if (levelNum < 5) return 'Fjärde divisionen'
+  if (levelNum < 300) return 'Högsta divisionen'
+  if (levelNum > 999) return 'Svenska Cupen'
+  if (levelNum < 400) return 'Näst högsta divisionen'
+  if (levelNum > 1100) return 'Allsvensk cup'
+  if (levelNum < 500) return 'Tredje divisionen'
+  if (levelNum < 600) return 'Fjärde divisionen'
   return 'Lägsta divisionen'
 }
 

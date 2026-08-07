@@ -1,6 +1,6 @@
-import { and, asc, desc, eq, sql } from 'drizzle-orm'
-import { seasons, series } from '@/db/schema'
 import { db } from '@/db'
+import { seasons, series } from '@/db/schema'
+import { and, asc, desc, eq, sql } from 'drizzle-orm'
 
 const ranked = db.$with('ranked').as(
   db
@@ -10,15 +10,18 @@ const ranked = db.$with('ranked').as(
       women: seasons.women,
       group: series.group,
       rankedGroup:
-        sql<number>`rank() over (partition by series.season_id, seasons.women order by series.serie_group_code desc)`
+        sql<number>`rank() over (partition by series.season_id order by series.serie_group_code asc)`
           .mapWith(Number)
           .as('ranked_group'),
     })
     .from(series)
-    .leftJoin(seasons, eq(seasons.seasonId, series.seasonId))
+    .leftJoin(
+      seasons,
+      eq(seasons.seasonId, series.seasonId),
+    )
     .where(
       and(
-        eq(series.level, 1),
+        eq(series.level, 200),
         eq(series.category, 'regular'),
         eq(seasons.women, sql.placeholder('women')),
       ),
@@ -52,7 +55,10 @@ export const preparedPagSeasons = db
     group: extractGroup.group,
   })
   .from(seasons)
-  .leftJoin(extractGroup, eq(extractGroup.seasonId, seasons.seasonId))
+  .leftJoin(
+    extractGroup,
+    eq(extractGroup.seasonId, seasons.seasonId),
+  )
   .where(eq(seasons.women, sql.placeholder('women')))
   .offset(sql.placeholder('offset'))
   .limit(12)

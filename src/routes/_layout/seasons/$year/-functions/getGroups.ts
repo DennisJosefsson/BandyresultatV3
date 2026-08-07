@@ -1,7 +1,6 @@
 import { db } from '@/db'
 import { seasons, series } from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
-import { sortOrder } from '@/lib/utils/constants'
 import { seasonIdCheck } from '@/lib/utils/utils'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
@@ -103,14 +102,10 @@ export const getGroups = createServerFn({ method: 'GET' })
               ne(series.group, 'mix'),
             ),
           )
-          .orderBy(asc(series.level), asc(series.category))
+          .orderBy(asc(series.level), asc(series.group))
         return {
           status: 200,
-          groups: groups.sort(
-            (a, b) =>
-              sortOrder.indexOf(a.group) -
-              sortOrder.indexOf(b.group),
-          ),
+          groups: groups,
           breadCrumb,
           meta,
         }
