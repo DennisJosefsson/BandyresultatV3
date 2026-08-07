@@ -14,6 +14,13 @@ function App() {
   return (
     <div className="font-inter max-h-[80svh] ml-2 flex flex-col gap-2">
       <div className="my-10 flex flex-col xl:mx-10 2xl:mx-16">
+        <div className="mb-3 md:mb-6 p-2">
+          <p>
+            OBS! Ny version av bandyresultat.se lanserades
+            2026-08-07. Vissa sidor kommer behöver fixas
+            till de närmaste dagarna.
+          </p>
+        </div>
         <div className="mb-3 md:mb-6">
           <h1 className="text-primary xs:text-base pl-2 text-sm font-bold sm:text-2xl xl:text-4xl">
             Ett stycke bandyhistoria
