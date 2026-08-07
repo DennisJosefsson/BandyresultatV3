@@ -30,12 +30,12 @@
     "compressdev": "bash ./.scripts/compressdev.sh",
     "restartdev": "bash ./.scripts/restartdev.sh",
     "stopdev": "bash ./.scripts/stopdev.sh",
-    "listPRODUCTION": "bash ./.scripts/listPRODUCTION.sh",
-    "connectPRODUCTION": "bash ./.scripts/connectPRODUCTION.sh",
-    "updatePRODUCTION": "bash ./.scripts/updatePRODUCTION.sh",
-    "compressPRODUCTION": "bash ./.scripts/compressPRODUCTION.sh",
-    "restartPRODUCTION": "bash ./.scripts/restartPRODUCTION.sh",
-    "stopPRODUCTION": "bash ./.scripts/stopPRODUCTION.sh"
+    "listPRODUCTION": "bash ./.scripts/listPRODUCTIONSTART.sh",
+    "connectPRODUCTION": "bash ./.scripts/connectPRODUCTIONSTART.sh",
+    "updatePRODUCTION": "bash ./.scripts/updatePRODUCTIONSTART.sh",
+    "compressPRODUCTION": "bash ./.scripts/compressPRODUCTIONSTART.sh",
+    "restartPRODUCTION": "bash ./.scripts/restartPRODUCTIONSTART.sh",
+    "stopPRODUCTION": "bash ./.scripts/stopPRODUCTIONSTART.sh"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
