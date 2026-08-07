@@ -21,6 +21,7 @@ const maxGoalDifferenceQuery = db
         and(
           eq(teamgames.teamId, sql.placeholder('teamId')),
           eq(teamgames.homeGame, false),
+          eq(teamgames.played, true),
         ),
       )
       .groupBy(teamgames.teamId),
@@ -51,6 +52,7 @@ export const preparedMaxGoalDifferenceAway = db
         teamgames.goalDifference,
         maxGoalDifferenceQuery.maxGoalDifference,
       ),
+      eq(teamgames.played, true),
     ),
   )
   .orderBy(desc(teamgames.date))

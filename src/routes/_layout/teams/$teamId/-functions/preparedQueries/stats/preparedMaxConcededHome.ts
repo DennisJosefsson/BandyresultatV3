@@ -19,6 +19,7 @@ const maxConcededQuery = db.$with('max_conceded_query').as(
       and(
         eq(teamgames.teamId, sql.placeholder('teamId')),
         eq(teamgames.homeGame, true),
+        eq(teamgames.played, true),
       ),
     )
     .groupBy(teamgames.teamId),
@@ -49,6 +50,7 @@ export const preparedMaxConcededHome = db
         teamgames.goalsConceded,
         maxConcededQuery.maxConceded,
       ),
+      eq(teamgames.played, true),
     ),
   )
   .orderBy(desc(teamgames.date))

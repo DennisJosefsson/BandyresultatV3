@@ -21,6 +21,7 @@ const minGoalDifferenceQuery = db
         and(
           eq(teamgames.teamId, sql.placeholder('teamId')),
           eq(teamgames.homeGame, false),
+          eq(teamgames.played, true),
         ),
       )
       .groupBy(teamgames.teamId),
@@ -51,6 +52,7 @@ export const preparedMinGoalDifferenceAway = db
         teamgames.goalDifference,
         minGoalDifferenceQuery.minGoalDifference,
       ),
+      eq(teamgames.played, true),
     ),
   )
   .orderBy(desc(teamgames.date))

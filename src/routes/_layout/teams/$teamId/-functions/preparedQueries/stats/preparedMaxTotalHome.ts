@@ -17,6 +17,7 @@ const maxTotalQuery = db.$with('max_total_query').as(
       and(
         eq(teamgames.teamId, sql.placeholder('teamId')),
         eq(teamgames.homeGame, true),
+        eq(teamgames.played, true),
       ),
     )
     .groupBy(teamgames.teamId),
@@ -44,6 +45,7 @@ export const preparedMaxTotalHome = db
       eq(teamgames.teamId, sql.placeholder('teamId')),
       eq(teamgames.homeGame, true),
       eq(teamgames.totalGoals, maxTotalQuery.maxTotal),
+      eq(teamgames.played, true),
     ),
   )
   .orderBy(desc(teamgames.date))

@@ -17,6 +17,7 @@ const maxScoreQuery = db.$with('max_score_query').as(
       and(
         eq(teamgames.teamId, sql.placeholder('teamId')),
         eq(teamgames.homeGame, true),
+        eq(teamgames.played, true),
       ),
     )
     .groupBy(teamgames.teamId),
@@ -44,6 +45,7 @@ export const preparedMaxScoredHome = db
       eq(teamgames.teamId, sql.placeholder('teamId')),
       eq(teamgames.homeGame, true),
       eq(teamgames.goalsScored, maxScoreQuery.maxScore),
+      eq(teamgames.played, true),
     ),
   )
   .orderBy(desc(teamgames.date))

@@ -17,6 +17,7 @@ const minTotalQuery = db.$with('min_total_query').as(
       and(
         eq(teamgames.teamId, sql.placeholder('teamId')),
         eq(teamgames.homeGame, false),
+        eq(teamgames.played, true),
       ),
     )
     .groupBy(teamgames.teamId),
@@ -44,6 +45,7 @@ export const preparedMinTotalAway = db
       eq(teamgames.teamId, sql.placeholder('teamId')),
       eq(teamgames.homeGame, false),
       eq(teamgames.totalGoals, minTotalQuery.minTotal),
+      eq(teamgames.played, true),
     ),
   )
   .orderBy(desc(teamgames.date))
