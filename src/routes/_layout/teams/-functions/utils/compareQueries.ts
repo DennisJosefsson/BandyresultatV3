@@ -464,7 +464,7 @@ export const getFirstDivisionSeasonsSince1931 = (
       and(
         inArray(teamgames.teamId, teamArray),
         gte(teamgames.seasonId, 25),
-        eq(series.level, 1),
+        lt(series.level, 250),
         eq(teamgames.category, 'regular'),
       ),
     )
@@ -512,7 +512,7 @@ export const getFirstDivisionSeasons = (
     .where(
       and(
         inArray(teamgames.teamId, teamArray),
-        eq(series.level, 1),
+        lt(series.level, 250),
         ne(teamgames.category, 'qualification'),
       ),
     )

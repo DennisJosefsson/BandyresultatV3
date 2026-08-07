@@ -1,8 +1,24 @@
-import type { SQL } from 'drizzle-orm'
-import { intersect } from 'drizzle-orm/pg-core'
-import { and, asc, countDistinct, desc, eq, inArray, lt, or, sql } from 'drizzle-orm'
-import { seasons, series, teamgames, teamseries } from '@/db/schema'
 import { db } from '@/db'
+import {
+  seasons,
+  series,
+  teamgames,
+  teamseries,
+} from '@/db/schema'
+import type { SQL } from 'drizzle-orm'
+import {
+  and,
+  asc,
+  countDistinct,
+  desc,
+  eq,
+  gte,
+  inArray,
+  lt,
+  or,
+  sql,
+} from 'drizzle-orm'
+import { intersect } from 'drizzle-orm/pg-core'
 
 export const getPreparedFirstDivisionSeasons = db
   .select({ count: countDistinct(series.seasonId) })
@@ -11,7 +27,7 @@ export const getPreparedFirstDivisionSeasons = db
   .where(
     and(
       eq(teamseries.teamId, sql.placeholder('teamId')),
-      eq(series.level, 1),
+      lt(series.level, 250),
       eq(series.category, 'regular'),
     ),
   )
@@ -24,7 +40,7 @@ export const getPreparedSecondDivisionSeasons = db
   .where(
     and(
       eq(teamseries.teamId, sql.placeholder('teamId')),
-      eq(series.level, 2),
+      and(gte(series.level, 300), lt(series.level, 350)),
       eq(series.category, 'regular'),
     ),
   )
@@ -33,7 +49,12 @@ export const preparedQualificationSeasons = db
   .selectDistinct({ seasonId: series.seasonId })
   .from(teamseries)
   .leftJoin(series, eq(series.serieId, teamseries.serieId))
-  .where(and(eq(teamseries.teamId, sql.placeholder('teamId')), lt(series.level, 2)))
+  .where(
+    and(
+      eq(teamseries.teamId, sql.placeholder('teamId')),
+      eq(series.level, 250),
+    ),
+  )
 
 export const preparedIntersectSeasons = intersect(
   getPreparedSecondDivisionSeasons,
@@ -51,9 +72,15 @@ export const getPreparedFirstFirstDivisionSeason = db
   .where(
     and(
       eq(teamseries.teamId, sql.placeholder('teamId')),
-      eq(series.level, 1),
+      lt(series.level, 250),
       or(
-        inArray(series.category, ['regular', 'eigth', 'quarter', 'semi', 'final']),
+        inArray(series.category, [
+          'regular',
+          'eigth',
+          'quarter',
+          'semi',
+          'final',
+        ]),
         inArray(series.group, ['SlutspelA', 'SlutspelB']),
       ),
     ),
@@ -73,9 +100,15 @@ export const getPreparedLatestFirstDivisionSeason = db
   .where(
     and(
       eq(teamseries.teamId, sql.placeholder('teamId')),
-      eq(series.level, 1),
+      lt(series.level, 250),
       or(
-        inArray(series.category, ['regular', 'eigth', 'quarter', 'semi', 'final']),
+        inArray(series.category, [
+          'regular',
+          'eigth',
+          'quarter',
+          'semi',
+          'final',
+        ]),
         inArray(series.group, ['SlutspelA', 'SlutspelB']),
       ),
     ),
@@ -87,7 +120,12 @@ export const getPreparedLatestFirstDivisionSeason = db
 export const preparedFinalCount = db
   .select({ count: countDistinct(teamgames.seasonId) })
   .from(teamgames)
-  .where(and(eq(teamgames.teamId, sql.placeholder('teamId')), eq(teamgames.category, 'final')))
+  .where(
+    and(
+      eq(teamgames.teamId, sql.placeholder('teamId')),
+      eq(teamgames.category, 'final'),
+    ),
+  )
   .prepare('finalCount')
 
 export const preparedLatestFinal = db
@@ -95,8 +133,16 @@ export const preparedLatestFinal = db
     year: seasons.year,
   })
   .from(teamgames)
-  .leftJoin(seasons, eq(seasons.seasonId, teamgames.seasonId))
-  .where(and(eq(teamgames.teamId, sql.placeholder('teamId')), eq(teamgames.category, 'final')))
+  .leftJoin(
+    seasons,
+    eq(seasons.seasonId, teamgames.seasonId),
+  )
+  .where(
+    and(
+      eq(teamgames.teamId, sql.placeholder('teamId')),
+      eq(teamgames.category, 'final'),
+    ),
+  )
   .orderBy(desc(teamgames.seasonId))
   .limit(1)
   .prepare('latestFinal')
@@ -106,7 +152,10 @@ export const preparedLatestFinalWin = db
     year: seasons.year,
   })
   .from(teamgames)
-  .leftJoin(seasons, eq(seasons.seasonId, teamgames.seasonId))
+  .leftJoin(
+    seasons,
+    eq(seasons.seasonId, teamgames.seasonId),
+  )
   .where(
     and(
       eq(teamgames.teamId, sql.placeholder('teamId')),
@@ -135,7 +184,10 @@ export const preparedFinalWins = db
     year: seasons.year as unknown as SQL<string>,
   })
   .from(teamgames)
-  .leftJoin(seasons, eq(seasons.seasonId, teamgames.seasonId))
+  .leftJoin(
+    seasons,
+    eq(seasons.seasonId, teamgames.seasonId),
+  )
   .where(
     and(
       eq(teamgames.teamId, sql.placeholder('teamId')),
@@ -153,8 +205,15 @@ export const preparedPlayoffCount = db
     and(
       eq(teamgames.teamId, sql.placeholder('teamId')),
       or(
-        inArray(teamgames.category, ['quarter', 'semi', 'final']),
-        inArray(teamgames.group, ['SlutspelA', 'SlutspelB']),
+        inArray(teamgames.category, [
+          'quarter',
+          'semi',
+          'final',
+        ]),
+        inArray(teamgames.group, [
+          'SlutspelA',
+          'SlutspelB',
+        ]),
       ),
     ),
   )

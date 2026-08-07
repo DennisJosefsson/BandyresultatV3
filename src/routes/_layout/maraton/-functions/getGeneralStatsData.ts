@@ -1,10 +1,22 @@
-import type { SQL } from 'drizzle-orm'
-import { and, countDistinct, desc, eq, gte, inArray } from 'drizzle-orm'
-import type { TeamBase } from '@/lib/types/team'
-import { series, teamgames, teams } from '@/db/schema'
 import { db } from '@/db'
+import { series, teamgames, teams } from '@/db/schema'
+import type { TeamBase } from '@/lib/types/team'
+import type { SQL } from 'drizzle-orm'
+import {
+  and,
+  countDistinct,
+  desc,
+  eq,
+  gte,
+  inArray,
+  lt,
+} from 'drizzle-orm'
 
-export async function getGeneralStatsData({ women }: { women: boolean }) {
+export async function getGeneralStatsData({
+  women,
+}: {
+  women: boolean
+}) {
   const golds = await db
     .select({
       count: countDistinct(teamgames.seasonId),
@@ -18,7 +30,11 @@ export async function getGeneralStatsData({ women }: { women: boolean }) {
     .from(teamgames)
     .leftJoin(teams, eq(teamgames.teamId, teams.teamId))
     .where(
-      and(eq(teamgames.women, women), eq(teamgames.category, 'final'), eq(teamgames.win, true)),
+      and(
+        eq(teamgames.women, women),
+        eq(teamgames.category, 'final'),
+        eq(teamgames.win, true),
+      ),
     )
     .groupBy(teams.teamId)
     .orderBy(desc(countDistinct(teamgames.seasonId)))
@@ -30,8 +46,11 @@ export async function getGeneralStatsData({ women }: { women: boolean }) {
         return {
           ...item,
           position:
-            index !== 0 && filteredResult[index - 1].count === item.count
-              ? filteredResult.find((r) => r.count === item.count)?.position
+            index !== 0 &&
+            filteredResult[index - 1].count === item.count
+              ? filteredResult.find(
+                  (r) => r.count === item.count,
+                )?.position
               : item.position,
         }
       })
@@ -49,7 +68,12 @@ export async function getGeneralStatsData({ women }: { women: boolean }) {
     })
     .from(teamgames)
     .leftJoin(teams, eq(teamgames.teamId, teams.teamId))
-    .where(and(eq(teamgames.women, women), eq(teamgames.category, 'final')))
+    .where(
+      and(
+        eq(teamgames.women, women),
+        eq(teamgames.category, 'final'),
+      ),
+    )
     .groupBy(teams.teamId)
     .orderBy(desc(countDistinct(teamgames.seasonId)))
     .then((res) => {
@@ -60,8 +84,11 @@ export async function getGeneralStatsData({ women }: { women: boolean }) {
         return {
           ...item,
           position:
-            index !== 0 && filteredResult[index - 1].count === item.count
-              ? filteredResult.find((r) => r.count === item.count)?.position
+            index !== 0 &&
+            filteredResult[index - 1].count === item.count
+              ? filteredResult.find(
+                  (r) => r.count === item.count,
+                )?.position
               : item.position,
         }
       })
@@ -82,7 +109,12 @@ export async function getGeneralStatsData({ women }: { women: boolean }) {
     .where(
       and(
         eq(teamgames.women, women),
-        inArray(teamgames.category, ['playoffseries', 'quarter', 'semi', 'final']),
+        inArray(teamgames.category, [
+          'playoffseries',
+          'quarter',
+          'semi',
+          'final',
+        ]),
       ),
     )
     .groupBy(teams.teamId)
@@ -96,8 +128,11 @@ export async function getGeneralStatsData({ women }: { women: boolean }) {
         return {
           ...item,
           position:
-            index !== 0 && filteredResult[index - 1].count === item.count
-              ? filteredResult.find((r) => r.count === item.count)?.position
+            index !== 0 &&
+            filteredResult[index - 1].count === item.count
+              ? filteredResult.find(
+                  (r) => r.count === item.count,
+                )?.position
               : item.position,
         }
       })
@@ -116,7 +151,12 @@ export async function getGeneralStatsData({ women }: { women: boolean }) {
     .from(teamgames)
     .leftJoin(teams, eq(teamgames.teamId, teams.teamId))
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
-    .where(and(eq(teamgames.women, women), eq(series.level, 1.0)))
+    .where(
+      and(
+        eq(teamgames.women, women),
+        lt(series.level, 250),
+      ),
+    )
     .groupBy(teams.teamId)
     .orderBy(desc(countDistinct(teamgames.seasonId)))
     .limit(10)
@@ -128,8 +168,11 @@ export async function getGeneralStatsData({ women }: { women: boolean }) {
         return {
           ...item,
           position:
-            index !== 0 && filteredResult[index - 1].count === item.count
-              ? filteredResult.find((r) => r.count === item.count)?.position
+            index !== 0 &&
+            filteredResult[index - 1].count === item.count
+              ? filteredResult.find(
+                  (r) => r.count === item.count,
+                )?.position
               : item.position,
         }
       })
@@ -148,7 +191,13 @@ export async function getGeneralStatsData({ women }: { women: boolean }) {
     .from(teamgames)
     .leftJoin(teams, eq(teamgames.teamId, teams.teamId))
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
-    .where(and(eq(teamgames.women, women), eq(series.level, 1.0), gte(teamgames.seasonId, 25)))
+    .where(
+      and(
+        eq(teamgames.women, women),
+        lt(series.level, 250),
+        gte(teamgames.seasonId, 25),
+      ),
+    )
     .groupBy(teams.teamId)
     .orderBy(desc(countDistinct(teamgames.seasonId)))
     .limit(10)
@@ -160,8 +209,11 @@ export async function getGeneralStatsData({ women }: { women: boolean }) {
         return {
           ...item,
           position:
-            index !== 0 && filteredResult[index - 1].count === item.count
-              ? filteredResult.find((r) => r.count === item.count)?.position
+            index !== 0 &&
+            filteredResult[index - 1].count === item.count
+              ? filteredResult.find(
+                  (r) => r.count === item.count,
+                )?.position
               : item.position,
         }
       })
@@ -182,7 +234,12 @@ export async function getGeneralStatsData({ women }: { women: boolean }) {
     .where(
       and(
         eq(teamgames.women, women),
-        inArray(teamgames.category, ['playoffseries', 'quarter', 'semi', 'final']),
+        inArray(teamgames.category, [
+          'playoffseries',
+          'quarter',
+          'semi',
+          'final',
+        ]),
         gte(teamgames.seasonId, 25),
       ),
     )
@@ -197,8 +254,11 @@ export async function getGeneralStatsData({ women }: { women: boolean }) {
         return {
           ...item,
           position:
-            index !== 0 && filteredResult[index - 1].count === item.count
-              ? filteredResult.find((r) => r.count === item.count)?.position
+            index !== 0 &&
+            filteredResult[index - 1].count === item.count
+              ? filteredResult.find(
+                  (r) => r.count === item.count,
+                )?.position
               : item.position,
         }
       })
