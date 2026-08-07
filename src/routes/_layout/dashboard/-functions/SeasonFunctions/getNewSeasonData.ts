@@ -1,6 +1,12 @@
-import { desc, inArray } from 'drizzle-orm'
-import { metadata, playoffseason, seasons, series, teamseasons } from '@/db/schema'
 import { db } from '@/db'
+import {
+  metadata,
+  playoffseason,
+  seasons,
+  series,
+  teamseasons,
+} from '@/db/schema'
+import { desc, inArray } from 'drizzle-orm'
 
 export async function getNewSeasonData() {
   const seasonInfo = await db
@@ -12,13 +18,23 @@ export async function getNewSeasonData() {
       const currYear = new Date().getFullYear()
       const currMonth = new Date().getMonth()
       const secondYear = parseInt(res[0].year.split('/')[1])
-      if (secondYear > currYear || (secondYear === currYear && currMonth < 4)) {
-        throw new Error('Du får vänta med att generera ny säsong!')
+      if (
+        secondYear > currYear ||
+        (secondYear === currYear && currMonth < 4)
+      ) {
+        throw new Error(
+          'Du får vänta med att generera ny säsong!',
+        )
       }
       const nextYear = `${secondYear}/${secondYear + 1}`
-      const currMenSeason = res.find((s) => s.women === false)
-      const currWomenSeason = res.find((s) => s.women === true)
-      if (!currMenSeason || !currWomenSeason) throw new Error('Nuvarande säsonger saknas.')
+      const currMenSeason = res.find(
+        (s) => s.women === false,
+      )
+      const currWomenSeason = res.find(
+        (s) => s.women === true,
+      )
+      if (!currMenSeason || !currWomenSeason)
+        throw new Error('Nuvarande säsonger saknas.')
       return {
         nextYear,
         currMenSeason,
@@ -35,10 +51,15 @@ export async function getNewSeasonData() {
     ])
     .returning()
 
-  const menSeasonId = newSeasons.find((s) => s.women === false)?.seasonId
-  const womenSeasonId = newSeasons.find((s) => s.women === true)?.seasonId
+  const menSeasonId = newSeasons.find(
+    (s) => s.women === false,
+  )?.seasonId
+  const womenSeasonId = newSeasons.find(
+    (s) => s.women === true,
+  )?.seasonId
 
-  if (!menSeasonId || !womenSeasonId) throw new Error('Nya säsonger har inte genererats.')
+  if (!menSeasonId || !womenSeasonId)
+    throw new Error('Nya säsonger har inte genererats.')
 
   const newTeamSeasonsArrays = await db
     .select({
@@ -114,140 +135,134 @@ export async function getNewSeasonData() {
       group: 'final',
       category: 'final',
       serieName: 'Final',
-      level: 1,
+      level: 100,
     },
     {
       seasonId: menSeasonId,
       group: 'final',
       category: 'final',
       serieName: 'Final',
-      level: 1,
+      level: 100,
     },
     {
       seasonId: womenSeasonId,
       group: 'S1',
       category: 'semi',
       serieName: 'Semifinal 1',
-      level: 1,
+      level: 110,
     },
     {
       seasonId: menSeasonId,
       group: 'S1',
       category: 'semi',
       serieName: 'Semifinal 1',
-      level: 1,
+      level: 110,
     },
     {
       seasonId: womenSeasonId,
       group: 'S2',
       category: 'semi',
       serieName: 'Semifinal 2',
-      level: 1,
+      level: 110,
     },
     {
       seasonId: menSeasonId,
       group: 'S2',
       category: 'semi',
       serieName: 'Semifinal 2',
-      level: 1,
+      level: 110,
     },
     {
       seasonId: womenSeasonId,
       group: 'Q1',
       category: 'quarter',
       serieName: 'Kvartsfinal 1',
-      level: 1,
+      level: 120,
     },
     {
       seasonId: menSeasonId,
       group: 'Q1',
       category: 'quarter',
       serieName: 'Kvartsfinal 1',
-      level: 1,
+      level: 120,
     },
     {
       seasonId: womenSeasonId,
       group: 'Q2',
       category: 'quarter',
       serieName: 'Kvartsfinal 2',
-      level: 1,
+      level: 120,
     },
     {
       seasonId: menSeasonId,
       group: 'Q2',
       category: 'quarter',
       serieName: 'Kvartsfinal 2',
-      level: 1,
+      level: 120,
     },
     {
       seasonId: womenSeasonId,
       group: 'Q3',
       category: 'quarter',
       serieName: 'Kvartsfinal 3',
-      level: 1,
+      level: 120,
     },
     {
       seasonId: menSeasonId,
       group: 'Q3',
       category: 'quarter',
       serieName: 'Kvartsfinal 3',
-      level: 1,
+      level: 120,
     },
     {
       seasonId: womenSeasonId,
       group: 'Q4',
       category: 'quarter',
       serieName: 'Kvartsfinal 4',
-      level: 1,
+      level: 120,
     },
     {
       seasonId: menSeasonId,
       group: 'Q4',
       category: 'quarter',
       serieName: 'Kvartsfinal 4',
-      level: 1,
+      level: 120,
     },
     {
       seasonId: menSeasonId,
       group: 'E1',
       category: 'eight',
       serieName: 'Åttondel 1',
-      level: 1,
+      level: 130,
     },
     {
       seasonId: menSeasonId,
       group: 'E2',
       category: 'eight',
       serieName: 'Åttondel 2',
-      level: 1,
+      level: 130,
     },
     {
       seasonId: womenSeasonId,
       group: 'elitserien',
       category: 'regular',
       serieName: 'Elitserien',
-      level: 1,
+      level: 200,
     },
     {
       seasonId: menSeasonId,
       group: 'elitserien',
       category: 'regular',
       serieName: 'Elitserien',
-      level: 1,
-    },
-
-    {
-      seasonId: menSeasonId,
-      group: 'allsvenskan',
-      category: 'qualification',
-      serieName: 'Bandyallsvenskan',
-      level: 2,
+      level: 200,
     },
   ]
 
   await db.insert(series).values(newSeriesArray)
 
-  const playoffSeasonArray: Array<typeof playoffseason.$inferInsert> = [
+  const playoffSeasonArray: Array<
+    typeof playoffseason.$inferInsert
+  > = [
     {
       seasonId: menSeasonId,
       women: false,
