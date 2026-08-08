@@ -1,13 +1,22 @@
-import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
-import { zd } from '@/lib/utils/zod'
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
-import { getMaratonTables } from '../-functions/getMaratonTable'
+import { zd } from '@/lib/utils/zod'
+import {
+  CatchBoundary,
+  createFileRoute,
+} from '@tanstack/react-router'
 import MaratonTable from '../-components/Maraton/MaratonTables'
+import { getMaratonMeta } from '../-functions/getMaratonMeta'
+import { getMaratonTables } from '../-functions/getMaratonTable'
 
-export const Route = createFileRoute('/_layout/maraton/table/$maratonTable')({
+export const Route = createFileRoute(
+  '/_layout/maraton/table/$maratonTable',
+)({
   params: {
     parse: (params) => ({
-      maratonTable: zd.enum(['all', 'away', 'home']).catch('all').parse(params.maratonTable),
+      maratonTable: zd
+        .enum(['all', 'away', 'home'])
+        .catch('all')
+        .parse(params.maratonTable),
     }),
     stringify: ({ maratonTable }) => ({
       maratonTable: `${maratonTable}`,
@@ -15,7 +24,13 @@ export const Route = createFileRoute('/_layout/maraton/table/$maratonTable')({
   },
   loaderDeps: ({ search: { women } }) => ({ women }),
   loader: async ({ params, deps }) => {
-    const data = await getMaratonTables({
+    const maratonMeta = await getMaratonMeta({
+      data: {
+        women: deps.women,
+        table: params.maratonTable,
+      },
+    })
+    const data = getMaratonTables({
       data: {
         women: deps.women,
         table: params.maratonTable,
@@ -23,7 +38,7 @@ export const Route = createFileRoute('/_layout/maraton/table/$maratonTable')({
     })
     if (!data) throw new Error('Missing data')
 
-    return data
+    return { maratonMeta, data }
   },
   staticData: {
     breadcrumb: (match) => {
@@ -33,7 +48,9 @@ export const Route = createFileRoute('/_layout/maraton/table/$maratonTable')({
   head: ({ loaderData }) => ({
     meta: [
       {
-        title: loaderData?.meta.title ?? 'Bandyresultat - Maratontabell',
+        title:
+          loaderData?.maratonMeta?.meta.title ??
+          'Bandyresultat - Maratontabell',
       },
       {
         name: 'description',
@@ -45,7 +62,9 @@ export const Route = createFileRoute('/_layout/maraton/table/$maratonTable')({
       },
       {
         property: 'og:title',
-        content: loaderData?.meta.title ?? 'Bandyresultat - Maratontabell',
+        content:
+          loaderData?.maratonMeta?.meta.title ??
+          'Bandyresultat - Maratontabell',
       },
       {
         property: 'og:type',
@@ -53,7 +72,9 @@ export const Route = createFileRoute('/_layout/maraton/table/$maratonTable')({
       },
       {
         property: 'og:url',
-        content: loaderData?.meta.url ?? 'https://www.bandyresultat.se/maraton/table/all',
+        content:
+          loaderData?.maratonMeta?.meta.url ??
+          'https://www.bandyresultat.se/maraton/table/all',
       },
       {
         property: 'og:image',
@@ -73,7 +94,11 @@ function RouteComponent() {
         console.error(error)
       }}
       errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent id="maratonTable" error={error} reset={reset} />
+        <SimpleErrorComponent
+          id="maratonTable"
+          error={error}
+          reset={reset}
+        />
       )}
     >
       <MaratonTable />

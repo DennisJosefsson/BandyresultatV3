@@ -1,4 +1,5 @@
-import { getRouteApi } from '@tanstack/react-router'
+import MaratonSkeleton from '@/components/Loading/Skeletons/MaratonSkeleton'
+import { Await, getRouteApi } from '@tanstack/react-router'
 import DataTable from './DataTable'
 import MobileDataTable from './MobileDataTable'
 import { columns } from './columns'
@@ -8,25 +9,37 @@ const route = getRouteApi(
 )
 
 const TableList = () => {
-  const tables = route.useLoaderData({
-    select: (s) => s.tables,
+  const promiseData = route.useLoaderData({
+    select: (s) => s.data,
   })
 
   return (
-    <div className="@container/maraton">
-      <div className="hidden md:block">
-        <DataTable
-          columns={columns}
-          data={tables}
-        />
-      </div>
-      <div className="md:hidden">
-        <MobileDataTable
-          columns={columns}
-          data={tables}
-        />
-      </div>
-    </div>
+    <Await
+      promise={promiseData}
+      fallback={<MaratonSkeleton />}
+    >
+      {(data) => {
+        if (!data) return null
+
+        const tables = data.tables
+        return (
+          <div className="@container/maraton">
+            <div className="hidden md:block">
+              <DataTable
+                columns={columns}
+                data={tables}
+              />
+            </div>
+            <div className="md:hidden">
+              <MobileDataTable
+                columns={columns}
+                data={tables}
+              />
+            </div>
+          </div>
+        )
+      }}
+    </Await>
   )
 }
 

@@ -28,8 +28,6 @@ type TablesReturn =
   | {
       status: 200
       tables: Array<MaratonTable>
-      breadCrumb: string
-      meta: { title: string; url: string }
     }
   | undefined
 
@@ -248,19 +246,9 @@ export const getMaratonTables = createServerFn({
             asc(result.seasons),
           )
 
-        const breadCrumb = `${table === 'all' ? 'Alla matcher' : table === 'home' ? 'Hemmamatcher' : 'Bortamatcher'}`
-        const title = `Bandyresultat - Maratontabell ${table === 'all' ? 'Alla' : table === 'home' ? 'Hemmamatcher' : 'Bortamatcher'} ${women === true ? 'Damer' : 'Herrar'}`
-        const url = `https://bandyresultat.se/maraton/table/${table}?women=${women}`
-
-        const meta = {
-          title,
-          url,
-        }
         return {
           status: 200,
           tables: maratonTables,
-          breadCrumb,
-          meta,
         }
       } catch (error) {
         catchError(error)
