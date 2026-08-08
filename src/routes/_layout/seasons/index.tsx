@@ -3,6 +3,7 @@ import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorCompon
 import { getPaginatedSeasons } from './-functions/getPaginatedSeasons'
 import SeasonsPagination from './-components/SeasonsPagination'
 import SeasonsList from './-components/SeasonsList'
+import { getSeasonsCount } from './-functions/getSeasonsCount'
 
 export const Route = createFileRoute('/_layout/seasons/')({
   head: () => ({
@@ -43,11 +44,12 @@ export const Route = createFileRoute('/_layout/seasons/')({
     women,
   }),
   loader: async ({ deps }) => {
-    const data = await getPaginatedSeasons({
+    const data = getPaginatedSeasons({
       data: { page: deps.page, women: deps.women },
     })
+    const count = await getSeasonsCount({data:{women:deps.women}})
     if (!data) throw new Error('Missing seasons data')
-    return data
+    return {count,data}
   },
   component: Seasons,
 })

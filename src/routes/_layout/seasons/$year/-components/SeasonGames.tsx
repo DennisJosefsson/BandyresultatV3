@@ -24,6 +24,14 @@ export const SeasonGames = () => {
 
   const navigate = route.useNavigate()
 
+  if (data.status === undefined) {
+    return (
+      <div className="mt-2 flex flex-row justify-center font-semibold">
+        <span>Väntar tålmodigt på data.</span>
+      </div>
+    )
+  }
+
   if (data.status === 404)
     return (
       <div className="mt-2 flex flex-row justify-center font-semibold">

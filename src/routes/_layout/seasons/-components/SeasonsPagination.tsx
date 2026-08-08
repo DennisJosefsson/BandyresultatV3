@@ -1,21 +1,42 @@
-import { ChevronLeftIcon, ChevronRightIcon, EllipsisIcon } from 'lucide-react'
-import { Link, useLoaderData, useSearch } from '@tanstack/react-router'
 import { Button } from '@/components/base/ui/button'
+import {
+  Link,
+  useLoaderData,
+  useSearch,
+} from '@tanstack/react-router'
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  EllipsisIcon,
+} from 'lucide-react'
 
 const Ellips = () => {
   return (
-    <span aria-hidden className="flex h-9 w-9 items-center justify-center">
+    <span
+      aria-hidden
+      className="flex h-9 w-9 items-center justify-center"
+    >
       <EllipsisIcon className="h-4 w-4" />
       <span className="sr-only">Fler sidor</span>
     </span>
   )
 }
 
-const MiddleButtons = ({ page = 1, maxPage }: { page: number | undefined; maxPage: number }) => {
+const MiddleButtons = ({
+  page = 1,
+  maxPage,
+}: {
+  page: number | undefined
+  maxPage: number
+}) => {
   if (page < 4) {
     return (
       <>
-        <Link from="/seasons" to="/seasons" search={(prev) => ({ ...prev, page: 2 })}>
+        <Link
+          from="/seasons"
+          to="/seasons"
+          search={(prev) => ({ ...prev, page: 2 })}
+        >
           {({ isActive }) => (
             <Button
               className="xs:size-7 xs:[&_svg:not([class*='size-'])]:size-3.5 size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5"
@@ -26,7 +47,11 @@ const MiddleButtons = ({ page = 1, maxPage }: { page: number | undefined; maxPag
             </Button>
           )}
         </Link>
-        <Link from="/seasons" to="/seasons" search={(prev) => ({ ...prev, page: 3 })}>
+        <Link
+          from="/seasons"
+          to="/seasons"
+          search={(prev) => ({ ...prev, page: 3 })}
+        >
           {({ isActive }) => (
             <Button
               className="xs:size-7 xs:[&_svg:not([class*='size-'])]:size-3.5 size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5"
@@ -37,7 +62,11 @@ const MiddleButtons = ({ page = 1, maxPage }: { page: number | undefined; maxPag
             </Button>
           )}
         </Link>
-        <Link from="/seasons" to="/seasons" search={(prev) => ({ ...prev, page: 4 })}>
+        <Link
+          from="/seasons"
+          to="/seasons"
+          search={(prev) => ({ ...prev, page: 4 })}
+        >
           {({ isActive }) => (
             <Button
               className="xs:size-7 xs:[&_svg:not([class*='size-'])]:size-3.5 size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5"
@@ -48,7 +77,11 @@ const MiddleButtons = ({ page = 1, maxPage }: { page: number | undefined; maxPag
             </Button>
           )}
         </Link>
-        <Link from="/seasons" to="/seasons" search={(prev) => ({ ...prev, page: 5 })}>
+        <Link
+          from="/seasons"
+          to="/seasons"
+          search={(prev) => ({ ...prev, page: 5 })}
+        >
           {({ isActive }) => (
             <Button
               className="xs:size-7 xs:[&_svg:not([class*='size-'])]:size-3.5 size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5"
@@ -144,7 +177,11 @@ const MiddleButtons = ({ page = 1, maxPage }: { page: number | undefined; maxPag
     return (
       <>
         <Ellips />
-        <Link from="/seasons" to="/seasons" search={(prev) => ({ ...prev, page: page - 1 })}>
+        <Link
+          from="/seasons"
+          to="/seasons"
+          search={(prev) => ({ ...prev, page: page - 1 })}
+        >
           {({ isActive }) => (
             <Button
               className="xs:size-7 xs:[&_svg:not([class*='size-'])]:size-3.5 size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5"
@@ -155,7 +192,11 @@ const MiddleButtons = ({ page = 1, maxPage }: { page: number | undefined; maxPag
             </Button>
           )}
         </Link>
-        <Link from="/seasons" to="/seasons" search={(prev) => ({ ...prev, page: page })}>
+        <Link
+          from="/seasons"
+          to="/seasons"
+          search={(prev) => ({ ...prev, page: page })}
+        >
           {({ isActive }) => (
             <Button
               className="xs:size-7 xs:[&_svg:not([class*='size-'])]:size-3.5 size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5"
@@ -166,7 +207,11 @@ const MiddleButtons = ({ page = 1, maxPage }: { page: number | undefined; maxPag
             </Button>
           )}
         </Link>
-        <Link from="/seasons" to="/seasons" search={(prev) => ({ ...prev, page: page + 1 })}>
+        <Link
+          from="/seasons"
+          to="/seasons"
+          search={(prev) => ({ ...prev, page: page + 1 })}
+        >
           {({ isActive }) => (
             <Button
               className="xs:size-7 xs:[&_svg:not([class*='size-'])]:size-3.5 size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5"
@@ -186,16 +231,21 @@ const MiddleButtons = ({ page = 1, maxPage }: { page: number | undefined; maxPag
 const SeasonsPagination = () => {
   const count = useLoaderData({
     from: '/_layout/seasons/',
-    select: (data) => data.count,
+    select: (data) => data.count?.count,
   })
   const page = useSearch({
     from: '/_layout/seasons/',
     select: (s) => s.page,
   })
+
+  if (!count) return null
   const maxPage = Math.ceil(count / 12)
 
   if (maxPage < 6) {
-    const array = Array.from({ length: maxPage }, (_, index) => index + 1)
+    const array = Array.from(
+      { length: maxPage },
+      (_, index) => index + 1,
+    )
 
     return (
       <div className="flex w-full flex-row items-center justify-center gap-1">
@@ -216,7 +266,9 @@ const SeasonsPagination = () => {
           >
             <div className="inline-flex items-center gap-1 pl-2.5">
               <ChevronLeftIcon className="h-4 w-4" />
-              <span className="hidden sm:block">Föregående</span>
+              <span className="hidden sm:block">
+                Föregående
+              </span>
             </div>
           </Button>
         </Link>
@@ -288,11 +340,17 @@ const SeasonsPagination = () => {
         >
           <div className="inline-flex items-center gap-1 pl-2.5">
             <ChevronLeftIcon className="h-4 w-4" />
-            <span className="hidden sm:block">Föregående</span>
+            <span className="hidden sm:block">
+              Föregående
+            </span>
           </div>
         </Button>
       </Link>
-      <Link from="/seasons" to="/seasons" search={(prev) => ({ ...prev, page: 1 })}>
+      <Link
+        from="/seasons"
+        to="/seasons"
+        search={(prev) => ({ ...prev, page: 1 })}
+      >
         {({ isActive }) => (
           <Button
             className="xs:size-7 xs:[&_svg:not([class*='size-'])]:size-3.5 size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5"
@@ -303,8 +361,15 @@ const SeasonsPagination = () => {
           </Button>
         )}
       </Link>
-      <MiddleButtons page={page} maxPage={maxPage} />
-      <Link from="/seasons" to="/seasons" search={(prev) => ({ ...prev, page: maxPage })}>
+      <MiddleButtons
+        page={page}
+        maxPage={maxPage}
+      />
+      <Link
+        from="/seasons"
+        to="/seasons"
+        search={(prev) => ({ ...prev, page: maxPage })}
+      >
         {({ isActive }) => (
           <Button
             className="xs:size-7 xs:[&_svg:not([class*='size-'])]:size-3.5 size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5"
