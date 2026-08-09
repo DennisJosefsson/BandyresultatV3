@@ -1,20 +1,14 @@
-import { createServerFn } from '@tanstack/react-start'
+import { catchError } from '@/lib/middlewares/errors/catchError'
+import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import type { GoalRecordDataArrays } from '@/lib/types/records'
 import { zd } from '@/lib/utils/zod'
-import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import { catchError } from '@/lib/middlewares/errors/catchError'
+import { createServerFn } from '@tanstack/react-start'
 import { getScoredData } from './getScoredData'
 
-type RecordStreakReturn =
+type ScoredReturn =
   | {
       status: 200
       scored: GoalRecordDataArrays
-      breadCrumb: string
-      meta: {
-        title: string
-        url: string
-        description: string
-      }
     }
   | undefined
 
@@ -27,25 +21,17 @@ export const getScoredRecords = createServerFn({
       women: zd.boolean(),
     }),
   )
-  .handler(async ({ data: { women } }): Promise<RecordStreakReturn> => {
-    try {
-      const scoredData = await getScoredData({ women })
-      const breadCrumb = `Gjorda mål`
-      const title = `Bandyresultat - Rekord gjorda mål - ${women === true ? 'Damer' : 'Herrar'}`
-      const url = `https://bandyresultat.se/maraton/records/scored?women=${women}`
-      const description = `Rekord i antalet gjorda mål i bandyns Elitserie för ${women ? 'damer' : 'herrar'}`
-      const meta = {
-        title,
-        url,
-        description,
+  .handler(
+    async ({ data: { women } }): Promise<ScoredReturn> => {
+      try {
+        const scoredData = await getScoredData({ women })
+
+        return {
+          status: 200,
+          scored: { ...scoredData },
+        }
+      } catch (error) {
+        catchError(error)
       }
-      return {
-        status: 200,
-        scored: { ...scoredData },
-        breadCrumb,
-        meta,
-      }
-    } catch (error) {
-      catchError(error)
-    }
-  })
+    },
+  )
