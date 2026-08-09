@@ -1,8 +1,9 @@
-import { createMiddleware } from '@tanstack/react-start'
 import { redirect } from '@tanstack/react-router'
-import ZodParsingError from './ZodParsingError'
-import UnauthorizedError from './UnauthorizedError'
+import { createMiddleware } from '@tanstack/react-start'
+import DatabaseConnectionError from './ConnectionError'
 import DbError from './DbError'
+import UnauthorizedError from './UnauthorizedError'
+import ZodParsingError from './ZodParsingError'
 
 export const errorMiddleware = createMiddleware({
   type: 'function',
@@ -33,6 +34,10 @@ export const errorMiddleware = createMiddleware({
           error.context.query,
         )
 
+        throw error
+      } else if (error instanceof DatabaseConnectionError) {
+        //
+        console.error('Connection error', error)
         throw error
       } else if (error instanceof Error) {
         console.error('Unknown error', error.message)
