@@ -1,40 +1,59 @@
-import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
-import Loading from '@/components/Loading/Loading'
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
-import { getStreakRecords } from '../-functions/getStreakRecords'
+import Loading from '@/components/Loading/Loading'
+import {
+  CatchBoundary,
+  createFileRoute,
+} from '@tanstack/react-router'
 import Streaks from '../-components/Records/Streaks/Streaks'
+import { getStreakMeta } from '../-functions/getStreakMeta'
+import { getStreakRecords } from '../-functions/getStreakRecords'
 
-export const Route = createFileRoute('/_layout/maraton/records/streaks')({
+export const Route = createFileRoute(
+  '/_layout/maraton/records/streaks',
+)({
   loaderDeps: ({ search: { women } }) => ({ women }),
   loader: async ({ deps }) => {
-    const data = await getStreakRecords({
+    const streakMeta = await getStreakMeta({
       data: { women: deps.women },
     })
-    if (!data) throw new Error('Missing data')
+    const data = getStreakRecords({
+      data: { women: deps.women },
+    })
+    if (!data || !streakMeta)
+      throw new Error('Missing data')
 
-    return data
+    return { data, streakMeta }
   },
   component: RouteComponent,
 
   staticData: {
-    breadcrumb: (match) => match.loaderData.breadCrumb ?? 'Sviter',
+    breadcrumb: (match) =>
+      match.loaderData.breadCrumb ?? 'Sviter',
   },
   head: ({ loaderData }) => ({
     meta: [
       {
-        title: loaderData?.meta.title ?? 'Bandyresultat - Rekord: Sviter',
+        title:
+          loaderData?.streakMeta.meta.title ??
+          'Bandyresultat - Rekord: Sviter',
       },
       {
         name: 'description',
-        content: loaderData?.meta.description ?? 'Bandyresultat - Rekord: Sviter',
+        content:
+          loaderData?.streakMeta.meta.description ??
+          'Bandyresultat - Rekord: Sviter',
       },
       {
         property: 'og:description',
-        content: loaderData?.meta.description ?? 'Bandyresultat - Rekord: Sviter',
+        content:
+          loaderData?.streakMeta.meta.description ??
+          'Bandyresultat - Rekord: Sviter',
       },
       {
         property: 'og:title',
-        content: loaderData?.meta.title ?? 'Bandyresultat - Rekord: Sviter',
+        content:
+          loaderData?.streakMeta.meta.title ??
+          'Bandyresultat - Rekord: Sviter',
       },
       {
         property: 'og:type',
@@ -42,7 +61,9 @@ export const Route = createFileRoute('/_layout/maraton/records/streaks')({
       },
       {
         property: 'og:url',
-        content: loaderData?.meta.url ?? 'https://www.bandyresultat.se/maraton/records/streaks',
+        content:
+          loaderData?.streakMeta.meta.url ??
+          'https://www.bandyresultat.se/maraton/records/streaks',
       },
       {
         property: 'og:image',
@@ -62,7 +83,11 @@ function RouteComponent() {
         console.error(error)
       }}
       errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent id="streaks" error={error} reset={reset} />
+        <SimpleErrorComponent
+          id="streaks"
+          error={error}
+          reset={reset}
+        />
       )}
     >
       <Streaks />
