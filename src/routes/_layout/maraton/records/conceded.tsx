@@ -1,37 +1,56 @@
-import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
-import { getConcededRecords } from '../-functions/getConcededRecords'
+import {
+  CatchBoundary,
+  createFileRoute,
+} from '@tanstack/react-router'
 import Conceded from '../-components/Records/PointsGoalsEtc/Conceded'
+import { getConcededMeta } from '../-functions/getConcededMeta'
+import { getConcededRecords } from '../-functions/getConcededRecords'
 
-export const Route = createFileRoute('/_layout/maraton/records/conceded')({
+export const Route = createFileRoute(
+  '/_layout/maraton/records/conceded',
+)({
   loaderDeps: ({ search: { women } }) => ({ women }),
   loader: async ({ deps }) => {
-    const data = await getConcededRecords({
+    const concededMeta = await getConcededMeta({
       data: { women: deps.women },
     })
-    if (!data) throw new Error('Missing data')
+    const data = getConcededRecords({
+      data: { women: deps.women },
+    })
+    if (!data || !concededMeta)
+      throw new Error('Missing data')
 
-    return data
+    return { data, concededMeta }
   },
   staticData: {
-    breadcrumb: (match) => match.loaderData.breadCrumb ?? 'Insläppta mål',
+    breadcrumb: (match) =>
+      match.loaderData.breadCrumb ?? 'Insläppta mål',
   },
   head: ({ loaderData }) => ({
     meta: [
       {
-        title: loaderData?.meta.title ?? 'Bandyresultat - Rekord: Insläppta mål',
+        title:
+          loaderData?.concededMeta.meta.title ??
+          'Bandyresultat - Rekord: Insläppta mål',
       },
       {
         name: 'description',
-        content: loaderData?.meta.description ?? 'Bandyresultat - Rekord: Insläppta mål',
+        content:
+          loaderData?.concededMeta.meta.description ??
+          'Bandyresultat - Rekord: Insläppta mål',
       },
       {
         property: 'og:description',
-        content: loaderData?.meta.description ?? 'Bandyresultat - Rekord: Insläppta mål',
+        content:
+          loaderData?.concededMeta.meta.description ??
+          'Bandyresultat - Rekord: Insläppta mål',
       },
       {
         property: 'og:title',
-        content: loaderData?.meta.title ?? 'Bandyresultat - Rekord: Insläppta mål',
+        content:
+          loaderData?.concededMeta.meta.title ??
+          'Bandyresultat - Rekord: Insläppta mål',
       },
       {
         property: 'og:type',
@@ -39,7 +58,9 @@ export const Route = createFileRoute('/_layout/maraton/records/conceded')({
       },
       {
         property: 'og:url',
-        content: loaderData?.meta.url ?? 'https://www.bandyresultat.se/maraton/records/conceded',
+        content:
+          loaderData?.concededMeta.meta.url ??
+          'https://www.bandyresultat.se/maraton/records/conceded',
       },
       {
         property: 'og:image',
@@ -59,7 +80,11 @@ function RouteComponent() {
         console.error(error)
       }}
       errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent id="conceded" error={error} reset={reset} />
+        <SimpleErrorComponent
+          id="conceded"
+          error={error}
+          reset={reset}
+        />
       )}
     >
       <Conceded />
