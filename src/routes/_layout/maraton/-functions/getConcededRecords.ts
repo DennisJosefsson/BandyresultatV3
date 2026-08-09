@@ -5,7 +5,7 @@ import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
 import { getConcededData } from './getConcededData'
 
-type RecordStreakReturn =
+type ConcededReturn =
   | {
       status: 200
       conceded: RecordDataArrays
@@ -24,7 +24,7 @@ export const getConcededRecords = createServerFn({
   .handler(
     async ({
       data: { women },
-    }): Promise<RecordStreakReturn> => {
+    }): Promise<ConcededReturn> => {
       try {
         const concededData = await getConcededData({
           women,

@@ -24,8 +24,7 @@ export const Route = createFileRoute(
     return { data, concededMeta }
   },
   staticData: {
-    breadcrumb: (match) =>
-      match.loaderData.breadCrumb ?? 'Insläppta mål',
+    breadcrumb: 'Insläppta mål',
   },
   head: ({ loaderData }) => ({
     meta: [

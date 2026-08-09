@@ -1,37 +1,55 @@
-import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
-import { getPointRecords } from '../-functions/getPointRecords'
+import {
+  CatchBoundary,
+  createFileRoute,
+} from '@tanstack/react-router'
 import Points from '../-components/Records/PointsGoalsEtc/Points'
+import { getPointRecords } from '../-functions/getPointRecords'
+import { getPointsMeta } from '../-functions/getPointsMeta'
 
-export const Route = createFileRoute('/_layout/maraton/records/points')({
+export const Route = createFileRoute(
+  '/_layout/maraton/records/points',
+)({
   loaderDeps: ({ search: { women } }) => ({ women }),
   loader: async ({ deps }) => {
-    const data = await getPointRecords({
+    const pointsMeta = await getPointsMeta({
       data: { women: deps.women },
     })
-    if (!data) throw new Error('Missing data')
+    const data = getPointRecords({
+      data: { women: deps.women },
+    })
+    if (!data || !pointsMeta)
+      throw new Error('Missing data')
 
-    return data
+    return { data, pointsMeta }
   },
   staticData: {
-    breadcrumb: (match) => match.loaderData.breadCrumb ?? 'Poäng',
+    breadcrumb: 'Poäng',
   },
   head: ({ loaderData }) => ({
     meta: [
       {
-        title: loaderData?.meta.title ?? 'Bandyresultat - Rekord: Poäng',
+        title:
+          loaderData?.pointsMeta.meta.title ??
+          'Bandyresultat - Rekord: Poäng',
       },
       {
         name: 'description',
-        content: loaderData?.meta.description ?? 'Bandyresultat - Rekord: Poäng',
+        content:
+          loaderData?.pointsMeta.meta.description ??
+          'Bandyresultat - Rekord: Poäng',
       },
       {
         property: 'og:description',
-        content: loaderData?.meta.description ?? 'Bandyresultat - Rekord: Poäng',
+        content:
+          loaderData?.pointsMeta.meta.description ??
+          'Bandyresultat - Rekord: Poäng',
       },
       {
         property: 'og:title',
-        content: loaderData?.meta.title ?? 'Bandyresultat - Rekord: Poäng',
+        content:
+          loaderData?.pointsMeta.meta.title ??
+          'Bandyresultat - Rekord: Poäng',
       },
       {
         property: 'og:type',
@@ -39,7 +57,9 @@ export const Route = createFileRoute('/_layout/maraton/records/points')({
       },
       {
         property: 'og:url',
-        content: loaderData?.meta.url ?? 'https://www.bandyresultat.se/maraton/records/points',
+        content:
+          loaderData?.pointsMeta.meta.url ??
+          'https://www.bandyresultat.se/maraton/records/points',
       },
       {
         property: 'og:image',
@@ -59,7 +79,11 @@ function RouteComponent() {
         console.error(error)
       }}
       errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent id="points" error={error} reset={reset} />
+        <SimpleErrorComponent
+          id="points"
+          error={error}
+          reset={reset}
+        />
       )}
     >
       <Points />
