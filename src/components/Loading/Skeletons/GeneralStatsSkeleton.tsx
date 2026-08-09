@@ -1,17 +1,34 @@
 import { Skeleton } from '@/components/base/ui/skeleton'
+import { PointsGoalsSkeletonFrame } from './recordStatSkeletons'
 
 const GeneralStatsSkeleton = () => {
   return (
-    <div className="font-inter text-foreground mx-auto mt-2 min-h-screen w-full">
-      <div className="flex flex-col">
-        <div className="mb-2 grid grid-cols-1 gap-2 md:gap-4 lg:grid-cols-2 lg:gap-6">
-          <Skeleton className="h-8 w-24" />
-          <Skeleton className="hidden h-8 w-24 lg:block" />
+    <div className="flex w-full flex-col @5xl:w-4/5 @7xl:w-2/3">
+      <div>
+        <Skeleton className="h-6 w-40 mb-1" />
+      </div>
+      <div>
+        <div>
+          <Skeleton className="h-6 w-40 mb-1" />
         </div>
-        <div className="grid grid-cols-1 gap-2 md:gap-4 lg:grid-cols-2 lg:gap-6">
-          {Array.from({ length: 24 }).map((_i, index) => {
-            return <Skeleton key={index} className="h-12 w-full" />
-          })}
+        <div className="mb-4 grid grid-cols-1 gap-2 @lg:grid-cols-2 @3xl:gap-4 @5xl:gap-6">
+          <div>
+            <div>
+              <Skeleton className="h-6 w-40 mb-1" />
+            </div>
+            <div>
+              <PointsGoalsSkeletonFrame />
+            </div>
+          </div>
+
+          <div>
+            <div>
+              <Skeleton className="h-6 w-40 mb-1" />
+            </div>
+            <div>
+              <PointsGoalsSkeletonFrame />
+            </div>
+          </div>
         </div>
       </div>
     </div>

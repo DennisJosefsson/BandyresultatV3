@@ -1,37 +1,54 @@
-import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
 import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
-import { getGeneralStats } from '../-functions/getGeneralStats'
+import {
+  CatchBoundary,
+  createFileRoute,
+} from '@tanstack/react-router'
 import GeneralStats from '../-components/Records/PointsGoalsEtc/GeneralStats'
+import { getGeneralStats } from '../-functions/getGeneralStats'
+import { getGeneralStatsMeta } from '../-functions/getGeneralStatsMeta'
 
-export const Route = createFileRoute('/_layout/maraton/records/stats')({
+export const Route = createFileRoute(
+  '/_layout/maraton/records/stats',
+)({
   loaderDeps: ({ search: { women } }) => ({ women }),
   loader: async ({ deps }) => {
-    const data = await getGeneralStats({
+    const statsMeta = await getGeneralStatsMeta({
       data: { women: deps.women },
     })
-    if (!data) throw new Error('Missing data')
+    const data = getGeneralStats({
+      data: { women: deps.women },
+    })
+    if (!data || !statsMeta) throw new Error('Missing data')
 
-    return data
+    return { data, statsMeta }
   },
   staticData: {
-    breadcrumb: (match) => match.loaderData.breadCrumb ?? 'Statistik',
+    breadcrumb: 'Statistik',
   },
   head: ({ loaderData }) => ({
     meta: [
       {
-        title: loaderData?.meta.title ?? 'Bandyresultat - Rekord: Statistik',
+        title:
+          loaderData?.statsMeta.meta.title ??
+          'Bandyresultat - Rekord: Statistik',
       },
       {
         name: 'description',
-        content: loaderData?.meta.description ?? 'Bandyresultat - Rekord: Statistik',
+        content:
+          loaderData?.statsMeta.meta.description ??
+          'Bandyresultat - Rekord: Statistik',
       },
       {
         property: 'og:description',
-        content: loaderData?.meta.description ?? 'Bandyresultat - Rekord: Statistik',
+        content:
+          loaderData?.statsMeta.meta.description ??
+          'Bandyresultat - Rekord: Statistik',
       },
       {
         property: 'og:title',
-        content: loaderData?.meta.title ?? 'Bandyresultat - Rekord: Statistik',
+        content:
+          loaderData?.statsMeta.meta.title ??
+          'Bandyresultat - Rekord: Statistik',
       },
       {
         property: 'og:type',
@@ -39,7 +56,9 @@ export const Route = createFileRoute('/_layout/maraton/records/stats')({
       },
       {
         property: 'og:url',
-        content: loaderData?.meta.url ?? 'https://www.bandyresultat.se/maraton/records/stats',
+        content:
+          loaderData?.statsMeta.meta.url ??
+          'https://www.bandyresultat.se/maraton/records/stats',
       },
       {
         property: 'og:image',
@@ -59,7 +78,11 @@ function RouteComponent() {
         console.error(error)
       }}
       errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent id="generalStats" error={error} reset={reset} />
+        <SimpleErrorComponent
+          id="generalStats"
+          error={error}
+          reset={reset}
+        />
       )}
     >
       <GeneralStats />
