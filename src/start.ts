@@ -4,6 +4,7 @@ import {
   createMiddleware,
   createStart,
 } from '@tanstack/react-start'
+import { error404Adapter } from './lib/middlewares/errors/404Error'
 import { compareRequestErrorAdapter } from './lib/middlewares/errors/CompareRequestError'
 import { databaseconnectionErrorAdapter } from './lib/middlewares/errors/ConnectionError'
 import { dbErrorAdapter } from './lib/middlewares/errors/DbError'
@@ -42,6 +43,7 @@ export const startInstance = createStart(() => {
       dbErrorAdapter,
       databaseconnectionErrorAdapter,
       unauthorizedErrorAdapter,
+      error404Adapter,
     ],
     functionMiddleware: [headerMiddleware, errorMiddleware],
   }

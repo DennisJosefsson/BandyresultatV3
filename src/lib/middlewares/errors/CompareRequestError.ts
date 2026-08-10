@@ -26,12 +26,12 @@ export default class CompareRequestError extends CustomError {
       context,
       url,
       breadCrumb,
-      teamArray
+      teamArray,
     } = params || {}
 
     super(message || 'Bad request')
     this._code = code || CompareRequestError._statusCode
-    this._logging = logging || false
+    this._logging = logging || code === 400
     this._context = context || {}
     this._url = url
     this._breadCrumb = breadCrumb

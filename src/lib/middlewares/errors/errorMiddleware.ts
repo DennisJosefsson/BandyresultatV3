@@ -4,6 +4,23 @@ import DatabaseConnectionError from './ConnectionError'
 import DbError from './DbError'
 import UnauthorizedError from './UnauthorizedError'
 import ZodParsingError from './ZodParsingError'
+import { logError } from './logError'
+
+const logErrorToDatabase = async (error: Error) => {
+  const cause =
+    error.cause instanceof Error
+      ? error.cause.message
+      : 'Ingen cause'
+  const errorData = {
+    name: error.name,
+    message: error.message,
+    body: error.stack ?? 'Ingen stack',
+    origin: cause,
+    date: new Date().toISOString(),
+    backend: false,
+  }
+  await logError({ data: errorData })
+}
 
 export const errorMiddleware = createMiddleware({
   type: 'function',
@@ -15,9 +32,11 @@ export const errorMiddleware = createMiddleware({
   } catch (error) {
     if (error) {
       if (error instanceof ZodParsingError) {
+        logErrorToDatabase(error)
         console.error('Zod parsing error', error.message)
         throw error
       } else if (error instanceof UnauthorizedError) {
+        logErrorToDatabase(error)
         throw redirect({
           to: '/unauthorized',
           search: { women: false },
@@ -26,6 +45,7 @@ export const errorMiddleware = createMiddleware({
           },
         })
       } else if (error instanceof DbError) {
+        logErrorToDatabase(error)
         console.error(
           'Database error:',
           error.name,
@@ -40,6 +60,7 @@ export const errorMiddleware = createMiddleware({
         console.error('Connection error', error)
         throw error
       } else if (error instanceof Error) {
+        logErrorToDatabase(error)
         console.error('Unknown error', error.message)
         throw error
       }
