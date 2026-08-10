@@ -50,7 +50,8 @@ export const Route = createFileRoute('/_layout/seasons/')({
     const count = await getSeasonsCount({
       data: { women: deps.women },
     })
-    if (!data) throw new Error('Missing seasons data')
+    if (!data || !count)
+      throw new Error('Missing seasons data')
     return { count, data }
   },
   component: Seasons,
