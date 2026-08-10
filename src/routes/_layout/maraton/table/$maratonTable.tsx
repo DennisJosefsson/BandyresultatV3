@@ -33,7 +33,8 @@ export const Route = createFileRoute(
         table: params.maratonTable,
       },
     })
-    if (!data) throw new Error('Missing data')
+    if (!data || !maratonMeta)
+      throw new Error('Missing data')
 
     return { maratonMeta, data }
   },
