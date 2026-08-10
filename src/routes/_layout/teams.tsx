@@ -1,7 +1,6 @@
-import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
+import { CustomCatchBoundary } from '@/components/ErrorComponents/CustomCatchBoundary'
 import { zd } from '@/lib/utils/zod'
 import {
-  CatchBoundary,
   Outlet,
   createFileRoute,
 } from '@tanstack/react-router'
@@ -32,21 +31,9 @@ export const Route = createFileRoute('/_layout/teams')({
 function TeamsHeader() {
   return (
     <div className="font-inter text-foreground mb-2 min-h-screen px-1">
-      <CatchBoundary
-        getResetKey={() => 'reset'}
-        onCatch={(error) => {
-          console.error(error)
-        }}
-        errorComponent={({ error, reset }) => (
-          <SimpleErrorComponent
-            id="teams"
-            error={error}
-            reset={reset}
-          />
-        )}
-      >
+      <CustomCatchBoundary id="teams">
         <Outlet />
-      </CatchBoundary>
+      </CustomCatchBoundary>
     </div>
   )
 }

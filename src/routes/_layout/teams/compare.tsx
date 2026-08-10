@@ -1,7 +1,6 @@
-import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
+import { CustomCatchBoundary } from '@/components/ErrorComponents/CustomCatchBoundary'
 import Loading from '@/components/Loading/Loading'
 import {
-  CatchBoundary,
   Navigate,
   createFileRoute,
 } from '@tanstack/react-router'
@@ -97,21 +96,9 @@ function RouteComponent() {
     )
   }
   return (
-    <CatchBoundary
-      getResetKey={() => 'reset'}
-      onCatch={(error) => {
-        console.error(error)
-      }}
-      errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent
-          id="compare"
-          error={error}
-          reset={reset}
-        />
-      )}
-    >
+    <CustomCatchBoundary id="compare">
       <Compare />
-    </CatchBoundary>
+    </CustomCatchBoundary>
   )
 }
 

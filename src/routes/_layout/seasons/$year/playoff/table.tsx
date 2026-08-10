@@ -1,10 +1,12 @@
-import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
+import { CustomCatchBoundary } from '@/components/ErrorComponents/CustomCatchBoundary'
 import Loading from '@/components/Loading/Loading'
-import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
-import { getPlayoffTable } from '../-functions/getPlayoffTable'
+import { createFileRoute } from '@tanstack/react-router'
 import SeasonPlayoffTables from '../-components/Playoff/SeasonPlayoffTables'
+import { getPlayoffTable } from '../-functions/getPlayoffTable'
 
-export const Route = createFileRoute('/_layout/seasons/$year/playoff/table')({
+export const Route = createFileRoute(
+  '/_layout/seasons/$year/playoff/table',
+)({
   loaderDeps: ({ search: { women } }) => ({ women }),
   loader: async ({ deps, params }) => {
     const data = await getPlayoffTable({
@@ -18,19 +20,27 @@ export const Route = createFileRoute('/_layout/seasons/$year/playoff/table')({
   head: ({ loaderData }) => ({
     meta: [
       {
-        title: loaderData?.meta.title ?? 'Bandyresultat - Slutspelsträd',
+        title:
+          loaderData?.meta.title ??
+          'Bandyresultat - Slutspelsträd',
       },
       {
         name: 'description',
-        content: loaderData?.meta.description ?? 'Bandyresultat - Slutspelsträd',
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - Slutspelsträd',
       },
       {
         property: 'og:description',
-        content: loaderData?.meta.description ?? 'Bandyresultat - Slutspelsträd',
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - Slutspelsträd',
       },
       {
         property: 'og:title',
-        content: loaderData?.meta.title ?? 'Bandyresultat - Slutspelsträd',
+        content:
+          loaderData?.meta.title ??
+          'Bandyresultat - Slutspelsträd',
       },
       {
         property: 'og:type',
@@ -38,7 +48,9 @@ export const Route = createFileRoute('/_layout/seasons/$year/playoff/table')({
       },
       {
         property: 'og:url',
-        content: loaderData?.meta.url ?? 'https://www.bandyresultat.se',
+        content:
+          loaderData?.meta.url ??
+          'https://www.bandyresultat.se',
       },
       {
         property: 'og:image',
@@ -65,16 +77,8 @@ function RouteComponent() {
     )
   }
   return (
-    <CatchBoundary
-      getResetKey={() => 'reset'}
-      onCatch={(error) => {
-        console.error(error)
-      }}
-      errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent id="playofftables" error={error} reset={reset} />
-      )}
-    >
+    <CustomCatchBoundary id="seasonPlayoff">
       <SeasonPlayoffTables />
-    </CatchBoundary>
+    </CustomCatchBoundary>
   )
 }

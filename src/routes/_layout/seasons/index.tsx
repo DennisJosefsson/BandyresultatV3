@@ -1,8 +1,8 @@
-import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
-import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
-import { getPaginatedSeasons } from './-functions/getPaginatedSeasons'
-import SeasonsPagination from './-components/SeasonsPagination'
+import { CustomCatchBoundary } from '@/components/ErrorComponents/CustomCatchBoundary'
+import { createFileRoute } from '@tanstack/react-router'
 import SeasonsList from './-components/SeasonsList'
+import SeasonsPagination from './-components/SeasonsPagination'
+import { getPaginatedSeasons } from './-functions/getPaginatedSeasons'
 import { getSeasonsCount } from './-functions/getSeasonsCount'
 
 export const Route = createFileRoute('/_layout/seasons/')({
@@ -47,9 +47,11 @@ export const Route = createFileRoute('/_layout/seasons/')({
     const data = getPaginatedSeasons({
       data: { page: deps.page, women: deps.women },
     })
-    const count = await getSeasonsCount({data:{women:deps.women}})
+    const count = await getSeasonsCount({
+      data: { women: deps.women },
+    })
     if (!data) throw new Error('Missing seasons data')
-    return {count,data}
+    return { count, data }
   },
   component: Seasons,
 })
@@ -58,15 +60,7 @@ function Seasons() {
   return (
     <div className="font-inter text-foreground mx-auto mb-2 min-h-screen w-full px-1">
       <div>
-        <CatchBoundary
-          getResetKey={() => 'reset'}
-          onCatch={(error) => {
-            console.error(error)
-          }}
-          errorComponent={({ error, reset }) => (
-            <SimpleErrorComponent id="Säsongslista" error={error} reset={reset} />
-          )}
-        >
+        <CustomCatchBoundary id="Säsongslista">
           <SeasonsPagination />
           <div className="self-center">
             <SeasonsList />
@@ -74,7 +68,7 @@ function Seasons() {
           <div className="sm:hidden">
             <SeasonsPagination />
           </div>
-        </CatchBoundary>
+        </CustomCatchBoundary>
       </div>
     </div>
   )

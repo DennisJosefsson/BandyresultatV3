@@ -1,11 +1,13 @@
-import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
+import { CustomCatchBoundary } from '@/components/ErrorComponents/CustomCatchBoundary'
 import Loading from '@/components/Loading/Loading'
-import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
-import { getGroupStats } from '../-functions/getGroupStats'
-import StatsComponent from '../-components/Stats/Stats'
+import { createFileRoute } from '@tanstack/react-router'
 import GroupListForErrorComponent from '../-components/GroupListForErrorComponent'
+import StatsComponent from '../-components/Stats/Stats'
+import { getGroupStats } from '../-functions/getGroupStats'
 
-export const Route = createFileRoute('/_layout/seasons/$year/$group/stats')({
+export const Route = createFileRoute(
+  '/_layout/seasons/$year/$group/stats',
+)({
   loaderDeps: ({ search: { women } }) => ({ women }),
   loader: async ({ deps, params }) => {
     const data = await getGroupStats({
@@ -23,24 +25,33 @@ export const Route = createFileRoute('/_layout/seasons/$year/$group/stats')({
   pendingComponent: () => <Loading page="seasonStats" />,
 
   staticData: {
-    breadcrumb: (match) => match.loaderData.breadCrumb ?? 'Statistik',
+    breadcrumb: (match) =>
+      match.loaderData.breadCrumb ?? 'Statistik',
   },
   head: ({ loaderData }) => ({
     meta: [
       {
-        title: loaderData?.meta.title ?? 'Bandyresultat - Statistik',
+        title:
+          loaderData?.meta.title ??
+          'Bandyresultat - Statistik',
       },
       {
         name: 'description',
-        content: loaderData?.meta.description ?? 'Bandyresultat - Statistik',
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - Statistik',
       },
       {
         property: 'og:description',
-        content: loaderData?.meta.description ?? 'Bandyresultat - Statistik',
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - Statistik',
       },
       {
         property: 'og:title',
-        content: loaderData?.meta.title ?? 'Bandyresultat - Statistik',
+        content:
+          loaderData?.meta.title ??
+          'Bandyresultat - Statistik',
       },
       {
         property: 'og:type',
@@ -48,7 +59,9 @@ export const Route = createFileRoute('/_layout/seasons/$year/$group/stats')({
       },
       {
         property: 'og:url',
-        content: loaderData?.meta.url ?? 'https://www.bandyresultat.se',
+        content:
+          loaderData?.meta.url ??
+          'https://www.bandyresultat.se',
       },
       {
         property: 'og:image',
@@ -70,22 +83,16 @@ function RouteComponent() {
           </span>
         </div>
 
-        {data.message.includes('Välj en ny i listan') ? <GroupListForErrorComponent /> : null}
+        {data.message.includes('Välj en ny i listan') ? (
+          <GroupListForErrorComponent />
+        ) : null}
       </div>
     )
   }
   return (
-    <CatchBoundary
-      getResetKey={() => 'reset'}
-      onCatch={(error) => {
-        console.error(error)
-      }}
-      errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent id="stats" error={error} reset={reset} />
-      )}
-    >
+    <CustomCatchBoundary id="stats">
       <Stats />
-    </CatchBoundary>
+    </CustomCatchBoundary>
   )
 }
 

@@ -1,6 +1,5 @@
-import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
+import { CustomCatchBoundary } from '@/components/ErrorComponents/CustomCatchBoundary'
 import {
-  CatchBoundary,
   Outlet,
   createFileRoute,
 } from '@tanstack/react-router'
@@ -52,22 +51,10 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
   return (
-    <CatchBoundary
-      getResetKey={() => 'reset'}
-      onCatch={(error) => {
-        console.error(error)
-      }}
-      errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent
-          id="records"
-          error={error}
-          reset={reset}
-        />
-      )}
-    >
+    <CustomCatchBoundary id="records">
       <div className="xs:p-2 p-1 sm:p-3 @container/records">
         <Outlet />
       </div>
-    </CatchBoundary>
+    </CustomCatchBoundary>
   )
 }

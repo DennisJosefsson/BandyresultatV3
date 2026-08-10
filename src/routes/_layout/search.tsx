@@ -1,7 +1,10 @@
-import { CatchBoundary, Outlet, createFileRoute } from '@tanstack/react-router'
 import { clientSearchParams } from '@/lib/types/search'
-import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
+import {
+  Outlet,
+  createFileRoute,
+} from '@tanstack/react-router'
 import { getSearchTeams } from './search/-functions/getSearchTeams'
+import { CustomCatchBoundary } from '@/components/ErrorComponents/CustomCatchBoundary'
 
 export const Route = createFileRoute('/_layout/search')({
   beforeLoad: () => {
@@ -21,17 +24,9 @@ export const Route = createFileRoute('/_layout/search')({
 function RouteComponent() {
   return (
     <div>
-      <CatchBoundary
-        getResetKey={() => 'reset'}
-        onCatch={(error) => {
-          console.error(error)
-        }}
-        errorComponent={({ error, reset }) => (
-          <SimpleErrorComponent id="Sök" error={error} reset={reset} />
-        )}
-      >
+      <CustomCatchBoundary id="Sök">
         <Outlet />
-      </CatchBoundary>
+      </CustomCatchBoundary>
     </div>
   )
 }

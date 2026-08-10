@@ -1,9 +1,6 @@
-import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
+import { CustomCatchBoundary } from '@/components/ErrorComponents/CustomCatchBoundary'
 import Loading from '@/components/Loading/Loading'
-import {
-  CatchBoundary,
-  createFileRoute,
-} from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import Streaks from '../-components/Records/Streaks/Streaks'
 import { getStreakMeta } from '../-functions/getStreakMeta'
 import { getStreakRecords } from '../-functions/getStreakRecords'
@@ -77,20 +74,8 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
   return (
-    <CatchBoundary
-      getResetKey={() => 'reset'}
-      onCatch={(error) => {
-        console.error(error)
-      }}
-      errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent
-          id="streaks"
-          error={error}
-          reset={reset}
-        />
-      )}
-    >
+    <CustomCatchBoundary id="streaks">
       <Streaks />
-    </CatchBoundary>
+    </CustomCatchBoundary>
   )
 }

@@ -1,8 +1,8 @@
-import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
+import { CustomCatchBoundary } from '@/components/ErrorComponents/CustomCatchBoundary'
 import Loading from '@/components/Loading/Loading'
-import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
-import { getMapTeams } from './-functions/getMapTeams'
+import { createFileRoute } from '@tanstack/react-router'
 import Map from './-components/Map/Map'
+import { getMapTeams } from './-functions/getMapTeams'
 
 export const Route = createFileRoute('/_layout/teams/map')({
   loaderDeps: ({ search: { women } }) => ({ women }),
@@ -18,16 +18,8 @@ export const Route = createFileRoute('/_layout/teams/map')({
 
 function MapComponent() {
   return (
-    <CatchBoundary
-      getResetKey={() => 'reset'}
-      onCatch={(error) => {
-        console.error(error)
-      }}
-      errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent id="teamsmap" error={error} reset={reset} />
-      )}
-    >
+    <CustomCatchBoundary id="seasonsMap">
       <Map />
-    </CatchBoundary>
+    </CustomCatchBoundary>
   )
 }

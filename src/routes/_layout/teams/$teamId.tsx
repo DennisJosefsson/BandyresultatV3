@@ -1,4 +1,4 @@
-import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
+import { CustomCatchBoundary } from '@/components/ErrorComponents/CustomCatchBoundary'
 import Loading from '@/components/Loading/Loading'
 import {
   Menubar,
@@ -8,7 +8,6 @@ import {
 import { useSidebar } from '@/components/base/ui/sidebar'
 import { zd } from '@/lib/utils/zod'
 import {
-  CatchBoundary,
   Link,
   Navigate,
   Outlet,
@@ -139,19 +138,7 @@ function SingleTeam() {
 
   return (
     <div>
-      <CatchBoundary
-        getResetKey={() => 'reset'}
-        onCatch={(error) => {
-          console.error(error)
-        }}
-        errorComponent={({ error, reset }) => (
-          <SimpleErrorComponent
-            id="singleteam"
-            error={error}
-            reset={reset}
-          />
-        )}
-      >
+      <CustomCatchBoundary id="singleteam">
         <div className="font-inter text-foreground mt-6 flex min-h-screen flex-col">
           <TeamHeader />
           {isMobile || !open ? (
@@ -237,7 +224,7 @@ function SingleTeam() {
             <Outlet />
           </div>
         </div>
-      </CatchBoundary>
+      </CustomCatchBoundary>
     </div>
   )
 }

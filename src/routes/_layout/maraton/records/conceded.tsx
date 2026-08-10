@@ -1,8 +1,5 @@
-import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
-import {
-  CatchBoundary,
-  createFileRoute,
-} from '@tanstack/react-router'
+import { CustomCatchBoundary } from '@/components/ErrorComponents/CustomCatchBoundary'
+import { createFileRoute } from '@tanstack/react-router'
 import Conceded from '../-components/Records/PointsGoalsEtc/Conceded'
 import { getConcededMeta } from '../-functions/getConcededMeta'
 import { getConcededRecords } from '../-functions/getConcededRecords'
@@ -73,20 +70,8 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
   return (
-    <CatchBoundary
-      getResetKey={() => 'reset'}
-      onCatch={(error) => {
-        console.error(error)
-      }}
-      errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent
-          id="conceded"
-          error={error}
-          reset={reset}
-        />
-      )}
-    >
+    <CustomCatchBoundary id="conceded">
       <Conceded />
-    </CatchBoundary>
+    </CustomCatchBoundary>
   )
 }

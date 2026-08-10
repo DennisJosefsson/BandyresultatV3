@@ -1,10 +1,12 @@
-import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
+import { CustomCatchBoundary } from '@/components/ErrorComponents/CustomCatchBoundary'
 import Loading from '@/components/Loading/Loading'
-import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
-import { getPlayoffStats } from '../-functions/getPlayoffStats'
+import { createFileRoute } from '@tanstack/react-router'
 import StatsComponent from '../-components/Stats/Stats'
+import { getPlayoffStats } from '../-functions/getPlayoffStats'
 
-export const Route = createFileRoute('/_layout/seasons/$year/playoff/stats')({
+export const Route = createFileRoute(
+  '/_layout/seasons/$year/playoff/stats',
+)({
   loaderDeps: ({ search: { women } }) => ({ women }),
   loader: async ({ deps, params }) => {
     const data = await getPlayoffStats({
@@ -18,19 +20,27 @@ export const Route = createFileRoute('/_layout/seasons/$year/playoff/stats')({
   head: ({ loaderData }) => ({
     meta: [
       {
-        title: loaderData?.meta.title ?? 'Bandyresultat - Statistik',
+        title:
+          loaderData?.meta.title ??
+          'Bandyresultat - Statistik',
       },
       {
         name: 'description',
-        content: loaderData?.meta.description ?? 'Bandyresultat - Statistik',
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - Statistik',
       },
       {
         property: 'og:description',
-        content: loaderData?.meta.description ?? 'Bandyresultat - Statistik',
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - Statistik',
       },
       {
         property: 'og:title',
-        content: loaderData?.meta.title ?? 'Bandyresultat - Statistik',
+        content:
+          loaderData?.meta.title ??
+          'Bandyresultat - Statistik',
       },
       {
         property: 'og:type',
@@ -38,7 +48,9 @@ export const Route = createFileRoute('/_layout/seasons/$year/playoff/stats')({
       },
       {
         property: 'og:url',
-        content: loaderData?.meta.url ?? 'https://www.bandyresultat.se',
+        content:
+          loaderData?.meta.url ??
+          'https://www.bandyresultat.se',
       },
       {
         property: 'og:image',
@@ -65,16 +77,8 @@ function RouteComponent() {
     )
   }
   return (
-    <CatchBoundary
-      getResetKey={() => 'reset'}
-      onCatch={(error) => {
-        console.error(error)
-      }}
-      errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent id="playoffstats" error={error} reset={reset} />
-      )}
-    >
+    <CustomCatchBoundary id="playoffstats">
       <StatsComponent stats={data} />
-    </CatchBoundary>
+    </CustomCatchBoundary>
   )
 }

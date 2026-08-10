@@ -1,17 +1,22 @@
-import { useEffect } from 'react'
-import { CatchBoundary, Navigate, createFileRoute } from '@tanstack/react-router'
+import { CustomCatchBoundary } from '@/components/ErrorComponents/CustomCatchBoundary'
 import { zd } from '@/lib/utils/zod'
-import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
-import { getDevData } from '../-functions/getDevData'
-import RangeData from '../-components/Interval/RangeData'
+import {
+  Navigate,
+  createFileRoute,
+} from '@tanstack/react-router'
+import { useEffect } from 'react'
 import GroupListForErrorComponent from '../-components/GroupListForErrorComponent'
+import RangeData from '../-components/Interval/RangeData'
+import { getDevData } from '../-functions/getDevData'
 
 const searchParams = zd.object({
   start: zd.int().nonnegative().catch(0),
   end: zd.int().nonnegative().optional(),
 })
 
-export const Route = createFileRoute('/_layout/seasons/$year/$group/interval')({
+export const Route = createFileRoute(
+  '/_layout/seasons/$year/$group/interval',
+)({
   validateSearch: searchParams,
   loaderDeps: ({ search: { women } }) => ({
     women,
@@ -38,15 +43,21 @@ export const Route = createFileRoute('/_layout/seasons/$year/$group/interval')({
   head: ({ loaderData }) => ({
     meta: [
       {
-        title: loaderData?.meta.title ?? 'Bandyresultat - Intervall',
+        title:
+          loaderData?.meta.title ??
+          'Bandyresultat - Intervall',
       },
       {
         property: 'og:description',
-        content: loaderData?.meta.description ?? 'Bandyresultat - Intervall',
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - Intervall',
       },
       {
         property: 'og:title',
-        content: loaderData?.meta.title ?? 'Bandyresultat - Intervall',
+        content:
+          loaderData?.meta.title ??
+          'Bandyresultat - Intervall',
       },
       {
         property: 'og:type',
@@ -54,7 +65,9 @@ export const Route = createFileRoute('/_layout/seasons/$year/$group/interval')({
       },
       {
         property: 'og:url',
-        content: loaderData?.meta.url ?? 'https://www.bandyresultat.se',
+        content:
+          loaderData?.meta.url ??
+          'https://www.bandyresultat.se',
       },
       {
         property: 'og:image',
@@ -76,22 +89,16 @@ function RouteComponent() {
           </span>
         </div>
 
-        {data.message.includes('Välj en ny i listan') ? <GroupListForErrorComponent /> : null}
+        {data.message.includes('Välj en ny i listan') ? (
+          <GroupListForErrorComponent />
+        ) : null}
       </div>
     )
   }
   return (
-    <CatchBoundary
-      getResetKey={() => 'reset'}
-      onCatch={(error) => {
-        console.error(error)
-      }}
-      errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent id="interval" error={error} reset={reset} />
-      )}
-    >
+    <CustomCatchBoundary id="interval">
       <Interval />
-    </CatchBoundary>
+    </CustomCatchBoundary>
   )
 }
 
@@ -106,7 +113,11 @@ function Interval() {
   useEffect(() => {
     if (data.status === 404) return
     const dataLength = data.games.length
-    if (cause === 'stay' && start !== 0 && end !== dataLength - 1) {
+    if (
+      cause === 'stay' &&
+      start !== 0 &&
+      end !== dataLength - 1
+    ) {
       navigate({
         to: '.',
         params: (prev) => ({ year: prev.year }),
@@ -121,7 +132,11 @@ function Interval() {
 
   if (data.status === 404) return null
 
-  if ((end && end >= data.dates.length) || start >= data.dates.length || (end && start >= end)) {
+  if (
+    (end && end >= data.dates.length) ||
+    start >= data.dates.length ||
+    (end && start >= end)
+  ) {
     return (
       <Navigate
         to="."

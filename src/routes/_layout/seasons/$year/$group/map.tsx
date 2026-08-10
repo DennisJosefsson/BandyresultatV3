@@ -1,11 +1,13 @@
-import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
+import { CustomCatchBoundary } from '@/components/ErrorComponents/CustomCatchBoundary'
 import Loading from '@/components/Loading/Loading'
-import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
-import { getTeamsForGroupMap } from '../-functions/getTeamsForGroupMap'
-import GroupMap from '../-components/Maps/GroupMap'
+import { createFileRoute } from '@tanstack/react-router'
 import GroupListForErrorComponent from '../-components/GroupListForErrorComponent'
+import GroupMap from '../-components/Maps/GroupMap'
+import { getTeamsForGroupMap } from '../-functions/getTeamsForGroupMap'
 
-export const Route = createFileRoute('/_layout/seasons/$year/$group/map')({
+export const Route = createFileRoute(
+  '/_layout/seasons/$year/$group/map',
+)({
   loaderDeps: ({ search: { women } }) => ({ women }),
   loader: async ({ deps, params }) => {
     const data = await getTeamsForGroupMap({
@@ -34,19 +36,25 @@ export const Route = createFileRoute('/_layout/seasons/$year/$group/map')({
   head: ({ loaderData }) => ({
     meta: [
       {
-        title: loaderData?.meta.title ?? 'Bandyresultat - Karta',
+        title:
+          loaderData?.meta.title ?? 'Bandyresultat - Karta',
       },
       {
         name: 'description',
-        content: loaderData?.meta.description ?? 'Bandyresultat - Karta',
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - Karta',
       },
       {
         property: 'og:description',
-        content: loaderData?.meta.description ?? 'Bandyresultat - Karta',
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - Karta',
       },
       {
         property: 'og:title',
-        content: loaderData?.meta.title ?? 'Bandyresultat - Karta',
+        content:
+          loaderData?.meta.title ?? 'Bandyresultat - Karta',
       },
       {
         property: 'og:type',
@@ -54,7 +62,9 @@ export const Route = createFileRoute('/_layout/seasons/$year/$group/map')({
       },
       {
         property: 'og:url',
-        content: loaderData?.meta.url ?? 'https://www.bandyresultat.se',
+        content:
+          loaderData?.meta.url ??
+          'https://www.bandyresultat.se',
       },
       {
         property: 'og:image',
@@ -76,21 +86,15 @@ function RouteComponent() {
           </span>
         </div>
 
-        {data.message.includes('Välj en ny i listan') ? <GroupListForErrorComponent /> : null}
+        {data.message.includes('Välj en ny i listan') ? (
+          <GroupListForErrorComponent />
+        ) : null}
       </div>
     )
   }
   return (
-    <CatchBoundary
-      getResetKey={() => 'reset'}
-      onCatch={(error) => {
-        console.error(error)
-      }}
-      errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent id="groupmap" error={error} reset={reset} />
-      )}
-    >
+    <CustomCatchBoundary id="groupmap">
       <GroupMap />
-    </CatchBoundary>
+    </CustomCatchBoundary>
   )
 }

@@ -1,10 +1,12 @@
-import { CatchBoundary, createFileRoute } from '@tanstack/react-router'
 import Loading from '@/components/Loading/Loading'
-import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
-import { getPlayoffGames } from '../-functions/getPlayoffGames'
+import { createFileRoute } from '@tanstack/react-router'
 import PlayoffGames from '../-components/Playoff/Games/PlayoffGames'
+import { getPlayoffGames } from '../-functions/getPlayoffGames'
+import { CustomCatchBoundary } from '@/components/ErrorComponents/CustomCatchBoundary'
 
-export const Route = createFileRoute('/_layout/seasons/$year/playoff/games')({
+export const Route = createFileRoute(
+  '/_layout/seasons/$year/playoff/games',
+)({
   loaderDeps: ({ search: { women } }) => ({ women }),
   loader: async ({ deps, params }) => {
     const data = await getPlayoffGames({
@@ -18,19 +20,27 @@ export const Route = createFileRoute('/_layout/seasons/$year/playoff/games')({
   head: ({ loaderData }) => ({
     meta: [
       {
-        title: loaderData?.meta.title ?? 'Bandyresultat - Matcher',
+        title:
+          loaderData?.meta.title ??
+          'Bandyresultat - Matcher',
       },
       {
         name: 'description',
-        content: loaderData?.meta.description ?? 'Bandyresultat - Matcher',
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - Matcher',
       },
       {
         property: 'og:description',
-        content: loaderData?.meta.description ?? 'Bandyresultat - Matcher',
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - Matcher',
       },
       {
         property: 'og:title',
-        content: loaderData?.meta.title ?? 'Bandyresultat - Matcher',
+        content:
+          loaderData?.meta.title ??
+          'Bandyresultat - Matcher',
       },
       {
         property: 'og:type',
@@ -38,7 +48,9 @@ export const Route = createFileRoute('/_layout/seasons/$year/playoff/games')({
       },
       {
         property: 'og:url',
-        content: loaderData?.meta.url ?? 'https://www.bandyresultat.se',
+        content:
+          loaderData?.meta.url ??
+          'https://www.bandyresultat.se',
       },
       {
         property: 'og:image',
@@ -48,7 +60,9 @@ export const Route = createFileRoute('/_layout/seasons/$year/playoff/games')({
     ],
   }),
   component: RouteComponent,
-  pendingComponent: () => <Loading page="seasonGamesList" />,
+  pendingComponent: () => (
+    <Loading page="seasonGamesList" />
+  ),
 })
 
 function RouteComponent() {
@@ -65,16 +79,8 @@ function RouteComponent() {
     )
   }
   return (
-    <CatchBoundary
-      getResetKey={() => 'reset'}
-      onCatch={(error) => {
-        console.error(error)
-      }}
-      errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent id="playoffgames" error={error} reset={reset} />
-      )}
-    >
+    <CustomCatchBoundary id="playoffgames">
       <PlayoffGames />
-    </CatchBoundary>
+    </CustomCatchBoundary>
   )
 }

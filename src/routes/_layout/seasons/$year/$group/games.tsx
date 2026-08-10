@@ -1,10 +1,7 @@
-import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
+import { CustomCatchBoundary } from '@/components/ErrorComponents/CustomCatchBoundary'
 import Loading from '@/components/Loading/Loading'
 import { zd } from '@/lib/utils/zod'
-import {
-  CatchBoundary,
-  createFileRoute,
-} from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import GroupListForErrorComponent from '../-components/GroupListForErrorComponent'
 import { SeasonGames } from '../-components/SeasonGames'
 import { getGames } from '../-functions/getGames'
@@ -100,20 +97,8 @@ function RouteComponent() {
     )
   }
   return (
-    <CatchBoundary
-      getResetKey={() => 'reset'}
-      onCatch={(error) => {
-        console.error(error)
-      }}
-      errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent
-          id="seasonGames"
-          error={error}
-          reset={reset}
-        />
-      )}
-    >
+    <CustomCatchBoundary id="seasonGames">
       <SeasonGames />
-    </CatchBoundary>
+    </CustomCatchBoundary>
   )
 }

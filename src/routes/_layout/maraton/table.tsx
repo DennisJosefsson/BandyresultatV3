@@ -1,7 +1,12 @@
-import { CatchBoundary, Outlet, createFileRoute } from '@tanstack/react-router'
-import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
+import { CustomCatchBoundary } from '@/components/ErrorComponents/CustomCatchBoundary'
+import {
+  Outlet,
+  createFileRoute,
+} from '@tanstack/react-router'
 
-export const Route = createFileRoute('/_layout/maraton/table')({
+export const Route = createFileRoute(
+  '/_layout/maraton/table',
+)({
   beforeLoad: () => {
     return { sidebarSection: 'maraton' }
   },
@@ -13,11 +18,13 @@ export const Route = createFileRoute('/_layout/maraton/table')({
       },
       {
         name: 'description',
-        content: 'Maratontabeller för Elitserien i bandy, damer och herrar.',
+        content:
+          'Maratontabeller för Elitserien i bandy, damer och herrar.',
       },
       {
         property: 'og:description',
-        content: 'Maratontabeller för Elitserien i bandy, damer och herrar.',
+        content:
+          'Maratontabeller för Elitserien i bandy, damer och herrar.',
       },
       {
         property: 'og:title',
@@ -43,16 +50,8 @@ export const Route = createFileRoute('/_layout/maraton/table')({
 
 function RouteComponent() {
   return (
-    <CatchBoundary
-      getResetKey={() => 'reset'}
-      onCatch={(error) => {
-        console.error(error)
-      }}
-      errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent id="maratontable" error={error} reset={reset} />
-      )}
-    >
+    <CustomCatchBoundary id="maratontable">
       <Outlet />
-    </CatchBoundary>
+    </CustomCatchBoundary>
   )
 }

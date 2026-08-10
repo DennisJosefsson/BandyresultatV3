@@ -1,8 +1,7 @@
-import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
+import { CustomCatchBoundary } from '@/components/ErrorComponents/CustomCatchBoundary'
 import Loading from '@/components/Loading/Loading'
 import { zd } from '@/lib/utils/zod'
 import {
-  CatchBoundary,
   Outlet,
   createFileRoute,
   useChildMatches,
@@ -111,24 +110,12 @@ function Season() {
   }
   return (
     <div className="flex flex-col gap-2">
-      <CatchBoundary
-        getResetKey={() => 'reset'}
-        onCatch={(error) => {
-          console.error(error)
-        }}
-        errorComponent={({ error, reset }) => (
-          <SimpleErrorComponent
-            id="Enskild säsong"
-            error={error}
-            reset={reset}
-          />
-        )}
-      >
+      <CustomCatchBoundary id="Enskild säsong">
         <div className="xs:gap-2 mt-2 flex flex-col gap-1 px-0.5 sm:mt-4 md:gap-4">
           <SeasonHeader />
           <Outlet />
         </div>
-      </CatchBoundary>
+      </CustomCatchBoundary>
     </div>
   )
 }

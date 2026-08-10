@@ -1,13 +1,18 @@
-import { CatchBoundary, Navigate, createFileRoute } from '@tanstack/react-router'
+import { CustomCatchBoundary } from '@/components/ErrorComponents/CustomCatchBoundary'
 import { zd } from '@/lib/utils/zod'
-import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
-import { getDevData } from '../-functions/getDevData'
-import GroupListForErrorComponent from '../-components/GroupListForErrorComponent'
+import {
+  Navigate,
+  createFileRoute,
+} from '@tanstack/react-router'
 import DevelopmentData from '../-components/Development/DevelopmentData'
+import GroupListForErrorComponent from '../-components/GroupListForErrorComponent'
+import { getDevData } from '../-functions/getDevData'
 
 const searchParams = zd.object({ index: zd.int().catch(0) })
 
-export const Route = createFileRoute('/_layout/seasons/$year/$group/development')({
+export const Route = createFileRoute(
+  '/_layout/seasons/$year/$group/development',
+)({
   validateSearch: searchParams,
   loaderDeps: ({ search: { women } }) => ({ women }),
   loader: async ({ params, deps }) => {
@@ -26,24 +31,33 @@ export const Route = createFileRoute('/_layout/seasons/$year/$group/development'
   component: RouteComponent,
 
   staticData: {
-    breadcrumb: (match) => match.loaderData.breadCrumb ?? 'Utveckling',
+    breadcrumb: (match) =>
+      match.loaderData.breadCrumb ?? 'Utveckling',
   },
   head: ({ loaderData }) => ({
     meta: [
       {
-        title: loaderData?.meta.title ?? 'Bandyresultat - Tabellutveckling',
+        title:
+          loaderData?.meta.title ??
+          'Bandyresultat - Tabellutveckling',
       },
       {
         name: 'description',
-        content: loaderData?.meta.description ?? 'Bandyresultat - Tabellutveckling',
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - Tabellutveckling',
       },
       {
         property: 'og:description',
-        content: loaderData?.meta.description ?? 'Bandyresultat - Tabellutveckling',
+        content:
+          loaderData?.meta.description ??
+          'Bandyresultat - Tabellutveckling',
       },
       {
         property: 'og:title',
-        content: loaderData?.meta.title ?? 'Bandyresultat - Tabellutveckling',
+        content:
+          loaderData?.meta.title ??
+          'Bandyresultat - Tabellutveckling',
       },
       {
         property: 'og:type',
@@ -51,7 +65,9 @@ export const Route = createFileRoute('/_layout/seasons/$year/$group/development'
       },
       {
         property: 'og:url',
-        content: loaderData?.meta.url ?? 'https://www.bandyresultat.se',
+        content:
+          loaderData?.meta.url ??
+          'https://www.bandyresultat.se',
       },
       {
         property: 'og:image',
@@ -73,22 +89,16 @@ function RouteComponent() {
           </span>
         </div>
 
-        {data.message.includes('Välj en ny i listan') ? <GroupListForErrorComponent /> : null}
+        {data.message.includes('Välj en ny i listan') ? (
+          <GroupListForErrorComponent />
+        ) : null}
       </div>
     )
   }
   return (
-    <CatchBoundary
-      getResetKey={() => 'reset'}
-      onCatch={(error) => {
-        console.error(error)
-      }}
-      errorComponent={({ error, reset }) => (
-        <SimpleErrorComponent id="development" error={error} reset={reset} />
-      )}
-    >
+    <CustomCatchBoundary id="development">
       <Development />
-    </CatchBoundary>
+    </CustomCatchBoundary>
   )
 }
 

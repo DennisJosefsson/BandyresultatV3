@@ -1,5 +1,5 @@
 import AppSidebar from '@/components/Common/Sidebar/AppSidebar'
-import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
+import { CustomCatchBoundary } from '@/components/ErrorComponents/CustomCatchBoundary'
 import Header from '@/components/Header/Header'
 import {
   SidebarInset,
@@ -7,7 +7,6 @@ import {
 } from '@/components/base/ui/sidebar'
 import { Toaster } from '@/components/base/ui/sonner'
 import {
-  CatchBoundary,
   Outlet,
   createFileRoute,
 } from '@tanstack/react-router'
@@ -24,23 +23,11 @@ function RouteComponent() {
           <AppSidebar />
           <SidebarInset className="size-full lg:peer-data-[state=collapsed]:max-w-[calc(100vw-var(--sidebar-width-icon))] lg:peer-data-[state=expanded]:max-w-[calc(100vw-var(--sidebar-width))]">
             <div className="bg-main-background mx-0 min-h-screen p-0.5 sm:p-1 md:ml-2 lg:p-2">
-              <CatchBoundary
-                getResetKey={() => 'reset'}
-                onCatch={(error) => {
-                  console.error(error)
-                }}
-                errorComponent={({ error, reset }) => (
-                  <SimpleErrorComponent
-                    id="layout"
-                    error={error}
-                    reset={reset}
-                  />
-                )}
-              >
+              <CustomCatchBoundary id={Route.id}>
                 <div>
                   <Outlet />
                 </div>
-              </CatchBoundary>
+              </CustomCatchBoundary>
               <Toaster richColors />
             </div>
           </SidebarInset>
