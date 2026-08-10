@@ -1,13 +1,12 @@
-import SimpleErrorComponent from '@/components/ErrorComponents/SimpleErrorComponent'
-
 import {
   Menubar,
   MenubarMenu,
   MenubarTrigger,
 } from '@/components/base/ui/menubar'
+import { CustomCatchBoundary } from '@/components/ErrorComponents/CustomCatchBoundary'
+import { logError } from '@/lib/middlewares/errors/logError'
 import { cn } from '@/lib/utils/utils'
 import {
-  CatchBoundary,
   Link,
   Outlet,
   createFileRoute,
@@ -21,6 +20,17 @@ export const Route = createFileRoute('/_layout/dashboard')({
     const { isAdmin } = await authStateFn()
 
     if (!isAdmin) {
+      const errorData = {
+        name: 'Unauthorized',
+        message:
+          'Du måste vara inloggad för att se denna sidan',
+        body: 'Ingen stack',
+        origin: 'Dashboard',
+        date: new Date().toISOString(),
+        backend: false,
+      }
+      await logError({ data: errorData })
+
       throw Route.redirect({
         to: '/unauthorized',
         search: (prev) => ({ women: prev.women ?? false }),
@@ -286,23 +296,11 @@ function RouteComponent() {
         </MenubarMenu>
       </Menubar>
 
-      <CatchBoundary
-        getResetKey={() => 'reset'}
-        onCatch={(error) => {
-          console.error(error)
-        }}
-        errorComponent={({ error, reset }) => (
-          <SimpleErrorComponent
-            id="layout"
-            error={error}
-            reset={reset}
-          />
-        )}
-      >
+      <CustomCatchBoundary id="dashboard">
         <div className="m-2">
           <Outlet />
         </div>
-      </CatchBoundary>
+      </CustomCatchBoundary>
     </div>
   )
 }
