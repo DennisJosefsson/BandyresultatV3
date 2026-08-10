@@ -4,8 +4,8 @@ import {
   createFileRoute,
   redirect,
 } from '@tanstack/react-router'
-import GroupListForErrorComponent from '../../-components/GroupListForErrorComponent'
 import SeasonTables from '../../-components/SeasonTables'
+import { getTableMeta } from '../../-functions/getTableBreadcrumb'
 import { getTables } from '../../-functions/getTables'
 
 export const Route = createFileRoute(
@@ -39,7 +39,7 @@ export const Route = createFileRoute(
     }
   },
   loader: async ({ deps, params }) => {
-    const data = await getTables({
+    const tableMeta = await getTableMeta({
       data: {
         group: params.group,
         year: params.year,
@@ -47,9 +47,17 @@ export const Route = createFileRoute(
         table: params.table,
       },
     })
-    if (!data) throw new Error('Missing data')
+    const data = getTables({
+      data: {
+        group: params.group,
+        year: params.year,
+        women: deps.women,
+        table: params.table,
+      },
+    })
+    if (!data || !tableMeta) throw new Error('Missing data')
 
-    return data
+    return { data, tableMeta }
   },
   component: RouteComponent,
 
@@ -61,25 +69,25 @@ export const Route = createFileRoute(
     meta: [
       {
         title:
-          loaderData?.meta.title ??
+          loaderData?.tableMeta.meta.title ??
           'Bandyresultat - Tabell',
       },
       {
         name: 'description',
         content:
-          loaderData?.meta.description ??
+          loaderData?.tableMeta.meta.description ??
           'Bandyresultat - Tabell',
       },
       {
         property: 'og:description',
         content:
-          loaderData?.meta.description ??
+          loaderData?.tableMeta.meta.description ??
           'Bandyresultat - Tabell',
       },
       {
         property: 'og:title',
         content:
-          loaderData?.meta.title ??
+          loaderData?.tableMeta.meta.title ??
           'Bandyresultat - Tabell',
       },
       {
@@ -89,7 +97,7 @@ export const Route = createFileRoute(
       {
         property: 'og:url',
         content:
-          loaderData?.meta.url ??
+          loaderData?.tableMeta.meta.url ??
           'https://www.bandyresultat.se',
       },
       {
@@ -102,22 +110,6 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
-  const data = Route.useLoaderData()
-  if (data.status === 404) {
-    return (
-      <div className="mt-4 flex flex-col justify-center text-sm">
-        <div className="mb-4 flex flex-row justify-center">
-          <span className="xs:text-[10px] text-[8px] font-semibold sm:text-xs lg:text-sm">
-            {data.message}
-          </span>
-        </div>
-
-        {data.message.includes('Välj en ny i listan') ? (
-          <GroupListForErrorComponent />
-        ) : null}
-      </div>
-    )
-  }
   return (
     <CustomCatchBoundary id="seasonTables">
       <SeasonTables />
