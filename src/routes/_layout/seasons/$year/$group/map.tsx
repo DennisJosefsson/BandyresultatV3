@@ -1,28 +1,38 @@
 import { CustomCatchBoundary } from '@/components/ErrorComponents/CustomCatchBoundary'
-import Loading from '@/components/Loading/Loading'
-import { createFileRoute } from '@tanstack/react-router'
+import SeasonMapSkeleton from '@/components/Loading/Skeletons/SeasonMapSkeleton'
+import {
+  Await,
+  createFileRoute,
+} from '@tanstack/react-router'
 import GroupListForErrorComponent from '../-components/GroupListForErrorComponent'
 import GroupMap from '../-components/Maps/GroupMap'
 import { getTeamsForGroupMap } from '../-functions/getTeamsForGroupMap'
+import { getTeamsForGroupMapMeta } from '../-functions/getTeamsForGroupMapMeta'
 
 export const Route = createFileRoute(
   '/_layout/seasons/$year/$group/map',
 )({
   loaderDeps: ({ search: { women } }) => ({ women }),
   loader: async ({ deps, params }) => {
-    const data = await getTeamsForGroupMap({
+    const mapMeta = await getTeamsForGroupMapMeta({
       data: {
         group: params.group,
         year: params.year,
         women: deps.women,
       },
     })
-    if (!data) throw new Error('Missing data')
+    const data = getTeamsForGroupMap({
+      data: {
+        group: params.group,
+        year: params.year,
+        women: deps.women,
+      },
+    })
+    if (!data || !mapMeta) throw new Error('Missing data')
 
-    return data
+    return { data, mapMeta }
   },
   component: RouteComponent,
-  pendingComponent: () => <Loading page="seasonStats" />,
 
   staticData: {
     breadcrumb: (match) => {
@@ -37,24 +47,26 @@ export const Route = createFileRoute(
     meta: [
       {
         title:
-          loaderData?.meta.title ?? 'Bandyresultat - Karta',
+          loaderData?.mapMeta.meta.title ??
+          'Bandyresultat - Karta',
       },
       {
         name: 'description',
         content:
-          loaderData?.meta.description ??
+          loaderData?.mapMeta.meta.description ??
           'Bandyresultat - Karta',
       },
       {
         property: 'og:description',
         content:
-          loaderData?.meta.description ??
+          loaderData?.mapMeta.meta.description ??
           'Bandyresultat - Karta',
       },
       {
         property: 'og:title',
         content:
-          loaderData?.meta.title ?? 'Bandyresultat - Karta',
+          loaderData?.mapMeta.meta.title ??
+          'Bandyresultat - Karta',
       },
       {
         property: 'og:type',
@@ -63,7 +75,7 @@ export const Route = createFileRoute(
       {
         property: 'og:url',
         content:
-          loaderData?.meta.url ??
+          loaderData?.mapMeta.meta.url ??
           'https://www.bandyresultat.se',
       },
       {
@@ -76,25 +88,39 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
-  const data = Route.useLoaderData()
-  if (data.status === 404) {
-    return (
-      <div className="mt-4 flex flex-col justify-center text-sm">
-        <div className="mb-4 flex flex-row justify-center">
-          <span className="xs:text-[10px] text-[8px] font-semibold sm:text-xs lg:text-sm">
-            {data.message}
-          </span>
-        </div>
-
-        {data.message.includes('Välj en ny i listan') ? (
-          <GroupListForErrorComponent />
-        ) : null}
-      </div>
-    )
-  }
+  const promiseData = Route.useLoaderData({
+    select: (s) => s.data,
+  })
   return (
-    <CustomCatchBoundary id="groupmap">
-      <GroupMap />
-    </CustomCatchBoundary>
+    <Await
+      promise={promiseData}
+      fallback={<SeasonMapSkeleton />}
+    >
+      {(data) => {
+        if (!data) return null
+        if (data.status === 404) {
+          return (
+            <div className="mt-4 flex flex-col justify-center text-sm">
+              <div className="mb-4 flex flex-row justify-center">
+                <span className="xs:text-[10px] text-[8px] font-semibold sm:text-xs lg:text-sm">
+                  {data.message}
+                </span>
+              </div>
+
+              {data.message.includes(
+                'Välj en ny i listan',
+              ) ? (
+                <GroupListForErrorComponent />
+              ) : null}
+            </div>
+          )
+        }
+        return (
+          <CustomCatchBoundary id="groupmap">
+            <GroupMap {...data} />
+          </CustomCatchBoundary>
+        )
+      }}
+    </Await>
   )
 }

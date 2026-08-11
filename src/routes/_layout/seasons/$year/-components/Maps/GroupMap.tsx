@@ -1,15 +1,19 @@
 import { Card } from '@/components/base/ui/card'
 import { Map, MapControls } from '@/components/base/ui/map'
-import { getRouteApi } from '@tanstack/react-router'
+import type { County } from '@/lib/types/county'
+import type { Municipality } from '@/lib/types/municipality'
+import type { Team } from '@/lib/types/team'
 import MapItem from './MapItem'
 
-const route = getRouteApi(
-  '/_layout/seasons/$year/$group/map',
-)
+type GroupMapProps = {
+  teams: Array<{
+    team: Team
+    county: County
+    municipality: Municipality
+  }>
+}
 
-const GroupMap = () => {
-  const data = route.useLoaderData()
-  if (data.status === 404) return null
+const GroupMap = ({ teams }: GroupMapProps) => {
   return (
     <div>
       <Card className="@container/map mx-auto h-[70vh] p-2 sm:w-125 xl:w-150">
@@ -18,7 +22,7 @@ const GroupMap = () => {
           zoom={4}
           fadeDuration={0}
         >
-          {data.teams.map((team) => {
+          {teams.map((team) => {
             return (
               <MapItem
                 key={team.team.teamId}
