@@ -11,7 +11,6 @@ import { getSortUnplayedGamesServerFn } from '@/lib/cookieFunctions/sortUnplayed
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import type { Games } from '@/lib/types/game'
-import type { Meta } from '@/lib/types/meta'
 import { seasonIdCheck } from '@/lib/utils/utils'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
@@ -37,15 +36,11 @@ type GamesReturn =
   | {
       status: 200
       games: Games
-      breadCrumb: string
-      meta: Meta
       teamArray: Array<TeamArray>
     }
   | {
       status: 404
       message: string
-      breadCrumb: string
-      meta: Meta
     }
   | undefined
 
@@ -67,21 +62,10 @@ export const getGames = createServerFn({ method: 'GET' })
     }): Promise<GamesReturn> => {
       try {
         const seasonYear = seasonIdCheck.parse(year)
-        const breadCrumb = 'Matcher'
-        const title = `Bandyresultat - Matcher - ${group} - ${women === true ? 'Damer' : 'Herrar'} ${seasonYear!}`
-        const url = `https://bandyresultat.se/seasons/${year}/${group}/games?women=${women}`
-        const description = `Matcher ${group} ${seasonYear} ${women ? 'damer' : 'herrar'}`
-        const meta = {
-          title,
-          url,
-          description,
-        }
         if (!seasonYear)
           return {
             status: 404,
             message: 'Säsongen finns inte.',
-            breadCrumb,
-            meta,
           }
 
         if (year < 1930) {
@@ -89,8 +73,6 @@ export const getGames = createServerFn({ method: 'GET' })
             status: 404,
             message:
               'Inga seriematcher inlagda denna säsong.',
-            breadCrumb,
-            meta,
           }
         }
 
@@ -118,16 +100,12 @@ export const getGames = createServerFn({ method: 'GET' })
           return {
             status: 404,
             message: `Ingen ${women ? 'dam' : 'herr'}serie med detta namn det här året. Välj en ny i listan.`,
-            breadCrumb,
-            meta,
           }
 
         if (serie.hasStatic) {
           return {
             status: 404,
             message: `Inga matcher inlagda för den här serien det här året, enbart sluttabell.`,
-            breadCrumb,
-            meta,
           }
         }
 
@@ -238,8 +216,6 @@ export const getGames = createServerFn({ method: 'GET' })
           return {
             status: 404,
             message: 'Inga matcher än denna säsong.',
-            breadCrumb,
-            meta,
           }
         }
         const season = await db.query.seasons.findFirst({
@@ -253,8 +229,6 @@ export const getGames = createServerFn({ method: 'GET' })
           return {
             status: 404,
             message: 'Säsongen finns inte.',
-            breadCrumb,
-            meta,
           }
 
         const sortedGames = sortGames({
@@ -283,8 +257,6 @@ export const getGames = createServerFn({ method: 'GET' })
           status: 200,
           games: sortedGames,
           teamArray,
-          breadCrumb,
-          meta,
         }
       } catch (error) {
         catchError(error)

@@ -7,6 +7,7 @@ import {
 import { Button } from '@/components/base/ui/button'
 import type { CheckedState } from '@/components/base/ui/checkbox'
 import { useCookies } from '@/lib/contexts/cookieContext'
+import type { Games } from '@/lib/types/game'
 import { cn } from '@/lib/utils/utils'
 import { getRouteApi } from '@tanstack/react-router'
 import GamesList from './Games/GamesList'
@@ -16,32 +17,25 @@ const route = getRouteApi(
   '/_layout/seasons/$year/$group/games',
 )
 
-export const SeasonGames = () => {
-  const data = route.useLoaderData()
+type SeasonGamesProps = {
+  games: Games
+  teamArray: Array<{
+    teamId: number
+    casualName: string
+  }>
+}
+
+export const SeasonGames = ({
+  games,
+  teamArray,
+}: SeasonGamesProps) => {
   const { sortGames: sortPreference, setSortGames } =
     useCookies()
   const teams = route.useSearch({ select: (s) => s.teams })
 
   const navigate = route.useNavigate()
 
-  if (data.status === undefined) {
-    return (
-      <div className="mt-2 flex flex-row justify-center font-semibold">
-        <span>Väntar tålmodigt på data.</span>
-      </div>
-    )
-  }
-
-  if (data.status === 404)
-    return (
-      <div className="mt-2 flex flex-row justify-center font-semibold">
-        {data.message}
-      </div>
-    )
-  if (
-    data.games.playedLength + data.games.unplayedLength ===
-    0
-  ) {
+  if (games.playedLength + games.unplayedLength === 0) {
     return (
       <div className="mt-2 flex flex-row justify-center font-semibold">
         Inga matcher än denna säsong.
@@ -110,7 +104,7 @@ export const SeasonGames = () => {
   const removeLeftOver = () => {
     const leftoverTeams = teams?.filter(
       (team) =>
-        !data.teamArray.map((t) => t.teamId).includes(team),
+        !teamArray.map((t) => t.teamId).includes(team),
     )
 
     if (!leftoverTeams || leftoverTeams.length === 0) return
@@ -134,7 +128,7 @@ export const SeasonGames = () => {
 
   const leftoverTeams = teams?.filter(
     (team) =>
-      !data.teamArray.map((t) => t.teamId).includes(team),
+      !teamArray.map((t) => t.teamId).includes(team),
   )
 
   return (
@@ -146,7 +140,7 @@ export const SeasonGames = () => {
           </AccordionTrigger>
           <AccordionContent>
             <GamePreference
-              teamArray={data.teamArray}
+              teamArray={teamArray}
               handleSort={handleSort}
               handleTeamArrayChange={handleTeamArrayChange}
               sort={sortPreference}
@@ -190,16 +184,16 @@ export const SeasonGames = () => {
               : 'flex-col',
           )}
         >
-          {data.games['playedLength'] > 0 ? (
+          {games['playedLength'] > 0 ? (
             <GamesList
-              group={data.games.played}
+              group={games.played}
               title="Spelade"
               teams={teams}
             />
           ) : null}
-          {data.games['unplayedLength'] > 0 ? (
+          {games['unplayedLength'] > 0 ? (
             <GamesList
-              group={data.games.unplayed}
+              group={games.unplayed}
               title="Kommande"
               teams={teams}
             />

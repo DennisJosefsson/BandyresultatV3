@@ -1,10 +1,14 @@
 import { CustomCatchBoundary } from '@/components/ErrorComponents/CustomCatchBoundary'
 import Loading from '@/components/Loading/Loading'
 import { zd } from '@/lib/utils/zod'
-import { createFileRoute } from '@tanstack/react-router'
+import {
+  Await,
+  createFileRoute,
+} from '@tanstack/react-router'
 import GroupListForErrorComponent from '../-components/GroupListForErrorComponent'
 import { SeasonGames } from '../-components/SeasonGames'
 import { getGames } from '../-functions/getGames'
+import { getGamesMeta } from '../-functions/getGamesMeta'
 
 export const Route = createFileRoute(
   '/_layout/seasons/$year/$group/games',
@@ -16,16 +20,24 @@ export const Route = createFileRoute(
   }),
   loaderDeps: ({ search: { women } }) => ({ women }),
   loader: async ({ deps, params }) => {
-    const data = await getGames({
+    const gamesMeta = await getGamesMeta({
       data: {
         group: params.group,
         year: params.year,
         women: deps.women,
       },
     })
-    if (!data) throw new Error('Missing games data')
+    const data = getGames({
+      data: {
+        group: params.group,
+        year: params.year,
+        women: deps.women,
+      },
+    })
+    if (!data || !gamesMeta)
+      throw new Error('Missing games data')
 
-    return data
+    return { data, gamesMeta }
   },
   component: RouteComponent,
   pendingComponent: () => (
@@ -39,25 +51,25 @@ export const Route = createFileRoute(
     meta: [
       {
         title:
-          loaderData?.meta.title ??
+          loaderData?.gamesMeta.meta.title ??
           'Bandyresultat - Matcher',
       },
       {
         name: 'description',
         content:
-          loaderData?.meta.description ??
+          loaderData?.gamesMeta.meta.description ??
           'Bandyresultat - Matcher',
       },
       {
         property: 'og:description',
         content:
-          loaderData?.meta.description ??
+          loaderData?.gamesMeta.meta.description ??
           'Bandyresultat - Matcher',
       },
       {
         property: 'og:title',
         content:
-          loaderData?.meta.title ??
+          loaderData?.gamesMeta.meta.title ??
           'Bandyresultat - Matcher',
       },
       {
@@ -67,7 +79,7 @@ export const Route = createFileRoute(
       {
         property: 'og:url',
         content:
-          loaderData?.meta.url ??
+          loaderData?.gamesMeta.meta.url ??
           'https://www.bandyresultat.se',
       },
       {
@@ -80,25 +92,36 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
-  const data = Route.useLoaderData()
-  if (data.status === 404) {
-    return (
-      <div className="mt-4 flex flex-col justify-center text-sm">
-        <div className="mb-4 flex flex-row justify-center">
-          <span className="xs:text-[10px] text-[8px] font-semibold sm:text-xs lg:text-sm">
-            {data.message}
-          </span>
-        </div>
-
-        {data.message.includes('Välj en ny i listan') ? (
-          <GroupListForErrorComponent />
-        ) : null}
-      </div>
-    )
-  }
+  const promiseData = Route.useLoaderData({
+    select: (s) => s.data,
+  })
   return (
-    <CustomCatchBoundary id="seasonGames">
-      <SeasonGames />
-    </CustomCatchBoundary>
+    <Await promise={promiseData}>
+      {(data) => {
+        if (!data) return null
+        if (data.status === 404) {
+          return (
+            <div className="mt-4 flex flex-col justify-center text-sm">
+              <div className="mb-4 flex flex-row justify-center">
+                <span className="xs:text-[10px] text-[8px] font-semibold sm:text-xs lg:text-sm">
+                  {data.message}
+                </span>
+              </div>
+
+              {data.message.includes(
+                'Välj en ny i listan',
+              ) ? (
+                <GroupListForErrorComponent />
+              ) : null}
+            </div>
+          )
+        }
+        return (
+          <CustomCatchBoundary id="seasonGames">
+            <SeasonGames {...data} />
+          </CustomCatchBoundary>
+        )
+      }}
+    </Await>
   )
 }
