@@ -37,9 +37,9 @@ export const getGamesMeta = createServerFn({
       try {
         const seasonYear = seasonIdCheck.parse(year)
         const breadCrumb = 'Matcher'
-        const title = `Bandyresultat - Matcher - ${group} - ${women === true ? 'Damer' : 'Herrar'} ${seasonYear!}`
+        const title = `Bandyresultat - Matcher - ${women === true ? 'Damer' : 'Herrar'} ${seasonYear!}`
         const url = `https://bandyresultat.se/seasons/${year}/${group}/games?women=${women}`
-        const description = `Matcher ${group} ${seasonYear} ${women ? 'damer' : 'herrar'}`
+        const description = `Matcher ${seasonYear} ${women ? 'damer' : 'herrar'}`
         const meta = {
           title,
           url,

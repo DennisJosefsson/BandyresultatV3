@@ -42,9 +42,9 @@ export const getTableMeta = createServerFn({
             : table === 'home'
               ? 'Hemmatabell'
               : 'Bortatabell'
-        const title = `Bandyresultat - ${breadCrumb} - ${group} - ${women === true ? 'Damer' : 'Herrar'} ${seasonYear!}`
+        const title = `Bandyresultat - ${breadCrumb} - ${women === true ? 'Damer' : 'Herrar'} ${seasonYear!}`
         const url = `https://bandyresultat.se/seasons/${year}/${group}/tables/${table}?women=${women}`
-        const description = `Serietabeller ${group} ${seasonYear} ${women ? 'damer' : 'herrar'}`
+        const description = `Serietabeller ${seasonYear} ${women ? 'damer' : 'herrar'}`
         const meta = {
           title,
           url,

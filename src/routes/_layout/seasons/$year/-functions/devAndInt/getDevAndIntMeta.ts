@@ -44,8 +44,8 @@ export const getDevAndIntMeta = createServerFn({
 
         const title =
           origin === 'development'
-            ? `Bandyresultat - Utveckling - ${group} - ${women === true ? 'Damer' : 'Herrar'} ${seasonYear!}`
-            : `Bandyresultat - Intervall - ${group} - ${women === true ? 'Damer' : 'Herrar'} ${seasonYear!}`
+            ? `Bandyresultat - Utveckling - ${women === true ? 'Damer' : 'Herrar'} ${seasonYear!}`
+            : `Bandyresultat - Intervall - ${women === true ? 'Damer' : 'Herrar'} ${seasonYear!}`
         const url =
           origin === 'development'
             ? `https://bandyresultat.se/seasons/${year}/${group}/development?women=${women}`
