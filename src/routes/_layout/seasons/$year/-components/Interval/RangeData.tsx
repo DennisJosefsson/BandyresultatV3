@@ -2,7 +2,7 @@ import { Slider } from '@/components/base/ui/slider'
 import type { Serie } from '@/lib/types/serie'
 import type { ReturnDevDataTableItem } from '@/lib/types/table'
 import { getRouteApi } from '@tanstack/react-router'
-import { getCurrentIntervalTable } from '../../-functions/getCurrentIntervalTable'
+import { getCurrentIntervalTable } from '../../-functions/devAndInt/getCurrentIntervalTable'
 import IntervalTable from './IntervalTable'
 
 const route = getRouteApi(

@@ -2,7 +2,7 @@ import { CustomCatchBoundary } from '@/components/ErrorComponents/CustomCatchBou
 import Loading from '@/components/Loading/Loading'
 import { createFileRoute } from '@tanstack/react-router'
 import StatsComponent from '../-components/Stats/Stats'
-import { getPlayoffStats } from '../-functions/getPlayoffStats'
+import { getPlayoffStats } from '../-functions/playoff/getPlayoffStats'
 
 export const Route = createFileRoute(
   '/_layout/seasons/$year/playoff/stats',

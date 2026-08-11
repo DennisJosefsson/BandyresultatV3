@@ -7,8 +7,8 @@ import {
 } from '@tanstack/react-router'
 import DevelopmentData from '../-components/Development/DevelopmentData'
 import GroupListForErrorComponent from '../-components/GroupListForErrorComponent'
-import { getDevAndIntMeta } from '../-functions/getDevAndIntMeta'
-import { getDevData } from '../-functions/getDevData'
+import { getDevAndIntMeta } from '../-functions/devAndInt/getDevAndIntMeta'
+import { getDevData } from '../-functions/devAndInt/getDevData'
 
 const searchParams = zd.object({ index: zd.int().catch(0) })
 

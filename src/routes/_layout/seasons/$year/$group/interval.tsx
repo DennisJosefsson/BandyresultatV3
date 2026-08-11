@@ -12,8 +12,8 @@ import {
 import { useEffect } from 'react'
 import GroupListForErrorComponent from '../-components/GroupListForErrorComponent'
 import RangeData from '../-components/Interval/RangeData'
-import { getDevAndIntMeta } from '../-functions/getDevAndIntMeta'
-import { getDevData } from '../-functions/getDevData'
+import { getDevAndIntMeta } from '../-functions/devAndInt/getDevAndIntMeta'
+import { getDevData } from '../-functions/devAndInt/getDevData'
 
 const searchParams = zd.object({
   start: zd.int().nonnegative().catch(0),

@@ -7,8 +7,8 @@ import {
 } from '@tanstack/react-router'
 import GroupListForErrorComponent from '../-components/GroupListForErrorComponent'
 import { SeasonGames } from '../-components/SeasonGames'
-import { getGames } from '../-functions/getGames'
-import { getGamesMeta } from '../-functions/getGamesMeta'
+import { getGames } from '../-functions/games/getGames'
+import { getGamesMeta } from '../-functions/games/getGamesMeta'
 
 export const Route = createFileRoute(
   '/_layout/seasons/$year/$group/games',

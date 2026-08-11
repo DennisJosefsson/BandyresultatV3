@@ -5,8 +5,8 @@ import {
   redirect,
 } from '@tanstack/react-router'
 import SeasonTables from '../../-components/SeasonTables'
-import { getTableMeta } from '../../-functions/getTableBreadcrumb'
-import { getTables } from '../../-functions/getTables'
+import { getTableMeta } from '../../-functions/tables/getTableBreadcrumb'
+import { getTables } from '../../-functions/tables/getTables'
 
 export const Route = createFileRoute(
   '/_layout/seasons/$year/$group/tables/$table',
