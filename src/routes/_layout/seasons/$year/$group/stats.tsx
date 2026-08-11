@@ -1,25 +1,36 @@
 import { CustomCatchBoundary } from '@/components/ErrorComponents/CustomCatchBoundary'
 import Loading from '@/components/Loading/Loading'
-import { createFileRoute } from '@tanstack/react-router'
+import {
+  Await,
+  createFileRoute,
+} from '@tanstack/react-router'
 import GroupListForErrorComponent from '../-components/GroupListForErrorComponent'
 import StatsComponent from '../-components/Stats/Stats'
 import { getGroupStats } from '../-functions/getGroupStats'
+import { getGroupStatsMeta } from '../-functions/getGroupStatsMeta'
 
 export const Route = createFileRoute(
   '/_layout/seasons/$year/$group/stats',
 )({
   loaderDeps: ({ search: { women } }) => ({ women }),
   loader: async ({ deps, params }) => {
-    const data = await getGroupStats({
+    const statsMeta = await getGroupStatsMeta({
       data: {
         group: params.group,
         year: params.year,
         women: deps.women,
       },
     })
-    if (!data) throw new Error('Missing data')
+    const data = getGroupStats({
+      data: {
+        group: params.group,
+        year: params.year,
+        women: deps.women,
+      },
+    })
+    if (!data || !statsMeta) throw new Error('Missing data')
 
-    return data
+    return { data, statsMeta }
   },
   component: RouteComponent,
   pendingComponent: () => <Loading page="seasonStats" />,
@@ -32,25 +43,25 @@ export const Route = createFileRoute(
     meta: [
       {
         title:
-          loaderData?.meta.title ??
+          loaderData?.statsMeta.meta.title ??
           'Bandyresultat - Statistik',
       },
       {
         name: 'description',
         content:
-          loaderData?.meta.description ??
+          loaderData?.statsMeta.meta.description ??
           'Bandyresultat - Statistik',
       },
       {
         property: 'og:description',
         content:
-          loaderData?.meta.description ??
+          loaderData?.statsMeta.meta.description ??
           'Bandyresultat - Statistik',
       },
       {
         property: 'og:title',
         content:
-          loaderData?.meta.title ??
+          loaderData?.statsMeta.meta.title ??
           'Bandyresultat - Statistik',
       },
       {
@@ -60,7 +71,7 @@ export const Route = createFileRoute(
       {
         property: 'og:url',
         content:
-          loaderData?.meta.url ??
+          loaderData?.statsMeta.meta.url ??
           'https://www.bandyresultat.se',
       },
       {
@@ -73,31 +84,36 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
-  const data = Route.useLoaderData()
-  if (data.status === 404) {
-    return (
-      <div className="mt-4 flex flex-col justify-center text-sm">
-        <div className="mb-4 flex flex-row justify-center">
-          <span className="xs:text-[10px] text-[8px] font-semibold sm:text-xs lg:text-sm">
-            {data.message}
-          </span>
-        </div>
-
-        {data.message.includes('Välj en ny i listan') ? (
-          <GroupListForErrorComponent />
-        ) : null}
-      </div>
-    )
-  }
+  const promiseData = Route.useLoaderData({
+    select: (s) => s.data,
+  })
   return (
-    <CustomCatchBoundary id="stats">
-      <Stats />
-    </CustomCatchBoundary>
-  )
-}
+    <Await promise={promiseData}>
+      {(data) => {
+        if (!data) return null
+        if (data.status === 404) {
+          return (
+            <div className="mt-4 flex flex-col justify-center text-sm">
+              <div className="mb-4 flex flex-row justify-center">
+                <span className="xs:text-[10px] text-[8px] font-semibold sm:text-xs lg:text-sm">
+                  {data.message}
+                </span>
+              </div>
 
-function Stats() {
-  const data = Route.useLoaderData()
-  if (data.status === 404) return null
-  return <StatsComponent stats={data} />
+              {data.message.includes(
+                'Välj en ny i listan',
+              ) ? (
+                <GroupListForErrorComponent />
+              ) : null}
+            </div>
+          )
+        }
+        return (
+          <CustomCatchBoundary id="stats">
+            <StatsComponent stats={data} />
+          </CustomCatchBoundary>
+        )
+      }}
+    </Await>
+  )
 }

@@ -62,7 +62,7 @@ const GoalData = ({ goalData }: GoalDataProps) => {
           config={resultChartConfig}
           className="mx-auto aspect-square max-h-80 min-h-40"
         >
-          <PieChart>
+          <PieChart className="min-w-full min-h-full">
             <Pie
               data={chartData}
               dataKey="value"
