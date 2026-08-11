@@ -1,4 +1,6 @@
 import { Slider } from '@/components/base/ui/slider'
+import type { Serie } from '@/lib/types/serie'
+import type { ReturnDevDataTableItem } from '@/lib/types/table'
 import { getRouteApi } from '@tanstack/react-router'
 import { getCurrentIntervalTable } from '../../-functions/getCurrentIntervalTable'
 import IntervalTable from './IntervalTable'
@@ -7,14 +9,26 @@ const route = getRouteApi(
   '/_layout/seasons/$year/$group/interval',
 )
 
-const RangeData = () => {
-  const data = route.useLoaderData()
+type RangeDataProps = {
+  tables: Array<{
+    date: string
+    table: Array<ReturnDevDataTableItem>
+  }>
+  serie: Serie
+  dates: Array<string>
+}
+
+const RangeData = ({
+  tables,
+
+  serie,
+  dates,
+}: RangeDataProps) => {
   const navigate = route.useNavigate()
   const start = route.useSearch({ select: (s) => s.start })
   const end = route.useSearch({ select: (s) => s.end })
-  if (data.status === 404) return null
 
-  const range = [start, end ?? data.dates.length - 1]
+  const range = [start, end ?? dates.length - 1]
 
   const valueChange = (value: Array<number>) => {
     navigate({
@@ -28,7 +42,7 @@ const RangeData = () => {
 
   const currTable = getCurrentIntervalTable({
     range,
-    tables: data.tables,
+    tables: tables,
   })
   if (!currTable) return null
 
@@ -36,18 +50,16 @@ const RangeData = () => {
     <div className="mx-1 flex flex-col gap-4 sm:mx-4">
       <div className="text-[8px] xxs:text-[10px] xs:text-xs sm:text-sm xl:text-base flex flex-row justify-between">
         <span className="w-24">
-          {data.dates.length < 2
-            ? null
-            : currTable.startDate}
+          {dates.length < 2 ? null : currTable.startDate}
         </span>
         <span className="font-semibold">
-          {data.serie.serieName}
+          {serie.serieName}
         </span>
         <span className="w-24 text-right">
-          {data.dates.length < 2 ? null : currTable.endDate}
+          {dates.length < 2 ? null : currTable.endDate}
         </span>
       </div>
-      {data.dates.length < 2 ? null : (
+      {dates.length < 2 ? null : (
         <Slider
           value={range}
           onValueChange={(value) =>
@@ -55,7 +67,7 @@ const RangeData = () => {
           }
           minStepsBetweenValues={1}
           min={0}
-          max={data.dates.length - 1}
+          max={dates.length - 1}
           orientation="horizontal"
           // Höjden sätts explicit med "h-1" på track i slider.tsx för att synas.
         />
@@ -63,7 +75,7 @@ const RangeData = () => {
 
       <IntervalTable
         table={currTable.table}
-        serie={data.serie}
+        serie={serie}
       />
     </div>
   )

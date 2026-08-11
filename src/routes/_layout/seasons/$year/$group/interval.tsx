@@ -1,12 +1,18 @@
 import { CustomCatchBoundary } from '@/components/ErrorComponents/CustomCatchBoundary'
+import IntervalSkeleton from '@/components/Loading/Skeletons/IntervalSkeleton'
+import type { Game } from '@/lib/types/game'
+import type { Serie } from '@/lib/types/serie'
+import type { ReturnDevDataTableItem } from '@/lib/types/table'
 import { zd } from '@/lib/utils/zod'
 import {
+  Await,
   Navigate,
   createFileRoute,
 } from '@tanstack/react-router'
 import { useEffect } from 'react'
 import GroupListForErrorComponent from '../-components/GroupListForErrorComponent'
 import RangeData from '../-components/Interval/RangeData'
+import { getDevAndIntMeta } from '../-functions/getDevAndIntMeta'
 import { getDevData } from '../-functions/getDevData'
 
 const searchParams = zd.object({
@@ -23,40 +29,48 @@ export const Route = createFileRoute(
   }),
   shouldReload: false,
   loader: async ({ params, deps }) => {
-    const data = await getDevData({
+    const intMeta = await getDevAndIntMeta({
       data: {
         group: params.group,
         year: params.year,
         women: deps.women,
-        origin: 'interval',
+        origin: 'development',
       },
     })
-    if (!data) throw new Error('Missing data')
+    const data = getDevData({
+      data: {
+        group: params.group,
+        year: params.year,
+        women: deps.women,
+      },
+    })
+    if (!data || !intMeta) throw new Error('Missing data')
 
-    return data
+    return { data, intMeta }
   },
   component: RouteComponent,
 
   staticData: {
-    breadcrumb: 'Intervall',
+    breadcrumb: (match) =>
+      match.loaderData.breadCrumb ?? 'Intervall',
   },
   head: ({ loaderData }) => ({
     meta: [
       {
         title:
-          loaderData?.meta.title ??
+          loaderData?.intMeta.meta.title ??
           'Bandyresultat - Intervall',
       },
       {
         property: 'og:description',
         content:
-          loaderData?.meta.description ??
+          loaderData?.intMeta.meta.description ??
           'Bandyresultat - Intervall',
       },
       {
         property: 'og:title',
         content:
-          loaderData?.meta.title ??
+          loaderData?.intMeta.meta.title ??
           'Bandyresultat - Intervall',
       },
       {
@@ -66,7 +80,7 @@ export const Route = createFileRoute(
       {
         property: 'og:url',
         content:
-          loaderData?.meta.url ??
+          loaderData?.intMeta.meta.url ??
           'https://www.bandyresultat.se',
       },
       {
@@ -79,40 +93,70 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
-  const data = Route.useLoaderData()
-  if (data.status === 404) {
-    return (
-      <div className="mt-4 flex flex-col justify-center text-sm">
-        <div className="mb-4 flex flex-row justify-center">
-          <span className="xs:text-[10px] text-[8px] font-semibold sm:text-xs lg:text-sm">
-            {data.message}
-          </span>
-        </div>
-
-        {data.message.includes('Välj en ny i listan') ? (
-          <GroupListForErrorComponent />
-        ) : null}
-      </div>
-    )
-  }
+  const promiseData = Route.useLoaderData({
+    select: (s) => s.data,
+  })
   return (
-    <CustomCatchBoundary id="interval">
-      <Interval />
-    </CustomCatchBoundary>
+    <Await
+      promise={promiseData}
+      fallback={<IntervalSkeleton />}
+    >
+      {(data) => {
+        if (!data) return null
+        if (data.status === 404) {
+          return (
+            <div className="mt-4 flex flex-col justify-center text-sm">
+              <div className="mb-4 flex flex-row justify-center">
+                <span className="xs:text-[10px] text-[8px] font-semibold sm:text-xs lg:text-sm">
+                  {data.message}
+                </span>
+              </div>
+
+              {data.message.includes(
+                'Välj en ny i listan',
+              ) ? (
+                <GroupListForErrorComponent />
+              ) : null}
+            </div>
+          )
+        }
+        return (
+          <CustomCatchBoundary id="interval">
+            <Interval {...data} />
+          </CustomCatchBoundary>
+        )
+      }}
+    </Await>
   )
 }
 
-function Interval() {
-  const data = Route.useLoaderData()
+type IntervalDataProps = {
+  tables: Array<{
+    date: string
+    table: Array<ReturnDevDataTableItem>
+  }>
 
+  games: Array<{
+    date: string
+    games: Array<Omit<Game, 'season'>>
+  }>
+  serie: Serie
+  dates: Array<string>
+}
+
+function Interval({
+  tables,
+  games,
+  serie,
+  dates,
+}: IntervalDataProps) {
   const start = Route.useSearch({ select: (s) => s.start })
   const end = Route.useSearch({ select: (s) => s.end })
   const navigate = Route.useNavigate()
   const cause = Route.useMatch({ select: (s) => s.cause })
 
   useEffect(() => {
-    if (data.status === 404) return
-    const dataLength = data.games.length
+    const dataLength = games.length
     if (
       cause === 'stay' &&
       start !== 0 &&
@@ -128,13 +172,11 @@ function Interval() {
         }),
       })
     }
-  }, [data])
-
-  if (data.status === 404) return null
+  }, [games])
 
   if (
-    (end && end >= data.dates.length) ||
-    start >= data.dates.length ||
+    (end && end >= dates.length) ||
+    start >= dates.length ||
     (end && start >= end)
   ) {
     return (
@@ -144,11 +186,17 @@ function Interval() {
         search={(prev) => ({
           ...prev,
           start: 0,
-          end: data.dates.length - 1,
+          end: dates.length - 1,
         })}
       />
     )
   }
 
-  return <RangeData />
+  return (
+    <RangeData
+      serie={serie}
+      tables={tables}
+      dates={dates}
+    />
+  )
 }

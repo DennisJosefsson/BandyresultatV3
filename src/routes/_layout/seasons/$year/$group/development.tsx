@@ -1,11 +1,13 @@
 import { CustomCatchBoundary } from '@/components/ErrorComponents/CustomCatchBoundary'
+import SeasonDevelopmentSkeleton from '@/components/Loading/Skeletons/SeasonDevelopmentSkeleton'
 import { zd } from '@/lib/utils/zod'
 import {
-  Navigate,
+  Await,
   createFileRoute,
 } from '@tanstack/react-router'
 import DevelopmentData from '../-components/Development/DevelopmentData'
 import GroupListForErrorComponent from '../-components/GroupListForErrorComponent'
+import { getDevAndIntMeta } from '../-functions/getDevAndIntMeta'
 import { getDevData } from '../-functions/getDevData'
 
 const searchParams = zd.object({ index: zd.int().catch(0) })
@@ -16,7 +18,7 @@ export const Route = createFileRoute(
   validateSearch: searchParams,
   loaderDeps: ({ search: { women } }) => ({ women }),
   loader: async ({ params, deps }) => {
-    const data = await getDevData({
+    const devMeta = await getDevAndIntMeta({
       data: {
         group: params.group,
         year: params.year,
@@ -24,9 +26,16 @@ export const Route = createFileRoute(
         origin: 'development',
       },
     })
-    if (!data) throw new Error('Missing data')
+    const data = getDevData({
+      data: {
+        group: params.group,
+        year: params.year,
+        women: deps.women,
+      },
+    })
+    if (!data || !devMeta) throw new Error('Missing data')
 
-    return data
+    return { data, devMeta }
   },
   component: RouteComponent,
 
@@ -38,25 +47,25 @@ export const Route = createFileRoute(
     meta: [
       {
         title:
-          loaderData?.meta.title ??
+          loaderData?.devMeta.meta.title ??
           'Bandyresultat - Tabellutveckling',
       },
       {
         name: 'description',
         content:
-          loaderData?.meta.description ??
+          loaderData?.devMeta.meta.description ??
           'Bandyresultat - Tabellutveckling',
       },
       {
         property: 'og:description',
         content:
-          loaderData?.meta.description ??
+          loaderData?.devMeta.meta.description ??
           'Bandyresultat - Tabellutveckling',
       },
       {
         property: 'og:title',
         content:
-          loaderData?.meta.title ??
+          loaderData?.devMeta.meta.title ??
           'Bandyresultat - Tabellutveckling',
       },
       {
@@ -66,7 +75,7 @@ export const Route = createFileRoute(
       {
         property: 'og:url',
         content:
-          loaderData?.meta.url ??
+          loaderData?.devMeta.meta.url ??
           'https://www.bandyresultat.se',
       },
       {
@@ -79,43 +88,39 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
-  const data = Route.useLoaderData()
-  if (data.status === 404) {
-    return (
-      <div className="mt-4 flex flex-col justify-center text-sm">
-        <div className="mb-4 flex flex-row justify-center">
-          <span className="xs:text-[10px] text-[8px] font-semibold sm:text-xs lg:text-sm">
-            {data.message}
-          </span>
-        </div>
-
-        {data.message.includes('Välj en ny i listan') ? (
-          <GroupListForErrorComponent />
-        ) : null}
-      </div>
-    )
-  }
+  const promiseData = Route.useLoaderData({
+    select: (s) => s.data,
+  })
   return (
-    <CustomCatchBoundary id="development">
-      <Development />
-    </CustomCatchBoundary>
+    <Await
+      promise={promiseData}
+      fallback={<SeasonDevelopmentSkeleton />}
+    >
+      {(data) => {
+        if (!data) return null
+        if (data.status === 404) {
+          return (
+            <div className="mt-4 flex flex-col justify-center text-sm">
+              <div className="mb-4 flex flex-row justify-center">
+                <span className="xs:text-[10px] text-[8px] font-semibold sm:text-xs lg:text-sm">
+                  {data.message}
+                </span>
+              </div>
+
+              {data.message.includes(
+                'Välj en ny i listan',
+              ) ? (
+                <GroupListForErrorComponent />
+              ) : null}
+            </div>
+          )
+        }
+        return (
+          <CustomCatchBoundary id="development">
+            <DevelopmentData {...data} />
+          </CustomCatchBoundary>
+        )
+      }}
+    </Await>
   )
-}
-
-function Development() {
-  const data = Route.useLoaderData()
-
-  const index = Route.useSearch({ select: (s) => s.index })
-  if (data.status === 404) return null
-  if (index >= data.dates.length) {
-    return (
-      <Navigate
-        to="."
-        params={(prev) => ({ ...prev })}
-        search={(prev) => ({ ...prev, index: 0 })}
-      />
-    )
-  }
-
-  return <DevelopmentData />
 }
