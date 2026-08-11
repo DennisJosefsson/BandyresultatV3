@@ -1,4 +1,4 @@
-import SeasonTablesButtonListSkeleton from '@/components/Loading/Skeletons/SeasonTableButtonSkeleton'
+import SeasonTableSkeleton from '@/components/Loading/Skeletons/SeasonTableSkeleton'
 import { Await, getRouteApi } from '@tanstack/react-router'
 import GroupListForErrorComponent from './GroupListForErrorComponent'
 import MobileTableList from './Tables/MobileTableList'
@@ -16,7 +16,7 @@ const SeasonTables = () => {
   return (
     <Await
       promise={promiseData}
-      fallback={<SeasonTablesButtonListSkeleton />}
+      fallback={<SeasonTableSkeleton />}
     >
       {(data) => {
         if (!data) return null
@@ -39,12 +39,18 @@ const SeasonTables = () => {
         }
         return (
           <div className="@container/tables">
-            <SeasonTablesButtonList />
+            <SeasonTablesButtonList serie={data.serie} />
             <div className="hidden @md/tables:block">
-              <TableList />
+              <TableList
+                tables={data.tables}
+                serie={data.serie}
+              />
             </div>
             <div className="@md/tables:hidden">
-              <MobileTableList />
+              <MobileTableList
+                tables={data.tables}
+                serie={data.serie}
+              />
             </div>
           </div>
         )
