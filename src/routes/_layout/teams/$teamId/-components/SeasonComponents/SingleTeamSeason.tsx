@@ -12,7 +12,7 @@ const SingleTeamSeason = () => {
   const data = route.useLoaderData()
   if (data.status === 404) return null
   return (
-    <div className="flex flex-col gap-2 mt-2 sm:mt-4">
+    <div className="@container flex flex-col gap-2 mt-2 sm:mt-4">
       <div className="flex flex-row items-center justify-center gap-10">
         <route.Link
           to="/teams/$teamId/seasons/$seasonId"
@@ -58,14 +58,17 @@ const SingleTeamSeason = () => {
       </div>
       <div className="flex flex-col gap-2 md:gap-4">
         <SeasonTables />
-        <GamesList
-          hasGames={data.hasGames}
-          gamesArray={data.games.playedGames}
-        />
-        <GamesList
-          hasGames={data.hasGames}
-          gamesArray={data.games.unplayedGames}
-        />
+        {data.hasGames ? null : (
+          <div className="mt-2 flex flex-row justify-center font-semibold">
+            Inga inlagda matcher denna säsong.
+          </div>
+        )}
+        <div className="grid grid-cols-1 gap-2 @3xl:grid-cols-2 @3xl:gap-4">
+          <GamesList gamesArray={data.games.playedGames} />
+          <GamesList
+            gamesArray={data.games.unplayedGames}
+          />
+        </div>
       </div>
     </div>
   )

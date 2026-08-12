@@ -2,8 +2,9 @@ import { Button } from '@/components/base/ui/button'
 import { clientEnv } from '@/lib/env/clientEnv'
 import type { CompareBaseTable } from '@/lib/types/compare'
 import {
+  useCanGoBack,
   useLocation,
-  useNavigate,
+  useRouter,
 } from '@tanstack/react-router'
 import { useCopyToClipboard } from 'usehooks-ts'
 
@@ -15,22 +16,14 @@ type CompareHeaderProps = {
 const Buttons = ({ length }: { length: number }) => {
   const [copiedText, copy] = useCopyToClipboard()
 
-  const navigate = useNavigate()
-
   const href = useLocation({
     select: (location) => location.href,
   })
 
-  const copyLink = clientEnv.VITE_SITE_PROD_URL + href
+  const router = useRouter()
+  const canGoBack = useCanGoBack()
 
-  const origin = useLocation().state.origin
-  const goBack = () => {
-    origin &&
-      navigate({
-        to: origin,
-        search: (prev) => ({ women: prev.women }),
-      })
-  }
+  const copyLink = clientEnv.VITE_SITE_PROD_URL + href
 
   return (
     <div className="mb-2 flex flex-row justify-end gap-2 xl:mb-6">
@@ -42,10 +35,10 @@ const Buttons = ({ length }: { length: number }) => {
           {copiedText ? 'Kopierad!' : `Länk`}
         </Button>
       )}
-      {origin ? (
+      {canGoBack ? (
         <Button
           // size="sm"
-          onClick={goBack}
+          onClick={() => router.history.back()}
         >
           Tillbaka
         </Button>

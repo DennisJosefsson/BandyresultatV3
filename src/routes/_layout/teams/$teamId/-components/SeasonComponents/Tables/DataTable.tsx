@@ -131,7 +131,7 @@ const DataTable = ({
                   <TeamLogoCell className="@xs:table-cell hidden w-8 py-1">
                     <TeamLogo
                       size={32}
-                      teamId={original.teamId}
+                      teamId={original.team.teamId}
                       className="size-[1lh] object-scale-down"
                       alt={original.team.casualName}
                       title={original.team.casualName}

@@ -3,23 +3,9 @@ import { GamesCard } from './GameCard'
 
 type GameListProps = {
   gamesArray: Array<GroupGames>
-
-  hasGames: boolean
 }
 
-const GamesList = ({
-  gamesArray,
-
-  hasGames,
-}: GameListProps) => {
-  if (!hasGames) {
-    return (
-      <div className="mt-2 flex flex-row justify-center font-semibold">
-        Inga inlagda matcher denna säsong, men tabell ska
-        finnas.
-      </div>
-    )
-  }
+const GamesList = ({ gamesArray }: GameListProps) => {
   if (gamesArray.length === 0) {
     return null
   }

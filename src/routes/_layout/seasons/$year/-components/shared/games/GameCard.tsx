@@ -8,9 +8,13 @@ import {
 } from '@/components/base/ui/card'
 import { Datum } from '@/components/Common/Date'
 import TeamLogo from '@/components/Common/TeamLogo'
+import { useCookies } from '@/lib/contexts/cookieContext'
 import type { Game } from '@/lib/types/game'
 import { Link } from '@tanstack/react-router'
-import { GitCompareArrowsIcon } from 'lucide-react'
+import {
+  GitCompareArrowsIcon,
+  StarIcon,
+} from 'lucide-react'
 
 type GamesCardProps = {
   serieName: string
@@ -21,6 +25,7 @@ export function GamesCard({
   serieName,
   game,
 }: GamesCardProps) {
+  const { favTeams } = useCookies()
   const otHomeGoal = game.otResult
     ? game.otResult.split('-')[0]
     : undefined
@@ -49,6 +54,14 @@ export function GamesCard({
               <span className="truncate @xs:tracking-wide">
                 {game.home.name}
               </span>
+              <StarIcon
+                data-favteam={
+                  favTeams.includes(game.homeTeamId)
+                    ? true
+                    : false
+                }
+                className="size-2.5 @xs:size-3 data-[favteam=false]:hidden"
+              />
             </div>
             <div className="w-10 @xs:w-15 @md:text-base">
               {game.played ? (
@@ -92,7 +105,6 @@ export function GamesCard({
                           game.awayTeamId,
                         ],
                       })}
-                      state={{ origin: origin }}
                     >
                       <GitCompareArrowsIcon className="@2xl:hidden" />
                       <span className="hidden @2xl:block">
@@ -105,6 +117,14 @@ export function GamesCard({
               )}
             </div>
             <div className="flex flex-row gap-2 items-center w-15 @xs:max-w-sm @xs:w-full justify-end">
+              <StarIcon
+                data-favteam={
+                  favTeams.includes(game.awayTeamId)
+                    ? true
+                    : false
+                }
+                className="size-2.5 @xs:size-3 data-[favteam=false]:hidden"
+              />
               <span className="truncate @xs:tracking-wide">
                 {game.away.name}
               </span>
