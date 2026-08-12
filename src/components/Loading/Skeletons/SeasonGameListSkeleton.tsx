@@ -15,19 +15,32 @@ const SeasonGameListSkeleton = () => {
           </AccordionTrigger>
         </AccordionItem>
       </Accordion>
-      <div>
-        <Skeleton className="h-6 w-20 mb-1" />
-        <Skeleton className="h-6 w-30 mb-1" />
-        <Skeleton className="h-4 w-40 mb-1" />
-        <div className="border px-1 py-0.5 @2xl:px-2 shadow-xs @3xl:shadow-sm max-w-3xl">
-          {Array.from({ length: 42 }).map((_i, index) => {
-            return (
-              <Skeleton
-                key={index}
-                className="mb-1 h-9 w-full"
-              />
-            )
-          })}
+      <div className="flex flex-col gap-4 @5xl:grid @5xl:grid-cols-2 mt-2">
+        <div>
+          <Skeleton className="h-5 w-40 mb-1" />
+          <div className="border px-1 py-0.5 @2xl:px-2 shadow-xs @3xl:shadow-sm">
+            {Array.from({ length: 12 }).map((_i, index) => {
+              return (
+                <Skeleton
+                  key={index}
+                  className="mb-1 h-28 w-full"
+                />
+              )
+            })}
+          </div>
+        </div>
+        <div>
+          <Skeleton className="h-5 w-40 mb-1" />
+          <div className="border px-1 py-0.5 @2xl:px-2 shadow-xs @3xl:shadow-sm">
+            {Array.from({ length: 12 }).map((_i, index) => {
+              return (
+                <Skeleton
+                  key={index}
+                  className="mb-1 h-28 w-full"
+                />
+              )
+            })}
+          </div>
         </div>
       </div>
     </div>

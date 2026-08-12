@@ -9,24 +9,14 @@ import { createServerFn } from '@tanstack/react-start'
 import { and, eq, getTableColumns } from 'drizzle-orm'
 import { getPlayoffGamesData } from './getPlayoffGamesData'
 
-type Meta = {
-  url: string
-  description: string
-  title: string
-}
-
 type GamesReturn =
   | {
       status: 200
       games: PlayoffGames
-      breadCrumb: string
-      meta: Meta
     }
   | {
       status: 404
       message: string
-      breadCrumb: string
-      meta: Meta
     }
   | undefined
 
@@ -43,22 +33,11 @@ export const getPlayoffGames = createServerFn({
     }): Promise<GamesReturn> => {
       try {
         const seasonYear = seasonIdCheck.parse(year)
-        const breadCrumb = `Matcher`
-        const title = `Bandyresultat - Slutspelsmatcher - ${women === true ? 'Damer' : 'Herrar'} ${seasonYear!}`
-        const url = `https://bandyresultat.se/seasons/${year}/playoff/games?women=${women}`
-        const description = `Slutspelsmatcher säsongen ${seasonYear} för ${women ? 'damer' : 'herrar'}`
-        const meta = {
-          title,
-          url,
-          description,
-        }
         if (year < 1973 && women) {
           return {
             status: 404,
             message:
               'Damernas första säsong var 1972/1973.',
-            breadCrumb,
-            meta,
           }
         }
 
@@ -74,8 +53,6 @@ export const getPlayoffGames = createServerFn({
           return {
             status: 404,
             message: 'Säsongen finns inte.',
-            breadCrumb,
-            meta,
           }
         }
 
@@ -97,8 +74,6 @@ export const getPlayoffGames = createServerFn({
           return {
             status: 404,
             message: 'Ingen slutspelsdata.',
-            breadCrumb,
-            meta,
           }
         }
 
@@ -111,16 +86,12 @@ export const getPlayoffGames = createServerFn({
           return {
             status: 404,
             message: 'Inga slutspelmatcher inlagda.',
-            breadCrumb,
-            meta,
           }
         }
 
         return {
           status: 200,
           games: results,
-          breadCrumb,
-          meta,
         }
       } catch (error) {
         catchError(error)

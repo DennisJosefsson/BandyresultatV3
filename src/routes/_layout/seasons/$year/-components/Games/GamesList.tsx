@@ -1,117 +1,63 @@
-import { Datum } from '@/components/Common/Date'
 import type { Game, GameGroupBase } from '@/lib/types/game'
-import { getRouteApi } from '@tanstack/react-router'
-import { LinkIcon } from 'lucide-react'
-import DataTable from '../shared/games/DataTable'
-import { columns } from '../shared/games/columns'
+import { GamesCard } from '../shared/games/GameCard'
 type GameListProps = {
   group: GameGroupBase<Array<Omit<Game, 'season'>>>
   title: string
   teams: Array<number> | undefined
 }
 
-const route = getRouteApi(
-  '/_layout/seasons/$year/$group/games',
-)
-
 const GamesList = ({
   group,
   title,
   teams,
 }: GameListProps) => {
-  const year = route.useParams({
-    select: (params) => params.year,
-  })
-
   if (group.dates.length === 0) return null
   return (
     <div className="font-inter mb-6 w-full">
       <h1 className="text-primary text-xs font-semibold tracking-wider @md/games:text-sm @xl/games:text-base">
         {title}
       </h1>
+
       <div>
-        <div
-          key={group.group}
-          className="mb-6"
-        >
-          <div
-            id={group.group}
-            className="group mb-0.5 flex flex-row items-center gap-1"
-          >
-            <h3 className="text-primary text-[10px] font-bold tracking-wide @sm/games:text-xs @3xl/games:text-sm @5xl/games:text-base">
-              {group.name}
-            </h3>
-            <route.Link
-              from="/seasons/$year/$group/games"
-              params={{ year: year, group: group.group }}
-              hash={group.group}
-              search={(prev) => ({ ...prev })}
-            >
-              <LinkIcon className="text-muted-foreground hidden h-4 w-4 group-hover:block" />
-            </route.Link>
-          </div>
-          {group.comment && (
-            <p className="bg-background my-2 max-w-xl p-1 text-[10px] font-bold @3xl/games:text-xs @5xl/games:text-sm">
-              {group.comment}
-            </p>
-          )}
-          <div>
-            {group.dates.map((date) => {
-              const games = date.games.filter((g) => {
-                if (!teams || teams.length === 0)
+        {group.comment && (
+          <p className="bg-background my-2 max-w-xl p-1 text-[10px] font-bold @3xl/games:text-xs @5xl/games:text-sm">
+            {group.comment}
+          </p>
+        )}
+        <div>
+          {group.dates.map((date) => {
+            const games = date.games.filter((g) => {
+              if (!teams || teams.length === 0) return true
+              if (teams.length === 1) {
+                if (
+                  teams.includes(g.homeTeamId) ||
+                  teams.includes(g.awayTeamId)
+                )
                   return true
-                if (teams.length === 1) {
-                  if (
-                    teams.includes(g.homeTeamId) ||
-                    teams.includes(g.awayTeamId)
-                  )
-                    return true
-                } else if (teams.length > 1) {
-                  if (
-                    teams.includes(g.homeTeamId) &&
-                    teams.includes(g.awayTeamId)
-                  )
-                    return true
-                  return false
-                } else return false
-              })
+              } else if (teams.length > 1) {
+                if (
+                  teams.includes(g.homeTeamId) &&
+                  teams.includes(g.awayTeamId)
+                )
+                  return true
+                return false
+              } else return false
+            })
 
-              if (games.length === 0) return null
+            if (games.length === 0) return null
 
-              return (
-                <div
-                  key={date.date}
-                  className="mb-4"
-                >
-                  {date.date !== 'null' && (
-                    <div className="group mb-0.5 flex flex-row items-center gap-1">
-                      <h3
-                        className="text-[10px] font-semibold tracking-wide @sm/games:text-xs @3xl/games:text-sm"
-                        id={`${group.group}-${date.date}`}
-                      >
-                        <Datum>{date.date}</Datum>
-                      </h3>
-                      <route.Link
-                        from="/seasons/$year/$group/games"
-                        params={{
-                          year: year,
-                          group: group.group,
-                        }}
-                        hash={`${group.group}-${date.date}`}
-                        search={(prev) => ({ ...prev })}
-                      >
-                        <LinkIcon className="text-muted-foreground hidden h-4 w-4 group-hover:block" />
-                      </route.Link>
-                    </div>
-                  )}
-                  <DataTable
-                    columns={columns}
-                    data={games}
+            return (
+              <div key={date.date}>
+                {games.map((game) => (
+                  <GamesCard
+                    key={`${game.homeTeamId}-${game.awayTeamId}-${date.date}`}
+                    game={game}
+                    serieName={group.name}
                   />
-                </div>
-              )
-            })}
-          </div>
+                ))}
+              </div>
+            )
+          })}
         </div>
       </div>
     </div>

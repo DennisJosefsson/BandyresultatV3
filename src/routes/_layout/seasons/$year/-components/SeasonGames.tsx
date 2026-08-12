@@ -8,7 +8,6 @@ import { Button } from '@/components/base/ui/button'
 import type { CheckedState } from '@/components/base/ui/checkbox'
 import { useCookies } from '@/lib/contexts/cookieContext'
 import type { Games } from '@/lib/types/game'
-import { cn } from '@/lib/utils/utils'
 import { getRouteApi } from '@tanstack/react-router'
 import GamesList from './Games/GamesList'
 import GamePreference from './shared/games/GamePreference'
@@ -177,12 +176,8 @@ export const SeasonGames = ({
 
       {leftoverTeams && leftoverTeams.length > 0 ? null : (
         <div
-          className={cn(
-            'flex gap-4 max-w-3xl',
-            sortPreference === 'unplayed'
-              ? 'flex-col-reverse'
-              : 'flex-col',
-          )}
+          data-sort={sortPreference}
+          className="flex gap-4 @5xl:grid @5xl:grid-cols-2 mt-2 data-[sort=played]:flex-col data-[sort=unplayed]:flex-col-reverse"
         >
           {games['playedLength'] > 0 ? (
             <GamesList

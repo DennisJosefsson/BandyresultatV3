@@ -5,18 +5,16 @@ import {
   AccordionTrigger,
 } from '@/components/base/ui/accordion'
 import { useCookies } from '@/lib/contexts/cookieContext'
-import { getRouteApi } from '@tanstack/react-router'
+import type { PlayoffGames } from '@/lib/types/game'
 import PlayoffGamesPreference from '../../shared/games/PlayoffGamesPreference'
 import Games from '../Games'
 
-const route = getRouteApi(
-  '/_layout/seasons/$year/playoff/games',
-)
+type PlayoffGamesProps = {
+  games: PlayoffGames
+}
 
-const PlayoffGames = () => {
-  const data = route.useLoaderData()
+const PlayoffGames = ({ games }: PlayoffGamesProps) => {
   const { sortGames: sortPreference } = useCookies()
-  if (data.status === 404) return null
   return (
     <div className="@container/playoff mx-1 flex flex-col gap-2 @sm/playoff:gap-4">
       <Accordion className="bg-secondary border">
@@ -31,17 +29,17 @@ const PlayoffGames = () => {
       </Accordion>
       <div
         data-sort={sortPreference}
-        className="flex gap-4 max-w-3xl data-[sort=played]:flex-col data-[sort=unplayed]:flex-col-reverse"
+        className="flex gap-4 @5xl:grid @5xl:grid-cols-2 mt-2 data-[sort=played]:flex-col data-[sort=unplayed]:flex-col-reverse"
       >
-        {data.games.playedLength > 0 ? (
+        {games.playedLength > 0 ? (
           <Games
-            games={data.games.played}
+            games={games.played}
             title="Spelade"
           />
         ) : null}
-        {data.games.unplayedLength > 0 ? (
+        {games.unplayedLength > 0 ? (
           <Games
-            games={data.games.unplayed}
+            games={games.unplayed}
             title="Kommande"
           />
         ) : null}
