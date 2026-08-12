@@ -1,68 +1,30 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/base/ui/tabs'
 import { Skeleton } from '@/components/base/ui/skeleton'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/base/ui/card'
-import { Button } from '@/components/base/ui/button'
 
 const SingleTeamSkeleton = () => {
   return (
     <div className="font-inter text-foreground mt-2 flex min-h-screen w-full flex-col">
-      <CardHeader className="p-1 md:p-6">
+      <div className="mb-4">
         <div className="flex flex-row items-center justify-between">
-          <CardTitle>
-            <Skeleton className="h-6 w-16" />
-          </CardTitle>
+          <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-1">
+              <span className="sm:text-md xs:tracking-widest text-sm tracking-wide md:text-lg xl:text-2xl">
+                <Skeleton className="h-5 w-30" />
+              </span>
+              <span className="text-xs md:text-sm xl:text-base">
+                <Skeleton className="h-5 w-20" />
+              </span>
+            </div>
 
-          <div>
             <div>
-              <Button size="responsive">Favoritlag</Button>
+              <Skeleton className="h-5 w-20" />
             </div>
           </div>
+
+          <div>
+            <Skeleton className="xs:w-16 w-8 object-scale-down md:w-24 lg:w-32 aspect-square"></Skeleton>
+          </div>
         </div>
-      </CardHeader>
-      <CardContent className="p-1 md:p-6">
-        <Tabs defaultValue="tables">
-          <TabsList>
-            <TabsTrigger className="text-[10px] md:text-sm" value="tables">
-              Tabeller
-            </TabsTrigger>
-            <TabsTrigger className="text-[10px] md:text-sm" value="fiveSeasons">
-              Senaste säsongerna
-            </TabsTrigger>
-            <TabsTrigger className="text-[10px] md:text-sm" value="stats">
-              Statistik
-            </TabsTrigger>
-            <TabsTrigger className="text-[10px] md:text-sm" value="chart">
-              Diagram
-            </TabsTrigger>
-          </TabsList>
-          <TabsContent value="tables">
-            <Card className="mb-2 p-1 sm:mb-4 md:mb-6 md:p-6">
-              <CardHeader className="p-1 md:p-6">
-                <CardTitle className="text-[10px] md:text-sm">
-                  <Skeleton className="h-6 w-16" />
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-1 md:p-6">
-                {Array.from({ length: 2 }).map((_i, index) => {
-                  return <Skeleton key={index} className="mb-1 h-9 w-full" />
-                })}
-              </CardContent>
-            </Card>
-            <Card className="mb-2 p-1 sm:mb-4 md:mb-6 md:p-6">
-              <CardHeader className="p-1 md:p-6">
-                <CardTitle className="text-[10px] md:text-sm">
-                  <Skeleton className="h-6 w-16" />
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-1 md:p-6">
-                {Array.from({ length: 2 }).map((_i, index) => {
-                  return <Skeleton key={index} className="mb-1 h-9 w-full" />
-                })}
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
-      </CardContent>
+      </div>
     </div>
   )
 }

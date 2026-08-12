@@ -14,13 +14,7 @@ const TeamHeader = () => {
 
   const { favTeams, setFavTeams } = useCookies()
   if (data.status === 404) return null
-  //   const { origin } = getOrigin()
-  //   const navigate = useNavigate()
 
-  //   const goBack = () => {
-  //     origin && navigate({ to: origin })
-  //     resetOrigin()
-  //   }
 
   const add = () => {
     if (!favTeams.includes(teamId)) {

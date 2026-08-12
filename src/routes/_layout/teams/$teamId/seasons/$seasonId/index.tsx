@@ -1,4 +1,5 @@
 import { CustomCatchBoundary } from '@/components/ErrorComponents/CustomCatchBoundary'
+import SingleTeamSeasonSkeleton from '@/components/Loading/Skeletons/SingleTeamSeasonSkeleton'
 import { zd } from '@/lib/utils/zod'
 import { createFileRoute } from '@tanstack/react-router'
 import SingleTeamSeason from '../../-components/SeasonComponents/SingleTeamSeason'
@@ -75,6 +76,7 @@ export const Route = createFileRoute(
       },
     ],
   }),
+  pendingComponent: SingleTeamSeasonSkeleton,
 })
 
 function RouteComponent() {

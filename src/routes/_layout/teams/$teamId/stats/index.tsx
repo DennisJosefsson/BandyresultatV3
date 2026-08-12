@@ -1,8 +1,11 @@
+import SingleTeamStatsSkeleton from '@/components/Loading/Skeletons/SingleTeamStatsSkeleton'
 import { createFileRoute } from '@tanstack/react-router'
-import { getSingleTeamStats } from '../-functions/getSingleTeamStats'
 import TeamCuriosities from '../-components/TeamCuriosities'
+import { getSingleTeamStats } from '../-functions/getSingleTeamStats'
 
-export const Route = createFileRoute('/_layout/teams/$teamId/stats/')({
+export const Route = createFileRoute(
+  '/_layout/teams/$teamId/stats/',
+)({
   loader: async ({ params }) => {
     const stats = await getSingleTeamStats({
       data: params.teamId,
@@ -12,4 +15,5 @@ export const Route = createFileRoute('/_layout/teams/$teamId/stats/')({
   },
   staticData: { breadcrumb: 'Statistik' },
   component: TeamCuriosities,
+  pendingComponent: SingleTeamStatsSkeleton,
 })
