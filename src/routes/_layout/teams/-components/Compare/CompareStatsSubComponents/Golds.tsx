@@ -1,20 +1,25 @@
-import { getRouteApi } from '@tanstack/react-router'
-import StatsCard from './StatsCard'
+import type { CompareSeasonStat } from '@/lib/types/compare'
 import CompareStatsCard from './CompareStatsCard'
-const route = getRouteApi('/_layout/teams/compare')
+import StatsCard from './StatsCard'
 
-const Golds = () => {
-  const data = route.useLoaderData()
-  if (data.status === 400 || data.status === 404) return null
+type CompareGoldProps = {
+  golds: Array<CompareSeasonStat>
+}
 
-  if (data.golds.length === 0) return null
+const Golds = ({ golds }: CompareGoldProps) => {
+  if (golds.length === 0) return null
   return (
     <StatsCard>
       <StatsCard.Title>SM-Guld</StatsCard.Title>
 
       <StatsCard.Content>
-        {data.golds.map((stat) => {
-          return <CompareStatsCard stat={stat} key={stat.teamId} />
+        {golds.map((stat) => {
+          return (
+            <CompareStatsCard
+              stat={stat}
+              key={stat.teamId}
+            />
+          )
         })}
       </StatsCard.Content>
     </StatsCard>

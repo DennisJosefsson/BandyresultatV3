@@ -2,57 +2,32 @@ import { db } from '@/db'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import CompareRequestError from '@/lib/middlewares/errors/CompareRequestError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import type {
-  CompareBaseTable,
-  CompareCategoryData,
-  CompareGameStat,
-  CompareLatestWinStats,
-  CompareSeasonStat,
-} from '@/lib/types/compare'
-import type { Team } from '@/lib/types/team'
+import type { Meta } from '@/lib/types/meta'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
 import { ZodError } from 'zod'
-import {
-  getAllGamesTables,
-  getCatTables,
-  getCompareStats,
-} from './utils/compareQueries'
-import { compareSortDivisionFunction } from './utils/compareSortFunctions'
-import getCompareHeaderText from './utils/getCompareHeaderText'
 
 type CompareReturn =
   | {
       status: 404
+      meta: Meta
+      breadCrumb: string
       message: string
-      teamArray?: Array<number>
     }
   | {
       status: 400
+      meta: Meta
+      breadCrumb: string
       message: string
-      teamArray?: Array<number>
     }
   | {
       status: 200
-      homeTeam: Team
-      awayTeam: Team
-      categoryData: CompareCategoryData
-      allData: Array<CompareBaseTable>
-      gameCount: number
-      golds: Array<CompareSeasonStat>
-      playoffs: Array<CompareSeasonStat>
-      allPlayoffs: Array<CompareSeasonStat>
-      firstDivisionSeasonsSince1931: Array<CompareSeasonStat>
-      firstDivisionSeasons: Array<CompareSeasonStat>
-      firstGames: Array<CompareGameStat>
-      latestGames: Array<CompareGameStat>
-      latestHomeWin: Array<CompareLatestWinStats>
-      latestAwayWin: Array<CompareLatestWinStats>
-      compareHeaderText: string
+      meta: Meta
+      breadCrumb: string
     }
   | undefined
 
-export const getCompareTeams = createServerFn({
+export const getCompareMeta = createServerFn({
   method: 'POST',
 })
   .validator(
@@ -125,76 +100,45 @@ export const getCompareTeams = createServerFn({
         })
       }
 
-      const catTables = await getCatTables({
-        homeTeamId: compareHomeTeam.teamId,
-        awayTeamId: compareAwayTeam.teamId,
-      })
-
-      if (catTables.length === 0) {
-        const teamStrings = `${compareHomeTeam.name} och ${compareAwayTeam.name}`
-        const breadCrumb = `H2H: ${compareHomeTeam.name} - ${compareAwayTeam.name}`
-
-        const message = `${teamStrings} har inga spelade matcher mot varandra i databasen.`
-        const url = `https://bandyresultat.se/teams/compare?women=${women}&teamArray=[$${compareHomeTeam.teamId},${compareAwayTeam.teamId}]`
-
-        throw new CompareRequestError({
-          message: message,
-          code: 404,
-          url,
-          breadCrumb,
-          teamArray,
-        })
-      }
-
-      const categoryData =
-        compareSortDivisionFunction(catTables)
-
-      const allData = await getAllGamesTables({
-        homeTeamId: compareHomeTeam.teamId,
-        awayTeamId: compareAwayTeam.teamId,
-      })
-
-      const gameCount = allData.length
-
-      const stats = await getCompareStats([
-        compareHomeTeam.teamId,
-        compareAwayTeam.teamId,
-      ])
-
-      const compareHeaderText = getCompareHeaderText({
-        homeTeam: compareHomeTeam,
-        awayTeam: compareAwayTeam,
-        gameCount,
-      })
+      const breadCrumb = `H2H:  ${compareHomeTeam.name} - ${compareAwayTeam.name}`
+      const title = `Bandyresultat - ${breadCrumb}`
+      const description = `Möten mellan $${compareHomeTeam.name} och ${compareAwayTeam.name}`
+      const url = `https://bandyresultat.se/teams/compare?women=${women}&teamArray=[$${compareHomeTeam.teamId},${compareAwayTeam.teamId}]`
 
       return {
-        homeTeam: compareHomeTeam,
-        awayTeam: compareAwayTeam,
-        categoryData,
-        allData,
-        gameCount,
-        ...stats,
-        compareHeaderText,
+        breadCrumb,
+        meta: { description, url, title },
         status: 200,
       }
     } catch (error) {
       if (error instanceof ZodError) {
+        const breadCrumb = `H2H`
+        const title = `Bandyresultat - ${breadCrumb}`
+        const description = ``
+        const url = `https://bandyresultat.se/teams?women=${data.women}`
         const errorString = error.issues
           .map((issue) => issue.message)
           .join(',')
         return {
           message: errorString,
+          breadCrumb,
+          meta: { title, description, url },
           status: 400,
-          teamArray: undefined,
         }
       } else if (error instanceof CompareRequestError) {
-        const teamArray = error.teamArray
+        const breadCrumb = error.breadCrumb ?? `H2H`
+        const title = `Bandyresultat - ${breadCrumb}`
+        const description = error.message
+        const url =
+          error.url ??
+          `https://bandyresultat.se/teams?women=${data.women}`
         const errorString = error.message
         const status = error.statusCode
         return {
           message: errorString,
+          breadCrumb,
+          meta: { title, description, url },
           status,
-          teamArray,
         }
       }
       {

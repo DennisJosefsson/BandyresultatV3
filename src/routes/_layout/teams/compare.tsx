@@ -1,28 +1,25 @@
 import { CustomCatchBoundary } from '@/components/ErrorComponents/CustomCatchBoundary'
 import Loading from '@/components/Loading/Loading'
 import {
+  Await,
   Navigate,
   createFileRoute,
 } from '@tanstack/react-router'
-import CompareHeader from './-components/Compare/CompareHeader'
-import FirstGames from './-components/Compare/CompareStatsSubComponents/FirstGames'
-import Golds from './-components/Compare/CompareStatsSubComponents/Golds'
-import LatestGames from './-components/Compare/CompareStatsSubComponents/LatestGames'
-import LatestWins from './-components/Compare/CompareStatsSubComponents/LatestWins'
-import Playoffs from './-components/Compare/CompareStatsSubComponents/Playoffs'
-import Seasons from './-components/Compare/CompareStatsSubComponents/Seasons'
-import CompareTables from './-components/Compare/Tables/Table'
+import Compare from './-components/Compare/Compare'
 import { getCompareTeams } from './-functions/compare'
+import { getCompareMeta } from './-functions/getCompareMeta'
 
 export const Route = createFileRoute(
   '/_layout/teams/compare',
 )({
   loaderDeps: ({ search: searchDeps }) => searchDeps,
   loader: async ({ deps }) => {
-    const data = await getCompareTeams({ data: deps })
-    if (!data) throw new Error('Missing data')
+    const compareMeta = await getCompareMeta({ data: deps })
+    const data = getCompareTeams({ data: deps })
+    if (!data || !compareMeta)
+      throw new Error('Missing data')
 
-    return data
+    return { data, compareMeta }
   },
   component: RouteComponent,
   errorComponent: ({ error }) => (
@@ -39,25 +36,25 @@ export const Route = createFileRoute(
     meta: [
       {
         title:
-          loaderData?.meta.title ??
+          loaderData?.compareMeta.meta.title ??
           'Bandyresultat - H2H: Fel',
       },
       {
         name: 'description',
         content:
-          loaderData?.meta.description ??
+          loaderData?.compareMeta.meta.description ??
           'Bandyresultat - H2H: Fel',
       },
       {
         property: 'og:description',
         content:
-          loaderData?.meta.description ??
+          loaderData?.compareMeta.meta.description ??
           'Bandyresultat - H2H: Fel',
       },
       {
         property: 'og:title',
         content:
-          loaderData?.meta.title ??
+          loaderData?.compareMeta.meta.title ??
           'Bandyresultat - H2H: Fel',
       },
       {
@@ -67,7 +64,7 @@ export const Route = createFileRoute(
       {
         property: 'og:url',
         content:
-          loaderData?.meta.url ??
+          loaderData?.compareMeta.meta.url ??
           'https://bandyresultat.se/',
       },
       {
@@ -80,60 +77,34 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
-  const data = Route.useLoaderData()
-
-  if (data.status === 400 || data.status === 404) {
-    return (
-      <Navigate
-        from="/teams/compare"
-        to="/teams/list"
-        search={(prev) => ({
-          women: prev.women,
-          teamArray: data.teamArray,
-          error: data.message,
-        })}
-      />
-    )
-  }
-  return (
-    <CustomCatchBoundary id="compare">
-      <Compare />
-    </CustomCatchBoundary>
-  )
-}
-
-function Compare() {
-  const data = Route.useLoaderData()
-  if (data.status === 400 || data.status === 404) {
-    return null
-  }
+  const promiseData = Route.useLoaderData({
+    select: (s) => s.data,
+  })
 
   return (
-    <div className="mt-2 @container/compare">
-      <CompareHeader />
-      <div className="grid grid-cols-1 @5xl:grid-cols-2 gap-4 mt-2 sm:mt-4">
-        <CompareTables />
-        <div className="flex flex-col gap-4 @5xl:mt-16">
-          <Seasons />
-          <Playoffs />
-          <Golds />
-        </div>
-        <div className="flex flex-col gap-4">
-          <LatestWins
-            latestWins={data.latestHomeWin}
-            title="Senaste hemmavinsten"
-          />
-          <LatestWins
-            latestWins={data.latestAwayWin}
-            title="Senaste bortavinsten"
-          />
-        </div>
-        <div className="flex flex-col gap-4">
-          <FirstGames />
-          <LatestGames />
-        </div>
-      </div>
-    </div>
+    <Await promise={promiseData}>
+      {(data) => {
+        if (!data) return null
+        if (data.status === 400 || data.status === 404) {
+          return (
+            <Navigate
+              from="/teams/compare"
+              to="/teams/list"
+              search={(prev) => ({
+                women: prev.women,
+                teamArray: data.teamArray,
+                error: data.message,
+              })}
+            />
+          )
+        }
+        return (
+          <CustomCatchBoundary id="compare">
+            <Compare {...data} />
+          </CustomCatchBoundary>
+        )
+      }}
+    </Await>
   )
 }
 

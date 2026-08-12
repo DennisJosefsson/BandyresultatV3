@@ -1,27 +1,34 @@
+import type { CompareSeasonStat } from '@/lib/types/compare'
 import { getRouteApi } from '@tanstack/react-router'
 import CompareStatsCard from './CompareStatsCard'
 import StatsCard from './StatsCard'
 const route = getRouteApi('/_layout/teams/compare')
 
-const Seasons = () => {
+type CompareSeasonProps = {
+  firstDivisionSeasonsSince1931: Array<CompareSeasonStat>
+  firstDivisionSeasons: Array<CompareSeasonStat>
+}
+
+const Seasons = ({
+  firstDivisionSeasons,
+  firstDivisionSeasonsSince1931,
+}: CompareSeasonProps) => {
   const women = route.useSearch({
     select(state) {
       return state.women
     },
   })
-  const data = route.useLoaderData()
-  if (data.status === 400 || data.status === 404)
-    return null
+
   return (
     <div className="flex flex-col gap-2">
-      {data.firstDivisionSeasons.length > 1 ? (
+      {firstDivisionSeasons.length > 1 ? (
         <StatsCard>
           <StatsCard.Title>
             Säsonger i högsta serien
           </StatsCard.Title>
 
           <StatsCard.Content>
-            {data.firstDivisionSeasons.map((stat) => {
+            {firstDivisionSeasons.map((stat) => {
               return (
                 <CompareStatsCard
                   stat={stat}
@@ -33,23 +40,21 @@ const Seasons = () => {
         </StatsCard>
       ) : null}
       {!women &&
-      data.firstDivisionSeasonsSince1931.length > 0 ? (
+      firstDivisionSeasonsSince1931.length > 0 ? (
         <StatsCard>
           <StatsCard.Title>
             Säsonger i högsta serien sedan 1931
           </StatsCard.Title>
 
           <StatsCard.Content>
-            {data.firstDivisionSeasonsSince1931.map(
-              (stat) => {
-                return (
-                  <CompareStatsCard
-                    stat={stat}
-                    key={stat.teamId}
-                  />
-                )
-              },
-            )}
+            {firstDivisionSeasonsSince1931.map((stat) => {
+              return (
+                <CompareStatsCard
+                  stat={stat}
+                  key={stat.teamId}
+                />
+              )
+            })}
           </StatsCard.Content>
         </StatsCard>
       ) : null}
