@@ -7,15 +7,15 @@ const GameStatComponent = ({
 }: {
   children: ReactNode
 }) => {
-  return <div className="mb-2">{children}</div>
-}
-
-function Title({ children }: { children: ReactNode }) {
   return (
-    <div className="xs:text-xs mb-1 text-[8px] md:text-sm">
+    <div className="border p-1 @xs:p-2 shadow-xs md:shadow-sm w-full @2xl:max-w-lg @4xl:max-w-xl h-fit justify-self-start">
       {children}
     </div>
   )
+}
+
+function Title({ children }: { children: ReactNode }) {
+  return <div>{children}</div>
 }
 
 function Content({
@@ -31,7 +31,7 @@ function Content({
         return (
           <div
             key={`${stat.gameId}-${index}`}
-            className="xs:p-2 xs:text-xs mb-2 flex max-w-lg flex-col gap-1 rounded border p-1 text-[8px] shadow-xs md:shadow-sm lg:text-sm"
+            className="bg-muted-foreground/20 px-1 @sm:px-3 py-1 mb-1"
           >
             <div className="flex flex-row justify-between">
               <span>

@@ -8,6 +8,16 @@ const Streaks = () => {
   if (data.status === 404) return null
   return (
     <div className="grid grid-cols-1 gap-2 md:gap-4 justify-start h-fit">
+      {data.streaks.playoffStreak.length > 0 ? (
+        <StreakComponent>
+          <StreakComponent.Title>
+            Slutspel i rad
+          </StreakComponent.Title>
+          <StreakComponent.PlayoffContent
+            streak={data.streaks.playoffStreak}
+          ></StreakComponent.PlayoffContent>
+        </StreakComponent>
+      ) : null}
       {data.streaks.unbeatenStreak.length > 0 ? (
         <StreakComponent>
           <StreakComponent.Title>

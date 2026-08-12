@@ -6,34 +6,26 @@ const StatsCard = ({
   children: ReactNode
 }) => {
   return (
-    <div className="mb-2 flex flex-col gap-1 border p-2 shadow-sm max-w-lg">
+    <div className="border p-2 shadow-xs md:shadow-sm sm:w-120 xl:w-full xl:max-w-160 h-fit justify-self-start">
       {children}
     </div>
   )
 }
 
-function Upper({ children }: { children: ReactNode }) {
+function Title({ children }: { children: ReactNode }) {
   return (
-    <div className="flex flex-row justify-between">
-      {children}
+    <div>
+      <span className="text-[8px] @xs:text-[10px] @sm:text-xs @2xl:text-sm/6">
+        {children}
+      </span>
     </div>
   )
 }
-
-function Lower({ children }: { children: ReactNode }) {
-  return <div className="flex flex-row">{children}</div>
-}
-
 function Content({ children }: { children: ReactNode }) {
-  return (
-    <div className="xs:text-xs text-[10px] sm:text-sm">
-      {children}
-    </div>
-  )
+  return <div>{children}</div>
 }
 
-StatsCard.Upper = Upper
-StatsCard.Lower = Lower
+StatsCard.Title = Title
 StatsCard.Content = Content
 
 export default StatsCard
