@@ -13,12 +13,6 @@ import { createServerFn } from '@tanstack/react-start'
 import { and, eq, getTableColumns } from 'drizzle-orm'
 import { getPlayoffTableData } from './getPlayoffTableData'
 
-type Meta = {
-  url: string
-  description: string
-  title: string
-}
-
 type PlayoffTableReturn =
   | {
       status: 200
@@ -28,14 +22,10 @@ type PlayoffTableReturn =
         | Array<PlayoffSeriesTable>
         | undefined
       playoffSeason: typeof playoffseason.$inferSelect
-      breadCrumb: string
-      meta: Meta
     }
   | {
       status: 404
       message: string
-      breadCrumb: string
-      meta: Meta
     }
   | undefined
 
@@ -52,22 +42,11 @@ export const getPlayoffTable = createServerFn({
     }): Promise<PlayoffTableReturn> => {
       try {
         const seasonYear = seasonIdCheck.parse(year)
-        const breadCrumb = `Slutspelsträd`
-        const title = `Bandyresultat - Slutspelsträd - ${women === true ? 'Damer' : 'Herrar'} ${seasonYear!}`
-        const url = `https://bandyresultat.se/seasons/${year}/playoff/table?women=${women}`
-        const description = `Slutspelsträd säsongen ${seasonYear} för ${women ? 'damer' : 'herrar'}`
-        const meta = {
-          title,
-          url,
-          description,
-        }
         if (year < 1973 && women) {
           return {
             status: 404,
             message:
               'Damernas första säsong var 1972/1973.',
-            breadCrumb,
-            meta,
           }
         }
         const season = await db.query.seasons.findFirst({
@@ -82,8 +61,6 @@ export const getPlayoffTable = createServerFn({
           return {
             status: 404,
             message: 'Säsongen finns inte.',
-            breadCrumb,
-            meta,
           }
         }
 
@@ -105,30 +82,10 @@ export const getPlayoffTable = createServerFn({
           return {
             status: 404,
             message: 'Ingen slutspelsdata.',
-            breadCrumb,
-            meta,
           }
         }
 
         const playoffSeason = playoffSeasonArr[0]
-
-        // const playoffGamesCount = await db.$count(
-        //   games,
-        //   and(
-        //     eq(games.seasonId, playoffSeason.seasonId),
-        //     eq(games.playoff, true),
-        //   ),
-        // )
-
-        // if (playoffGamesCount === 0) {
-        //   return {
-        //     status: 404,
-        //     message: 'Inga slutspelsmatcher är inlagda.',
-        //     breadCrumb,
-        //     meta,
-        //   }
-        // }
-
         const playoffData = await getPlayoffTableData({
           playoffSeason,
         })
@@ -137,8 +94,6 @@ export const getPlayoffTable = createServerFn({
           status: 200,
           ...playoffData,
           playoffSeason,
-          breadCrumb,
-          meta,
         }
       } catch (error) {
         catchError(error)

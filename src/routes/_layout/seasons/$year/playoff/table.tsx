@@ -1,45 +1,52 @@
 import { CustomCatchBoundary } from '@/components/ErrorComponents/CustomCatchBoundary'
 import Loading from '@/components/Loading/Loading'
-import { createFileRoute } from '@tanstack/react-router'
+import {
+  Await,
+  createFileRoute,
+} from '@tanstack/react-router'
 import SeasonPlayoffTables from '../-components/Playoff/SeasonPlayoffTables'
 import { getPlayoffTable } from '../-functions/playoff/getPlayoffTable'
+import { getPlayoffTableMeta } from '../-functions/playoff/getPlayoffTableMeta'
 
 export const Route = createFileRoute(
   '/_layout/seasons/$year/playoff/table',
 )({
   loaderDeps: ({ search: { women } }) => ({ women }),
   loader: async ({ deps, params }) => {
-    const data = await getPlayoffTable({
+    const tableMeta = await getPlayoffTableMeta({
       data: { year: params.year, women: deps.women },
     })
-    if (!data) throw new Error('Missing data')
+    const data = getPlayoffTable({
+      data: { year: params.year, women: deps.women },
+    })
+    if (!data || !tableMeta) throw new Error('Missing data')
 
-    return data
+    return { data, tableMeta }
   },
   staticData: { breadcrumb: 'Slutspelsträd' },
   head: ({ loaderData }) => ({
     meta: [
       {
         title:
-          loaderData?.meta.title ??
+          loaderData?.tableMeta.meta.title ??
           'Bandyresultat - Slutspelsträd',
       },
       {
         name: 'description',
         content:
-          loaderData?.meta.description ??
+          loaderData?.tableMeta.meta.description ??
           'Bandyresultat - Slutspelsträd',
       },
       {
         property: 'og:description',
         content:
-          loaderData?.meta.description ??
+          loaderData?.tableMeta.meta.description ??
           'Bandyresultat - Slutspelsträd',
       },
       {
         property: 'og:title',
         content:
-          loaderData?.meta.title ??
+          loaderData?.tableMeta.meta.title ??
           'Bandyresultat - Slutspelsträd',
       },
       {
@@ -49,7 +56,7 @@ export const Route = createFileRoute(
       {
         property: 'og:url',
         content:
-          loaderData?.meta.url ??
+          loaderData?.tableMeta.meta.url ??
           'https://www.bandyresultat.se',
       },
       {
@@ -64,21 +71,30 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
-  const data = Route.useLoaderData()
-  if (data.status === 404) {
-    return (
-      <div className="mt-4 flex flex-col justify-center text-sm">
-        <div className="mb-4 flex flex-row justify-center">
-          <span className="xs:text-[10px] text-[8px] font-semibold sm:text-xs lg:text-sm">
-            {data.message}
-          </span>
-        </div>
-      </div>
-    )
-  }
+  const promiseData = Route.useLoaderData({
+    select: (s) => s.data,
+  })
   return (
-    <CustomCatchBoundary id="seasonPlayoff">
-      <SeasonPlayoffTables />
-    </CustomCatchBoundary>
+    <Await promise={promiseData}>
+      {(data) => {
+        if (!data) return null
+        if (data.status === 404) {
+          return (
+            <div className="mt-4 flex flex-col justify-center text-sm">
+              <div className="mb-4 flex flex-row justify-center">
+                <span className="xs:text-[10px] text-[8px] font-semibold sm:text-xs lg:text-sm">
+                  {data.message}
+                </span>
+              </div>
+            </div>
+          )
+        }
+        return (
+          <CustomCatchBoundary id="seasonPlayoff">
+            <SeasonPlayoffTables {...data} />
+          </CustomCatchBoundary>
+        )
+      }}
+    </Await>
   )
 }

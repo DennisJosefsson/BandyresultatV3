@@ -1,24 +1,34 @@
+import type { playoffseason } from '@/db/schema'
+import type { Game } from '@/lib/types/game'
+import type {
+  PlayoffCategoryArray,
+  PlayoffSeriesTable,
+} from '@/lib/types/table'
 import { cn } from '@/lib/utils/utils'
-import { getRouteApi } from '@tanstack/react-router'
 import PlayoffAsSeriesTables from './PlayoffAsSeriesTables'
 import DefaultComponent from './PlayoffTree/DefaultComponent'
 import Final from './PlayoffTree/Final'
 import NilComponent from './PlayoffTree/NilComponent'
 
-const route = getRouteApi(
-  '/_layout/seasons/$year/playoff/table',
-)
+type PlayoffTableProps = {
+  status: 200
+  finalGames: Array<Omit<Game, 'season'>>
+  playoffTables: Array<PlayoffCategoryArray>
+  playoffSeriesTables: Array<PlayoffSeriesTable> | undefined
+  playoffSeason: typeof playoffseason.$inferSelect
+}
 
-const SeasonPlayoffTables = () => {
-  const data = route.useLoaderData()
-
-  if (data.status === 404) return null
-
+const SeasonPlayoffTables = ({
+  finalGames,
+  playoffSeason,
+  playoffSeriesTables,
+  playoffTables,
+}: PlayoffTableProps) => {
   return (
     <div className="@container/playoff m-0 w-full @2xl/playoff:justify-self-center">
       <div className="grid gap-2 @5xl/playoff:gap-4">
-        <Final />
-        {data.playoffTables.map((cat) => {
+        <Final finalGames={finalGames} />
+        {playoffTables.map((cat) => {
           return (
             <div
               key={cat.category}
@@ -80,8 +90,10 @@ const SeasonPlayoffTables = () => {
           )
         })}
 
-        {data.playoffSeason.playoffAsSeries ? (
-          <PlayoffAsSeriesTables />
+        {playoffSeason.playoffAsSeries ? (
+          <PlayoffAsSeriesTables
+            playoffSeriesTables={playoffSeriesTables}
+          />
         ) : null}
       </div>
     </div>

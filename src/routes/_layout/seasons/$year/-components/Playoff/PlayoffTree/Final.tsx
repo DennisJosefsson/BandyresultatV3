@@ -1,22 +1,23 @@
-import { getRouteApi } from '@tanstack/react-router'
-import NilFinalComponent from './NilFinalComponent'
+import type { Game } from '@/lib/types/game'
 import FinalCard from './FinalCard'
+import NilFinalComponent from './NilFinalComponent'
 
-const route = getRouteApi('/_layout/seasons/$year/playoff/table')
+type FinalGameProps = {
+  finalGames: Array<Omit<Game, 'season'>>
+}
 
-
-
-const Final = () => {
-  const data = route.useLoaderData()
-
-  if (data.status === 404 || !data.finalGames) return null
-
-  if (data.finalGames.length === 0) return <NilFinalComponent />
+const Final = ({ finalGames }: FinalGameProps) => {
+  if (finalGames.length === 0) return <NilFinalComponent />
 
   return (
     <>
-      {data.finalGames.map((game) => {
-        return <FinalCard  key={game.gameId} game={game} />
+      {finalGames.map((game) => {
+        return (
+          <FinalCard
+            key={game.gameId}
+            game={game}
+          />
+        )
       })}
     </>
   )

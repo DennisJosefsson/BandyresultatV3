@@ -1,20 +1,19 @@
-import { getRouteApi } from '@tanstack/react-router'
+import type { PlayoffSeriesTable } from '@/lib/types/table'
 import MobileTableList from './SeriesTables/MobileTableList'
 import TableList from './SeriesTables/TableList'
 
-const route = getRouteApi(
-  '/_layout/seasons/$year/playoff/table',
-)
+type PlayoffAsSeriesTablesProps = {
+  playoffSeriesTables: Array<PlayoffSeriesTable> | undefined
+}
 
-const PlayoffAsSeriesTables = () => {
-  const data = route.useLoaderData()
-
-  if (data.status === 404 || !data.playoffSeriesTables)
-    return null
+const PlayoffAsSeriesTables = ({
+  playoffSeriesTables,
+}: PlayoffAsSeriesTablesProps) => {
+  if (!playoffSeriesTables) return null
   return (
     <div className="@container/playoffseries">
       <div className="hidden @md:block">
-        {data.playoffSeriesTables.map((group) => {
+        {playoffSeriesTables.map((group) => {
           return (
             <TableList
               key={group.group}
@@ -24,7 +23,7 @@ const PlayoffAsSeriesTables = () => {
         })}
       </div>
       <div className="@md:hidden">
-        {data.playoffSeriesTables.map((group) => {
+        {playoffSeriesTables.map((group) => {
           return (
             <MobileTableList
               key={group.group}
