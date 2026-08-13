@@ -19,7 +19,7 @@ import {
 type RoutePaths =
   | '/seasons/$year/$group/games'
   | '/seasons/$year/playoff/games'
-  | '/teams/$teamId/$seasonId'
+  | '/teams/$teamId/seasons/$seasonId/'
 
 type GamesCardProps = {
   serieName: string
@@ -27,7 +27,7 @@ type GamesCardProps = {
   routePath: RoutePaths
 }
 
-export function GamesCard({
+export function GameCard({
   serieName,
   game,
   routePath,

@@ -1,5 +1,5 @@
+import { GameCard } from '@/components/Common/Games/GameCard'
 import type { Game, GameGroupBase } from '@/lib/types/game'
-import { GamesCard } from '../../shared/games/GameCard'
 
 type GameListProps = {
   gamesArray: Array<
@@ -28,10 +28,11 @@ const GamesList = ({ gamesArray }: GameListProps) => {
                   return (
                     <div key={date.date}>
                       {date.games.map((game) => (
-                        <GamesCard
+                        <GameCard
                           key={`${game.homeTeamId}-${game.awayTeamId}-${date.date}`}
                           game={game}
                           serieName={group.name}
+                          routePath="/seasons/$year/playoff/games"
                         />
                       ))}
                     </div>
