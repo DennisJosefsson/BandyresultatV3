@@ -264,7 +264,7 @@ export const getUnionedTables = async ({
     .from(teamgames)
     .where(
       and(
-        eq(teamgames.category, 'mix'),
+        eq(teamgames.group, 'mix'),
         eq(teamgames.seasonId, serie.seasonId),
         eq(teamgames.played, true),
         inArray(teamgames.teamId, teamArray),
