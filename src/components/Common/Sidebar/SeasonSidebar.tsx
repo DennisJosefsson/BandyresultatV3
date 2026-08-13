@@ -68,6 +68,7 @@ export function SeasonSidebar() {
                           onClick={toggleOnMobile}
                           render={
                             <Link
+                              title={item.name}
                               to="/seasons/$year/$group/tables/$table"
                               params={{
                                 year,
@@ -89,6 +90,7 @@ export function SeasonSidebar() {
                           onClick={toggleOnMobile}
                           render={
                             <Link
+                              title={item.name}
                               to="."
                               params={(prev) => ({
                                 ...prev,
