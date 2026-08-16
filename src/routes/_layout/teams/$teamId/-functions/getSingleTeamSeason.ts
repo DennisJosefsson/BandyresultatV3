@@ -3,6 +3,7 @@ import {
   games,
   seasons,
   series,
+  teamgames,
   teams,
   teamseasons,
   teamseries,
@@ -11,20 +12,29 @@ import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import type { GroupGames } from '@/lib/types/game'
 import type { Meta } from '@/lib/types/meta'
-import type { SerieData } from '@/lib/types/serie'
-import type { GroupTable } from '@/lib/types/table'
+import type { Serie } from '@/lib/types/serie'
+import type { TeamSeasonTable } from '@/lib/types/table'
 import type { Team } from '@/lib/types/team'
 import { seasonIdCheck } from '@/lib/utils/utils'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
 import type { SQL } from 'drizzle-orm'
-import { and, desc, eq, or } from 'drizzle-orm'
+import {
+  and,
+  asc,
+  desc,
+  eq,
+  getTableColumns,
+  inArray,
+  ne,
+  or,
+} from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
+
+import { getUnionedTables } from './getSingleTeamSeasonTables'
 import {
   getSeasonGames,
   getSeasons,
-  getTeamSeasonStaticTables,
-  getTeamSeasonTables,
 } from './singleTeamSeasonFunctions'
 
 const home = alias(teams, 'home')
@@ -35,8 +45,8 @@ type SingeTeamSeasonReturn =
       status: 200
       breadCrumb: string
       meta: Meta
-      tables: Array<GroupTable>
-      staticTables: Array<GroupTable>
+      tables: Array<TeamSeasonTable>
+      tableLength: number
       hasGames: boolean
       games: {
         playedGames: Array<GroupGames>
@@ -44,7 +54,7 @@ type SingeTeamSeasonReturn =
       }
       team: Team
       seasonYear: string
-      series: Array<SerieData>
+      series: Array<Serie>
       firstSeason: {
         year: string
         seasonId: number
@@ -146,14 +156,10 @@ export const getSingleTeamSeason = createServerFn({
         const teamSeason = db
           .select()
           .from(teamseasons)
-          .leftJoin(
-            seasons,
-            eq(seasons.seasonId, teamseasons.seasonId),
-          )
           .where(
             and(
               eq(teamseasons.teamId, team.teamId),
-              eq(seasons.year, seasonYear),
+              eq(teamseasons.seasonId, season.seasonId),
             ),
           )
 
@@ -238,11 +244,7 @@ export const getSingleTeamSeason = createServerFn({
 
         const seriesForTeam = await db
           .select({
-            category: series.category,
-            group: series.group,
-            comment: series.comment,
-            serieName: series.serieName,
-            level: series.level,
+            ...getTableColumns(series),
           })
           .from(series)
           .leftJoin(
@@ -260,29 +262,57 @@ export const getSingleTeamSeason = createServerFn({
           .where(
             and(
               eq(teams.teamId, team.teamId),
-              eq(seasons.year, seasonYear),
+              eq(series.seasonId, season.seasonId),
+              ne(series.group, 'mix'),
             ),
           )
+          .orderBy(asc(series.level))
 
-        const tableSeriesArray = seriesForTeam
-          .filter((serie) =>
-            ['regular', 'qualification'].includes(
-              serie.category,
-            ),
-          )
-          .map((serie) => serie.group)
-
-        const staticTables =
-          await getTeamSeasonStaticTables({
-            seasonYear,
-            women: team.women,
-            groupArray: tableSeriesArray,
+        const teamArray = await db
+          .selectDistinct({
+            teamId: teamgames.teamId,
+            group: teamgames.group,
           })
-        const getTables = await getTeamSeasonTables({
-          seasonYear,
-          women: team.women,
-          groupArray: tableSeriesArray,
-        })
+          .from(teamgames)
+          .where(
+            and(
+              inArray(teamgames.category, [
+                'playoffseries',
+                'regular',
+                'qualification',
+              ]),
+              ne(teamgames.group, 'mix'),
+              eq(teamgames.seasonId, season.seasonId),
+            ),
+          )
+          .groupBy(teamgames.group, teamgames.teamId)
+
+        const tables = await Promise.all(
+          seriesForTeam
+            .filter((s) =>
+              [
+                'playoffseries',
+                'regular',
+                'qualification',
+              ].includes(s.category),
+            )
+            .map(async (serie) => {
+              return {
+                serie: serie,
+                table: await getUnionedTables({
+                  serie,
+                  teamArray: teamArray
+                    .filter((t) => t.group === serie.group)
+                    .map((t) => t.teamId),
+                }),
+              }
+            }),
+        )
+
+        const tableLength = tables.reduce(
+          (acc, curr) => acc + curr.table.length,
+          0,
+        )
 
         const returnGames = getSeasonGames({
           gamesArray: gamesForTeam,
@@ -301,10 +331,10 @@ export const getSingleTeamSeason = createServerFn({
 
         return {
           status: 200,
-          staticTables,
-          tables: getTables,
+          tables,
           hasGames,
           games: returnGames,
+          tableLength,
           team,
           seasonYear,
           series: seriesForTeam,

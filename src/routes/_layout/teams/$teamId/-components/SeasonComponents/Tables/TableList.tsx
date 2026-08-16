@@ -1,15 +1,15 @@
-import type { GroupTable } from '@/lib/types/table'
+import { Button } from '@/components/base/ui/button'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/base/ui/popover'
+import type { TeamSeasonTable } from '@/lib/types/table'
 import DataTable from './DataTable'
 import MobileDataTable from './MobileDataTable'
 
 type TableListProps = {
-  tableArray: Array<GroupTable>
-}
-
-const Comment = ({ comment }: { comment: string }) => {
-  return (
-    <p className="p-1 text-[8px] md:text-xs">{comment}</p>
-  )
+  tableArray: Array<TeamSeasonTable>
 }
 
 const TableList = ({ tableArray }: TableListProps) => {
@@ -24,38 +24,46 @@ const TableList = ({ tableArray }: TableListProps) => {
   }
   return (
     <div className="mb-6">
-      {tableArray.map((group) => {
+      {tableArray.map((serie) => {
         return (
           <div
-            key={group.group}
+            key={serie.serie.group}
             className="mb-6 @container/teamseasontable"
           >
-            <div
-              id={group.group}
-              className="group mb-0.5 flex flex-row items-center gap-1"
-            >
-              <h3 className="text-primary text-[10px] font-semibold tracking-wide md:text-xs xl:text-sm 2xl:text-base">
-                {group.name}
+            <div className="flex flex-row gap-x-12 items-center mb-2">
+              <h3 className="text-primary text-xs font-semibold tracking-wider @md:text-sm">
+                {serie.serie.serieName}
               </h3>
+
+              {serie.serie.comment ? (
+                <Popover>
+                  <PopoverTrigger
+                    render={
+                      <Button variant="outline">
+                        Kommentar
+                      </Button>
+                    }
+                  />
+                  <PopoverContent>
+                    <span className="p-2 text-xs @sm:text-sm font-semibold">
+                      {serie.serie.comment}
+                    </span>
+                  </PopoverContent>
+                </Popover>
+              ) : null}
             </div>
 
             <div className="hidden flex-col gap-2 @lg:flex">
               <DataTable
-                data={group.tables}
-                serieStructure={group.serieStructure}
+                data={serie.table}
+                serieStructure={serie.serie.serieStructure}
               />
-              {group.comment ? (
-                <Comment comment={group.comment} />
-              ) : null}
             </div>
             <div className="flex flex-col gap-2 @lg:hidden">
               <MobileDataTable
-                data={group.tables}
-                serieStructure={group.serieStructure}
+                data={serie.table}
+                serieStructure={serie.serie.serieStructure}
               />
-              {group.comment ? (
-                <Comment comment={group.comment} />
-              ) : null}
             </div>
           </div>
         )

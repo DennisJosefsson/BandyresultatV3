@@ -46,7 +46,10 @@ export const goalsColumns = {
   totalPoints: true,
 }
 
-const columnHelper = createColumnHelper<TeamTable>()
+const columnHelper =
+  createColumnHelper<
+    Omit<TeamTable, 'women' | 'season' | 'group'>
+  >()
 
 export const columns = [
   columnHelper.accessor('team.casualName' as const, {

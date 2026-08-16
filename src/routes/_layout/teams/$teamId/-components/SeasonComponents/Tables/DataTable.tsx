@@ -13,7 +13,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { useState } from 'react'
-// oxlint-disable no-unused-expressions
+
 import {
   Table,
   TableBody,
@@ -30,7 +30,7 @@ import TeamLogo from '@/components/Common/TeamLogo'
 import { columns } from './columns'
 
 interface DataTableProps {
-  data: Array<TeamTable>
+  data: Array<Omit<TeamTable, 'women' | 'season' | 'group'>>
   serieStructure: Array<number> | null | undefined
 }
 

@@ -37,7 +37,7 @@ import {
 } from './columns'
 
 interface MobileDataTableProps {
-  data: Array<TeamTable>
+  data: Array<Omit<TeamTable, 'women' | 'season' | 'group'>>
   serieStructure: Array<number> | null | undefined
 }
 
