@@ -18,11 +18,6 @@ const GamesList = ({ gamesArray }: GameListProps) => {
               key={group.group}
               className="mb-6"
             >
-              {group.comment && (
-                <p className="bg-background my-2 max-w-xl p-1 text-[10px] font-bold @3xl/playoff:text-xs @5xl/playoff:text-sm">
-                  {group.comment}
-                </p>
-              )}
               <div>
                 {group.dates.map((date) => {
                   return (

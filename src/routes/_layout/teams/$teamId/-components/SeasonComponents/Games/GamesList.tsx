@@ -16,13 +16,9 @@ const GamesList = ({ gamesArray }: GameListProps) => {
           return (
             <div
               key={group.group}
-              className="mb-6 w-full @container/teamseasongames"
+              className="mb-4 w-full @container/teamseasongames"
             >
-              <div className="ml-2 w-full table-fixed md:ml-4">
-                {group.comment && (
-                  <span>{group.comment}</span>
-                )}
-
+              <div className="w-full">
                 {group.dates.map((date) => {
                   return (
                     <div key={date.date}>

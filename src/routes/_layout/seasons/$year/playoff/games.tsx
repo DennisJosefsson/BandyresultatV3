@@ -11,6 +11,9 @@ import { getPlayoffGamesMeta } from '../-functions/playoff/getPlayoffGamesMeta'
 export const Route = createFileRoute(
   '/_layout/seasons/$year/playoff/games',
 )({
+  beforeLoad: () => {
+    return { sidebarSection: 'playoffGames' }
+  },
   loaderDeps: ({ search: { women } }) => ({ women }),
   loader: async ({ deps, params }) => {
     const gamesMeta = await getPlayoffGamesMeta({

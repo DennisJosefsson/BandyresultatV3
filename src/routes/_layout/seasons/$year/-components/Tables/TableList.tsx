@@ -1,9 +1,14 @@
 import DataTable from './DataTable'
 
+import { Button } from '@/components/base/ui/button'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/base/ui/popover'
 import type { Serie } from '@/lib/types/serie'
 import type { TeamTable } from '@/lib/types/table'
 import { columns } from './columns'
-import { Comment, SerieName } from './sharedComponents'
 
 type TablesListProps = {
   tables: Array<
@@ -25,11 +30,24 @@ const TableList = ({ tables, serie }: TablesListProps) => {
 
   return (
     <div className="mb-6">
-      <div
-        id={serie.group}
-        className="group mb-0.5 flex flex-row items-center gap-1"
-      >
-        <SerieName>{serie.serieName}</SerieName>
+      <div className="flex flex-row gap-x-12 items-center mb-2">
+        <h3 className="text-primary text-xs font-semibold tracking-wider @md:text-sm">
+          {serie.serieName}
+        </h3>
+        {serie.comment ? (
+          <Popover>
+            <PopoverTrigger
+              render={
+                <Button variant="outline">Kommentar</Button>
+              }
+            />
+            <PopoverContent>
+              <span className="p-2 text-xs @sm:text-sm font-semibold">
+                {serie.comment}
+              </span>
+            </PopoverContent>
+          </Popover>
+        ) : null}
       </div>
 
       <div>
@@ -38,9 +56,6 @@ const TableList = ({ tables, serie }: TablesListProps) => {
           data={tables}
           serieStructure={serie.serieStructure}
         />
-        {serie.comment ? (
-          <Comment>{serie.comment}</Comment>
-        ) : null}
       </div>
     </div>
   )

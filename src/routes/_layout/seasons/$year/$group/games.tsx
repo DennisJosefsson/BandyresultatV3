@@ -1,6 +1,5 @@
 import { CustomCatchBoundary } from '@/components/ErrorComponents/CustomCatchBoundary'
 import Loading from '@/components/Loading/Loading'
-import { zd } from '@/lib/utils/zod'
 import {
   Await,
   createFileRoute,
@@ -13,11 +12,10 @@ import { getGamesMeta } from '../-functions/games/getGamesMeta'
 export const Route = createFileRoute(
   '/_layout/seasons/$year/$group/games',
 )({
-  validateSearch: zd.object({
-    teams: zd
-      .array(zd.number().int().positive())
-      .optional(),
-  }),
+  beforeLoad: () => {
+    return { sidebarSection: 'groupGames' }
+  },
+
   loaderDeps: ({ search: { women } }) => ({ women }),
   loader: async ({ deps, params }) => {
     const gamesMeta = await getGamesMeta({

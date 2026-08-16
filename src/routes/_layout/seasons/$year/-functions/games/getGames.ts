@@ -11,6 +11,7 @@ import { getSortUnplayedGamesServerFn } from '@/lib/cookieFunctions/sortUnplayed
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import type { Games } from '@/lib/types/game'
+import type { Serie } from '@/lib/types/serie'
 import { seasonIdCheck } from '@/lib/utils/utils'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
@@ -37,6 +38,7 @@ type GamesReturn =
       status: 200
       games: Games
       teamArray: Array<TeamArray>
+      serie: Serie
     }
   | {
       status: 404
@@ -257,6 +259,7 @@ export const getGames = createServerFn({ method: 'GET' })
           status: 200,
           games: sortedGames,
           teamArray,
+          serie,
         }
       } catch (error) {
         catchError(error)
