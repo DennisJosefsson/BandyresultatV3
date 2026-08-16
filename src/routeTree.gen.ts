@@ -22,6 +22,7 @@ import { Route as LayoutLogoutIndexRouteImport } from './routes/_layout/logout/i
 import { Route as LayoutLoginIndexRouteImport } from './routes/_layout/login/index'
 import { Route as LayoutDashboardIndexRouteImport } from './routes/_layout/dashboard/index'
 import { Route as LayoutAboutIndexRouteImport } from './routes/_layout/about/index'
+import { Route as ApiV1HealthRouteImport } from './routes/api/v1/health'
 import { Route as LayoutTeamsMapRouteImport } from './routes/_layout/teams/map'
 import { Route as LayoutTeamsListRouteImport } from './routes/_layout/teams/list'
 import { Route as LayoutTeamsCompareRouteImport } from './routes/_layout/teams/compare'
@@ -148,6 +149,11 @@ const LayoutAboutIndexRoute = LayoutAboutIndexRouteImport.update({
   id: '/about/',
   path: '/about/',
   getParentRoute: () => LayoutRoute,
+} as any)
+const ApiV1HealthRoute = ApiV1HealthRouteImport.update({
+  id: '/api/v1/health',
+  path: '/api/v1/health',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const LayoutTeamsMapRoute = LayoutTeamsMapRouteImport.update({
   id: '/map',
@@ -527,6 +533,7 @@ export interface FileRoutesByFullPath {
   '/teams/compare': typeof LayoutTeamsCompareRoute
   '/teams/list': typeof LayoutTeamsListRoute
   '/teams/map': typeof LayoutTeamsMapRoute
+  '/api/v1/health': typeof ApiV1HealthRoute
   '/about/': typeof LayoutAboutIndexRoute
   '/dashboard/': typeof LayoutDashboardIndexRoute
   '/login/': typeof LayoutLoginIndexRoute
@@ -600,6 +607,7 @@ export interface FileRoutesByTo {
   '/teams/compare': typeof LayoutTeamsCompareRoute
   '/teams/list': typeof LayoutTeamsListRoute
   '/teams/map': typeof LayoutTeamsMapRoute
+  '/api/v1/health': typeof ApiV1HealthRoute
   '/about': typeof LayoutAboutIndexRoute
   '/dashboard': typeof LayoutDashboardIndexRoute
   '/login': typeof LayoutLoginIndexRoute
@@ -676,6 +684,7 @@ export interface FileRoutesById {
   '/_layout/teams/compare': typeof LayoutTeamsCompareRoute
   '/_layout/teams/list': typeof LayoutTeamsListRoute
   '/_layout/teams/map': typeof LayoutTeamsMapRoute
+  '/api/v1/health': typeof ApiV1HealthRoute
   '/_layout/about/': typeof LayoutAboutIndexRoute
   '/_layout/dashboard/': typeof LayoutDashboardIndexRoute
   '/_layout/login/': typeof LayoutLoginIndexRoute
@@ -754,6 +763,7 @@ export interface FileRouteTypes {
     | '/teams/compare'
     | '/teams/list'
     | '/teams/map'
+    | '/api/v1/health'
     | '/about/'
     | '/dashboard/'
     | '/login/'
@@ -827,6 +837,7 @@ export interface FileRouteTypes {
     | '/teams/compare'
     | '/teams/list'
     | '/teams/map'
+    | '/api/v1/health'
     | '/about'
     | '/dashboard'
     | '/login'
@@ -902,6 +913,7 @@ export interface FileRouteTypes {
     | '/_layout/teams/compare'
     | '/_layout/teams/list'
     | '/_layout/teams/map'
+    | '/api/v1/health'
     | '/_layout/about/'
     | '/_layout/dashboard/'
     | '/_layout/login/'
@@ -966,6 +978,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   LayoutRoute: typeof LayoutRouteWithChildren
+  ApiV1HealthRoute: typeof ApiV1HealthRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1060,6 +1073,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/about/'
       preLoaderRoute: typeof LayoutAboutIndexRouteImport
       parentRoute: typeof LayoutRoute
+    }
+    '/api/v1/health': {
+      id: '/api/v1/health'
+      path: '/api/v1/health'
+      fullPath: '/api/v1/health'
+      preLoaderRoute: typeof ApiV1HealthRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_layout/teams/map': {
       id: '/_layout/teams/map'
@@ -1828,6 +1848,7 @@ const LayoutRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   LayoutRoute: LayoutRouteWithChildren,
+  ApiV1HealthRoute: ApiV1HealthRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
