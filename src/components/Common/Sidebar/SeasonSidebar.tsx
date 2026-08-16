@@ -7,7 +7,6 @@ import {
   SidebarMenuSubItem,
   useSidebar,
 } from '@/components/base/ui/sidebar'
-import { groupConstant } from '@/lib/utils/constants'
 import {
   Link,
   getRouteApi,
@@ -170,35 +169,8 @@ export function DefaultSeasonSidebar({
   if (!open) return null
   return (
     <>
-      {/* <SidebarMenuSub>
-        <SidebarMenuSubItem>
-          <SidebarMenuSubButton
-            onClick={toggleOnMobile}
-            render={
-              <Link
-                to="/seasons"
-                params={{ page: 1 }}
-                search={{ women }}
-                activeOptions={{
-                  includeSearch: false,
-                  exact: true,
-                }}
-                activeProps={{
-                  className: `underline underline-offset-auto`,
-                }}
-              >
-                <span className="md:text-sm">
-                  Säsongslista
-                </span>
-              </Link>
-            }
-          />
-        </SidebarMenuSubItem>
-      </SidebarMenuSub> */}
       <SidebarGroup>
-        <SidebarGroupLabel>
-          {groupConstant[group]}
-        </SidebarGroupLabel>
+        <SidebarGroupLabel>Grundserie</SidebarGroupLabel>
         <SidebarGroupContent>
           <SidebarMenuSub>
             <SidebarMenuSubItem>
