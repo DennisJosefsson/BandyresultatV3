@@ -105,7 +105,6 @@ export function getDbErrorMessage(error: unknown): {
     error.cause instanceof DatabaseError
   ) {
     const originalError = error.cause
-    console.log('ORIGINALERROR', originalError)
 
     const handler =
       PostgresErrorHandlers[originalError.code ?? 'default']

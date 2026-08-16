@@ -3,8 +3,6 @@ import type { ErrorComponentProps } from '@tanstack/react-router'
 function DefaultErrorComponent({
   ...errorProps
 }: ErrorComponentProps) {
-  console.log(errorProps.error)
-
   const message = errorProps.error.message.includes(
     'Databaskoppling saknas',
   )

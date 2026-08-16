@@ -7,11 +7,9 @@ type ErrorComponentProps = {
 }
 
 const SimpleErrorComponent = ({
-  id,
   error,
   reset,
 }: ErrorComponentProps) => {
-  console.log(id)
   return (
     <div className="font-inter text-foreground mx-auto mt-10 flex items-center justify-center">
       <div className="mx-2 max-w-3xl">

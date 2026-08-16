@@ -34,7 +34,6 @@ export const getRouter = () => {
       )
     },
     defaultOnCatch: async (error, errorInfo) => {
-      console.log('LOGGAR')
       const errorData = {
         name: error.name,
         message: error.message,
