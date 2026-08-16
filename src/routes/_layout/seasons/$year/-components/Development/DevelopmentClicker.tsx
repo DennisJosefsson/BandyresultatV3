@@ -73,40 +73,42 @@ const DevelopmentClicker = ({
           <CarouselNext className="h-3 w-3 lg:h-6 lg:w-6" />
         </Carousel>
       </div>
-      <div className="mb-2 flex flex-row items-center justify-center">
-        <Carousel
-          className="xs:w-[60%] w-[50%] max-w-60 self-center sm:max-w-sm lg:max-w-2xl"
-          setApi={setDateApi}
-          opts={{
-            containScroll: 'keepSnaps',
-            dragFree: true,
-            loop: true,
-            startIndex: index,
-          }}
-          plugins={[Classnames()]}
-        >
-          <CarouselContent>
-            {dates.map((date, arrIndex) => {
-              return (
-                <CarouselItem
-                  key={date}
-                  className={cn(
-                    'flex basis-1/3 cursor-pointer flex-row items-center justify-center p-0 text-[8px] md:basis-1/5 md:text-sm [.is-snapped]:font-semibold ',
-                    { 'basis-full': dates.length < 5 },
-                  )}
-                  onClick={() =>
-                    api && api.scrollTo(arrIndex, true)
-                  }
-                >
-                  {date}
-                </CarouselItem>
-              )
-            })}
-          </CarouselContent>
-          <CarouselPrevious className="h-3 w-3 lg:h-6 lg:w-6" />
-          <CarouselNext className="h-3 w-3 lg:h-6 lg:w-6" />
-        </Carousel>
-      </div>
+      {dates.length < 5 ? null : (
+        <div className="mb-2 flex flex-row items-center justify-center">
+          <Carousel
+            className="xs:w-[60%] w-[50%] max-w-60 self-center sm:max-w-sm lg:max-w-2xl"
+            setApi={setDateApi}
+            opts={{
+              containScroll: 'keepSnaps',
+              dragFree: true,
+              loop: true,
+              startIndex: index,
+            }}
+            plugins={[Classnames()]}
+          >
+            <CarouselContent>
+              {dates.map((date, arrIndex) => {
+                return (
+                  <CarouselItem
+                    key={date}
+                    className={cn(
+                      'flex basis-1/3 cursor-pointer flex-row items-center justify-center p-0 text-[8px] md:basis-1/5 md:text-sm [.is-snapped]:font-semibold ',
+                      { 'basis-full': dates.length < 5 },
+                    )}
+                    onClick={() =>
+                      api && api.scrollTo(arrIndex, true)
+                    }
+                  >
+                    {date}
+                  </CarouselItem>
+                )
+              })}
+            </CarouselContent>
+            <CarouselPrevious className="h-3 w-3 lg:h-6 lg:w-6" />
+            <CarouselNext className="h-3 w-3 lg:h-6 lg:w-6" />
+          </Carousel>
+        </div>
+      )}
     </div>
   )
 }

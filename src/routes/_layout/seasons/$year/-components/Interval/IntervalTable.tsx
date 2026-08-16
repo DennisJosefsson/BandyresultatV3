@@ -21,7 +21,6 @@ const IntervalTable = ({
           serieStructure={serie.serieStructure}
           columns={columns}
           data={table}
-          comment={serie.comment}
         />
       </div>
       <div className="sm:hidden">
@@ -29,7 +28,6 @@ const IntervalTable = ({
           serieStructure={serie.serieStructure}
           columns={columns}
           data={table}
-          comment={serie.comment}
         />
       </div>
     </div>

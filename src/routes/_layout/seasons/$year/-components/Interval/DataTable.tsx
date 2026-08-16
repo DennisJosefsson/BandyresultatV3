@@ -5,7 +5,6 @@ import {
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -24,14 +23,12 @@ interface DataTableProps<TData, TValue> {
   columns: Array<ColumnDef<TData, TValue>>
   data: Array<TData>
   serieStructure: Array<number> | null | undefined
-  comment: string | null
 }
 
 const DataTable = <TData, TValue>({
   columns,
   data,
   serieStructure,
-  comment,
 }: DataTableProps<TData, TValue>) => {
   const table = useReactTable({
     data,
@@ -44,7 +41,6 @@ const DataTable = <TData, TValue>({
   return (
     <div className="border px-1 py-0.5 shadow-xs sm:p-2 md:shadow-sm">
       <Table className="text-[8px] @xs:text-[10px] @sm:text-xs @2xl:text-sm">
-        <TableCaption>{comment}</TableCaption>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>

@@ -26,7 +26,6 @@ const MobileDevelopmentTable = ({
     <MobileDataTable
       columns={columns}
       serieStructure={serie.serieStructure}
-      comment={serie.comment}
       data={tables[index].table}
     />
   )

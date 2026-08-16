@@ -77,6 +77,11 @@ const RangeData = ({
         table={currTable.table}
         serie={serie}
       />
+      <div>
+        <span className="p-1 sm:p-2 text-[10px] xs:text-xs md:text-sm font-semibold">
+          {serie.comment}
+        </span>
+      </div>
     </div>
   )
 }

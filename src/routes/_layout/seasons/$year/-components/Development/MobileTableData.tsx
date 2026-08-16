@@ -2,7 +2,6 @@ import { Button } from '@/components/base/ui/button'
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -26,14 +25,12 @@ interface DataTableProps<TData, TValue> {
   columns: Array<ColumnDef<TData, TValue>>
   data: Array<TData>
   serieStructure: Array<number> | null | undefined
-  comment: string | null
 }
 
 const MobileDataTable = <TData, TValue>({
   columns,
   data,
   serieStructure,
-  comment,
 }: DataTableProps<TData, TValue>) => {
   const [columnVisibility, setColumnVisibility] =
     useState<VisibilityState>(goalsColumns)
@@ -78,7 +75,6 @@ const MobileDataTable = <TData, TValue>({
       </div>
       <div className="border px-1 py-0.5 shadow-xs @xl:px-2 @3xl:shadow-sm">
         <Table className="text-[8px] @xs:text-[10px] @sm:text-xs @2xl:text-sm">
-          <TableCaption>{comment}</TableCaption>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
