@@ -4,22 +4,28 @@ import { columns } from './columns'
 
 type TableListProps = {
   data: PlayoffSeriesTable
- 
 }
 
 const TableList = ({ data }: TableListProps) => {
   if (data.tables.length === 0) {
     return (
       <div className="font-inter text-foreground mx-auto mt-4 grid place-items-center py-5 text-sm font-bold md:text-base">
-        <p className="mx-10 text-center">Slutspelstabeller saknas för denna säsong.</p>
+        <p className="mx-10 text-center">
+          Slutspelstabeller saknas för denna säsong.
+        </p>
       </div>
     )
   }
 
   return (
     <div className="mb-6">
-      <div id={data.group} className="group mb-0.5 flex flex-row items-center gap-1">
-        <h2 className="text-sm font-semibold tracking-wide lg:text-base xl:text-xl">{data.name}</h2>
+      <div
+        id={data.group}
+        className="group mb-0.5 flex flex-row items-center gap-1"
+      >
+        <h2 className="text-xs font-semibold tracking-wider @md:text-sm">
+          {data.name}
+        </h2>
       </div>
 
       <div>
@@ -27,9 +33,12 @@ const TableList = ({ data }: TableListProps) => {
           columns={columns}
           data={data.tables}
           serieStructure={data.serieStructure}
-          
         />
-        {data.comment && <p className="bg-background p-1 text-[8px] md:text-xs">{data.comment}</p>}
+        {data.comment && (
+          <p className="bg-background p-1 text-[8px] md:text-xs">
+            {data.comment}
+          </p>
+        )}
       </div>
     </div>
   )
