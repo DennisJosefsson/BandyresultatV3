@@ -77,17 +77,4 @@ export const editTeamSeriesArray = zd.object({
   teamserie: zd.array(editTeamSeriesObject),
 })
 
-export type SerieData = Pick<
-  Serie,
-  'category' | 'group' | 'comment' | 'serieName' | 'level'
->
 
-export type SerieDataWithSerieStructure = Pick<
-  Serie,
-  | 'category'
-  | 'group'
-  | 'comment'
-  | 'serieName'
-  | 'level'
-  | 'serieStructure'
->

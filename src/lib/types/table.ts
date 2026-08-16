@@ -1,4 +1,5 @@
 import { zd } from '../utils/zod'
+import type { Serie } from './serie'
 
 export type Base = {
   group: string
@@ -34,6 +35,13 @@ export type GroupTable = {
   serieStructure: Array<number>
   level: number
   tables: Array<TeamTable>
+}
+
+export type TeamSeasonTable = {
+  serie: Serie
+  table: Array<
+    Omit<TeamTable, 'women' | 'season' | 'group'>
+  >
 }
 
 export type MaratonTable = Omit<
