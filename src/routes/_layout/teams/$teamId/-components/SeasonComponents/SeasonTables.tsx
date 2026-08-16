@@ -8,7 +8,7 @@ const SeasonTables = () => {
 
   if (data.status === 404) return null
 
-  if (data.tables.length + data.staticTables.length === 0) {
+  if (data.tableLength === 0) {
     return (
       <div className="mt-2 flex flex-row justify-center font-semibold">
         Inga tabeller än denna säsong.
@@ -19,7 +19,7 @@ const SeasonTables = () => {
   return (
     <div>
       {data.tables.length > 0 ? <TableList tableArray={data.tables} /> : null}
-      {data.staticTables.length > 0 ? <TableList tableArray={data.staticTables} /> : null}
+      
     </div>
   )
 }
