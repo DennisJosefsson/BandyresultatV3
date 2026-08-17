@@ -1,11 +1,11 @@
-import { eq } from 'drizzle-orm'
-import { createServerFn } from '@tanstack/react-start'
-import { newParentSerieObject } from '@/lib/types/serie'
-import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import { catchError } from '@/lib/middlewares/errors/catchError'
-import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
-import { parentchildseries, series } from '@/db/schema'
 import { db } from '@/db'
+import { parentchildseries, series } from '@/db/schema'
+import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
+import { catchError } from '@/lib/middlewares/errors/catchError'
+import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
+import { newParentSerieObject } from '@/lib/types/serie'
+import { createServerFn } from '@tanstack/react-start'
+import { eq } from 'drizzle-orm'
 
 export const newParentSerieInput = createServerFn({
   method: 'POST',
@@ -27,9 +27,15 @@ export const newParentSerieInput = createServerFn({
               .then((res) => res[0]),
         )
 
+      const returnValue = await db
+        .update(series)
+        .set({ hasParent: true })
+        .where(eq(series.serieId, data.childId))
+        .returning({ serieName: series.serieName })
+
       return {
         status: 200,
-        message: `${newParentSerie.serieName} inlagd som ParentSerie.`,
+        message: `${newParentSerie.serieName} inlagd som ParentSerie till ${returnValue.at(0)?.serieName}. Glöm inte att uppdatera allParentGames-variablen om det behövs.`,
       }
     } catch (error) {
       catchError(error)

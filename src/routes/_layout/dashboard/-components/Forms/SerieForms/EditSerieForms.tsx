@@ -27,19 +27,6 @@ const EditSerieForms = () => {
                 search={(prev) => ({ women: prev.women })}
                 resetScroll={false}
               >
-                Lägg till ParentId
-              </route.Link>
-            }
-            nativeButton={false}
-          />
-
-          <Button
-            render={
-              <route.Link
-                to="/dashboard/season/$seasonId/info/$serieId/edit/editParentId"
-                search={(prev) => ({ women: prev.women })}
-                resetScroll={false}
-              >
                 Redigera ParentId
               </route.Link>
             }

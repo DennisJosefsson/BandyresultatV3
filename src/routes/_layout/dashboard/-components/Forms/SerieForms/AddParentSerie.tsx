@@ -1,97 +1,133 @@
-import { getRouteApi } from '@tanstack/react-router'
-import { zd } from '@/lib/utils/zod'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectSeparator,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/base/ui/select'
-import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/base/ui/field'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/base/ui/card'
 import { Button } from '@/components/base/ui/button'
-import { useNewParentSerieForm } from '../../../-hooks/useNewParentSerieForm'
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/base/ui/card'
+import ConfirmDialog from '@/components/Common/ConfirmDialog'
+import { getRouteApi } from '@tanstack/react-router'
+import { useRef, useState } from 'react'
+import { useNewParentSerieMutation } from '../../../-hooks/addParentSerieMutation'
+import { deleteParentSerieMutation } from '../../../-hooks/useDeleteParentSerieMutation'
 
-const route = getRouteApi('/_layout/dashboard/season/$seasonId/info_/$serieId/edit')
+const route = getRouteApi(
+  '/_layout/dashboard/season/$seasonId/info_/$serieId/edit',
+)
 
 const AddParentSerie = () => {
+  const serieId = route.useParams({
+    select: (s) => s.serieId,
+  })
+  const dialogRef = useRef<HTMLDialogElement | null>(null)
+  const [parentChildId, setParentChildId] = useState<
+    number | null
+  >(null)
+  const [parentName, setParentName] = useState<
+    string | null
+  >(null)
+  const deleteMutation =
+    deleteParentSerieMutation(dialogRef)
+  const addMutation = useNewParentSerieMutation()
   const series = route.useLoaderData({
     select: (s) => s.series,
   })
-  const parentSeries = route.useLoaderData({ select: (s) => s.parentSeries }).map((s) => s.parentId)
-  const form = useNewParentSerieForm()
+  const parentSeries = route.useLoaderData({
+    select: (s) => s.parentSeries,
+  })
 
-  const seriesArray = series.filter((serie) => !parentSeries.includes(serie.value))
+  const parentSerieIdArray = parentSeries.map(
+    (s) => s.parentId,
+  )
+
+  const seriesArray = series.filter(
+    (serie) => !parentSerieIdArray.includes(serie.value),
+  )
+
+  const openDialog = (id: number) => {
+    setParentChildId(id)
+    dialogRef.current?.showModal()
+  }
+
+  const deleteParentChildFunction = () => {
+    if (!parentChildId) return
+    deleteMutation.mutate({ data: { id: parentChildId } })
+  }
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex flex-row items-center justify-between">
-          <div>
-            <CardTitle>Ny Parentserie</CardTitle>
+    <>
+      <ConfirmDialog
+        dialogRef={dialogRef}
+        confirmTitle={`Vill du ta bort ${parentName} som ParentSerie?`}
+        onClose={() => setParentName(null)}
+        confirmFunction={deleteParentChildFunction}
+      />
+      <Card>
+        <CardHeader>
+          <div className="flex flex-row items-center justify-between">
+            <div>
+              <CardTitle>Parentserie</CardTitle>
+            </div>
           </div>
-          <div className="flex flex-row gap-2">
-            <Button type="submit" form="addParentSerieForm">
-              Lägg till
-            </Button>
-          </div>
-        </div>
-      </CardHeader>
+        </CardHeader>
 
-      <CardContent>
-        <form
-          id="addParentSerieForm"
-          onSubmit={(e) => {
-            e.preventDefault()
-            form.handleSubmit()
-          }}
-        >
-          <FieldGroup>
-            <form.Field
-              name="parentId"
-              children={(field) => {
-                const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
-                return (
-                  <Field data-invalid={isInvalid}>
-                    <FieldLabel htmlFor={field.name}>ParentSerie</FieldLabel>
-                    <Select
-                      name={field.name}
-                      value={field.state.value.toString()}
-                      onValueChange={(value) => {
-                        field.handleChange(zd.coerce.number().parse(value))
-                      }}
-                    >
-                      <SelectTrigger
-                        id={field.name}
-                        aria-invalid={isInvalid}
-                        className="w-full min-w-[120px]"
+        <CardContent>
+          <div className="grid grid-cols-2 gap-12">
+            <div className="flex flex-col gap-1">
+              <div>
+                <span className="font-semibold text-sm">
+                  Serier
+                </span>
+                <div className="flex flex-col gap-1 max-w-60">
+                  {seriesArray.map((ser) => {
+                    return (
+                      <Button
+                        size="sm"
+                        key={ser.value.toString()}
+                        onClick={() =>
+                          addMutation.mutate({
+                            data: {
+                              parentId: ser.value,
+                              childId: serieId,
+                            },
+                          })
+                        }
                       >
-                        <SelectValue placeholder="Välj">
-                          {seriesArray.find((s) => s.value === field.state.value)?.label ?? 'Välj'}
-                        </SelectValue>
-                      </SelectTrigger>
-                      <SelectContent alignItemWithTrigger={true}>
-                        <SelectItem value="auto">
-                          {seriesArray.find((s) => s.value === field.state.value)?.label ?? 'Välj'}
-                        </SelectItem>
-                        <SelectSeparator />
-                        {seriesArray.map((cat) => (
-                          <SelectItem key={cat.value} value={cat.value.toString()}>
-                            {cat.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    {isInvalid && <FieldError errors={field.state.meta.errors} />}
-                  </Field>
-                )
-              }}
-            />
-          </FieldGroup>
-        </form>
-      </CardContent>
-    </Card>
+                        {ser.label}
+                      </Button>
+                    )
+                  })}
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-col gap-1">
+              <div>
+                <span className="font-semibold text-sm">
+                  Serier med parentId
+                </span>
+              </div>
+              <div className="flex flex-col gap-1 max-w-60">
+                {parentSeries.map((ser) => {
+                  return (
+                    <Button
+                      key={ser.parent.serieId.toString()}
+                      onClick={() => {
+                        setParentName(ser.parent.serieName)
+                        openDialog(ser.id)
+                      }}
+                      size="sm"
+                      variant="destructive"
+                    >
+                      {ser.parent.serieName}
+                    </Button>
+                  )
+                })}
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </>
   )
 }
 
