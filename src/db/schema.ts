@@ -541,7 +541,7 @@ export const competitions = pgTable(
     competitionId: serial('competition_id')
       .primaryKey()
       .notNull(),
-    competionName: varchar('competition_name').notNull(),
+    competitionName: varchar('competition_name').notNull(),
     division: decimalNumber().notNull(),
     isCup: boolean('is_cup').default(false),
     seasonId: integer('season_id').notNull(),
