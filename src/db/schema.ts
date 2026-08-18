@@ -240,12 +240,18 @@ export const series = pgTable(
       false,
     ),
     uefaSorting: boolean('uefa_sorting').default(false),
+    competitionId: integer('competition_id').notNull(),
   },
   (table) => [
     foreignKey({
       columns: [table.seasonId],
       foreignColumns: [seasons.seasonId],
       name: 'series_season_id_fkey',
+    }),
+    foreignKey({
+      columns: [table.competitionId],
+      foreignColumns: [competitions.competitionId],
+      name: 'series_competition_fk',
     }),
   ],
 )
@@ -529,6 +535,27 @@ export const playoffseason = pgTable(
   ],
 )
 
+export const competitions = pgTable(
+  'competitions',
+  {
+    competitionId: serial('competition_id')
+      .primaryKey()
+      .notNull(),
+    competionName: varchar('competition_name').notNull(),
+    division: decimalNumber().notNull(),
+    isCup: boolean('is_cup').default(false),
+    seasonId: integer('season_id').notNull(),
+    women: boolean().notNull(),
+  },
+  (table) => [
+    foreignKey({
+      columns: [table.seasonId],
+      foreignColumns: [seasons.seasonId],
+      name: 'competition_seasons_fk',
+    }),
+  ],
+)
+
 export const users = pgTable('users', {
   userId: serial('user_id').primaryKey().notNull(),
   userName: text('user_name').notNull(),
@@ -567,6 +594,7 @@ export const seasonsRelations = relations(
     teamseasons: many(teamseasons),
     games: many(games),
     teamgames: many(teamgames),
+    competitions: many(competitions),
   }),
 )
 
@@ -581,6 +609,7 @@ export const seriesRelations = relations(
     teamseries: many(teamseries),
     games: many(games),
     teamgames: many(teamgames),
+    competitions: one(competitions),
   }),
 )
 
@@ -754,5 +783,13 @@ export const parentchildseriesRelations = relations(
       references: [series.serieId],
       relationName: 'child',
     }),
+  }),
+)
+
+export const competitionsRelations = relations(
+  competitions,
+  ({ one, many }) => ({
+    season: one(seasons),
+    series: many(series),
   }),
 )
