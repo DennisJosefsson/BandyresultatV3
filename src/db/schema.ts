@@ -211,7 +211,7 @@ export const seasons = pgTable('seasons', {
 
 const decimalNumber = customType<{ data: number }>({
   dataType() {
-    return 'decimal(2, 1)'
+    return 'decimal(4, 1)'
   },
   fromDriver(value) {
     return Number(value)
