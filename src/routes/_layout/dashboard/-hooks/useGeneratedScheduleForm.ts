@@ -1,20 +1,29 @@
-import { toast } from 'sonner'
-import { getRouteApi } from '@tanstack/react-router'
-import { useMutation } from '@tanstack/react-query'
-import { revalidateLogic, useForm } from '@tanstack/react-form'
-import type { zd } from '@/lib/utils/zod'
 import { generatedGameObjectArray } from '@/lib/types/game'
+import type { zd } from '@/lib/utils/zod'
+import {
+  revalidateLogic,
+  useForm,
+} from '@tanstack/react-form'
+import { useMutation } from '@tanstack/react-query'
+import { getRouteApi } from '@tanstack/react-router'
+import { toast } from 'sonner'
 import { insertFromGeneratedSchedule } from '../-functions/GameFunctions/insertFromGeneratedSchedule'
 
 const route = getRouteApi(
-  '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/generateschedule',
+  '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/generateschedule',
 )
 
-type Data = Awaited<ReturnType<typeof insertFromGeneratedSchedule>>
+type Data = Awaited<
+  ReturnType<typeof insertFromGeneratedSchedule>
+>
 
 export const useGeneratedScheduleForm = () => {
-  const gameData = route.useLoaderData({ select: (s) => s.games })
-  const defaultValues: zd.input<typeof generatedGameObjectArray> = {
+  const gameData = route.useLoaderData({
+    select: (s) => s.games,
+  })
+  const defaultValues: zd.input<
+    typeof generatedGameObjectArray
+  > = {
     gameArray: gameData,
   }
   const navigate = route.useNavigate()
@@ -31,7 +40,8 @@ export const useGeneratedScheduleForm = () => {
       onDynamic: generatedGameObjectArray,
     },
     defaultValues: { ...defaultValues },
-    onSubmit: ({ value }) => mutation.mutateAsync({ data: value }),
+    onSubmit: ({ value }) =>
+      mutation.mutateAsync({ data: value }),
   })
 
   const onMutationSuccess = (data: Data) => {
@@ -40,7 +50,10 @@ export const useGeneratedScheduleForm = () => {
     } else {
       toast.success(data.message)
     }
-    navigate({ to: '..', search: (prev) => ({ women: prev.women }) })
+    navigate({
+      to: '..',
+      search: (prev) => ({ women: prev.women }),
+    })
   }
 
   const onMutationError = (error: unknown) => {

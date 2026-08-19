@@ -1,5 +1,6 @@
 import { db } from '@/db'
 import {
+  competitions,
   metadata,
   playoffseason,
   seasons,
@@ -60,6 +61,29 @@ export async function getNewSeasonData() {
 
   if (!menSeasonId || !womenSeasonId)
     throw new Error('Nya säsonger har inte genererats.')
+
+  const newCompetitions = [
+    {
+      seasonId: menSeasonId,
+      women: false,
+      competitionName: 'Högsta divisionen',
+      division: 1,
+    },
+    {
+      seasonId: womenSeasonId,
+      women: true,
+      competitionName: 'Högsta divisionen',
+      division: 1,
+    },
+  ]
+
+  const newCompetitionIds = await db
+    .insert(competitions)
+    .values(newCompetitions)
+    .returning({
+      women: competitions.women,
+      competitionId: competitions.competitionId,
+    })
 
   const newTeamSeasonsArrays = await db
     .select({
@@ -129,9 +153,25 @@ export async function getNewSeasonData() {
 
   await db.insert(metadata).values(seasonMetaData)
 
+  const menCompetition = newCompetitionIds.find(
+    (c) => c.women === false,
+  )
+  const womenCompetition = newCompetitionIds.find(
+    (c) => c.women === true,
+  )
+
+  if (!menCompetition) {
+    throw new Error('Herrturnering saknas')
+  }
+
+  if (!womenCompetition) {
+    throw new Error('Damturnering saknas')
+  }
+
   const newSeriesArray = [
     {
       seasonId: womenSeasonId,
+      competitionId: womenCompetition.competitionId,
       group: 'final',
       category: 'final',
       serieName: 'Final',
@@ -140,6 +180,7 @@ export async function getNewSeasonData() {
     },
     {
       seasonId: menSeasonId,
+      competitionId: menCompetition.competitionId,
       group: 'final',
       category: 'final',
       serieName: 'Final',
@@ -148,6 +189,7 @@ export async function getNewSeasonData() {
     },
     {
       seasonId: womenSeasonId,
+      competitionId: womenCompetition.competitionId,
       group: 'S1',
       category: 'semi',
       serieName: 'Semifinal 1',
@@ -156,6 +198,7 @@ export async function getNewSeasonData() {
     },
     {
       seasonId: menSeasonId,
+      competitionId: menCompetition.competitionId,
       group: 'S1',
       category: 'semi',
       serieName: 'Semifinal 1',
@@ -164,6 +207,7 @@ export async function getNewSeasonData() {
     },
     {
       seasonId: womenSeasonId,
+      competitionId: womenCompetition.competitionId,
       group: 'S2',
       category: 'semi',
       serieName: 'Semifinal 2',
@@ -172,6 +216,7 @@ export async function getNewSeasonData() {
     },
     {
       seasonId: menSeasonId,
+      competitionId: menCompetition.competitionId,
       group: 'S2',
       category: 'semi',
       serieName: 'Semifinal 2',
@@ -180,6 +225,7 @@ export async function getNewSeasonData() {
     },
     {
       seasonId: womenSeasonId,
+      competitionId: womenCompetition.competitionId,
       group: 'Q1',
       category: 'quarter',
       serieName: 'Kvartsfinal 1',
@@ -188,6 +234,7 @@ export async function getNewSeasonData() {
     },
     {
       seasonId: menSeasonId,
+      competitionId: menCompetition.competitionId,
       group: 'Q1',
       category: 'quarter',
       serieName: 'Kvartsfinal 1',
@@ -196,6 +243,7 @@ export async function getNewSeasonData() {
     },
     {
       seasonId: womenSeasonId,
+      competitionId: womenCompetition.competitionId,
       group: 'Q2',
       category: 'quarter',
       serieName: 'Kvartsfinal 2',
@@ -204,6 +252,7 @@ export async function getNewSeasonData() {
     },
     {
       seasonId: menSeasonId,
+      competitionId: menCompetition.competitionId,
       group: 'Q2',
       category: 'quarter',
       serieName: 'Kvartsfinal 2',
@@ -212,6 +261,7 @@ export async function getNewSeasonData() {
     },
     {
       seasonId: womenSeasonId,
+      competitionId: womenCompetition.competitionId,
       group: 'Q3',
       category: 'quarter',
       serieName: 'Kvartsfinal 3',
@@ -220,6 +270,7 @@ export async function getNewSeasonData() {
     },
     {
       seasonId: menSeasonId,
+      competitionId: menCompetition.competitionId,
       group: 'Q3',
       category: 'quarter',
       serieName: 'Kvartsfinal 3',
@@ -228,6 +279,7 @@ export async function getNewSeasonData() {
     },
     {
       seasonId: womenSeasonId,
+      competitionId: womenCompetition.competitionId,
       group: 'Q4',
       category: 'quarter',
       serieName: 'Kvartsfinal 4',
@@ -236,6 +288,7 @@ export async function getNewSeasonData() {
     },
     {
       seasonId: menSeasonId,
+      competitionId: menCompetition.competitionId,
       group: 'Q4',
       category: 'quarter',
       serieName: 'Kvartsfinal 4',
@@ -244,6 +297,7 @@ export async function getNewSeasonData() {
     },
     {
       seasonId: menSeasonId,
+      competitionId: menCompetition.competitionId,
       group: 'E1',
       category: 'eight',
       serieName: 'Åttondel 1',
@@ -252,6 +306,7 @@ export async function getNewSeasonData() {
     },
     {
       seasonId: menSeasonId,
+      competitionId: menCompetition.competitionId,
       group: 'E2',
       category: 'eight',
       serieName: 'Åttondel 2',
@@ -260,6 +315,7 @@ export async function getNewSeasonData() {
     },
     {
       seasonId: womenSeasonId,
+      competitionId: womenCompetition.competitionId,
       group: 'elitserien',
       category: 'regular',
       serieName: 'Elitserien',
@@ -268,6 +324,7 @@ export async function getNewSeasonData() {
     },
     {
       seasonId: menSeasonId,
+      competitionId: menCompetition.competitionId,
       group: 'elitserien',
       category: 'regular',
       serieName: 'Elitserien',

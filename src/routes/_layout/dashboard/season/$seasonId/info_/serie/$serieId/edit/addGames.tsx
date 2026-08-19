@@ -5,7 +5,7 @@ import FileInput from '@/routes/_layout/dashboard/-components/Utils/XLSXFileInpu
 import BulkGames from '@/routes/_layout/dashboard/-components/Games/BulkGames'
 
 export const Route = createFileRoute(
-  '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/addGames',
+  '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/addGames',
 )({
   component: RouteComponent,
 })

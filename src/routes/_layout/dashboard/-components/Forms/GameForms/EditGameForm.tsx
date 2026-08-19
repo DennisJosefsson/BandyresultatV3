@@ -1,17 +1,25 @@
-import { getRouteApi } from '@tanstack/react-router'
+import { Button } from '@/components/base/ui/button'
+import { Checkbox } from '@/components/base/ui/checkbox'
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldSet,
+} from '@/components/base/ui/field'
+import { Input } from '@/components/base/ui/input'
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupInput,
 } from '@/components/base/ui/input-group'
-import { Input } from '@/components/base/ui/input'
-import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from '@/components/base/ui/field'
-import { Checkbox } from '@/components/base/ui/checkbox'
-import { Button } from '@/components/base/ui/button'
+import { getRouteApi } from '@tanstack/react-router'
 import { useEditGameForm } from '../../../-hooks/useEditGameForm'
 
-const route = getRouteApi('/_layout/dashboard/season/$seasonId/info_/$serieId/edit/$gameId')
+const route = getRouteApi(
+  '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/$gameId',
+)
 
 const currDate = new Date().toLocaleDateString('se-SV', {
   year: 'numeric',
@@ -32,7 +40,7 @@ const EditGameForm = () => {
 
   const close = () => {
     navigate({
-      to: '/dashboard/season/$seasonId/info/$serieId/edit/games',
+      to: '/dashboard/season/$seasonId/info/serie/$serieId/edit/games',
       search: { women },
     })
   }
@@ -46,20 +54,33 @@ const EditGameForm = () => {
     <div className="mt-4 flex w-full flex-col gap-4 px-8">
       <div className="flex flex-row justify-between">
         <div>
-          <h3 className="mb-4 text-base">Redigera resultat</h3>
+          <h3 className="mb-4 text-base">
+            Redigera resultat
+          </h3>
           <h4 className="text-sm">
             {game.home.name} - {game.away.name}
           </h4>
         </div>
         <div>
           <Field orientation="horizontal">
-            <Button type="button" variant="outline" onClick={close}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={close}
+            >
               Stäng
             </Button>
-            <Button type="button" variant="outline" onClick={() => form.reset()}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => form.reset()}
+            >
               Reset
             </Button>
-            <Button type="submit" form="edit-game">
+            <Button
+              type="submit"
+              form="edit-game"
+            >
               Skicka
             </Button>
           </Field>
@@ -78,21 +99,31 @@ const EditGameForm = () => {
               <form.Field
                 name="result"
                 children={(field) => {
-                  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+                  const isInvalid =
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <FieldLabel htmlFor={field.name}>Slutresultat</FieldLabel>
+                      <FieldLabel htmlFor={field.name}>
+                        Slutresultat
+                      </FieldLabel>
                       <Input
                         id={field.name}
                         name={field.name}
                         value={field.state.value}
                         onBlur={field.handleBlur}
-                        onChange={(e) => field.handleChange(e.target.value)}
+                        onChange={(e) =>
+                          field.handleChange(e.target.value)
+                        }
                         aria-invalid={isInvalid}
                         placeholder="T.ex. 5-3"
                         autoComplete="off"
                       />
-                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                      {isInvalid && (
+                        <FieldError
+                          errors={field.state.meta.errors}
+                        />
+                      )}
                     </Field>
                   )
                 }}
@@ -100,22 +131,32 @@ const EditGameForm = () => {
               <form.Field
                 name="halftimeResult"
                 children={(field) => {
-                  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+                  const isInvalid =
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <FieldLabel htmlFor={field.name}>Halvtidsresultat</FieldLabel>
+                      <FieldLabel htmlFor={field.name}>
+                        Halvtidsresultat
+                      </FieldLabel>
 
                       <Input
                         id={field.name}
                         name={field.name}
                         value={field.state.value}
                         onBlur={field.handleBlur}
-                        onChange={(e) => field.handleChange(e.target.value)}
+                        onChange={(e) =>
+                          field.handleChange(e.target.value)
+                        }
                         placeholder="T.ex. 2-3"
                         aria-invalid={isInvalid}
                       />
 
-                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                      {isInvalid && (
+                        <FieldError
+                          errors={field.state.meta.errors}
+                        />
+                      )}
                     </Field>
                   )
                 }}
@@ -123,27 +164,42 @@ const EditGameForm = () => {
               <form.Field
                 name="date"
                 children={(field) => {
-                  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+                  const isInvalid =
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <FieldLabel htmlFor={field.name}>Datum</FieldLabel>
+                      <FieldLabel htmlFor={field.name}>
+                        Datum
+                      </FieldLabel>
                       <InputGroup>
                         <InputGroupInput
                           id={field.name}
                           name={field.name}
                           value={field.state.value}
                           onBlur={field.handleBlur}
-                          onChange={(e) => field.handleChange(e.target.value)}
+                          onChange={(e) =>
+                            field.handleChange(
+                              e.target.value,
+                            )
+                          }
                           placeholder="T.ex. 2025-12-26"
                           aria-invalid={isInvalid}
                         />
                         <InputGroupAddon align="inline-end">
-                          <InputGroupButton variant="secondary" onClick={buttonClick}>
+                          <InputGroupButton
+                            variant="secondary"
+                            onClick={buttonClick}
+                          >
                             Idag
                           </InputGroupButton>
                         </InputGroupAddon>
                       </InputGroup>
-                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                      {isInvalid && (
+                        <FieldError
+                          errors={field.state.meta.errors}
+                        />
+                      )}
                     </Field>
                   )
                 }}
@@ -151,22 +207,32 @@ const EditGameForm = () => {
               <form.Field
                 name="otResult"
                 children={(field) => {
-                  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+                  const isInvalid =
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <FieldLabel htmlFor={field.name}>Resultat efter SD/Straffar</FieldLabel>
+                      <FieldLabel htmlFor={field.name}>
+                        Resultat efter SD/Straffar
+                      </FieldLabel>
 
                       <Input
                         id={field.name}
                         name={field.name}
                         value={field.state.value}
                         onBlur={field.handleBlur}
-                        onChange={(e) => field.handleChange(e.target.value)}
+                        onChange={(e) =>
+                          field.handleChange(e.target.value)
+                        }
                         placeholder="T.ex. 2-3"
                         aria-invalid={isInvalid}
                       />
 
-                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                      {isInvalid && (
+                        <FieldError
+                          errors={field.state.meta.errors}
+                        />
+                      )}
                     </Field>
                   )
                 }}
@@ -177,23 +243,39 @@ const EditGameForm = () => {
                 <form.Field
                   name="extraTime"
                   children={(field) => {
-                    const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+                    const isInvalid =
+                      field.state.meta.isTouched &&
+                      !field.state.meta.isValid
                     return (
                       <FieldSet>
                         <FieldGroup data-slot="checkbox-group">
-                          <Field orientation="horizontal" data-invalid={isInvalid}>
+                          <Field
+                            orientation="horizontal"
+                            data-invalid={isInvalid}
+                          >
                             <Checkbox
                               id="extraTime"
                               name={field.name}
                               checked={field.state.value}
-                              onCheckedChange={(checked) => field.handleChange(checked === true)}
+                              onCheckedChange={(checked) =>
+                                field.handleChange(
+                                  checked === true,
+                                )
+                              }
                             />
-                            <FieldLabel htmlFor="extraTime" className="font-normal">
+                            <FieldLabel
+                              htmlFor="extraTime"
+                              className="font-normal"
+                            >
                               Övertid
                             </FieldLabel>
                           </Field>
                         </FieldGroup>
-                        {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                        {isInvalid && (
+                          <FieldError
+                            errors={field.state.meta.errors}
+                          />
+                        )}
                       </FieldSet>
                     )
                   }}
@@ -203,23 +285,39 @@ const EditGameForm = () => {
                 <form.Field
                   name="penalties"
                   children={(field) => {
-                    const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+                    const isInvalid =
+                      field.state.meta.isTouched &&
+                      !field.state.meta.isValid
                     return (
                       <FieldSet>
                         <FieldGroup data-slot="checkbox-group">
-                          <Field orientation="horizontal" data-invalid={isInvalid}>
+                          <Field
+                            orientation="horizontal"
+                            data-invalid={isInvalid}
+                          >
                             <Checkbox
                               id="penalties"
                               name={field.name}
                               checked={field.state.value}
-                              onCheckedChange={(checked) => field.handleChange(checked === true)}
+                              onCheckedChange={(checked) =>
+                                field.handleChange(
+                                  checked === true,
+                                )
+                              }
                             />
-                            <FieldLabel htmlFor="penalties" className="font-normal">
+                            <FieldLabel
+                              htmlFor="penalties"
+                              className="font-normal"
+                            >
                               Straffar
                             </FieldLabel>
                           </Field>
                         </FieldGroup>
-                        {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                        {isInvalid && (
+                          <FieldError
+                            errors={field.state.meta.errors}
+                          />
+                        )}
                       </FieldSet>
                     )
                   }}

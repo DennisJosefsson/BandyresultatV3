@@ -1,37 +1,38 @@
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from '@tanstack/react-router'
 import { toast } from 'sonner'
-import { addTeamToSerie } from '../-functions/SerieFunctions/addTeamToSerie'
+import { addCompetition } from '../-functions/CompetitionFunctions/addCompetition';
+
 
 type Data = { status: 200; message: string } | undefined
 
-export const addTeamToSerieMutation = () => {
-  const mutation = useMutation({
-    mutationFn: addTeamToSerie,
-    onSuccess: (data) => onMutationSuccess(data),
-    onError: (error) => onErrorFunction(error),
-  })
-
+export const useAddCompetitionMutation = () => {
   const router = useRouter()
+
+  const mutation = useMutation({
+    mutationFn: addCompetition,
+    onSuccess: (data) => onMutationSuccess(data),
+    onError: (error) => onMutationError(error),
+  })
 
   const onMutationSuccess = (data: Data) => {
     if (!data) {
-      toast.error('Något gick fel.')
+      toast.success('Okänt fel.')
     } else {
       toast.success(data.message)
     }
+
     router.invalidate({
-      filter: (route) =>
-        route.routeId ===
-        '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit',
+      filter: (r) =>
+        r.routeId === '/_layout/dashboard/season/$seasonId',
     })
   }
 
-  const onErrorFunction = (error: unknown) => {
+  const onMutationError = (error: unknown) => {
     if (error instanceof Error) {
       toast.error(error.message)
     } else {
-      toast.error('Något gick fel.')
+      toast.error('Något gick fel')
     }
   }
 

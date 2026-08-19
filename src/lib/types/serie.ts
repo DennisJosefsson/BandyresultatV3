@@ -1,4 +1,5 @@
 import type { series } from '@/db/schema'
+import z from 'zod'
 import { zd } from '../utils/zod'
 
 export type Serie = typeof series.$inferSelect
@@ -13,7 +14,17 @@ export const categoryEnum = zd.enum([
   'final',
 ])
 
+export const cupCategoryEnum = zd.enum([
+  'cup-qualification',
+  'cup-regular',
+  'cup-eight',
+  'cup-quarter',
+  'cup-semi',
+  'cup-final',
+])
+
 export const newSeriesObject = zd.object({
+  type: z.literal('serie'),
   seasonId: zd.number().int().positive(),
   group: zd.string().min(2, 'Måste ange en gruppkod.'),
   category: categoryEnum,
@@ -31,7 +42,43 @@ export const newSeriesObject = zd.object({
   hasParent: zd.boolean().default(false).optional(),
   allParentGames: zd.boolean().default(false).optional(),
   uefaSorting: zd.boolean().default(false).optional(),
+  competitionId: zd.number(),
 })
+
+export const newCupSerieObject = zd.object({
+  type: z.literal('cup'),
+  seasonId: zd.number().int().positive(),
+  group: zd
+    .string()
+    .startsWith('cup-')
+    .min(6, 'Måste ange en gruppkod.'),
+  category: cupCategoryEnum,
+  serieName: zd
+    .string()
+    .min(5, 'Måste ange ett gruppnamn.'),
+  serieStructure: zd
+    .array(zd.number().int().positive())
+    .optional(),
+  comment: zd.string().optional(),
+  level: zd.number().positive(),
+  division: zd.number().positive(),
+  hasMix: zd.boolean().default(false).optional(),
+  hasStatic: zd.boolean().default(false).optional(),
+  hasParent: zd.boolean().default(false).optional(),
+  allParentGames: zd.boolean().default(false).optional(),
+  uefaSorting: zd.boolean().default(false).optional(),
+  competitionId: zd.number(),
+})
+
+export const newCupOrSeriesObject = zd.discriminatedUnion(
+  'type',
+  [newSeriesObject, newCupSerieObject],
+)
+
+export const editCupOrSeriesObject = zd.discriminatedUnion(
+  'type',
+  [newSeriesObject.extend({serieId: zd.number().int().positive()}), newCupSerieObject.extend({serieId: zd.number().int().positive()})],
+)
 
 export const editSeriesObject = zd.object({
   serieId: zd.number().int().positive(),
@@ -51,6 +98,7 @@ export const editSeriesObject = zd.object({
   hasParent: zd.boolean().default(false).optional(),
   allParentGames: zd.boolean().default(false).optional(),
   uefaSorting: zd.boolean().default(false).optional(),
+  competitionId: zd.number(),
 })
 
 export const newParentSerieObject = zd.object({
@@ -76,5 +124,3 @@ export const editTeamSeriesObject = zd.object({
 export const editTeamSeriesArray = zd.object({
   teamserie: zd.array(editTeamSeriesObject),
 })
-
-

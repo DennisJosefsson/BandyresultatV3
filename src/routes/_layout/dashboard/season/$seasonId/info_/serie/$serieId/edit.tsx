@@ -3,7 +3,7 @@ import { getSerieForEdit } from '@/routes/_layout/dashboard/-functions/SerieFunc
 import EditSerieForms from '@/routes/_layout/dashboard/-components/Forms/SerieForms/EditSerieForms'
 import Loading from '@/components/Loading/Loading'
 
-export const Route = createFileRoute('/_layout/dashboard/season/$seasonId/info_/$serieId/edit')({
+export const Route = createFileRoute('/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit')({
   loader: async ({ params }) => {
     const data = await getSerieForEdit({
       data: { seasonId: params.seasonId, serieId: params.serieId },

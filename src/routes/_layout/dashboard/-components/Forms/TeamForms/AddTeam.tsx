@@ -1,7 +1,24 @@
-import { getRouteApi } from '@tanstack/react-router'
-import { useQuery } from '@tanstack/react-query'
-import { useStore } from '@tanstack/react-form'
-import { zd } from '@/lib/utils/zod'
+import { Button } from '@/components/base/ui/button'
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/base/ui/card'
+import { Checkbox } from '@/components/base/ui/checkbox'
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from '@/components/base/ui/field'
+import { Input } from '@/components/base/ui/input'
+import {
+  Map,
+  MapControls,
+  MapMarker,
+  MarkerContent,
+} from '@/components/base/ui/map'
 import {
   Select,
   SelectContent,
@@ -10,14 +27,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/base/ui/select'
-import { Map, MapControls, MapMarker, MarkerContent } from '@/components/base/ui/map'
-import { Input } from '@/components/base/ui/input'
-import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/base/ui/field'
-import { Checkbox } from '@/components/base/ui/checkbox'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/base/ui/card'
-import { Button } from '@/components/base/ui/button'
-import { useNewTeamForm } from '../../../-hooks/useNewTeamForm'
+import { zd } from '@/lib/utils/zod'
+import { useStore } from '@tanstack/react-form'
+import { useQuery } from '@tanstack/react-query'
+import { getRouteApi } from '@tanstack/react-router'
 import { municipalityQueries } from '../../../-hooks/getMunicipalities'
+import { useNewTeamForm } from '../../../-hooks/useNewTeamForm'
 
 const route = getRouteApi('/_layout/dashboard/teams/add')
 
@@ -27,10 +42,18 @@ const AddTeam = () => {
     select: (s) => s.counties,
   })
   const form = useNewTeamForm()
-  const countyId = useStore(form.store, (state) => state.values.countyId)
-  const { data: municipalities } = useQuery(municipalityQueries['teamForm'](countyId))
+  const countyId = useStore(
+    form.store,
+    (state) => state.values.countyId,
+  )
+  const { data: municipalities } = useQuery(
+    municipalityQueries['teamForm'](countyId),
+  )
 
-  const handleDragEnd = (lnglat: { lng: number; lat: number }) => {
+  const handleDragEnd = (lnglat: {
+    lng: number
+    lat: number
+  }) => {
     form.setFieldValue('lat', lnglat.lat)
     form.setFieldValue('long', lnglat.lng)
   }
@@ -46,13 +69,19 @@ const AddTeam = () => {
             <Button
               nativeButton={false}
               render={
-                <route.Link to="/dashboard" search={{ women }}>
+                <route.Link
+                  to="/dashboard"
+                  search={{ women }}
+                >
                   Tillbaka
                 </route.Link>
               }
             />
 
-            <Button type="submit" form="newTeamForm">
+            <Button
+              type="submit"
+              form="newTeamForm"
+            >
               Lägg till
             </Button>
           </div>
@@ -71,21 +100,31 @@ const AddTeam = () => {
               <form.Field
                 name="name"
                 children={(field) => {
-                  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+                  const isInvalid =
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <FieldLabel htmlFor={field.name}>Namn</FieldLabel>
+                      <FieldLabel htmlFor={field.name}>
+                        Namn
+                      </FieldLabel>
                       <Input
                         id={field.name}
                         name={field.name}
                         value={field.state.value}
                         onBlur={field.handleBlur}
-                        onChange={(e) => field.handleChange(e.target.value)}
+                        onChange={(e) =>
+                          field.handleChange(e.target.value)
+                        }
                         aria-invalid={isInvalid}
                         placeholder="T.ex. IFK Oxelösund"
                         autoComplete="off"
                       />
-                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                      {isInvalid && (
+                        <FieldError
+                          errors={field.state.meta.errors}
+                        />
+                      )}
                     </Field>
                   )
                 }}
@@ -93,21 +132,31 @@ const AddTeam = () => {
               <form.Field
                 name="casualName"
                 children={(field) => {
-                  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+                  const isInvalid =
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <FieldLabel htmlFor={field.name}>Vanligt namn</FieldLabel>
+                      <FieldLabel htmlFor={field.name}>
+                        Vanligt namn
+                      </FieldLabel>
                       <Input
                         id={field.name}
                         name={field.name}
                         value={field.state.value}
                         onBlur={field.handleBlur}
-                        onChange={(e) => field.handleChange(e.target.value)}
+                        onChange={(e) =>
+                          field.handleChange(e.target.value)
+                        }
                         aria-invalid={isInvalid}
                         placeholder="T.ex. Oxelösund"
                         autoComplete="off"
                       />
-                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                      {isInvalid && (
+                        <FieldError
+                          errors={field.state.meta.errors}
+                        />
+                      )}
                     </Field>
                   )
                 }}
@@ -115,21 +164,31 @@ const AddTeam = () => {
               <form.Field
                 name="shortName"
                 children={(field) => {
-                  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+                  const isInvalid =
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <FieldLabel htmlFor={field.name}>Kort namn</FieldLabel>
+                      <FieldLabel htmlFor={field.name}>
+                        Kort namn
+                      </FieldLabel>
                       <Input
                         id={field.name}
                         name={field.name}
                         value={field.state.value}
                         onBlur={field.handleBlur}
-                        onChange={(e) => field.handleChange(e.target.value)}
+                        onChange={(e) =>
+                          field.handleChange(e.target.value)
+                        }
                         aria-invalid={isInvalid}
                         placeholder="T.ex. IFKÖ"
                         autoComplete="off"
                       />
-                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                      {isInvalid && (
+                        <FieldError
+                          errors={field.state.meta.errors}
+                        />
+                      )}
                     </Field>
                   )
                 }}
@@ -137,21 +196,31 @@ const AddTeam = () => {
               <form.Field
                 name="city"
                 children={(field) => {
-                  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+                  const isInvalid =
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <FieldLabel htmlFor={field.name}>Stad</FieldLabel>
+                      <FieldLabel htmlFor={field.name}>
+                        Stad
+                      </FieldLabel>
                       <Input
                         id={field.name}
                         name={field.name}
                         value={field.state.value}
                         onBlur={field.handleBlur}
-                        onChange={(e) => field.handleChange(e.target.value)}
+                        onChange={(e) =>
+                          field.handleChange(e.target.value)
+                        }
                         aria-invalid={isInvalid}
                         placeholder="T.ex. Oxelösund"
                         autoComplete="off"
                       />
-                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                      {isInvalid && (
+                        <FieldError
+                          errors={field.state.meta.errors}
+                        />
+                      )}
                     </Field>
                   )
                 }}
@@ -159,23 +228,35 @@ const AddTeam = () => {
               <form.Field
                 name="lat"
                 children={(field) => {
-                  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+                  const isInvalid =
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <FieldLabel htmlFor={field.name}>Latitud</FieldLabel>
+                      <FieldLabel htmlFor={field.name}>
+                        Latitud
+                      </FieldLabel>
                       <Input
                         id={field.name}
                         name={field.name}
                         value={field.state.value}
                         onBlur={field.handleBlur}
                         onChange={(e) =>
-                          field.handleChange(zd.coerce.number().parse(e.target.value))
+                          field.handleChange(
+                            zd.coerce
+                              .number()
+                              .parse(e.target.value),
+                          )
                         }
                         aria-invalid={isInvalid}
                         placeholder="T.ex. 62"
                         autoComplete="off"
                       />
-                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                      {isInvalid && (
+                        <FieldError
+                          errors={field.state.meta.errors}
+                        />
+                      )}
                     </Field>
                   )
                 }}
@@ -183,23 +264,35 @@ const AddTeam = () => {
               <form.Field
                 name="long"
                 children={(field) => {
-                  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+                  const isInvalid =
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <FieldLabel htmlFor={field.name}>Longitud</FieldLabel>
+                      <FieldLabel htmlFor={field.name}>
+                        Longitud
+                      </FieldLabel>
                       <Input
                         id={field.name}
                         name={field.name}
                         value={field.state.value}
                         onBlur={field.handleBlur}
                         onChange={(e) =>
-                          field.handleChange(zd.coerce.number().parse(e.target.value))
+                          field.handleChange(
+                            zd.coerce
+                              .number()
+                              .parse(e.target.value),
+                          )
                         }
                         aria-invalid={isInvalid}
                         placeholder="T.ex. 15"
                         autoComplete="off"
                       />
-                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                      {isInvalid && (
+                        <FieldError
+                          errors={field.state.meta.errors}
+                        />
+                      )}
                     </Field>
                   )
                 }}
@@ -207,21 +300,37 @@ const AddTeam = () => {
               <form.Field
                 name="women"
                 children={(field) => {
-                  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+                  const isInvalid =
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <Field orientation="horizontal" data-invalid={isInvalid}>
+                      <Field
+                        orientation="horizontal"
+                        data-invalid={isInvalid}
+                      >
                         <Checkbox
                           id={field.name}
                           name={field.name}
                           checked={field.state.value}
-                          onCheckedChange={(checked) => field.handleChange(checked === true)}
+                          onCheckedChange={(checked) =>
+                            field.handleChange(
+                              checked === true,
+                            )
+                          }
                         />
-                        <FieldLabel htmlFor={field.name} className="font-normal">
+                        <FieldLabel
+                          htmlFor={field.name}
+                          className="font-normal"
+                        >
                           Damlag
                         </FieldLabel>
                       </Field>
-                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                      {isInvalid && (
+                        <FieldError
+                          errors={field.state.meta.errors}
+                        />
+                      )}
                     </Field>
                   )
                 }}
@@ -236,39 +345,62 @@ const AddTeam = () => {
                   },
                 }}
                 children={(field) => {
-                  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+                  const isInvalid =
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
                   return (
                     <Field data-invalid={isInvalid}>
-                      <FieldLabel htmlFor={field.name}>Län</FieldLabel>
+                      <FieldLabel htmlFor={field.name}>
+                        Län
+                      </FieldLabel>
                       <Select
                         name={field.name}
                         value={field.state.value.toString()}
                         onValueChange={(value) =>
-                          field.handleChange(zd.coerce.number().parse(value))
+                          field.handleChange(
+                            zd.coerce.number().parse(value),
+                          )
                         }
                       >
                         <SelectTrigger
                           id={field.name}
                           aria-invalid={isInvalid}
-                          className="min-w-[120px]"
+                          className="min-w-30"
                         >
                           <SelectValue placeholder="Välj">
-                            {counties.find((c) => c.value === field.state.value)?.label ?? 'Välj'}
+                            {counties.find(
+                              (c) =>
+                                c.value ===
+                                field.state.value,
+                            )?.label ?? 'Välj'}
                           </SelectValue>
                         </SelectTrigger>
-                        <SelectContent alignItemWithTrigger={true}>
+                        <SelectContent
+                          alignItemWithTrigger={true}
+                        >
                           <SelectItem value="auto">
-                            {counties.find((c) => c.value === field.state.value)?.label ?? 'Välj'}
+                            {counties.find(
+                              (c) =>
+                                c.value ===
+                                field.state.value,
+                            )?.label ?? 'Välj'}
                           </SelectItem>
                           <SelectSeparator />
                           {counties.map((cat) => (
-                            <SelectItem key={cat.value} value={cat.value.toString()}>
+                            <SelectItem
+                              key={cat.value}
+                              value={cat.value.toString()}
+                            >
                               {cat.label}
                             </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
-                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                      {isInvalid && (
+                        <FieldError
+                          errors={field.state.meta.errors}
+                        />
+                      )}
                     </Field>
                   )
                 }}
@@ -277,56 +409,85 @@ const AddTeam = () => {
                 <form.Field
                   name="municipalityId"
                   children={(field) => {
-                    const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+                    const isInvalid =
+                      field.state.meta.isTouched &&
+                      !field.state.meta.isValid
                     return (
                       <Field data-invalid={isInvalid}>
-                        <FieldLabel htmlFor={field.name}>Kommun</FieldLabel>
+                        <FieldLabel htmlFor={field.name}>
+                          Kommun
+                        </FieldLabel>
                         <Select
                           name={field.name}
                           value={field.state.value.toString()}
                           onValueChange={(value) =>
-                            field.handleChange(zd.coerce.number().parse(value))
+                            field.handleChange(
+                              zd.coerce
+                                .number()
+                                .parse(value),
+                            )
                           }
                         >
                           <SelectTrigger
                             id={field.name}
                             aria-invalid={isInvalid}
-                            className="min-w-[120px]"
+                            className="min-w-30"
                           >
                             <SelectValue placeholder="Välj">
                               {municipalities.municipalities.find(
-                                (c) => c.value === field.state.value,
+                                (c) =>
+                                  c.value ===
+                                  field.state.value,
                               )?.label ?? 'Välj'}
                             </SelectValue>
                           </SelectTrigger>
-                          <SelectContent alignItemWithTrigger={true}>
+                          <SelectContent
+                            alignItemWithTrigger={true}
+                          >
                             <SelectItem value="auto">
                               {municipalities.municipalities.find(
-                                (c) => c.value === field.state.value,
+                                (c) =>
+                                  c.value ===
+                                  field.state.value,
                               )?.label ?? 'Välj'}
                             </SelectItem>
                             <SelectSeparator />
-                            {municipalities.municipalities.map((cat) => (
-                              <SelectItem key={cat.value} value={cat.value.toString()}>
-                                {cat.label}
-                              </SelectItem>
-                            ))}
+                            {municipalities.municipalities.map(
+                              (cat) => (
+                                <SelectItem
+                                  key={cat.value}
+                                  value={cat.value.toString()}
+                                >
+                                  {cat.label}
+                                </SelectItem>
+                              ),
+                            )}
                           </SelectContent>
                         </Select>
-                        {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                        {isInvalid && (
+                          <FieldError
+                            errors={field.state.meta.errors}
+                          />
+                        )}
                       </Field>
                     )
                   }}
                 />
               ) : null}
             </div>
-            <div className="xs:max-w-[360px] h-[400px] w-screen max-w-[280px] p-2 sm:h-160 sm:max-w-xl xl:max-w-4xl">
-              <Map center={[15, 62]} zoom={4} fadeDuration={0}>
+            <div className="xs:max-w-90 h-100 w-screen max-w-70 p-2 sm:h-160 sm:max-w-xl xl:max-w-4xl">
+              <Map
+                center={[15, 62]}
+                zoom={4}
+                fadeDuration={0}
+              >
                 <MapMarker
                   latitude={62}
                   longitude={15}
                   draggable
-                  onDragEnd={(value) => handleDragEnd(value)}
+                  onDragEnd={(value) =>
+                    handleDragEnd(value)
+                  }
                 >
                   <MarkerContent>
                     <div className="size-4 rounded-full border-2 border-orange-500 bg-orange-500 opacity-75 shadow-lg" />

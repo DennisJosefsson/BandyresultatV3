@@ -1,22 +1,30 @@
-import type { SQL } from 'drizzle-orm'
-import { asc, eq, getTableColumns, sql } from 'drizzle-orm'
-import { createServerFn } from '@tanstack/react-start'
+import { db } from '@/db'
+import {
+  competitions,
+  teams,
+  teamseasons,
+} from '@/db/schema'
+import { catchError } from '@/lib/middlewares/errors/catchError'
+import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import type { TeamBase } from '@/lib/types/team'
 import { zd } from '@/lib/utils/zod'
-import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import { catchError } from '@/lib/middlewares/errors/catchError'
-import { series, teams, teamseasons } from '@/db/schema'
-import { db } from '@/db'
+import { createServerFn } from '@tanstack/react-start'
+import type { SQL } from 'drizzle-orm'
+import { asc, eq, getTableColumns, sql } from 'drizzle-orm'
+import { getCompetitionSeries } from './seasonQueries'
 
 export const getSeasonInfo = createServerFn({
   method: 'GET',
 })
   .middleware([errorMiddleware])
-  .validator(zd.object({ seasonId: zd.number().int().positive() }))
+  .validator(
+    zd.object({ seasonId: zd.number().int().positive() }),
+  )
   .handler(async ({ data: { seasonId } }) => {
     try {
       const metadata = await db.query.metadata.findFirst({
-        where: (metadataSchema, { eq: equal }) => equal(metadataSchema.seasonId, seasonId),
+        where: (metadataSchema, { eq: equal }) =>
+          equal(metadataSchema.seasonId, seasonId),
       })
 
       const teamSeasons = await db
@@ -30,19 +38,43 @@ export const getSeasonInfo = createServerFn({
           } as unknown as SQL<TeamBase>,
         })
         .from(teamseasons)
-        .leftJoin(teams, eq(teams.teamId, teamseasons.teamId))
+        .leftJoin(
+          teams,
+          eq(teams.teamId, teamseasons.teamId),
+        )
         .where(eq(teamseasons.seasonId, seasonId))
-        .orderBy(asc(sql`teams.casual_name collate "se-SE-x-icu"`))
+        .orderBy(
+          asc(sql`teams.casual_name collate "se-SE-x-icu"`),
+        )
 
-      const seasonSeries = await db.select().from(series).where(eq(series.seasonId, seasonId))
+      const competitionArray = await db
+        .select({ ...getTableColumns(competitions) })
+        .from(competitions)
+        .where(eq(competitions.seasonId, seasonId))
+        .orderBy(asc(competitions.division))
+
+      const seasonSeries = await Promise.all(
+        competitionArray.map(async (comp) => {
+          return {
+            competitionName: comp.competitionName,
+            competitionId: comp.competitionId,
+            series: await getCompetitionSeries({
+              competitionId: comp.competitionId,
+            }),
+          }
+        }),
+      )
 
       const season = await db.query.seasons.findFirst({
-        where: (seasons, { eq: equal }) => equal(seasons.seasonId, seasonId),
+        where: (seasons, { eq: equal }) =>
+          equal(seasons.seasonId, seasonId),
       })
 
-      const playoffSeasonData = await db.query.playoffseason.findFirst({
-        where: (playoffseason, { eq: equal }) => equal(playoffseason.seasonId, seasonId),
-      })
+      const playoffSeasonData =
+        await db.query.playoffseason.findFirst({
+          where: (playoffseason, { eq: equal }) =>
+            equal(playoffseason.seasonId, seasonId),
+        })
 
       if (!metadata) {
         throw new Error('Metadata saknas')

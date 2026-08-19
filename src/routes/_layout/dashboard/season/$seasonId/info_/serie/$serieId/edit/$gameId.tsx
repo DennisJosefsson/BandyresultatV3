@@ -4,7 +4,7 @@ import EditGameForm from '@/routes/_layout/dashboard/-components/Forms/GameForms
 import { zd } from '@/lib/utils/zod'
 
 export const Route = createFileRoute(
-  '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/$gameId',
+  '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/$gameId',
 )({
   params: {
     parse: ({ gameId }) => ({ gameId: zd.coerce.number().parse(gameId) }),

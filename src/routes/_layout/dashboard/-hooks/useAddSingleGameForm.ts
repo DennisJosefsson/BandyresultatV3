@@ -10,7 +10,7 @@ import { addSingleGame } from '../-functions/GameFunctions/addSingleGame'
 import { parseNewGameWithResult } from '../-functions/dataParsers/parseGameResults'
 
 const route = getRouteApi(
-  '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/singlegame',
+  '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/singlegame',
 )
 
 type Data = Awaited<ReturnType<typeof addSingleGame>>
