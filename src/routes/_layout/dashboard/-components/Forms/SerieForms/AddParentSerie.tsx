@@ -12,7 +12,7 @@ import { useNewParentSerieMutation } from '../../../-hooks/addParentSerieMutatio
 import { deleteParentSerieMutation } from '../../../-hooks/useDeleteParentSerieMutation'
 
 const route = getRouteApi(
-  '/_layout/dashboard/season/$seasonId/info_/$serieId/edit',
+  '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit',
 )
 
 const AddParentSerie = () => {

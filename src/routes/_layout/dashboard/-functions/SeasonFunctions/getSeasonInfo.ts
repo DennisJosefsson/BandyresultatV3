@@ -1,7 +1,6 @@
 import { db } from '@/db'
 import {
   competitions,
-  series,
   teams,
   teamseasons,
 } from '@/db/schema'
@@ -12,7 +11,7 @@ import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
 import type { SQL } from 'drizzle-orm'
 import { asc, eq, getTableColumns, sql } from 'drizzle-orm'
-import { sortSeasonSeries } from './sortFunctions'
+import { getCompetitionSeries } from './seasonQueries'
 
 export const getSeasonInfo = createServerFn({
   method: 'GET',
@@ -48,24 +47,23 @@ export const getSeasonInfo = createServerFn({
           asc(sql`teams.casual_name collate "se-SE-x-icu"`),
         )
 
-      const seasonSeries = await db
-        .select({
-          ...getTableColumns(series),
-          competition: { ...getTableColumns(competitions) },
-        })
-        .from(series)
-        .leftJoin(
-          competitions,
-          eq(
-            competitions.competitionId,
-            series.competitionId,
-          ),
-        )
-        .where(eq(series.seasonId, seasonId))
-        .orderBy(asc(series.level))
+      const competitionArray = await db
+        .select({ ...getTableColumns(competitions) })
+        .from(competitions)
+        .where(eq(competitions.seasonId, seasonId))
+        .orderBy(asc(competitions.division))
 
-      const sortedSeasonSeries =
-        sortSeasonSeries(seasonSeries)
+      const seasonSeries = await Promise.all(
+        competitionArray.map(async (comp) => {
+          return {
+            competitionName: comp.competitionName,
+            competitionId: comp.competitionId,
+            series: await getCompetitionSeries({
+              competitionId: comp.competitionId,
+            }),
+          }
+        }),
+      )
 
       const season = await db.query.seasons.findFirst({
         where: (seasons, { eq: equal }) =>
@@ -101,7 +99,7 @@ export const getSeasonInfo = createServerFn({
       return {
         metadata,
         teams: teamSeasons,
-        series: sortedSeasonSeries,
+        series: seasonSeries,
         season,
         playoffSeason: playoffSeasonData,
       }

@@ -3,7 +3,7 @@ import { getSeriesTableData } from '@/routes/_layout/dashboard/-functions/SerieF
 import AddStaticTableForm from '@/routes/_layout/dashboard/-components/Forms/TableForms/AddStaticTableForm'
 
 export const Route = createFileRoute(
-  '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/addTable',
+  '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/addTable',
 )({
   loader: async ({ params: { serieId } }) => {
     const data = await getSeriesTableData({

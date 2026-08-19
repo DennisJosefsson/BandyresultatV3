@@ -6,7 +6,7 @@ import EditSerie from './EditSerie'
 import EditTeamSerie from './EditTeamserie'
 
 const route = getRouteApi(
-  '/_layout/dashboard/season/$seasonId/info_/$serieId/edit',
+  '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit',
 )
 
 const EditSerieForms = () => {
@@ -23,7 +23,7 @@ const EditSerieForms = () => {
           <Button
             render={
               <route.Link
-                to="/dashboard/season/$seasonId/info/$serieId/edit/newParentId"
+                to="/dashboard/season/$seasonId/info/serie/$serieId/edit/newParentId"
                 search={(prev) => ({ women: prev.women })}
                 resetScroll={false}
               >
@@ -36,7 +36,7 @@ const EditSerieForms = () => {
           <Button
             render={
               <route.Link
-                to="/dashboard/season/$seasonId/info/$serieId/edit/games"
+                to="/dashboard/season/$seasonId/info/serie/$serieId/edit/games"
                 search={(prev) => ({ women: prev.women })}
                 resetScroll={false}
               >
@@ -49,7 +49,7 @@ const EditSerieForms = () => {
           <Button
             render={
               <route.Link
-                to="/dashboard/season/$seasonId/info/$serieId/edit/generateschedule"
+                to="/dashboard/season/$seasonId/info/serie/$serieId/edit/generateschedule"
                 search={(prev) => ({ women: prev.women })}
                 resetScroll={false}
               >
@@ -62,7 +62,7 @@ const EditSerieForms = () => {
           <Button
             render={
               <route.Link
-                to="/dashboard/season/$seasonId/info/$serieId/edit/singlegame"
+                to="/dashboard/season/$seasonId/info/serie/$serieId/edit/singlegame"
                 search={(prev) => ({ women: prev.women })}
                 resetScroll={false}
               >
@@ -75,7 +75,7 @@ const EditSerieForms = () => {
           <Button
             render={
               <route.Link
-                to="/dashboard/season/$seasonId/info/$serieId/edit/addGames"
+                to="/dashboard/season/$seasonId/info/serie/$serieId/edit/addGames"
                 search={(prev) => ({ women: prev.women })}
                 resetScroll={false}
               >
@@ -88,7 +88,7 @@ const EditSerieForms = () => {
           <Button
             render={
               <route.Link
-                to="/dashboard/season/$seasonId/info/$serieId/edit/addTable"
+                to="/dashboard/season/$seasonId/info/serie/$serieId/edit/addTable"
                 search={(prev) => ({ women: prev.women })}
                 resetScroll={false}
               >
@@ -101,7 +101,7 @@ const EditSerieForms = () => {
           <Button
             render={
               <route.Link
-                to="/dashboard/season/$seasonId/info/$serieId/edit/editTable"
+                to="/dashboard/season/$seasonId/info/serie/$serieId/edit/editTable"
                 search={(prev) => ({ women: prev.women })}
                 resetScroll={false}
               >

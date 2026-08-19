@@ -3,7 +3,7 @@ import { getSerieGames } from '@/routes/_layout/dashboard/-functions/GameFunctio
 import SerieGames from '@/routes/_layout/dashboard/-components/Games/SerieGames'
 
 export const Route = createFileRoute(
-  '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/games',
+  '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/games',
 )({
   loader: async ({ params: { serieId } }) => {
     const data = await getSerieGames({ data: { serieId } })

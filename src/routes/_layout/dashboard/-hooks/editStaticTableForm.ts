@@ -1,11 +1,19 @@
-import { toast } from 'sonner'
-import { getRouteApi, useRouter } from '@tanstack/react-router'
-import { useMutation } from '@tanstack/react-query'
-import { revalidateLogic, useForm } from '@tanstack/react-form'
 import { editStaticTableArray } from '@/lib/types/table'
+import {
+  revalidateLogic,
+  useForm,
+} from '@tanstack/react-form'
+import { useMutation } from '@tanstack/react-query'
+import {
+  getRouteApi,
+  useRouter,
+} from '@tanstack/react-router'
+import { toast } from 'sonner'
 import { editStaticTable } from '../-functions/SerieFunctions/editStaticTable'
 
-const route = getRouteApi('/_layout/dashboard/season/$seasonId/info_/$serieId/edit/editTable')
+const route = getRouteApi(
+  '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/editTable',
+)
 
 type Data = Awaited<ReturnType<typeof editStaticTable>>
 
@@ -30,7 +38,8 @@ export const editStaticTableForm = () => {
     defaultValues: {
       tableArray: values,
     },
-    onSubmit: ({ value }) => mutation.mutateAsync({ data: value }),
+    onSubmit: ({ value }) =>
+      mutation.mutateAsync({ data: value }),
   })
 
   const onMutationSuccess = (data: Data) => {
@@ -40,10 +49,12 @@ export const editStaticTableForm = () => {
       toast.success(data.message)
     }
     router.invalidate({
-      filter: (r) => r.routeId === '/_layout/dashboard/season/$seasonId/info_/$serieId/edit',
+      filter: (r) =>
+        r.routeId ===
+        '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit',
     })
     navigate({
-      to: '/dashboard/season/$seasonId/info/$serieId/edit',
+      to: '/dashboard/season/$seasonId/info/serie/$serieId/edit',
       search: (prev) => ({ women: prev.women }),
     })
   }

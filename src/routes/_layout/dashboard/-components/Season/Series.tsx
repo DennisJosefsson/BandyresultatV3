@@ -30,11 +30,11 @@ const Series = () => {
           <Button
             render={
               <route.Link
-                to="info/newSerie"
+                to="info/competition/newCompetition"
                 params={{ seasonId }}
                 search={{ women }}
               >
-                Lägg till serie
+                Lägg till turnering
               </route.Link>
             }
             nativeButton={false}
@@ -47,14 +47,47 @@ const Series = () => {
             {series.map((div) => {
               return (
                 <div
-                  key={div.serie}
-                  className="mb-1 flex flex-col gap-2"
+                  key={div.competitionName}
+                  className="mb-4 flex flex-col gap-2"
                 >
-                  <div className="mb-2">
+                  <div className="mb-2 flex flex-row justify-between">
                     <span className="text-base font-semibold">
-                      {' '}
-                      {div.serie}
+                      {div.competitionName}
                     </span>
+                    <div className="flex flex-row gap-2">
+                      <Button
+                        render={
+                          <route.Link
+                            to="info/competition/$competitionId/edit"
+                            params={{
+                              seasonId,
+                              competitionId:
+                                div.competitionId,
+                            }}
+                            search={{ women }}
+                          >
+                            Ändra
+                          </route.Link>
+                        }
+                        nativeButton={false}
+                      />
+                      <Button
+                        render={
+                          <route.Link
+                            to="info/competition/$competitionId/newSerie"
+                            params={{
+                              seasonId,
+                              competitionId:
+                                div.competitionId,
+                            }}
+                            search={{ women }}
+                          >
+                            Lägg till serie
+                          </route.Link>
+                        }
+                        nativeButton={false}
+                      />
+                    </div>
                   </div>
                   {div.series.map((serie) => {
                     return (
@@ -71,7 +104,7 @@ const Series = () => {
                             variant="outline"
                             render={
                               <route.Link
-                                to="/dashboard/season/$seasonId/info/$serieId/edit/games"
+                                to="/dashboard/season/$seasonId/info/serie/$serieId/edit/games"
                                 params={{
                                   seasonId: seasonId,
                                   serieId: serie.serieId,
@@ -87,7 +120,7 @@ const Series = () => {
                           <Button
                             render={
                               <route.Link
-                                to="/dashboard/season/$seasonId/info/$serieId/edit"
+                                to="/dashboard/season/$seasonId/info/serie/$serieId/edit"
                                 params={{
                                   seasonId: seasonId,
                                   serieId: serie.serieId,

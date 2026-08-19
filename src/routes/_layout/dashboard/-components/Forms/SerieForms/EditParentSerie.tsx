@@ -29,7 +29,7 @@ import { deleteParentSerieMutation } from '../../../-hooks/useDeleteParentSerieM
 import { useEditParentSerieForm } from '../../../-hooks/useEditParentSerieForm'
 
 const route = getRouteApi(
-  '/_layout/dashboard/season/$seasonId/info_/$serieId/edit',
+  '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit',
 )
 
 const EditParentSerie = () => {

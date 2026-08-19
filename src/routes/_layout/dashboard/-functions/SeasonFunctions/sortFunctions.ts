@@ -28,10 +28,17 @@ export function sortSeasonSeries(
   )
 
   const sortedTables = Object.keys(seriesArray).map(
-    (serie) => {
+    (competition) => {
+      const competitionObject = seasonSeries.find(
+        (s) =>
+          s.competition?.competitionName === competition,
+      )
+      if (!competitionObject)
+        throw new Error('Turnering saknas')
       return {
-        serie,
-        series: seriesArray[serie],
+        competition,
+        competitionId: competitionObject.competitionId,
+        series: seriesArray[competition],
       }
     },
   )

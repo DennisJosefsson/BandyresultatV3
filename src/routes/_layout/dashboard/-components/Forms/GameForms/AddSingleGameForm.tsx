@@ -27,7 +27,7 @@ import { getRouteApi } from '@tanstack/react-router'
 import { useAddSingleGameForm } from '../../../-hooks/useAddSingleGameForm'
 
 const route = getRouteApi(
-  '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/singlegame',
+  '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/singlegame',
 )
 
 const currDate = new Date().toLocaleDateString('se-SV', {

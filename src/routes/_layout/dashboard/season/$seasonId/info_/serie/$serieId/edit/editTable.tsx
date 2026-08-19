@@ -3,7 +3,7 @@ import { getSeriesTableDataForEdit } from '@/routes/_layout/dashboard/-functions
 import EditStaticTableForm from '@/routes/_layout/dashboard/-components/Forms/TableForms/EditStaticTableForm'
 
 export const Route = createFileRoute(
-  '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/editTable',
+  '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/editTable',
 )({
   loader: async ({ params: { serieId } }) => {
     const data = await getSeriesTableDataForEdit({

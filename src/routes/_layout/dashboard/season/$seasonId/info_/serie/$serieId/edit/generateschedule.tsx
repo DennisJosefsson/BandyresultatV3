@@ -3,7 +3,7 @@ import { generateSchedule } from '@/routes/_layout/dashboard/-functions/GameFunc
 import GenerateSchedule from '@/routes/_layout/dashboard/-components/Games/GenerateSchedule'
 
 export const Route = createFileRoute(
-  '/_layout/dashboard/season/$seasonId/info_/$serieId/edit/generateschedule',
+  '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/generateschedule',
 )({
   loader: async ({ params: { serieId } }) => {
     const games = await generateSchedule({ data: { serieId } })
