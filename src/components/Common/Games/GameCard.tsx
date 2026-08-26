@@ -59,7 +59,7 @@ export function GameCard({
                 size={32}
                 teamId={game.homeTeamId}
                 className="@sm:block hidden size-[1lh] object-scale-down"
-                alt={game.home.casualName}
+                aria-label={game.home.casualName}
                 title={game.home.casualName}
               />
               <span className="truncate @xs:tracking-wide">
@@ -145,7 +145,7 @@ export function GameCard({
                 size={32}
                 teamId={game.awayTeamId}
                 className="@sm:block hidden size-[1lh] object-scale-down"
-                alt={game.away.casualName}
+                aria-label={game.away.casualName}
                 title={game.away.casualName}
               />
             </div>

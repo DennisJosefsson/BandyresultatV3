@@ -62,7 +62,7 @@ const TeamHeader = () => {
             className="xs:w-16 w-8 object-scale-down md:w-24 lg:w-32"
             size={128}
             teamId={teamId}
-            alt={data.team.name}
+            aria-label={data.team.name}
             title={data.team.name}
           ></TeamLogo>
         </div>

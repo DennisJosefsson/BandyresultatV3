@@ -4,10 +4,10 @@ import type { Game } from '@/lib/types/game'
 import PlayoffCard from './PlayoffCard'
 type FinalCardProps = {
   game: Omit<Game, 'season'>
-  title:string
+  title: string
 }
 
-const FinalCard = ({ game,title }: FinalCardProps) => {
+const FinalCard = ({ game, title }: FinalCardProps) => {
   return (
     <div className="grid w-auto min-w-[33%] grid-cols-1 justify-center @2xl/playoff:mx-auto">
       <PlayoffCard group="final">
@@ -25,7 +25,7 @@ const FinalCard = ({ game,title }: FinalCardProps) => {
                   size={32}
                   teamId={game.home.teamId}
                   className="size-[1lh] object-scale-down"
-                  alt={game.home.casualName}
+                  aria-label={game.home.casualName}
                   title={game.home.casualName}
                 />
                 <span>{game.home.name}</span>
@@ -35,7 +35,7 @@ const FinalCard = ({ game,title }: FinalCardProps) => {
                   size={32}
                   teamId={game.away.teamId}
                   className="size-[1lh] object-scale-down"
-                  alt={game.away.casualName}
+                  aria-label={game.away.casualName}
                   title={game.away.casualName}
                 />
                 <span>{game.away.name}</span>

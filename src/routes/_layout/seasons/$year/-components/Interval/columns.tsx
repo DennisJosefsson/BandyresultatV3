@@ -23,7 +23,7 @@ export const columns: Array<
           size={32}
           teamId={row.original.teamId}
           className="hidden @xs:block size-[1lh] object-scale-down"
-          alt={row.original.team.casualName}
+          aria-label={row.original.team.casualName}
           title={row.original.team.casualName}
         />
         <span className="truncate">

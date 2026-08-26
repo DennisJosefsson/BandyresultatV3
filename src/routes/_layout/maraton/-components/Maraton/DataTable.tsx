@@ -116,7 +116,7 @@ const DataTable = <TData, TValue>({
                       size={32}
                       teamId={original.teamId}
                       className="size-[1lh] object-scale-down"
-                      alt={original.team.casualName}
+                      aria-label={original.team.casualName}
                       title={original.team.casualName}
                     />
                   </TeamLogoCell>

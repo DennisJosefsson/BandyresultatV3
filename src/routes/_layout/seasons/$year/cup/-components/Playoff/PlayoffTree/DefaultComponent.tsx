@@ -37,7 +37,7 @@ const DefaultComponent = ({
             size={32}
             teamId={group.table.homeTeam.teamId}
             className="size-[1lh] object-scale-down"
-            alt={group.table.homeTeam.name}
+            aria-label={group.table.homeTeam.name}
             title={group.table.homeTeam.name}
           />
           <span>{group.table.homeTeam.casualName}</span>
@@ -50,7 +50,7 @@ const DefaultComponent = ({
             size={32}
             teamId={group.table.awayTeam.teamId}
             className="size-[1lh] object-scale-down"
-            alt={group.table.awayTeam.name}
+            aria-label={group.table.awayTeam.name}
             title={group.table.awayTeam.name}
           />
           <span>{group.table.awayTeam.casualName}</span>

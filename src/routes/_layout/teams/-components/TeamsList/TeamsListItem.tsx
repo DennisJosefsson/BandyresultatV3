@@ -37,7 +37,7 @@ const TeamsListItem = ({
         <TeamLogo
           className="size-[1lh] object-scale-down"
           size={32}
-          alt={team.casualName}
+          aria-label={team.casualName}
           title={team.name}
           teamId={team.teamId}
         />

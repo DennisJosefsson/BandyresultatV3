@@ -30,7 +30,7 @@ export const columns: Array<
           size={32}
           teamId={row.original.homeTeamId}
           className="@sm:block hidden size-[1lh] object-scale-down"
-          alt={row.original.home.casualName}
+          aria-label={row.original.home.casualName}
           title={row.original.home.casualName}
         />
         <span className="text-center">-</span>
@@ -38,7 +38,7 @@ export const columns: Array<
           size={32}
           teamId={row.original.awayTeamId}
           className="@sm:block hidden size-[1lh] object-scale-down"
-          alt={row.original.away.casualName}
+          aria-label={row.original.away.casualName}
           title={row.original.away.casualName}
         />
       </Divider>

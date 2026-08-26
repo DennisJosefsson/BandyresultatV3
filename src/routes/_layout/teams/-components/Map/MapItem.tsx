@@ -104,7 +104,8 @@ function MapItem({
           <TeamLogo
             teamId={team.teamId}
             size={256}
-            alt={team.name}
+            aria-label={team.name}
+            title={team.name}
             className="object-cover -translate-y-5 xs:-translate-y-3.5"
           />
         </div>
