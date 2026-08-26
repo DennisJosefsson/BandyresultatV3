@@ -189,22 +189,50 @@ function GroupList() {
 
   if (data.status === 200) {
     return (
-      <div className="grid grid-cols-2 gap-4 md:gap-8 lg:grid-cols-4 xl:gap-10 2xl:grid-cols-6">
-        {data.groups.map((group) => {
-          return (
-            <Route.Link
-              key={group.serieId.toString()}
-              to="/seasons/$year/$group"
-              params={{ group: group.group, year: year }}
-              search={{ women: women }}
-              className="flex w-full flex-row items-center justify-center border px-4 py-2 shadow-xs md:shadow-sm"
-            >
-              <span className="xs:text-[10px] text-center text-[8px] font-semibold md:text-sm">
-                {group.name}
-              </span>
-            </Route.Link>
-          )
-        })}
+      <div className="@container flex flex-col gap-2 p-1">
+        <span className="text-xs sm:text-sm font-semibold">
+          Seriespel
+        </span>
+        <div className="grid grid-cols-1 gap-2 @md:gap-4 @lg:grid-cols-3 @3xl:gap-10 @4xl:grid-cols-4">
+          {data.groups.map((group) => {
+            return (
+              <Route.Link
+                key={group.serieId.toString()}
+                to="/seasons/$year/$group"
+                params={{ group: group.group, year: year }}
+                search={{ women: women }}
+                className="flex w-full flex-row items-center justify-center border px-4 py-2 shadow-xs md:shadow-sm"
+              >
+                <span className="@sm:text-[10px] text-center text-[8px] font-semibold @md:text-xs @2xl:text-sm">
+                  {group.name}
+                </span>
+              </Route.Link>
+            )
+          })}
+        </div>
+        <span className="text-xs sm:text-sm font-semibold">
+          Cupspel
+        </span>
+        <div className="grid grid-cols-1 gap-2 @md:gap-4 @lg:grid-cols-3 @3xl:gap-10 @4xl:grid-cols-4">
+          {data.cups.map((cup) => {
+            return (
+              <Route.Link
+                key={cup.competitionId.toString()}
+                to="/seasons/$year/cup/$competitionName/games"
+                params={{
+                  competitionName: cup.competitionName,
+                  year: year,
+                }}
+                search={{ women: women }}
+                className="flex w-full flex-row items-center justify-center border px-4 py-2 shadow-xs md:shadow-sm"
+              >
+                <span className="@sm:text-[10px] text-center text-[8px] font-semibold @md:text-xs @2xl:text-sm">
+                  {cup.competitionName}
+                </span>
+              </Route.Link>
+            )
+          })}
+        </div>
       </div>
     )
   }

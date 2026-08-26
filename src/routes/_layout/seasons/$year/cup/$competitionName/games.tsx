@@ -20,6 +20,53 @@ export const Route = createFileRoute(
   },
 
   staticData: { breadcrumb: 'Matcher' },
+  head: ({ match }) => {
+    const seasonYear = match.context.seasonYear
+    const women = match.search.women
+    return {
+      meta: [
+        {
+          title: `Bandyresultat - Matcher ${
+            match.params.competitionName.replaceAll(
+              '_',
+              ' ',
+            ) ?? 'Cup'
+          } ${women ? 'damer' : 'herrar'} ${seasonYear}`,
+        },
+        {
+          property: 'og:description',
+          content: `Bandyresultat - Matcher i ${
+            match.params.competitionName.replaceAll(
+              '_',
+              ' ',
+            ) ?? 'Cup'
+          } ${women ? 'damer' : 'herrar'} ${seasonYear}`,
+        },
+        {
+          property: 'og:title',
+          content: `Bandyresultat - Matcher ${
+            match.params.competitionName.replaceAll(
+              '_',
+              ' ',
+            ) ?? 'Cup'
+          } ${women ? 'damer' : 'herrar'} ${seasonYear}`,
+        },
+        {
+          property: 'og:type',
+          content: 'website',
+        },
+        {
+          property: 'og:url',
+          content: `https://bandyresultat.se/seasons/${match.params.year}}/cup/${match.params.competitionName}/games?women=${women}`,
+        },
+        {
+          property: 'og:image',
+          content:
+            'https://github.com/DennisJosefsson/WebsiteImages/blob/main/bandyresultat.jpg?raw=true',
+        },
+      ],
+    }
+  },
   component: RouteComponent,
 })
 

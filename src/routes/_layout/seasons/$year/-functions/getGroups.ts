@@ -126,6 +126,7 @@ export const getGroups = createServerFn({ method: 'GET' })
               eq(competitions.isCup, true),
             ),
           )
+          .orderBy(asc(competitions.division))
 
         return {
           status: 200,

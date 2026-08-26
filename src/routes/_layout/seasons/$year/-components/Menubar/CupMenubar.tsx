@@ -15,9 +15,9 @@ import {
   useLoaderData,
 } from '@tanstack/react-router'
 
-const route = getRouteApi('/_layout/seasons/$year/playoff')
+const route = getRouteApi('/_layout/seasons/$year/cup')
 
-const PlayoffMenubar = () => {
+const CupMenubar = () => {
   const data = useLoaderData({
     from: '/_layout/seasons/$year',
   })
@@ -358,4 +358,4 @@ const PlayoffMenubar = () => {
   return null
 }
 
-export default PlayoffMenubar
+export default CupMenubar
