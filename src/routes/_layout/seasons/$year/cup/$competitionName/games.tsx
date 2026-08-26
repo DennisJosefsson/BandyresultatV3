@@ -83,8 +83,8 @@ function RouteComponent() {
 
   if (data.status === 404) {
     return (
-      <div className="flex flex-row justify-center mt-6">
-        <span className="text-xs sm:text-sm">
+      <div className="mt-4 flex flex-row justify-center">
+        <span className="xs:text-xs text-[8px] sm:text-sm">
           {data.message}
         </span>
       </div>

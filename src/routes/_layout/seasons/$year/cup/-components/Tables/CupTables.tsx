@@ -21,8 +21,10 @@ const CupTables = () => {
 
   if (data.tableLength === 0) {
     return (
-      <div className="mt-2 flex flex-row justify-center font-semibold">
-        Inga tabeller än denna säsong.
+      <div className="mt-4 flex flex-row justify-center">
+        <span className="xs:text-xs text-[8px] sm:text-sm">
+          Inga tabeller för denna turnering än.
+        </span>
       </div>
     )
   }

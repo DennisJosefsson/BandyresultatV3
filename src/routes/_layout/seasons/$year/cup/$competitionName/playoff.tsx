@@ -83,12 +83,10 @@ function RouteComponent() {
   })
   if (data.status === 404) {
     return (
-      <div className="mt-4 flex flex-col justify-center text-sm">
-        <div className="mb-4 flex flex-row justify-center">
-          <span className="xs:text-[10px] text-[8px] font-semibold sm:text-xs lg:text-sm">
-            {data.message}
-          </span>
-        </div>
+      <div className="mt-4 flex flex-row justify-center">
+        <span className="xs:text-xs text-[8px] sm:text-sm">
+          {data.message}
+        </span>
       </div>
     )
   }
