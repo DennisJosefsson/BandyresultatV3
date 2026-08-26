@@ -31,7 +31,7 @@ const TeamsListItem = ({
           ? 'checked'
           : 'unchecked'
       }
-      className="bg-muted data-[state=checked]:shadow-accent dark:bg-muted/50 data-[state=checked]:outline-primary/30 data-[state=checked]:bg-primary/10 dark:data-[state=checked]:outline-primary/20 dark:data-[state=checked]:bg-primary/10 flex flex-row items-center justify-between space-y-0 space-x-3 rounded p-2 text-sm data-[state=checked]:shadow-sm data-[state=checked]:outline md:text-base 2xl:text-lg"
+      className="bg-muted data-[state=checked]:shadow-accent dark:bg-muted/50 data-[state=checked]:outline-primary/30 data-[state=checked]:bg-primary/10 dark:data-[state=checked]:outline-primary/20 dark:data-[state=checked]:bg-primary/10 flex flex-row items-center justify-between space-y-0 space-x-3 p-2 text-xs sm:text-sm data-[state=checked]:shadow-sm data-[state=checked]:outline"
     >
       <div className="flex flex-row items-center gap-2">
         <TeamLogo
