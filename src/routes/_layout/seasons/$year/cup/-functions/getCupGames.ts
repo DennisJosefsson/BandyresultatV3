@@ -4,30 +4,26 @@ import { competitions, seasons, series } from '@/db/schema'
 import Error404 from '@/lib/middlewares/errors/404Error'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import type { Serie } from '@/lib/types/serie'
 import type { TeamBase } from '@/lib/types/team'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
 import { and, asc, eq, getTableColumns } from 'drizzle-orm'
-import {
-  playedCupGames,
-  unplayedCupGames,
-} from './cupQueries'
+import { cupGames } from './cupQueries'
 
-type CupGames = {
-  serie: Serie
-  games: Array<
-    typeof games.$inferSelect & {
-      home: TeamBase
-    } & { away: TeamBase }
-  >
-}
+type CupGame = typeof games.$inferSelect & {
+          home: TeamBase
+        } & { away: TeamBase } & {serie: {serieId:number,serieName:string}}
+
 
 type CupGameReturn =
   | {
       status: 200
-      played: Array<CupGames>
-      unplayed: Array<CupGames>
+      played: Array<
+       CupGame
+      >
+      unplayed: Array<
+       CupGame
+      >
       competition: typeof competitions.$inferSelect
       playedLength: number
       unplayedLength: number
@@ -116,36 +112,18 @@ export const getCupGames = createServerFn({ method: 'GET' })
           })
         }
 
-        const playedGames = await Promise.all(
-          competitionSeries.map(async (serie) => {
-            return {
-              serie,
-              games: await playedCupGames({
-                serieId: serie.serieId,
-              }),
-            }
-          }),
-        )
+        const playedGames = await cupGames({
+          competitionId: competition.competitionId,
+          played: true,
+        })
 
-        const unplayedGames = await Promise.all(
-          competitionSeries.map(async (serie) => {
-            return {
-              serie,
-              games: await unplayedCupGames({
-                serieId: serie.serieId,
-              }),
-            }
-          }),
-        )
+        const unplayedGames = await cupGames({
+          competitionId: competition.competitionId,
+          played: false,
+        })
 
-        const playedLength = playedGames.reduce(
-          (acc, curr) => acc + curr.games.length,
-          0,
-        )
-        const unplayedLength = unplayedGames.reduce(
-          (acc, curr) => acc + curr.games.length,
-          0,
-        )
+        const playedLength = playedGames.length
+        const unplayedLength = unplayedGames.length
 
         if (playedLength + unplayedLength === 0) {
           throw new Error404({

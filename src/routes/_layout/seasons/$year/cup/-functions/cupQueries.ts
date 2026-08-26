@@ -1,9 +1,10 @@
 import { db } from '@/db'
-import type { series } from '@/db/schema'
+
 import {
   games,
   parentchildseries,
   seasons,
+  series,
   tables,
   teamgames,
   teams,
@@ -26,10 +27,12 @@ import { alias, unionAll } from 'drizzle-orm/pg-core'
 const home = alias(teams, 'home')
 const away = alias(teams, 'away')
 
-export async function playedCupGames({
-  serieId,
+export async function cupGames({
+  competitionId,
+  played,
 }: {
-  serieId: number
+  competitionId: number
+  played: boolean
 }) {
   const playedGamesArray = await db
     .select({
@@ -56,15 +59,23 @@ export async function playedCupGames({
         casualName: string
         shortName: string
       }>,
+      serie: {
+        serieId: series.serieId,
+        serieName: series.serieName,
+      } as unknown as SQL<{
+        serieId: number
+        serieName: string
+      }>,
     })
     .from(games)
     .leftJoin(seasons, eq(seasons.seasonId, games.seasonId))
     .leftJoin(home, eq(games.homeTeamId, home.teamId))
     .leftJoin(away, eq(games.awayTeamId, away.teamId))
+    .leftJoin(series, eq(games.serieId, series.serieId))
     .where(
       and(
-        eq(games.played, true),
-        eq(games.serieId, serieId),
+        eq(games.played, played),
+        eq(series.competitionId, competitionId),
       ),
     )
     .orderBy(asc(games.date))

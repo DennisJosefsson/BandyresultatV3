@@ -1,19 +1,15 @@
 import { GameCard } from '@/components/Common/Games/GameCard'
 import type { games } from '@/db/schema'
-import type { Serie } from '@/lib/types/serie'
 import type { TeamBase } from '@/lib/types/team'
 
-type CupGames = {
-  serie: Serie
-  games: Array<
+type GameListProps = {
+  gamesArray: Array<
     typeof games.$inferSelect & {
       home: TeamBase
-    } & { away: TeamBase }
+    } & { away: TeamBase } & {
+      serie: { serieId: number; serieName: string }
+    }
   >
-}
-
-type GameListProps = {
-  gamesArray: Array<CupGames>
   title: string
 }
 
@@ -50,27 +46,15 @@ const GamesList = ({
       <h4 className="text-primary text-xs font-semibold tracking-wider @md:text-sm">
         {title}
       </h4>
-      <div>
-        {gamesArray.map((serie) => {
-          if (serie.games.length === 0) return null
+      <div className="mb-4 w-full @container/cupgames">
+        {gamesArray.map((game) => {
           return (
-            <div
-              key={serie.serie.group}
-              className="mb-4 w-full @container/cupgames"
-            >
-              <div className="w-full">
-                {serie.games.map((game) => {
-                  return (
-                    <GameCard
-                      key={game.gameId}
-                      game={game}
-                      serieName={serie.serie.serieName}
-                      routePath="/seasons/$year/cup/$competitionName/games"
-                    />
-                  )
-                })}
-              </div>
-            </div>
+            <GameCard
+              key={game.gameId}
+              game={game}
+              serieName={game.serie.serieName}
+              routePath="/seasons/$year/cup/$competitionName/games"
+            />
           )
         })}
       </div>
