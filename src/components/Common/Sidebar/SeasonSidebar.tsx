@@ -29,9 +29,15 @@ export function SeasonSidebar() {
 
   const data = route.useLoaderData()
 
-  const playoffRoute = useMatches()
-    .map((m) => m.context.sidebarSection)
-    .some((r) => r === 'playoff')
+  const sidebarSections = useMatches().map(
+    (m) => m.context.sidebarSection,
+  )
+
+  const playoffRoute = sidebarSections.some(
+    (r) => r === 'playoff',
+  )
+
+  const cupRoute = sidebarSections.some((r) => r === 'cup')
 
   const toggleOnMobile = () => {
     if (isMobile) {
@@ -52,7 +58,7 @@ export function SeasonSidebar() {
           women={women}
           group={group}
         />
-        {data.status === 200 && (
+        {data.status === 200 ? (
           <SidebarGroup>
             <SidebarGroupLabel>Serier</SidebarGroupLabel>
             <SidebarGroupContent>
@@ -62,7 +68,7 @@ export function SeasonSidebar() {
                     <SidebarMenuSubItem
                       key={item.serieId.toString()}
                     >
-                      {playoffRoute ? (
+                      {playoffRoute || cupRoute ? (
                         <SidebarMenuSubButton
                           onClick={toggleOnMobile}
                           render={
@@ -112,42 +118,122 @@ export function SeasonSidebar() {
               </SidebarMenuSub>
             </SidebarGroupContent>
           </SidebarGroup>
-        )}
+        ) : null}
+        {data.status === 200 && data.cups.length > 0 ? (
+          <SidebarGroup>
+            <SidebarGroupLabel>Cuper</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenuSub>
+                {data.cups.map((cup) => {
+                  return (
+                    <SidebarMenuSubItem
+                      key={cup.competitionId.toString()}
+                    >
+                      <SidebarMenuSubButton
+                        onClick={toggleOnMobile}
+                        render={
+                          <Link
+                            title={cup.competitionName}
+                            to="/seasons/$year/cup/$competitionName/games"
+                            params={{
+                              year,
+                              competitionName:
+                                cup.competitionName,
+                            }}
+                            search={{
+                              women: women,
+                            }}
+                          >
+                            <span className="truncate md:text-sm">
+                              {cup.competitionName}
+                            </span>
+                          </Link>
+                        }
+                      />
+                      <SidebarMenuSub>
+                        <SidebarMenuSubItem>
+                          <SidebarMenuSubButton
+                            onClick={toggleOnMobile}
+                            render={
+                              <Link
+                                title="Slutspel"
+                                to="/seasons/$year/cup/$competitionName/playoff"
+                                params={{
+                                  year,
+                                  competitionName:
+                                    cup.competitionName,
+                                }}
+                                search={{
+                                  women: women,
+                                }}
+                              >
+                                <span className="truncate md:text-sm">
+                                  Slutspel
+                                </span>
+                              </Link>
+                            }
+                          />
+                        </SidebarMenuSubItem>
+                        <SidebarMenuSubItem>
+                          <SidebarMenuSubButton
+                            onClick={toggleOnMobile}
+                            render={
+                              <Link
+                                title="Tabeller"
+                                to="/seasons/$year/cup/$competitionName/tables"
+                                params={{
+                                  year,
+                                  competitionName:
+                                    cup.competitionName,
+                                }}
+                                search={{
+                                  women: women,
+                                }}
+                              >
+                                <span className="truncate md:text-sm">
+                                  Tabeller
+                                </span>
+                              </Link>
+                            }
+                          />
+                        </SidebarMenuSubItem>
+                        <SidebarMenuSubItem>
+                          <SidebarMenuSubButton
+                            onClick={toggleOnMobile}
+                            render={
+                              <Link
+                                title="Matcher"
+                                to="/seasons/$year/cup/$competitionName/games"
+                                params={{
+                                  year,
+                                  competitionName:
+                                    cup.competitionName,
+                                }}
+                                search={{
+                                  women: women,
+                                }}
+                              >
+                                <span className="truncate md:text-sm">
+                                  Matcher
+                                </span>
+                              </Link>
+                            }
+                          />
+                        </SidebarMenuSubItem>
+                      </SidebarMenuSub>
+                    </SidebarMenuSubItem>
+                  )
+                })}
+              </SidebarMenuSub>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        ) : null}
       </>
     )
   }
 
   if (data.status === 404 || data.status === 204) {
-    return (
-      <>
-        {/* <SidebarMenuSub>
-          <SidebarMenuSubItem>
-            <SidebarMenuSubButton
-              onClick={toggleOnMobile}
-              render={
-                <Link
-                  to="/seasons"
-                  params={{ page: 1 }}
-                  search={{ women }}
-                  activeOptions={{
-                    includeSearch: false,
-                    exact: true,
-                  }}
-                  activeProps={{
-                    className: `underline underline-offset-auto`,
-                  }}
-                >
-                  <span className="md:text-sm">
-                    Säsongslista
-                  </span>
-                </Link>
-              }
-            />
-          </SidebarMenuSubItem>
-        </SidebarMenuSub> */}
-        <PlayoffSidebar />
-      </>
-    )
+    return <PlayoffSidebar />
   }
 }
 
@@ -173,26 +259,6 @@ export function DefaultSeasonSidebar({
         <SidebarGroupLabel>Grundserie</SidebarGroupLabel>
         <SidebarGroupContent>
           <SidebarMenuSub>
-            <SidebarMenuSubItem>
-              <SidebarMenuSubButton
-                onClick={toggleOnMobile}
-                render={
-                  <Link
-                    to="/seasons/$year/$group/games"
-                    params={{ year, group }}
-                    search={{ women }}
-                    activeOptions={{ includeSearch: false }}
-                    activeProps={{
-                      className: `underline underline-offset-auto`,
-                    }}
-                  >
-                    <span className="md:text-sm">
-                      Matcher
-                    </span>
-                  </Link>
-                }
-              />
-            </SidebarMenuSubItem>
             <SidebarMenuSubItem>
               <SidebarMenuSubButton
                 onClick={toggleOnMobile}
@@ -298,7 +364,26 @@ export function DefaultSeasonSidebar({
                 </SidebarMenuSubItem>
               </SidebarMenuSub>
             </SidebarMenuSubItem>
-
+            <SidebarMenuSubItem>
+              <SidebarMenuSubButton
+                onClick={toggleOnMobile}
+                render={
+                  <Link
+                    to="/seasons/$year/$group/games"
+                    params={{ year, group }}
+                    search={{ women }}
+                    activeOptions={{ includeSearch: false }}
+                    activeProps={{
+                      className: `underline underline-offset-auto`,
+                    }}
+                  >
+                    <span className="md:text-sm">
+                      Matcher
+                    </span>
+                  </Link>
+                }
+              />
+            </SidebarMenuSubItem>
             <SidebarMenuSubItem>
               <SidebarMenuSubButton
                 onClick={toggleOnMobile}

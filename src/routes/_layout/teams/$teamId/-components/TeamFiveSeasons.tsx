@@ -50,15 +50,32 @@ const TeamFiveSeasonsTables = () => {
             : 'Visa matchkolumner'}
         </Button>
       </div>
-      {data.fiveSeasons.map((season) => {
+      {data.fiveSeasons.map(({ season, competitions }) => {
         return (
-          <div key={season.season}>
-            <FiveSeasonTeamTable
-              tables={season.tables}
-              season={season.season}
-              columnVisibility={columnVisibility}
-              setColumnVisibility={setColumnVisibility}
-            />
+          <div
+            key={season}
+            className="flex flex-col"
+          >
+            <span className="xs:text-xs text-[10px] font-semibold md:text-sm">
+              {season}
+            </span>
+            <div>
+              {competitions.map(
+                ({ tables, competitionName }) => {
+                  return (
+                    <FiveSeasonTeamTable
+                      key={competitionName}
+                      tables={tables}
+                      competitionName={competitionName}
+                      columnVisibility={columnVisibility}
+                      setColumnVisibility={
+                        setColumnVisibility
+                      }
+                    />
+                  )
+                },
+              )}
+            </div>
           </div>
         )
       })}

@@ -1,4 +1,5 @@
 import { CustomCatchBoundary } from '@/components/ErrorComponents/CustomCatchBoundary'
+import type { NotFoundRouteProps } from '@tanstack/react-router'
 import { createFileRoute } from '@tanstack/react-router'
 import SeasonsList from './-components/SeasonsList'
 import SeasonsPagination from './-components/SeasonsPagination'
@@ -55,6 +56,9 @@ export const Route = createFileRoute('/_layout/seasons/')({
     return { count, data }
   },
   component: Seasons,
+  notFoundComponent(props) {
+    return <NotFound props={props} />
+  },
 })
 
 function Seasons() {
@@ -71,6 +75,27 @@ function Seasons() {
           </div>
         </CustomCatchBoundary>
       </div>
+    </div>
+  )
+}
+
+function NotFound({
+  props,
+}: {
+  props: NotFoundRouteProps
+}) {
+  const errorString =
+    props.data && typeof props.data === 'string'
+      ? props.data
+      : 'Du blev omdirigerad hit för att föregående länk inte finns.'
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-row justify-center">
+        <span className="text-xs sm:text-sm font-semibold">
+          {errorString}
+        </span>
+      </div>
+      <Seasons />
     </div>
   )
 }

@@ -2,7 +2,7 @@ import { Button } from '@/components/base/ui/button'
 import { getRouteApi } from '@tanstack/react-router'
 import { ArrowLeftIcon, ArrowRightIcon } from 'lucide-react'
 import GamesList from './Games/GamesList'
-import SeasonTables from './SeasonTables'
+import TableList from './Tables/TableList'
 
 const route = getRouteApi(
   '/_layout/teams/$teamId/seasons/$seasonId/',
@@ -57,18 +57,27 @@ const SingleTeamSeason = () => {
         </route.Link>
       </div>
       <div className="flex flex-col gap-2 md:gap-4">
-        <SeasonTables />
-        {data.hasGames ? null : (
-          <div className="mt-2 flex flex-row justify-center font-semibold">
-            Inga inlagda matcher denna säsong.
-          </div>
-        )}
-        <div className="grid grid-cols-1 gap-2 @3xl:grid-cols-2 @3xl:gap-4">
-          <GamesList gamesArray={data.games.playedGames} />
-          <GamesList
-            gamesArray={data.games.unplayedGames}
-          />
-        </div>
+        {data.data.map((c) => {
+          return (
+            <div
+              key={c.competitionName}
+              className="flex flex-col"
+            >
+              <h3 className="text-primary text-xs font-semibold tracking-wider @md:text-sm">
+                {c.competitionName}
+              </h3>
+              <TableList tableArray={c.tables} />
+              <div className="grid grid-cols-1 gap-2 @3xl:grid-cols-2 @3xl:gap-4">
+                <GamesList
+                  gamesArray={c.games.playedGames}
+                />
+                <GamesList
+                  gamesArray={c.games.unplayedGames}
+                />
+              </div>
+            </div>
+          )
+        })}
       </div>
     </div>
   )

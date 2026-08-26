@@ -59,6 +59,14 @@ const divisionArray = [
     label: 'Svenska Cupen',
     value: 'Svenska Cupen',
   },
+  {
+    label: 'Allsvenska supercupen',
+    value: 'Allsvenska supercupen',
+  },
+  {
+    label: 'World Cup',
+    value: 'World Cup',
+  },
 ]
 
 type DivisionValues = Record<string, number>
@@ -72,6 +80,8 @@ const divisionValues: DivisionValues = {
   'Kval till tredje högsta divisionen': 3.5,
   'Fjärde högsta divisionen': 4,
   'Svenska Cupen': 10,
+  'World Cup': 11,
+  'Allsvenska supercupen': 12,
 }
 
 const AddCompetition = () => {
@@ -130,7 +140,7 @@ const AddCompetition = () => {
                     if (
                       divisionValues[value] === undefined
                     ) {
-                      form.setFieldValue('division', 11)
+                      form.setFieldValue('division', 12)
                     } else {
                       form.setFieldValue(
                         'division',
@@ -207,6 +217,13 @@ const AddCompetition = () => {
               />
               <form.Field
                 name="division"
+                listeners={{
+                  onChange: ({ value }) => {
+                    if (value >= 10) {
+                      form.setFieldValue('isCup', true)
+                    }
+                  },
+                }}
                 children={(field) => {
                   const isInvalid =
                     field.state.meta.isTouched &&

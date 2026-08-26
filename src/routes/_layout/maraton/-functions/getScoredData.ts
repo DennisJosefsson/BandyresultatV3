@@ -16,7 +16,6 @@ import {
   getTableColumns,
   gt,
   gte,
-  lt,
   ne,
   sql,
 } from 'drizzle-orm'
@@ -53,7 +52,7 @@ export async function getScoredData({
         eq(teamgames.played, true),
         eq(teamgames.category, 'regular'),
         eq(teamgames.women, women),
-        lt(series.level, 250),
+        eq(series.division, 1),
       ),
     )
     .groupBy(teams.teamId, seasons.year)
@@ -110,7 +109,7 @@ export async function getScoredData({
         eq(teamgames.played, true),
         eq(teamgames.category, 'regular'),
         eq(teamgames.women, women),
-        lt(series.level, 250),
+        eq(series.division, 1),
         eq(teamgames.homeGame, true),
       ),
     )
@@ -168,7 +167,7 @@ export async function getScoredData({
         eq(teamgames.played, true),
         eq(teamgames.category, 'regular'),
         eq(teamgames.women, women),
-        lt(series.level, 250),
+        eq(series.division, 1),
         eq(teamgames.homeGame, false),
       ),
     )
@@ -226,7 +225,7 @@ export async function getScoredData({
         eq(teamgames.played, true),
         eq(teamgames.category, 'regular'),
         eq(teamgames.women, women),
-        lt(series.level, 250),
+        eq(series.division, 1),
       ),
     )
     .groupBy(teams.teamId, seasons.year)
@@ -283,7 +282,7 @@ export async function getScoredData({
         eq(teamgames.played, true),
         eq(teamgames.category, 'regular'),
         eq(teamgames.women, women),
-        lt(series.level, 250),
+        eq(series.division, 1),
         eq(teamgames.homeGame, true),
       ),
     )
@@ -341,7 +340,7 @@ export async function getScoredData({
         eq(teamgames.played, true),
         eq(teamgames.category, 'regular'),
         eq(teamgames.women, women),
-        lt(series.level, 250),
+        eq(series.division, 1),
         eq(teamgames.homeGame, false),
       ),
     )
@@ -399,7 +398,7 @@ export async function getScoredData({
         eq(teamgames.played, true),
         eq(teamgames.category, 'regular'),
         eq(teamgames.women, women),
-        lt(series.level, 250),
+        eq(series.division, 1),
       ),
     )
     .groupBy(teams.teamId, seasons.year)
@@ -456,7 +455,7 @@ export async function getScoredData({
         eq(teamgames.played, true),
         eq(teamgames.category, 'regular'),
         eq(teamgames.women, women),
-        lt(series.level, 250),
+        eq(series.division, 1),
         eq(teamgames.homeGame, true),
       ),
     )
@@ -514,7 +513,7 @@ export async function getScoredData({
         eq(teamgames.played, true),
         eq(teamgames.category, 'regular'),
         eq(teamgames.women, women),
-        lt(series.level, 250),
+        eq(series.division, 1),
         eq(teamgames.homeGame, false),
       ),
     )
@@ -572,7 +571,7 @@ export async function getScoredData({
         eq(teamgames.played, true),
         eq(teamgames.category, 'regular'),
         eq(teamgames.women, women),
-        lt(series.level, 250),
+        eq(series.division, 1),
       ),
     )
     .groupBy(teams.teamId, seasons.year)
@@ -629,7 +628,7 @@ export async function getScoredData({
         eq(teamgames.played, true),
         eq(teamgames.category, 'regular'),
         eq(teamgames.women, women),
-        lt(series.level, 250),
+        eq(series.division, 1),
         eq(teamgames.homeGame, true),
       ),
     )
@@ -687,7 +686,7 @@ export async function getScoredData({
         eq(teamgames.played, true),
         eq(teamgames.category, 'regular'),
         eq(teamgames.women, women),
-        lt(series.level, 250),
+        eq(series.division, 1),
         eq(teamgames.homeGame, false),
       ),
     )
@@ -755,7 +754,7 @@ export async function getScoredData({
         eq(teamgames.played, true),
         eq(teamgames.category, 'regular'),
         eq(teamgames.women, women),
-        lt(series.level, 250),
+        eq(series.division, 1),
         eq(teamgames.homeGame, true),
       ),
     )
@@ -821,7 +820,7 @@ export async function getScoredData({
         eq(teamgames.played, true),
         eq(teamgames.category, 'regular'),
         eq(teamgames.women, women),
-        lt(series.level, 250),
+        eq(series.division, 1),
         eq(teamgames.homeGame, true),
       ),
     )
@@ -870,7 +869,7 @@ export async function getScoredData({
         eq(teamgames.played, true),
         ne(teamgames.category, 'qualification'),
         eq(teamgames.women, women),
-        lt(series.level, 250),
+        eq(series.division, 1),
         eq(teamgames.homeGame, true),
         eq(teamgames.totalGoals, lastMaxGoal!),
       ),
@@ -887,7 +886,7 @@ export async function getScoredData({
         eq(teamgames.played, true),
         ne(teamgames.category, 'qualification'),
         eq(teamgames.women, women),
-        lt(series.level, 250),
+        eq(series.division, 1),
         eq(teamgames.homeGame, true),
         eq(teamgames.totalGoals, lastMinGoal!),
       ),

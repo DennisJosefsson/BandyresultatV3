@@ -9,7 +9,6 @@ import {
   eq,
   gte,
   inArray,
-  lt,
 } from 'drizzle-orm'
 
 export async function getGeneralStatsData({
@@ -154,7 +153,7 @@ export async function getGeneralStatsData({
     .where(
       and(
         eq(teamgames.women, women),
-        lt(series.level, 250),
+        eq(series.division, 1),
       ),
     )
     .groupBy(teams.teamId)
@@ -194,7 +193,7 @@ export async function getGeneralStatsData({
     .where(
       and(
         eq(teamgames.women, women),
-        lt(series.level, 250),
+        eq(series.division, 1),
         gte(teamgames.seasonId, 25),
       ),
     )

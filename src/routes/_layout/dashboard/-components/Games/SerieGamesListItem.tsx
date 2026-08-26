@@ -15,8 +15,6 @@ const GamesListItem = ({
   game,
   openDialog,
 }: GamesListItemProps) => {
-  const women = route.useSearch({ select: (s) => s.women })
-
   const matchup = `${game.home.shortName} - ${game.away.shortName}`
 
   const mdMatchup = `${game.home.casualName} - ${game.away.casualName}`
@@ -57,7 +55,7 @@ const GamesListItem = ({
               <route.Link
                 to="/dashboard/season/$seasonId/info/serie/$serieId/edit/$gameId"
                 params={{ gameId: game.gameId }}
-                search={{ women }}
+                search={(prev) => ({ ...prev })}
               >
                 Ändra
               </route.Link>

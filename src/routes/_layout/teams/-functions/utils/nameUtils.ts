@@ -4,27 +4,35 @@ type CategoryName = {
 
 const categoryNames: CategoryName = {
   final: 'Final',
-  cupFinal: 'Final',
+  'cup-final': 'Final',
+  bronze: 'Bronsmatch',
+  'cup-bronze': 'Bronsmatch',
   semi: 'Semifinal',
-  cupSemi: 'Semifinal',
+  'cup-semi': 'Semifinal',
   quarter: 'Kvartsfinal',
-  cupQuarter: 'Cupkvartsfinal',
+  'cup-quarter': 'Kvartsfinal',
   eight: 'Åttondelsfinal',
   playoffseries: 'Slutspelsserie',
-  cupPlayoffseries: 'Slutspelsserie Cup',
+  'cup-playoffseries': 'Slutspelsserie Cup',
   regular: 'Grundserie',
-  cupRegular: 'Grundserie Cup',
+  'cup-regular': 'Grundserie',
   qualification: 'Kvalserie',
+  'cup-qualification': 'Kvalserie Cup',
 }
 
-export function getDivisionName(level: string) {
-  const levelNum = Number(level)
-  if (levelNum <= 1.5) return 'Högsta divisionen'
-  if (levelNum <= 2.5) return 'Näst högsta divisionen'
-  if (levelNum < 4) return 'Tredje divisionen'
-  if (levelNum < 5) return 'Fjärde divisionen'
-  if (levelNum === 10) return 'Svenska Cupen'
-  if (levelNum === 11) return 'Allsvensk cup'
+export function getDivisionName(division: string) {
+  const divisionNum = Number(division)
+  if (divisionNum === 1) return 'Högsta divisionen'
+  if (divisionNum === 1.5)
+    return 'Kval till högsta divisionen'
+  if (divisionNum === 2) return 'Näst högsta divisionen'
+  if (divisionNum === 2.5)
+    return 'Kval till näst högsta divisionen'
+  if (divisionNum === 3) return 'Tredje divisionen'
+  if (divisionNum === 4) return 'Fjärde divisionen'
+  if (divisionNum === 10) return 'Svenska Cupen'
+  if (divisionNum === 11) return 'World Cup'
+  if (divisionNum === 12) return 'Övriga cuper'
   return 'Lägsta divisionen'
 }
 

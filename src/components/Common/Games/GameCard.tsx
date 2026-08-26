@@ -20,6 +20,7 @@ type RoutePaths =
   | '/seasons/$year/$group/games'
   | '/seasons/$year/playoff/games'
   | '/teams/$teamId/seasons/$seasonId/'
+  | '/seasons/$year/cup/$competitionName/games'
 
 type GamesCardProps = {
   serieName: string
@@ -101,29 +102,31 @@ export function GameCard({
                   )}
                 </div>
               ) : (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  render={
-                    <Link
-                      from={routePath}
-                      to="/teams/compare"
-                      search={(prev) => ({
-                        ...prev,
-                        teamArray: [
-                          game.homeTeamId,
-                          game.awayTeamId,
-                        ],
-                      })}
-                    >
-                      <GitCompareArrowsIcon className="@2xl:hidden" />
-                      <span className="hidden @2xl:block">
-                        H2H
-                      </span>
-                    </Link>
-                  }
-                  nativeButton={false}
-                />
+                <div className="flex flex-row justify-center">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    render={
+                      <Link
+                        from={routePath}
+                        to="/teams/compare"
+                        search={(prev) => ({
+                          ...prev,
+                          teamArray: [
+                            game.homeTeamId,
+                            game.awayTeamId,
+                          ],
+                        })}
+                      >
+                        <GitCompareArrowsIcon className="@2xl:hidden" />
+                        <span className="hidden @2xl:block">
+                          H2H
+                        </span>
+                      </Link>
+                    }
+                    nativeButton={false}
+                  />
+                </div>
               )}
             </div>
             <div className="flex flex-row gap-0.5 @sm:gap-1 @lg:gap-2 items-center w-15 @xs:w-20 @sm:w-25 @md:w-40 @xl:w-full justify-end">

@@ -18,7 +18,6 @@ import {
   countDistinct,
   desc,
   eq,
-  lt,
   sql,
   sum,
 } from 'drizzle-orm'
@@ -91,7 +90,7 @@ export const getMaratonTables = createServerFn({
           .where(
             and(
               eq(tables.category, 'regular'),
-              lt(series.level, 250),
+              eq(series.division, 1),
               eq(tables.women, women),
             ),
           )
@@ -149,7 +148,7 @@ export const getMaratonTables = createServerFn({
               eq(teamgames.women, women),
               eq(teamgames.category, 'regular'),
               eq(teamgames.played, true),
-              lt(series.level, 250),
+              eq(series.division, 1),
               table === 'home'
                 ? eq(teamgames.homeGame, true)
                 : table === 'away'

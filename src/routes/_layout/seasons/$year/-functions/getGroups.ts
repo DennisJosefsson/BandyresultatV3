@@ -1,10 +1,17 @@
 import { db } from '@/db'
-import { seasons, series } from '@/db/schema'
+import { competitions, seasons, series } from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { seasonIdCheck } from '@/lib/utils/utils'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
-import { and, asc, eq, inArray, ne } from 'drizzle-orm'
+import {
+  and,
+  asc,
+  eq,
+  getTableColumns,
+  inArray,
+  ne,
+} from 'drizzle-orm'
 
 type Group = {
   group: string
@@ -22,6 +29,7 @@ type GroupReturn = Promise<
   | {
       status: 200
       groups: Array<Group>
+      cups: Array<typeof competitions.$inferSelect>
       breadCrumb: string
       meta: Meta
     }
@@ -103,9 +111,26 @@ export const getGroups = createServerFn({ method: 'GET' })
             ),
           )
           .orderBy(asc(series.level), asc(series.group))
+
+        const cups = await db
+          .select({ ...getTableColumns(competitions) })
+          .from(competitions)
+          .leftJoin(
+            seasons,
+            eq(seasons.seasonId, competitions.seasonId),
+          )
+          .where(
+            and(
+              eq(seasons.year, seasonYear),
+              eq(seasons.women, women),
+              eq(competitions.isCup, true),
+            ),
+          )
+
         return {
           status: 200,
           groups: groups,
+          cups,
           breadCrumb,
           meta,
         }

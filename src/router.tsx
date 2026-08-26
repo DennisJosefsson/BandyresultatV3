@@ -37,7 +37,7 @@ export const getRouter = () => {
       const errorData = {
         name: error.name,
         message: error.message,
-        origin: errorInfo.componentStack ?? 'Ingen stack',
+        body: errorInfo.componentStack ?? 'Ingen stack',
         date: new Date().toISOString(),
         backend: false,
       }

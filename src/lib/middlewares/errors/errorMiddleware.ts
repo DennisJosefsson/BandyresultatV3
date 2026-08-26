@@ -13,9 +13,8 @@ const logErrorToDatabase = async (error: Error) => {
       : 'Ingen cause'
   const errorData = {
     name: error.name,
-    message: error.message,
+    message: `${error.message} och ${cause}`,
     body: error.stack ?? 'Ingen stack',
-    origin: cause,
     date: new Date().toISOString(),
     backend: false,
   }

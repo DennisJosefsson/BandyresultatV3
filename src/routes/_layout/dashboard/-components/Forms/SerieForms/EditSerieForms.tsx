@@ -2,6 +2,7 @@ import { Button } from '@/components/base/ui/button'
 import { Card } from '@/components/base/ui/card'
 import { Outlet, getRouteApi } from '@tanstack/react-router'
 import AddTeamToSerie from './AddTeamToSerie'
+import EditCupSerie from './EditCupSerie'
 import EditSerie from './EditSerie'
 import EditTeamSerie from './EditTeamserie'
 
@@ -10,9 +11,10 @@ const route = getRouteApi(
 )
 
 const EditSerieForms = () => {
+  const form = route.useSearch({ select: (s) => s.form })
   return (
     <div className="flex flex-col gap-4">
-      <EditSerie />
+      {form === 'serie' ? <EditSerie /> : <EditCupSerie />}
 
       <div className="grid grid-cols-2 gap-8">
         <AddTeamToSerie />
@@ -24,7 +26,7 @@ const EditSerieForms = () => {
             render={
               <route.Link
                 to="/dashboard/season/$seasonId/info/serie/$serieId/edit/newParentId"
-                search={(prev) => ({ women: prev.women })}
+                search={(prev) => ({ ...prev })}
                 resetScroll={false}
               >
                 Redigera ParentId
@@ -37,7 +39,7 @@ const EditSerieForms = () => {
             render={
               <route.Link
                 to="/dashboard/season/$seasonId/info/serie/$serieId/edit/games"
-                search={(prev) => ({ women: prev.women })}
+                search={(prev) => ({ ...prev })}
                 resetScroll={false}
               >
                 Matcher
@@ -50,7 +52,7 @@ const EditSerieForms = () => {
             render={
               <route.Link
                 to="/dashboard/season/$seasonId/info/serie/$serieId/edit/generateschedule"
-                search={(prev) => ({ women: prev.women })}
+                search={(prev) => ({ ...prev })}
                 resetScroll={false}
               >
                 Generera spelschema
@@ -63,7 +65,7 @@ const EditSerieForms = () => {
             render={
               <route.Link
                 to="/dashboard/season/$seasonId/info/serie/$serieId/edit/singlegame"
-                search={(prev) => ({ women: prev.women })}
+                search={(prev) => ({ ...prev })}
                 resetScroll={false}
               >
                 Lägg till match
@@ -76,7 +78,7 @@ const EditSerieForms = () => {
             render={
               <route.Link
                 to="/dashboard/season/$seasonId/info/serie/$serieId/edit/addGames"
-                search={(prev) => ({ women: prev.women })}
+                search={(prev) => ({ ...prev })}
                 resetScroll={false}
               >
                 Lägg till matcher
@@ -89,7 +91,7 @@ const EditSerieForms = () => {
             render={
               <route.Link
                 to="/dashboard/season/$seasonId/info/serie/$serieId/edit/addTable"
-                search={(prev) => ({ women: prev.women })}
+                search={(prev) => ({ ...prev })}
                 resetScroll={false}
               >
                 Lägg till tabell
@@ -102,7 +104,7 @@ const EditSerieForms = () => {
             render={
               <route.Link
                 to="/dashboard/season/$seasonId/info/serie/$serieId/edit/editTable"
-                search={(prev) => ({ women: prev.women })}
+                search={(prev) => ({ ...prev })}
                 resetScroll={false}
               >
                 Ändra tabell
@@ -115,7 +117,7 @@ const EditSerieForms = () => {
             render={
               <route.Link
                 to="."
-                search={(prev) => ({ women: prev.women })}
+                search={(prev) => ({ ...prev })}
                 resetScroll={false}
               >
                 Tillbaka

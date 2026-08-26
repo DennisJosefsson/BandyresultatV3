@@ -3,7 +3,7 @@ import { series } from '@/db/schema'
 import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import { editCupOrSeriesObject } from '@/lib/types/serie'
+import { inputEditSeriesObject } from '@/lib/types/serie'
 import { createServerFn } from '@tanstack/react-start'
 import { eq } from 'drizzle-orm'
 
@@ -11,7 +11,7 @@ export const editSerieInput = createServerFn({
   method: 'POST',
 })
   .middleware([authMiddleware, errorMiddleware])
-  .validator(editCupOrSeriesObject)
+  .validator(inputEditSeriesObject)
   .handler(async ({ data }) => {
     try {
       const editSerie = await db

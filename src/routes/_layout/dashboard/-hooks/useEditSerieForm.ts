@@ -1,8 +1,5 @@
-import type {
-  categoryEnum,
-  cupCategoryEnum,
-} from '@/lib/types/serie'
-import { editCupOrSeriesObject } from '@/lib/types/serie'
+import type { categoryEnum } from '@/lib/types/serie'
+import { editSeriesObject } from '@/lib/types/serie'
 
 import type { zd } from '@/lib/utils/zod'
 import { useForm } from '@tanstack/react-form'
@@ -33,10 +30,7 @@ export const useEditSerieForm = () => {
     onError: (error) => onMutationError(error),
   })
 
-  const serieDefaultValues: zd.input<
-    typeof editCupOrSeriesObject
-  > = {
-    type: 'serie',
+  const defaultValues: zd.input<typeof editSeriesObject> = {
     serieId: serie.serieId,
     seasonId: serie.seasonId,
     group: serie.group,
@@ -56,37 +50,10 @@ export const useEditSerieForm = () => {
     division: serie.division,
   }
 
-  const cupDefaultValues: zd.input<
-    typeof editCupOrSeriesObject
-  > = {
-    type: 'cup',
-    serieId: serie.serieId,
-    seasonId: serie.seasonId,
-    group: serie.group,
-    category: serie.category as zd.infer<
-      typeof cupCategoryEnum
-    >,
-    serieName: serie.serieName,
-    serieStructure: serie.serieStructure ?? [],
-    comment: serie.comment ?? '',
-    level: serie.level,
-    hasMix: serie.hasMix ?? false,
-    hasParent: serie.hasParent ?? false,
-    allParentGames: serie.allParentGames ?? false,
-    hasStatic: serie.hasStatic ?? false,
-    uefaSorting: serie.uefaSorting ?? false,
-    competitionId: serie.competitionId,
-    division: serie.division,
-  }
-
-  const defaultValues = serie.competition.isCup
-    ? cupDefaultValues
-    : serieDefaultValues
-
   const form = useForm({
     validators: {
-      onBlur: editCupOrSeriesObject,
-      onSubmit: editCupOrSeriesObject,
+      onBlur: editSeriesObject,
+      onSubmit: editSeriesObject,
     },
     defaultValues: { ...defaultValues },
     onSubmit: ({ value }) =>

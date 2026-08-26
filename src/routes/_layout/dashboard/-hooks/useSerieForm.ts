@@ -1,4 +1,4 @@
-import { newCupOrSeriesObject } from '@/lib/types/serie'
+import { newSeriesObject } from '@/lib/types/serie'
 import type { zd } from '@/lib/utils/zod'
 import {
   revalidateLogic,
@@ -22,11 +22,10 @@ const route = getRouteApi(
 
 export const useNewSerieForm = ({
   seasonId,
-  isCup,
+
   division,
 }: {
   seasonId: number
-  isCup: boolean | null
   division: number
 }) => {
   const router = useRouter()
@@ -46,10 +45,7 @@ export const useNewSerieForm = ({
     onError: (error) => onMutationError(error),
   })
 
-  const serieDefaultValues: zd.input<
-    typeof newCupOrSeriesObject
-  > = {
-    type: 'serie',
+  const defaultValues: zd.input<typeof newSeriesObject> = {
     seasonId,
     group: '',
     category: 'regular',
@@ -65,33 +61,10 @@ export const useNewSerieForm = ({
     competitionId: competitionId,
   }
 
-  const cupDefaultValues: zd.input<
-    typeof newCupOrSeriesObject
-  > = {
-    type: 'cup',
-    seasonId,
-    group: '',
-    category: 'cup-regular',
-    serieName: '',
-    serieStructure: [],
-    comment: '',
-    level: 1000,
-    division: division,
-    hasMix: false,
-    hasParent: false,
-    allParentGames: false,
-    hasStatic: false,
-    competitionId: competitionId,
-  }
-
-  const defaultValues = isCup
-    ? cupDefaultValues
-    : serieDefaultValues
-
   const form = useForm({
     validationLogic: revalidateLogic(),
     validators: {
-      onDynamic: newCupOrSeriesObject,
+      onDynamic: newSeriesObject,
     },
 
     defaultValues: { ...defaultValues },
@@ -111,7 +84,7 @@ export const useNewSerieForm = ({
       })
       navigate({
         to: '/dashboard/season/$seasonId/info/serie/$serieId/edit',
-        search: { women },
+        search: { women, form: 'serie' },
         params: { serieId: data.serieId },
       })
     }

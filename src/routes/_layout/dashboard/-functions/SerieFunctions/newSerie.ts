@@ -3,14 +3,14 @@ import { series } from '@/db/schema'
 import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import { newCupOrSeriesObject } from '@/lib/types/serie'
+import { inputNewSeriesObject } from '@/lib/types/serie'
 import { createServerFn } from '@tanstack/react-start'
 
 export const newSerieInput = createServerFn({
   method: 'POST',
 })
   .middleware([authMiddleware, errorMiddleware])
-  .validator(newCupOrSeriesObject)
+  .validator(inputNewSeriesObject)
   .handler(async ({ data }) => {
     try {
       const newSerie = await db

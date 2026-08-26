@@ -22,10 +22,6 @@ export const useEditGameForm = () => {
   const game = route.useLoaderData()
   const router = useRouter()
 
-  const women = route.useSearch({
-    select: (search) => search.women,
-  })
-
   const navigate = route.useNavigate()
 
   const mutation = useMutation({
@@ -60,7 +56,7 @@ export const useEditGameForm = () => {
   const close = () => {
     navigate({
       to: '/dashboard/season/$seasonId/info/serie/$serieId/edit/games',
-      search: { women },
+      search: (prev) => ({ ...prev }),
     })
   }
 

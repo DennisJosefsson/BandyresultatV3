@@ -1,9 +1,16 @@
-import type { county, municipality, teams } from '@/db/schema'
+import type {
+  county,
+  municipality,
+  teams,
+} from '@/db/schema'
 import { zd } from '../utils/zod'
 
 export type Team = typeof teams.$inferSelect
 
-export type TeamBase = Pick<Team, 'teamId' | 'casualName' | 'name' | 'shortName'>
+export type TeamBase = Pick<
+  Team,
+  'teamId' | 'casualName' | 'name' | 'shortName'
+>
 
 export type MapTeam = Team & {
   county: typeof county.$inferSelect
@@ -97,13 +104,26 @@ export type FiveSeasonTableItem = {
   totalLost: number
   serie: {
     serieName: string
+    level: number
+    competition: {
+      competitionName: string
+      division: number
+    }
   }
   season: {
     year: string
   }
 }
 
-export type FiveSeason = {
-  season: string
+export type Competition = {
+  competitionName: string
+  division: number
   tables: Array<FiveSeasonTableItem>
 }
+
+export type FiveSeason = {
+  season: string
+  competitions: Array<Competition>
+}
+
+

@@ -92,6 +92,7 @@ export type GroupPlayoffTable = {
 export type PlayoffGroups = {
   category: string
   group: string
+  name: string
   table: GroupPlayoffTable | undefined
 }
 
@@ -118,9 +119,7 @@ export type SingleTeamTableItem = {
   totalGoalsConceded: number
   totalGoalDifference: number
   totalPoints: number
-  serie: {
-    division: number
-  }
+ 
 }
 
 export const singleTeamTableItem = zd.object({

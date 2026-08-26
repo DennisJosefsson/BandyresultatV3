@@ -1,12 +1,21 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { getSerieForEdit } from '@/routes/_layout/dashboard/-functions/SerieFunctions/getSerieForEdit'
-import EditSerieForms from '@/routes/_layout/dashboard/-components/Forms/SerieForms/EditSerieForms'
 import Loading from '@/components/Loading/Loading'
+import { zd } from '@/lib/utils/zod'
+import EditSerieForms from '@/routes/_layout/dashboard/-components/Forms/SerieForms/EditSerieForms'
+import { getSerieForEdit } from '@/routes/_layout/dashboard/-functions/SerieFunctions/getSerieForEdit'
+import { createFileRoute } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit')({
+export const Route = createFileRoute(
+  '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit',
+)({
+  validateSearch: zd.object({
+    form: zd.enum(['serie', 'cup']),
+  }),
   loader: async ({ params }) => {
     const data = await getSerieForEdit({
-      data: { seasonId: params.seasonId, serieId: params.serieId },
+      data: {
+        seasonId: params.seasonId,
+        serieId: params.serieId,
+      },
     })
     if (!data) throw new Error('Missing data')
 

@@ -30,10 +30,6 @@ const currDate = new Date().toLocaleDateString('se-SV', {
 const EditGameForm = () => {
   const game = route.useLoaderData()
 
-  const women = route.useSearch({
-    select: (search) => search.women,
-  })
-
   const navigate = route.useNavigate()
 
   const form = useEditGameForm()
@@ -41,7 +37,7 @@ const EditGameForm = () => {
   const close = () => {
     navigate({
       to: '/dashboard/season/$seasonId/info/serie/$serieId/edit/games',
-      search: { women },
+      search: (prev) => ({ ...prev }),
     })
   }
 

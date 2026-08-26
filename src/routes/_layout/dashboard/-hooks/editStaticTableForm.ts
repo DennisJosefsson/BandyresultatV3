@@ -55,7 +55,7 @@ export const editStaticTableForm = () => {
     })
     navigate({
       to: '/dashboard/season/$seasonId/info/serie/$serieId/edit',
-      search: (prev) => ({ women: prev.women }),
+      search: (prev) => ({ ...prev }),
     })
   }
 
