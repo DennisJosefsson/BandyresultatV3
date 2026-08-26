@@ -68,18 +68,14 @@ export const SeasonGames = ({
         data-sort={sortPreference}
         className="flex gap-4 @5xl:grid @5xl:grid-cols-2 mt-2 data-[sort=played]:flex-col data-[sort=unplayed]:flex-col-reverse"
       >
-        {games['playedLength'] > 0 ? (
-          <GamesList
-            group={games.played}
-            title="Spelade"
-          />
-        ) : null}
-        {games['unplayedLength'] > 0 ? (
-          <GamesList
-            group={games.unplayed}
-            title="Kommande"
-          />
-        ) : null}
+        <GamesList
+          group={games.played}
+          title="Spelade"
+        />
+        <GamesList
+          group={games.unplayed}
+          title="Kommande"
+        />
       </div>
     </div>
   )

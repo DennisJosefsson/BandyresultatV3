@@ -13,6 +13,7 @@ import NilComponent from './PlayoffTree/NilComponent'
 type PlayoffTableProps = {
   status: 200
   finalGames: Array<Omit<Game, 'season'>>
+  bronzeGames:Array<Omit<Game, 'season'>>
   playoffTables: Array<PlayoffCategoryArray>
   playoffSeriesTables: Array<PlayoffSeriesTable> | undefined
   playoffSeason: typeof playoffseason.$inferSelect
@@ -20,6 +21,7 @@ type PlayoffTableProps = {
 
 const SeasonPlayoffTables = ({
   finalGames,
+  bronzeGames,
   playoffSeason,
   playoffSeriesTables,
   playoffTables,
@@ -27,7 +29,8 @@ const SeasonPlayoffTables = ({
   return (
     <div className="@container/playoff m-0 w-full @2xl/playoff:justify-self-center">
       <div className="grid gap-2 @5xl/playoff:gap-4">
-        <Final finalGames={finalGames} />
+        <Final finalGames={finalGames} title='Final'/>
+        {bronzeGames.length > 0 ? <Final finalGames={bronzeGames} title='Bronsmatch'/> : null}
         {playoffTables.map((cat) => {
           return (
             <div
@@ -63,7 +66,7 @@ const SeasonPlayoffTables = ({
                         'data-[twogroups=false]:data-[groupid=E1]:@2xl/playoff:col-start-1 data-[twogroups=false]:data-[groupid=E2]:@2xl/playoff:col-start-2 data-[twogroups=false]:data-[groupid=E3]:@2xl/playoff:col-start-3 data-[twogroups=false]:data-[groupid=E4]:@2xl/playoff:col-start-4',
                       )}
                     >
-                      <NilComponent group={group.group} />
+                      <NilComponent group={group.name} />
                     </div>
                   )
 
@@ -82,7 +85,7 @@ const SeasonPlayoffTables = ({
                       'data-[twogroups=false]:data-[groupid=E1]:@2xl/playoff:col-start-1 data-[twogroups=false]:data-[groupid=E2]:@2xl/playoff:col-start-2 data-[twogroups=false]:data-[groupid=E3]:@2xl/playoff:col-start-3 data-[twogroups=false]:data-[groupid=E4]:@2xl/playoff:col-start-4',
                     )}
                   >
-                    <DefaultComponent group={group.table} />
+                    <DefaultComponent group={group} />
                   </div>
                 )
               })}

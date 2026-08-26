@@ -59,6 +59,14 @@ const divisionArray = [
     label: 'Svenska Cupen',
     value: 'Svenska Cupen',
   },
+  {
+    label: 'Allsvenska supercupen',
+    value: 'Allsvenska supercupen',
+  },
+  {
+    label: 'World Cup',
+    value: 'World Cup',
+  },
 ]
 
 type DivisionValues = Record<string, number>
@@ -72,6 +80,8 @@ const divisionValues: DivisionValues = {
   'Kval till tredje högsta divisionen': 3.5,
   'Fjärde högsta divisionen': 4,
   'Svenska Cupen': 10,
+  'World Cup': 11,
+  'Allsvenska supercupen': 12,
 }
 
 const EditCompetition = () => {

@@ -71,22 +71,76 @@ const Series = () => {
                         }
                         nativeButton={false}
                       />
-                      <Button
-                        render={
-                          <route.Link
-                            to="info/competition/$competitionId/newSerie"
-                            params={{
-                              seasonId,
-                              competitionId:
-                                div.competitionId,
-                            }}
-                            search={{ women }}
-                          >
-                            Lägg till serie
-                          </route.Link>
-                        }
-                        nativeButton={false}
-                      />
+                      {div.isCup ? (
+                        <Button
+                          render={
+                            <route.Link
+                              to="info/competition/$competitionId/generateCupSerie"
+                              params={{
+                                seasonId,
+                                competitionId:
+                                  div.competitionId,
+                              }}
+                              search={{ women }}
+                            >
+                              Generera serier
+                            </route.Link>
+                          }
+                          nativeButton={false}
+                        />
+                      ) : (
+                        <Button
+                          render={
+                            <route.Link
+                              to="info/competition/$competitionId/generateSerie"
+                              params={{
+                                seasonId,
+                                competitionId:
+                                  div.competitionId,
+                              }}
+                              search={{ women }}
+                            >
+                              Generera serier
+                            </route.Link>
+                          }
+                          nativeButton={false}
+                        />
+                      )}
+                      {div.isCup ? (
+                        <Button
+                          render={
+                            <route.Link
+                              to="info/competition/$competitionId/newCupSerie"
+                              params={{
+                                seasonId,
+                                competitionId:
+                                  div.competitionId,
+                              }}
+                              search={{ women }}
+                            >
+                              Lägg till serie
+                            </route.Link>
+                          }
+                          nativeButton={false}
+                        />
+                      ) : (
+                        <Button
+                          render={
+                            <route.Link
+                              to="info/competition/$competitionId/newSerie"
+                              params={{
+                                seasonId,
+                                competitionId:
+                                  div.competitionId,
+                              }}
+                              search={{ women }}
+                            >
+                              Lägg till serie
+                            </route.Link>
+                          }
+                          nativeButton={false}
+                        />
+                      )}
                     </div>
                   </div>
                   {div.series.map((serie) => {
@@ -109,7 +163,13 @@ const Series = () => {
                                   seasonId: seasonId,
                                   serieId: serie.serieId,
                                 }}
-                                search={{ women }}
+                                search={{
+                                  women,
+                                  form:
+                                    div.isCup === true
+                                      ? 'cup'
+                                      : 'serie',
+                                }}
                               >
                                 Matcher
                               </route.Link>
@@ -125,7 +185,13 @@ const Series = () => {
                                   seasonId: seasonId,
                                   serieId: serie.serieId,
                                 }}
-                                search={{ women }}
+                                search={{
+                                  women,
+                                  form:
+                                    div.isCup === true
+                                      ? 'cup'
+                                      : 'serie',
+                                }}
                               >
                                 Ändra
                               </route.Link>

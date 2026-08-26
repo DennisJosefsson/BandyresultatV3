@@ -377,6 +377,7 @@ export const getSeasonGames = ({
         getTime(new Date(a.date)) -
         getTime(new Date(b.date)),
     )
+
   const unsortedUnplayedGames = gamesArray
     .filter((game) => !game.played)
     .sort(
@@ -394,9 +395,13 @@ export const getSeasonGames = ({
   const unplayedGames = gameSortFunction(
     unsortedUnplayedGames,
     seriesArray,
+    false,
   )
 
-  return { playedGames, unplayedGames }
+  return {
+    playedGames,
+    unplayedGames,
+  }
 }
 
 export const getSeasons = async ({

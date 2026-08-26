@@ -1,5 +1,6 @@
 import { db } from '@/db'
 import {
+  competitions,
   games,
   seasons,
   series,
@@ -10,10 +11,9 @@ import {
 } from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import type { GroupGames } from '@/lib/types/game'
+import type { Game } from '@/lib/types/game'
 import type { Meta } from '@/lib/types/meta'
 import type { Serie } from '@/lib/types/serie'
-import type { TeamSeasonTable } from '@/lib/types/table'
 import type { Team } from '@/lib/types/team'
 import { seasonIdCheck } from '@/lib/utils/utils'
 import { zd } from '@/lib/utils/zod'
@@ -25,12 +25,12 @@ import {
   desc,
   eq,
   getTableColumns,
-  inArray,
   ne,
   or,
 } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
 
+import type { TeamTable } from '@/lib/types/table'
 import { getUnionedTables } from './getSingleTeamSeasonTables'
 import {
   getSeasonGames,
@@ -45,13 +45,38 @@ type SingeTeamSeasonReturn =
       status: 200
       breadCrumb: string
       meta: Meta
-      tables: Array<TeamSeasonTable>
-      tableLength: number
+      data: Array<{
+        competitionName: string
+        tables: Array<{
+          serie: Serie
+          table: Array<
+            Omit<TeamTable, 'women' | 'season' | 'group'>
+          >
+        }>
+        games: {
+          playedGames: Array<{
+            group: string
+            name: string
+            comment: string
+            level: number
+            dates: Array<{
+              date: string
+              games: Array<Game>
+            }>
+          }>
+          unplayedGames: Array<{
+            group: string
+            name: string
+            comment: string
+            level: number
+            dates: Array<{
+              date: string
+              games: Array<Game>
+            }>
+          }>
+        }
+      }>
       hasGames: boolean
-      games: {
-        playedGames: Array<GroupGames>
-        unplayedGames: Array<GroupGames>
-      }
       team: Team
       seasonYear: string
       series: Array<Serie>
@@ -176,6 +201,93 @@ export const getSingleTeamSeason = createServerFn({
           }
         }
 
+        const competitionArray = await db
+          .select()
+          .from(competitions)
+          .leftJoin(
+            series,
+            eq(
+              series.competitionId,
+              competitions.competitionId,
+            ),
+          )
+          .leftJoin(
+            teamseries,
+            eq(series.serieId, teamseries.serieId),
+          )
+          .where(
+            and(
+              eq(competitions.seasonId, season.seasonId),
+              eq(teamseries.teamId, team.teamId),
+            ),
+          )
+          .orderBy(
+            asc(competitions.division),
+            asc(series.level),
+          )
+          .then((res) => {
+            const sortComps = res.reduce<
+              Record<
+                string,
+                {
+                  competition: typeof competitions.$inferSelect
+                  series: Array<Serie>
+                }
+              >
+            >((acc, row) => {
+              const competitionName =
+                row.competitions.competitionName
+              const competition = row.competitions
+              const serie = row.series
+              if (
+                typeof acc[competitionName] === 'undefined'
+              ) {
+                acc[competitionName] = {
+                  competition,
+                  series: [],
+                }
+              }
+              if (serie) {
+                acc[competitionName].series.push(serie)
+              }
+              return acc
+            }, {})
+
+            const sortedComps = Object.keys(sortComps).map(
+              (comp) => {
+                return sortComps[comp]
+              },
+            )
+
+            return sortedComps
+          })
+
+        const seriesForTeam = await db
+          .select({
+            ...getTableColumns(series),
+          })
+          .from(series)
+          .leftJoin(
+            seasons,
+            eq(seasons.seasonId, series.seasonId),
+          )
+          .leftJoin(
+            teamseries,
+            eq(teamseries.serieId, series.serieId),
+          )
+          .leftJoin(
+            teams,
+            eq(teamseries.teamId, teams.teamId),
+          )
+          .where(
+            and(
+              eq(teams.teamId, team.teamId),
+              eq(series.seasonId, season.seasonId),
+              ne(series.group, 'mix'),
+            ),
+          )
+          .orderBy(asc(series.level))
+
         const gamesForTeam = await db
           .select({
             gameId: games.gameId,
@@ -192,6 +304,7 @@ export const getSingleTeamSeason = createServerFn({
             otResult: games.otResult,
             penalties: games.penalties,
             extraTime: games.extraTime,
+            competitionId: series.competitionId,
             home: {
               teamId: home.teamId,
               name: home.name,
@@ -229,6 +342,10 @@ export const getSingleTeamSeason = createServerFn({
             seasons,
             eq(seasons.seasonId, games.seasonId),
           )
+          .leftJoin(
+            series,
+            eq(games.serieId, series.serieId),
+          )
           .where(
             and(
               or(
@@ -242,32 +359,6 @@ export const getSingleTeamSeason = createServerFn({
 
         const hasGames = gamesForTeam.length !== 0
 
-        const seriesForTeam = await db
-          .select({
-            ...getTableColumns(series),
-          })
-          .from(series)
-          .leftJoin(
-            seasons,
-            eq(seasons.seasonId, series.seasonId),
-          )
-          .leftJoin(
-            teamseries,
-            eq(teamseries.serieId, series.serieId),
-          )
-          .leftJoin(
-            teams,
-            eq(teamseries.teamId, teams.teamId),
-          )
-          .where(
-            and(
-              eq(teams.teamId, team.teamId),
-              eq(series.seasonId, season.seasonId),
-              ne(series.group, 'mix'),
-            ),
-          )
-          .orderBy(asc(series.level))
-
         const teamArray = await db
           .selectDistinct({
             teamId: teamgames.teamId,
@@ -276,48 +367,95 @@ export const getSingleTeamSeason = createServerFn({
           .from(teamgames)
           .where(
             and(
-              inArray(teamgames.category, [
-                'playoffseries',
-                'regular',
-                'qualification',
-              ]),
               ne(teamgames.group, 'mix'),
               eq(teamgames.seasonId, season.seasonId),
             ),
           )
           .groupBy(teamgames.group, teamgames.teamId)
 
-        const tables = await Promise.all(
-          seriesForTeam
-            .filter((s) =>
-              [
-                'playoffseries',
-                'regular',
-                'qualification',
-              ].includes(s.category),
-            )
-            .map(async (serie) => {
-              return {
-                serie: serie,
-                table: await getUnionedTables({
-                  serie,
-                  teamArray: teamArray
-                    .filter((t) => t.group === serie.group)
-                    .map((t) => t.teamId),
+        const data = await Promise.all(
+          competitionArray.map(async (comp) => {
+            return {
+              competitionName:
+                comp.competition.competitionName,
+              tables: await Promise.all(
+                comp.series.map(async (s1) => {
+                  const table = await getUnionedTables({
+                    serie: s1,
+                    teamArray: teamArray
+                      .filter((t) => t.group === s1.group)
+                      .map((t) => t.teamId),
+                  })
+                  return {
+                    serie: s1,
+                    table,
+                  }
                 }),
-              }
-            }),
+              ),
+              games: getSeasonGames({
+                gamesArray: gamesForTeam.filter(
+                  (g) =>
+                    g.competitionId ===
+                    comp.competition.competitionId,
+                ),
+                seriesArray: seriesForTeam.filter(
+                  (s) =>
+                    s.competitionId ===
+                    comp.competition.competitionId,
+                ),
+              }),
+            }
+          }),
         )
 
-        const tableLength = tables.reduce(
-          (acc, curr) => acc + curr.table.length,
-          0,
-        )
+        // const seriesTables = await Promise.all(
+        //   seriesForTeam
+        //     .filter((s1) => !s1.category.startsWith('cup-'))
+        //     .map(async (serie) => {
+        //       return {
+        //         serie: serie,
+        //         table: await getUnionedTables({
+        //           serie,
+        //           teamArray: teamArray
+        //             .filter((t) => t.group === serie.group)
+        //             .map((t) => t.teamId),
+        //         }),
+        //       }
+        //     }),
+        // )
+        // const cupTables = await Promise.all(
+        //   seriesForTeam
+        //     .filter((s1) => s1.category.startsWith('cup-'))
+        //     .map(async (serie) => {
+        //       return {
+        //         serie: serie,
+        //         table: await getUnionedTables({
+        //           serie,
+        //           teamArray: teamArray
+        //             .filter((t) => t.group === serie.group)
+        //             .map((t) => t.teamId),
+        //         }),
+        //       }
+        //     }),
+        // )
 
-        const returnGames = getSeasonGames({
-          gamesArray: gamesForTeam,
-          seriesArray: seriesForTeam,
-        })
+        // const seriesTableLength = seriesTables.reduce(
+        //   (acc, curr) => acc + curr.table.length,
+        //   0,
+        // )
+
+        // const cupTableLength = cupTables.reduce(
+        //   (acc, curr) => acc + curr.table.length,
+        //   0,
+        // )
+
+        // const tableLength =
+        //   seriesTableLength + cupTableLength
+
+        // const returnGames = getSeasonGames({
+        //   gamesArray: gamesForTeam,
+        //   seriesArray: seriesForTeam,
+        // })
 
         const seasonObjects = await getSeasons({
           teamId,
@@ -331,10 +469,9 @@ export const getSingleTeamSeason = createServerFn({
 
         return {
           status: 200,
-          tables,
           hasGames,
-          games: returnGames,
-          tableLength,
+
+          data,
           team,
           seasonYear,
           series: seriesForTeam,

@@ -1,7 +1,7 @@
-import { getRouteApi } from '@tanstack/react-router'
-import { useCookies } from '@/lib/contexts/cookieContext'
 import TeamLogo from '@/components/Common/TeamLogo'
 import { Button } from '@/components/base/ui/button'
+import { useCookies } from '@/lib/contexts/cookieContext'
+import { getRouteApi } from '@tanstack/react-router'
 
 const route = getRouteApi('/_layout/teams/$teamId')
 
@@ -15,7 +15,6 @@ const TeamHeader = () => {
   const { favTeams, setFavTeams } = useCookies()
   if (data.status === 404) return null
 
-
   const add = () => {
     if (!favTeams.includes(teamId)) {
       setFavTeams([...favTeams.concat(teamId)])
@@ -27,24 +26,31 @@ const TeamHeader = () => {
   }
 
   return (
-    <div className="mb-4">
+    <div className="mb-4 border-b">
       <div className="flex flex-row items-center justify-between">
         <div className="flex flex-col gap-2">
           <div className="flex flex-col gap-1">
             <span className="sm:text-md xs:tracking-widest text-sm tracking-wide md:text-lg xl:text-2xl">
               {data.team.name}
             </span>
-            <span className="text-xs md:text-sm xl:text-base">{data.team.city}</span>
+            <span className="text-xs md:text-sm xl:text-base">
+              {data.team.city}
+            </span>
           </div>
 
           <div>
-            {favTeams.includes(teamId) && (
-              <Button onClick={remove} size="responsive">
+            {favTeams.includes(teamId) ? (
+              <Button
+                onClick={remove}
+                size="responsive"
+              >
                 Ta bort favorit
               </Button>
-            )}
-            {!favTeams.includes(teamId) && (
-              <Button onClick={add} size="responsive">
+            ) : (
+              <Button
+                onClick={add}
+                size="responsive"
+              >
                 Favoritlag
               </Button>
             )}

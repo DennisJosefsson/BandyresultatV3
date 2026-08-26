@@ -15,7 +15,6 @@ import {
   eq,
   gt,
   gte,
-  lt,
   sql,
 } from 'drizzle-orm'
 
@@ -50,7 +49,7 @@ export async function getPointData({
         eq(teamgames.played, true),
         eq(teamgames.category, 'regular'),
         eq(teamgames.women, women),
-        lt(series.level, 250),
+        eq(series.division, 1),
       ),
     )
     .groupBy(teams.teamId, seasons.year)
@@ -107,7 +106,7 @@ export async function getPointData({
         eq(teamgames.played, true),
         eq(teamgames.category, 'regular'),
         eq(teamgames.women, women),
-        lt(series.level, 250),
+        eq(series.division, 1),
         eq(teamgames.homeGame, true),
       ),
     )
@@ -165,7 +164,7 @@ export async function getPointData({
         eq(teamgames.played, true),
         eq(teamgames.category, 'regular'),
         eq(teamgames.women, women),
-        lt(series.level, 250),
+        eq(series.division, 1),
         eq(teamgames.homeGame, false),
       ),
     )
@@ -223,7 +222,7 @@ export async function getPointData({
         eq(teamgames.played, true),
         eq(teamgames.category, 'regular'),
         eq(teamgames.women, women),
-        lt(series.level, 250),
+        eq(series.division, 1),
       ),
     )
     .groupBy(teams.teamId, seasons.year)
@@ -280,7 +279,7 @@ export async function getPointData({
         eq(teamgames.played, true),
         eq(teamgames.category, 'regular'),
         eq(teamgames.women, women),
-        lt(series.level, 250),
+        eq(series.division, 1),
         eq(teamgames.homeGame, true),
       ),
     )
@@ -338,7 +337,7 @@ export async function getPointData({
         eq(teamgames.played, true),
         eq(teamgames.category, 'regular'),
         eq(teamgames.women, women),
-        lt(series.level, 250),
+        eq(series.division, 1),
         eq(teamgames.homeGame, false),
       ),
     )
@@ -396,7 +395,7 @@ export async function getPointData({
         eq(teamgames.played, true),
         eq(teamgames.category, 'regular'),
         eq(teamgames.women, women),
-        lt(series.level, 250),
+        eq(series.division, 1),
       ),
     )
     .groupBy(teams.teamId, seasons.year)
@@ -453,7 +452,7 @@ export async function getPointData({
         eq(teamgames.played, true),
         eq(teamgames.category, 'regular'),
         eq(teamgames.women, women),
-        lt(series.level, 250),
+        eq(series.division, 1),
         eq(teamgames.homeGame, true),
       ),
     )
@@ -511,7 +510,7 @@ export async function getPointData({
         eq(teamgames.played, true),
         eq(teamgames.category, 'regular'),
         eq(teamgames.women, women),
-        lt(series.level, 250),
+        eq(series.division, 1),
         eq(teamgames.homeGame, false),
       ),
     )
@@ -569,7 +568,7 @@ export async function getPointData({
         eq(teamgames.played, true),
         eq(teamgames.category, 'regular'),
         eq(teamgames.women, women),
-        lt(series.level, 250),
+        eq(series.division, 1),
       ),
     )
     .groupBy(teams.teamId, seasons.year)
@@ -626,7 +625,7 @@ export async function getPointData({
         eq(teamgames.played, true),
         eq(teamgames.category, 'regular'),
         eq(teamgames.women, women),
-        lt(series.level, 250),
+        eq(series.division, 1),
         eq(teamgames.homeGame, true),
       ),
     )
@@ -684,7 +683,7 @@ export async function getPointData({
         eq(teamgames.played, true),
         eq(teamgames.category, 'regular'),
         eq(teamgames.women, women),
-        lt(series.level, 250),
+        eq(series.division, 1),
         eq(teamgames.homeGame, false),
       ),
     )

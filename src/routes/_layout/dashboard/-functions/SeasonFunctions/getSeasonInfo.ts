@@ -58,6 +58,7 @@ export const getSeasonInfo = createServerFn({
           return {
             competitionName: comp.competitionName,
             competitionId: comp.competitionId,
+            isCup: comp.isCup,
             series: await getCompetitionSeries({
               competitionId: comp.competitionId,
             }),

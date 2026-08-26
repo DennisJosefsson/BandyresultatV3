@@ -17,6 +17,7 @@ type PlayoffTableReturn =
   | {
       status: 200
       finalGames: Array<Omit<Game, 'season'>>
+      bronzeGames: Array<Omit<Game, 'season'>>
       playoffTables: Array<PlayoffCategoryArray>
       playoffSeriesTables:
         | Array<PlayoffSeriesTable>

@@ -1,4 +1,4 @@
-import type { FiveSeason } from '@/lib/types/team'
+import type { Competition } from '@/lib/types/team'
 import type { VisibilityState } from '@tanstack/react-table'
 import type { Dispatch, SetStateAction } from 'react'
 import DataTable from './TableComponents/DataTable'
@@ -6,8 +6,8 @@ import MobileDataTable from './TableComponents/MobileDataTable'
 import { columns } from './TableComponents/fiveSeasonsColumns'
 
 type ComponentProps = {
-  tables: FiveSeason['tables']
-  season?: string
+  tables: Competition['tables']
+  competitionName: string
   columnVisibility: VisibilityState
   setColumnVisibility: Dispatch<
     SetStateAction<VisibilityState>
@@ -16,12 +16,15 @@ type ComponentProps = {
 
 const FiveSeasonTeamTable = ({
   tables,
-  season = '',
+  competitionName,
   columnVisibility,
   setColumnVisibility,
 }: ComponentProps) => {
   return (
-    <div className="my-4">
+    <div>
+      <span className="xs:text-xs text-[10px] font-semibold md:text-sm">
+        {competitionName}
+      </span>
       <div>
         {tables.map((table) => {
           return (
@@ -31,7 +34,7 @@ const FiveSeasonTeamTable = ({
             >
               <div>
                 <span className="xs:text-xs text-[10px] font-semibold md:text-sm">
-                  {`${table.serie.serieName} ${season}`}
+                  {table.serie.serieName}
                 </span>
               </div>
               <div>

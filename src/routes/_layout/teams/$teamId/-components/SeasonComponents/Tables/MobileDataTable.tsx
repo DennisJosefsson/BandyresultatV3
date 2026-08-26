@@ -108,7 +108,10 @@ const MobileDataTable = ({
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                <PositionHeader key={'position'}>
+                <PositionHeader
+                  key={'position'}
+                  className="hidden @xs:invisible"
+                >
                   <span className="invisible">P</span>
                 </PositionHeader>
                 <TeamLogoHeader className="hidden @xs:table-cell">

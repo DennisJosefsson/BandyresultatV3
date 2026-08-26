@@ -4,14 +4,15 @@ import type { Game } from '@/lib/types/game'
 import PlayoffCard from './PlayoffCard'
 type FinalCardProps = {
   game: Omit<Game, 'season'>
+  title:string
 }
 
-const FinalCard = ({ game }: FinalCardProps) => {
+const FinalCard = ({ game,title }: FinalCardProps) => {
   return (
     <div className="grid w-auto min-w-[33%] grid-cols-1 justify-center @2xl/playoff:mx-auto">
       <PlayoffCard group="final">
         <PlayoffCard.Title>
-          <PlayoffCard.Group>Final</PlayoffCard.Group>
+          <PlayoffCard.Group>{title}</PlayoffCard.Group>
           <PlayoffCard.Result>
             <Datum>{game.date}</Datum>
           </PlayoffCard.Result>

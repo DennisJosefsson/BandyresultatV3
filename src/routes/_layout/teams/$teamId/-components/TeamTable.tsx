@@ -71,7 +71,7 @@ const TeamTable = () => {
                       key={table.category}
                       className="@container/teamtable"
                     >
-                      <h6 className="text-[10px] font-semibold md:text-xs lg:text-sm xl:text-base">
+                      <h6 className="text-[8px] @xs:text-[10px] @sm:text-xs @2xl:text-sm">
                         {table.categoryName}
                       </h6>
                       <div className="@lg:block hidden w-full p-2 @3xl:w-160">

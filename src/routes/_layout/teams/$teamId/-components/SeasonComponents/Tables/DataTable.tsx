@@ -70,11 +70,18 @@ const DataTable = ({
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
-              <PositionHeader key={'position'}>
-                <span className="invisible">P</span>
+              <PositionHeader
+                key={'position'}
+                className="hidden @xs:table-cell"
+              >
+                <span className="hidden @xs:invisible">
+                  P
+                </span>
               </PositionHeader>
               <TeamLogoHeader className="hidden @xs:table-cell">
-                <span className="invisible">Lag</span>
+                <span className="hidden @xs:invisible">
+                  Lag
+                </span>
               </TeamLogoHeader>
               {headerGroup.headers.map((header) => {
                 return (
@@ -124,7 +131,7 @@ const DataTable = ({
                 >
                   <PositionCell
                     key={`index-${index}`}
-                    className="xxs:table-cell hidden py-1"
+                    className="@xs:table-cell hidden py-1"
                   >
                     {index + 1}
                   </PositionCell>

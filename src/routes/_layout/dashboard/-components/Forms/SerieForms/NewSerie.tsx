@@ -15,20 +15,9 @@ import {
   FieldSet,
 } from '@/components/base/ui/field'
 import { Input } from '@/components/base/ui/input'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectSeparator,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/base/ui/select'
 import { Textarea } from '@/components/base/ui/textarea'
-import type {
-  newCupSerieObject,
-  newSeriesObject,
-} from '@/lib/types/serie'
-import { categoryEnum } from '@/lib/types/serie'
+import RadioBadges from '@/components/Common/RadioBadge'
+import type { newSeriesObject } from '@/lib/types/serie'
 import type { zd } from '@/lib/utils/zod'
 import { getRouteApi } from '@tanstack/react-router'
 import { useNewSerieForm } from '../../../-hooks/useSerieForm'
@@ -49,29 +38,29 @@ type CategoryArray = {
   label: string
 }
 
-type CupCategoryArray = {
-  value: zd.infer<typeof newCupSerieObject>['category']
-  label: string
-}
-
-const serieCategoryArray: Array<CategoryArray> = [
+const categoryArray: Array<CategoryArray> = [
   { value: 'qualification', label: 'Kval' },
   { value: 'regular', label: 'Grundserie' },
   { value: 'playoffseries', label: 'Slutspelsserie' },
   { value: 'eight', label: 'Åttondelsfinal' },
   { value: 'quarter', label: 'Kvartsfinal' },
   { value: 'semi', label: 'Semifinal' },
+  { value: 'bronze', label: 'Bronsmatch' },
   { value: 'final', label: 'Final' },
 ]
 
-const cupCategoryArray: Array<CupCategoryArray> = [
-  { value: 'cup-qualification', label: 'Kval' },
-  { value: 'cup-regular', label: 'Grundserie' },
-  { value: 'cup-eight', label: 'Åttondelsfinal' },
-  { value: 'cup-quarter', label: 'Kvartsfinal' },
-  { value: 'cup-semi', label: 'Semifinal' },
-  { value: 'cup-final', label: 'Final' },
-]
+type CategoryValues = Record<string, number>
+
+const categoryValues: CategoryValues = {
+  qualification: 250,
+  regular: 300,
+  playoffseries: 110,
+  eight: 130,
+  quarter: 120,
+  semi: 110,
+  bronze: 105,
+  final: 100,
+}
 
 const NewSerie = () => {
   const seasonId = route.useParams({
@@ -84,13 +73,9 @@ const NewSerie = () => {
   const women = route.useSearch({ select: (s) => s.women })
   const form = useNewSerieForm({
     seasonId,
-    isCup: competition.isCup,
+
     division: competition.division,
   })
-
-  const categoryArray = competition.isCup
-    ? cupCategoryArray
-    : serieCategoryArray
 
   return (
     <Card>
@@ -134,7 +119,7 @@ const NewSerie = () => {
           }}
         >
           <FieldGroup>
-            <div className="grid grid-cols-2 items-center gap-4">
+            <div className="grid grid-cols-3 items-center gap-4">
               <form.Field
                 name="serieName"
                 children={(field) => {
@@ -199,69 +184,7 @@ const NewSerie = () => {
                   )
                 }}
               />
-              <form.Field
-                name="category"
-                children={(field) => {
-                  const isInvalid =
-                    field.state.meta.isTouched &&
-                    !field.state.meta.isValid
-                  return (
-                    <Field data-invalid={isInvalid}>
-                      <FieldLabel htmlFor={field.name}>
-                        Kategori
-                      </FieldLabel>
-                      <Select
-                        name={field.name}
-                        value={field.state.value}
-                        onValueChange={(value) =>
-                          field.handleChange(
-                            categoryEnum.parse(value),
-                          )
-                        }
-                      >
-                        <SelectTrigger
-                          id={field.name}
-                          aria-invalid={isInvalid}
-                          className="min-w-30"
-                        >
-                          <SelectValue placeholder="Välj">
-                            {categoryArray.find(
-                              (cat) =>
-                                cat.value ===
-                                field.state.value,
-                            )?.label ?? 'Välj'}
-                          </SelectValue>
-                        </SelectTrigger>
-                        <SelectContent
-                          alignItemWithTrigger={true}
-                        >
-                          <SelectItem value="auto">
-                            {categoryArray.find(
-                              (cat) =>
-                                cat.value ===
-                                field.state.value,
-                            )?.label ?? 'Välj'}
-                          </SelectItem>
-                          <SelectSeparator />
-                          {categoryArray.map((cat) => (
-                            <SelectItem
-                              key={cat.value}
-                              value={cat.value}
-                            >
-                              {cat.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      {isInvalid && (
-                        <FieldError
-                          errors={field.state.meta.errors}
-                        />
-                      )}
-                    </Field>
-                  )
-                }}
-              />
+
               <form.Field
                 name="level"
                 children={(field) => {
@@ -297,7 +220,66 @@ const NewSerie = () => {
                 }}
               />
             </div>
-
+            <div>
+              <form.Field
+                name="category"
+                listeners={{
+                  onChange: ({ value }) => {
+                    if (
+                      categoryValues[value] === undefined
+                    ) {
+                      form.setFieldValue('level', 300)
+                    } else {
+                      form.setFieldValue(
+                        'level',
+                        categoryValues[value],
+                      )
+                    }
+                    if (value === 'final') {
+                      form.setFieldValue('group', 'final')
+                      form.setFieldValue(
+                        'serieName',
+                        'Final',
+                      )
+                    }
+                  },
+                }}
+                children={(field) => {
+                  const isInvalid =
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
+                  return (
+                    <Field data-invalid={isInvalid}>
+                      <FieldLegend variant="label">
+                        Kategori
+                      </FieldLegend>
+                      <FieldGroup>
+                        <div>
+                          <RadioBadges
+                            array={categoryArray}
+                            orientation="horizontal"
+                            id={field.name}
+                            name={field.name}
+                            value={field.state.value}
+                            onBlur={field.handleBlur}
+                            onValueChange={(value) =>
+                              field.setValue(value)
+                            }
+                            aria-invalid={isInvalid}
+                            className="flex flex-row gap-2"
+                          />
+                        </div>
+                      </FieldGroup>
+                      {isInvalid && (
+                        <FieldError
+                          errors={field.state.meta.errors}
+                        />
+                      )}
+                    </Field>
+                  )
+                }}
+              />
+            </div>
             <form.Field
               name="serieStructure"
               mode="array"

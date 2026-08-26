@@ -52,7 +52,7 @@ export const useGeneratedScheduleForm = () => {
     }
     navigate({
       to: '..',
-      search: (prev) => ({ women: prev.women }),
+      search: (prev) => ({ ...prev }),
     })
   }
 

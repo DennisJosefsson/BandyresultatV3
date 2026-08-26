@@ -34,7 +34,10 @@ export const addCompetition = createServerFn({
           await db.query.competitions.findFirst({
             where: (competitionsSchema, { and, eq }) =>
               and(
-                eq(competitionsSchema.division, division),
+                eq(
+                  competitionsSchema.competitionName,
+                  competitionName,
+                ),
                 eq(competitionsSchema.seasonId, seasonId),
               ),
           })

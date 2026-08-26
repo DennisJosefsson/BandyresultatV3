@@ -4,12 +4,18 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/base/ui/popover'
-import type { TeamSeasonTable } from '@/lib/types/table'
+import type { Serie } from '@/lib/types/serie'
+import type { TeamTable } from '@/lib/types/table'
 import DataTable from './DataTable'
 import MobileDataTable from './MobileDataTable'
 
 type TableListProps = {
-  tableArray: Array<TeamSeasonTable>
+  tableArray: Array<{
+    serie: Serie
+    table: Array<
+      Omit<TeamTable, 'women' | 'season' | 'group'>
+    >
+  }>
 }
 
 const TableList = ({ tableArray }: TableListProps) => {
@@ -27,7 +33,7 @@ const TableList = ({ tableArray }: TableListProps) => {
       {tableArray.map((serie) => {
         return (
           <div
-            key={serie.serie.group}
+            key={serie.serie.serieName}
             className="mb-6 @container/teamseasontable"
           >
             <div className="flex flex-row gap-x-12 items-center mb-2">

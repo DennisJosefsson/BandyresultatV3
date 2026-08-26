@@ -176,6 +176,7 @@ export const getPlayoffTableData = async ({
           (grp) => grp.group === group.group,
         )
         array.push({
+          name: group.serieName,
           group: group.group,
           category: group.category,
           table,
@@ -225,12 +226,50 @@ export const getPlayoffTableData = async ({
     )
     .orderBy(desc(games.date))
 
+  const bronzeGames = await db
+    .select({
+      ...getTableColumns(games),
+      home: {
+        teamId: home.teamId,
+        name: home.name,
+        casualName: home.casualName,
+        shortName: home.shortName,
+      } as unknown as SQL<{
+        teamId: number
+        name: string
+        casualName: string
+        shortName: string
+      }>,
+      away: {
+        teamId: away.teamId,
+        name: away.name,
+        casualName: away.casualName,
+        shortName: away.shortName,
+      } as unknown as SQL<{
+        teamId: number
+        name: string
+        casualName: string
+        shortName: string
+      }>,
+    })
+    .from(games)
+    .leftJoin(home, eq(games.homeTeamId, home.teamId))
+    .leftJoin(away, eq(games.awayTeamId, away.teamId))
+    .where(
+      and(
+        eq(games.seasonId, playoffSeason.seasonId),
+        eq(games.group, 'bronze'),
+      ),
+    )
+    .orderBy(desc(games.date))
+
   const playoffSeriesTables = playoffSeason.playoffAsSeries
     ? await getPlayoffAsSeriesTable(playoffSeason.seasonId)
     : undefined
 
   return {
     finalGames,
+    bronzeGames,
     playoffTables,
     playoffSeriesTables,
   }
@@ -263,6 +302,7 @@ function sortPlayoffTables({
       groups[table.group] = {
         table: [],
         category: table.category,
+        
       }
     }
 
@@ -275,6 +315,7 @@ function sortPlayoffTables({
       return {
         group,
         tables: groupArray[group],
+        
       }
     })
     .sort((a, b) => {
@@ -331,6 +372,7 @@ function sortPlayoffTables({
         homeTeam: sortTables[0].team,
         awayTeam: sortTables[1].team,
         tables: sortTables,
+        
       }
     })
 

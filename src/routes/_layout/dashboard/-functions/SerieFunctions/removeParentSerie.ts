@@ -24,14 +24,14 @@ export const removeParentChildSerie = createServerFn({
         })
         .then(async (res) => {
           const resArray = res.map((r) => r.deletedChildId)
-          console.log('resArray', resArray)
+          
           const existingParents = await db
             .select()
             .from(parentchildseries)
             .where(
               inArray(parentchildseries.childId, resArray),
             )
-          console.log('existingParents', existingParents)
+          
           if (existingParents.length > 0) return
           else
             await db

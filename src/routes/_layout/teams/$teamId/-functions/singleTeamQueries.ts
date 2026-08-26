@@ -4,7 +4,11 @@ import type {
   municipality,
   teams,
 } from '@/db/schema'
-import { seasons, teamseasons } from '@/db/schema'
+import {
+  seasons,
+  teamseasons,
+  teamseries,
+} from '@/db/schema'
 import { zd } from '@/lib/utils/zod'
 import type { SQL } from 'drizzle-orm'
 import { asc, desc, eq } from 'drizzle-orm'
@@ -76,6 +80,16 @@ export const getAllTeamsSeasons = async (
     count,
     rows: allTeamSeasons,
   }
+}
+
+export async function getTeamSerieIds(teamId: number) {
+  const serieIds = await db
+    .select()
+    .from(teamseries)
+    .where(eq(teamseries.teamId, teamId))
+    .then((res) => res.map((r) => r.serieId))
+
+  return serieIds
 }
 
 type Team = typeof teams.$inferSelect & {

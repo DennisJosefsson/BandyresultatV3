@@ -1,25 +1,22 @@
 import { CustomCatchBoundary } from '@/components/ErrorComponents/CustomCatchBoundary'
 import Loading from '@/components/Loading/Loading'
+import { seasonIdCheck } from '@/lib/utils/utils'
 import { zd } from '@/lib/utils/zod'
+import type { NotFoundRouteProps } from '@tanstack/react-router'
 import {
+  Link,
   Outlet,
   createFileRoute,
+  notFound,
   useChildMatches,
 } from '@tanstack/react-router'
 import SeasonHeader from './$year/-components/SeasonHeader'
 import { getGroups } from './$year/-functions/getGroups'
-
-const yearParser = zd.object({
-  year: zd.number().int().min(1907),
-})
+import { getSeason } from './-functions/getSeason'
 
 export const Route = createFileRoute(
   '/_layout/seasons/$year',
 )({
-  beforeLoad: () => {
-    return { sidebarSection: 'year' }
-  },
-  loaderDeps: ({ search: { women } }) => ({ women }),
   params: {
     parse: (params) => ({
       year: zd
@@ -32,9 +29,48 @@ export const Route = createFileRoute(
       year: `${year}`,
     }),
   },
-  loader: async ({ params, deps }) => {
+  beforeLoad: async ({
+    params: { year },
+    search: { women },
+    abortController,
+  }) => {
+    const seasonYear = seasonIdCheck.safeParse(year)
+    if (seasonYear.error) {
+      abortController.abort('Felaktigt säsongs-id')
+      throw notFound({
+        data: 'Felaktigt säsongs-id.',
+      })
+    }
+
+    if (!seasonYear.data) {
+      abortController.abort('Felaktigt säsongs-id')
+      throw notFound({
+        data: 'Felaktigt säsongs-id.',
+      })
+    }
+
+    const season = await getSeason({
+      data: { women, seasonYear: seasonYear.data },
+    })
+    if (!season) {
+      abortController.abort('Säsongen finns inte')
+      throw notFound({
+        data: 'Säsongen finns inte.',
+      })
+    }
+
+    return {
+      sidebarSection: 'year',
+      seasonYear: seasonYear.data,
+      season,
+    }
+  },
+  loaderDeps: ({ search: { women } }) => ({ women }),
+
+  loader: async ({ params, deps, abortController }) => {
     const data = await getGroups({
       data: { year: params.year, women: deps.women },
+      signal: abortController.signal,
     })
 
     if (!data) throw new Error('Missing groups data')
@@ -43,7 +79,7 @@ export const Route = createFileRoute(
   },
   staticData: {
     breadcrumb: (match) => {
-      return match.loaderData.breadCrumb ?? 'Säsong'
+      return match.context.seasonYear ?? 'Säsong'
     },
   },
   head: ({ loaderData }) => ({
@@ -89,7 +125,7 @@ export const Route = createFileRoute(
     ],
   }),
   component: Season,
-  notFoundComponent: NotFound,
+  notFoundComponent: (opts) => <NotFound opts={opts} />,
   pendingComponent: () => <Loading page="singleSeason" />,
 })
 
@@ -120,13 +156,21 @@ function Season() {
   )
 }
 
-function NotFound() {
-  const year = Route.useParams().year
-  const parseYear = yearParser.safeParse(year)
-  if (!parseYear.success) {
+function NotFound({ opts }: { opts: NotFoundRouteProps }) {
+  if (opts.data && typeof opts.data === 'string') {
     return (
-      <div className="flex flex-row justify-center">
-        Felaktigt säsongsId, kolla om länken är korrekt.
+      <div className="flex flex-row justify-center mt-8">
+        <span>
+          {opts.data} Hitta annan säsong i{' '}
+          <Link
+            to="/seasons"
+            search={{ women: false }}
+            className="underline"
+          >
+            säsongslistan
+          </Link>
+          .
+        </span>
       </div>
     )
   }

@@ -10,7 +10,7 @@ const GamesList = ({ gamesArray }: GameListProps) => {
     return null
   }
   return (
-    <div className="font-inter mt-2 mb-6 max-w-3xl lg:mt-3 2xl:mt-4">
+    <div className="font-inter mt-2 mb-6 lg:mt-3 2xl:mt-4">
       <div>
         {gamesArray.map((group) => {
           return (

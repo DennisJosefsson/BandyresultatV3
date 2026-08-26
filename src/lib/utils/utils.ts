@@ -1,6 +1,6 @@
 import type { ClassValue } from 'clsx'
-import { twMerge } from 'tailwind-merge'
 import { clsx } from 'clsx'
+import { twMerge } from 'tailwind-merge'
 import { zd } from './zod'
 
 export function cn(...inputs: Array<ClassValue>) {
@@ -21,7 +21,10 @@ export const seasonIdCheck = zd.coerce
     }
   })
 
-type HostName = 'localhost' | 'dev.bandyresultat.se' | 'bandyresultat.se'
+type HostName =
+  | 'localhost'
+  | 'dev.bandyresultat.se'
+  | 'bandyresultat.se'
 
 export const getBaseUrl = () => {
   let baseUrl: string
