@@ -11,5 +11,5 @@ export async function getCompetitionSeries({
     .select({ ...getTableColumns(series) })
     .from(series)
     .where(eq(series.competitionId, competitionId))
-    .orderBy(asc(series.level))
+    .orderBy(asc(series.level), asc(series.group))
 }
