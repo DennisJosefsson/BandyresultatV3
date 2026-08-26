@@ -114,7 +114,7 @@ export const getCupPlayoffTables = createServerFn({
               ]),
             ),
           )
-          .orderBy(asc(series.level))
+          .orderBy(asc(series.level), asc(series.group))
           .then((res) => {
             if (res.length === 0) return undefined
             else return res
