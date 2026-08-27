@@ -1,9 +1,11 @@
-import { createFileRoute } from '@tanstack/react-router'
 import { zd } from '@/lib/utils/zod'
-import { getUnplayedGames } from '../-functions/GameFunctions/getUnplayedGames'
+import { createFileRoute } from '@tanstack/react-router'
 import GamesList from '../-components/Games/GamesList'
+import { getUnplayedGames } from '../-functions/GameFunctions/getUnplayedGames'
 
-export const Route = createFileRoute('/_layout/dashboard/games/$today')({
+export const Route = createFileRoute(
+  '/_layout/dashboard/games/$today',
+)({
   params: {
     parse: (params) => ({
       today: zd.enum(['true', 'false']).parse(params.today),
@@ -11,7 +13,9 @@ export const Route = createFileRoute('/_layout/dashboard/games/$today')({
     stringify: ({ today }) => ({ today: `${today}` }),
   },
   loader: async ({ params }) => {
-    const games = await getUnplayedGames({ data: { today: params.today } })
+    const games = await getUnplayedGames({
+      data: { today: params.today },
+    })
     if (!games) throw new Error('Data saknas')
 
     return games
@@ -31,7 +35,7 @@ function RouteComponent() {
   }
   return (
     <div>
-      <GamesList games={games} />
+      <GamesList />
     </div>
   )
 }
