@@ -5,11 +5,9 @@ export const parseGameResult = zd
     gameId: zd.number().int().positive(),
     homeTeamId: zd.number().int().positive(),
     awayTeamId: zd.number().int().positive(),
-    result: zd
-      .string()
-      .regex(/^\d{1,2}-\d{1,2}$/, {
-        message: 'Fel resultatformat.',
-      }),
+    result: zd.string().regex(/^\d{1,2}-\d{1,2}$/, {
+      message: 'Fel resultatformat.',
+    }),
     halftimeResult: zd
       .string()
       .regex(/^\d{1,2}-\d{1,2}$/, {
@@ -28,6 +26,10 @@ export const parseGameResult = zd
       .or(zd.literal('')),
     homeTeamGameId: zd.number().int().positive(),
     awayTeamGameId: zd.number().int().positive(),
+  })
+  .refine((val) => val.homeTeamId !== val.awayTeamId, {
+    message: 'Lag-id kan inte vara samma.',
+    path: ['awayTeamId'],
   })
   .transform((obj) => {
     const resultArray = obj.result
@@ -291,11 +293,9 @@ export const parseNewGameWithResult = zd
   .object({
     homeTeamId: zd.number().int().positive(),
     awayTeamId: zd.number().int().positive(),
-    result: zd
-      .string()
-      .regex(/^\d{1,2}-\d{1,2}$/, {
-        message: 'Fel resultatformat.',
-      }),
+    result: zd.string().regex(/^\d{1,2}-\d{1,2}$/, {
+      message: 'Fel resultatformat.',
+    }),
     halftimeResult: zd
       .string()
       .regex(/^\d{1,2}-\d{1,2}$/, {
@@ -318,6 +318,10 @@ export const parseNewGameWithResult = zd
         message: 'Fel resultatformat.',
       })
       .or(zd.literal('')),
+  })
+  .refine((val) => val.homeTeamId !== val.awayTeamId, {
+    message: 'Lag-id kan inte vara samma.',
+    path: ['awayTeamId'],
   })
   .transform((obj) => {
     const resultArray = obj.result
