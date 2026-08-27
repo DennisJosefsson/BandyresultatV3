@@ -78,7 +78,7 @@ export async function cupGames({
         eq(series.competitionId, competitionId),
       ),
     )
-    .orderBy(asc(games.date))
+    .orderBy(played ? desc(games.date) : asc(games.date))
 
   return playedGamesArray
 }
