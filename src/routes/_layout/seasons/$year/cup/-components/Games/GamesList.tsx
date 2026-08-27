@@ -18,28 +18,20 @@ const GamesList = ({
   title,
 }: GameListProps) => {
   if (gamesArray.length === 0) {
-    if (title === 'Kommande') {
+    {
       return (
         <div className="font-inter mb-6 w-full">
           <h4 className="text-primary text-xs font-semibold tracking-wider @md:text-sm">
             {title}
           </h4>
           <span className="text-sm mt-2">
-            Alla matcher är spelade.
+            {title === 'Kommande'
+              ? 'Alla matcher är spelade.'
+              : ' Inga spelade matcher.'}
           </span>
         </div>
       )
     }
-    return (
-      <div className="font-inter mb-6 w-full">
-        <h4 className="text-primary text-xs font-semibold tracking-wider @md:text-sm">
-          {title}
-        </h4>
-        <span className="text-sm mt-2">
-          Inga spelade matcher.
-        </span>
-      </div>
-    )
   }
   return (
     <div className="font-inter mb-6 w-full">

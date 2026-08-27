@@ -94,31 +94,15 @@ function RouteComponent() {
   return (
     <div className="@container mx-1 flex flex-col gap-2 @sm:gap-4">
       <div className="flex gap-4 @5xl:grid @5xl:grid-cols-2 mt-2 flex-col">
-        {data.playedLength > 0 ? (
-          <GamesList
-            gamesArray={data.played}
-            title="Spelade"
-          />
-        ) : (
-          <div className="flex flex-row">
-            <span className="text-sm">
-              Inga spelade matcher.
-            </span>
-          </div>
-        )}
+        <GamesList
+          gamesArray={data.played}
+          title="Spelade"
+        />
 
-        {data.unplayedLength > 0 ? (
-          <GamesList
-            gamesArray={data.unplayed}
-            title="Kommande"
-          />
-        ) : (
-          <div className="flex flex-row">
-            <span className="text-sm">
-              Alla matcher är spelade.
-            </span>
-          </div>
-        )}
+        <GamesList
+          gamesArray={data.unplayed}
+          title="Kommande"
+        />
       </div>
     </div>
   )
