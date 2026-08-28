@@ -4,8 +4,8 @@ import {
   parentchildseries,
   seasons,
   series,
+  teamcompetitions,
   teams,
-  teamseasons,
   teamseries,
 } from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
@@ -122,9 +122,9 @@ export const getSerieForEdit = createServerFn({
           asc(sql`teams.casual_name collate "se-SE-x-icu"`),
         )
 
-      const teamsInSeason = await db
+      const teamsInCompetition = await db
         .select({
-          ...getTableColumns(teamseasons),
+          ...getTableColumns(teamcompetitions),
           team: {
             teamId: teams.teamId,
             name: teams.name,
@@ -132,12 +132,24 @@ export const getSerieForEdit = createServerFn({
             casualName: teams.casualName,
           } as unknown as SQL<TeamBase>,
         })
-        .from(teamseasons)
+        .from(teamcompetitions)
         .leftJoin(
           teams,
-          eq(teams.teamId, teamseasons.teamId),
+          eq(teams.teamId, teamcompetitions.teamId),
         )
-        .where(eq(teamseasons.seasonId, seasonId))
+        .leftJoin(
+          competitions,
+          eq(
+            teamcompetitions.competitionId,
+            competitions.competitionId,
+          ),
+        )
+        .where(
+          eq(
+            competitions.competitionId,
+            serie.competitionId,
+          ),
+        )
         .orderBy(
           asc(sql`teams.casual_name collate "se-SE-x-icu"`),
         )
@@ -154,7 +166,7 @@ export const getSerieForEdit = createServerFn({
         serie: serie,
         parentSeries,
         teamsInSerie,
-        teamsInSeason,
+        teamsInCompetition,
         competitions: competitionArray,
       }
     } catch (error) {

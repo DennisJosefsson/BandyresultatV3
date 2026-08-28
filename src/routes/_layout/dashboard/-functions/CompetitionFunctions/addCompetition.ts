@@ -57,11 +57,13 @@ export const addCompetition = createServerFn({
           })
           .returning({
             competitionName: competitions.competitionName,
+            competitionId: competitions.competitionId,
           })
 
         return {
           status: 200,
           message: `Turneringen ${returnValue[0].competitionName} inlagd`,
+          competitionId: returnValue[0].competitionId,
         }
       } catch (error) {
         if (

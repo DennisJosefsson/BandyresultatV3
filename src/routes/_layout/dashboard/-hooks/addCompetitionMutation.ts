@@ -1,14 +1,21 @@
 import { useMutation } from '@tanstack/react-query'
-import { useRouter } from '@tanstack/react-router'
+import {
+  getRouteApi,
+  useRouter,
+} from '@tanstack/react-router'
 import { toast } from 'sonner'
-import { addCompetition } from '../-functions/CompetitionFunctions/addCompetition';
+import { addCompetition } from '../-functions/CompetitionFunctions/addCompetition'
 
-
-type Data = { status: 200; message: string } | undefined
+const route = getRouteApi(
+  '/_layout/dashboard/season/$seasonId/info_/competition/newCompetition',
+)
+type Data =
+  | { status: 200; message: string; competitionId: number }
+  | undefined
 
 export const useAddCompetitionMutation = () => {
   const router = useRouter()
-
+  const navigate = route.useNavigate()
   const mutation = useMutation({
     mutationFn: addCompetition,
     onSuccess: (data) => onMutationSuccess(data),
@@ -26,6 +33,16 @@ export const useAddCompetitionMutation = () => {
       filter: (r) =>
         r.routeId === '/_layout/dashboard/season/$seasonId',
     })
+
+    data?.competitionId &&
+      navigate({
+        to: '/dashboard/season/$seasonId/info/competition/$competitionId/teamcompetition',
+        search: (prev) => ({ ...prev }),
+        params: (prev) => ({
+          ...prev,
+          competitionId: data?.competitionId,
+        }),
+      })
   }
 
   const onMutationError = (error: unknown) => {

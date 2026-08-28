@@ -106,41 +106,22 @@ const Series = () => {
                           nativeButton={false}
                         />
                       )}
-                      {div.isCup ? (
-                        <Button
-                          render={
-                            <route.Link
-                              to="info/competition/$competitionId/newCupSerie"
-                              params={{
-                                seasonId,
-                                competitionId:
-                                  div.competitionId,
-                              }}
-                              search={{ women }}
-                            >
-                              Lägg till serie
-                            </route.Link>
-                          }
-                          nativeButton={false}
-                        />
-                      ) : (
-                        <Button
-                          render={
-                            <route.Link
-                              to="info/competition/$competitionId/newSerie"
-                              params={{
-                                seasonId,
-                                competitionId:
-                                  div.competitionId,
-                              }}
-                              search={{ women }}
-                            >
-                              Lägg till serie
-                            </route.Link>
-                          }
-                          nativeButton={false}
-                        />
-                      )}
+                      <Button
+                        render={
+                          <route.Link
+                            to="info/competition/$competitionId/teamcompetition"
+                            params={{
+                              seasonId,
+                              competitionId:
+                                div.competitionId,
+                            }}
+                            search={{ women }}
+                          >
+                            Lägg till lag
+                          </route.Link>
+                        }
+                        nativeButton={false}
+                      />
                     </div>
                   </div>
                   {div.series.map((serie) => {

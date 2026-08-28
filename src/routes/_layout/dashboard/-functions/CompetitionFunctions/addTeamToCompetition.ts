@@ -1,0 +1,29 @@
+import { db } from '@/db'
+import { teamcompetitions } from '@/db/schema'
+import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
+import { catchError } from '@/lib/middlewares/errors/catchError'
+import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
+import { zd } from '@/lib/utils/zod'
+import { createServerFn } from '@tanstack/react-start'
+
+export const addTeamToCompetition = createServerFn({
+  method: 'POST',
+})
+  .middleware([authMiddleware, errorMiddleware])
+  .validator(
+    zd.object({
+      teamId: zd.number().int().positive(),
+      competitionId: zd.number().int().positive(),
+    }),
+  )
+  .handler(async ({ data: { teamId, competitionId } }) => {
+    try {
+      await db
+        .insert(teamcompetitions)
+        .values({ teamId, competitionId })
+
+      return { status: 200, message: 'Lag tillagt' }
+    } catch (error) {
+      catchError(error)
+    }
+  })

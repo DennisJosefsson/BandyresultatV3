@@ -8,28 +8,43 @@ import {
 import { Input } from '@/components/base/ui/input'
 import { getRouteApi } from '@tanstack/react-router'
 import { useState } from 'react'
-import { addTeamToSerieMutation } from '../../../-hooks/addTeamToSerieMutation'
+import { addTeamToCompetitionMutation } from '../../../-hooks/addTeamToCompetitionMutation'
 
 const route = getRouteApi(
-  '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit',
+  '/_layout/dashboard/season/$seasonId/info_/competition/$competitionId/teamcompetition',
 )
 
-const AddTeamToSerie = () => {
-  const serieId = route.useParams({
-    select: (s) => s.serieId,
+const AddTeams = () => {
+  const competitionId = route.useParams({
+    select: (s) => s.competitionId,
   })
-  const teams = route.useLoaderData({
-    select: (s) => s.teamsInCompetition,
-  })
-  const teamInSerie = route
-    .useLoaderData({ select: (s) => s.teamsInSerie })
-    .map((team) => team.teamId)
-  const mutation = addTeamToSerieMutation()
+  const data = route.useLoaderData()
+  const mutation = addTeamToCompetitionMutation()
   const [teamFilter, setTeamFilter] = useState('')
 
   const onClickTeamButton = (teamId: number) => {
-    mutation.mutate({ data: { serieId, teamId } })
+    mutation.mutate({ data: { competitionId, teamId } })
   }
+
+  if (data.status === 404) {
+    return (
+      <Card className="flex flex-col">
+        <CardHeader className="flex flex-row items-center">
+          <div>
+            <CardTitle>Lägg till lag</CardTitle>
+          </div>
+        </CardHeader>
+
+        <CardContent className="flex flex-row justify-center">
+          <span className="text-sm">{data.message}</span>
+        </CardContent>
+      </Card>
+    )
+  }
+
+  const competitionTeams = data.teamsInCompetition.map(
+    (t) => t.team.teamId,
+  )
 
   return (
     <Card className="flex flex-col">
@@ -53,19 +68,20 @@ const AddTeamToSerie = () => {
       </CardHeader>
 
       <CardContent className="grid grid-cols-3 gap-8 place-self-start px-10">
-        {teams
+        {data.teamsInSeason
           .filter((team) =>
             team.team.casualName.includes(teamFilter),
           )
           .filter(
-            (team) => !teamInSerie.includes(team.teamId),
+            (team) =>
+              !competitionTeams.includes(team.teamId),
           )
           .map((team) => {
             return (
               <Button
                 key={team.teamId.toString()}
-                size="sm"
                 variant="outline"
+                size="sm"
                 onClick={() =>
                   onClickTeamButton(team.teamId)
                 }
@@ -79,4 +95,4 @@ const AddTeamToSerie = () => {
   )
 }
 
-export default AddTeamToSerie
+export default AddTeams
