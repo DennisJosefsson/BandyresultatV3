@@ -489,6 +489,29 @@ export const teamseries = pgTable(
   ],
 )
 
+export const teamcompetitions = pgTable(
+  'teamcompetitions',
+  {
+    teamCompetitionId: serial('team_competition_id')
+      .primaryKey()
+      .notNull(),
+    teamId: integer('team_id').notNull(),
+    competitionId: integer('competition_id').notNull(),
+  },
+  (table) => [
+    foreignKey({
+      columns: [table.competitionId],
+      foreignColumns: [competitions.competitionId],
+      name: 'teamcompetitions_competition_id_fkey',
+    }),
+    foreignKey({
+      columns: [table.teamId],
+      foreignColumns: [teams.teamId],
+      name: 'teamcompetitions_team_id_fkey',
+    }),
+  ],
+)
+
 export const parentchildseries = pgTable(
   'parentchildseries',
   {
@@ -713,6 +736,24 @@ export const teamseriesRelations = relations(
     series: one(series, {
       fields: [teamseries.serieId],
       references: [series.serieId],
+    }),
+    team: one(teams, {
+      fields: [teamseries.teamId],
+      references: [teams.teamId],
+    }),
+  }),
+)
+
+export const teamscompetitionRelations = relations(
+  teamcompetitions,
+  ({ one }) => ({
+    series: one(competitions, {
+      fields: [teamcompetitions.competitionId],
+      references: [competitions.competitionId],
+    }),
+    team: one(teams, {
+      fields: [teamcompetitions.teamId],
+      references: [teams.teamId],
     }),
   }),
 )
