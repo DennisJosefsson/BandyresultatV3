@@ -78,7 +78,21 @@ export async function cupGames({
         eq(series.competitionId, competitionId),
       ),
     )
-    .orderBy(played ? desc(games.date) : asc(games.date))
+    .orderBy(
+      played ? desc(games.date) : asc(games.date),
+      sql`case 
+      when ${games.category} like '%final' then 1
+      when ${games.category} like '%bronze' then 2
+      when ${games.category} like '%semi' then 3
+      when ${games.category} like '%playoffseries' then 4
+      when ${games.category} like '%quarter' then 5
+      when ${games.category} like '%eight' then 6
+      when ${games.category} like '%regular' then 7
+      when ${games.category} like '%qualification' then 8
+    end`,
+      asc(games.group),
+      asc(sql`home.casual_name collate "se-SE-x-icu"`),
+    )
 
   return playedGamesArray
 }
