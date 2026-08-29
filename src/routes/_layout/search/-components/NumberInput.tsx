@@ -1,13 +1,20 @@
-import type { ChangeEvent } from 'react'
-import { useNavigate, useSearch } from '@tanstack/react-router'
-import type { SearchParamsFields } from '@/lib/types/search'
 import CustomNumberInput from '@/components/Common/CustomNumberInput'
 import { Label } from '@/components/base/ui/label'
+import type { SearchParamsFields } from '@/lib/types/search'
+import {
+  useNavigate,
+  useSearch,
+} from '@tanstack/react-router'
+import type { ChangeEvent } from 'react'
 
 type NumberInputProps = {
   field: Extract<
     SearchParamsFields,
-    'endSeason' | 'startSeason' | 'goalDiff' | 'goalsConceded' | 'goalsScored'
+    | 'endSeason'
+    | 'startSeason'
+    | 'goalDiff'
+    | 'goalsConceded'
+    | 'goalsScored'
   >
   label: string
   placeholder: string
@@ -15,7 +22,13 @@ type NumberInputProps = {
   max?: number
 }
 
-const NumberInput = ({ field, label, placeholder, min, max }: NumberInputProps) => {
+const NumberInput = ({
+  field,
+  label,
+  placeholder,
+  min,
+  max,
+}: NumberInputProps) => {
   const searchField = useSearch({
     from: '/_layout/search',
     select: (search) => search[field],
@@ -23,7 +36,9 @@ const NumberInput = ({ field, label, placeholder, min, max }: NumberInputProps) 
 
   const navigate = useNavigate({ from: '/search' })
 
-  const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleOnChange = (
+    event: ChangeEvent<HTMLInputElement>,
+  ) => {
     const value = event.target.value
 
     if (value === '') {
@@ -97,10 +112,14 @@ const NumberInput = ({ field, label, placeholder, min, max }: NumberInputProps) 
 
   return (
     <div className="grid w-full max-w-sm items-center gap-1.5 px-1">
-      <Label htmlFor={field} className="font-semibold md:text-sm">
+      <Label
+        htmlFor={field}
+        className="font-semibold md:text-sm"
+      >
         {label}
       </Label>
       <CustomNumberInput
+        inputGroupClassName="xs:w-3xs w-50"
         value={searchField ?? ''}
         onChange={handleOnChange}
         name={field}

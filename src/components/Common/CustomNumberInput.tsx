@@ -1,7 +1,10 @@
-import type { DetailedHTMLProps, InputHTMLAttributes } from 'react'
-import { CircleXIcon } from 'lucide-react'
-import { cn } from '@/lib/utils/utils'
 import { FieldError } from '@/components/base/ui/field'
+import { cn } from '@/lib/utils/utils'
+import { CircleXIcon } from 'lucide-react'
+import type {
+  DetailedHTMLProps,
+  InputHTMLAttributes,
+} from 'react'
 import {
   InputGroup,
   InputGroupAddon,
@@ -18,13 +21,17 @@ type ErrorField =
   | { hasErrorField: false | undefined }
 
 interface CustomNumberInputProps extends Omit<
-  DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>,
+  DetailedHTMLProps<
+    InputHTMLAttributes<HTMLInputElement>,
+    HTMLInputElement
+  >,
   'type'
 > {
   decrementer: () => void
   incrementer: () => void
   resetter?: () => void
   error?: ErrorField
+  inputGroupClassName?: string
 }
 
 const CustomNumberInput = ({
@@ -32,11 +39,12 @@ const CustomNumberInput = ({
   incrementer,
   resetter,
   className,
+  inputGroupClassName,
   error,
   ...props
 }: CustomNumberInputProps) => {
   return (
-    <InputGroup className="xs:w-3xs w-50">
+    <InputGroup className={cn('', inputGroupClassName)}>
       <InputGroupInput
         {...props}
         type="number"
@@ -77,7 +85,9 @@ const CustomNumberInput = ({
           </InputGroupButton>
         </InputGroupAddon>
       ) : null}
-      {error?.hasErrorField && error.errorBoolean && <FieldError errors={error.errors} />}
+      {error?.hasErrorField && error.errorBoolean && (
+        <FieldError errors={error.errors} />
+      )}
     </InputGroup>
   )
 }
