@@ -119,7 +119,6 @@ export type SingleTeamTableItem = {
   totalGoalsConceded: number
   totalGoalDifference: number
   totalPoints: number
- 
 }
 
 export const singleTeamTableItem = zd.object({
@@ -158,7 +157,7 @@ export const newStaticTable = zd.object({
   lost: zd.number().nonnegative().int(),
   scoredGoals: zd.number().nonnegative().int(),
   concededGoals: zd.number().nonnegative().int(),
-  goalDifference: zd.number().nonnegative().int(),
+  goalDifference: zd.number().int(),
   points: zd.number().nonnegative().int(),
   qualification: zd.boolean(),
   women: zd.boolean(),
@@ -182,7 +181,7 @@ export const editStaticTable = zd.object({
   lost: zd.number().nonnegative().int(),
   scoredGoals: zd.number().nonnegative().int(),
   concededGoals: zd.number().nonnegative().int(),
-  goalDifference: zd.number().nonnegative().int(),
+  goalDifference: zd.number().int(),
   points: zd.number().nonnegative().int(),
 })
 
