@@ -51,7 +51,7 @@ const Season = () => {
                 nativeButton={false}
               />
             ) : (
-              <span>Ingen föregående säsong.</span>
+              <Button disabled>Föregående säsong.</Button>
             )}
           </div>
           <div>
@@ -78,9 +78,11 @@ const Season = () => {
                 nativeButton={false}
               />
             ) : (
-              <span>
-                Motsvarande säsong för damer saknas.
-              </span>
+              <Button disabled>
+                {season.women
+                  ? `Herrar ${season.year}`
+                  : `Damer ${season.year}`}
+              </Button>
             )}
           </div>
           <div>
@@ -104,7 +106,7 @@ const Season = () => {
                 nativeButton={false}
               />
             ) : (
-              <span>Ingen kommande säsong.</span>
+              <Button disabled> Nästa säsong</Button>
             )}
           </div>
         </div>
