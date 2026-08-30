@@ -1,6 +1,7 @@
 import { db } from '@/db'
 import {
   competitions,
+  seasons,
   teams,
   teamseasons,
 } from '@/db/schema'
@@ -10,7 +11,16 @@ import type { TeamBase } from '@/lib/types/team'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
 import type { SQL } from 'drizzle-orm'
-import { asc, eq, getTableColumns, sql } from 'drizzle-orm'
+import {
+  and,
+  asc,
+  desc,
+  eq,
+  getTableColumns,
+  gt,
+  lt,
+  sql,
+} from 'drizzle-orm'
 import { getCompetitionSeries } from './seasonQueries'
 
 export const getSeasonInfo = createServerFn({
@@ -67,8 +77,8 @@ export const getSeasonInfo = createServerFn({
       )
 
       const season = await db.query.seasons.findFirst({
-        where: (seasons, { eq: equal }) =>
-          equal(seasons.seasonId, seasonId),
+        where: (seasonsSchema, { eq: equal }) =>
+          equal(seasonsSchema.seasonId, seasonId),
       })
 
       const playoffSeasonData =
@@ -93,6 +103,55 @@ export const getSeasonInfo = createServerFn({
         throw new Error('Säsong saknas')
       }
 
+      const nextCurrentSeason = await db
+        .select()
+        .from(seasons)
+        .where(
+          and(
+            eq(seasons.women, season.women ? true : false),
+            gt(seasons.seasonId, season.seasonId),
+          ),
+        )
+        .orderBy(asc(seasons.seasonId))
+        .limit(1)
+        .then((res) => {
+          if (res.length === 0) return undefined
+
+          return res[0]
+        })
+
+      const prevCurrentSeason = await db
+        .select()
+        .from(seasons)
+        .where(
+          and(
+            eq(seasons.women, season.women ? true : false),
+            lt(seasons.seasonId, season.seasonId),
+          ),
+        )
+        .limit(1)
+        .orderBy(desc(seasons.seasonId))
+        .then((res) => {
+          if (res.length === 0) return undefined
+
+          return res[0]
+        })
+
+      const currentOtherGenderSeason = await db
+        .select()
+        .from(seasons)
+        .where(
+          and(
+            eq(seasons.year, season.year),
+            eq(seasons.women, season.women ? false : true),
+          ),
+        )
+        .then((res) => {
+          if (res.length === 0) return undefined
+
+          return res[0]
+        })
+
       if (!playoffSeasonData) {
         throw new Error('Säsong saknas')
       }
@@ -102,6 +161,9 @@ export const getSeasonInfo = createServerFn({
         teams: teamSeasons,
         series: seasonSeries,
         season,
+        nextCurrentSeason,
+        prevCurrentSeason,
+        currentOtherGenderSeason,
         playoffSeason: playoffSeasonData,
       }
     } catch (error) {

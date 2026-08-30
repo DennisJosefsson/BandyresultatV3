@@ -66,8 +66,61 @@ const RemoveTeams = () => {
       <Card>
         <CardHeader>
           <div className="flex flex-row items-center justify-between">
-            <div>
+            <div className="flex flex-row gap-20 items-center">
               <CardTitle>Lag i turneringen</CardTitle>
+              <div className="flex flex-row gap-6">
+                <Button
+                  render={
+                    <route.Link
+                      to="/dashboard/season/$seasonId"
+                      params={(prev) => ({
+                        seasonId: prev.seasonId,
+                      })}
+                      search={(prev) => ({
+                        women: prev.women,
+                      })}
+                    >
+                      Tillbaka till säsongen
+                    </route.Link>
+                  }
+                  nativeButton={false}
+                />
+                {data.competition.isCup ? (
+                  <Button
+                    render={
+                      <route.Link
+                        to="/dashboard/season/$seasonId/info/competition/$competitionId/generateCupSerie"
+                        params={(prev) => ({
+                          seasonId: prev.seasonId,
+                        })}
+                        search={(prev) => ({
+                          women: prev.women,
+                        })}
+                      >
+                        Generera serier
+                      </route.Link>
+                    }
+                    nativeButton={false}
+                  />
+                ) : (
+                  <Button
+                    render={
+                      <route.Link
+                        to="/dashboard/season/$seasonId/info/competition/$competitionId/generateSerie"
+                        params={(prev) => ({
+                          seasonId: prev.seasonId,
+                        })}
+                        search={(prev) => ({
+                          women: prev.women,
+                        })}
+                      >
+                        Generera serier
+                      </route.Link>
+                    }
+                    nativeButton={false}
+                  />
+                )}
+              </div>
             </div>
           </div>
         </CardHeader>

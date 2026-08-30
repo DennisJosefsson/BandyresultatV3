@@ -1,4 +1,5 @@
 import { db } from '@/db'
+import type { competitions } from '@/db/schema'
 import {
   teamcompetitions,
   teams,
@@ -24,6 +25,7 @@ type ReturnType =
           team: TeamBase
         }
       >
+      competition: typeof competitions.$inferSelect
     }
   | { status: 404; message: string }
   | undefined
@@ -110,6 +112,7 @@ export const getTeamsForCompetitions = createServerFn({
           status: 200,
           teamsInSeason,
           teamsInCompetition,
+          competition,
         }
       } catch (error) {
         if (error instanceof Error404) {

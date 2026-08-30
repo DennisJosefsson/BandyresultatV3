@@ -238,12 +238,30 @@ function Selection({ competition }: SelectionProps) {
         <span className="text-sm font-semibold">
           Grupper {competition.competitionName}
         </span>
-        <Button
-          type="submit"
-          form="generateSeries"
-        >
-          Skicka
-        </Button>
+        <div className="flex flex-row gap-6">
+          <Button
+            render={
+              <Route.Link
+                to="/dashboard/season/$seasonId"
+                params={(prev) => ({
+                  seasonId: prev.seasonId,
+                })}
+                search={(prev) => ({
+                  women: prev.women,
+                })}
+              >
+                Tillbaka till säsongen
+              </Route.Link>
+            }
+            nativeButton={false}
+          />
+          <Button
+            type="submit"
+            form="generateSeries"
+          >
+            Skicka
+          </Button>
+        </div>
       </div>
       <div className="flex flex-row gap-4 items-center">
         <Button onClick={addFinal}>Finalmatch</Button>
