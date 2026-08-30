@@ -160,6 +160,14 @@ export const getSerieForEdit = createServerFn({
         .where(eq(competitions.seasonId, seasonId))
         .orderBy(asc(competitions.division))
 
+      const competitionSeries = await db
+        .select()
+        .from(series)
+        .where(
+          eq(series.competitionId, serie.competitionId),
+        )
+        .orderBy(asc(series.level))
+
       return {
         status: 200,
         series: getSeries,
@@ -168,6 +176,7 @@ export const getSerieForEdit = createServerFn({
         teamsInSerie,
         teamsInCompetition,
         competitions: competitionArray,
+        competitionSeries,
       }
     } catch (error) {
       catchError(error)

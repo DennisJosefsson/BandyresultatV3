@@ -12,8 +12,31 @@ const route = getRouteApi(
 
 const EditSerieForms = () => {
   const form = route.useSearch({ select: (s) => s.form })
+  const competitionSeries = route.useLoaderData({
+    select: (s) => s.competitionSeries,
+  })
   return (
     <div className="flex flex-col gap-4">
+      <div className="grid grid-cols-6 gap-4">
+        {competitionSeries.map((s1) => {
+          return (
+            <Button
+              variant="outline"
+              key={s1.serieId.toString()}
+              render={
+                <route.Link
+                  to="."
+                  params={{ serieId: s1.serieId }}
+                  search={(prev) => ({ ...prev })}
+                >
+                  {s1.serieName}
+                </route.Link>
+              }
+              nativeButton={false}
+            />
+          )
+        })}
+      </div>
       {form === 'serie' ? <EditSerie /> : <EditCupSerie />}
 
       <div className="grid grid-cols-2 gap-8">
