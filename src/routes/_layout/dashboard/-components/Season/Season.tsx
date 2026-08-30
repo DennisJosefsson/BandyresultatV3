@@ -1,3 +1,4 @@
+import { Button } from '@/components/base/ui/button'
 import { getRouteApi } from '@tanstack/react-router'
 import Metadata from './Metadata'
 import PlayoffSeason from './PlayoffSeason'
@@ -31,39 +32,51 @@ const Season = () => {
         <div className="flex flex-row w-full justify-between">
           <div>
             {prevCurrentSeason ? (
-              <route.Link
-                to="."
-                params={{
-                  seasonId: prevCurrentSeason.seasonId,
-                }}
-                search={{
-                  women: Boolean(prevCurrentSeason.women),
-                }}
-              >
-                Föregående säsong
-              </route.Link>
+              <Button
+                render={
+                  <route.Link
+                    to="."
+                    params={{
+                      seasonId: prevCurrentSeason.seasonId,
+                    }}
+                    search={{
+                      women: Boolean(
+                        prevCurrentSeason.women,
+                      ),
+                    }}
+                  >
+                    Föregående säsong
+                  </route.Link>
+                }
+                nativeButton={false}
+              />
             ) : (
               <span>Ingen föregående säsong.</span>
             )}
           </div>
           <div>
             {currentOtherGenderSeason ? (
-              <route.Link
-                to="."
-                params={{
-                  seasonId:
-                    currentOtherGenderSeason.seasonId,
-                }}
-                search={{
-                  women: Boolean(
-                    currentOtherGenderSeason.women,
-                  ),
-                }}
-              >
-                {currentOtherGenderSeason.women
-                  ? `Damer ${currentOtherGenderSeason.year}`
-                  : `Herrar ${currentOtherGenderSeason.year}`}
-              </route.Link>
+              <Button
+                render={
+                  <route.Link
+                    to="."
+                    params={{
+                      seasonId:
+                        currentOtherGenderSeason.seasonId,
+                    }}
+                    search={{
+                      women: Boolean(
+                        currentOtherGenderSeason.women,
+                      ),
+                    }}
+                  >
+                    {currentOtherGenderSeason.women
+                      ? `Damer ${currentOtherGenderSeason.year}`
+                      : `Herrar ${currentOtherGenderSeason.year}`}
+                  </route.Link>
+                }
+                nativeButton={false}
+              />
             ) : (
               <span>
                 Motsvarande säsong för damer saknas.
@@ -72,17 +85,24 @@ const Season = () => {
           </div>
           <div>
             {nextCurrentSeason ? (
-              <route.Link
-                to="."
-                params={{
-                  seasonId: nextCurrentSeason.seasonId,
-                }}
-                search={{
-                  women: Boolean(nextCurrentSeason.women),
-                }}
-              >
-                Nästa säsong
-              </route.Link>
+              <Button
+                render={
+                  <route.Link
+                    to="."
+                    params={{
+                      seasonId: nextCurrentSeason.seasonId,
+                    }}
+                    search={{
+                      women: Boolean(
+                        nextCurrentSeason.women,
+                      ),
+                    }}
+                  >
+                    Nästa säsong
+                  </route.Link>
+                }
+                nativeButton={false}
+              />
             ) : (
               <span>Ingen kommande säsong.</span>
             )}
