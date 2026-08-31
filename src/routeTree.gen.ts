@@ -57,6 +57,7 @@ import { Route as LayoutTeamsTeamIdSeasonsIndexRouteImport } from './routes/_lay
 import { Route as LayoutTeamsTeamIdLatestIndexRouteImport } from './routes/_layout/teams/$teamId/latest/index'
 import { Route as LayoutSeasonsYearGroupIndexRouteImport } from './routes/_layout/seasons/$year/$group/index'
 import { Route as LayoutDashboardSeasonSeasonIdIndexRouteImport } from './routes/_layout/dashboard/season/$seasonId/index'
+import { Route as ApiV1StatsRecordsScoredRouteImport } from './routes/api/v1/stats/records/scored'
 import { Route as LayoutSeasonsYearPlayoffTableRouteImport } from './routes/_layout/seasons/$year/playoff/table'
 import { Route as LayoutSeasonsYearPlayoffStatsRouteImport } from './routes/_layout/seasons/$year/playoff/stats'
 import { Route as LayoutSeasonsYearPlayoffMapRouteImport } from './routes/_layout/seasons/$year/playoff/map'
@@ -358,6 +359,11 @@ const LayoutDashboardSeasonSeasonIdIndexRoute =
     path: '/',
     getParentRoute: () => LayoutDashboardSeasonSeasonIdRoute,
   } as any)
+const ApiV1StatsRecordsScoredRoute = ApiV1StatsRecordsScoredRouteImport.update({
+  id: '/api/v1/stats/records/scored',
+  path: '/api/v1/stats/records/scored',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LayoutSeasonsYearPlayoffTableRoute =
   LayoutSeasonsYearPlayoffTableRouteImport.update({
     id: '/table',
@@ -687,6 +693,7 @@ export interface FileRoutesByFullPath {
   '/seasons/$year/playoff/map': typeof LayoutSeasonsYearPlayoffMapRoute
   '/seasons/$year/playoff/stats': typeof LayoutSeasonsYearPlayoffStatsRoute
   '/seasons/$year/playoff/table': typeof LayoutSeasonsYearPlayoffTableRoute
+  '/api/v1/stats/records/scored': typeof ApiV1StatsRecordsScoredRoute
   '/dashboard/season/$seasonId/': typeof LayoutDashboardSeasonSeasonIdIndexRoute
   '/seasons/$year/$group/': typeof LayoutSeasonsYearGroupIndexRoute
   '/teams/$teamId/latest/': typeof LayoutTeamsTeamIdLatestIndexRoute
@@ -771,6 +778,7 @@ export interface FileRoutesByTo {
   '/seasons/$year/playoff/map': typeof LayoutSeasonsYearPlayoffMapRoute
   '/seasons/$year/playoff/stats': typeof LayoutSeasonsYearPlayoffStatsRoute
   '/seasons/$year/playoff/table': typeof LayoutSeasonsYearPlayoffTableRoute
+  '/api/v1/stats/records/scored': typeof ApiV1StatsRecordsScoredRoute
   '/dashboard/season/$seasonId': typeof LayoutDashboardSeasonSeasonIdIndexRoute
   '/seasons/$year/$group': typeof LayoutSeasonsYearGroupIndexRoute
   '/teams/$teamId/latest': typeof LayoutTeamsTeamIdLatestIndexRoute
@@ -862,6 +870,7 @@ export interface FileRoutesById {
   '/_layout/seasons/$year/playoff/map': typeof LayoutSeasonsYearPlayoffMapRoute
   '/_layout/seasons/$year/playoff/stats': typeof LayoutSeasonsYearPlayoffStatsRoute
   '/_layout/seasons/$year/playoff/table': typeof LayoutSeasonsYearPlayoffTableRoute
+  '/api/v1/stats/records/scored': typeof ApiV1StatsRecordsScoredRoute
   '/_layout/dashboard/season/$seasonId/': typeof LayoutDashboardSeasonSeasonIdIndexRoute
   '/_layout/seasons/$year/$group/': typeof LayoutSeasonsYearGroupIndexRoute
   '/_layout/teams/$teamId/latest/': typeof LayoutTeamsTeamIdLatestIndexRoute
@@ -953,6 +962,7 @@ export interface FileRouteTypes {
     | '/seasons/$year/playoff/map'
     | '/seasons/$year/playoff/stats'
     | '/seasons/$year/playoff/table'
+    | '/api/v1/stats/records/scored'
     | '/dashboard/season/$seasonId/'
     | '/seasons/$year/$group/'
     | '/teams/$teamId/latest/'
@@ -1037,6 +1047,7 @@ export interface FileRouteTypes {
     | '/seasons/$year/playoff/map'
     | '/seasons/$year/playoff/stats'
     | '/seasons/$year/playoff/table'
+    | '/api/v1/stats/records/scored'
     | '/dashboard/season/$seasonId'
     | '/seasons/$year/$group'
     | '/teams/$teamId/latest'
@@ -1127,6 +1138,7 @@ export interface FileRouteTypes {
     | '/_layout/seasons/$year/playoff/map'
     | '/_layout/seasons/$year/playoff/stats'
     | '/_layout/seasons/$year/playoff/table'
+    | '/api/v1/stats/records/scored'
     | '/_layout/dashboard/season/$seasonId/'
     | '/_layout/seasons/$year/$group/'
     | '/_layout/teams/$teamId/latest/'
@@ -1167,6 +1179,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   LayoutRoute: typeof LayoutRouteWithChildren
   ApiV1HealthRoute: typeof ApiV1HealthRoute
+  ApiV1StatsRecordsScoredRoute: typeof ApiV1StatsRecordsScoredRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1506,6 +1519,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/season/$seasonId/'
       preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdIndexRouteImport
       parentRoute: typeof LayoutDashboardSeasonSeasonIdRoute
+    }
+    '/api/v1/stats/records/scored': {
+      id: '/api/v1/stats/records/scored'
+      path: '/api/v1/stats/records/scored'
+      fullPath: '/api/v1/stats/records/scored'
+      preLoaderRoute: typeof ApiV1StatsRecordsScoredRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_layout/seasons/$year/playoff/table': {
       id: '/_layout/seasons/$year/playoff/table'
@@ -2189,6 +2209,7 @@ const LayoutRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   LayoutRoute: LayoutRouteWithChildren,
   ApiV1HealthRoute: ApiV1HealthRoute,
+  ApiV1StatsRecordsScoredRoute: ApiV1StatsRecordsScoredRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
