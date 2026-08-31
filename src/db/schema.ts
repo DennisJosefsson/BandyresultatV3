@@ -229,7 +229,7 @@ export const series = pgTable(
     bonusPoints: varchar('bonus_points'),
     comment: text(),
     level: integer().notNull(),
-    division: decimalNumber().notNull(),
+    division: decimalNumber(),
     hasMix: boolean('has_mix'),
     parentSerieId: integer('parent_serie_id').references(
       (): AnyPgColumn => series.serieId,
