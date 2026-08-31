@@ -37,7 +37,7 @@ export const getCatTables = ({
 }: GetCatTables) =>
   db
     .select({
-      category: series.category,
+      category: series.category as unknown as SQL<string>,
       totalGames: count(teamgames.teamGameId),
       totalPoints: sum(teamgames.points).as(
         'total_points',
