@@ -86,7 +86,7 @@ export async function getPlayoffStatsData({
       goalsScoredAvg: avg(games.awayGoal).mapWith(Number),
     })
     .from(games)
-    .leftJoin(series, eq(series.serieId, teamgames.serieId))
+    .leftJoin(series, eq(series.serieId, games.serieId))
     .where(
       and(
         eq(games.seasonId, playoffSeason.seasonId),
@@ -253,6 +253,7 @@ export async function getPlayoffStatsData({
     .from(games)
     .leftJoin(home, eq(home.teamId, games.homeTeamId))
     .leftJoin(away, eq(away.teamId, games.awayTeamId))
+    .leftJoin(series, eq(series.serieId, games.serieId))
     .where(
       and(
         eq(games.seasonId, playoffSeason.seasonId),
@@ -313,6 +314,7 @@ export async function getPlayoffStatsData({
     .from(games)
     .leftJoin(home, eq(home.teamId, games.homeTeamId))
     .leftJoin(away, eq(away.teamId, games.awayTeamId))
+    .leftJoin(series, eq(series.serieId, games.serieId))
     .where(
       and(
         eq(games.seasonId, playoffSeason.seasonId),
@@ -479,6 +481,10 @@ async function getStreak({
               ),
           })
           .from(teamgames)
+          .leftJoin(
+            series,
+            eq(series.serieId, teamgames.serieId),
+          )
           .where(
             and(
               eq(teamgames.played, true),
@@ -510,6 +516,10 @@ async function getStreak({
               ),
           })
           .from(teamgames)
+          .leftJoin(
+            series,
+            eq(series.serieId, teamgames.serieId),
+          )
           .where(
             and(
               eq(teamgames.played, true),
@@ -541,6 +551,10 @@ async function getStreak({
               ),
           })
           .from(teamgames)
+          .leftJoin(
+            series,
+            eq(series.serieId, teamgames.serieId),
+          )
           .where(
             and(
               eq(teamgames.played, true),
@@ -572,6 +586,10 @@ async function getStreak({
               ),
           })
           .from(teamgames)
+          .leftJoin(
+            series,
+            eq(series.serieId, teamgames.serieId),
+          )
           .where(
             and(
               eq(teamgames.played, true),
@@ -603,6 +621,10 @@ async function getStreak({
               ),
           })
           .from(teamgames)
+          .leftJoin(
+            series,
+            eq(series.serieId, teamgames.serieId),
+          )
           .where(
             and(
               eq(teamgames.played, true),
