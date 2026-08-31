@@ -47,7 +47,6 @@ export const useEditSerieForm = () => {
     hasStatic: serie.hasStatic ?? false,
     uefaSorting: serie.uefaSorting ?? false,
     competitionId: serie.competitionId,
-    division: serie.division,
   }
 
   const form = useForm({

@@ -26,7 +26,6 @@ export const generateCupSeriesForm = ({
       category: 'cup-final' as zd.infer<
         typeof cupCategoryEnum
       >,
-      division: competition.division,
       competitionId: competition.competitionId,
     },
     {
@@ -37,7 +36,6 @@ export const generateCupSeriesForm = ({
       category: 'cup-semi' as zd.infer<
         typeof cupCategoryEnum
       >,
-      division: competition.division,
       competitionId: competition.competitionId,
     },
     {
@@ -48,7 +46,6 @@ export const generateCupSeriesForm = ({
       category: 'cup-semi' as zd.infer<
         typeof cupCategoryEnum
       >,
-      division: competition.division,
       competitionId: competition.competitionId,
     },
   ]
