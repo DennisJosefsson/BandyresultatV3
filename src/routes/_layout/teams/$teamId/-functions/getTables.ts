@@ -1,5 +1,6 @@
 import { db } from '@/db'
 import {
+  competitions,
   series,
   tables,
   teamgames,
@@ -19,131 +20,11 @@ import {
 import { unionAll } from 'drizzle-orm/pg-core'
 import { getDivisionName } from '../../-functions/utils/nameUtils'
 
-// export const getTables = async ({
-//   teamId,
-//   seasonIdArray,
-// }: {
-//   teamId: number
-//   seasonIdArray: Array<number>
-// }) => {
-//   const getTableData = await db
-//     .select({
-//       category: teamgames.category,
-//       totalGames: count(teamgames.teamGameId),
-//       totalPoints: sum(teamgames.points)
-//         .mapWith(Number)
-//         .as('total_points'),
-//       totalGoalsScored: sum(teamgames.goalsScored)
-//         .mapWith(Number)
-//         .as('total_goals_scored') as unknown as SQL<number>,
-//       totalGoalsConceded: sum(teamgames.goalsConceded)
-//         .mapWith(Number)
-//         .as(
-//           'total_goals_conceded',
-//         ) as unknown as SQL<number>,
-
-//       totalGoalDifference: sum(teamgames.goalDifference)
-//         .mapWith(Number)
-//         .as(
-//           'total_goal_difference',
-//         ) as unknown as SQL<number>,
-
-//       totalWins:
-//         sql<number>`cast(count(*) filter (where win) as int)`.as(
-//           'totalWins',
-//         ),
-//       totalDraws:
-//         sql<number>`cast(count(*) filter (where draw) as int)`.as(
-//           'totalDraws',
-//         ),
-//       totalLost:
-//         sql<number>`cast(count(*) filter (where lost) as int)`.as(
-//           'totalLost',
-//         ),
-//       serie: {
-//         division: series.division,
-//         level: series.level,
-//       } as unknown as SQL<{
-//         division: number
-//         level: number
-//       }>,
-//     })
-//     .from(teamgames)
-//     .leftJoin(series, eq(teamgames.serieId, series.serieId))
-//     .where(
-//       and(
-//         eq(teamgames.teamId, teamId),
-//         eq(teamgames.played, true),
-//       ),
-//     )
-//     .groupBy(
-//       series.division,
-//       teamgames.category,
-//       series.level,
-//     )
-//     .orderBy(
-//       asc(series.level),
-//       desc(sql`total_points`),
-//       desc(sql`total_goal_difference`),
-//       desc(sql`total_goals_scored`),
-//     )
-
-//   const gameSeasonIds = await db
-//     .selectDistinct({ seasonId: teamgames.seasonId })
-//     .from(teamgames)
-//     .where(eq(teamgames.teamId, teamId))
-//     .then((result) => result.map((s) => s.seasonId))
-
-//   const filteredSeasons = seasonIdArray.filter(
-//     (season) => !gameSeasonIds.includes(season),
-//   )
-
-//   const teamTables = await db
-//     .select({
-//       category: tables.category,
-//       totalGames: tables.games,
-//       totalWins: tables.won,
-//       totalDraws: tables.draw,
-//       totalLost: tables.lost,
-//       totalGoalsScored: tables.scoredGoals,
-//       totalGoalsConceded: tables.concededGoals,
-//       totalGoalDifference: tables.goalDifference,
-//       totalPoints: tables.points,
-//       serie: {
-//         division: series.division,
-//         level: series.level,
-//       } as unknown as SQL<{
-//         division: number
-//         level: number
-//       }>,
-//     })
-//     .from(tables)
-//     .leftJoin(series, eq(series.serieId, tables.serieId))
-//     .where(
-//       and(
-//         eq(tables.teamId, teamId),
-//         inArray(tables.seasonId, filteredSeasons),
-//       ),
-//     )
-
-//   return sortTables([...teamTables, ...getTableData])
-// }
-
 export async function getUnionedTables({
   teamId,
 }: {
   teamId: number
 }) {
-  // const gameSerieIds = await db
-  //   .selectDistinct({ serieId: teamgames.serieId })
-  //   .from(teamgames)
-  //   .where(eq(teamgames.teamId, teamId))
-  //   .then((result) => result.map((s) => s.serieId))
-
-  // const filteredSeries = serieIdArray.filter(
-  //   (serie) => !gameSerieIds.includes(serie),
-  // )
-
   const staticTables = db
     .select({
       teamId: tables.teamId,
@@ -286,7 +167,8 @@ export async function getUnionedTables({
       totalLost: sum(unionQuery.totalLost)
         .mapWith(Number)
         .as('total_lost'),
-      division: series.division as unknown as SQL<number>,
+      division:
+        competitions.division as unknown as SQL<number>,
       category: series.category as unknown as SQL<string>,
     })
     .from(unionQuery)
@@ -294,13 +176,17 @@ export async function getUnionedTables({
       series,
       eq(unionQuery.serieId, series.serieId),
     )
+    .leftJoin(
+      competitions,
+      eq(competitions.competitionId, series.competitionId),
+    )
     .groupBy(
-      series.division,
+      competitions.division,
       series.category,
       unionQuery.teamId,
     )
     .orderBy(
-      asc(series.division),
+      asc(competitions.division),
       sql`case 
 	when ${series.category} like '%final' then 1
 	when ${series.category} like '%bronze' then 2
@@ -315,114 +201,6 @@ end`,
 
   return sortTablesV2(result)
 }
-
-// type SortedCompareCategoryTables = {
-//   [key: string]: Array<SingleTeamTableItem>
-// }
-
-// type SortedTables = {
-//   [key: string]: Array<SingleTeamTableItem>
-// }
-
-// function sortTables(
-//   tableArray: zd.infer<typeof singleTeamTable>,
-// ) {
-//   const sortDivisions = tableArray.reduce(
-//     (divisions, table) => {
-//       if (!divisions[table.serie.division]) {
-//         divisions[table.serie.division] = []
-//       }
-//       divisions[table.serie.division].push(table)
-//       return divisions
-//     },
-//     {} as SortedCompareCategoryTables,
-//   )
-
-//   const sortedDivisions = Object.keys(sortDivisions).map(
-//     (division) => {
-//       return {
-//         division,
-//         categories: sortDivisions[division],
-//       }
-//     },
-//   )
-
-//   const sortDivisionsAndTables = sortedDivisions.map(
-//     (divisionObject) => {
-//       const sortCats = divisionObject.categories.reduce(
-//         (category, table) => {
-//           if (!category[table.category]) {
-//             category[table.category] = []
-//           }
-//           category[table.category].push(table)
-//           return category
-//         },
-//         {} as SortedTables,
-//       )
-
-//       const sortedTables = Object.keys(sortCats).map(
-//         (cat) => {
-//           return {
-//             category: cat,
-//             categoryName: groupConstant[cat],
-//             tables: [
-//               sortCats[cat].reduce(
-//                 (acc, curr) => {
-//                   return {
-//                     category: curr.category,
-//                     serie: curr.serie,
-//                     totalGames:
-//                       acc.totalGames + curr.totalGames,
-//                     totalWins:
-//                       acc.totalWins + curr.totalWins,
-//                     totalDraws:
-//                       acc.totalDraws + curr.totalDraws,
-//                     totalLost:
-//                       acc.totalLost + curr.totalLost,
-//                     totalGoalsScored:
-//                       acc.totalGoalsScored +
-//                       curr.totalGoalsScored,
-//                     totalGoalsConceded:
-//                       acc.totalGoalsConceded +
-//                       curr.totalGoalsConceded,
-//                     totalGoalDifference:
-//                       acc.totalGoalDifference +
-//                       curr.totalGoalDifference,
-//                     totalPoints:
-//                       acc.totalPoints + curr.totalPoints,
-//                   }
-//                 },
-//                 {
-//                   category: cat,
-//                   serie: { division: 1 },
-//                   totalGames: 0,
-//                   totalWins: 0,
-//                   totalDraws: 0,
-//                   totalLost: 0,
-//                   totalGoalsScored: 0,
-//                   totalGoalsConceded: 0,
-//                   totalGoalDifference: 0,
-//                   totalPoints: 0,
-//                 } as SingleTeamTableItem,
-//               ),
-//             ],
-//           }
-//         },
-//       )
-//       return {
-//         division: divisionObject['division'],
-//         divisionName: getDivisionName(
-//           divisionObject['division'],
-//         ),
-//         tables: sortedTables,
-//       }
-//     },
-//   )
-
-//   return sortDivisionsAndTables.sort(
-//     (a, b) => parseInt(a.division) - parseInt(b.division),
-//   )
-// }
 
 type Table = {
   teamId: number

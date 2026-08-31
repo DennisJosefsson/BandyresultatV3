@@ -1,5 +1,6 @@
 import { db } from '@/db'
 import {
+  competitions,
   series,
   tables,
   teamgames,
@@ -87,10 +88,17 @@ export const getMaratonTables = createServerFn({
             series,
             eq(tables.serieId, series.serieId),
           )
+          .leftJoin(
+            competitions,
+            eq(
+              competitions.competitionId,
+              series.competitionId,
+            ),
+          )
           .where(
             and(
-              eq(tables.category, 'regular'),
-              eq(series.division, 1),
+              eq(series.category, 'regular'),
+              eq(competitions.division, 1),
               eq(tables.women, women),
             ),
           )
@@ -143,12 +151,19 @@ export const getMaratonTables = createServerFn({
             series,
             eq(series.serieId, teamgames.serieId),
           )
+          .leftJoin(
+            competitions,
+            eq(
+              competitions.competitionId,
+              series.competitionId,
+            ),
+          )
           .where(
             and(
               eq(teamgames.women, women),
-              eq(teamgames.category, 'regular'),
+              eq(series.category, 'regular'),
               eq(teamgames.played, true),
-              eq(series.division, 1),
+              eq(competitions.division, 1),
               table === 'home'
                 ? eq(teamgames.homeGame, true)
                 : table === 'away'
