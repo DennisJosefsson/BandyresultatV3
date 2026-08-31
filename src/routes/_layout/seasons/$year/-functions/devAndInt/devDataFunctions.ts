@@ -174,8 +174,8 @@ export const getDevelopmentData = async ({
         and(
           eq(teamgames.played, true),
           serie.hasMix
-            ? inArray(teamgames.group, [serie.group, 'mix'])
-            : eq(teamgames.group, serie.group),
+            ? inArray(series.group, [serie.group, 'mix'])
+            : eq(series.group, serie.group),
           serie.hasMix
             ? inArray(teamgames.teamId, teamArray)
             : undefined,
@@ -306,6 +306,8 @@ export const getDevelopmentData = async ({
   const mainGameArray = db
     .select({
       ...getTableColumns(games),
+      group: series.group as unknown as SQL<string>,
+      category: series.category as unknown as SQL<string>,
       home: {
         teamId: home.teamId,
         name: home.name,
@@ -332,9 +334,10 @@ export const getDevelopmentData = async ({
     .from(games)
     .leftJoin(home, eq(games.homeTeamId, home.teamId))
     .leftJoin(away, eq(games.awayTeamId, away.teamId))
+    .leftJoin(series, eq(series.serieId, games.serieId))
     .where(
       and(
-        eq(games.group, serie.group),
+        eq(series.group, serie.group),
         eq(games.seasonId, serie.seasonId),
         eq(games.played, true),
         or(
@@ -347,6 +350,8 @@ export const getDevelopmentData = async ({
   const mixGames = db
     .select({
       ...getTableColumns(games),
+      group: series.group as unknown as SQL<string>,
+      category: series.category as unknown as SQL<string>,
       home: {
         teamId: home.teamId,
         name: home.name,
@@ -373,9 +378,10 @@ export const getDevelopmentData = async ({
     .from(games)
     .leftJoin(home, eq(games.homeTeamId, home.teamId))
     .leftJoin(away, eq(games.awayTeamId, away.teamId))
+    .leftJoin(series, eq(series.serieId, games.serieId))
     .where(
       and(
-        eq(games.group, 'mix'),
+        eq(series.group, 'mix'),
         eq(games.seasonId, serie.seasonId),
         eq(games.played, true),
         or(

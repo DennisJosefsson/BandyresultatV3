@@ -161,8 +161,6 @@ export const newStaticTable = zd.object({
   points: zd.number().nonnegative().int(),
   qualification: zd.boolean(),
   women: zd.boolean(),
-  group: zd.string(),
-  category: zd.string(),
   serieId: zd.number(),
 })
 

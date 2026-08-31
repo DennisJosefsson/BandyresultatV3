@@ -120,10 +120,11 @@ export const getPreparedLatestFirstDivisionSeason = db
 export const preparedFinalCount = db
   .select({ count: countDistinct(teamgames.seasonId) })
   .from(teamgames)
+  .leftJoin(series, eq(series.serieId, teamgames.serieId))
   .where(
     and(
       eq(teamgames.teamId, sql.placeholder('teamId')),
-      eq(teamgames.category, 'final'),
+      eq(series.category, 'final'),
     ),
   )
   .prepare('finalCount')
@@ -137,10 +138,11 @@ export const preparedLatestFinal = db
     seasons,
     eq(seasons.seasonId, teamgames.seasonId),
   )
+  .leftJoin(series, eq(series.serieId, teamgames.serieId))
   .where(
     and(
       eq(teamgames.teamId, sql.placeholder('teamId')),
-      eq(teamgames.category, 'final'),
+      eq(series.category, 'final'),
     ),
   )
   .orderBy(desc(teamgames.seasonId))
@@ -156,10 +158,11 @@ export const preparedLatestFinalWin = db
     seasons,
     eq(seasons.seasonId, teamgames.seasonId),
   )
+  .leftJoin(series, eq(series.serieId, teamgames.serieId))
   .where(
     and(
       eq(teamgames.teamId, sql.placeholder('teamId')),
-      eq(teamgames.category, 'final'),
+      eq(series.category, 'final'),
       eq(teamgames.win, true),
     ),
   )
@@ -170,10 +173,11 @@ export const preparedLatestFinalWin = db
 export const preparedFinalWinCount = db
   .select({ count: countDistinct(teamgames.seasonId) })
   .from(teamgames)
+  .leftJoin(series, eq(series.serieId, teamgames.serieId))
   .where(
     and(
       eq(teamgames.teamId, sql.placeholder('teamId')),
-      eq(teamgames.category, 'final'),
+      eq(series.category, 'final'),
       eq(teamgames.win, true),
     ),
   )
@@ -188,10 +192,11 @@ export const preparedFinalWins = db
     seasons,
     eq(seasons.seasonId, teamgames.seasonId),
   )
+  .leftJoin(series, eq(series.serieId, teamgames.serieId))
   .where(
     and(
       eq(teamgames.teamId, sql.placeholder('teamId')),
-      eq(teamgames.category, 'final'),
+      eq(series.category, 'final'),
       eq(teamgames.win, true),
     ),
   )
@@ -201,20 +206,16 @@ export const preparedFinalWins = db
 export const preparedPlayoffCount = db
   .select({ count: countDistinct(teamgames.seasonId) })
   .from(teamgames)
+  .leftJoin(series, eq(series.serieId, teamgames.serieId))
   .where(
     and(
       eq(teamgames.teamId, sql.placeholder('teamId')),
-      or(
-        inArray(teamgames.category, [
-          'quarter',
-          'semi',
-          'final',
-        ]),
-        inArray(teamgames.group, [
-          'SlutspelA',
-          'SlutspelB',
-        ]),
-      ),
+      inArray(series.category, [
+        'playoffseries',
+        'quarter',
+        'semi',
+        'final',
+      ]),
     ),
   )
   .prepare('playoffCounts')

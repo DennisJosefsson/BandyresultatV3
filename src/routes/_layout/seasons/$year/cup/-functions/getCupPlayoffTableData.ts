@@ -45,8 +45,8 @@ export const getCupPlayoffTableData = async ({
     db
       .select({
         teamId: teamgames.teamId,
-        group: teamgames.group,
-        category: teamgames.category,
+        group: series.group as unknown as SQL<string>,
+        category: series.category as unknown as SQL<string>,
         serieId: teamgames.serieId,
         totalGames: count(teamgames.teamGameId).as(
           'total_games',
@@ -93,9 +93,9 @@ export const getCupPlayoffTableData = async ({
       )
       .where(inArray(teamgames.serieId, serieIds))
       .groupBy(
-        teamgames.group,
+        series.group,
         teamgames.teamId,
-        teamgames.category,
+        series.category,
         teamgames.serieId,
       ),
   )
@@ -162,6 +162,8 @@ export const getCupPlayoffTableData = async ({
   const finalGames = await db
     .select({
       ...getTableColumns(games),
+      group: series.group as unknown as SQL<string>,
+      category: series.category as unknown as SQL<string>,
       home: {
         teamId: home.teamId,
         name: home.name,
@@ -192,7 +194,7 @@ export const getCupPlayoffTableData = async ({
     .where(
       and(
         eq(series.competitionId, competition.competitionId),
-        eq(games.group, 'cup-final'),
+        eq(series.group, 'cup-final'),
       ),
     )
     .orderBy(desc(games.date))
@@ -200,6 +202,8 @@ export const getCupPlayoffTableData = async ({
   const bronzeGames = await db
     .select({
       ...getTableColumns(games),
+      group: series.group as unknown as SQL<string>,
+      category: series.category as unknown as SQL<string>,
       home: {
         teamId: home.teamId,
         name: home.name,
@@ -230,7 +234,7 @@ export const getCupPlayoffTableData = async ({
     .where(
       and(
         eq(series.competitionId, competition.competitionId),
-        eq(games.group, 'cup-bronze'),
+        eq(series.group, 'cup-bronze'),
       ),
     )
     .orderBy(desc(games.date))
@@ -401,8 +405,8 @@ async function getPlayoffAsSeriesTable(
     db
       .select({
         teamId: teamgames.teamId,
-        group: teamgames.group,
-        category: teamgames.category,
+        group: series.group as unknown as SQL<string>,
+        category: series.category as unknown as SQL<string>,
         serieId: teamgames.serieId,
         totalGames: count(teamgames.teamGameId).as(
           'total_games',
@@ -450,13 +454,13 @@ async function getPlayoffAsSeriesTable(
       .where(
         and(
           eq(series.competitionId, competitionId),
-          inArray(teamgames.category, ['playoffseries']),
+          inArray(series.category, ['playoffseries']),
         ),
       )
       .groupBy(
-        teamgames.group,
+        series.group,
         teamgames.teamId,
-        teamgames.category,
+        series.category,
         teamgames.serieId,
       ),
   )

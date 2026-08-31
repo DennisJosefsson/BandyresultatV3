@@ -928,7 +928,7 @@ export async function getScoredData({
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
         eq(teamgames.played, true),
-        ne(teamgames.category, 'qualification'),
+        ne(series.category, 'qualification'),
         eq(teamgames.women, women),
         eq(competitions.division, 1),
         eq(teamgames.homeGame, true),
@@ -949,7 +949,7 @@ export async function getScoredData({
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
         eq(teamgames.played, true),
-        ne(teamgames.category, 'qualification'),
+        ne(series.category, 'qualification'),
         eq(teamgames.women, women),
         eq(competitions.division, 1),
         eq(teamgames.homeGame, true),

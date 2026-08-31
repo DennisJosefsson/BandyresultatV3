@@ -33,10 +33,11 @@ export async function getGeneralStatsData({
     })
     .from(teamgames)
     .leftJoin(teams, eq(teamgames.teamId, teams.teamId))
+    .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .where(
       and(
         eq(teamgames.women, women),
-        eq(teamgames.category, 'final'),
+        eq(series.category, 'final'),
         eq(teamgames.win, true),
       ),
     )
@@ -72,10 +73,11 @@ export async function getGeneralStatsData({
     })
     .from(teamgames)
     .leftJoin(teams, eq(teamgames.teamId, teams.teamId))
+    .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .where(
       and(
         eq(teamgames.women, women),
-        eq(teamgames.category, 'final'),
+        eq(series.category, 'final'),
       ),
     )
     .groupBy(teams.teamId)
@@ -110,10 +112,11 @@ export async function getGeneralStatsData({
     })
     .from(teamgames)
     .leftJoin(teams, eq(teamgames.teamId, teams.teamId))
+    .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .where(
       and(
         eq(teamgames.women, women),
-        inArray(teamgames.category, [
+        inArray(series.category, [
           'playoffseries',
           'quarter',
           'semi',
@@ -243,10 +246,11 @@ export async function getGeneralStatsData({
     })
     .from(teamgames)
     .leftJoin(teams, eq(teamgames.teamId, teams.teamId))
+    .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .where(
       and(
         eq(teamgames.women, women),
-        inArray(teamgames.category, [
+        inArray(series.category, [
           'playoffseries',
           'quarter',
           'semi',

@@ -51,7 +51,7 @@ export const getTeamSeasonStaticTables = async ({
 
   const getStaticTables = await db
     .select({
-      group: tables.group,
+      group: series.group as unknown as SQL<string>,
       teamId: tables.teamId,
       women: tables.women,
       totalGames: tables.games,
@@ -90,7 +90,7 @@ export const getTeamSeasonStaticTables = async ({
     .leftJoin(series, eq(series.serieId, tables.serieId))
     .where(
       and(
-        inArray(tables.group, groupArray),
+        inArray(series.group, groupArray),
         eq(tables.seasonId, seasonId),
       ),
     )
@@ -158,8 +158,8 @@ export const getTeamSeasonTables = async ({
   const getTeamArray = await db
     .selectDistinct({
       teamId: teamgames.teamId,
-      group: teamgames.group,
-      category: teamgames.category,
+      group: series.group as unknown as SQL<string>,
+      category: series.category as unknown as SQL<string>,
       women: teamgames.women,
       season: {
         year: seasons.year,
@@ -192,14 +192,14 @@ export const getTeamSeasonTables = async ({
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .where(
       and(
-        inArray(teamgames.group, groupArray),
+        inArray(series.group, groupArray),
         eq(teamgames.seasonId, seasonId),
       ),
     )
     .groupBy(
-      teamgames.group,
+      series.group,
       teamgames.teamId,
-      teamgames.category,
+      series.category,
       teams.name,
       teams.teamId,
       teams.casualName,
@@ -234,7 +234,7 @@ export const getTeamSeasonTables = async ({
   const getTables = db
     .select({
       teamId: teamgames.teamId,
-      group: teamgames.group,
+      group: series.group as unknown as SQL<string>,
       women: teamgames.women,
       team: {
         teamId: teams.teamId,
@@ -312,11 +312,11 @@ export const getTeamSeasonTables = async ({
       and(
         eq(teamgames.played, true),
         eq(teamgames.seasonId, seasonId),
-        inArray(teamgames.group, filteredGroups),
+        inArray(series.group, filteredGroups),
       ),
     )
     .groupBy(
-      teamgames.group,
+      series.group,
       teamgames.teamId,
       teams.name,
       teams.teamId,
@@ -696,7 +696,7 @@ function getMixQuery({
   const mixTable = db
     .select({
       teamId: teamgames.teamId,
-      group: teamgames.group,
+      group: series.group as unknown as SQL<string>,
       seasonId: teamgames.seasonId,
       women: teamgames.women,
       totalGames: count(teamgames.teamGameId),
@@ -732,16 +732,17 @@ function getMixQuery({
         ),
     })
     .from(teamgames)
+    .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .where(
       and(
         eq(teamgames.played, true),
         eq(teamgames.seasonId, seasonId),
-        eq(teamgames.group, 'mix'),
+        eq(series.group, 'mix'),
         inArray(teamgames.teamId, filterTeamArray),
       ),
     )
     .groupBy(
-      teamgames.group,
+      series.group,
       teamgames.teamId,
       teamgames.serieId,
     )
@@ -749,7 +750,7 @@ function getMixQuery({
   const mainTable = db
     .select({
       teamId: teamgames.teamId,
-      group: teamgames.group,
+      group: series.group as unknown as SQL<string>,
       seasonId: teamgames.seasonId,
       women: teamgames.women,
       totalGames: count(teamgames.teamGameId),
@@ -785,16 +786,17 @@ function getMixQuery({
         ),
     })
     .from(teamgames)
+    .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .where(
       and(
         eq(teamgames.played, true),
         eq(teamgames.seasonId, seasonId),
-        eq(teamgames.group, mixGroup),
+        eq(series.group, mixGroup),
         inArray(teamgames.teamId, filterTeamArray),
       ),
     )
     .groupBy(
-      teamgames.group,
+      series.group,
       teamgames.teamId,
       teamgames.serieId,
     )
@@ -916,7 +918,7 @@ function withParentSerie({
   const mainTable = db
     .select({
       teamId: teamgames.teamId,
-      group: teamgames.group,
+      group: series.group as unknown as SQL<string>,
       serieId: teamgames.serieId,
       women: teamgames.women,
       seasonId: teamgames.seasonId,
@@ -953,6 +955,7 @@ function withParentSerie({
         ),
     })
     .from(teamgames)
+    .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .where(
       and(
         eq(teamgames.seasonId, seasonId),
@@ -962,7 +965,7 @@ function withParentSerie({
       ),
     )
     .groupBy(
-      teamgames.group,
+      series.group,
       teamgames.teamId,
       teamgames.serieId,
     )
@@ -970,7 +973,7 @@ function withParentSerie({
   const parentTable = db
     .select({
       teamId: teamgames.teamId,
-      group: teamgames.group,
+      group: series.group as unknown as SQL<string>,
       serieId: teamgames.serieId,
       women: teamgames.women,
       seasonId: teamgames.seasonId,

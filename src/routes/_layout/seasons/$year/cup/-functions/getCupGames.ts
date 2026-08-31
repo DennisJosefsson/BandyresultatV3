@@ -1,29 +1,23 @@
 import { db } from '@/db'
-import type { games } from '@/db/schema'
 import { competitions, seasons, series } from '@/db/schema'
 import Error404 from '@/lib/middlewares/errors/404Error'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import type { TeamBase } from '@/lib/types/team'
+import type { Game } from '@/lib/types/game'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
 import { and, asc, eq, getTableColumns } from 'drizzle-orm'
 import { cupGames } from './cupQueries'
 
-type CupGame = typeof games.$inferSelect & {
-          home: TeamBase
-        } & { away: TeamBase } & {serie: {serieId:number,serieName:string}}
-
+type CupGame = Omit<Game, 'season'> & {
+  serie: { serieId: number; serieName: string }
+}
 
 type CupGameReturn =
   | {
       status: 200
-      played: Array<
-       CupGame
-      >
-      unplayed: Array<
-       CupGame
-      >
+      played: Array<CupGame>
+      unplayed: Array<CupGame>
       competition: typeof competitions.$inferSelect
       playedLength: number
       unplayedLength: number

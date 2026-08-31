@@ -47,8 +47,6 @@ export type InlineEditGame = {
   otResult: string | null
   homeGoal: number | null
   awayGoal: number | null
-  round: number | null
-  category: string
   createdAt: string | null
   updatedAt: string | null
   halftimeResult: string | null
@@ -57,7 +55,6 @@ export type InlineEditGame = {
   playoff: boolean | null
   extraTime: boolean | null
   penalties: boolean | null
-  group: string
   mix: boolean | null
   serieId: number
   played: boolean | null
@@ -98,8 +95,6 @@ export const generatedGameObject = zd.object({
   homeTeamId: zd.number().positive().int(),
   awayTeamId: zd.number().positive().int(),
   date: zd.iso.date(),
-  group: zd.string(),
-  category: zd.string(),
   played: zd.boolean(),
   playoff: zd.boolean(),
   women: zd.boolean(),

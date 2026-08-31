@@ -37,6 +37,8 @@ export async function cupGames({
   const playedGamesArray = await db
     .select({
       ...getTableColumns(games),
+      group: series.group as unknown as SQL<string>,
+      category: series.category as unknown as SQL<string>,
       home: {
         teamId: home.teamId,
         name: home.name,
@@ -81,16 +83,16 @@ export async function cupGames({
     .orderBy(
       played ? desc(games.date) : asc(games.date),
       sql`case 
-      when ${games.category} like '%final' then 1
-      when ${games.category} like '%bronze' then 2
-      when ${games.category} like '%semi' then 3
-      when ${games.category} like '%playoffseries' then 4
-      when ${games.category} like '%quarter' then 5
-      when ${games.category} like '%eight' then 6
-      when ${games.category} like '%regular' then 7
-      when ${games.category} like '%qualification' then 8
+      when ${series.category} like '%final' then 1
+      when ${series.category} like '%bronze' then 2
+      when ${series.category} like '%semi' then 3
+      when ${series.category} like '%playoffseries' then 4
+      when ${series.category} like '%quarter' then 5
+      when ${series.category} like '%eight' then 6
+      when ${series.category} like '%regular' then 7
+      when ${series.category} like '%qualification' then 8
     end`,
-      asc(games.group),
+      asc(series.group),
       asc(sql`home.casual_name collate "se-SE-x-icu"`),
     )
 
@@ -156,7 +158,7 @@ export const getUnionedTables = async ({
     const result = await db
       .select({
         teamId: tables.teamId,
-        group: tables.group,
+        group: series.group as unknown as SQL<string>,
         totalGames: tables.games,
         totalWins: tables.won,
         totalDraws: tables.draw,
@@ -179,6 +181,7 @@ export const getUnionedTables = async ({
       })
       .from(tables)
       .leftJoin(teams, eq(tables.teamId, teams.teamId))
+      .leftJoin(series, eq(series.serieId, tables.serieId))
       .where(eq(tables.serieId, serie.serieId))
       .orderBy(asc(tables.position))
 
@@ -367,9 +370,10 @@ export const getUnionedTables = async ({
         ),
     })
     .from(teamgames)
+    .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .where(
       and(
-        eq(teamgames.group, 'mix'),
+        eq(series.group, 'mix'),
         eq(teamgames.seasonId, serie.seasonId),
         eq(teamgames.played, true),
         inArray(teamgames.teamId, teamArray),

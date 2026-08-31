@@ -1,12 +1,23 @@
 import { db } from '@/db'
-import { games, playoffseason, seasons } from '@/db/schema'
+import {
+  games,
+  playoffseason,
+  seasons,
+  series,
+} from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import type { Stats } from '@/lib/types/stats'
 import { seasonIdCheck } from '@/lib/utils/utils'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
-import { and, eq, getTableColumns } from 'drizzle-orm'
+import {
+  and,
+  count,
+  eq,
+  getTableColumns,
+  inArray,
+} from 'drizzle-orm'
 import { getPlayoffStatsData } from './getPlayoffStatsData'
 
 type GroupStatsReturn =
@@ -79,14 +90,27 @@ export const getPlayoffStats = createServerFn({
 
         const playoffSeason = playoffSeasonArr[0]
 
-        const gameCount = await db.$count(
-          games,
-          and(
-            eq(games.seasonId, playoffSeason.seasonId),
-            eq(games.played, true),
-            eq(games.playoff, true),
-          ),
-        )
+        const gameCount = await db
+          .select({ count: count() })
+          .from(games)
+          .leftJoin(
+            series,
+            eq(series.serieId, games.serieId),
+          )
+          .where(
+            and(
+              eq(games.seasonId, playoffSeason.seasonId),
+              eq(games.played, true),
+              inArray(series.category, [
+                'playoffseries',
+                'eight',
+                'quarter',
+                'semi',
+                'final',
+              ]),
+            ),
+          )
+          .then((res) => res[0].count)
 
         if (gameCount === 0) {
           return {

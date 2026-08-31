@@ -294,8 +294,9 @@ export const getSingleTeamSeason = createServerFn({
             homeTeamId: games.homeTeamId,
             awayTeamId: games.awayTeamId,
             date: games.date,
-            group: games.group,
-            category: games.category,
+            group: series.group as unknown as SQL<string>,
+            category:
+              series.category as unknown as SQL<string>,
             result: games.result,
             homeGoal: games.homeGoal,
             awayGoal: games.awayGoal,
@@ -362,16 +363,16 @@ export const getSingleTeamSeason = createServerFn({
         const teamArray = await db
           .selectDistinct({
             teamId: teamgames.teamId,
-            group: teamgames.group,
+            group: series.group as unknown as SQL<string>,
           })
-          .from(teamgames)
+          .from(teamgames).leftJoin(series,eq(series.serieId,teamgames.serieId))
           .where(
             and(
-              ne(teamgames.group, 'mix'),
+              ne(series.group, 'mix'),
               eq(teamgames.seasonId, season.seasonId),
             ),
           )
-          .groupBy(teamgames.group, teamgames.teamId)
+          .groupBy(series.group, teamgames.teamId)
 
         const data = await Promise.all(
           competitionArray.map(async (comp) => {

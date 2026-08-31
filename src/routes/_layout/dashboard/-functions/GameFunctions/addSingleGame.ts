@@ -1,9 +1,9 @@
-import { createServerFn } from '@tanstack/react-start'
-import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import { catchError } from '@/lib/middlewares/errors/catchError'
-import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
-import { games, teamgames } from '@/db/schema'
 import { db } from '@/db'
+import { games, teamgames } from '@/db/schema'
+import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
+import { catchError } from '@/lib/middlewares/errors/catchError'
+import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
+import { createServerFn } from '@tanstack/react-start'
 import { parseNewGameWithResult } from '../dataParsers/parseGameResults'
 
 export const addSingleGame = createServerFn({
@@ -13,7 +13,11 @@ export const addSingleGame = createServerFn({
   .validator(parseNewGameWithResult)
   .handler(async ({ data }) => {
     try {
-      const { homeTeamTeamGame, awayTeamTeamGame, ...rest } = data
+      const {
+        homeTeamTeamGame,
+        awayTeamTeamGame,
+        ...rest
+      } = data
       const newGame = await db
         .insert(games)
         .values(rest)
@@ -22,8 +26,12 @@ export const addSingleGame = createServerFn({
 
       const currChamp = await db.query.teamgames.findFirst({
         where: (teamgamesSchema, { and, eq }) =>
-          and(eq(teamgamesSchema.currInoffChamp, true), eq(teamgamesSchema.women, data.women)),
-        orderBy: (teamgamesSchema, { desc }) => desc(teamgamesSchema.date),
+          and(
+            eq(teamgamesSchema.currInoffChamp, true),
+            eq(teamgamesSchema.women, data.women),
+          ),
+        orderBy: (teamgamesSchema, { desc }) =>
+          desc(teamgamesSchema.date),
       })
 
       let currInoffChamp: number | null
@@ -34,13 +42,14 @@ export const addSingleGame = createServerFn({
       }
 
       const homeTeamNewCurrChamp =
-        data.homeTeamTeamGame.win && currInoffChamp === data.awayTeamId ? true : false
+        data.homeTeamTeamGame.win &&
+        currInoffChamp === data.awayTeamId
+          ? true
+          : false
 
       const homeTeamGame = {
         gameId: newGame.gameId,
         currInoffChamp: homeTeamNewCurrChamp,
-        group: data.group,
-        category: data.category,
         serieId: data.serieId,
         seasonId: data.seasonId,
         women: data.women,
@@ -51,13 +60,14 @@ export const addSingleGame = createServerFn({
       await db.insert(teamgames).values([homeTeamGame])
 
       const awayTeamNewCurrChamp =
-        data.awayTeamTeamGame.win && currInoffChamp === data.homeTeamId ? true : false
+        data.awayTeamTeamGame.win &&
+        currInoffChamp === data.homeTeamId
+          ? true
+          : false
 
       const awayTeamGame = {
         gameId: newGame.gameId,
         currInoffChamp: awayTeamNewCurrChamp,
-        group: data.group,
-        category: data.category,
         serieId: data.serieId,
         seasonId: data.seasonId,
         women: data.women,

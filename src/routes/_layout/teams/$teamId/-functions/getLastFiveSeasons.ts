@@ -41,8 +41,8 @@ export const getLastFiveSeasons = async ({
   const getTables = await db
     .select({
       seasonId: teamgames.seasonId,
-      group: teamgames.group,
-      category: teamgames.category,
+      group: series.group as unknown as SQL<string>,
+      category: series.category as unknown as SQL<string>,
       totalGames: count(teamgames.teamGameId),
       totalPoints: sum(teamgames.points)
         .mapWith(Number)
@@ -99,6 +99,10 @@ export const getLastFiveSeasons = async ({
       seasons,
       eq(teamgames.seasonId, seasons.seasonId),
     )
+    .leftJoin(
+      competitions,
+      eq(series.competitionId, competitions.competitionId),
+    )
     .where(
       and(
         eq(teamgames.teamId, teamId),
@@ -106,17 +110,14 @@ export const getLastFiveSeasons = async ({
         inArray(teamgames.seasonId, seasonIdArray),
       ),
     )
-    .leftJoin(
-      competitions,
-      eq(series.competitionId, competitions.competitionId),
-    )
+
     .groupBy(
       teamgames.seasonId,
-      teamgames.group,
+      series.group,
       seasons.seasonId,
       series.serieName,
       series.level,
-      teamgames.category,
+      series.category,
       competitions.competitionName,
       competitions.division,
     )
@@ -140,8 +141,8 @@ export const getLastFiveSeasons = async ({
     const teamTables = await db
       .select({
         seasonId: tables.seasonId,
-        group: tables.group,
-        category: tables.category,
+        group: series.group as unknown as SQL<string>,
+        category: series.category as unknown as SQL<string>,
         totalGames: tables.games,
         totalWins: tables.won,
         totalDraws: tables.draw,
