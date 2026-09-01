@@ -66,7 +66,6 @@ function Selection({ competition }: SelectionProps) {
       serieName: `Grundserie ${1}`,
       level: competition.division * 100 + 100,
       category: 'regular' as zd.infer<typeof categoryEnum>,
-      division: competition.division,
       competitionId: competition.competitionId,
     })
   }
@@ -81,7 +80,6 @@ function Selection({ competition }: SelectionProps) {
         category: 'regular' as zd.infer<
           typeof categoryEnum
         >,
-        division: competition.division,
         competitionId: competition.competitionId,
       }
     })
@@ -99,7 +97,6 @@ function Selection({ competition }: SelectionProps) {
       category: 'qualification' as zd.infer<
         typeof categoryEnum
       >,
-      division: competition.division,
       competitionId: competition.competitionId,
     })
   }

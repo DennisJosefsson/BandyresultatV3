@@ -303,8 +303,6 @@ export const parseNewGameWithResult = zd
       })
       .or(zd.literal('')),
     date: zd.iso.date({ message: 'Fel datumformat.' }),
-    group: zd.string(),
-    category: zd.string(),
     seasonId: zd.number().int().positive(),
     serieId: zd.number().int().positive(),
     women: zd.boolean(),

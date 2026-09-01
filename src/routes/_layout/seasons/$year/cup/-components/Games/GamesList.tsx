@@ -1,12 +1,9 @@
 import { GameCard } from '@/components/Common/Games/GameCard'
-import type { games } from '@/db/schema'
-import type { TeamBase } from '@/lib/types/team'
+import type { Game } from '@/lib/types/game'
 
 type GameListProps = {
   gamesArray: Array<
-    typeof games.$inferSelect & {
-      home: TeamBase
-    } & { away: TeamBase } & {
+    Omit<Game, 'season'> & {
       serie: { serieId: number; serieName: string }
     }
   >

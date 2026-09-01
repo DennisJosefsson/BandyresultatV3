@@ -1,10 +1,10 @@
-import { createServerFn } from '@tanstack/react-start'
-import { generatedGameObjectArray } from '@/lib/types/game'
-import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import { catchError } from '@/lib/middlewares/errors/catchError'
-import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
-import { games, teamgames } from '@/db/schema'
 import { db } from '@/db'
+import { games, teamgames } from '@/db/schema'
+import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
+import { catchError } from '@/lib/middlewares/errors/catchError'
+import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
+import { generatedGameObjectArray } from '@/lib/types/game'
+import { createServerFn } from '@tanstack/react-start'
 
 type TeamGame = typeof teamgames.$inferInsert
 
@@ -28,8 +28,6 @@ export const insertFromGeneratedSchedule = createServerFn({
               teamId: game.homeTeamId,
               opponentId: game.awayTeamId,
               seasonId: game.seasonId,
-              group: game.group,
-              category: game.category,
               date: game.date,
               women: game.women,
               serieId: game.serieId,
@@ -45,8 +43,6 @@ export const insertFromGeneratedSchedule = createServerFn({
               teamId: game.awayTeamId,
               opponentId: game.homeTeamId,
               seasonId: game.seasonId,
-              group: game.group,
-              category: game.category,
               date: game.date,
               women: game.women,
               serieId: game.serieId,

@@ -73,8 +73,6 @@ const NewSerie = () => {
   const women = route.useSearch({ select: (s) => s.women })
   const form = useNewSerieForm({
     seasonId,
-
-    division: competition.division,
   })
 
   return (

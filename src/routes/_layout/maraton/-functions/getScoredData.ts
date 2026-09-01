@@ -1,5 +1,6 @@
 import { db } from '@/db'
 import {
+  competitions,
   seasons,
   series,
   teamgames,
@@ -41,6 +42,10 @@ export async function getScoredData({
     })
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
+    .leftJoin(
+      competitions,
+      eq(competitions.competitionId, series.competitionId),
+    )
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
     .leftJoin(
       seasons,
@@ -50,9 +55,9 @@ export async function getScoredData({
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
         eq(teamgames.played, true),
-        eq(teamgames.category, 'regular'),
+        eq(series.category, 'regular'),
         eq(teamgames.women, women),
-        eq(series.division, 1),
+        eq(competitions.division, 1),
       ),
     )
     .groupBy(teams.teamId, seasons.year)
@@ -98,6 +103,10 @@ export async function getScoredData({
     })
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
+    .leftJoin(
+      competitions,
+      eq(competitions.competitionId, series.competitionId),
+    )
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
     .leftJoin(
       seasons,
@@ -107,9 +116,9 @@ export async function getScoredData({
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
         eq(teamgames.played, true),
-        eq(teamgames.category, 'regular'),
+        eq(series.category, 'regular'),
         eq(teamgames.women, women),
-        eq(series.division, 1),
+        eq(competitions.division, 1),
         eq(teamgames.homeGame, true),
       ),
     )
@@ -156,6 +165,10 @@ export async function getScoredData({
     })
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
+    .leftJoin(
+      competitions,
+      eq(competitions.competitionId, series.competitionId),
+    )
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
     .leftJoin(
       seasons,
@@ -165,9 +178,9 @@ export async function getScoredData({
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
         eq(teamgames.played, true),
-        eq(teamgames.category, 'regular'),
+        eq(series.category, 'regular'),
         eq(teamgames.women, women),
-        eq(series.division, 1),
+        eq(competitions.division, 1),
         eq(teamgames.homeGame, false),
       ),
     )
@@ -214,6 +227,10 @@ export async function getScoredData({
     })
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
+    .leftJoin(
+      competitions,
+      eq(competitions.competitionId, series.competitionId),
+    )
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
     .leftJoin(
       seasons,
@@ -223,9 +240,9 @@ export async function getScoredData({
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
         eq(teamgames.played, true),
-        eq(teamgames.category, 'regular'),
+        eq(series.category, 'regular'),
         eq(teamgames.women, women),
-        eq(series.division, 1),
+        eq(competitions.division, 1),
       ),
     )
     .groupBy(teams.teamId, seasons.year)
@@ -271,6 +288,10 @@ export async function getScoredData({
     })
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
+    .leftJoin(
+      competitions,
+      eq(competitions.competitionId, series.competitionId),
+    )
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
     .leftJoin(
       seasons,
@@ -280,9 +301,9 @@ export async function getScoredData({
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
         eq(teamgames.played, true),
-        eq(teamgames.category, 'regular'),
+        eq(series.category, 'regular'),
         eq(teamgames.women, women),
-        eq(series.division, 1),
+        eq(competitions.division, 1),
         eq(teamgames.homeGame, true),
       ),
     )
@@ -329,6 +350,10 @@ export async function getScoredData({
     })
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
+    .leftJoin(
+      competitions,
+      eq(competitions.competitionId, series.competitionId),
+    )
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
     .leftJoin(
       seasons,
@@ -338,9 +363,9 @@ export async function getScoredData({
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
         eq(teamgames.played, true),
-        eq(teamgames.category, 'regular'),
+        eq(series.category, 'regular'),
         eq(teamgames.women, women),
-        eq(series.division, 1),
+        eq(competitions.division, 1),
         eq(teamgames.homeGame, false),
       ),
     )
@@ -387,6 +412,10 @@ export async function getScoredData({
     })
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
+    .leftJoin(
+      competitions,
+      eq(competitions.competitionId, series.competitionId),
+    )
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
     .leftJoin(
       seasons,
@@ -396,9 +425,9 @@ export async function getScoredData({
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
         eq(teamgames.played, true),
-        eq(teamgames.category, 'regular'),
+        eq(series.category, 'regular'),
         eq(teamgames.women, women),
-        eq(series.division, 1),
+        eq(competitions.division, 1),
       ),
     )
     .groupBy(teams.teamId, seasons.year)
@@ -444,6 +473,10 @@ export async function getScoredData({
     })
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
+    .leftJoin(
+      competitions,
+      eq(competitions.competitionId, series.competitionId),
+    )
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
     .leftJoin(
       seasons,
@@ -453,9 +486,9 @@ export async function getScoredData({
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
         eq(teamgames.played, true),
-        eq(teamgames.category, 'regular'),
+        eq(series.category, 'regular'),
         eq(teamgames.women, women),
-        eq(series.division, 1),
+        eq(competitions.division, 1),
         eq(teamgames.homeGame, true),
       ),
     )
@@ -502,6 +535,10 @@ export async function getScoredData({
     })
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
+    .leftJoin(
+      competitions,
+      eq(competitions.competitionId, series.competitionId),
+    )
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
     .leftJoin(
       seasons,
@@ -511,9 +548,9 @@ export async function getScoredData({
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
         eq(teamgames.played, true),
-        eq(teamgames.category, 'regular'),
+        eq(series.category, 'regular'),
         eq(teamgames.women, women),
-        eq(series.division, 1),
+        eq(competitions.division, 1),
         eq(teamgames.homeGame, false),
       ),
     )
@@ -560,6 +597,10 @@ export async function getScoredData({
     })
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
+    .leftJoin(
+      competitions,
+      eq(competitions.competitionId, series.competitionId),
+    )
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
     .leftJoin(
       seasons,
@@ -569,9 +610,9 @@ export async function getScoredData({
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
         eq(teamgames.played, true),
-        eq(teamgames.category, 'regular'),
+        eq(series.category, 'regular'),
         eq(teamgames.women, women),
-        eq(series.division, 1),
+        eq(competitions.division, 1),
       ),
     )
     .groupBy(teams.teamId, seasons.year)
@@ -617,6 +658,10 @@ export async function getScoredData({
     })
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
+    .leftJoin(
+      competitions,
+      eq(competitions.competitionId, series.competitionId),
+    )
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
     .leftJoin(
       seasons,
@@ -626,9 +671,9 @@ export async function getScoredData({
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
         eq(teamgames.played, true),
-        eq(teamgames.category, 'regular'),
+        eq(series.category, 'regular'),
         eq(teamgames.women, women),
-        eq(series.division, 1),
+        eq(competitions.division, 1),
         eq(teamgames.homeGame, true),
       ),
     )
@@ -675,6 +720,10 @@ export async function getScoredData({
     })
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
+    .leftJoin(
+      competitions,
+      eq(competitions.competitionId, series.competitionId),
+    )
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
     .leftJoin(
       seasons,
@@ -684,9 +733,9 @@ export async function getScoredData({
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
         eq(teamgames.played, true),
-        eq(teamgames.category, 'regular'),
+        eq(series.category, 'regular'),
         eq(teamgames.women, women),
-        eq(series.division, 1),
+        eq(competitions.division, 1),
         eq(teamgames.homeGame, false),
       ),
     )
@@ -739,6 +788,10 @@ export async function getScoredData({
     })
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
+    .leftJoin(
+      competitions,
+      eq(competitions.competitionId, series.competitionId),
+    )
     .leftJoin(team, eq(team.teamId, teamgames.teamId))
     .leftJoin(
       opponent,
@@ -752,9 +805,9 @@ export async function getScoredData({
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
         eq(teamgames.played, true),
-        eq(teamgames.category, 'regular'),
+        eq(series.category, 'regular'),
         eq(teamgames.women, women),
-        eq(series.division, 1),
+        eq(competitions.division, 1),
         eq(teamgames.homeGame, true),
       ),
     )
@@ -805,6 +858,10 @@ export async function getScoredData({
     })
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
+    .leftJoin(
+      competitions,
+      eq(competitions.competitionId, series.competitionId),
+    )
     .leftJoin(team, eq(team.teamId, teamgames.teamId))
     .leftJoin(
       opponent,
@@ -818,9 +875,9 @@ export async function getScoredData({
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
         eq(teamgames.played, true),
-        eq(teamgames.category, 'regular'),
+        eq(series.category, 'regular'),
         eq(teamgames.women, women),
-        eq(series.division, 1),
+        eq(competitions.division, 1),
         eq(teamgames.homeGame, true),
       ),
     )
@@ -863,13 +920,17 @@ export async function getScoredData({
     .select({ count: count(teamgames.gameId) })
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
+    .leftJoin(
+      competitions,
+      eq(competitions.competitionId, series.competitionId),
+    )
     .where(
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
         eq(teamgames.played, true),
-        ne(teamgames.category, 'qualification'),
+        ne(series.category, 'qualification'),
         eq(teamgames.women, women),
-        eq(series.division, 1),
+        eq(competitions.division, 1),
         eq(teamgames.homeGame, true),
         eq(teamgames.totalGoals, lastMaxGoal!),
       ),
@@ -880,13 +941,17 @@ export async function getScoredData({
     .select({ count: count(teamgames.gameId) })
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
+    .leftJoin(
+      competitions,
+      eq(competitions.competitionId, series.competitionId),
+    )
     .where(
       and(
         gt(teamgames.seasonId, women ? 162 : 101),
         eq(teamgames.played, true),
-        ne(teamgames.category, 'qualification'),
+        ne(series.category, 'qualification'),
         eq(teamgames.women, women),
-        eq(series.division, 1),
+        eq(competitions.division, 1),
         eq(teamgames.homeGame, true),
         eq(teamgames.totalGoals, lastMinGoal!),
       ),

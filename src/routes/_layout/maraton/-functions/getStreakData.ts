@@ -1,5 +1,10 @@
 import { db } from '@/db'
-import { series, teamgames, teams } from '@/db/schema'
+import {
+  competitions,
+  series,
+  teamgames,
+  teams,
+} from '@/db/schema'
 import type { SQL } from 'drizzle-orm'
 import { and, asc, desc, eq, sql } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
@@ -148,10 +153,17 @@ async function getStreak({
             series,
             eq(series.serieId, teamgames.serieId),
           )
+          .leftJoin(
+            competitions,
+            eq(
+              competitions.competitionId,
+              series.competitionId,
+            ),
+          )
           .where(
             and(
               eq(teamgames.played, true),
-              eq(series.division, 1),
+              eq(competitions.division, 1),
               eq(teamgames.women, women),
             ),
           ),
@@ -176,10 +188,17 @@ async function getStreak({
             series,
             eq(series.serieId, teamgames.serieId),
           )
+          .leftJoin(
+            competitions,
+            eq(
+              competitions.competitionId,
+              series.competitionId,
+            ),
+          )
           .where(
             and(
               eq(teamgames.played, true),
-              eq(series.division, 1),
+              eq(competitions.division, 1),
               eq(teamgames.women, women),
             ),
           ),
@@ -204,10 +223,17 @@ async function getStreak({
             series,
             eq(series.serieId, teamgames.serieId),
           )
+          .leftJoin(
+            competitions,
+            eq(
+              competitions.competitionId,
+              series.competitionId,
+            ),
+          )
           .where(
             and(
               eq(teamgames.played, true),
-              eq(series.division, 1),
+              eq(competitions.division, 1),
               eq(teamgames.women, women),
             ),
           ),
@@ -232,10 +258,17 @@ async function getStreak({
             series,
             eq(series.serieId, teamgames.serieId),
           )
+          .leftJoin(
+            competitions,
+            eq(
+              competitions.competitionId,
+              series.competitionId,
+            ),
+          )
           .where(
             and(
               eq(teamgames.played, true),
-              eq(series.division, 1),
+              eq(competitions.division, 1),
               eq(teamgames.women, women),
             ),
           ),
@@ -260,10 +293,17 @@ async function getStreak({
             series,
             eq(series.serieId, teamgames.serieId),
           )
+          .leftJoin(
+            competitions,
+            eq(
+              competitions.competitionId,
+              series.competitionId,
+            ),
+          )
           .where(
             and(
               eq(teamgames.played, true),
-              eq(series.division, 1),
+              eq(competitions.division, 1),
               eq(teamgames.women, women),
             ),
           ),

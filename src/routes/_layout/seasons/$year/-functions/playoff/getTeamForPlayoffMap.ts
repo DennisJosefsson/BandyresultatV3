@@ -4,6 +4,7 @@ import {
   municipality,
   playoffseason,
   seasons,
+  series,
   teamgames,
   teams,
 } from '@/db/schema'
@@ -16,7 +17,13 @@ import { seasonIdCheck } from '@/lib/utils/utils'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
 import type { SQL } from 'drizzle-orm'
-import { and, eq, getTableColumns, ne } from 'drizzle-orm'
+import {
+  and,
+  eq,
+  getTableColumns,
+  inArray,
+  ne,
+} from 'drizzle-orm'
 
 type TeamsForPlayoffMapReturn =
   | {
@@ -98,6 +105,10 @@ export const getTeamsForPlayoffMap = createServerFn({
           })
           .from(teamgames)
           .leftJoin(
+            series,
+            eq(series.serieId, teamgames.serieId),
+          )
+          .leftJoin(
             teams,
             eq(teams.teamId, teamgames.teamId),
           )
@@ -118,7 +129,13 @@ export const getTeamsForPlayoffMap = createServerFn({
                 teamgames.seasonId,
                 playoffSeason.seasonId,
               ),
-              eq(teamgames.playoff, true),
+              inArray(series.category, [
+                'playoffseries',
+                'eight',
+                'quarter',
+                'semi',
+                'final',
+              ]),
               ne(teamgames.teamId, 176),
             ),
           )

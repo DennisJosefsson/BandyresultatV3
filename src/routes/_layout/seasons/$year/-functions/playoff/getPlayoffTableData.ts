@@ -66,8 +66,8 @@ export const getPlayoffTableData = async ({
     db
       .select({
         teamId: teamgames.teamId,
-        group: teamgames.group,
-        category: teamgames.category,
+        group: series.group as unknown as SQL<string>,
+        category: series.category as unknown as SQL<string>,
         serieId: teamgames.serieId,
         totalGames: count(teamgames.teamGameId).as(
           'total_games',
@@ -115,7 +115,7 @@ export const getPlayoffTableData = async ({
       .where(
         and(
           eq(teamgames.seasonId, playoffSeason.seasonId),
-          inArray(teamgames.category, [
+          inArray(series.category, [
             'eight',
             'quarter',
             'semi',
@@ -123,9 +123,9 @@ export const getPlayoffTableData = async ({
         ),
       )
       .groupBy(
-        teamgames.group,
+        series.group,
         teamgames.teamId,
-        teamgames.category,
+        series.category,
         teamgames.serieId,
       ),
   )
@@ -192,6 +192,8 @@ export const getPlayoffTableData = async ({
   const finalGames = await db
     .select({
       ...getTableColumns(games),
+      group: series.group as unknown as SQL<string>,
+      category: series.category as unknown as SQL<string>,
       home: {
         teamId: home.teamId,
         name: home.name,
@@ -218,10 +220,11 @@ export const getPlayoffTableData = async ({
     .from(games)
     .leftJoin(home, eq(games.homeTeamId, home.teamId))
     .leftJoin(away, eq(games.awayTeamId, away.teamId))
+    .leftJoin(series, eq(series.serieId, games.serieId))
     .where(
       and(
         eq(games.seasonId, playoffSeason.seasonId),
-        eq(games.group, 'final'),
+        eq(series.group, 'final'),
       ),
     )
     .orderBy(desc(games.date))
@@ -229,6 +232,8 @@ export const getPlayoffTableData = async ({
   const bronzeGames = await db
     .select({
       ...getTableColumns(games),
+      group: series.group as unknown as SQL<string>,
+      category: series.category as unknown as SQL<string>,
       home: {
         teamId: home.teamId,
         name: home.name,
@@ -255,10 +260,11 @@ export const getPlayoffTableData = async ({
     .from(games)
     .leftJoin(home, eq(games.homeTeamId, home.teamId))
     .leftJoin(away, eq(games.awayTeamId, away.teamId))
+    .leftJoin(series, eq(games.serieId, series.serieId))
     .where(
       and(
         eq(games.seasonId, playoffSeason.seasonId),
-        eq(games.group, 'bronze'),
+        eq(series.group, 'bronze'),
       ),
     )
     .orderBy(desc(games.date))
@@ -302,7 +308,6 @@ function sortPlayoffTables({
       groups[table.group] = {
         table: [],
         category: table.category,
-        
       }
     }
 
@@ -315,7 +320,6 @@ function sortPlayoffTables({
       return {
         group,
         tables: groupArray[group],
-        
       }
     })
     .sort((a, b) => {
@@ -372,7 +376,6 @@ function sortPlayoffTables({
         homeTeam: sortTables[0].team,
         awayTeam: sortTables[1].team,
         tables: sortTables,
-        
       }
     })
 
@@ -426,8 +429,8 @@ async function getPlayoffAsSeriesTable(seasonId: number) {
     db
       .select({
         teamId: teamgames.teamId,
-        group: teamgames.group,
-        category: teamgames.category,
+        group: series.group as unknown as SQL<string>,
+        category: series.category as unknown as SQL<string>,
         serieId: teamgames.serieId,
         totalGames: count(teamgames.teamGameId).as(
           'total_games',
@@ -468,16 +471,20 @@ async function getPlayoffAsSeriesTable(seasonId: number) {
             .as('away_goals'),
       })
       .from(teamgames)
+      .leftJoin(
+        series,
+        eq(series.serieId, teamgames.serieId),
+      )
       .where(
         and(
           eq(teamgames.seasonId, seasonId),
-          inArray(teamgames.category, ['playoffseries']),
+          inArray(series.category, ['playoffseries']),
         ),
       )
       .groupBy(
-        teamgames.group,
+        series.group,
         teamgames.teamId,
-        teamgames.category,
+        series.category,
         teamgames.serieId,
       ),
   )

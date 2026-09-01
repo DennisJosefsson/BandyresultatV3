@@ -1,5 +1,10 @@
 import { db } from '@/db'
-import { series, teamgames, teams } from '@/db/schema'
+import {
+  competitions,
+  series,
+  teamgames,
+  teams,
+} from '@/db/schema'
 import type { TeamBase } from '@/lib/types/team'
 import type { SQL } from 'drizzle-orm'
 import {
@@ -28,10 +33,11 @@ export async function getGeneralStatsData({
     })
     .from(teamgames)
     .leftJoin(teams, eq(teamgames.teamId, teams.teamId))
+    .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .where(
       and(
         eq(teamgames.women, women),
-        eq(teamgames.category, 'final'),
+        eq(series.category, 'final'),
         eq(teamgames.win, true),
       ),
     )
@@ -67,10 +73,11 @@ export async function getGeneralStatsData({
     })
     .from(teamgames)
     .leftJoin(teams, eq(teamgames.teamId, teams.teamId))
+    .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .where(
       and(
         eq(teamgames.women, women),
-        eq(teamgames.category, 'final'),
+        eq(series.category, 'final'),
       ),
     )
     .groupBy(teams.teamId)
@@ -105,10 +112,11 @@ export async function getGeneralStatsData({
     })
     .from(teamgames)
     .leftJoin(teams, eq(teamgames.teamId, teams.teamId))
+    .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .where(
       and(
         eq(teamgames.women, women),
-        inArray(teamgames.category, [
+        inArray(series.category, [
           'playoffseries',
           'quarter',
           'semi',
@@ -150,10 +158,14 @@ export async function getGeneralStatsData({
     .from(teamgames)
     .leftJoin(teams, eq(teamgames.teamId, teams.teamId))
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
+    .leftJoin(
+      competitions,
+      eq(competitions.competitionId, series.competitionId),
+    )
     .where(
       and(
         eq(teamgames.women, women),
-        eq(series.division, 1),
+        eq(competitions.division, 1),
       ),
     )
     .groupBy(teams.teamId)
@@ -190,10 +202,14 @@ export async function getGeneralStatsData({
     .from(teamgames)
     .leftJoin(teams, eq(teamgames.teamId, teams.teamId))
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
+    .leftJoin(
+      competitions,
+      eq(competitions.competitionId, series.competitionId),
+    )
     .where(
       and(
         eq(teamgames.women, women),
-        eq(series.division, 1),
+        eq(competitions.division, 1),
         gte(teamgames.seasonId, 25),
       ),
     )
@@ -230,10 +246,11 @@ export async function getGeneralStatsData({
     })
     .from(teamgames)
     .leftJoin(teams, eq(teamgames.teamId, teams.teamId))
+    .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .where(
       and(
         eq(teamgames.women, women),
-        inArray(teamgames.category, [
+        inArray(series.category, [
           'playoffseries',
           'quarter',
           'semi',

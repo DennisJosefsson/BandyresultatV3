@@ -22,11 +22,8 @@ const route = getRouteApi(
 
 export const useNewSerieForm = ({
   seasonId,
-
-  division,
 }: {
   seasonId: number
-  division: number
 }) => {
   const router = useRouter()
   const navigate = useNavigate({
@@ -53,7 +50,6 @@ export const useNewSerieForm = ({
     serieStructure: [],
     comment: '',
     level: 200,
-    division: division,
     hasMix: false,
     hasParent: false,
     allParentGames: false,

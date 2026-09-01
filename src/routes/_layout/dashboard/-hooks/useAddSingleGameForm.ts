@@ -29,8 +29,6 @@ export const useAddSingleGameForm = () => {
     homeTeamId: 0,
     awayTeamId: 0,
     date: '',
-    group: serie.group,
-    category: serie.category,
     seasonId: serie.seasonId,
     serieId: serie.serieId,
     women: serie.season.women ?? false,

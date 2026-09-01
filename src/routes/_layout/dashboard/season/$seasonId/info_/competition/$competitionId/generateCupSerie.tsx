@@ -66,7 +66,6 @@ function Selection({ competition }: SelectionProps) {
       serieName: 'Final',
       level: competition.division === 10 ? 1000 : 1100,
       category: 'cup-final',
-      division: competition.division,
       competitionId: competition.competitionId,
     })
   }
@@ -78,7 +77,6 @@ function Selection({ competition }: SelectionProps) {
       serieName: 'Bronsmatch',
       level: competition.division === 10 ? 1005 : 1105,
       category: 'cup-bronze',
-      division: competition.division,
       competitionId: competition.competitionId,
     })
   }
@@ -93,7 +91,6 @@ function Selection({ competition }: SelectionProps) {
         category: 'cup-semi' as zd.infer<
           typeof cupCategoryEnum
         >,
-        division: competition.division,
         competitionId: competition.competitionId,
       }
     })
@@ -112,7 +109,6 @@ function Selection({ competition }: SelectionProps) {
         category: 'cup-quarter' as zd.infer<
           typeof cupCategoryEnum
         >,
-        division: competition.division,
         competitionId: competition.competitionId,
       }
     })
@@ -131,7 +127,6 @@ function Selection({ competition }: SelectionProps) {
         category: 'cup-quarter' as zd.infer<
           typeof cupCategoryEnum
         >,
-        division: competition.division,
         competitionId: competition.competitionId,
       }
     })
@@ -151,7 +146,6 @@ function Selection({ competition }: SelectionProps) {
         category: 'cup-eight' as zd.infer<
           typeof cupCategoryEnum
         >,
-        division: competition.division,
         competitionId: competition.competitionId,
       }
     })
@@ -170,7 +164,6 @@ function Selection({ competition }: SelectionProps) {
         category: 'cup-eight' as zd.infer<
           typeof cupCategoryEnum
         >,
-        division: competition.division,
         competitionId: competition.competitionId,
       }
     })
@@ -190,7 +183,6 @@ function Selection({ competition }: SelectionProps) {
         category: 'cup-playoffseries' as zd.infer<
           typeof cupCategoryEnum
         >,
-        division: competition.division,
         competitionId: competition.competitionId,
       }
     })
@@ -208,7 +200,6 @@ function Selection({ competition }: SelectionProps) {
       category: 'cup-regular' as zd.infer<
         typeof cupCategoryEnum
       >,
-      division: competition.division,
       competitionId: competition.competitionId,
     })
   }
@@ -223,7 +214,6 @@ function Selection({ competition }: SelectionProps) {
         category: 'cup-regular' as zd.infer<
           typeof cupCategoryEnum
         >,
-        division: competition.division,
         competitionId: competition.competitionId,
       }
     })

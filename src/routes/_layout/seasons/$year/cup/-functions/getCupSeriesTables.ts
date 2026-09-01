@@ -11,6 +11,7 @@ import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import type { TeamSeasonTable } from '@/lib/types/table'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
+import type { SQL } from 'drizzle-orm'
 import {
   and,
   asc,
@@ -122,7 +123,7 @@ export const getCupSeriesTables = createServerFn({
         const teamArray = await db
           .selectDistinct({
             teamId: teamgames.teamId,
-            group: teamgames.group,
+            group: series.group as unknown as SQL<string>,
           })
           .from(teamgames)
           .leftJoin(
@@ -138,7 +139,7 @@ export const getCupSeriesTables = createServerFn({
           )
           .where(
             and(
-              inArray(teamgames.category, [
+              inArray(series.category, [
                 'cup-regular',
                 'cup-qualification',
               ]),
@@ -148,7 +149,7 @@ export const getCupSeriesTables = createServerFn({
               ),
             ),
           )
-          .groupBy(teamgames.group, teamgames.teamId)
+          .groupBy(series.group, teamgames.teamId)
 
         const tables = await Promise.all(
           competitionSeries.map(async (serie) => {

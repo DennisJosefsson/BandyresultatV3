@@ -99,6 +99,9 @@ export function gameSortFunction(
   played = false,
 ) {
   const sortGroups = gamesArray.reduce((groups, game) => {
+    if (!game.group) {
+      throw new Error('Grupp kan inte vara null')
+    }
     if (game.group === 'mix') {
       const serieObject = seriesData.find(
         (s) => s.hasMix === true,

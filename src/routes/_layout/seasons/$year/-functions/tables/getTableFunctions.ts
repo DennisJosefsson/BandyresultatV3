@@ -1,7 +1,7 @@
 import { db } from '@/db'
-import type { series } from '@/db/schema'
 import {
   parentchildseries,
+  series,
   tables,
   teamgames,
   teams,
@@ -33,7 +33,7 @@ export const getUnionedTables = async ({
     const result = await db
       .select({
         teamId: tables.teamId,
-        group: tables.group,
+        group: series.group as unknown as SQL<string>,
         totalGames: tables.games,
         totalWins: tables.won,
         totalDraws: tables.draw,
@@ -56,6 +56,7 @@ export const getUnionedTables = async ({
       })
       .from(tables)
       .leftJoin(teams, eq(tables.teamId, teams.teamId))
+      .leftJoin(series, eq(series.serieId, tables.serieId))
       .where(eq(tables.serieId, serie.serieId))
       .orderBy(asc(tables.position))
     serie.comment =
@@ -262,9 +263,10 @@ export const getUnionedTables = async ({
         ),
     })
     .from(teamgames)
+    .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .where(
       and(
-        eq(teamgames.group, 'mix'),
+        eq(series.group, 'mix'),
         eq(teamgames.seasonId, serie.seasonId),
         eq(teamgames.played, true),
         inArray(teamgames.teamId, teamArray),

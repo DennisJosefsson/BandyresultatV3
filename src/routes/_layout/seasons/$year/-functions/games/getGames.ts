@@ -119,6 +119,9 @@ export const getGames = createServerFn({ method: 'GET' })
         const playedGamesArray = await db
           .select({
             ...getTableColumns(games),
+            group: series.group as unknown as SQL<string>,
+            category:
+              series.category as unknown as SQL<string>,
             home: {
               teamId: home.teamId,
               name: home.name,
@@ -149,12 +152,16 @@ export const getGames = createServerFn({ method: 'GET' })
           )
           .leftJoin(home, eq(games.homeTeamId, home.teamId))
           .leftJoin(away, eq(games.awayTeamId, away.teamId))
+          .leftJoin(
+            series,
+            eq(series.serieId, games.serieId),
+          )
           .where(
             and(
               eq(games.played, true),
               eq(seasons.year, seasonYear),
               eq(games.women, women),
-              inArray(games.group, [group, 'mix']),
+              inArray(series.group, [group, 'mix']),
             ),
           )
           .orderBy(
@@ -166,6 +173,9 @@ export const getGames = createServerFn({ method: 'GET' })
         const unplayedGamesArray = await db
           .select({
             ...getTableColumns(games),
+            group: series.group as unknown as SQL<string>,
+            category:
+              series.category as unknown as SQL<string>,
             home: {
               teamId: home.teamId,
               name: home.name,
@@ -196,12 +206,16 @@ export const getGames = createServerFn({ method: 'GET' })
           )
           .leftJoin(home, eq(games.homeTeamId, home.teamId))
           .leftJoin(away, eq(games.awayTeamId, away.teamId))
+          .leftJoin(
+            series,
+            eq(series.serieId, games.serieId),
+          )
           .where(
             and(
               eq(games.played, false),
               eq(seasons.year, seasonYear),
               eq(games.women, women),
-              inArray(games.group, [group, 'mix']),
+              inArray(series.group, [group, 'mix']),
             ),
           )
           .orderBy(

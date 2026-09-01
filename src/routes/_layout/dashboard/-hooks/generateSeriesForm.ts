@@ -24,7 +24,6 @@ export const generateSeriesForm = ({
       serieName: 'Serienamn',
       level: competition.division * 100 + 100,
       category: 'regular' as zd.infer<typeof categoryEnum>,
-      division: competition.division,
       competitionId: competition.competitionId,
     },
   ]
