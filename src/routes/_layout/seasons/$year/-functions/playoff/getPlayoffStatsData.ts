@@ -45,13 +45,7 @@ export async function getPlayoffStatsData({
     .where(
       and(
         eq(teamgames.seasonId, playoffSeason.seasonId),
-        inArray(series.category, [
-          'playoffseries',
-          'eight',
-          'quarter',
-          'semi',
-          'final',
-        ]),
+        eq(teamgames.playoff, true),
         eq(teamgames.homeGame, true),
         eq(teamgames.played, true),
       ),
@@ -68,13 +62,7 @@ export async function getPlayoffStatsData({
     .where(
       and(
         eq(games.seasonId, playoffSeason.seasonId),
-        inArray(series.category, [
-          'playoffseries',
-          'eight',
-          'quarter',
-          'semi',
-          'final',
-        ]),
+        eq(games.playoff, true),
         eq(games.played, true),
       ),
     )
@@ -90,13 +78,7 @@ export async function getPlayoffStatsData({
     .where(
       and(
         eq(games.seasonId, playoffSeason.seasonId),
-        inArray(series.category, [
-          'playoffseries',
-          'eight',
-          'quarter',
-          'semi',
-          'final',
-        ]),
+        eq(games.playoff, true),
         eq(games.played, true),
       ),
     )
@@ -118,13 +100,7 @@ export async function getPlayoffStatsData({
     .where(
       and(
         eq(teamgames.seasonId, playoffSeason.seasonId),
-        inArray(series.category, [
-          'playoffseries',
-          'eight',
-          'quarter',
-          'semi',
-          'final',
-        ]),
+        eq(teamgames.playoff, true),
         eq(teamgames.homeGame, true),
         eq(teamgames.played, true),
       ),
@@ -147,13 +123,7 @@ export async function getPlayoffStatsData({
     .where(
       and(
         eq(teamgames.seasonId, playoffSeason.seasonId),
-        inArray(series.category, [
-          'playoffseries',
-          'eight',
-          'quarter',
-          'semi',
-          'final',
-        ]),
+        eq(teamgames.playoff, true),
         eq(teamgames.homeGame, false),
         eq(teamgames.played, true),
       ),
@@ -176,13 +146,7 @@ export async function getPlayoffStatsData({
     .where(
       and(
         eq(teamgames.seasonId, playoffSeason.seasonId),
-        inArray(series.category, [
-          'playoffseries',
-          'eight',
-          'quarter',
-          'semi',
-          'final',
-        ]),
+        eq(teamgames.playoff, true),
         eq(teamgames.homeGame, true),
         eq(teamgames.played, true),
       ),
@@ -257,13 +221,7 @@ export async function getPlayoffStatsData({
     .where(
       and(
         eq(games.seasonId, playoffSeason.seasonId),
-        inArray(series.category, [
-          'playoffseries',
-          'eight',
-          'quarter',
-          'semi',
-          'final',
-        ]),
+        eq(games.playoff, true),
         sql`(games.home_goal + games.away_goal) = (select max(teamgames.total_goals) from "teamgames" where "teamgames"."season_id" = ${playoffSeason.seasonId} and "teamgames"."played" = true and "teamgames"."playoff" = true)`,
       ),
     )
@@ -318,13 +276,7 @@ export async function getPlayoffStatsData({
     .where(
       and(
         eq(games.seasonId, playoffSeason.seasonId),
-        inArray(series.category, [
-          'playoffseries',
-          'eight',
-          'quarter',
-          'semi',
-          'final',
-        ]),
+        eq(games.playoff, true),
         sql`(games.home_goal + games.away_goal) = (select min(teamgames.total_goals) from "teamgames" where "teamgames"."season_id" = ${playoffSeason.seasonId} and "teamgames"."played" = true and "teamgames"."playoff" = true)`,
       ),
     )
@@ -348,13 +300,7 @@ export async function getPlayoffStatsData({
     .where(
       and(
         eq(teamgames.seasonId, playoffSeason.seasonId),
-        inArray(series.category, [
-          'playoffseries',
-          'eight',
-          'quarter',
-          'semi',
-          'final',
-        ]),
+        eq(teamgames.playoff, true),
         eq(
           teamgames.goalDifference,
           db
@@ -371,13 +317,7 @@ export async function getPlayoffStatsData({
                   playoffSeason.seasonId,
                 ),
                 eq(teamgames.played, true),
-                inArray(series.category, [
-                  'playoffseries',
-                  'eight',
-                  'quarter',
-                  'semi',
-                  'final',
-                ]),
+                eq(teamgames.playoff, true),
               ),
             ),
         ),
