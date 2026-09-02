@@ -41,14 +41,23 @@ export async function getNewSeasonData() {
         currMenSeason,
         currWomenSeason,
         secondYear,
+        intYear: secondYear + 1,
       }
     })
 
   const newSeasons = await db
     .insert(seasons)
     .values([
-      { year: seasonInfo.nextYear, women: false },
-      { year: seasonInfo.nextYear, women: true },
+      {
+        year: seasonInfo.nextYear,
+        women: false,
+        intYear: seasonInfo.intYear,
+      },
+      {
+        year: seasonInfo.nextYear,
+        women: true,
+        intYear: seasonInfo.intYear,
+      },
     ])
     .returning()
 
