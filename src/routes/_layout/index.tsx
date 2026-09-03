@@ -1,26 +1,29 @@
+import { GameCard } from '@/components/Common/Games/GameCard'
 import LandingCard from '@/components/Common/Landing/LandingCard'
 import type { LinkProps } from '@tanstack/react-router'
 import {
   Link,
   createFileRoute,
 } from '@tanstack/react-router'
+import { getIndexGames } from './-functions/getIndexGames'
 import { useGetFirstAndLastSeason } from './seasons/$year/-hooks/useGetFirstAndLastSeason'
 
 export const Route = createFileRoute('/_layout/')({
+  loader: async () => {
+    const games = await getIndexGames()
+    if (!games) {
+      throw new Error('Games missing from index route')
+    }
+
+    return games
+  },
   component: App,
 })
 
 function App() {
   return (
-    <div className="font-inter max-h-[80svh] ml-2 flex flex-col gap-2">
-      <div className="my-10 flex flex-col xl:mx-10 2xl:mx-16">
-        <div className="mb-3 md:mb-6 p-2">
-          <p className="text-[8px] xs:text-[10px] sm:text-sm">
-            OBS! Ny version av bandyresultat.se lanserades
-            2026-08-07. Vissa sidor kommer behöver fixas
-            till de närmaste dagarna.
-          </p>
-        </div>
+    <div className="@container font-inter flex flex-col gap-2">
+      <div className="mt-10 flex flex-col mx-1 @xs:mx-2 @3xl:mx-4 @7xl:mx-10">
         <div className="mb-3 md:mb-6">
           <h1 className="text-primary xs:text-base pl-2 text-sm font-bold sm:text-2xl xl:text-4xl">
             Ett stycke bandyhistoria
@@ -34,6 +37,7 @@ function App() {
         </div>
       </div>
       <IndexPageLinks />
+      <IndexGames />
     </div>
   )
 }
@@ -102,7 +106,7 @@ function IndexPageLinks() {
 
   return (
     <div className="@container">
-      <div className="mx-0 @xs:mx-4 @md:mx-10 grid grid-cols-1 gap-y-4 @7xl:grid-cols-2 @7xl:gap-x-20">
+      <div className="mx-1 @xs:mx-2 @3xl:mx-4 @7xl:mx-10 grid grid-cols-1 gap-y-4 @5xl:grid-cols-2 @5xl:gap-x-20">
         <LandingCard>
           <LandingCard.Gender>
             Elitserien Herrar
@@ -153,6 +157,33 @@ function IndexPageLinks() {
             })}
           </LandingCard.Content>
         </LandingCard>
+      </div>
+    </div>
+  )
+}
+
+function IndexGames() {
+  const data = Route.useLoaderData()
+  if (data.status === 404) return null
+  return (
+    <div className="@container flex flex-col gap-4 mt-2 @5xl:mt-6">
+      <div className="flex flex-row justify-center">
+        <span className="text-sm font-semibold">
+          Kommande matcher
+        </span>
+      </div>
+      <div className="mx-1 @xs:mx-2 @3xl:mx-4 @7xl:mx-10 grid grid-cols-1 gap-y-4 @5xl:grid-cols-2 @5xl:gap-x-20">
+        {data.games.map((game) => {
+          const serieName = `${game.group.includes('cup-') ? game.competition.competitionName + ' ' : null}${game.serie.serieName}`
+          return (
+            <GameCard
+              key={game.gameId.toString()}
+              serieName={serieName}
+              routePath="/"
+              game={game}
+            />
+          )
+        })}
       </div>
     </div>
   )
