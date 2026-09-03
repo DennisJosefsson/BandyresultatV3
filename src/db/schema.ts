@@ -194,7 +194,7 @@ export const municipality = pgTable(
 export const seasons = pgTable('seasons', {
   seasonId: serial('season_id').primaryKey().notNull(),
   year: varchar({ length: 255 }).notNull(),
-  intYear: integer().notNull(),
+  intYear: integer('int_year').notNull(),
   women: boolean().default(false),
   createdAt: timestamp('created_at', {
     withTimezone: true,
