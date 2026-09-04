@@ -1,6 +1,10 @@
 import { FieldError } from '@/components/base/ui/field'
 import { cn } from '@/lib/utils/utils'
-import { CircleXIcon } from 'lucide-react'
+import {
+  CircleXIcon,
+  MinusIcon,
+  PlusIcon,
+} from 'lucide-react'
 import type {
   DetailedHTMLProps,
   InputHTMLAttributes,
@@ -59,8 +63,9 @@ const CustomNumberInput = ({
           variant="ghost"
           onClick={() => decrementer()}
           className="size-[1lh]"
+          aria-label="Minus"
         >
-          -
+          <MinusIcon />
         </InputGroupButton>
       </InputGroupAddon>
       <InputGroupAddon align="inline-end">
@@ -69,8 +74,9 @@ const CustomNumberInput = ({
           variant="ghost"
           onClick={() => incrementer()}
           className="size-[1lh]"
+          aria-label="Plus"
         >
-          +
+          <PlusIcon />
         </InputGroupButton>
       </InputGroupAddon>
       {resetter ? (
@@ -80,6 +86,7 @@ const CustomNumberInput = ({
             variant="ghost"
             onClick={() => resetter()}
             className="size-[1lh]"
+            aria-label="Ta bort"
           >
             <CircleXIcon className="size-3" />
           </InputGroupButton>
