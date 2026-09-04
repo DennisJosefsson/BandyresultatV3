@@ -11,10 +11,7 @@ import TeamLogo from '@/components/Common/TeamLogo'
 import { useCookies } from '@/lib/contexts/cookieContext'
 import type { Game } from '@/lib/types/game'
 import { Link } from '@tanstack/react-router'
-import {
-  GitCompareArrowsIcon,
-  StarIcon,
-} from 'lucide-react'
+import { StarIcon } from 'lucide-react'
 
 type RoutePaths =
   | '/seasons/$year/$group/games'
@@ -22,6 +19,7 @@ type RoutePaths =
   | '/teams/$teamId/seasons/$seasonId/'
   | '/seasons/$year/cup/$competitionName/games'
   | '/'
+  | '/search'
 
 type GamesCardProps = {
   serieName: string
@@ -119,8 +117,7 @@ export function GameCard({
                           ],
                         })}
                       >
-                        <GitCompareArrowsIcon className="@2xl:hidden" />
-                        <span className="hidden @2xl:block">
+                        <span className="text-[8px] @xs:text-[10px] @sm:text-xs @xl:text-sm">
                           H2H
                         </span>
                       </Link>
