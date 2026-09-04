@@ -818,8 +818,8 @@ export async function getScoredData({
     .limit(10)
     .then((res) => {
       const filteredResult = res.map((item, index) => {
-        return {
-          teams: `${item.team.casualName}-${item.opponent.casualName}`,
+        return {homeTeam:item.team.casualName,homeTeamId:item.team.teamId,awayTeam:item.opponent.casualName,awayTeamId:item.opponent.teamId,
+          
           result: `${item.goalsScored}-${item.goalsConceded}`,
           goals: item.totalGoals,
           date: item.date,
@@ -888,8 +888,8 @@ export async function getScoredData({
     .limit(10)
     .then((res) => {
       const filteredResult = res.map((item, index) => {
-        return {
-          teams: `${item.team.casualName}-${item.opponent.casualName}`,
+        return {homeTeam:item.team.casualName,homeTeamId:item.team.teamId,awayTeam:item.opponent.casualName,awayTeamId:item.opponent.teamId,
+          
           result: `${item.goalsScored}-${item.goalsConceded}`,
           goals: item.totalGoals,
           date: item.date,

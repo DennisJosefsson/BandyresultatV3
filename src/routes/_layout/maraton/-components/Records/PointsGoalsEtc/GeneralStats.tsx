@@ -21,11 +21,11 @@ const GeneralStats = () => {
         const stats = data.generalStats
         if (!women) {
           return (
-            <div className="flex w-full flex-col @5xl:w-4/5 @7xl:w-2/3">
+            <div className="flex w-full flex-col">
               <H1>Statistik</H1>
               <div>
                 <H2>Säsonger</H2>
-                <div className="mb-4 grid grid-cols-1 gap-2 @lg:grid-cols-2 @3xl:gap-4 @5xl:gap-6">
+                <div className="grid grid-cols-1 gap-y-4 @3xl:grid-cols-2 @3xl:gap-4 @7xl:grid-cols-3 @7xl:gap-10">
                   <div>
                     <H3>Säsonger sedan 1931</H3>
                     <div>
@@ -52,7 +52,7 @@ const GeneralStats = () => {
 
               <div className="flex flex-col">
                 <H2>Slutspel</H2>
-                <div className="mb-4 grid grid-cols-1 gap-2 @lg:grid-cols-2 @3xl:gap-4 @5xl:gap-6">
+                <div className="grid grid-cols-1 gap-y-4 @3xl:grid-cols-2 @3xl:gap-4 @7xl:grid-cols-3 @7xl:gap-10">
                   <div>
                     <H3>Slutspel sedan 1931</H3>
                     <div>
@@ -79,7 +79,7 @@ const GeneralStats = () => {
               <div>
                 <div>
                   <H2>SM-Finaler</H2>
-                  <div className="grid grid-cols-1 gap-2 @lg:grid-cols-2 @3xl:gap-4 @5xl:gap-6">
+                  <div className="grid grid-cols-1 gap-y-4 @3xl:grid-cols-2 @3xl:gap-4 @7xl:grid-cols-3 @7xl:gap-10">
                     <div>
                       <H3>Guld</H3>
                       <div>
@@ -107,7 +107,7 @@ const GeneralStats = () => {
 
         return (
           <div>
-            <div className="grid grid-cols-1 gap-2 @lg:grid-cols-2">
+            <div className="grid grid-cols-1 gap-y-4 @3xl:grid-cols-2 @3xl:gap-4 @7xl:grid-cols-3 @7xl:gap-10">
               <div>
                 <H3>Säsonger</H3>
 

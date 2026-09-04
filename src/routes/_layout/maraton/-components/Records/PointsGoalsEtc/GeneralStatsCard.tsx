@@ -1,3 +1,4 @@
+import TeamLogo from '@/components/Common/TeamLogo'
 import type { GeneralStatItem } from '@/lib/types/records'
 
 const GeneralStatsCard = ({
@@ -12,13 +13,17 @@ const GeneralStatsCard = ({
       </span>
 
       <div className="flex grow flex-row items-center justify-between">
-        <div className="xxs:w-fit w-16">
+        <div className="flex flex-row gap-2">
+          <TeamLogo
+            teamId={team.teamId}
+            size={32}
+          />
           <span className="truncate font-semibold">
             {team.name}
           </span>
         </div>
         <div>
-          <span className="mr-4 w-8 text-right text-xs font-semibold tabular-nums md:text-sm">
+          <span className="mr-2 @3xl:mr-4 w-4 @sm:w-8 text-right text-[10px] @sm:text-xs @md:text-sm font-semibold tabular-nums">
             {count}
           </span>
         </div>

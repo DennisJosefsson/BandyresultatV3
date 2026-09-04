@@ -37,7 +37,10 @@ export type RecordData = {
 
 export type MaxMinGoalGames = {
   position: number | undefined
-  teams: string
+  homeTeam: string
+  homeTeamId: number
+  awayTeam: string
+  awayTeamId: number
   result: string
   goals: number | null
   date: string

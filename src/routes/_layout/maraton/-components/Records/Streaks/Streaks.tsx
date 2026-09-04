@@ -1,4 +1,5 @@
 import { Datum } from '@/components/Common/Date'
+import TeamLogo from '@/components/Common/TeamLogo'
 import StreaksSkeleton from '@/components/Loading/Skeletons/StreaksSkeleton'
 import { Await, getRouteApi } from '@tanstack/react-router'
 import { H1, H3 } from '../Headers'
@@ -23,7 +24,7 @@ const Streaks = () => {
         return (
           <div className="flex flex-col gap-2">
             <H1>Rekordsviter</H1>
-            <div className="grid grid-cols-1 gap-y-4 lg:grid-cols-2 lg:gap-4 xl:grid-cols-3 2xl:gap-10">
+            <div className="grid grid-cols-1 gap-y-4 @3xl:grid-cols-2 @3xl:gap-4 @7xl:grid-cols-3 @7xl:gap-10">
               <StreakCard
                 streak={streaks.unbeatenStreak}
                 title="Matcher i rad utan förlust"
@@ -45,9 +46,9 @@ const Streaks = () => {
                 title="Matcher i rad utan seger"
               />
 
-              <div>
+              <div className="mt-2">
                 <H3>Inofficiella Svenska Mästare</H3>
-                <div className="mb-2 @3xl:mb-4 max-w-65 @xs:max-w-70 @2xl:max-w-90 @7xl:max-w-105  border shadow-xs md:shadow-sm">
+                <div className="mb-2 @3xl:mb-4 border shadow-xs md:shadow-sm">
                   {streaks.currInoffChamps.games.map(
                     (team, index) => {
                       return (
@@ -58,23 +59,29 @@ const Streaks = () => {
                           <span className="mr-2 @lg:mr-4 w-4 @sm:w-6 @lg:w-8 text-right text-sm @xs:text-base font-bold tabular-nums @md:text-2xl">
                             {index + 1}
                           </span>
-                          <div className="mr-2 @sm:mr-4 flex grow flex-col">
+                          <div className="flex grow flex-col gap-1 @sm:gap-2">
                             <div className="flex flex-row justify-between">
-                              <span className="truncate font-semibold">
-                                {team.team.name}
-                              </span>
-                              <span className="text-right">
+                              <div className="flex flex-row gap-2">
+                                <TeamLogo
+                                  teamId={team.team.teamId}
+                                  size={32}
+                                />
+                                <span className="truncate font-semibold">
+                                  {team.team.name}
+                                </span>
+                              </div>
+                              <span className="text-right font-semibold mr-2 @3xl:mr-4">
                                 {team.result}
                               </span>
                             </div>
-                            <div className="flex flex-row items-center justify-between">
+                            <div className="@3xl:ml-1 flex flex-row items-center justify-between text-[7px] @xs:text-[8px] @sm:text-[10px] @xl:text-xs">
                               <div>
                                 <span>
                                   <Datum>{team.date}</Datum>
                                 </span>
                               </div>
 
-                              <span className="text-right">
+                              <span className="text-right mr-2 @3xl:mr-4">
                                 {team.opponent.shortName}
                               </span>
                             </div>

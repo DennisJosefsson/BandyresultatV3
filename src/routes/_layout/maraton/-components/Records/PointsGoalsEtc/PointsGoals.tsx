@@ -11,8 +11,8 @@ const PointsGoals = ({ data, stat }: PointsGoalsProps) => {
   return (
     <div>
       <H2>Högsta</H2>
-      <div className="mb-4 grid grid-cols-1 gap-2 @3xl:grid-cols-2 @3xl:gap-x-8 @7xl:grid-cols-3 @7xl:gap-x-12">
-        <div className="max-w-xl">
+      <div className="grid grid-cols-1 gap-y-4 @3xl:grid-cols-2 @3xl:gap-4 @7xl:grid-cols-3 @7xl:gap-10">
+        <div>
           <H3>Genomsnitt</H3>
           <div>
             <RenderPointsGoalsCard
@@ -21,7 +21,7 @@ const PointsGoals = ({ data, stat }: PointsGoalsProps) => {
             />
           </div>
         </div>
-        <div className="max-w-xl">
+        <div>
           <H3>Genomsnitt Hemma</H3>
           <div>
             <RenderPointsGoalsCard
@@ -30,7 +30,7 @@ const PointsGoals = ({ data, stat }: PointsGoalsProps) => {
             />
           </div>
         </div>
-        <div className="max-w-xl">
+        <div>
           <H3>Genomsnitt Borta</H3>
           <div>
             <RenderPointsGoalsCard
@@ -41,8 +41,8 @@ const PointsGoals = ({ data, stat }: PointsGoalsProps) => {
         </div>
       </div>
       <H2>Lägsta</H2>
-      <div className="mb-4 grid grid-cols-1 gap-2 @3xl:grid-cols-2 @3xl:gap-x-8 @7xl:grid-cols-3 @7xl:gap-x-12">
-        <div className="max-w-xl">
+      <div className="grid grid-cols-1 gap-y-4 @3xl:grid-cols-2 @3xl:gap-4 @7xl:grid-cols-3 @7xl:gap-10">
+        <div>
           <H3>Genomsnitt</H3>
           <div>
             <RenderPointsGoalsCard
@@ -51,7 +51,7 @@ const PointsGoals = ({ data, stat }: PointsGoalsProps) => {
             />
           </div>
         </div>
-        <div className="max-w-xl">
+        <div>
           <H3>Genomsnitt Hemma</H3>
           <div>
             <RenderPointsGoalsCard
@@ -60,7 +60,7 @@ const PointsGoals = ({ data, stat }: PointsGoalsProps) => {
             />
           </div>
         </div>
-        <div className="max-w-xl">
+        <div>
           <H3>Genomsnitt Borta</H3>
           <div>
             <RenderPointsGoalsCard
@@ -71,8 +71,8 @@ const PointsGoals = ({ data, stat }: PointsGoalsProps) => {
         </div>
       </div>
       <H2>Högsta</H2>
-      <div className="mb-4 grid grid-cols-1 gap-2 @3xl:grid-cols-2 @3xl:gap-x-8 @7xl:grid-cols-3 @7xl:gap-x-12">
-        <div className="max-w-xl">
+      <div className="grid grid-cols-1 gap-y-4 @3xl:grid-cols-2 @3xl:gap-4 @7xl:grid-cols-3 @7xl:gap-10">
+        <div>
           <H3>Totalt</H3>
           <div>
             <RenderPointsGoalsCard
@@ -81,7 +81,7 @@ const PointsGoals = ({ data, stat }: PointsGoalsProps) => {
             />
           </div>
         </div>
-        <div className="max-w-xl">
+        <div>
           <H3>Totalt Hemma</H3>
           <div>
             <RenderPointsGoalsCard
@@ -90,7 +90,7 @@ const PointsGoals = ({ data, stat }: PointsGoalsProps) => {
             />
           </div>
         </div>
-        <div className="max-w-xl">
+        <div>
           <H3>Totalt Borta</H3>
           <div>
             <RenderPointsGoalsCard
@@ -101,8 +101,8 @@ const PointsGoals = ({ data, stat }: PointsGoalsProps) => {
         </div>
       </div>
       <H2>Lägsta</H2>
-      <div className="mb-4 grid grid-cols-1 gap-2 @3xl:grid-cols-2 @3xl:gap-x-8 @7xl:grid-cols-3 @7xl:gap-x-12">
-        <div className="max-w-xl">
+      <div className="grid grid-cols-1 gap-y-4 @3xl:grid-cols-2 @3xl:gap-4 @7xl:grid-cols-3 @7xl:gap-10">
+        <div>
           <H3>Totalt</H3>
           <div>
             <RenderPointsGoalsCard
@@ -111,7 +111,7 @@ const PointsGoals = ({ data, stat }: PointsGoalsProps) => {
             />
           </div>
         </div>
-        <div className="max-w-xl">
+        <div>
           <H3>Totalt Hemma</H3>
           <div>
             <RenderPointsGoalsCard
@@ -120,7 +120,7 @@ const PointsGoals = ({ data, stat }: PointsGoalsProps) => {
             />
           </div>
         </div>
-        <div className="max-w-xl">
+        <div>
           <H3>Totalt Borta</H3>
           <div>
             <RenderPointsGoalsCard

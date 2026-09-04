@@ -27,8 +27,8 @@ const Scored = () => {
 
         return (
           <div className="mt-3 flex flex-col gap-2">
-            <div className="grid-cols-1 grid gap-2 @3xl:grid-cols-2">
-              <div className="max-w-xl">
+            <div className="grid grid-cols-1 gap-y-4 @3xl:grid-cols-2 @3xl:gap-4 @7xl:grid-cols-3 @7xl:gap-10">
+              <div>
                 <H2>
                   Elitseriematcher med flest antal mål
                 </H2>
@@ -41,7 +41,7 @@ const Scored = () => {
                   {count.lastMaxGoal} mål.
                 </p>
               </div>
-              <div className="max-w-xl">
+              <div>
                 <H2>
                   Elitseriematcher med minst antal mål
                 </H2>
