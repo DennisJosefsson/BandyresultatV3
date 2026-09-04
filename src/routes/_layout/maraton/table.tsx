@@ -1,7 +1,9 @@
 import { CustomCatchBoundary } from '@/components/ErrorComponents/CustomCatchBoundary'
 import {
+  Navigate,
   Outlet,
   createFileRoute,
+  useChildMatches,
 } from '@tanstack/react-router'
 
 export const Route = createFileRoute(
@@ -49,6 +51,17 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
+  const matches = useChildMatches()
+  if (matches.length === 0) {
+    return (
+      <Navigate
+        from={Route.fullPath}
+        to="/maraton/table/$maratonTable"
+        search={(prev) => ({ ...prev })}
+        params={{ maratonTable: 'all' }}
+      />
+    )
+  }
   return (
     <CustomCatchBoundary id="maratontable">
       <Outlet />
