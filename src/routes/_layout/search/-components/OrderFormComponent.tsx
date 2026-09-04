@@ -1,6 +1,9 @@
-import OperatorSelector from './OperatorSelector'
 import LimitSelection from './LimitSelection'
-import { orderSelection, orderVariableSelection } from './arrays/arrays'
+import OperatorSelector from './OperatorSelector'
+import {
+  orderSelection,
+  orderVariableSelection,
+} from './arrays/arrays'
 
 const OrderFormComponent = () => {
   return (
@@ -12,7 +15,7 @@ const OrderFormComponent = () => {
         <div className="flex max-w-[16rem] flex-col">
           <OperatorSelector
             array={orderSelection}
-            defaultValue="asc"
+            defaultValue="desc"
             label="Stigande/Fallande"
             field="order"
           />

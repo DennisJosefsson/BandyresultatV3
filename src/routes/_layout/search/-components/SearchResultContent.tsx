@@ -19,7 +19,7 @@ const SearchContent = ({
   const copyLink = `${clientEnv.VITE_SITE_PROD_URL + link + '&submit=true'}`
 
   return (
-    <div className="mx-1 mt-4 xl:mx-0">
+    <div className="mt-4">
       <div className="flex flex-row-reverse gap-2">
         <Button
           size="responsive"

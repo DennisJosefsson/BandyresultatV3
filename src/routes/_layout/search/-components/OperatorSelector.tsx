@@ -1,5 +1,4 @@
-import { useNavigate, useSearch } from '@tanstack/react-router'
-import type { OperatorValues, SearchParamsFields } from '@/lib/types/search'
+import { Label } from '@/components/base/ui/label'
 import {
   Select,
   SelectContent,
@@ -7,7 +6,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/base/ui/select'
-import { Label } from '@/components/base/ui/label'
+import type {
+  OperatorValues,
+  SearchParamsFields,
+} from '@/lib/types/search'
+import {
+  useNavigate,
+  useSearch,
+} from '@tanstack/react-router'
 
 type OperatorSelectorProps = {
   array: Array<{
@@ -16,13 +22,28 @@ type OperatorSelectorProps = {
   }>
   field: Extract<
     SearchParamsFields,
-    'goalDiffOperator' | 'goalsScoredOperator' | 'goalsConcededOperator' | 'order' | 'orderVar'
+    | 'goalDiffOperator'
+    | 'goalsScoredOperator'
+    | 'goalsConcededOperator'
+    | 'order'
+    | 'orderVar'
   >
-  defaultValue: 'gte' | 'lte' | 'eq' | 'asc' | 'date'
+  defaultValue:
+    | 'gte'
+    | 'lte'
+    | 'eq'
+    | 'asc'
+    | 'desc'
+    | 'date'
   label: string
 }
 
-const OperatorSelector = ({ array, field, defaultValue, label }: OperatorSelectorProps) => {
+const OperatorSelector = ({
+  array,
+  field,
+  defaultValue,
+  label,
+}: OperatorSelectorProps) => {
   const searchField = useSearch({
     from: '/_layout/search',
     select: (search) => search[field],
@@ -30,7 +51,9 @@ const OperatorSelector = ({ array, field, defaultValue, label }: OperatorSelecto
 
   const navigate = useNavigate({ from: '/search' })
 
-  const onValueChange = (val: OperatorValues | null): void => {
+  const onValueChange = (
+    val: OperatorValues | null,
+  ): void => {
     if (val) {
       navigate({
         resetScroll: false,
@@ -45,7 +68,10 @@ const OperatorSelector = ({ array, field, defaultValue, label }: OperatorSelecto
 
   return (
     <div className="grid w-full max-w-sm items-center gap-1.5 px-1">
-      <Label htmlFor={field} className="font-semibold md:text-sm">
+      <Label
+        htmlFor={field}
+        className="font-semibold md:text-sm"
+      >
         {label}
       </Label>
       <Select
@@ -55,12 +81,17 @@ const OperatorSelector = ({ array, field, defaultValue, label }: OperatorSelecto
         id={field}
       >
         <SelectTrigger className="xs:w-64 w-50">
-          <SelectValue placeholder="Välj">{arrayLabel}</SelectValue>
+          <SelectValue placeholder="Välj">
+            {arrayLabel}
+          </SelectValue>
         </SelectTrigger>
         <SelectContent alignItemWithTrigger={true}>
           {array.map((item) => {
             return (
-              <SelectItem value={item.value} key={item.value}>
+              <SelectItem
+                value={item.value}
+                key={item.value}
+              >
                 {item.label}
               </SelectItem>
             )

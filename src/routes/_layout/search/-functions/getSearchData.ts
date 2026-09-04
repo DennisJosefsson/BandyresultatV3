@@ -1,5 +1,6 @@
 import { db } from '@/db'
 import {
+  competitions,
   games,
   seasons,
   series,
@@ -117,52 +118,76 @@ export async function getSearchData({
   const results = await db
     .with(filteredtCte)
     .select({
-      gameId: filteredtCte.gameId,
-      result: filteredtCte.result,
-      halftimeResult: filteredtCte.halftimeResult,
-      otResult: filteredtCte.otResult,
-      date: filteredtCte.date,
-      qualificationGame: filteredtCte.qualificationGame,
+      gameId: games.gameId as unknown as SQL<number>,
+      date: games.date as unknown as SQL<string>,
+      seasonId: games.seasonId as unknown as SQL<number>,
+      homeTeamId:
+        games.homeTeamId as unknown as SQL<number>,
+      awayTeamId:
+        games.awayTeamId as unknown as SQL<number>,
+      women: games.women as unknown as SQL<boolean>,
+      result: games.result as unknown as SQL<string | null>,
+      otResult: games.otResult as unknown as SQL<
+        string | null
+      >,
+      homeGoal: games.homeGoal as unknown as SQL<number>,
+      awayGoal: games.awayGoal as unknown as SQL<number>,
+      createdAt: games.createdAt as unknown as SQL<
+        string | null
+      >,
+      updatedAt: games.updatedAt as unknown as SQL<
+        string | null
+      >,
+      halftimeResult:
+        games.halftimeResult as unknown as SQL<
+          string | null
+        >,
+      halftimeHomeGoal:
+        games.halftimeHomeGoal as unknown as SQL<number>,
+      halftimeAwayGoal:
+        games.halftimeAwayGoal as unknown as SQL<number>,
+      playoff: games.playoff as unknown as SQL<boolean>,
+      extraTime: games.extraTime as unknown as SQL<boolean>,
+      penalties: games.penalties as unknown as SQL<boolean>,
+      mix: games.mix as unknown as SQL<boolean>,
+      serieId: games.serieId as unknown as SQL<number>,
+      played: games.played as unknown as SQL<boolean>,
+      group: series.group as unknown as SQL<string>,
+      category: series.category as unknown as SQL<string>,
+      serie: {
+        serieName:
+          series.serieName as unknown as SQL<string>,
+      },
+      competition: {
+        competitionName:
+          competitions.competitionName as unknown as SQL<string>,
+      },
       goalsScored: filteredtCte.goalsScored,
       goalsConceded: filteredtCte.goalsConceded,
       goalDifference: filteredtCte.goalDifference,
       totalGoals: filteredtCte.totalGoals,
-      women: filteredtCte.women,
-      extraTime: filteredtCte.extraTime,
-      penalties: filteredtCte.penalties,
       home: {
-        teamId: sql`home.team_id`
-          .mapWith(Number)
-          .as('home.team_id'),
-        name: sql`home.name`
-          .mapWith(String)
-          .as('home.name'),
-        casualName: sql`home.casual_name`
-          .mapWith(String)
-          .as('home.casual_name'),
-        shortName: sql`home.short_name`
-          .mapWith(String)
-          .as('home.short_name'),
+        teamId: home.teamId,
+        name: home.name,
+        casualName: home.casualName,
+        shortName: home.shortName,
       } as unknown as SQL<TeamBase>,
       away: {
-        teamId: sql`away.team_id`
-          .mapWith(Number)
-          .as('away.team_id'),
-        name: sql`away.name`
-          .mapWith(String)
-          .as('away.name'),
-        casualName: sql`away.casual_name`
-          .mapWith(String)
-          .as('away.casual_name'),
-        shortName: sql`away.short_name`
-          .mapWith(String)
-          .as('away.short_name'),
+        teamId: away.teamId,
+        name: away.name,
+        casualName: away.casualName,
+        shortName: away.shortName,
       } as unknown as SQL<TeamBase>,
     })
     .from(filteredtCte)
     .leftJoin(games, eq(games.gameId, filteredtCte.gameId))
     .leftJoin(home, eq(games.homeTeamId, home.teamId))
     .leftJoin(away, eq(games.awayTeamId, away.teamId))
+    .leftJoin(series, eq(series.serieId, games.serieId))
+    .leftJoin(
+      competitions,
+      eq(competitions.competitionId, series.competitionId),
+    )
     .orderBy(...orderArray)
     .limit(searchRequest.limit)
 
@@ -345,11 +370,11 @@ function getOrder(searchParams: ParsedSearchRequest) {
   const orderArray = []
 
   if (searchParams.order === 'asc') {
-    orderArray.push(asc(sql`"date"`))
+    orderArray.push(asc(sql`"games"."date"`))
   }
 
   if (searchParams.order === 'desc') {
-    orderArray.push(desc(sql`"date"`))
+    orderArray.push(desc(sql`"games"."date"`))
   }
 
   if (searchParams.orderVar === 'goalDifference') {
