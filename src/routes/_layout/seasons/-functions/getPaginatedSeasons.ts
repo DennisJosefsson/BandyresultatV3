@@ -14,6 +14,7 @@ type SeasonsReturn =
 
       seasons: Array<{
         year: string
+        intYear: number
         seasonId: number
         group: string | null
       }>

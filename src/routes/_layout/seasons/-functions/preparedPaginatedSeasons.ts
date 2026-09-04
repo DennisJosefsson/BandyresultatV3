@@ -51,6 +51,7 @@ export const preparedPagSeasons = db
   .with(extractGroup)
   .select({
     year: seasons.year,
+    intYear: seasons.intYear,
     seasonId: seasons.seasonId,
     group: extractGroup.group,
   })
@@ -64,15 +65,3 @@ export const preparedPagSeasons = db
   .limit(12)
   .orderBy(desc(seasons.seasonId))
   .prepare('paginatedSeasons')
-
-// export const preparedPagSeasons = db.query.seasons
-//   .findMany({
-//     columns: { seasonId: true, year: true },
-//     where: (seasonsSchema, { eq: equal }) =>
-//       equal(seasonsSchema.women, sql.placeholder('women')),
-//     offset: sql.placeholder('offset'),
-//     limit: 12,
-//     orderBy: (seasonsSchema, { desc }) =>
-//       desc(seasonsSchema.seasonId),
-//   })
-//   .prepare('paginatedSeasons')

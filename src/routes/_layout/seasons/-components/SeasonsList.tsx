@@ -34,11 +34,6 @@ const SeasonsList = () => {
           <div className="my-2 flex flex-col">
             <div className="mx-auto grid grid-cols-1 gap-y-2 border px-2 py-2 shadow-xs sm:grid-cols-2 sm:gap-x-8 md:shadow-md xl:grid-cols-3 xl:px-4 2xl:gap-x-24">
               {data.seasons.map((season) => {
-                const year =
-                  parseInt(season.year.split('/')[1]) >=
-                  1964
-                    ? parseInt(season.year.split('/')[1])
-                    : parseInt(season.year)
                 if (women) {
                   if (season.group === null) return null
                   return (
@@ -52,7 +47,7 @@ const SeasonsList = () => {
                           search={(prev) => ({
                             women: prev.women,
                           })}
-                          params={{ year }}
+                          params={{ year: season.intYear }}
                         >
                           <span className="hover:underline hover:underline-offset-auto text-[10px] font-semibold sm:text-xs xl:text-sm">
                             {season.year}
@@ -63,7 +58,7 @@ const SeasonsList = () => {
                         <route.Link
                           to="/seasons/$year/$group/tables/$table"
                           params={{
-                            year: year,
+                            year: season.intYear,
                             group: season.group,
                             table: 'all',
                           }}
@@ -78,7 +73,7 @@ const SeasonsList = () => {
                         <route.Link
                           to="/seasons/$year/$group/games"
                           params={{
-                            year: year,
+                            year: season.intYear,
                             group: season.group,
                           }}
                           search={{ women }}
@@ -92,7 +87,7 @@ const SeasonsList = () => {
                         <route.Link
                           to="/seasons/$year/playoff/table"
                           params={{
-                            year: year,
+                            year: season.intYear,
                           }}
                           search={{ women }}
                           className="hover:text-primary font-medium hover:underline hover:underline-offset-auto lg:font-normal"
@@ -117,7 +112,7 @@ const SeasonsList = () => {
                           search={(prev) => ({
                             women: prev.women,
                           })}
-                          params={{ year }}
+                          params={{ year: season.intYear }}
                         >
                           <span className="hover:underline hover:underline-offset-auto text-[10px] font-semibold sm:text-xs xl:text-sm">
                             {season.year}
@@ -128,7 +123,7 @@ const SeasonsList = () => {
                         <route.Link
                           to="/seasons/$year/playoff/table"
                           params={{
-                            year: year,
+                            year: season.intYear,
                           }}
                           search={{ women }}
                           className="hover:text-primary font-medium hover:underline hover:underline-offset-auto lg:font-normal"
@@ -140,7 +135,7 @@ const SeasonsList = () => {
                         <route.Link
                           to="/seasons/$year/playoff/games"
                           params={{
-                            year: year,
+                            year: season.intYear,
                           }}
                           search={{ women }}
                           className="hover:text-primary font-medium hover:underline hover:underline-offset-auto lg:font-normal"
@@ -165,7 +160,7 @@ const SeasonsList = () => {
                         search={(prev) => ({
                           women: prev.women,
                         })}
-                        params={{ year }}
+                        params={{ year: season.intYear }}
                       >
                         <span className="hover:underline hover:underline-offset-auto text-[10px] font-semibold sm:text-xs xl:text-sm">
                           {season.year}
@@ -176,7 +171,7 @@ const SeasonsList = () => {
                       <route.Link
                         to="/seasons/$year/$group/tables/$table"
                         params={{
-                          year: year,
+                          year: season.intYear,
                           group: season.group,
                           table: 'all',
                         }}
@@ -191,7 +186,7 @@ const SeasonsList = () => {
                       <route.Link
                         to="/seasons/$year/$group/games"
                         params={{
-                          year: year,
+                          year: season.intYear,
                           group: season.group,
                         }}
                         search={{ women }}
@@ -205,7 +200,7 @@ const SeasonsList = () => {
                       <route.Link
                         to="/seasons/$year/playoff/table"
                         params={{
-                          year: year,
+                          year: season.intYear,
                         }}
                         search={{ women }}
                         className="hover:text-primary font-medium hover:underline hover:underline-offset-auto lg:font-normal"
