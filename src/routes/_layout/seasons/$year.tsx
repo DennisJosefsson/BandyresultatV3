@@ -50,7 +50,7 @@ export const Route = createFileRoute(
     }
 
     const season = await getSeason({
-      data: { women, seasonYear: seasonYear.data },
+      data: { women, year: year },
     })
     if (!season) {
       abortController.abort('Säsongen finns inte')

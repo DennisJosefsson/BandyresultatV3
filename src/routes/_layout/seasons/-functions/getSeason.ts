@@ -11,10 +11,10 @@ export const getSeason = createServerFn({ method: 'GET' })
   .validator(
     zd.object({
       women: zd.boolean(),
-      seasonYear: zd.string(),
+      year: zd.number(),
     }),
   )
-  .handler(async ({ data: { women, seasonYear } }) => {
+  .handler(async ({ data: { women, year } }) => {
     try {
       const season = await db
         .select()
@@ -22,7 +22,7 @@ export const getSeason = createServerFn({ method: 'GET' })
         .where(
           and(
             eq(seasons.women, women),
-            eq(seasons.year, seasonYear),
+            eq(seasons.intYear, year),
           ),
         )
         .then((res) => {
