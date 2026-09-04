@@ -70,6 +70,10 @@ export const errors = pgTable('errors', {
   production: boolean(),
   backend: boolean(),
   date: varchar(),
+  createdAt: timestamp('created_at', {
+    withTimezone: true,
+    mode: 'string',
+  }),
 })
 
 export const games = pgTable(

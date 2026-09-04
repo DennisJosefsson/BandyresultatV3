@@ -1,4 +1,5 @@
 import { Button } from '@/components/base/ui/button'
+import { Datum } from '@/components/Common/Date'
 import { zd } from '@/lib/utils/zod'
 import { createFileRoute } from '@tanstack/react-router'
 import { getSingleError } from '../-functions/ErrorFunctions/getSingleError'
@@ -37,7 +38,13 @@ function RouteComponent() {
   }
   return (
     <div className="flex flex-col gap-1 text-sm">
-      <span>{data.error.date}</span>
+      <span>
+        {data.error.createdAt ? (
+          <Datum>{data.error.createdAt}</Datum>
+        ) : (
+          <Datum>{data.error.date}</Datum>
+        )}
+      </span>
       <span>{data.error.name}</span>
       <span>{data.error.message}</span>
       <span>

@@ -91,7 +91,11 @@ function ErrorsComponent({
             return (
               <TableRow key={e.errorId}>
                 <TableCell className="w-80">
-                  <Datum>{e.date}</Datum>
+                  {e.createdAt ? (
+                    <Datum>{e.createdAt}</Datum>
+                  ) : (
+                    <Datum>{e.date}</Datum>
+                  )}
                 </TableCell>
                 <TableCell className="w-80">
                   <Route.Link
