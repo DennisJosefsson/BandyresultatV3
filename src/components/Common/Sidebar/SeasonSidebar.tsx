@@ -143,6 +143,12 @@ export function SeasonSidebar() {
                             search={{
                               women: women,
                             }}
+                            activeOptions={{
+                              includeSearch: false,
+                            }}
+                            activeProps={{
+                              className: `underline underline-offset-auto`,
+                            }}
                           >
                             <span className="truncate md:text-sm">
                               {cup.competitionName}
@@ -165,6 +171,12 @@ export function SeasonSidebar() {
                                 }}
                                 search={{
                                   women: women,
+                                }}
+                                activeOptions={{
+                                  includeSearch: false,
+                                }}
+                                activeProps={{
+                                  className: `underline underline-offset-auto`,
                                 }}
                               >
                                 <span className="truncate md:text-sm">
@@ -189,6 +201,12 @@ export function SeasonSidebar() {
                                 search={{
                                   women: women,
                                 }}
+                                activeOptions={{
+                                  includeSearch: false,
+                                }}
+                                activeProps={{
+                                  className: `underline underline-offset-auto`,
+                                }}
                               >
                                 <span className="truncate md:text-sm">
                                   Tabeller
@@ -211,6 +229,12 @@ export function SeasonSidebar() {
                                 }}
                                 search={{
                                   women: women,
+                                }}
+                                activeOptions={{
+                                  includeSearch: false,
+                                }}
+                                activeProps={{
+                                  className: `underline underline-offset-auto`,
                                 }}
                               >
                                 <span className="truncate md:text-sm">
