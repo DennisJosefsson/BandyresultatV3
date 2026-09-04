@@ -47,11 +47,11 @@ const MaxMinGoalsCard = ({
             </div>
           </div>
         </div>
-        <div className="flex flex-col gap-1 @sm:gap-2">
-          <span className="mr-2 @3xl:mr-4 text-right text-[10px] @sm:text-xs @md:text-sm font-semibold tabular-nums">
+        <div className="mr-2 @3xl:mr-4  flex flex-col gap-1 @sm:gap-2">
+          <span className="text-right text-[10px] @sm:text-xs @md:text-sm font-semibold tabular-nums">
             {result}
           </span>
-          <span className="@3xl:ml-1 text-[7px] @xs:text-[8px] @sm:text-[10px] @xl:text-xs">
+          <span className="text-[7px] @xs:text-[8px] @sm:text-[10px] @xl:text-xs">
             <Datum>{date}</Datum>
           </span>
         </div>
