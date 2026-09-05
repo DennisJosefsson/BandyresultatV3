@@ -16,7 +16,12 @@ import { seasonIdCheck } from '@/lib/utils/utils'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
 import type { SQL } from 'drizzle-orm'
-import { and, eq, getTableColumns } from 'drizzle-orm'
+import {
+  and,
+  eq,
+  getTableColumns,
+  inArray,
+} from 'drizzle-orm'
 
 type TeamsForGroupMapReturn =
   | {
@@ -72,33 +77,6 @@ export const getTeamsForGroupMap = createServerFn({
           }
         }
 
-        const serie = await db
-          .select({
-            ...getTableColumns(series),
-          })
-          .from(series)
-          .leftJoin(
-            seasons,
-            eq(seasons.seasonId, series.seasonId),
-          )
-          .where(
-            and(
-              eq(seasons.women, women),
-              eq(seasons.year, seasonYear),
-              eq(series.group, group),
-            ),
-          )
-          .then((res) => {
-            if (res.length > 0) return res[0]
-            else return undefined
-          })
-
-        if (!serie)
-          return {
-            status: 404,
-            message: `Ingen ${women ? 'dam' : 'herr'}serie med detta namn ${seasonYear}. Välj en ny i listan.`,
-          }
-
         const teamArray = await db
           .select({
             team: getTableColumns(
@@ -127,7 +105,27 @@ export const getTeamsForGroupMap = createServerFn({
             county,
             eq(teams.countyId, county.countyId),
           )
-          .where(eq(teamseries.serieId, serie.serieId))
+          .where(
+            inArray(
+              teamseries.serieId,
+              db
+                .select({
+                  serieId: series.serieId,
+                })
+                .from(series)
+                .leftJoin(
+                  seasons,
+                  eq(seasons.seasonId, series.seasonId),
+                )
+                .where(
+                  and(
+                    eq(seasons.women, women),
+                    eq(seasons.intYear, year),
+                    eq(series.group, group),
+                  ),
+                ),
+            ),
+          )
 
         return {
           status: 200,

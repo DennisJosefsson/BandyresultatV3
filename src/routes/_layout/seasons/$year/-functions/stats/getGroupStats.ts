@@ -3,7 +3,6 @@ import { games, seasons, series } from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import type { Stats } from '@/lib/types/stats'
-import { seasonIdCheck } from '@/lib/utils/utils'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
 import { and, eq, getTableColumns } from 'drizzle-orm'
@@ -33,7 +32,6 @@ export const getGroupStats = createServerFn({
       data: { group, year, women },
     }): Promise<GroupStatsReturn> => {
       try {
-        const seasonYear = seasonIdCheck.parse(year)
         if (year < 1930) {
           return {
             status: 404,
@@ -50,13 +48,6 @@ export const getGroupStats = createServerFn({
           }
         }
 
-        if (!seasonYear) {
-          return {
-            status: 404,
-            message: 'Säsongen finns inte.',
-          }
-        }
-
         const serie = await db
           .select({
             ...getTableColumns(series),
@@ -69,7 +60,7 @@ export const getGroupStats = createServerFn({
           .where(
             and(
               eq(seasons.women, women),
-              eq(seasons.year, seasonYear),
+              eq(seasons.intYear, year),
               eq(series.group, group),
             ),
           )

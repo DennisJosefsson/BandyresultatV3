@@ -82,7 +82,7 @@ export const getDevData = createServerFn({ method: 'GET' })
           .where(
             and(
               eq(seasons.women, women),
-              eq(seasons.year, seasonYear),
+              eq(seasons.intYear, year),
               eq(series.group, group),
             ),
           )

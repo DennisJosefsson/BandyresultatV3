@@ -7,10 +7,14 @@ import type {
   PlayoffCategoryArray,
   PlayoffSeriesTable,
 } from '@/lib/types/table'
-import { seasonIdCheck } from '@/lib/utils/utils'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
-import { and, eq, getTableColumns } from 'drizzle-orm'
+import {
+  and,
+  eq,
+  getTableColumns,
+  inArray,
+} from 'drizzle-orm'
 import { getPlayoffTableData } from './getPlayoffTableData'
 
 type PlayoffTableReturn =
@@ -42,26 +46,11 @@ export const getPlayoffTable = createServerFn({
       data: { year, women },
     }): Promise<PlayoffTableReturn> => {
       try {
-        const seasonYear = seasonIdCheck.parse(year)
         if (year < 1973 && women) {
           return {
             status: 404,
             message:
               'Damernas första säsong var 1972/1973.',
-          }
-        }
-        const season = await db.query.seasons.findFirst({
-          where: (seasonsSchema, { and: AND, eq: equal }) =>
-            AND(
-              eq(seasonsSchema.year, seasonYear!),
-              equal(seasonsSchema.women, women),
-            ),
-        })
-
-        if (!season) {
-          return {
-            status: 404,
-            message: 'Säsongen finns inte.',
           }
         }
 
@@ -74,15 +63,25 @@ export const getPlayoffTable = createServerFn({
           )
           .where(
             and(
-              eq(seasons.seasonId, season.seasonId),
-              eq(seasons.women, women),
+              inArray(
+                seasons.seasonId,
+                db
+                  .select({ seasonId: seasons.seasonId })
+                  .from(seasons)
+                  .where(
+                    and(
+                      eq(seasons.intYear, year),
+                      eq(seasons.women, women),
+                    ),
+                  ),
+              ),
             ),
           )
 
         if (playoffSeasonArr.length === 0) {
           return {
             status: 404,
-            message: 'Ingen slutspelsdata.',
+            message: 'Inga slutspelstabeller.',
           }
         }
 

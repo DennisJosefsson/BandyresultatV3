@@ -101,7 +101,7 @@ export const getGroups = createServerFn({ method: 'GET' })
           )
           .where(
             and(
-              eq(seasons.year, seasonYear),
+              eq(seasons.intYear, year),
               eq(seasons.women, women),
               inArray(series.category, [
                 'regular',
@@ -121,7 +121,7 @@ export const getGroups = createServerFn({ method: 'GET' })
           )
           .where(
             and(
-              eq(seasons.year, seasonYear),
+              eq(seasons.intYear, year),
               eq(seasons.women, women),
               eq(competitions.isCup, true),
             ),

@@ -8,13 +8,13 @@ import {
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import type { Stats } from '@/lib/types/stats'
-import { seasonIdCheck } from '@/lib/utils/utils'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
 import {
   and,
   count,
   eq,
+  exists,
   getTableColumns,
   inArray,
 } from 'drizzle-orm'
@@ -43,27 +43,11 @@ export const getPlayoffStats = createServerFn({
       data: { year, women },
     }): Promise<GroupStatsReturn> => {
       try {
-        const seasonYear = seasonIdCheck.parse(year)
         if (year < 1973 && women) {
           return {
             status: 404,
             message:
               'Damernas första säsong var 1972/1973.',
-          }
-        }
-
-        const season = await db.query.seasons.findFirst({
-          where: (seasonsSchema, { and: AND, eq: equal }) =>
-            AND(
-              equal(seasonsSchema.year, seasonYear!),
-              equal(seasonsSchema.women, women),
-            ),
-        })
-
-        if (!season) {
-          return {
-            status: 404,
-            message: 'Säsongen finns inte.',
           }
         }
 
@@ -76,10 +60,49 @@ export const getPlayoffStats = createServerFn({
           )
           .where(
             and(
-              eq(seasons.seasonId, season.seasonId),
-              eq(seasons.women, women),
+              inArray(
+                seasons.seasonId,
+                db
+                  .select({ seasonI: seasons.seasonId })
+                  .from(seasons)
+                  .where(
+                    and(
+                      eq(seasons.intYear, year),
+                      eq(seasons.women, women),
+                    ),
+                  ),
+              ),
+              exists(
+                db
+                  .select()
+                  .from(games)
+                  .leftJoin(
+                    series,
+                    eq(series.serieId, games.serieId),
+                  )
+                  .leftJoin(
+                    seasons,
+                    eq(seasons.seasonId, games.seasonId),
+                  )
+                  .where(
+                    and(
+                      eq(seasons.intYear, year),
+                      eq(seasons.women, women),
+                      eq(games.played, true),
+                      inArray(series.category, [
+                        'playoffseries',
+                        'eight',
+                        'quarter',
+                        'semi',
+                        'final',
+                      ]),
+                    ),
+                  ),
+              ),
             ),
           )
+
+        console.log(playoffSeasonArr)
 
         if (playoffSeasonArr.length === 0) {
           return {

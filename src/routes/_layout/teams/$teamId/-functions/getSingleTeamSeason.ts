@@ -161,7 +161,7 @@ export const getSingleTeamSeason = createServerFn({
           where: (seasonsSchema, { eq: equal, and: AND }) =>
             AND(
               equal(seasonsSchema.women, team.women),
-              equal(seasonsSchema.year, seasonYear),
+              equal(seasonsSchema.intYear, seasonId),
             ),
         })
 
@@ -365,7 +365,11 @@ export const getSingleTeamSeason = createServerFn({
             teamId: teamgames.teamId,
             group: series.group as unknown as SQL<string>,
           })
-          .from(teamgames).leftJoin(series,eq(series.serieId,teamgames.serieId))
+          .from(teamgames)
+          .leftJoin(
+            series,
+            eq(series.serieId, teamgames.serieId),
+          )
           .where(
             and(
               ne(series.group, 'mix'),
@@ -408,55 +412,6 @@ export const getSingleTeamSeason = createServerFn({
             }
           }),
         )
-
-        // const seriesTables = await Promise.all(
-        //   seriesForTeam
-        //     .filter((s1) => !s1.category.startsWith('cup-'))
-        //     .map(async (serie) => {
-        //       return {
-        //         serie: serie,
-        //         table: await getUnionedTables({
-        //           serie,
-        //           teamArray: teamArray
-        //             .filter((t) => t.group === serie.group)
-        //             .map((t) => t.teamId),
-        //         }),
-        //       }
-        //     }),
-        // )
-        // const cupTables = await Promise.all(
-        //   seriesForTeam
-        //     .filter((s1) => s1.category.startsWith('cup-'))
-        //     .map(async (serie) => {
-        //       return {
-        //         serie: serie,
-        //         table: await getUnionedTables({
-        //           serie,
-        //           teamArray: teamArray
-        //             .filter((t) => t.group === serie.group)
-        //             .map((t) => t.teamId),
-        //         }),
-        //       }
-        //     }),
-        // )
-
-        // const seriesTableLength = seriesTables.reduce(
-        //   (acc, curr) => acc + curr.table.length,
-        //   0,
-        // )
-
-        // const cupTableLength = cupTables.reduce(
-        //   (acc, curr) => acc + curr.table.length,
-        //   0,
-        // )
-
-        // const tableLength =
-        //   seriesTableLength + cupTableLength
-
-        // const returnGames = getSeasonGames({
-        //   gamesArray: gamesForTeam,
-        //   seriesArray: seriesForTeam,
-        // })
 
         const seasonObjects = await getSeasons({
           teamId,

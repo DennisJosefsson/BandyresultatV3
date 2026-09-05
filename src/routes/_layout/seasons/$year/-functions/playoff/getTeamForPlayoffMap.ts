@@ -2,7 +2,6 @@ import { db } from '@/db'
 import {
   county,
   municipality,
-  playoffseason,
   seasons,
   series,
   teamgames,
@@ -13,7 +12,6 @@ import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import type { County } from '@/lib/types/county'
 import type { Municipality } from '@/lib/types/municipality'
 import type { Team } from '@/lib/types/team'
-import { seasonIdCheck } from '@/lib/utils/utils'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
 import type { SQL } from 'drizzle-orm'
@@ -52,7 +50,6 @@ export const getTeamsForPlayoffMap = createServerFn({
       data: { year, women },
     }): Promise<TeamsForPlayoffMapReturn> => {
       try {
-        const seasonYear = seasonIdCheck.parse(year)
         if (year < 1973 && women) {
           return {
             status: 404,
@@ -60,36 +57,32 @@ export const getTeamsForPlayoffMap = createServerFn({
               'Damernas första säsong var 1972/1973.',
           }
         }
-        const season = await db.query.seasons.findFirst({
-          where: (seasonsSchema, { and: AND, eq: equal }) =>
-            AND(
-              equal(seasonsSchema.year, seasonYear!),
-              equal(seasonsSchema.women, women),
-            ),
-        })
 
-        if (!season) {
-          return {
-            status: 404,
-            message: 'Säsongen finns inte.',
-          }
-        }
+        // const playoffSeasonArr = await db
+        //   .select({ ...getTableColumns(playoffseason) })
+        //   .from(playoffseason)
+        //   .leftJoin(
+        //     seasons,
+        //     eq(seasons.seasonId, playoffseason.seasonId),
+        //   )
+        //   .where(
+        //     and(
+        //       inArray(
+        //         seasons.seasonId,
+        //         db
+        //           .select({ seasonI: seasons.seasonId })
+        //           .from(seasons)
+        //           .where(
+        //             and(
+        //               eq(seasons.intYear, year),
+        //               eq(seasons.women, women),
+        //             ),
+        //           ),
+        //       ),
+        //     ),
+        //   )
 
-        const playoffSeasonArr = await db
-          .select({ ...getTableColumns(playoffseason) })
-          .from(playoffseason)
-          .leftJoin(
-            seasons,
-            eq(seasons.seasonId, playoffseason.seasonId),
-          )
-          .where(
-            and(
-              eq(seasons.seasonId, season.seasonId),
-              eq(seasons.women, women),
-            ),
-          )
-
-        const playoffSeason = playoffSeasonArr[0]
+        // const playoffSeason = playoffSeasonArr[0]
 
         const teamArray = await db
           .selectDistinctOn([teamgames.teamId], {
@@ -125,9 +118,17 @@ export const getTeamsForPlayoffMap = createServerFn({
           )
           .where(
             and(
-              eq(
+              inArray(
                 teamgames.seasonId,
-                playoffSeason.seasonId,
+                db
+                  .select({ seasonId: seasons.seasonId })
+                  .from(seasons)
+                  .where(
+                    and(
+                      eq(seasons.intYear, year),
+                      eq(seasons.women, women),
+                    ),
+                  ),
               ),
               inArray(series.category, [
                 'playoffseries',

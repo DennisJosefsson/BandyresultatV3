@@ -4,7 +4,6 @@ import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import type { Serie } from '@/lib/types/serie'
 import type { TeamTable } from '@/lib/types/table'
-import { seasonIdCheck } from '@/lib/utils/utils'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
 import { and, eq, getTableColumns } from 'drizzle-orm'
@@ -39,13 +38,6 @@ export const getTables = createServerFn({ method: 'GET' })
       data: { group, year, women, table },
     }): Promise<TablesReturn> => {
       try {
-        const seasonYear = seasonIdCheck.parse(year)
-        if (!seasonYear) {
-          return {
-            status: 404,
-            message: 'Säsongen finns inte.',
-          }
-        }
         if (year < 1930) {
           return {
             status: 404,
@@ -74,7 +66,7 @@ export const getTables = createServerFn({ method: 'GET' })
           .where(
             and(
               eq(seasons.women, women),
-              eq(seasons.year, seasonYear),
+              eq(seasons.intYear, year),
               eq(series.group, group),
             ),
           )

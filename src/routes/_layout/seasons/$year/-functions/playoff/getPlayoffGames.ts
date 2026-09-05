@@ -3,7 +3,6 @@ import { playoffseason, seasons } from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import type { PlayoffGames } from '@/lib/types/game'
-import { seasonIdCheck } from '@/lib/utils/utils'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
 import { and, eq, getTableColumns } from 'drizzle-orm'
@@ -32,30 +31,6 @@ export const getPlayoffGames = createServerFn({
       data: { year, women },
     }): Promise<GamesReturn> => {
       try {
-        const seasonYear = seasonIdCheck.parse(year)
-        if (year < 1973 && women) {
-          return {
-            status: 404,
-            message:
-              'Damernas första säsong var 1972/1973.',
-          }
-        }
-
-        const season = await db.query.seasons.findFirst({
-          where: (seasonsSchema, { and: AND, eq: equal }) =>
-            AND(
-              equal(seasonsSchema.year, seasonYear!),
-              equal(seasonsSchema.women, women),
-            ),
-        })
-
-        if (!season) {
-          return {
-            status: 404,
-            message: 'Säsongen finns inte.',
-          }
-        }
-
         const playoffSeasonArr = await db
           .select({ ...getTableColumns(playoffseason) })
           .from(playoffseason)
@@ -65,7 +40,7 @@ export const getPlayoffGames = createServerFn({
           )
           .where(
             and(
-              eq(seasons.seasonId, season.seasonId),
+              eq(seasons.intYear, year),
               eq(seasons.women, women),
             ),
           )

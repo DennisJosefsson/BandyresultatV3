@@ -1,11 +1,5 @@
 import { db } from '@/db'
-import {
-  games,
-  seasons,
-  series,
-  teams,
-  teamseries,
-} from '@/db/schema'
+import { games, seasons, series, teams } from '@/db/schema'
 import { getSortPlayedGamesServerFn } from '@/lib/cookieFunctions/sortPlayedGames'
 import { getSortUnplayedGamesServerFn } from '@/lib/cookieFunctions/sortUnplayedGames'
 import { catchError } from '@/lib/middlewares/errors/catchError'
@@ -23,21 +17,14 @@ import {
   eq,
   getTableColumns,
   inArray,
-  sql,
 } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
 import { sortGames } from './gameSortFunction'
-
-type TeamArray = {
-  teamId: number
-  casualName: string
-}
 
 type GamesReturn =
   | {
       status: 200
       games: Games
-      teamArray: Array<TeamArray>
       serie: Serie
     }
   | {
@@ -91,7 +78,7 @@ export const getGames = createServerFn({ method: 'GET' })
             and(
               eq(series.group, group),
               eq(seasons.women, women),
-              eq(seasons.year, seasonYear),
+              eq(seasons.intYear, year),
             ),
           )
           .then((res) => {
@@ -159,7 +146,7 @@ export const getGames = createServerFn({ method: 'GET' })
           .where(
             and(
               eq(games.played, true),
-              eq(seasons.year, seasonYear),
+              eq(seasons.intYear, year),
               eq(games.women, women),
               inArray(series.group, [group, 'mix']),
             ),
@@ -213,7 +200,7 @@ export const getGames = createServerFn({ method: 'GET' })
           .where(
             and(
               eq(games.played, false),
-              eq(seasons.year, seasonYear),
+              eq(seasons.intYear, year),
               eq(games.women, women),
               inArray(series.group, [group, 'mix']),
             ),
@@ -234,18 +221,6 @@ export const getGames = createServerFn({ method: 'GET' })
             message: 'Inga matcher än denna säsong.',
           }
         }
-        const season = await db.query.seasons.findFirst({
-          where: (seasonsSchema, { eq: equal, and: AND }) =>
-            AND(
-              equal(seasonsSchema.year, seasonYear),
-              equal(seasonsSchema.women, women),
-            ),
-        })
-        if (!season)
-          return {
-            status: 404,
-            message: 'Säsongen finns inte.',
-          }
 
         const sortedGames = sortGames({
           playedGamesArray,
@@ -253,26 +228,10 @@ export const getGames = createServerFn({ method: 'GET' })
           serie,
         })
 
-        const teamArray = await db
-          .select({
-            teamId: teams.teamId as unknown as SQL<number>,
-            casualName:
-              teams.casualName as unknown as SQL<string>,
-          })
-          .from(teamseries)
-          .leftJoin(
-            teams,
-            eq(teamseries.teamId, teams.teamId),
-          )
-          .where(eq(teamseries.serieId, serie.serieId))
-          .orderBy(
-            asc(sql`casual_name collate "se-SE-x-icu"`),
-          )
-
         return {
           status: 200,
           games: sortedGames,
-          teamArray,
+
           serie,
         }
       } catch (error) {
