@@ -22,7 +22,7 @@ const season_order = db.$with('season_order').as(
       year: seasons.year,
     })
     .from(seasons)
-    .where(gte(seasons.seasonId, 25)),
+    .where(gte(seasons.intYear, 1931)),
 )
 
 const playoff_seasons = db.$with('playoff_seasons').as(
@@ -30,9 +30,13 @@ const playoff_seasons = db.$with('playoff_seasons').as(
     .selectDistinct({ seasonId: teamgames.seasonId })
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
+    .leftJoin(
+      seasons,
+      eq(seasons.seasonId, teamgames.seasonId),
+    )
     .where(
       and(
-        gte(teamgames.seasonId, 25),
+        gte(seasons.intYear, 1931),
         eq(teamgames.teamId, sql.placeholder('teamId')),
         inArray(series.category, [
           'playoffseries',

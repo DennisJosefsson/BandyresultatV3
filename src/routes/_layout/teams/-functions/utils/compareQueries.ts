@@ -2,6 +2,7 @@ import { db } from '@/db'
 import {
   competitions,
   games,
+  seasons,
   series,
   teamcompetitions,
   teamgames,
@@ -399,10 +400,14 @@ export const getPlayoffs = (teamArray: Array<number>) =>
     .from(teamgames)
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
+    .leftJoin(
+      seasons,
+      eq(seasons.seasonId, teamgames.seasonId),
+    )
     .where(
       and(
         inArray(teamgames.teamId, teamArray),
-        gte(teamgames.seasonId, 25),
+        gte(seasons.intYear, 1931),
         inArray(series.category, [
           'playoffseries',
           'quarter',
@@ -462,10 +467,14 @@ export const getFirstDivisionSeasonsSince1931 = (
     .from(teamgames)
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
     .leftJoin(series, eq(teamgames.serieId, series.serieId))
+    .leftJoin(
+      seasons,
+      eq(seasons.seasonId, teamgames.seasonId),
+    )
     .where(
       and(
         inArray(teamgames.teamId, teamArray),
-        gte(teamgames.seasonId, 25),
+        gte(seasons.intYear, 1931),
         lt(series.level, 250),
         eq(series.category, 'regular'),
       ),

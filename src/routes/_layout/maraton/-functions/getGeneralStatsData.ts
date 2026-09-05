@@ -1,6 +1,7 @@
 import { db } from '@/db'
 import {
   competitions,
+  seasons,
   series,
   teamgames,
   teams,
@@ -189,7 +190,7 @@ export async function getGeneralStatsData({
       })
     })
 
-  const seasons = await db
+  const seasonCount = await db
     .select({
       count: countDistinct(teamgames.seasonId),
       team: {
@@ -206,11 +207,15 @@ export async function getGeneralStatsData({
       competitions,
       eq(competitions.competitionId, series.competitionId),
     )
+    .leftJoin(
+      seasons,
+      eq(seasons.seasonId, teamgames.seasonId),
+    )
     .where(
       and(
         eq(teamgames.women, women),
         eq(competitions.division, 1),
-        gte(teamgames.seasonId, 25),
+        gte(seasons.intYear, 1931),
       ),
     )
     .groupBy(teams.teamId)
@@ -247,6 +252,10 @@ export async function getGeneralStatsData({
     .from(teamgames)
     .leftJoin(teams, eq(teamgames.teamId, teams.teamId))
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
+    .leftJoin(
+      seasons,
+      eq(seasons.seasonId, teamgames.seasonId),
+    )
     .where(
       and(
         eq(teamgames.women, women),
@@ -256,7 +265,7 @@ export async function getGeneralStatsData({
           'semi',
           'final',
         ]),
-        gte(teamgames.seasonId, 25),
+        gte(seasons.intYear, 1931),
       ),
     )
     .groupBy(teams.teamId)
@@ -285,7 +294,7 @@ export async function getGeneralStatsData({
     finals,
     playoffs,
     allPlayoffs,
-    seasons,
+    seasons: seasonCount,
     allSeasons,
   }
 }
