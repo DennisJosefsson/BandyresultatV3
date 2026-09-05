@@ -50,7 +50,7 @@ export async function getPointData({
     )
     .where(
       and(
-        gt(teamgames.seasonId, women ? 162 : 101),
+        gt(seasons.intYear, women ? 2015 : 2007),
         eq(teamgames.played, true),
         eq(series.category, 'regular'),
         eq(teamgames.women, women),
@@ -111,7 +111,7 @@ export async function getPointData({
     )
     .where(
       and(
-        gt(teamgames.seasonId, women ? 162 : 101),
+        gt(seasons.intYear, women ? 2015 : 2007),
         eq(teamgames.played, true),
         eq(series.category, 'regular'),
         eq(teamgames.women, women),
@@ -173,7 +173,7 @@ export async function getPointData({
     )
     .where(
       and(
-        gt(teamgames.seasonId, women ? 162 : 101),
+        gt(seasons.intYear, women ? 2015 : 2007),
         eq(teamgames.played, true),
         eq(series.category, 'regular'),
         eq(teamgames.women, women),
@@ -235,7 +235,7 @@ export async function getPointData({
     )
     .where(
       and(
-        gt(teamgames.seasonId, women ? 162 : 101),
+        gt(seasons.intYear, women ? 2015 : 2007),
         eq(teamgames.played, true),
         eq(series.category, 'regular'),
         eq(teamgames.women, women),
@@ -296,7 +296,7 @@ export async function getPointData({
     )
     .where(
       and(
-        gt(teamgames.seasonId, women ? 162 : 101),
+        gt(seasons.intYear, women ? 2015 : 2007),
         eq(teamgames.played, true),
         eq(series.category, 'regular'),
         eq(teamgames.women, women),
@@ -358,7 +358,7 @@ export async function getPointData({
     )
     .where(
       and(
-        gt(teamgames.seasonId, women ? 162 : 101),
+        gt(seasons.intYear, women ? 2015 : 2007),
         eq(teamgames.played, true),
         eq(series.category, 'regular'),
         eq(teamgames.women, women),
@@ -420,7 +420,7 @@ export async function getPointData({
     )
     .where(
       and(
-        gt(teamgames.seasonId, women ? 162 : 101),
+        gt(seasons.intYear, women ? 2015 : 2007),
         eq(teamgames.played, true),
         eq(series.category, 'regular'),
         eq(teamgames.women, women),
@@ -481,7 +481,7 @@ export async function getPointData({
     )
     .where(
       and(
-        gt(teamgames.seasonId, women ? 162 : 101),
+        gt(seasons.intYear, women ? 2015 : 2007),
         eq(teamgames.played, true),
         eq(series.category, 'regular'),
         eq(teamgames.women, women),
@@ -543,7 +543,7 @@ export async function getPointData({
     )
     .where(
       and(
-        gt(teamgames.seasonId, women ? 162 : 101),
+        gt(seasons.intYear, women ? 2015 : 2007),
         eq(teamgames.played, true),
         eq(series.category, 'regular'),
         eq(teamgames.women, women),
@@ -605,7 +605,7 @@ export async function getPointData({
     )
     .where(
       and(
-        gt(teamgames.seasonId, women ? 162 : 101),
+        gt(seasons.intYear, women ? 2015 : 2007),
         eq(teamgames.played, true),
         eq(series.category, 'regular'),
         eq(teamgames.women, women),
@@ -666,7 +666,7 @@ export async function getPointData({
     )
     .where(
       and(
-        gt(teamgames.seasonId, women ? 162 : 101),
+        gt(seasons.intYear, women ? 2015 : 2007),
         eq(teamgames.played, true),
         eq(series.category, 'regular'),
         eq(teamgames.women, women),
@@ -728,7 +728,7 @@ export async function getPointData({
     )
     .where(
       and(
-        gt(teamgames.seasonId, women ? 162 : 101),
+        gt(seasons.intYear, women ? 2015 : 2007),
         eq(teamgames.played, true),
         eq(series.category, 'regular'),
         eq(teamgames.women, women),

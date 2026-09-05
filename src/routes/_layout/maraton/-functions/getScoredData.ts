@@ -53,7 +53,7 @@ export async function getScoredData({
     )
     .where(
       and(
-        gt(teamgames.seasonId, women ? 162 : 101),
+        gt(seasons.intYear, women ? 2015 : 2007),
         eq(teamgames.played, true),
         eq(series.category, 'regular'),
         eq(teamgames.women, women),
@@ -114,7 +114,7 @@ export async function getScoredData({
     )
     .where(
       and(
-        gt(teamgames.seasonId, women ? 162 : 101),
+        gt(seasons.intYear, women ? 2015 : 2007),
         eq(teamgames.played, true),
         eq(series.category, 'regular'),
         eq(teamgames.women, women),
@@ -176,7 +176,7 @@ export async function getScoredData({
     )
     .where(
       and(
-        gt(teamgames.seasonId, women ? 162 : 101),
+        gt(seasons.intYear, women ? 2015 : 2007),
         eq(teamgames.played, true),
         eq(series.category, 'regular'),
         eq(teamgames.women, women),
@@ -238,7 +238,7 @@ export async function getScoredData({
     )
     .where(
       and(
-        gt(teamgames.seasonId, women ? 162 : 101),
+        gt(seasons.intYear, women ? 2015 : 2007),
         eq(teamgames.played, true),
         eq(series.category, 'regular'),
         eq(teamgames.women, women),
@@ -299,7 +299,7 @@ export async function getScoredData({
     )
     .where(
       and(
-        gt(teamgames.seasonId, women ? 162 : 101),
+        gt(seasons.intYear, women ? 2015 : 2007),
         eq(teamgames.played, true),
         eq(series.category, 'regular'),
         eq(teamgames.women, women),
@@ -361,7 +361,7 @@ export async function getScoredData({
     )
     .where(
       and(
-        gt(teamgames.seasonId, women ? 162 : 101),
+        gt(seasons.intYear, women ? 2015 : 2007),
         eq(teamgames.played, true),
         eq(series.category, 'regular'),
         eq(teamgames.women, women),
@@ -423,7 +423,7 @@ export async function getScoredData({
     )
     .where(
       and(
-        gt(teamgames.seasonId, women ? 162 : 101),
+        gt(seasons.intYear, women ? 2015 : 2007),
         eq(teamgames.played, true),
         eq(series.category, 'regular'),
         eq(teamgames.women, women),
@@ -484,7 +484,7 @@ export async function getScoredData({
     )
     .where(
       and(
-        gt(teamgames.seasonId, women ? 162 : 101),
+        gt(seasons.intYear, women ? 2015 : 2007),
         eq(teamgames.played, true),
         eq(series.category, 'regular'),
         eq(teamgames.women, women),
@@ -546,7 +546,7 @@ export async function getScoredData({
     )
     .where(
       and(
-        gt(teamgames.seasonId, women ? 162 : 101),
+        gt(seasons.intYear, women ? 2015 : 2007),
         eq(teamgames.played, true),
         eq(series.category, 'regular'),
         eq(teamgames.women, women),
@@ -608,7 +608,7 @@ export async function getScoredData({
     )
     .where(
       and(
-        gt(teamgames.seasonId, women ? 162 : 101),
+        gt(seasons.intYear, women ? 2015 : 2007),
         eq(teamgames.played, true),
         eq(series.category, 'regular'),
         eq(teamgames.women, women),
@@ -669,7 +669,7 @@ export async function getScoredData({
     )
     .where(
       and(
-        gt(teamgames.seasonId, women ? 162 : 101),
+        gt(seasons.intYear, women ? 2015 : 2007),
         eq(teamgames.played, true),
         eq(series.category, 'regular'),
         eq(teamgames.women, women),
@@ -731,7 +731,7 @@ export async function getScoredData({
     )
     .where(
       and(
-        gt(teamgames.seasonId, women ? 162 : 101),
+        gt(seasons.intYear, women ? 2015 : 2007),
         eq(teamgames.played, true),
         eq(series.category, 'regular'),
         eq(teamgames.women, women),
@@ -803,7 +803,7 @@ export async function getScoredData({
     )
     .where(
       and(
-        gt(teamgames.seasonId, women ? 162 : 101),
+        gt(seasons.intYear, women ? 2015 : 2007),
         eq(teamgames.played, true),
         eq(series.category, 'regular'),
         eq(teamgames.women, women),
@@ -818,8 +818,12 @@ export async function getScoredData({
     .limit(10)
     .then((res) => {
       const filteredResult = res.map((item, index) => {
-        return {homeTeam:item.team.casualName,homeTeamId:item.team.teamId,awayTeam:item.opponent.casualName,awayTeamId:item.opponent.teamId,
-          
+        return {
+          homeTeam: item.team.casualName,
+          homeTeamId: item.team.teamId,
+          awayTeam: item.opponent.casualName,
+          awayTeamId: item.opponent.teamId,
+
           result: `${item.goalsScored}-${item.goalsConceded}`,
           goals: item.totalGoals,
           date: item.date,
@@ -873,7 +877,7 @@ export async function getScoredData({
     )
     .where(
       and(
-        gt(teamgames.seasonId, women ? 162 : 101),
+        gt(seasons.intYear, women ? 2015 : 2007),
         eq(teamgames.played, true),
         eq(series.category, 'regular'),
         eq(teamgames.women, women),
@@ -888,8 +892,12 @@ export async function getScoredData({
     .limit(10)
     .then((res) => {
       const filteredResult = res.map((item, index) => {
-        return {homeTeam:item.team.casualName,homeTeamId:item.team.teamId,awayTeam:item.opponent.casualName,awayTeamId:item.opponent.teamId,
-          
+        return {
+          homeTeam: item.team.casualName,
+          homeTeamId: item.team.teamId,
+          awayTeam: item.opponent.casualName,
+          awayTeamId: item.opponent.teamId,
+
           result: `${item.goalsScored}-${item.goalsConceded}`,
           goals: item.totalGoals,
           date: item.date,
@@ -924,9 +932,13 @@ export async function getScoredData({
       competitions,
       eq(competitions.competitionId, series.competitionId),
     )
+    .leftJoin(
+      seasons,
+      eq(seasons.seasonId, teamgames.seasonId),
+    )
     .where(
       and(
-        gt(teamgames.seasonId, women ? 162 : 101),
+        gt(seasons.intYear, women ? 2015 : 2007),
         eq(teamgames.played, true),
         ne(series.category, 'qualification'),
         eq(teamgames.women, women),
@@ -945,9 +957,13 @@ export async function getScoredData({
       competitions,
       eq(competitions.competitionId, series.competitionId),
     )
+    .leftJoin(
+      seasons,
+      eq(seasons.seasonId, teamgames.seasonId),
+    )
     .where(
       and(
-        gt(teamgames.seasonId, women ? 162 : 101),
+        gt(seasons.intYear, women ? 2015 : 2007),
         eq(teamgames.played, true),
         ne(series.category, 'qualification'),
         eq(teamgames.women, women),
