@@ -363,6 +363,8 @@ export const teamgames = pgTable(
     win: boolean(),
     otWin: boolean('ot_win'),
     otLost: boolean('ot_lost'),
+    otGoalsScored: integer('ot_goals_scored'),
+    otGoalsConceded: integer('ot_goals_conceded'),
     firstHalfWin: boolean('first_half_win'),
     secondHalfWin: boolean('second_half_win'),
     lost: boolean(),
@@ -477,6 +479,7 @@ export const teamseries = pgTable(
     teamId: integer('team_id').notNull(),
     serieId: integer('serie_id').notNull(),
     bonusPoints: integer('bonus_points'),
+    sortPriority: integer('sort_priority').default(0),
   },
   (table) => [
     foreignKey({
