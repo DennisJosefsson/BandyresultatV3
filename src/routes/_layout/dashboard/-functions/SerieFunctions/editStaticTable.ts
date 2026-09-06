@@ -1,11 +1,11 @@
-import { eq } from 'drizzle-orm'
-import { createServerFn } from '@tanstack/react-start'
-import { editStaticTableArray } from '@/lib/types/table'
-import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import { catchError } from '@/lib/middlewares/errors/catchError'
-import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
-import { tables } from '@/db/schema'
 import { db } from '@/db'
+import { tables } from '@/db/schema'
+import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
+import { catchError } from '@/lib/middlewares/errors/catchError'
+import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
+import { editStaticTableArray } from '@/lib/types/table'
+import { createServerFn } from '@tanstack/react-start'
+import { eq } from 'drizzle-orm'
 
 export const editStaticTable = createServerFn({
   method: 'POST',
@@ -20,28 +20,13 @@ export const editStaticTable = createServerFn({
 
       const queries = tableArray.map((table) => {
         const { tableId, teamName, ...rest } = table
-        return db.update(tables).set(rest).where(eq(tables.tableId, tableId))
+        return db
+          .update(tables)
+          .set(rest)
+          .where(eq(tables.tableId, tableId))
       })
 
       await Promise.all(queries)
-
-      //   const sqlChunks: SQL[] = []
-      //   const ids: number[] = []
-      //   sqlChunks.push(sql`(case`)
-
-      //   for (const input of tableArray) {
-      //     sqlChunks.push(
-      //       sql`when ${tables.tableId} = ${input.tableId} then cast(${input.bonusPoints} as integer)`,
-      //     )
-      //     ids.push(input.tableId)
-      //   }
-
-      //   sqlChunks.push(sql`end)`)
-      //   const finalSql: SQL = sql.join(sqlChunks, sql.raw(' '))
-      //   await db
-      //     .update(teamseries)
-      //     .set({ bonusPoints: finalSql })
-      //     .where(inArray(teamseries.teamseriesId, ids))
 
       return {
         status: 200,

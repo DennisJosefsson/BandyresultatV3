@@ -1,4 +1,5 @@
 import ConfirmDialog from '@/components/Common/ConfirmDialog'
+import CustomNumberInput from '@/components/Common/CustomNumberInput'
 import { Button } from '@/components/base/ui/button'
 import {
   Card,
@@ -14,15 +15,9 @@ import {
   FieldLegend,
   FieldSet,
 } from '@/components/base/ui/field'
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput,
-} from '@/components/base/ui/input-group'
-import { zd } from '@/lib/utils/zod'
 import { getRouteApi } from '@tanstack/react-router'
 import { useRef, useState } from 'react'
+
 import { deleteTeamserieMutation } from '../../../-hooks/deleteTeamserieMutation'
 import { useEditTeamSeriesForm } from '../../../-hooks/useEditTeamSeriesForm'
 
@@ -40,6 +35,7 @@ const EditTeamSerie = () => {
     null,
   )
   const form = useEditTeamSeriesForm()
+
   const teamArray = route
     .useLoaderData({ select: (s) => s.teamsInSerie })
     .map((team) => {
@@ -49,6 +45,7 @@ const EditTeamSerie = () => {
         teamId: team.team.teamId,
       }
     })
+
   const mutation = deleteTeamserieMutation(
     teamserieDialogRef,
   )
@@ -107,129 +104,249 @@ const EditTeamSerie = () => {
                     !field.state.meta.isValid
                   return (
                     <FieldSet className="gap-4">
-                      <FieldLegend variant="label">
-                        <div className="flex flex-row items-center gap-2">
-                          <span className="w-40 text-sm">
+                      <FieldLegend
+                        variant="label"
+                        className="w-full"
+                      >
+                        <div className="grid grid-cols-5 items-center gap-2">
+                          <span className="text-sm">
                             Lag
                           </span>
-                          <span className="w-40 text-sm">
+                          <span className="text-sm">
                             TeamId
                           </span>
-                          <div className="w-40 text-sm">
+                          <span className="text-sm">
                             Bonuspoäng
-                          </div>
+                          </span>
+                          <span className="text-sm">
+                            Sortering
+                          </span>
+                          <span className="invisible">
+                            Fält
+                          </span>
                         </div>
                       </FieldLegend>
                       <FieldGroup className="gap-4">
                         {field.state.value.map(
-                          (team, index) => (
-                            <form.Field
-                              key={index}
-                              name={`teamserie[${index}].bonusPoints`}
-                              children={(subField) => {
-                                const currTeamName =
-                                  teamArray.find(
-                                    (t) =>
-                                      t.teamseriesId ===
-                                      team.teamseriesId,
-                                  )?.teamName
-                                const currTeamId =
-                                  teamArray.find(
-                                    (t) =>
-                                      t.teamseriesId ===
-                                      team.teamseriesId,
-                                  )?.teamId
-                                const isSubFieldInvalid =
-                                  subField.state.meta
-                                    .isTouched &&
-                                  !subField.state.meta
-                                    .isValid
-                                return (
-                                  <Field
-                                    orientation="horizontal"
-                                    data-invalid={
-                                      isSubFieldInvalid
-                                    }
-                                  >
-                                    <FieldContent>
-                                      <div className="flex flex-row items-center gap-2">
-                                        <span className="w-40 text-sm">
-                                          {currTeamName}
-                                        </span>
-                                        <span className="w-40 text-sm">
-                                          {currTeamId}
-                                        </span>
-                                        <div className="w-40">
-                                          <InputGroup>
-                                            <InputGroupInput
-                                              id={`form-team-array-bonusPoints-${index}`}
-                                              name={
-                                                subField.name
-                                              }
-                                              value={
-                                                subField
-                                                  .state
-                                                  .value
-                                              }
-                                              onBlur={
-                                                subField.handleBlur
-                                              }
-                                              onChange={(
-                                                e,
-                                              ) =>
-                                                subField.handleChange(
-                                                  zd.coerce
-                                                    .number()
-                                                    .parse(
-                                                      e
-                                                        .target
-                                                        .value,
-                                                    ),
-                                                )
-                                              }
-                                              aria-invalid={
-                                                isSubFieldInvalid
-                                              }
-                                              placeholder="0"
-                                            />
-
-                                            <InputGroupAddon align="inline-end">
-                                              <InputGroupButton
-                                                type="button"
-                                                variant="ghost"
-                                                onClick={() => {
-                                                  setTeamName(
-                                                    currTeamName ??
-                                                      'Okänt lag',
+                          (team, index) => {
+                            const currTeamName =
+                              teamArray.find(
+                                (t) =>
+                                  t.teamseriesId ===
+                                  team.teamseriesId,
+                              )?.teamName
+                            const currTeamId =
+                              teamArray.find(
+                                (t) =>
+                                  t.teamseriesId ===
+                                  team.teamseriesId,
+                              )?.teamId
+                            return (
+                              <div
+                                key={`div-${index}`}
+                                className="grid grid-cols-5 gap-2"
+                              >
+                                <span className="text-sm">
+                                  {currTeamName}
+                                </span>
+                                <span className="text-sm">
+                                  {currTeamId}
+                                </span>
+                                <form.Field
+                                  name={`teamserie[${index}].bonusPoints`}
+                                  children={(subField) => {
+                                    const isSubFieldInvalid =
+                                      subField.state.meta
+                                        .isTouched &&
+                                      !subField.state.meta
+                                        .isValid
+                                    return (
+                                      <Field
+                                        orientation="horizontal"
+                                        data-invalid={
+                                          isSubFieldInvalid
+                                        }
+                                      >
+                                        <FieldContent>
+                                          <div className="flex flex-row items-center gap-2">
+                                            <div className="w-24">
+                                              <CustomNumberInput
+                                                id={
+                                                  subField.name
+                                                }
+                                                name={
+                                                  subField.name
+                                                }
+                                                value={
+                                                  subField
+                                                    .state
+                                                    .value
+                                                }
+                                                onBlur={
+                                                  subField.handleBlur
+                                                }
+                                                onChange={(
+                                                  e,
+                                                ) =>
+                                                  subField.handleChange(
+                                                    e.target
+                                                      .valueAsNumber,
                                                   )
-                                                  openDialog(
-                                                    team.teamseriesId,
+                                                }
+                                                aria-invalid={
+                                                  isSubFieldInvalid
+                                                }
+                                                placeholder="0"
+                                                incrementer={() =>
+                                                  subField.setValue(
+                                                    subField
+                                                      .state
+                                                      .value +
+                                                      1,
                                                   )
+                                                }
+                                                decrementer={() =>
+                                                  subField.setValue(
+                                                    subField
+                                                      .state
+                                                      .value -
+                                                      1,
+                                                  )
+                                                }
+                                                error={{
+                                                  hasErrorField: true,
+                                                  errorBoolean:
+                                                    isSubFieldInvalid,
+                                                  errors:
+                                                    subField
+                                                      .state
+                                                      .meta
+                                                      .errors,
                                                 }}
-                                                aria-label={`Ta bort lag ${index + 1}`}
-                                              >
-                                                Ta bort lag
-                                              </InputGroupButton>
-                                            </InputGroupAddon>
-                                          </InputGroup>
-                                          {isSubFieldInvalid && (
-                                            <FieldError
-                                              errors={
-                                                subField
-                                                  .state
-                                                  .meta
-                                                  .errors
-                                              }
-                                            />
-                                          )}
-                                        </div>
-                                      </div>
-                                    </FieldContent>
-                                  </Field>
-                                )
-                              }}
-                            />
-                          ),
+                                              />
+                                              {isSubFieldInvalid && (
+                                                <FieldError
+                                                  errors={
+                                                    subField
+                                                      .state
+                                                      .meta
+                                                      .errors
+                                                  }
+                                                />
+                                              )}
+                                            </div>
+                                          </div>
+                                        </FieldContent>
+                                      </Field>
+                                    )
+                                  }}
+                                />
+                                <form.Field
+                                  name={`teamserie[${index}].sortPriority`}
+                                  children={(subField) => {
+                                    const isSubFieldInvalid =
+                                      subField.state.meta
+                                        .isTouched &&
+                                      !subField.state.meta
+                                        .isValid
+                                    return (
+                                      <Field
+                                        orientation="horizontal"
+                                        data-invalid={
+                                          isSubFieldInvalid
+                                        }
+                                      >
+                                        <FieldContent>
+                                          <div className="flex flex-row items-center gap-2">
+                                            <div className="w-24">
+                                              <CustomNumberInput
+                                                id={
+                                                  subField.name
+                                                }
+                                                name={
+                                                  subField.name
+                                                }
+                                                value={
+                                                  subField
+                                                    .state
+                                                    .value
+                                                }
+                                                onBlur={
+                                                  subField.handleBlur
+                                                }
+                                                onChange={(
+                                                  e,
+                                                ) =>
+                                                  subField.handleChange(
+                                                    e.target
+                                                      .valueAsNumber,
+                                                  )
+                                                }
+                                                aria-invalid={
+                                                  isSubFieldInvalid
+                                                }
+                                                placeholder="0"
+                                                incrementer={() =>
+                                                  subField.setValue(
+                                                    subField
+                                                      .state
+                                                      .value +
+                                                      1,
+                                                  )
+                                                }
+                                                decrementer={() =>
+                                                  subField.setValue(
+                                                    subField
+                                                      .state
+                                                      .value -
+                                                      1,
+                                                  )
+                                                }
+                                                error={{
+                                                  hasErrorField: true,
+                                                  errorBoolean:
+                                                    isSubFieldInvalid,
+                                                  errors:
+                                                    subField
+                                                      .state
+                                                      .meta
+                                                      .errors,
+                                                }}
+                                              />
+                                              {isSubFieldInvalid && (
+                                                <FieldError
+                                                  errors={
+                                                    subField
+                                                      .state
+                                                      .meta
+                                                      .errors
+                                                  }
+                                                />
+                                              )}
+                                            </div>
+                                          </div>
+                                        </FieldContent>
+                                      </Field>
+                                    )
+                                  }}
+                                />
+                                <Button
+                                  variant="outline"
+                                  onClick={() => {
+                                    setTeamName(
+                                      currTeamName ??
+                                        'Okänt lag',
+                                    )
+                                    openDialog(
+                                      team.teamseriesId,
+                                    )
+                                  }}
+                                >
+                                  Ta bort
+                                </Button>
+                              </div>
+                            )
+                          },
                         )}
                       </FieldGroup>
                       {isInvalid && (

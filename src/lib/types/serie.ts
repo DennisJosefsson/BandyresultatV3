@@ -120,6 +120,7 @@ export const editParentSerieObjectArray = zd.object({
 export const editTeamSeriesObject = zd.object({
   teamseriesId: zd.number().int().positive(),
   bonusPoints: zd.number().int(),
+  sortPriority: zd.number().int(),
 })
 
 export const editTeamSeriesArray = zd.object({

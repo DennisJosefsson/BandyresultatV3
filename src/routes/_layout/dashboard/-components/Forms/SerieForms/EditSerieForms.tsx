@@ -1,10 +1,8 @@
 import { Button } from '@/components/base/ui/button'
 import { Card } from '@/components/base/ui/card'
 import { Outlet, getRouteApi } from '@tanstack/react-router'
-import AddTeamToSerie from './AddTeamToSerie'
 import EditCupSerie from './EditCupSerie'
 import EditSerie from './EditSerie'
-import EditTeamSerie from './EditTeamserie'
 
 const route = getRouteApi(
   '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit',
@@ -39,12 +37,20 @@ const EditSerieForms = () => {
       </div>
       {form === 'serie' ? <EditSerie /> : <EditCupSerie />}
 
-      <div className="grid grid-cols-2 gap-8">
-        <AddTeamToSerie />
-        <EditTeamSerie />
-      </div>
       <Card>
         <div className="mb-4 flex flex-row justify-center gap-6">
+          <Button
+            render={
+              <route.Link
+                to="/dashboard/season/$seasonId/info/serie/$serieId/edit/teamseries"
+                search={(prev) => ({ ...prev })}
+                resetScroll={false}
+              >
+                Ändra lag
+              </route.Link>
+            }
+            nativeButton={false}
+          />
           <Button
             render={
               <route.Link

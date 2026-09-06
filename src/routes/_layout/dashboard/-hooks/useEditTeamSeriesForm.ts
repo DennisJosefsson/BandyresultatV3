@@ -34,6 +34,7 @@ export const useEditTeamSeriesForm = () => {
       return {
         teamseriesId: s.teamseriesId,
         bonusPoints: s.bonusPoints ?? 0,
+        sortPriority: s.sortPriority ?? 0,
       }
     }),
   }
