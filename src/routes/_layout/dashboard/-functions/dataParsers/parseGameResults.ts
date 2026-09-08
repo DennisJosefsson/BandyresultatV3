@@ -280,8 +280,8 @@ export const parseGameResult = zd
       women: obj.women,
       homeTeamId: obj.homeTeamId,
       awayTeamId: obj.awayTeamId,
-      homeGoal,
-      awayGoal,
+      homeGoal: otHomeGoal ?? homeGoal,
+      awayGoal: otAwayGoal ?? awayGoal,
       halftimeHomeGoal,
       halftimeAwayGoal,
       penalties: obj.penalties,
@@ -569,8 +569,8 @@ export const parseNewGameWithResult = zd
 
     return {
       ...obj,
-      homeGoal,
-      awayGoal,
+      homeGoal: otHomeGoal ?? homeGoal,
+      awayGoal: otAwayGoal ?? awayGoal,
       halftimeHomeGoal,
       halftimeAwayGoal,
       homeTeamTeamGame,
