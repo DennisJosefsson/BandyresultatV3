@@ -4,7 +4,7 @@ import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import type { Game } from '@/lib/types/game'
 import type {
-  PlayoffCategoryArray,
+  PlayoffGroupsV2,
   PlayoffSeriesTable,
 } from '@/lib/types/table'
 import { zd } from '@/lib/utils/zod'
@@ -17,12 +17,17 @@ import {
 } from 'drizzle-orm'
 import { getPlayoffTableData } from './getPlayoffTableData'
 
+type PlayoffTable = {
+  category: string
+  level: number | null
+  groupArray: Array<PlayoffGroupsV2>
+}
 type PlayoffTableReturn =
   | {
       status: 200
       finalGames: Array<Omit<Game, 'season'>>
       bronzeGames: Array<Omit<Game, 'season'>>
-      playoffTables: Array<PlayoffCategoryArray>
+      playoffTables: Array<PlayoffTable>
       playoffSeriesTables:
         | Array<PlayoffSeriesTable>
         | undefined
@@ -87,7 +92,8 @@ export const getPlayoffTable = createServerFn({
 
         const playoffSeason = playoffSeasonArr[0]
         const playoffData = await getPlayoffTableData({
-          playoffSeason,
+          year,
+          women,
         })
 
         return {

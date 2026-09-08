@@ -9,7 +9,7 @@ type FinalCardProps = {
 
 const FinalCard = ({ game, title }: FinalCardProps) => {
   return (
-    <div className="grid w-auto min-w-[33%] grid-cols-1 justify-center @2xl/playoff:mx-auto">
+    <div className="grid w-auto min-w-[33%] grid-cols-1 justify-center @4xl/playoff:mx-auto">
       <PlayoffCard group="final">
         <PlayoffCard.Title>
           <PlayoffCard.Group>{title}</PlayoffCard.Group>
@@ -18,33 +18,50 @@ const FinalCard = ({ game, title }: FinalCardProps) => {
           </PlayoffCard.Result>
         </PlayoffCard.Title>
         <PlayoffCard.Content>
-          <div className="flex flex-row justify-between text-xs @2xs/playoff:text-sm @2xl/playoff:text-xs @4xl/playoff:text-base">
-            <div className="flex flex-col gap-2">
-              <PlayoffCard.Team teamId={game.home.teamId}>
-                <TeamLogo
-                  size={32}
-                  teamId={game.home.teamId}
-                  className="size-[1lh] object-scale-down"
-                  aria-label={game.home.casualName}
-                  title={game.home.casualName}
-                />
-                <span>{game.home.name}</span>
-              </PlayoffCard.Team>
-              <PlayoffCard.Team teamId={game.awayTeamId}>
-                <TeamLogo
-                  size={32}
-                  teamId={game.away.teamId}
-                  className="size-[1lh] object-scale-down"
-                  aria-label={game.away.casualName}
-                  title={game.away.casualName}
-                />
-                <span>{game.away.name}</span>
-              </PlayoffCard.Team>
-            </div>
-            <div>
-              <PlayoffCard.Result>
-                <span className="mr-2">{game.result}</span>
-              </PlayoffCard.Result>
+          <div className="flex flex-row justify-between text-xs @2xs/playoff:text-sm @2xl/playoff:text-xs @4xl/playoff:text-base 4xl/playoff:p-1">
+            <div className="flex flex-col gap-2 w-full">
+              <div className="flex flex-row justify-between items-center w-full">
+                <PlayoffCard.Team teamId={game.home.teamId}>
+                  <TeamLogo
+                    size={32}
+                    teamId={game.home.teamId}
+                    className="size-[1lh] object-scale-down"
+                    aria-label={game.home.casualName}
+                    title={game.home.casualName}
+                  />
+                  <span>{game.home.name}</span>
+                </PlayoffCard.Team>
+                <div>
+                  <span>{game.homeGoal}</span>
+                </div>
+              </div>
+              <div className="flex flex-row justify-between items-center w-full">
+                <PlayoffCard.Team teamId={game.awayTeamId}>
+                  <TeamLogo
+                    size={32}
+                    teamId={game.away.teamId}
+                    className="size-[1lh] object-scale-down"
+                    aria-label={game.away.casualName}
+                    title={game.away.casualName}
+                  />
+                  <span>{game.away.name}</span>
+                </PlayoffCard.Team>
+                <div>
+                  <span>{game.awayGoal}</span>
+                </div>
+              </div>
+              {game.otResult ? (
+                <div>
+                  <span className="text-[10px] @2xl:text-xs">
+                    Matchen slutade {game.result} efter full
+                    tid och avgjordes{' '}
+                    {game.penalties
+                      ? 'på straffar'
+                      : 'under förlängningen'}
+                    .
+                  </span>
+                </div>
+              ) : null}
             </div>
           </div>
         </PlayoffCard.Content>

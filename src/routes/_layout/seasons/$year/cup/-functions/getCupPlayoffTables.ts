@@ -5,7 +5,7 @@ import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import type { Game } from '@/lib/types/game'
 import type {
-  PlayoffCategoryArray,
+  PlayoffGroupsV2,
   PlayoffSeriesTable,
 } from '@/lib/types/table'
 import { zd } from '@/lib/utils/zod'
@@ -19,13 +19,19 @@ import {
 } from 'drizzle-orm'
 import { getCupPlayoffTableData } from './getCupPlayoffTableData'
 
+type PlayoffTable = {
+  category: string
+  level: number | null
+  groupArray: Array<PlayoffGroupsV2>
+}
+
 type CupPlayoffReturn =
   | {
       status: 200
       competition: typeof competitions.$inferSelect
       finalGames: Array<Omit<Game, 'season'>>
       bronzeGames: Array<Omit<Game, 'season'>>
-      playoffTables: Array<PlayoffCategoryArray>
+      playoffTables: Array<PlayoffTable>
       playoffSeriesTables:
         | Array<PlayoffSeriesTable>
         | undefined
@@ -42,45 +48,30 @@ export const getCupPlayoffTables = createServerFn({
       competitionName: zd
         .string()
         .transform((val) => val.replaceAll('_', ' ')),
-      seasonYear: zd.string(),
+      year: zd.number(),
       women: zd.boolean(),
     }),
   )
   .handler(
     async ({
-      data: { competitionName, seasonYear, women },
+      data: { competitionName, year, women },
     }): Promise<CupPlayoffReturn> => {
       try {
-        const season = await db
-          .select({ ...getTableColumns(seasons) })
-          .from(seasons)
-          .where(
-            and(
-              eq(seasons.year, seasonYear),
-              eq(seasons.women, women),
-            ),
-          )
-          .then((res) => {
-            if (res.length === 0) return undefined
-            return res[0]
-          })
-
-        if (!season) {
-          throw new Error404({
-            message: 'Säsongen finns inte.',
-          })
-        }
-
         const competition = await db
-          .select()
+          .select({ ...getTableColumns(competitions) })
           .from(competitions)
+          .leftJoin(
+            seasons,
+            eq(seasons.seasonId, competitions.seasonId),
+          )
           .where(
             and(
               eq(
                 competitions.competitionName,
                 competitionName,
               ),
-              eq(competitions.seasonId, season.seasonId),
+              eq(seasons.intYear, year),
+              eq(seasons.women, women),
               eq(competitions.isCup, true),
             ),
           )
@@ -100,9 +91,32 @@ export const getCupPlayoffTables = createServerFn({
           .from(series)
           .where(
             and(
-              eq(
+              inArray(
                 series.competitionId,
-                competition.competitionId,
+                db
+                  .select({
+                    competitionId:
+                      competitions.competitionId,
+                  })
+                  .from(competitions)
+                  .leftJoin(
+                    seasons,
+                    eq(
+                      seasons.seasonId,
+                      competitions.seasonId,
+                    ),
+                  )
+                  .where(
+                    and(
+                      eq(seasons.intYear, year),
+                      eq(seasons.women, women),
+                      eq(
+                        competitions.competitionName,
+                        competitionName,
+                      ),
+                      eq(competitions.isCup, true),
+                    ),
+                  ),
               ),
               inArray(series.category, [
                 'cup-playoffseries',
@@ -127,8 +141,9 @@ export const getCupPlayoffTables = createServerFn({
         }
 
         const playoffData = await getCupPlayoffTableData({
-          competition,
-          serieArray: competitionSeries,
+          year,
+          women,
+          competitionName,
         })
 
         return {

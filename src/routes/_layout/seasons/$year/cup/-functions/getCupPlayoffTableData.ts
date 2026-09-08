@@ -1,19 +1,24 @@
 import { db } from '@/db'
-import type { competitions } from '@/db/schema'
 import {
+  competitions,
   games,
+  seasons,
   series,
   teamgames,
   teams,
+  teamseries,
 } from '@/db/schema'
 import type {
-  PlayoffGroups,
+  GoalsArrayItem,
+  PlayoffGroupsV2,
   PlayoffTable,
+  TeamArrayItem,
 } from '@/lib/types/table'
 import { sortOrder } from '@/lib/utils/constants'
 import type { SQL } from 'drizzle-orm'
 import {
   and,
+  asc,
   count,
   desc,
   eq,
@@ -25,136 +30,136 @@ import {
 import { alias } from 'drizzle-orm/pg-core'
 
 type FunctionProps = {
-  serieArray: Array<typeof series.$inferSelect>
-  competition: typeof competitions.$inferSelect
+  year: number
+  women: boolean
+  competitionName: string
 }
 
 export const getCupPlayoffTableData = async ({
-  serieArray,
-  competition,
+  year,
+  women,
+  competitionName,
 }: FunctionProps) => {
-  const playoffGroups = serieArray.filter((s1) =>
-    ['cup-eight', 'cup-quarter', 'cup-semi'].includes(
-      s1.category,
-    ),
-  )
+  const playoffTables = await getPlayoffTable({
+    year,
+    women,
+    competitionName,
+  })
 
-  const serieIds = playoffGroups.map((s2) => s2.serieId)
+  // const playoffCte = db.$with('playoff_cte').as(
+  //   db
+  //     .select({
+  //       teamId: teamgames.teamId,
+  //       group: series.group as unknown as SQL<string>,
+  //       category: series.category as unknown as SQL<string>,
+  //       serieId: teamgames.serieId,
+  //       totalGames: count(teamgames.teamGameId).as(
+  //         'total_games',
+  //       ),
+  //       totalPoints: sum(teamgames.points)
+  //         .mapWith(Number)
+  //         .as('total_points'),
+  //       totalGoalsScored: sum(teamgames.goalsScored)
+  //         .mapWith(Number)
+  //         .as(
+  //           'total_goals_scored',
+  //         ) as unknown as SQL<number>,
+  //       totalGoalsConceded: sum(teamgames.goalsConceded)
+  //         .mapWith(Number)
+  //         .as(
+  //           'total_goals_conceded',
+  //         ) as unknown as SQL<number>,
+  //       totalGoalDifference: sum(teamgames.goalDifference)
+  //         .mapWith(Number)
+  //         .as(
+  //           'total_goal_difference',
+  //         ) as unknown as SQL<number>,
+  //       totalWins:
+  //         sql<number>`cast(count(*) filter (where win or ot_win) as int)`.as(
+  //           'totalWins',
+  //         ),
+  //       totalDraws:
+  //         sql<number>`cast(count(*) filter (where draw) as int)`.as(
+  //           'totalDraws',
+  //         ),
+  //       totalLost:
+  //         sql<number>`cast(count(*) filter (where lost or ot_lost) as int)`.as(
+  //           'totalLost',
+  //         ),
+  //       awayGoals:
+  //         sql<number>`sum(case when teamgames.home_game = false then teamgames.goals_scored else null end)`
+  //           .mapWith(Number)
+  //           .as('away_goals'),
+  //     })
+  //     .from(teamgames)
+  //     .leftJoin(
+  //       series,
+  //       eq(teamgames.serieId, series.serieId),
+  //     )
+  //     .where(inArray(teamgames.serieId, serieIds))
+  //     .groupBy(
+  //       series.group,
+  //       teamgames.teamId,
+  //       series.category,
+  //       teamgames.serieId,
+  //     ),
+  // )
 
-  const playoffCte = db.$with('playoff_cte').as(
-    db
-      .select({
-        teamId: teamgames.teamId,
-        group: series.group as unknown as SQL<string>,
-        category: series.category as unknown as SQL<string>,
-        serieId: teamgames.serieId,
-        totalGames: count(teamgames.teamGameId).as(
-          'total_games',
-        ),
-        totalPoints: sum(teamgames.points)
-          .mapWith(Number)
-          .as('total_points'),
-        totalGoalsScored: sum(teamgames.goalsScored)
-          .mapWith(Number)
-          .as(
-            'total_goals_scored',
-          ) as unknown as SQL<number>,
-        totalGoalsConceded: sum(teamgames.goalsConceded)
-          .mapWith(Number)
-          .as(
-            'total_goals_conceded',
-          ) as unknown as SQL<number>,
-        totalGoalDifference: sum(teamgames.goalDifference)
-          .mapWith(Number)
-          .as(
-            'total_goal_difference',
-          ) as unknown as SQL<number>,
-        totalWins:
-          sql<number>`cast(count(*) filter (where win or ot_win) as int)`.as(
-            'totalWins',
-          ),
-        totalDraws:
-          sql<number>`cast(count(*) filter (where draw) as int)`.as(
-            'totalDraws',
-          ),
-        totalLost:
-          sql<number>`cast(count(*) filter (where lost or ot_lost) as int)`.as(
-            'totalLost',
-          ),
-        awayGoals:
-          sql<number>`sum(case when teamgames.home_game = false then teamgames.goals_scored else null end)`
-            .mapWith(Number)
-            .as('away_goals'),
-      })
-      .from(teamgames)
-      .leftJoin(
-        series,
-        eq(teamgames.serieId, series.serieId),
-      )
-      .where(inArray(teamgames.serieId, serieIds))
-      .groupBy(
-        series.group,
-        teamgames.teamId,
-        series.category,
-        teamgames.serieId,
-      ),
-  )
-
-  const playoffTables = await db
-    .with(playoffCte)
-    .select({
-      teamId: playoffCte.teamId,
-      group: playoffCte.group,
-      category: playoffCte.category,
-      totalGames: playoffCte.totalGames,
-      totalWins: playoffCte.totalWins,
-      totalDraws: playoffCte.totalDraws,
-      totalLost: playoffCte.totalLost,
-      totalGoalsScored: playoffCte.totalGoalsScored,
-      totalGoalsConceded: playoffCte.totalGoalsConceded,
-      totalGoalDifference: playoffCte.totalGoalDifference,
-      totalPoints: playoffCte.totalPoints,
-      awayGoals: playoffCte.awayGoals,
-      team: {
-        teamId: teams.teamId,
-        name: teams.name,
-        shortName: teams.shortName,
-        casualName: teams.casualName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        shortName: string
-        casualName: string
-      }>,
-    })
-    .from(playoffCte)
-    .leftJoin(teams, eq(teams.teamId, playoffCte.teamId))
-    .leftJoin(
-      series,
-      eq(series.serieId, playoffCte.serieId),
-    )
-    .then((res) =>
-      sortPlayoffTables({
-        tableArray: res,
-        uefaSorting: false,
-      }),
-    )
-    .then((res) => {
-      const array: Array<PlayoffGroups> = []
-      playoffGroups.forEach((group) => {
-        const table = res.find(
-          (grp) => grp.group === group.group,
-        )
-        array.push({
-          name: group.serieName,
-          group: group.group,
-          category: group.category,
-          table,
-        })
-      })
-      return array
-    })
-    .then((res) => sortCategories({ sortedTables: res }))
+  // const playoffTables = await db
+  //   .with(playoffCte)
+  //   .select({
+  //     teamId: playoffCte.teamId,
+  //     group: playoffCte.group,
+  //     category: playoffCte.category,
+  //     totalGames: playoffCte.totalGames,
+  //     totalWins: playoffCte.totalWins,
+  //     totalDraws: playoffCte.totalDraws,
+  //     totalLost: playoffCte.totalLost,
+  //     totalGoalsScored: playoffCte.totalGoalsScored,
+  //     totalGoalsConceded: playoffCte.totalGoalsConceded,
+  //     totalGoalDifference: playoffCte.totalGoalDifference,
+  //     totalPoints: playoffCte.totalPoints,
+  //     awayGoals: playoffCte.awayGoals,
+  //     team: {
+  //       teamId: teams.teamId,
+  //       name: teams.name,
+  //       shortName: teams.shortName,
+  //       casualName: teams.casualName,
+  //     } as unknown as SQL<{
+  //       teamId: number
+  //       name: string
+  //       shortName: string
+  //       casualName: string
+  //     }>,
+  //   })
+  //   .from(playoffCte)
+  //   .leftJoin(teams, eq(teams.teamId, playoffCte.teamId))
+  //   .leftJoin(
+  //     series,
+  //     eq(series.serieId, playoffCte.serieId),
+  //   )
+  //   .then((res) =>
+  //     sortPlayoffTables({
+  //       tableArray: res,
+  //       uefaSorting: false,
+  //     }),
+  //   )
+  //   .then((res) => {
+  //     const array: Array<PlayoffGroups> = []
+  //     playoffGroups.forEach((group) => {
+  //       const table = res.find(
+  //         (grp) => grp.group === group.group,
+  //       )
+  //       array.push({
+  //         name: group.serieName,
+  //         group: group.group,
+  //         category: group.category,
+  //         table,
+  //       })
+  //     })
+  //     return array
+  //   })
+  //   .then((res) => sortCategories({ sortedTables: res }))
 
   const home = alias(teams, 'home')
   const away = alias(teams, 'away')
@@ -193,7 +198,34 @@ export const getCupPlayoffTableData = async ({
     .leftJoin(series, eq(games.serieId, series.serieId))
     .where(
       and(
-        eq(series.competitionId, competition.competitionId),
+        inArray(
+          series.competitionId,
+          db
+            .select({
+              competitionId: competitions.competitionId,
+            })
+            .from(competitions)
+            .where(
+              and(
+                eq(
+                  competitions.competitionName,
+                  competitionName,
+                ),
+                inArray(
+                  competitions.seasonId,
+                  db
+                    .select({ seasonId: seasons.seasonId })
+                    .from(seasons)
+                    .where(
+                      and(
+                        eq(seasons.intYear, year),
+                        eq(seasons.women, women),
+                      ),
+                    ),
+                ),
+              ),
+            ),
+        ),
         eq(series.group, 'cup-final'),
       ),
     )
@@ -233,25 +265,54 @@ export const getCupPlayoffTableData = async ({
     .leftJoin(series, eq(games.serieId, series.serieId))
     .where(
       and(
-        eq(series.competitionId, competition.competitionId),
+        inArray(
+          series.competitionId,
+          db
+            .select({
+              competitionId: competitions.competitionId,
+            })
+            .from(competitions)
+            .where(
+              and(
+                eq(
+                  competitions.competitionName,
+                  competitionName,
+                ),
+                inArray(
+                  competitions.seasonId,
+                  db
+                    .select({ seasonId: seasons.seasonId })
+                    .from(seasons)
+                    .where(
+                      and(
+                        eq(seasons.intYear, year),
+                        eq(seasons.women, women),
+                      ),
+                    ),
+                ),
+              ),
+            ),
+        ),
         eq(series.group, 'cup-bronze'),
       ),
     )
     .orderBy(desc(games.date))
 
-  const playoffSeriesTables = serieArray.some(
-    (s3) => s3.category === 'cup-playoffseries',
-  )
-    ? await getPlayoffAsSeriesTable(
-        competition.competitionId,
-      )
-    : undefined
+  const getPlayoffSeriesTables =
+    await getPlayoffAsSeriesTable({
+      year,
+      women,
+      competitionName,
+    })
 
   return {
     finalGames,
     bronzeGames,
     playoffTables,
-    playoffSeriesTables,
+    playoffSeriesTables:
+      getPlayoffSeriesTables.length === 0
+        ? undefined
+        : getPlayoffSeriesTables,
   }
 }
 
@@ -267,9 +328,9 @@ type SortedTableGroups = {
   }
 }
 
-type SortedCategories = {
-  [key: string]: Array<PlayoffGroups>
-}
+// type SortedCategories = {
+//   [key: string]: Array<PlayoffGroups>
+// }
 
 const eightGroupIds = ['E1', 'E2', 'E3', 'E4']
 
@@ -356,51 +417,57 @@ function sortPlayoffTables({
   return sortedTables
 }
 
-const sortCategories = ({
-  sortedTables,
+// const sortCategories = ({
+//   sortedTables,
+// }: {
+//   sortedTables: Array<PlayoffGroups>
+// }) => {
+//   const categoryArray = sortedTables.reduce(
+//     (category, group) => {
+//       if (!category[group.category]) {
+//         category[group.category] = []
+//       }
+//       category[group.category].push(group)
+//       return category
+//     },
+//     {} as SortedCategories,
+//   )
+
+//   const sortedCategories = Object.keys(categoryArray).map(
+//     (c) => {
+//       return {
+//         category: c,
+//         groups: categoryArray[c],
+//       }
+//     },
+//   )
+
+//   return sortedCategories.sort((a, b) => {
+//     if (
+//       sortOrder.indexOf(a.category) >
+//       sortOrder.indexOf(b.category)
+//     ) {
+//       return 1
+//     } else if (
+//       sortOrder.indexOf(a.category) <
+//       sortOrder.indexOf(b.category)
+//     ) {
+//       return -1
+//     } else {
+//       return 0
+//     }
+//   })
+// }
+
+async function getPlayoffAsSeriesTable({
+  year,
+  women,
+  competitionName,
 }: {
-  sortedTables: Array<PlayoffGroups>
-}) => {
-  const categoryArray = sortedTables.reduce(
-    (category, group) => {
-      if (!category[group.category]) {
-        category[group.category] = []
-      }
-      category[group.category].push(group)
-      return category
-    },
-    {} as SortedCategories,
-  )
-
-  const sortedCategories = Object.keys(categoryArray).map(
-    (c) => {
-      return {
-        category: c,
-        groups: categoryArray[c],
-      }
-    },
-  )
-
-  return sortedCategories.sort((a, b) => {
-    if (
-      sortOrder.indexOf(a.category) >
-      sortOrder.indexOf(b.category)
-    ) {
-      return 1
-    } else if (
-      sortOrder.indexOf(a.category) <
-      sortOrder.indexOf(b.category)
-    ) {
-      return -1
-    } else {
-      return 0
-    }
-  })
-}
-
-async function getPlayoffAsSeriesTable(
-  competitionId: number,
-) {
+  year: number
+  women: boolean
+  competitionName: string
+}) {
   const playoffCte = db.$with('playoff_cte').as(
     db
       .select({
@@ -453,7 +520,36 @@ async function getPlayoffAsSeriesTable(
       )
       .where(
         and(
-          eq(series.competitionId, competitionId),
+          inArray(
+            series.competitionId,
+            db
+              .select({
+                competitionId: competitions.competitionId,
+              })
+              .from(competitions)
+              .where(
+                and(
+                  eq(
+                    competitions.competitionName,
+                    competitionName,
+                  ),
+                  inArray(
+                    competitions.seasonId,
+                    db
+                      .select({
+                        seasonId: seasons.seasonId,
+                      })
+                      .from(seasons)
+                      .where(
+                        and(
+                          eq(seasons.intYear, year),
+                          eq(seasons.women, women),
+                        ),
+                      ),
+                  ),
+                ),
+              ),
+          ),
           inArray(series.category, ['playoffseries']),
         ),
       )
@@ -511,7 +607,34 @@ async function getPlayoffAsSeriesTable(
     .from(series)
     .where(
       and(
-        eq(series.competitionId, competitionId),
+        inArray(
+          series.competitionId,
+          db
+            .select({
+              competitionId: competitions.competitionId,
+            })
+            .from(competitions)
+            .where(
+              and(
+                eq(
+                  competitions.competitionName,
+                  competitionName,
+                ),
+                inArray(
+                  competitions.seasonId,
+                  db
+                    .select({ seasonId: seasons.seasonId })
+                    .from(seasons)
+                    .where(
+                      and(
+                        eq(seasons.intYear, year),
+                        eq(seasons.women, women),
+                      ),
+                    ),
+                ),
+              ),
+            ),
+        ),
         eq(series.category, 'cup-playoffseries'),
       ),
     )
@@ -536,4 +659,151 @@ async function getPlayoffAsSeriesTable(
   })
 
   return sortedTables
+}
+
+async function getPlayoffTable({
+  year,
+  women,
+  competitionName,
+}: {
+  year: number
+  women: boolean
+  competitionName: string
+}) {
+  const seriesCte = db.$with('series_cte').as(
+    db
+      .select({
+        serieId: series.serieId,
+        teamId: teamgames.teamId,
+        gameCount: count(teamgames.teamGameId).as(
+          'game_count',
+        ),
+        goalsArray: sql<Array<GoalsArrayItem>>`
+                  coalesce(
+                      json_agg(
+                          json_build_object(
+                          'otWin',teamgames.ot_win,
+                          'penalties',games.penalties,
+                          'extraTime',games.extra_time,
+                          'goals',coalesce(teamgames.ot_goals_scored, teamgames.goals_scored, 0)
+                          )
+                      order by teamgames."date" asc
+                      ) filter (where teamgames.played is true), '[]'::json
+                  ) 
+                  `.as('goals_array'),
+        awayGoals:
+          sql`coalesce(sum(case when teamgames.home_game is false then teamgames.goals_scored else 0 end),0)`
+            .mapWith(Number)
+            .as('away_goals'),
+        winCount:
+          sql`coalesce(sum(case when coalesce(teamgames.ot_win,teamgames.win) is true then 1 else 0 end),0)`
+            .mapWith(Number)
+            .as('win_count'),
+      })
+      .from(series)
+      .leftJoin(
+        seasons,
+        eq(seasons.seasonId, series.seasonId),
+      )
+      .leftJoin(
+        teamgames,
+        eq(teamgames.serieId, series.serieId),
+      )
+      .leftJoin(games, eq(games.gameId, teamgames.gameId))
+      .leftJoin(
+        competitions,
+        eq(
+          competitions.competitionId,
+          series.competitionId,
+        ),
+      )
+      .where(
+        and(
+          eq(competitions.competitionName, competitionName),
+          inArray(
+            competitions.seasonId,
+            db
+              .select({ seasonId: seasons.seasonId })
+              .from(seasons)
+              .where(
+                and(
+                  eq(seasons.intYear, year),
+                  eq(seasons.women, women),
+                ),
+              ),
+          ),
+          inArray(series.category, [
+            'cup-semi',
+            'cup-quarter',
+            'cup-eight',
+          ]),
+        ),
+      )
+      .groupBy(series.serieId, teamgames.teamId),
+  )
+
+  const groupsAgg = db.$with('groups_agg').as(
+    db
+      .with(seriesCte)
+      .select({
+        serieId: seriesCte.serieId,
+        serieName: series.serieName,
+        level: series.level,
+        teamArray: sql<Array<TeamArrayItem>>`
+                      coalesce(json_agg(
+                          json_build_object(
+                              'teamId',teams.team_id,
+                              'shortName',teams.short_name,
+                              'name',teams."name",
+                              'casualName',teams.casual_name,
+                              'winCount',series_cte.win_count,
+                              'gameCount',series_cte.game_count,
+                              'awayGoals',series_cte.away_goals,
+                              'goalsArray',series_cte.goals_array
+                          ) order by teamseries.sort_priority desc, series_cte.win_count desc) 
+                      filter (where teams.team_id is not null), '[]'::json )
+                  `.as('team_array'),
+      })
+      .from(seriesCte)
+      .leftJoin(
+        series,
+        eq(series.serieId, seriesCte.serieId),
+      )
+      .leftJoin(teams, eq(teams.teamId, seriesCte.teamId))
+      .leftJoin(
+        teamseries,
+        and(
+          eq(teamseries.serieId, seriesCte.serieId),
+          eq(teamseries.teamId, seriesCte.teamId),
+        ),
+      )
+      .groupBy(
+        seriesCte.serieId,
+        series.serieName,
+        series.level,
+      )
+      .orderBy(asc(series.level), series.serieName),
+  )
+
+  const array = await db
+    .with(groupsAgg)
+    .select({
+      category: series.category as unknown as SQL<string>,
+      level: groupsAgg.level,
+      groupArray: sql<Array<PlayoffGroupsV2>>`
+                  json_agg(
+                      json_build_object(
+                          'group',series.serie_group_code,
+                          'serieName',groups_agg.serie_name,
+                          'teamArray',groups_agg.team_array
+                      ) order by groups_agg.serie_name
+                  )
+                `.as('group_array'),
+    })
+    .from(groupsAgg)
+    .leftJoin(series, eq(series.serieId, groupsAgg.serieId))
+    .groupBy(series.category, groupsAgg.level)
+    .orderBy(asc(groupsAgg.level))
+
+  return array
 }

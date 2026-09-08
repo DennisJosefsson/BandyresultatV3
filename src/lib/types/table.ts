@@ -186,3 +186,27 @@ export const editStaticTable = zd.object({
 export const editStaticTableArray = zd.object({
   tableArray: zd.array(editStaticTable),
 })
+
+export type GoalsArrayItem = {
+  otWin: boolean | null
+  penalties: boolean | null
+  extraTime: boolean | null
+  goals: number
+}
+
+export type TeamArrayItem = {
+  teamId: number
+  name: string
+  casualName: string
+  shortName: string
+  gameCount: number
+  winCount: number
+  awayGoals: number
+  goalsArray: Array<GoalsArrayItem>
+}
+
+export type PlayoffGroupsV2 = {
+  group: string
+  serieName: string
+  teamArray: Array<TeamArrayItem>
+}

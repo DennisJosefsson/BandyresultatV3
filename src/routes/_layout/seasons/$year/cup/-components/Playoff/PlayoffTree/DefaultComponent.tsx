@@ -1,5 +1,5 @@
 import TeamLogo from '@/components/Common/TeamLogo'
-import type { PlayoffGroups } from '@/lib/types/table'
+import type { PlayoffGroupsV2 } from '@/lib/types/table'
 import type {
   DetailedHTMLProps,
   HTMLAttributes,
@@ -10,51 +10,66 @@ interface DefaultComponentProps extends DetailedHTMLProps<
   HTMLAttributes<HTMLDivElement>,
   HTMLDivElement
 > {
-  group: PlayoffGroups
+  group: PlayoffGroupsV2
 }
 
 const DefaultComponent = ({
   group,
   className,
 }: DefaultComponentProps) => {
-  if (group.table === undefined) return null
+  if (group.teamArray.length === 0) return null
   return (
     <PlayoffCard
       className={className}
       group={group.group}
     >
       <PlayoffCard.Title>
-        <PlayoffCard.Group>{group.name}</PlayoffCard.Group>
-        <PlayoffCard.Result>
-          {group.table.result}
-        </PlayoffCard.Result>
+        <PlayoffCard.Group>
+          {group.serieName}
+        </PlayoffCard.Group>
       </PlayoffCard.Title>
       <PlayoffCard.Content>
-        <PlayoffCard.Team
-          teamId={group.table.homeTeam.teamId}
-        >
-          <TeamLogo
-            size={32}
-            teamId={group.table.homeTeam.teamId}
-            className="size-[1lh] object-scale-down"
-            aria-label={group.table.homeTeam.name}
-            title={group.table.homeTeam.name}
-          />
-          <span>{group.table.homeTeam.casualName}</span>
-        </PlayoffCard.Team>
-
-        <PlayoffCard.Team
-          teamId={group.table.awayTeam.teamId}
-        >
-          <TeamLogo
-            size={32}
-            teamId={group.table.awayTeam.teamId}
-            className="size-[1lh] object-scale-down"
-            aria-label={group.table.awayTeam.name}
-            title={group.table.awayTeam.name}
-          />
-          <span>{group.table.awayTeam.casualName}</span>
-        </PlayoffCard.Team>
+        {group.teamArray.map((team) => {
+          return (
+            <div
+              key={`${team.teamId.toString()}-${group.serieName}`}
+              className="flex flex-row justify-between items-center"
+            >
+              <PlayoffCard.Team teamId={team.teamId}>
+                <TeamLogo
+                  size={32}
+                  teamId={team.teamId}
+                  className="size-[1lh] object-scale-down"
+                  aria-label={team.name}
+                  title={team.name}
+                />
+                <span>{team.shortName}</span>
+              </PlayoffCard.Team>
+              <div className="flex flex-row gap-1 items-center justify-between">
+                <div>
+                  <span className="font-bold">
+                    {team.gameCount > 1
+                      ? team.winCount
+                      : null}
+                  </span>
+                </div>
+                <div
+                  data-gamecount={team.gameCount === 1}
+                  className="grid grid-cols-5 data-[gamecount=true]:grid-cols-1 data-[gamecount=true]:font-bold gap-1 w-25"
+                >
+                  {team.goalsArray.map((g, index) => (
+                    <div
+                      className="text-right lining-nums tabular-nums text-[10px] @2xs/playoff:text-xs @2xl/playoff:text-[10px] @4xl/playoff:text-xs"
+                      key={`goalsArray-${team.teamId}-${group.serieName}-${index}`}
+                    >
+                      <span>{g.goals}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )
+        })}
       </PlayoffCard.Content>
     </PlayoffCard>
   )

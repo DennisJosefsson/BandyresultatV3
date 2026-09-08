@@ -8,12 +8,11 @@ export const Route = createFileRoute(
 )({
   loaderDeps: ({ search: { women } }) => ({ women }),
   loader: async ({
-    params: { competitionName },
+    params: { competitionName, year },
     deps: { women },
-    context: { seasonYear },
   }) => {
     const data = await getCupPlayoffTables({
-      data: { seasonYear, women, competitionName },
+      data: { year, women, competitionName },
     })
 
     if (!data) throw new Error('Missing cup playoff data')

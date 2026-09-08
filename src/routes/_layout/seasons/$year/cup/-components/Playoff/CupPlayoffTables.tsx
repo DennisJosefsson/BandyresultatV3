@@ -41,19 +41,19 @@ const CupPlayoffTables = () => {
               key={cat.category}
               data-category={cat.category}
               data-twogroups={
-                cat.groups.length === 2 ? true : false
+                cat.groupArray.length === 2 ? true : false
               }
               className={cn(
                 'grid grid-cols-1 gap-2',
-                'data-[category=cup-semi]:@2xl/playoff:grid-cols-5',
-                'data-[category=cup-quarter]:@5xl/playoff:gap-4 data-[category=cup-quarter]:data-[twogroups=true]:@5xl/playoff:gap-4 @2xl/playoff:grid-cols-5',
+                'data-[category=cup-semi]:@2xl/playoff:grid-cols-7',
+                'data-[category=cup-quarter]:@5xl/playoff:gap-4 data-[category=cup-quarter]:data-[twogroups=true]:@5xl/playoff:gap-4 @2xl/playoff:grid-cols-7',
                 'data-[category=cup-quarter]:data-[twogroups=false]:@2xl/playoff:grid-cols-4',
-                'data-[category=cup-eight]:@5xl/playoff:gap-4 data-[category=cup-eight]:data-[twogroups=true]:@5xl/playoff:gap-4 @2xl/playoff:grid-cols-5',
+                'data-[category=cup-eight]:@5xl/playoff:gap-4 data-[category=cup-eight]:data-[twogroups=true]:@5xl/playoff:gap-4 @2xl/playoff:grid-cols-7',
                 'data-[category=cup-eight]:data-[twogroups=false]:@2xl/playoff:grid-cols-4',
               )}
             >
-              {cat.groups.map((group, _, arr) => {
-                if (group.table === undefined)
+              {cat.groupArray.map((group, _, arr) => {
+                if (group.teamArray.length === 0)
                   return (
                     <div
                       key={group.group}
@@ -62,15 +62,17 @@ const CupPlayoffTables = () => {
                         arr.length === 2 ? true : false
                       }
                       className={cn(
-                        'mb-2 @2xl/playoff:mb-6',
-                        'data-[groupid=cup-S1]:@2xl/playoff:col-start-2 data-[groupid=cup-S2]:@2xl/playoff:col-start-4',
-                        'data-[twogroups=true]:data-[groupid=cup-Q1]:@2xl/playoff:col-start-2 data-[twogroups=true]:data-[groupid=cup-Q2]:@2xl/playoff:col-start-4',
-                        'data-[twogroups=false]:data-[groupid=cup-Q1]:@2xl/playoff:col-start-1 data-[twogroups=false]:data-[groupid=cup-Q2]:@2xl/playoff:col-start-2 data-[twogroups=false]:data-[groupid=cup-Q3]:@2xl/playoff:col-start-3 data-[twogroups=false]:data-[groupid=cup-Q4]:@2xl/playoff:col-start-4',
-                        'data-[twogroups=true]:data-[groupid=cup-E1]:@2xl/playoff:col-start-2 data-[twogroups=true]:data-[groupid=cup-E2]:@2xl/playoff:col-start-4',
-                        'data-[twogroups=false]:data-[groupid=cup-E1]:@2xl/playoff:col-start-1 data-[twogroups=false]:data-[groupid=cup-E2]:@2xl/playoff:col-start-2 data-[twogroups=false]:data-[groupid=cup-E3]:@2xl/playoff:col-start-3 data-[twogroups=false]:data-[groupid=cup-E4]:@2xl/playoff:col-start-4',
+                        'mb-2 @4xl/playoff:mb-6',
+                        'data-[groupid=cup-S1]:@4xl/playoff:col-start-2 data-[groupid=cup-S2]:@4xl/playoff:col-start-5 data-[groupid=cup-S1]:@4xl/playoff:col-span-2 data-[groupid=cup-S2]:@4xl/playoff:col-span-2',
+                        'data-[twogroups=true]:data-[groupid=cup-Q1]:@4xl/playoff:col-start-2 data-[twogroups=true]:data-[groupid=cup-Q2]:@4xl/playoff:col-start-5 data-[twogroups=true]:data-[groupid=cup-Q1]:@4xl/playoff:col-span-2 data-[twogroups=true]:data-[groupid=cup-Q2]:@4xl/playoff:col-span-2',
+                        'data-[twogroups=false]:data-[groupid=cup-Q1]:@4xl/playoff:col-start-1 data-[twogroups=false]:data-[groupid=cup-Q2]:@4xl/playoff:col-start-2 data-[twogroups=false]:data-[groupid=cup-Q3]:@4xl/playoff:col-start-3 data-[twogroups=false]:data-[groupid=cup-Q4]:@4xl/playoff:col-start-4',
+                        'data-[twogroups=true]:data-[groupid=cup-E1]:@4xl/playoff:col-start-2 data-[twogroups=true]:data-[groupid=cup-E2]:@4xl/playoff:col-start-5 data-[twogroups=true]:data-[groupid=cup-E1]:@4xl/playoff:col-span-2 data-[twogroups=true]:data-[groupid=cup-E2]:@4xl/playoff:col-span-2',
+                        'data-[twogroups=false]:data-[groupid=cup-E1]:@4xl/playoff:col-start-1 data-[twogroups=false]:data-[groupid=cup-E2]:@4xl/playoff:col-start-2 data-[twogroups=false]:data-[groupid=cup-E3]:@4xl/playoff:col-start-3 data-[twogroups=false]:data-[groupid=cup-E4]:@4xl/playoff:col-start-4',
                       )}
                     >
-                      <NilComponent group={group.name} />
+                      <NilComponent
+                        group={group.serieName}
+                      />
                     </div>
                   )
 
@@ -82,11 +84,12 @@ const CupPlayoffTables = () => {
                       arr.length === 2 ? true : false
                     }
                     className={cn(
-                      'data-[groupid=cup-S1]:@2xl/playoff:col-start-2 data-[groupid=cup-S2]:@2xl/playoff:col-start-4',
-                      'data-[twogroups=true]:data-[groupid=cup-Q1]:@2xl/playoff:col-start-2 data-[twogroups=true]:data-[groupid=cup-Q2]:@2xl/playoff:col-start-4',
-                      'data-[twogroups=false]:data-[groupid=cup-Q1]:@2xl/playoff:col-start-1 data-[twogroups=false]:data-[groupid=cup-Q2]:@2xl/playoff:col-start-2 data-[twogroups=false]:data-[groupid=cup-Q3]:@2xl/playoff:col-start-3 data-[twogroups=false]:data-[groupid=cup-Q4]:@2xl/playoff:col-start-4',
-                      'data-[twogroups=true]:data-[groupid=cup-E1]:@2xl/playoff:col-start-2 data-[twogroups=true]:data-[groupid=cup-E2]:@2xl/playoff:col-start-4',
-                      'data-[twogroups=false]:data-[groupid=cup-E1]:@2xl/playoff:col-start-1 data-[twogroups=false]:data-[groupid=cup-E2]:@2xl/playoff:col-start-2 data-[twogroups=false]:data-[groupid=cup-E3]:@2xl/playoff:col-start-3 data-[twogroups=false]:data-[groupid=cup-E4]:@2xl/playoff:col-start-4',
+                      'mb-2 @4xl/playoff:mb-6',
+                      'data-[groupid=cup-S1]:@4xl/playoff:col-start-2 data-[groupid=cup-S2]:@4xl/playoff:col-start-5 data-[groupid=cup-S1]:@4xl/playoff:col-span-2 data-[groupid=cup-S2]:@4xl/playoff:col-span-2',
+                      'data-[twogroups=true]:data-[groupid=cup-Q1]:@4xl/playoff:col-start-2 data-[twogroups=true]:data-[groupid=cup-Q2]:@4xl/playoff:col-start-5 data-[twogroups=true]:data-[groupid=cup-Q1]:@4xl/playoff:col-span-2 data-[twogroups=true]:data-[groupid=cup-Q2]:@4xl/playoff:col-span-2',
+                      'data-[twogroups=false]:data-[groupid=cup-Q1]:@4xl/playoff:col-start-1 data-[twogroups=false]:data-[groupid=cup-Q2]:@4xl/playoff:col-start-2 data-[twogroups=false]:data-[groupid=cup-Q3]:@4xl/playoff:col-start-3 data-[twogroups=false]:data-[groupid=cup-Q4]:@4xl/playoff:col-start-4',
+                      'data-[twogroups=true]:data-[groupid=cup-E1]:@4xl/playoff:col-start-2 data-[twogroups=true]:data-[groupid=cup-E2]:@4xl/playoff:col-start-5 data-[twogroups=true]:data-[groupid=cup-E1]:@4xl/playoff:col-span-2 data-[twogroups=true]:data-[groupid=cup-E2]:@4xl/playoff:col-span-2',
+                      'data-[twogroups=false]:data-[groupid=cup-E1]:@4xl/playoff:col-start-1 data-[twogroups=false]:data-[groupid=cup-E2]:@4xl/playoff:col-start-2 data-[twogroups=false]:data-[groupid=cup-E3]:@4xl/playoff:col-start-3 data-[twogroups=false]:data-[groupid=cup-E4]:@4xl/playoff:col-start-4',
                     )}
                   >
                     <DefaultComponent group={group} />

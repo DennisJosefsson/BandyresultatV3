@@ -74,7 +74,7 @@ function Result({ children }: { children: ReactNode }) {
 
 function Content({ children }: { children: ReactNode }) {
   return (
-    <CardContent className="flex flex-col gap-2 group-data-[size=sm]/card:p-1 text-xs @2xs/playoff:text-sm @2xl/playoff:text-xs @4xl/playoff:text-sm group-data-[size=sm]/card:@2xl/playoff:p-2">
+    <CardContent className="flex flex-col gap-2 group-data-[size=sm]/card:p-1 text-xs @2xs/playoff:text-sm @2xl/playoff:text-xs @4xl/playoff:text-sm group-data-[size=sm]/card:@2xl/playoff:p-1.5">
       {children}
     </CardContent>
   )
@@ -94,7 +94,7 @@ function Team({ teamId, children }: TeamProps) {
       data-favteam={
         favTeams.includes(teamId) ? true : false
       }
-      className="items center flex flex-row gap-2 p-0.5 text-xs @2xs/playoff:text-sm @2xl/playoff:text-xs @4xl/playoff:text-sm data-[favteam=true]:font-semibold sm:gap-2"
+      className="items center flex flex-row gap-1.5 @5xl/playoff:gap-2 p-0.5 text-xs @2xs/playoff:text-sm @2xl/playoff:text-xs @4xl/playoff:text-sm data-[favteam=true]:font-semibold"
     >
       {children}
     </span>
