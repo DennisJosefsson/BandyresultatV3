@@ -121,8 +121,8 @@ function RouteComponent() {
   if (childMatches.length === 0) {
     return (
       <div className="flex flex-col gap-2">
-        <div className="flex flex-row mt-4 justify-center">
-          <span className="text-sm font-semibold">
+        <div className="flex flex-row justify-center">
+          <span className="text-sm sm:text-base font-semibold">
             {data.competition.competitionName}
           </span>
         </div>
@@ -180,8 +180,8 @@ function RouteComponent() {
   }
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex flex-row mt-4 justify-center">
-        <span className="text-sm font-semibold">
+      <div className="flex flex-row justify-center">
+        <span className="text-sm sm:text-base font-semibold">
           {data.competition.competitionName}
         </span>
       </div>
