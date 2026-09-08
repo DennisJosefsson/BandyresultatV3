@@ -158,7 +158,10 @@ export const getSerieForEdit = createServerFn({
         .select({ ...getTableColumns(competitions) })
         .from(competitions)
         .where(eq(competitions.seasonId, seasonId))
-        .orderBy(asc(competitions.division))
+        .orderBy(
+          asc(competitions.division),
+          competitions.competitionName,
+        )
 
       const competitionSeries = await db
         .select()
@@ -166,7 +169,7 @@ export const getSerieForEdit = createServerFn({
         .where(
           eq(series.competitionId, serie.competitionId),
         )
-        .orderBy(asc(series.level))
+        .orderBy(asc(series.level), series.group)
 
       return {
         status: 200,
