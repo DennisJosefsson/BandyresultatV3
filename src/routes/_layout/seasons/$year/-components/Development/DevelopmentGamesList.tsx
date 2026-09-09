@@ -25,10 +25,12 @@ const DevelopmentGamesList = ({
       <div className="text-[10px] font-semibold tracking-wide @sm/dev:text-xs @3xl/dev:text-sm mt-2">
         <Datum>{games[index]?.date}</Datum>
       </div>
-      <GamesDataTable
-        columns={columns}
-        data={games[index]?.games}
-      />
+      {games[index]?.games.length > 0 ? (
+        <GamesDataTable
+          columns={columns}
+          data={games[index]?.games}
+        />
+      ) : null}
     </div>
   )
 }
