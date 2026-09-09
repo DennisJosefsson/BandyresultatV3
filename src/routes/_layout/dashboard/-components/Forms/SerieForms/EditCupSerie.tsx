@@ -326,7 +326,11 @@ const EditCupSerie = () => {
                                     field.state.value.indexOf(
                                       item.value,
                                     )
-                                  if (index && index > -1) {
+
+                                  if (
+                                    index !== undefined &&
+                                    index > -1
+                                  ) {
                                     field.removeValue(index)
                                   }
                                 }
