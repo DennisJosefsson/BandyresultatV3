@@ -399,19 +399,40 @@ export const getDevelopmentData = async ({
 
   const sortedGames = sortGames({ gameArray })
 
-  const dates = gameDates.map((d) => {
-    const dateArray = d.split('-')
-    const date = `${parseInt(dateArray[2])}/${parseInt(dateArray[1])}`
-    return date
-  })
+  const dates = gameDates.map((d) => parseDateItem(d))
+
+  const firstDate = new Date(gameDates[0])
+
+  const startDate = new Date(firstDate)
+  startDate.setDate(startDate.getDate() - 1)
+
+  const firstDateItem = new Intl.DateTimeFormat().format(
+    startDate,
+  )
 
   const sortedTables = tableSorting({
     startTable: start,
     tableArray,
     dateArray: gameDates,
+    firstDateItem,
   })
 
-  return { games: sortedGames, tables: sortedTables, dates }
+  const updatedGames = sortedGames.toSpliced(0, 0, {
+    date: firstDateItem,
+    games: [],
+  })
+
+  const updatedDates = dates.toSpliced(
+    0,
+    0,
+    parseDateItem(firstDateItem),
+  )
+
+  return {
+    games: updatedGames,
+    tables: sortedTables,
+    dates: updatedDates,
+  }
 }
 
 type GameDates = Array<string>
@@ -420,6 +441,7 @@ type TableSortingProps = {
   startTable: Array<DevDataTableItem>
   tableArray: Array<DevDataTableItem>
   dateArray: GameDates
+  firstDateItem: string
 }
 
 type IntReturnType = {
@@ -436,11 +458,33 @@ function tableSorting({
   startTable,
   tableArray,
   dateArray,
+  firstDateItem,
 }: TableSortingProps): Array<ReturnType> {
   const returnArray: Array<IntReturnType> = []
   const currTable = new Map<string, DevDataTableItem>()
   startTable.forEach((item) => {
-    currTable.set(item.teamId.toString(), item)
+    currTable.set(item.teamId.toString(), {
+      ...item,
+      date: firstDateItem,
+    })
+  })
+
+  const firstTable = Array.from(currTable.values())
+    .sort((teamA, teamB) =>
+      teamA.team.casualName.localeCompare(
+        teamB.team.casualName,
+      ),
+    )
+    .map((team, index) => {
+      return {
+        ...team,
+        position: index + 1,
+      }
+    })
+
+  returnArray.push({
+    date: firstDateItem,
+    table: firstTable,
   })
 
   dateArray.forEach((date) => {
@@ -540,4 +584,13 @@ function sortGames({ gameArray }: SortGamesProps) {
   )
 
   return sortedGameDates
+}
+
+function parseDateItem(dateItem: string) {
+  const dateArray = dateItem.split('-')
+  dateArray.shift()
+  return dateArray
+    .reverse()
+    .map((n) => parseInt(n))
+    .join('/')
 }
