@@ -37,6 +37,7 @@ const RangeData = ({
         start: value[0],
         end: value[1],
       }),
+      resetScroll: false,
     })
   }
 
