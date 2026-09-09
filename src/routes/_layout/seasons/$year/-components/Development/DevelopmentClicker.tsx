@@ -34,6 +34,7 @@ const DevelopmentClicker = ({
           ...prev,
           index: api.selectedScrollSnap(),
         }),
+        resetScroll: false,
       })
       dateApi.scrollTo(api.selectedScrollSnap(), true)
     })
@@ -49,7 +50,8 @@ const DevelopmentClicker = ({
           className="xs:w-[60%] w-[50%] max-w-60 self-center sm:max-w-sm lg:max-w-2xl"
           opts={{
             loop: true,
-            containScroll: 'keepSnaps',
+            containScroll: 'trimSnaps',
+            duration: 10000,
             startIndex: index,
           }}
           plugins={[Classnames()]}
