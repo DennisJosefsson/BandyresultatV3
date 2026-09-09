@@ -69,8 +69,10 @@ export const useEditCupSerieForm = () => {
     }
     router.invalidate({
       filter: (r) =>
-        r.routeId === '/_layout/dashboard/season/$seasonId',
+        r.routeId ===
+        '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit',
     })
+    form.reset()
   }
 
   const onMutationError = (error: unknown) => {
