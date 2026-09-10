@@ -1,6 +1,8 @@
 import { Datum } from '@/components/Common/Date'
 import TeamLogo from '@/components/Common/TeamLogo'
+import { useCookies } from '@/lib/contexts/cookieContext'
 import type { Game } from '@/lib/types/game'
+import { StarIcon } from 'lucide-react'
 import PlayoffCard from './PlayoffCard'
 type FinalCardProps = {
   game: Omit<Game, 'season'>
@@ -8,6 +10,7 @@ type FinalCardProps = {
 }
 
 const FinalCard = ({ game, title }: FinalCardProps) => {
+  const { favTeams } = useCookies()
   return (
     <div className="grid w-auto min-w-[33%] grid-cols-1 justify-center @4xl/playoff:mx-auto">
       <PlayoffCard group="final">
@@ -21,7 +24,7 @@ const FinalCard = ({ game, title }: FinalCardProps) => {
           <div className="flex flex-row justify-between text-xs @2xs/playoff:text-sm @2xl/playoff:text-xs @4xl/playoff:text-base 4xl/playoff:p-1">
             <div className="flex flex-col gap-2 w-full">
               <div className="flex flex-row justify-between items-center w-full">
-                <PlayoffCard.Team teamId={game.home.teamId}>
+                <PlayoffCard.Team>
                   <TeamLogo
                     size={32}
                     teamId={game.home.teamId}
@@ -29,14 +32,26 @@ const FinalCard = ({ game, title }: FinalCardProps) => {
                     aria-label={game.home.casualName}
                     title={game.home.casualName}
                   />
-                  <span>{game.home.name}</span>
+                  <span className="font-semibold">
+                    {game.home.name}
+                  </span>
+                  <StarIcon
+                    data-favteam={
+                      favTeams.includes(game.homeTeamId)
+                        ? true
+                        : false
+                    }
+                    className="size-2.5 @xs:size-3 data-[favteam=false]:hidden"
+                  />
                 </PlayoffCard.Team>
                 <div>
-                  <span>{game.homeGoal}</span>
+                  <span className="font-semibold">
+                    {game.homeGoal}
+                  </span>
                 </div>
               </div>
               <div className="flex flex-row justify-between items-center w-full">
-                <PlayoffCard.Team teamId={game.awayTeamId}>
+                <PlayoffCard.Team>
                   <TeamLogo
                     size={32}
                     teamId={game.away.teamId}
@@ -44,10 +59,22 @@ const FinalCard = ({ game, title }: FinalCardProps) => {
                     aria-label={game.away.casualName}
                     title={game.away.casualName}
                   />
-                  <span>{game.away.name}</span>
+                  <span className="font-semibold">
+                    {game.away.name}
+                  </span>
+                  <StarIcon
+                    data-favteam={
+                      favTeams.includes(game.awayTeamId)
+                        ? true
+                        : false
+                    }
+                    className="size-2.5 @xs:size-3 data-[favteam=false]:hidden"
+                  />
                 </PlayoffCard.Team>
                 <div>
-                  <span>{game.awayGoal}</span>
+                  <span className="font-semibold">
+                    {game.awayGoal}
+                  </span>
                 </div>
               </div>
               {game.otResult ? (

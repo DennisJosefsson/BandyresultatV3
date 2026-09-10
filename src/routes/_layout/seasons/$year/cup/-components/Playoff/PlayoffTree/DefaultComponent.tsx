@@ -1,5 +1,7 @@
 import TeamLogo from '@/components/Common/TeamLogo'
+import { useCookies } from '@/lib/contexts/cookieContext'
 import type { PlayoffGroupsV2 } from '@/lib/types/table'
+import { StarIcon } from 'lucide-react'
 import type {
   DetailedHTMLProps,
   HTMLAttributes,
@@ -17,6 +19,7 @@ const DefaultComponent = ({
   group,
   className,
 }: DefaultComponentProps) => {
+  const { favTeams } = useCookies()
   if (group.teamArray.length === 0) return null
   return (
     <PlayoffCard
@@ -35,7 +38,7 @@ const DefaultComponent = ({
               key={`${team.teamId.toString()}-${group.serieName}`}
               className="flex flex-row justify-between items-center"
             >
-              <PlayoffCard.Team teamId={team.teamId}>
+              <PlayoffCard.Team>
                 <TeamLogo
                   size={32}
                   teamId={team.teamId}
@@ -43,11 +46,21 @@ const DefaultComponent = ({
                   aria-label={team.name}
                   title={team.name}
                 />
-                <span>{team.shortName}</span>
+                <span className="font-semibold">
+                  {team.shortName}
+                </span>
+                <StarIcon
+                  data-favteam={
+                    favTeams.includes(team.teamId)
+                      ? true
+                      : false
+                  }
+                  className="size-2.5 @xs:size-3 data-[favteam=false]:hidden"
+                />
               </PlayoffCard.Team>
               <div className="flex flex-row gap-1 items-center justify-between">
                 <div>
-                  <span className="font-bold">
+                  <span className="font-semibold">
                     {team.gameCount > 1
                       ? team.winCount
                       : null}
