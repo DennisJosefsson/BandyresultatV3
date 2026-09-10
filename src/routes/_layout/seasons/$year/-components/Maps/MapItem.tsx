@@ -13,6 +13,9 @@ import { Link } from '@tanstack/react-router'
 import { ExternalLink } from 'lucide-react'
 
 type MapItemProps = {
+  from:
+    | '/seasons/$year/$group/map'
+    | '/seasons/$year/playoff/map'
   team: {
     team: Team
     county: County
@@ -26,6 +29,7 @@ function MapItem({
   team,
   latitude,
   longitude,
+  from,
 }: MapItemProps) {
   return (
     <MapMarker
@@ -61,7 +65,7 @@ function MapItem({
               className="w-full"
               render={
                 <Link
-                  from="/teams/map"
+                  from={from}
                   to="/teams/$teamId/tables"
                   params={{ teamId: team.team.teamId }}
                   search={(prev) => ({ women: prev.women })}
