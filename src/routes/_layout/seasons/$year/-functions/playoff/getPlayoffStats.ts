@@ -102,8 +102,6 @@ export const getPlayoffStats = createServerFn({
             ),
           )
 
-        console.log(playoffSeasonArr)
-
         if (playoffSeasonArr.length === 0) {
           return {
             status: 404,
