@@ -38,18 +38,15 @@ const PlayoffGames = ({ games }: PlayoffGamesProps) => {
         data-sort={sortPreference}
         className="flex gap-4 @5xl:grid @5xl:grid-cols-2 mt-2 data-[sort=played]:flex-col data-[sort=unplayed]:flex-col-reverse"
       >
-        {games.playedLength > 0 ? (
-          <Games
-            games={games.played}
-            title="Spelade"
-          />
-        ) : null}
-        {games.unplayedLength > 0 ? (
-          <Games
-            games={games.unplayed}
-            title="Kommande"
-          />
-        ) : null}
+        <Games
+          gamesArray={games.played}
+          title="Spelade"
+        />
+
+        <Games
+          gamesArray={games.unplayed}
+          title="Kommande"
+        />
       </div>
     </div>
   )
