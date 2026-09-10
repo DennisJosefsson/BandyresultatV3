@@ -50,11 +50,7 @@ export const getErrors = createServerFn({
             eq(errors.production, true),
           ),
         )
-        .orderBy(
-          desc(errors.createdAt),
-          desc(errors.date),
-          desc(errors.errorId),
-        )
+        .orderBy(desc(errors.errorId))
         .limit(10)
       const frontendProduction = await db
         .select({ ...getTableColumns(errors) })
@@ -65,11 +61,7 @@ export const getErrors = createServerFn({
             eq(errors.production, true),
           ),
         )
-        .orderBy(
-          desc(errors.createdAt),
-          desc(errors.date),
-          desc(errors.errorId),
-        )
+        .orderBy(desc(errors.errorId))
         .limit(10)
 
       const backendDevelopment = await db
@@ -81,11 +73,7 @@ export const getErrors = createServerFn({
             eq(errors.production, false),
           ),
         )
-        .orderBy(
-          desc(errors.createdAt),
-          desc(errors.date),
-          desc(errors.errorId),
-        )
+        .orderBy(desc(errors.errorId))
         .limit(10)
       const frontendDevelopment = await db
         .select({ ...getTableColumns(errors) })
@@ -96,11 +84,7 @@ export const getErrors = createServerFn({
             eq(errors.production, false),
           ),
         )
-        .orderBy(
-          desc(errors.createdAt),
-          desc(errors.date),
-          desc(errors.errorId),
-        )
+        .orderBy(desc(errors.errorId))
         .limit(10)
 
       const backendProductionCount = await db.$count(
