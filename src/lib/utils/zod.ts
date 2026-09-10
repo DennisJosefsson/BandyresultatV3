@@ -1,5 +1,6 @@
-import { sv } from 'zod/locales'
 import * as z from 'zod'
+import 'zod/compile'
+import { sv } from 'zod/locales'
 
 z.config(sv())
 

@@ -5,7 +5,7 @@ const NilFinalComponent = ({
   title: string
 }) => {
   return (
-    <div className="grid w-auto min-w-[33%] grid-cols-1 justify-center lg:mx-auto mb-2 sm:mb-4">
+    <div className="grid w-auto min-w-[33%] grid-cols-1 justify-center @4xl/playoff:mx-auto">
       <PlayoffCard group="final">
         <PlayoffCard.Title>
           <PlayoffCard.Group>{title}</PlayoffCard.Group>

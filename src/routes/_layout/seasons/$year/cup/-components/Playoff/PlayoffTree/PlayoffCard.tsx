@@ -4,7 +4,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/base/ui/card'
-import { useCookies } from '@/lib/contexts/cookieContext'
 import { cn } from '@/lib/utils/utils'
 import type {
   DetailedHTMLProps,
@@ -80,24 +79,11 @@ function Content({ children }: { children: ReactNode }) {
   )
 }
 
-interface TeamProps extends DetailedHTMLProps<
-  HTMLAttributes<HTMLSpanElement>,
-  HTMLSpanElement
-> {
-  teamId: number
-}
-
-function Team({ teamId, children }: TeamProps) {
-  const { favTeams } = useCookies()
+function Team({ children }: { children: ReactNode }) {
   return (
-    <span
-      data-favteam={
-        favTeams.includes(teamId) ? true : false
-      }
-      className="items center flex flex-row gap-2 p-0.5 text-xs @2xs/playoff:text-sm @2xl/playoff:text-xs @4xl/playoff:text-sm data-[favteam=true]:font-semibold sm:gap-2"
-    >
+    <div className="items-center flex flex-row gap-1 @5xl/playoff:gap-2 p-0.5 text-xs @2xs/playoff:text-sm @2xl/playoff:text-xs @4xl/playoff:text-sm">
       {children}
-    </span>
+    </div>
   )
 }
 

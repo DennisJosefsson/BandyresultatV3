@@ -34,20 +34,22 @@ export const getRouter = () => {
       )
     },
     defaultOnCatch: async (error, errorInfo) => {
-      const errorData = {
-        name: error.name,
-        message: error.message,
-        body: errorInfo.componentStack ?? 'Ingen stack',
-        date: new Date().toISOString(),
-        backend: false,
+      if (error instanceof Error) {
+        const errorData = {
+          name: error.name,
+          message: error.message,
+          body: errorInfo.componentStack ?? 'Ingen stack',
+          date: new Date().toISOString(),
+          backend: false,
+        }
+        const insertedError = await logError({
+          data: errorData,
+        })
+        if (!insertedError) {
+          console.log('Något gick fel vid felloggning')
+        }
+        console.log(insertedError?.message)
       }
-      const insertedError = await logError({
-        data: errorData,
-      })
-      if (!insertedError) {
-        console.log('Något gick fel vid felloggning')
-      }
-      console.log(insertedError?.message)
     },
   })
 

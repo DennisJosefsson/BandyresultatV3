@@ -8,7 +8,6 @@ type CustomCatchBoundaryProps = {
 }
 
 export function CustomCatchBoundary({
-  id,
   children,
 }: CustomCatchBoundaryProps) {
   return (
@@ -16,7 +15,6 @@ export function CustomCatchBoundary({
       getResetKey={() => 'reset'}
       errorComponent={({ error, reset }) => (
         <SimpleErrorComponent
-          id={id}
           error={error}
           reset={reset}
         />

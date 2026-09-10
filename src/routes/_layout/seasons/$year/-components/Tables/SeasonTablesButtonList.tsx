@@ -41,15 +41,10 @@ const SeasonTablesButtonList = ({
               exact: true,
             }}
           >
-            {({ isActive, isTransitioning }) => (
+            {({ isActive }) => (
               <Button
                 size="responsive"
-                variant={
-                  isActive || isTransitioning
-                    ? 'default'
-                    : 'outline'
-                }
-                disabled={isTransitioning}
+                variant={isActive ? 'default' : 'outline'}
               >
                 Alla
               </Button>
@@ -69,15 +64,11 @@ const SeasonTablesButtonList = ({
             }}
             disabled={hasStatic}
           >
-            {({ isActive, isTransitioning }) => (
+            {({ isActive }) => (
               <Button
                 size="responsive"
-                variant={
-                  isActive || isTransitioning
-                    ? 'default'
-                    : 'outline'
-                }
-                disabled={isTransitioning || hasStatic}
+                variant={isActive ? 'default' : 'outline'}
+                disabled={hasStatic}
               >
                 Hemma
               </Button>
@@ -97,15 +88,11 @@ const SeasonTablesButtonList = ({
             }}
             disabled={hasStatic}
           >
-            {({ isActive, isTransitioning }) => (
+            {({ isActive }) => (
               <Button
                 size="responsive"
-                variant={
-                  isActive || isTransitioning
-                    ? 'default'
-                    : 'outline'
-                }
-                disabled={isTransitioning || hasStatic}
+                variant={isActive ? 'default' : 'outline'}
+                disabled={hasStatic}
               >
                 Borta
               </Button>

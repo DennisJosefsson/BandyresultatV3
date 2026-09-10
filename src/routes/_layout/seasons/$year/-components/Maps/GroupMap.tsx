@@ -29,6 +29,7 @@ const GroupMap = ({ teams }: GroupMapProps) => {
                 latitude={team.team.lat}
                 longitude={team.team.long}
                 team={team}
+                from="/seasons/$year/$group/map"
               />
             )
           })}
