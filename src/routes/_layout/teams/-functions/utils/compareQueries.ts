@@ -68,7 +68,9 @@ export const getCatTables = ({
         ),
       serie: {
         division: competitions.division,
-      } as unknown as SQL<{ division: number }>,
+      } as unknown as SQL<{
+        division: number
+      }>,
     })
     .from(teamgames)
     .leftJoin(series, eq(teamgames.serieId, series.serieId))
@@ -84,6 +86,19 @@ export const getCatTables = ({
       ),
     )
     .groupBy(competitions.division, series.category)
+    .orderBy(
+      asc(competitions.division),
+      sql`case 
+	when series.serie_category like '%final' then 1
+	when series.serie_category like '%bronze' then 2
+	when series.serie_category like '%semi' then 3
+	when series.serie_category like '%playoffseries' then 4
+	when series.serie_category like '%quarter' then 5
+	when series.serie_category like '%eight' then 6
+	when series.serie_category like '%regular' then 7
+	when series.serie_category like '%qualification' then 8
+end`,
+    )
 
 export const getAllGamesTables = ({
   homeTeamId,
