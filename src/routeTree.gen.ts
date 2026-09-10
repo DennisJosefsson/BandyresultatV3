@@ -11,93 +11,93 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as LayoutRouteImport } from './routes/_layout'
 import { Route as LayoutIndexRouteImport } from './routes/_layout/index'
-import { Route as LayoutTeamsRouteImport } from './routes/_layout/teams'
-import { Route as LayoutSeasonsRouteImport } from './routes/_layout/seasons'
-import { Route as LayoutSearchRouteImport } from './routes/_layout/search'
 import { Route as LayoutDashboardRouteImport } from './routes/_layout/dashboard'
-import { Route as LayoutUnauthorizedIndexRouteImport } from './routes/_layout/unauthorized/index'
-import { Route as LayoutSeasonsIndexRouteImport } from './routes/_layout/seasons/index'
-import { Route as LayoutSearchIndexRouteImport } from './routes/_layout/search/index'
-import { Route as LayoutLogoutIndexRouteImport } from './routes/_layout/logout/index'
-import { Route as LayoutLoginIndexRouteImport } from './routes/_layout/login/index'
-import { Route as LayoutDashboardIndexRouteImport } from './routes/_layout/dashboard/index'
+import { Route as LayoutSearchRouteImport } from './routes/_layout/search'
+import { Route as LayoutSeasonsRouteImport } from './routes/_layout/seasons'
+import { Route as LayoutTeamsRouteImport } from './routes/_layout/teams'
 import { Route as LayoutAboutIndexRouteImport } from './routes/_layout/about/index'
-import { Route as ApiV1HealthRouteImport } from './routes/api/v1/health'
-import { Route as LayoutTeamsMapRouteImport } from './routes/_layout/teams/map'
-import { Route as LayoutTeamsListRouteImport } from './routes/_layout/teams/list'
-import { Route as LayoutTeamsCompareRouteImport } from './routes/_layout/teams/compare'
-import { Route as LayoutTeamsTeamIdRouteImport } from './routes/_layout/teams/$teamId'
-import { Route as LayoutSeasonsYearRouteImport } from './routes/_layout/seasons/$year'
-import { Route as LayoutSearchHelpRouteImport } from './routes/_layout/search/help'
-import { Route as LayoutMaratonTableRouteImport } from './routes/_layout/maraton/table'
-import { Route as LayoutMaratonRecordsRouteImport } from './routes/_layout/maraton/records'
 import { Route as LayoutAboutChangelogRouteImport } from './routes/_layout/about/changelog'
-import { Route as LayoutMaratonHelpIndexRouteImport } from './routes/_layout/maraton/help/index'
-import { Route as LayoutDashboardTeamsIndexRouteImport } from './routes/_layout/dashboard/teams/index'
-import { Route as LayoutDashboardSeasonsIndexRouteImport } from './routes/_layout/dashboard/seasons/index'
-import { Route as LayoutDashboardNewseasonIndexRouteImport } from './routes/_layout/dashboard/newseason/index'
+import { Route as LayoutDashboardIndexRouteImport } from './routes/_layout/dashboard/index'
+import { Route as LayoutLoginIndexRouteImport } from './routes/_layout/login/index'
+import { Route as LayoutLogoutIndexRouteImport } from './routes/_layout/logout/index'
+import { Route as LayoutMaratonRecordsRouteImport } from './routes/_layout/maraton/records'
+import { Route as LayoutMaratonTableRouteImport } from './routes/_layout/maraton/table'
+import { Route as LayoutSearchIndexRouteImport } from './routes/_layout/search/index'
+import { Route as LayoutSearchHelpRouteImport } from './routes/_layout/search/help'
+import { Route as LayoutSeasonsIndexRouteImport } from './routes/_layout/seasons/index'
+import { Route as LayoutSeasonsYearRouteImport } from './routes/_layout/seasons/$year'
+import { Route as LayoutTeamsTeamIdRouteImport } from './routes/_layout/teams/$teamId'
+import { Route as LayoutTeamsCompareRouteImport } from './routes/_layout/teams/compare'
+import { Route as LayoutTeamsListRouteImport } from './routes/_layout/teams/list'
+import { Route as LayoutTeamsMapRouteImport } from './routes/_layout/teams/map'
+import { Route as LayoutUnauthorizedIndexRouteImport } from './routes/_layout/unauthorized/index'
+import { Route as ApiV1HealthRouteImport } from './routes/api/v1/health'
 import { Route as LayoutDashboardErrorIdIndexRouteImport } from './routes/_layout/dashboard/$errorId/index'
-import { Route as LayoutTeamsTeamIdSeasonIdRouteImport } from './routes/_layout/teams/$teamId/$seasonId'
-import { Route as LayoutSeasonsYearPlayoffRouteImport } from './routes/_layout/seasons/$year/playoff'
-import { Route as LayoutSeasonsYearCupRouteImport } from './routes/_layout/seasons/$year/cup'
-import { Route as LayoutSeasonsYearGroupRouteImport } from './routes/_layout/seasons/$year/$group'
-import { Route as LayoutMaratonTableMaratonTableRouteImport } from './routes/_layout/maraton/table/$maratonTable'
-import { Route as LayoutMaratonRecordsStreaksRouteImport } from './routes/_layout/maraton/records/streaks'
-import { Route as LayoutMaratonRecordsStatsRouteImport } from './routes/_layout/maraton/records/stats'
-import { Route as LayoutMaratonRecordsScoredRouteImport } from './routes/_layout/maraton/records/scored'
-import { Route as LayoutMaratonRecordsPointsRouteImport } from './routes/_layout/maraton/records/points'
-import { Route as LayoutMaratonRecordsConcededRouteImport } from './routes/_layout/maraton/records/conceded'
-import { Route as LayoutDashboardTeamsAddRouteImport } from './routes/_layout/dashboard/teams/add'
-import { Route as LayoutDashboardTeamTeamIdRouteImport } from './routes/_layout/dashboard/team/$teamId'
-import { Route as LayoutDashboardSeasonSeasonIdRouteImport } from './routes/_layout/dashboard/season/$seasonId'
 import { Route as LayoutDashboardGamesTodayRouteImport } from './routes/_layout/dashboard/games/$today'
-import { Route as LayoutTeamsTeamIdTablesIndexRouteImport } from './routes/_layout/teams/$teamId/tables/index'
-import { Route as LayoutTeamsTeamIdStatsIndexRouteImport } from './routes/_layout/teams/$teamId/stats/index'
-import { Route as LayoutTeamsTeamIdSeasonsIndexRouteImport } from './routes/_layout/teams/$teamId/seasons/index'
-import { Route as LayoutTeamsTeamIdLatestIndexRouteImport } from './routes/_layout/teams/$teamId/latest/index'
-import { Route as LayoutSeasonsYearGroupIndexRouteImport } from './routes/_layout/seasons/$year/$group/index'
+import { Route as LayoutDashboardNewseasonIndexRouteImport } from './routes/_layout/dashboard/newseason/index'
+import { Route as LayoutDashboardSeasonSeasonIdRouteImport } from './routes/_layout/dashboard/season/$seasonId'
+import { Route as LayoutDashboardSeasonsIndexRouteImport } from './routes/_layout/dashboard/seasons/index'
+import { Route as LayoutDashboardTeamTeamIdRouteImport } from './routes/_layout/dashboard/team/$teamId'
+import { Route as LayoutDashboardTeamsIndexRouteImport } from './routes/_layout/dashboard/teams/index'
+import { Route as LayoutDashboardTeamsAddRouteImport } from './routes/_layout/dashboard/teams/add'
+import { Route as LayoutMaratonHelpIndexRouteImport } from './routes/_layout/maraton/help/index'
+import { Route as LayoutMaratonRecordsConcededRouteImport } from './routes/_layout/maraton/records/conceded'
+import { Route as LayoutMaratonRecordsPointsRouteImport } from './routes/_layout/maraton/records/points'
+import { Route as LayoutMaratonRecordsScoredRouteImport } from './routes/_layout/maraton/records/scored'
+import { Route as LayoutMaratonRecordsStatsRouteImport } from './routes/_layout/maraton/records/stats'
+import { Route as LayoutMaratonRecordsStreaksRouteImport } from './routes/_layout/maraton/records/streaks'
+import { Route as LayoutMaratonTableMaratonTableRouteImport } from './routes/_layout/maraton/table/$maratonTable'
+import { Route as LayoutSeasonsYearGroupRouteImport } from './routes/_layout/seasons/$year/$group'
+import { Route as LayoutSeasonsYearCupRouteImport } from './routes/_layout/seasons/$year/cup'
+import { Route as LayoutSeasonsYearPlayoffRouteImport } from './routes/_layout/seasons/$year/playoff'
+import { Route as LayoutTeamsTeamIdSeasonIdRouteImport } from './routes/_layout/teams/$teamId/$seasonId'
 import { Route as LayoutDashboardSeasonSeasonIdIndexRouteImport } from './routes/_layout/dashboard/season/$seasonId/index'
-import { Route as LayoutSeasonsYearPlayoffTableRouteImport } from './routes/_layout/seasons/$year/playoff/table'
-import { Route as LayoutSeasonsYearPlayoffStatsRouteImport } from './routes/_layout/seasons/$year/playoff/stats'
-import { Route as LayoutSeasonsYearPlayoffMapRouteImport } from './routes/_layout/seasons/$year/playoff/map'
-import { Route as LayoutSeasonsYearPlayoffGamesRouteImport } from './routes/_layout/seasons/$year/playoff/games'
-import { Route as LayoutSeasonsYearCupCompetitionNameRouteImport } from './routes/_layout/seasons/$year/cup/$competitionName'
-import { Route as LayoutSeasonsYearGroupTablesRouteImport } from './routes/_layout/seasons/$year/$group/tables'
-import { Route as LayoutSeasonsYearGroupStatsRouteImport } from './routes/_layout/seasons/$year/$group/stats'
-import { Route as LayoutSeasonsYearGroupMapRouteImport } from './routes/_layout/seasons/$year/$group/map'
-import { Route as LayoutSeasonsYearGroupIntervalRouteImport } from './routes/_layout/seasons/$year/$group/interval'
-import { Route as LayoutSeasonsYearGroupGamesRouteImport } from './routes/_layout/seasons/$year/$group/games'
+import { Route as LayoutSeasonsYearGroupIndexRouteImport } from './routes/_layout/seasons/$year/$group/index'
 import { Route as LayoutSeasonsYearGroupDevelopmentRouteImport } from './routes/_layout/seasons/$year/$group/development'
-import { Route as LayoutTeamsTeamIdSeasonsSeasonIdIndexRouteImport } from './routes/_layout/teams/$teamId/seasons/$seasonId/index'
-import { Route as LayoutDashboardSeasonSeasonIdTeamseasonIndexRouteImport } from './routes/_layout/dashboard/season/$seasonId/teamseason_/index'
-import { Route as LayoutDashboardSeasonSeasonIdPlayoffseasonIndexRouteImport } from './routes/_layout/dashboard/season/$seasonId/playoffseason/index'
+import { Route as LayoutSeasonsYearGroupGamesRouteImport } from './routes/_layout/seasons/$year/$group/games'
+import { Route as LayoutSeasonsYearGroupIntervalRouteImport } from './routes/_layout/seasons/$year/$group/interval'
+import { Route as LayoutSeasonsYearGroupMapRouteImport } from './routes/_layout/seasons/$year/$group/map'
+import { Route as LayoutSeasonsYearGroupStatsRouteImport } from './routes/_layout/seasons/$year/$group/stats'
+import { Route as LayoutSeasonsYearGroupTablesRouteImport } from './routes/_layout/seasons/$year/$group/tables'
+import { Route as LayoutSeasonsYearCupCompetitionNameRouteImport } from './routes/_layout/seasons/$year/cup/$competitionName'
+import { Route as LayoutSeasonsYearPlayoffGamesRouteImport } from './routes/_layout/seasons/$year/playoff/games'
+import { Route as LayoutSeasonsYearPlayoffMapRouteImport } from './routes/_layout/seasons/$year/playoff/map'
+import { Route as LayoutSeasonsYearPlayoffStatsRouteImport } from './routes/_layout/seasons/$year/playoff/stats'
+import { Route as LayoutSeasonsYearPlayoffTableRouteImport } from './routes/_layout/seasons/$year/playoff/table'
+import { Route as LayoutTeamsTeamIdLatestIndexRouteImport } from './routes/_layout/teams/$teamId/latest/index'
+import { Route as LayoutTeamsTeamIdSeasonsIndexRouteImport } from './routes/_layout/teams/$teamId/seasons/index'
+import { Route as LayoutTeamsTeamIdStatsIndexRouteImport } from './routes/_layout/teams/$teamId/stats/index'
+import { Route as LayoutTeamsTeamIdTablesIndexRouteImport } from './routes/_layout/teams/$teamId/tables/index'
 import { Route as LayoutDashboardSeasonSeasonIdMetadataIndexRouteImport } from './routes/_layout/dashboard/season/$seasonId/metadata/index'
-import { Route as LayoutSeasonsYearCupCompetitionNameTablesRouteImport } from './routes/_layout/seasons/$year/cup/$competitionName/tables'
-import { Route as LayoutSeasonsYearCupCompetitionNamePlayoffRouteImport } from './routes/_layout/seasons/$year/cup/$competitionName/playoff'
-import { Route as LayoutSeasonsYearCupCompetitionNameGamesRouteImport } from './routes/_layout/seasons/$year/cup/$competitionName/games'
+import { Route as LayoutDashboardSeasonSeasonIdPlayoffseasonIndexRouteImport } from './routes/_layout/dashboard/season/$seasonId/playoffseason/index'
+import { Route as LayoutDashboardSeasonSeasonIdTeamseasonIndexRouteImport } from './routes/_layout/dashboard/season/$seasonId/teamseason_/index'
 import { Route as LayoutSeasonsYearGroupTablesTableRouteImport } from './routes/_layout/seasons/$year/$group/tables/$table'
-import { Route as LayoutDashboardSeasonSeasonIdInfoSerieSerieIdRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/serie/$serieId'
-import { Route as LayoutDashboardSeasonSeasonIdInfoCompetitionNewCompetitionRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/competition/newCompetition'
-import { Route as LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/competition/$competitionId'
+import { Route as LayoutSeasonsYearCupCompetitionNameGamesRouteImport } from './routes/_layout/seasons/$year/cup/$competitionName/games'
+import { Route as LayoutSeasonsYearCupCompetitionNamePlayoffRouteImport } from './routes/_layout/seasons/$year/cup/$competitionName/playoff'
+import { Route as LayoutSeasonsYearCupCompetitionNameTablesRouteImport } from './routes/_layout/seasons/$year/cup/$competitionName/tables'
+import { Route as LayoutTeamsTeamIdSeasonsSeasonIdIndexRouteImport } from './routes/_layout/teams/$teamId/seasons/$seasonId/index'
 import { Route as LayoutDashboardSeasonSeasonIdGamesSerieIdSerieIdRouteImport } from './routes/_layout/dashboard/season/$seasonId/games/$serieId/$serieId'
+import { Route as LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/competition/$competitionId'
+import { Route as LayoutDashboardSeasonSeasonIdInfoCompetitionNewCompetitionRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/competition/newCompetition'
+import { Route as LayoutDashboardSeasonSeasonIdInfoSerieSerieIdRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/serie/$serieId'
 import { Route as LayoutDashboardSeasonSeasonIdGamesSerieIdEditIndexRouteImport } from './routes/_layout/dashboard/season/$seasonId/games_/$serieId/edit/index'
-import { Route as LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit'
-import { Route as LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdTeamcompetitionRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/competition/$competitionId/teamcompetition'
-import { Route as LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdNewSerieRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/competition/$competitionId/newSerie'
-import { Route as LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdNewCupSerieRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/competition/$competitionId/newCupSerie'
-import { Route as LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdGenerateSerieRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/competition/$competitionId/generateSerie'
-import { Route as LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdGenerateCupSerieRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/competition/$competitionId/generateCupSerie'
 import { Route as LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdEditRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/competition/$competitionId/edit'
-import { Route as LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditTeamseriesRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/teamseries'
-import { Route as LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditSinglegameRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/singlegame'
-import { Route as LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditNewParentIdRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/newParentId'
-import { Route as LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditGeneratescheduleRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/generateschedule'
-import { Route as LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditGamesRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/games'
-import { Route as LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditEditTableRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/editTable'
-import { Route as LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditEditParentIdRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/editParentId'
-import { Route as LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditAddTableRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/addTable'
-import { Route as LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditAddGamesRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/addGames'
+import { Route as LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdGenerateCupSerieRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/competition/$competitionId/generateCupSerie'
+import { Route as LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdGenerateSerieRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/competition/$competitionId/generateSerie'
+import { Route as LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdNewCupSerieRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/competition/$competitionId/newCupSerie'
+import { Route as LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdNewSerieRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/competition/$competitionId/newSerie'
+import { Route as LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdTeamcompetitionRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/competition/$competitionId/teamcompetition'
+import { Route as LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit'
 import { Route as LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditGameIdRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/$gameId'
+import { Route as LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditAddGamesRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/addGames'
+import { Route as LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditAddTableRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/addTable'
+import { Route as LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditEditParentIdRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/editParentId'
+import { Route as LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditEditTableRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/editTable'
+import { Route as LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditGamesRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/games'
+import { Route as LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditGeneratescheduleRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/generateschedule'
+import { Route as LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditNewParentIdRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/newParentId'
+import { Route as LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditSinglegameRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/singlegame'
+import { Route as LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditTeamseriesRouteImport } from './routes/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/teamseries'
 
 const LayoutRoute = LayoutRouteImport.update({
   id: '/_layout',
@@ -108,14 +108,9 @@ const LayoutIndexRoute = LayoutIndexRouteImport.update({
   path: '/',
   getParentRoute: () => LayoutRoute,
 } as any)
-const LayoutTeamsRoute = LayoutTeamsRouteImport.update({
-  id: '/teams',
-  path: '/teams',
-  getParentRoute: () => LayoutRoute,
-} as any)
-const LayoutSeasonsRoute = LayoutSeasonsRouteImport.update({
-  id: '/seasons',
-  path: '/seasons',
+const LayoutDashboardRoute = LayoutDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => LayoutRoute,
 } as any)
 const LayoutSearchRoute = LayoutSearchRouteImport.update({
@@ -123,89 +118,19 @@ const LayoutSearchRoute = LayoutSearchRouteImport.update({
   path: '/search',
   getParentRoute: () => LayoutRoute,
 } as any)
-const LayoutDashboardRoute = LayoutDashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
+const LayoutSeasonsRoute = LayoutSeasonsRouteImport.update({
+  id: '/seasons',
+  path: '/seasons',
   getParentRoute: () => LayoutRoute,
 } as any)
-const LayoutUnauthorizedIndexRoute = LayoutUnauthorizedIndexRouteImport.update({
-  id: '/unauthorized/',
-  path: '/unauthorized/',
+const LayoutTeamsRoute = LayoutTeamsRouteImport.update({
+  id: '/teams',
+  path: '/teams',
   getParentRoute: () => LayoutRoute,
-} as any)
-const LayoutSeasonsIndexRoute = LayoutSeasonsIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => LayoutSeasonsRoute,
-} as any)
-const LayoutSearchIndexRoute = LayoutSearchIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => LayoutSearchRoute,
-} as any)
-const LayoutLogoutIndexRoute = LayoutLogoutIndexRouteImport.update({
-  id: '/logout/',
-  path: '/logout/',
-  getParentRoute: () => LayoutRoute,
-} as any)
-const LayoutLoginIndexRoute = LayoutLoginIndexRouteImport.update({
-  id: '/login/',
-  path: '/login/',
-  getParentRoute: () => LayoutRoute,
-} as any)
-const LayoutDashboardIndexRoute = LayoutDashboardIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => LayoutDashboardRoute,
 } as any)
 const LayoutAboutIndexRoute = LayoutAboutIndexRouteImport.update({
   id: '/about/',
   path: '/about/',
-  getParentRoute: () => LayoutRoute,
-} as any)
-const ApiV1HealthRoute = ApiV1HealthRouteImport.update({
-  id: '/api/v1/health',
-  path: '/api/v1/health',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LayoutTeamsMapRoute = LayoutTeamsMapRouteImport.update({
-  id: '/map',
-  path: '/map',
-  getParentRoute: () => LayoutTeamsRoute,
-} as any)
-const LayoutTeamsListRoute = LayoutTeamsListRouteImport.update({
-  id: '/list',
-  path: '/list',
-  getParentRoute: () => LayoutTeamsRoute,
-} as any)
-const LayoutTeamsCompareRoute = LayoutTeamsCompareRouteImport.update({
-  id: '/compare',
-  path: '/compare',
-  getParentRoute: () => LayoutTeamsRoute,
-} as any)
-const LayoutTeamsTeamIdRoute = LayoutTeamsTeamIdRouteImport.update({
-  id: '/$teamId',
-  path: '/$teamId',
-  getParentRoute: () => LayoutTeamsRoute,
-} as any)
-const LayoutSeasonsYearRoute = LayoutSeasonsYearRouteImport.update({
-  id: '/$year',
-  path: '/$year',
-  getParentRoute: () => LayoutSeasonsRoute,
-} as any)
-const LayoutSearchHelpRoute = LayoutSearchHelpRouteImport.update({
-  id: '/help',
-  path: '/help',
-  getParentRoute: () => LayoutSearchRoute,
-} as any)
-const LayoutMaratonTableRoute = LayoutMaratonTableRouteImport.update({
-  id: '/maraton/table',
-  path: '/maraton/table',
-  getParentRoute: () => LayoutRoute,
-} as any)
-const LayoutMaratonRecordsRoute = LayoutMaratonRecordsRouteImport.update({
-  id: '/maraton/records',
-  path: '/maraton/records',
   getParentRoute: () => LayoutRoute,
 } as any)
 const LayoutAboutChangelogRoute = LayoutAboutChangelogRouteImport.update({
@@ -213,108 +138,85 @@ const LayoutAboutChangelogRoute = LayoutAboutChangelogRouteImport.update({
   path: '/about/changelog',
   getParentRoute: () => LayoutRoute,
 } as any)
-const LayoutMaratonHelpIndexRoute = LayoutMaratonHelpIndexRouteImport.update({
-  id: '/maraton/help/',
-  path: '/maraton/help/',
+const LayoutDashboardIndexRoute = LayoutDashboardIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => LayoutDashboardRoute,
+} as any)
+const LayoutLoginIndexRoute = LayoutLoginIndexRouteImport.update({
+  id: '/login/',
+  path: '/login/',
   getParentRoute: () => LayoutRoute,
 } as any)
-const LayoutDashboardTeamsIndexRoute =
-  LayoutDashboardTeamsIndexRouteImport.update({
-    id: '/teams/',
-    path: '/teams/',
-    getParentRoute: () => LayoutDashboardRoute,
-  } as any)
-const LayoutDashboardSeasonsIndexRoute =
-  LayoutDashboardSeasonsIndexRouteImport.update({
-    id: '/seasons/',
-    path: '/seasons/',
-    getParentRoute: () => LayoutDashboardRoute,
-  } as any)
-const LayoutDashboardNewseasonIndexRoute =
-  LayoutDashboardNewseasonIndexRouteImport.update({
-    id: '/newseason/',
-    path: '/newseason/',
-    getParentRoute: () => LayoutDashboardRoute,
-  } as any)
+const LayoutLogoutIndexRoute = LayoutLogoutIndexRouteImport.update({
+  id: '/logout/',
+  path: '/logout/',
+  getParentRoute: () => LayoutRoute,
+} as any)
+const LayoutMaratonRecordsRoute = LayoutMaratonRecordsRouteImport.update({
+  id: '/maraton/records',
+  path: '/maraton/records',
+  getParentRoute: () => LayoutRoute,
+} as any)
+const LayoutMaratonTableRoute = LayoutMaratonTableRouteImport.update({
+  id: '/maraton/table',
+  path: '/maraton/table',
+  getParentRoute: () => LayoutRoute,
+} as any)
+const LayoutSearchIndexRoute = LayoutSearchIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => LayoutSearchRoute,
+} as any)
+const LayoutSearchHelpRoute = LayoutSearchHelpRouteImport.update({
+  id: '/help',
+  path: '/help',
+  getParentRoute: () => LayoutSearchRoute,
+} as any)
+const LayoutSeasonsIndexRoute = LayoutSeasonsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => LayoutSeasonsRoute,
+} as any)
+const LayoutSeasonsYearRoute = LayoutSeasonsYearRouteImport.update({
+  id: '/$year',
+  path: '/$year',
+  getParentRoute: () => LayoutSeasonsRoute,
+} as any)
+const LayoutTeamsTeamIdRoute = LayoutTeamsTeamIdRouteImport.update({
+  id: '/$teamId',
+  path: '/$teamId',
+  getParentRoute: () => LayoutTeamsRoute,
+} as any)
+const LayoutTeamsCompareRoute = LayoutTeamsCompareRouteImport.update({
+  id: '/compare',
+  path: '/compare',
+  getParentRoute: () => LayoutTeamsRoute,
+} as any)
+const LayoutTeamsListRoute = LayoutTeamsListRouteImport.update({
+  id: '/list',
+  path: '/list',
+  getParentRoute: () => LayoutTeamsRoute,
+} as any)
+const LayoutTeamsMapRoute = LayoutTeamsMapRouteImport.update({
+  id: '/map',
+  path: '/map',
+  getParentRoute: () => LayoutTeamsRoute,
+} as any)
+const LayoutUnauthorizedIndexRoute = LayoutUnauthorizedIndexRouteImport.update({
+  id: '/unauthorized/',
+  path: '/unauthorized/',
+  getParentRoute: () => LayoutRoute,
+} as any)
+const ApiV1HealthRoute = ApiV1HealthRouteImport.update({
+  id: '/api/v1/health',
+  path: '/api/v1/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LayoutDashboardErrorIdIndexRoute =
   LayoutDashboardErrorIdIndexRouteImport.update({
     id: '/$errorId/',
     path: '/$errorId/',
-    getParentRoute: () => LayoutDashboardRoute,
-  } as any)
-const LayoutTeamsTeamIdSeasonIdRoute =
-  LayoutTeamsTeamIdSeasonIdRouteImport.update({
-    id: '/$seasonId',
-    path: '/$seasonId',
-    getParentRoute: () => LayoutTeamsTeamIdRoute,
-  } as any)
-const LayoutSeasonsYearPlayoffRoute =
-  LayoutSeasonsYearPlayoffRouteImport.update({
-    id: '/playoff',
-    path: '/playoff',
-    getParentRoute: () => LayoutSeasonsYearRoute,
-  } as any)
-const LayoutSeasonsYearCupRoute = LayoutSeasonsYearCupRouteImport.update({
-  id: '/cup',
-  path: '/cup',
-  getParentRoute: () => LayoutSeasonsYearRoute,
-} as any)
-const LayoutSeasonsYearGroupRoute = LayoutSeasonsYearGroupRouteImport.update({
-  id: '/$group',
-  path: '/$group',
-  getParentRoute: () => LayoutSeasonsYearRoute,
-} as any)
-const LayoutMaratonTableMaratonTableRoute =
-  LayoutMaratonTableMaratonTableRouteImport.update({
-    id: '/$maratonTable',
-    path: '/$maratonTable',
-    getParentRoute: () => LayoutMaratonTableRoute,
-  } as any)
-const LayoutMaratonRecordsStreaksRoute =
-  LayoutMaratonRecordsStreaksRouteImport.update({
-    id: '/streaks',
-    path: '/streaks',
-    getParentRoute: () => LayoutMaratonRecordsRoute,
-  } as any)
-const LayoutMaratonRecordsStatsRoute =
-  LayoutMaratonRecordsStatsRouteImport.update({
-    id: '/stats',
-    path: '/stats',
-    getParentRoute: () => LayoutMaratonRecordsRoute,
-  } as any)
-const LayoutMaratonRecordsScoredRoute =
-  LayoutMaratonRecordsScoredRouteImport.update({
-    id: '/scored',
-    path: '/scored',
-    getParentRoute: () => LayoutMaratonRecordsRoute,
-  } as any)
-const LayoutMaratonRecordsPointsRoute =
-  LayoutMaratonRecordsPointsRouteImport.update({
-    id: '/points',
-    path: '/points',
-    getParentRoute: () => LayoutMaratonRecordsRoute,
-  } as any)
-const LayoutMaratonRecordsConcededRoute =
-  LayoutMaratonRecordsConcededRouteImport.update({
-    id: '/conceded',
-    path: '/conceded',
-    getParentRoute: () => LayoutMaratonRecordsRoute,
-  } as any)
-const LayoutDashboardTeamsAddRoute = LayoutDashboardTeamsAddRouteImport.update({
-  id: '/teams/add',
-  path: '/teams/add',
-  getParentRoute: () => LayoutDashboardRoute,
-} as any)
-const LayoutDashboardTeamTeamIdRoute =
-  LayoutDashboardTeamTeamIdRouteImport.update({
-    id: '/team/$teamId',
-    path: '/team/$teamId',
-    getParentRoute: () => LayoutDashboardRoute,
-  } as any)
-const LayoutDashboardSeasonSeasonIdRoute =
-  LayoutDashboardSeasonSeasonIdRouteImport.update({
-    id: '/season/$seasonId',
-    path: '/season/$seasonId',
     getParentRoute: () => LayoutDashboardRoute,
   } as any)
 const LayoutDashboardGamesTodayRoute =
@@ -323,35 +225,103 @@ const LayoutDashboardGamesTodayRoute =
     path: '/games/$today',
     getParentRoute: () => LayoutDashboardRoute,
   } as any)
-const LayoutTeamsTeamIdTablesIndexRoute =
-  LayoutTeamsTeamIdTablesIndexRouteImport.update({
-    id: '/tables/',
-    path: '/tables/',
-    getParentRoute: () => LayoutTeamsTeamIdRoute,
+const LayoutDashboardNewseasonIndexRoute =
+  LayoutDashboardNewseasonIndexRouteImport.update({
+    id: '/newseason/',
+    path: '/newseason/',
+    getParentRoute: () => LayoutDashboardRoute,
   } as any)
-const LayoutTeamsTeamIdStatsIndexRoute =
-  LayoutTeamsTeamIdStatsIndexRouteImport.update({
-    id: '/stats/',
-    path: '/stats/',
-    getParentRoute: () => LayoutTeamsTeamIdRoute,
+const LayoutDashboardSeasonSeasonIdRoute =
+  LayoutDashboardSeasonSeasonIdRouteImport.update({
+    id: '/season/$seasonId',
+    path: '/season/$seasonId',
+    getParentRoute: () => LayoutDashboardRoute,
   } as any)
-const LayoutTeamsTeamIdSeasonsIndexRoute =
-  LayoutTeamsTeamIdSeasonsIndexRouteImport.update({
+const LayoutDashboardSeasonsIndexRoute =
+  LayoutDashboardSeasonsIndexRouteImport.update({
     id: '/seasons/',
     path: '/seasons/',
-    getParentRoute: () => LayoutTeamsTeamIdRoute,
+    getParentRoute: () => LayoutDashboardRoute,
   } as any)
-const LayoutTeamsTeamIdLatestIndexRoute =
-  LayoutTeamsTeamIdLatestIndexRouteImport.update({
-    id: '/latest/',
-    path: '/latest/',
-    getParentRoute: () => LayoutTeamsTeamIdRoute,
+const LayoutDashboardTeamTeamIdRoute =
+  LayoutDashboardTeamTeamIdRouteImport.update({
+    id: '/team/$teamId',
+    path: '/team/$teamId',
+    getParentRoute: () => LayoutDashboardRoute,
   } as any)
-const LayoutSeasonsYearGroupIndexRoute =
-  LayoutSeasonsYearGroupIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => LayoutSeasonsYearGroupRoute,
+const LayoutDashboardTeamsIndexRoute =
+  LayoutDashboardTeamsIndexRouteImport.update({
+    id: '/teams/',
+    path: '/teams/',
+    getParentRoute: () => LayoutDashboardRoute,
+  } as any)
+const LayoutDashboardTeamsAddRoute = LayoutDashboardTeamsAddRouteImport.update({
+  id: '/teams/add',
+  path: '/teams/add',
+  getParentRoute: () => LayoutDashboardRoute,
+} as any)
+const LayoutMaratonHelpIndexRoute = LayoutMaratonHelpIndexRouteImport.update({
+  id: '/maraton/help/',
+  path: '/maraton/help/',
+  getParentRoute: () => LayoutRoute,
+} as any)
+const LayoutMaratonRecordsConcededRoute =
+  LayoutMaratonRecordsConcededRouteImport.update({
+    id: '/conceded',
+    path: '/conceded',
+    getParentRoute: () => LayoutMaratonRecordsRoute,
+  } as any)
+const LayoutMaratonRecordsPointsRoute =
+  LayoutMaratonRecordsPointsRouteImport.update({
+    id: '/points',
+    path: '/points',
+    getParentRoute: () => LayoutMaratonRecordsRoute,
+  } as any)
+const LayoutMaratonRecordsScoredRoute =
+  LayoutMaratonRecordsScoredRouteImport.update({
+    id: '/scored',
+    path: '/scored',
+    getParentRoute: () => LayoutMaratonRecordsRoute,
+  } as any)
+const LayoutMaratonRecordsStatsRoute =
+  LayoutMaratonRecordsStatsRouteImport.update({
+    id: '/stats',
+    path: '/stats',
+    getParentRoute: () => LayoutMaratonRecordsRoute,
+  } as any)
+const LayoutMaratonRecordsStreaksRoute =
+  LayoutMaratonRecordsStreaksRouteImport.update({
+    id: '/streaks',
+    path: '/streaks',
+    getParentRoute: () => LayoutMaratonRecordsRoute,
+  } as any)
+const LayoutMaratonTableMaratonTableRoute =
+  LayoutMaratonTableMaratonTableRouteImport.update({
+    id: '/$maratonTable',
+    path: '/$maratonTable',
+    getParentRoute: () => LayoutMaratonTableRoute,
+  } as any)
+const LayoutSeasonsYearGroupRoute = LayoutSeasonsYearGroupRouteImport.update({
+  id: '/$group',
+  path: '/$group',
+  getParentRoute: () => LayoutSeasonsYearRoute,
+} as any)
+const LayoutSeasonsYearCupRoute = LayoutSeasonsYearCupRouteImport.update({
+  id: '/cup',
+  path: '/cup',
+  getParentRoute: () => LayoutSeasonsYearRoute,
+} as any)
+const LayoutSeasonsYearPlayoffRoute =
+  LayoutSeasonsYearPlayoffRouteImport.update({
+    id: '/playoff',
+    path: '/playoff',
+    getParentRoute: () => LayoutSeasonsYearRoute,
+  } as any)
+const LayoutTeamsTeamIdSeasonIdRoute =
+  LayoutTeamsTeamIdSeasonIdRouteImport.update({
+    id: '/$seasonId',
+    path: '/$seasonId',
+    getParentRoute: () => LayoutTeamsTeamIdRoute,
   } as any)
 const LayoutDashboardSeasonSeasonIdIndexRoute =
   LayoutDashboardSeasonSeasonIdIndexRouteImport.update({
@@ -359,64 +329,10 @@ const LayoutDashboardSeasonSeasonIdIndexRoute =
     path: '/',
     getParentRoute: () => LayoutDashboardSeasonSeasonIdRoute,
   } as any)
-const LayoutSeasonsYearPlayoffTableRoute =
-  LayoutSeasonsYearPlayoffTableRouteImport.update({
-    id: '/table',
-    path: '/table',
-    getParentRoute: () => LayoutSeasonsYearPlayoffRoute,
-  } as any)
-const LayoutSeasonsYearPlayoffStatsRoute =
-  LayoutSeasonsYearPlayoffStatsRouteImport.update({
-    id: '/stats',
-    path: '/stats',
-    getParentRoute: () => LayoutSeasonsYearPlayoffRoute,
-  } as any)
-const LayoutSeasonsYearPlayoffMapRoute =
-  LayoutSeasonsYearPlayoffMapRouteImport.update({
-    id: '/map',
-    path: '/map',
-    getParentRoute: () => LayoutSeasonsYearPlayoffRoute,
-  } as any)
-const LayoutSeasonsYearPlayoffGamesRoute =
-  LayoutSeasonsYearPlayoffGamesRouteImport.update({
-    id: '/games',
-    path: '/games',
-    getParentRoute: () => LayoutSeasonsYearPlayoffRoute,
-  } as any)
-const LayoutSeasonsYearCupCompetitionNameRoute =
-  LayoutSeasonsYearCupCompetitionNameRouteImport.update({
-    id: '/$competitionName',
-    path: '/$competitionName',
-    getParentRoute: () => LayoutSeasonsYearCupRoute,
-  } as any)
-const LayoutSeasonsYearGroupTablesRoute =
-  LayoutSeasonsYearGroupTablesRouteImport.update({
-    id: '/tables',
-    path: '/tables',
-    getParentRoute: () => LayoutSeasonsYearGroupRoute,
-  } as any)
-const LayoutSeasonsYearGroupStatsRoute =
-  LayoutSeasonsYearGroupStatsRouteImport.update({
-    id: '/stats',
-    path: '/stats',
-    getParentRoute: () => LayoutSeasonsYearGroupRoute,
-  } as any)
-const LayoutSeasonsYearGroupMapRoute =
-  LayoutSeasonsYearGroupMapRouteImport.update({
-    id: '/map',
-    path: '/map',
-    getParentRoute: () => LayoutSeasonsYearGroupRoute,
-  } as any)
-const LayoutSeasonsYearGroupIntervalRoute =
-  LayoutSeasonsYearGroupIntervalRouteImport.update({
-    id: '/interval',
-    path: '/interval',
-    getParentRoute: () => LayoutSeasonsYearGroupRoute,
-  } as any)
-const LayoutSeasonsYearGroupGamesRoute =
-  LayoutSeasonsYearGroupGamesRouteImport.update({
-    id: '/games',
-    path: '/games',
+const LayoutSeasonsYearGroupIndexRoute =
+  LayoutSeasonsYearGroupIndexRouteImport.update({
+    id: '/',
+    path: '/',
     getParentRoute: () => LayoutSeasonsYearGroupRoute,
   } as any)
 const LayoutSeasonsYearGroupDevelopmentRoute =
@@ -425,16 +341,94 @@ const LayoutSeasonsYearGroupDevelopmentRoute =
     path: '/development',
     getParentRoute: () => LayoutSeasonsYearGroupRoute,
   } as any)
-const LayoutTeamsTeamIdSeasonsSeasonIdIndexRoute =
-  LayoutTeamsTeamIdSeasonsSeasonIdIndexRouteImport.update({
-    id: '/seasons/$seasonId/',
-    path: '/seasons/$seasonId/',
+const LayoutSeasonsYearGroupGamesRoute =
+  LayoutSeasonsYearGroupGamesRouteImport.update({
+    id: '/games',
+    path: '/games',
+    getParentRoute: () => LayoutSeasonsYearGroupRoute,
+  } as any)
+const LayoutSeasonsYearGroupIntervalRoute =
+  LayoutSeasonsYearGroupIntervalRouteImport.update({
+    id: '/interval',
+    path: '/interval',
+    getParentRoute: () => LayoutSeasonsYearGroupRoute,
+  } as any)
+const LayoutSeasonsYearGroupMapRoute =
+  LayoutSeasonsYearGroupMapRouteImport.update({
+    id: '/map',
+    path: '/map',
+    getParentRoute: () => LayoutSeasonsYearGroupRoute,
+  } as any)
+const LayoutSeasonsYearGroupStatsRoute =
+  LayoutSeasonsYearGroupStatsRouteImport.update({
+    id: '/stats',
+    path: '/stats',
+    getParentRoute: () => LayoutSeasonsYearGroupRoute,
+  } as any)
+const LayoutSeasonsYearGroupTablesRoute =
+  LayoutSeasonsYearGroupTablesRouteImport.update({
+    id: '/tables',
+    path: '/tables',
+    getParentRoute: () => LayoutSeasonsYearGroupRoute,
+  } as any)
+const LayoutSeasonsYearCupCompetitionNameRoute =
+  LayoutSeasonsYearCupCompetitionNameRouteImport.update({
+    id: '/$competitionName',
+    path: '/$competitionName',
+    getParentRoute: () => LayoutSeasonsYearCupRoute,
+  } as any)
+const LayoutSeasonsYearPlayoffGamesRoute =
+  LayoutSeasonsYearPlayoffGamesRouteImport.update({
+    id: '/games',
+    path: '/games',
+    getParentRoute: () => LayoutSeasonsYearPlayoffRoute,
+  } as any)
+const LayoutSeasonsYearPlayoffMapRoute =
+  LayoutSeasonsYearPlayoffMapRouteImport.update({
+    id: '/map',
+    path: '/map',
+    getParentRoute: () => LayoutSeasonsYearPlayoffRoute,
+  } as any)
+const LayoutSeasonsYearPlayoffStatsRoute =
+  LayoutSeasonsYearPlayoffStatsRouteImport.update({
+    id: '/stats',
+    path: '/stats',
+    getParentRoute: () => LayoutSeasonsYearPlayoffRoute,
+  } as any)
+const LayoutSeasonsYearPlayoffTableRoute =
+  LayoutSeasonsYearPlayoffTableRouteImport.update({
+    id: '/table',
+    path: '/table',
+    getParentRoute: () => LayoutSeasonsYearPlayoffRoute,
+  } as any)
+const LayoutTeamsTeamIdLatestIndexRoute =
+  LayoutTeamsTeamIdLatestIndexRouteImport.update({
+    id: '/latest/',
+    path: '/latest/',
     getParentRoute: () => LayoutTeamsTeamIdRoute,
   } as any)
-const LayoutDashboardSeasonSeasonIdTeamseasonIndexRoute =
-  LayoutDashboardSeasonSeasonIdTeamseasonIndexRouteImport.update({
-    id: '/teamseason_/',
-    path: '/teamseason/',
+const LayoutTeamsTeamIdSeasonsIndexRoute =
+  LayoutTeamsTeamIdSeasonsIndexRouteImport.update({
+    id: '/seasons/',
+    path: '/seasons/',
+    getParentRoute: () => LayoutTeamsTeamIdRoute,
+  } as any)
+const LayoutTeamsTeamIdStatsIndexRoute =
+  LayoutTeamsTeamIdStatsIndexRouteImport.update({
+    id: '/stats/',
+    path: '/stats/',
+    getParentRoute: () => LayoutTeamsTeamIdRoute,
+  } as any)
+const LayoutTeamsTeamIdTablesIndexRoute =
+  LayoutTeamsTeamIdTablesIndexRouteImport.update({
+    id: '/tables/',
+    path: '/tables/',
+    getParentRoute: () => LayoutTeamsTeamIdRoute,
+  } as any)
+const LayoutDashboardSeasonSeasonIdMetadataIndexRoute =
+  LayoutDashboardSeasonSeasonIdMetadataIndexRouteImport.update({
+    id: '/metadata/',
+    path: '/metadata/',
     getParentRoute: () => LayoutDashboardSeasonSeasonIdRoute,
   } as any)
 const LayoutDashboardSeasonSeasonIdPlayoffseasonIndexRoute =
@@ -443,16 +437,22 @@ const LayoutDashboardSeasonSeasonIdPlayoffseasonIndexRoute =
     path: '/playoffseason/',
     getParentRoute: () => LayoutDashboardSeasonSeasonIdRoute,
   } as any)
-const LayoutDashboardSeasonSeasonIdMetadataIndexRoute =
-  LayoutDashboardSeasonSeasonIdMetadataIndexRouteImport.update({
-    id: '/metadata/',
-    path: '/metadata/',
+const LayoutDashboardSeasonSeasonIdTeamseasonIndexRoute =
+  LayoutDashboardSeasonSeasonIdTeamseasonIndexRouteImport.update({
+    id: '/teamseason_/',
+    path: '/teamseason/',
     getParentRoute: () => LayoutDashboardSeasonSeasonIdRoute,
   } as any)
-const LayoutSeasonsYearCupCompetitionNameTablesRoute =
-  LayoutSeasonsYearCupCompetitionNameTablesRouteImport.update({
-    id: '/tables',
-    path: '/tables',
+const LayoutSeasonsYearGroupTablesTableRoute =
+  LayoutSeasonsYearGroupTablesTableRouteImport.update({
+    id: '/$table',
+    path: '/$table',
+    getParentRoute: () => LayoutSeasonsYearGroupTablesRoute,
+  } as any)
+const LayoutSeasonsYearCupCompetitionNameGamesRoute =
+  LayoutSeasonsYearCupCompetitionNameGamesRouteImport.update({
+    id: '/games',
+    path: '/games',
     getParentRoute: () => LayoutSeasonsYearCupCompetitionNameRoute,
   } as any)
 const LayoutSeasonsYearCupCompetitionNamePlayoffRoute =
@@ -461,28 +461,22 @@ const LayoutSeasonsYearCupCompetitionNamePlayoffRoute =
     path: '/playoff',
     getParentRoute: () => LayoutSeasonsYearCupCompetitionNameRoute,
   } as any)
-const LayoutSeasonsYearCupCompetitionNameGamesRoute =
-  LayoutSeasonsYearCupCompetitionNameGamesRouteImport.update({
-    id: '/games',
-    path: '/games',
+const LayoutSeasonsYearCupCompetitionNameTablesRoute =
+  LayoutSeasonsYearCupCompetitionNameTablesRouteImport.update({
+    id: '/tables',
+    path: '/tables',
     getParentRoute: () => LayoutSeasonsYearCupCompetitionNameRoute,
   } as any)
-const LayoutSeasonsYearGroupTablesTableRoute =
-  LayoutSeasonsYearGroupTablesTableRouteImport.update({
-    id: '/$table',
-    path: '/$table',
-    getParentRoute: () => LayoutSeasonsYearGroupTablesRoute,
+const LayoutTeamsTeamIdSeasonsSeasonIdIndexRoute =
+  LayoutTeamsTeamIdSeasonsSeasonIdIndexRouteImport.update({
+    id: '/seasons/$seasonId/',
+    path: '/seasons/$seasonId/',
+    getParentRoute: () => LayoutTeamsTeamIdRoute,
   } as any)
-const LayoutDashboardSeasonSeasonIdInfoSerieSerieIdRoute =
-  LayoutDashboardSeasonSeasonIdInfoSerieSerieIdRouteImport.update({
-    id: '/info_/serie/$serieId',
-    path: '/info/serie/$serieId',
-    getParentRoute: () => LayoutDashboardSeasonSeasonIdRoute,
-  } as any)
-const LayoutDashboardSeasonSeasonIdInfoCompetitionNewCompetitionRoute =
-  LayoutDashboardSeasonSeasonIdInfoCompetitionNewCompetitionRouteImport.update({
-    id: '/info_/competition/newCompetition',
-    path: '/info/competition/newCompetition',
+const LayoutDashboardSeasonSeasonIdGamesSerieIdSerieIdRoute =
+  LayoutDashboardSeasonSeasonIdGamesSerieIdSerieIdRouteImport.update({
+    id: '/games/$serieId/$serieId',
+    path: '/games/$serieId/$serieId',
     getParentRoute: () => LayoutDashboardSeasonSeasonIdRoute,
   } as any)
 const LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdRoute =
@@ -491,10 +485,16 @@ const LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdRoute =
     path: '/info/competition/$competitionId',
     getParentRoute: () => LayoutDashboardSeasonSeasonIdRoute,
   } as any)
-const LayoutDashboardSeasonSeasonIdGamesSerieIdSerieIdRoute =
-  LayoutDashboardSeasonSeasonIdGamesSerieIdSerieIdRouteImport.update({
-    id: '/games/$serieId/$serieId',
-    path: '/games/$serieId/$serieId',
+const LayoutDashboardSeasonSeasonIdInfoCompetitionNewCompetitionRoute =
+  LayoutDashboardSeasonSeasonIdInfoCompetitionNewCompetitionRouteImport.update({
+    id: '/info_/competition/newCompetition',
+    path: '/info/competition/newCompetition',
+    getParentRoute: () => LayoutDashboardSeasonSeasonIdRoute,
+  } as any)
+const LayoutDashboardSeasonSeasonIdInfoSerieSerieIdRoute =
+  LayoutDashboardSeasonSeasonIdInfoSerieSerieIdRouteImport.update({
+    id: '/info_/serie/$serieId',
+    path: '/info/serie/$serieId',
     getParentRoute: () => LayoutDashboardSeasonSeasonIdRoute,
   } as any)
 const LayoutDashboardSeasonSeasonIdGamesSerieIdEditIndexRoute =
@@ -503,44 +503,11 @@ const LayoutDashboardSeasonSeasonIdGamesSerieIdEditIndexRoute =
     path: '/games/$serieId/edit/',
     getParentRoute: () => LayoutDashboardSeasonSeasonIdRoute,
   } as any)
-const LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditRoute =
-  LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditRouteImport.update({
-    id: '/edit',
-    path: '/edit',
-    getParentRoute: () => LayoutDashboardSeasonSeasonIdInfoSerieSerieIdRoute,
-  } as any)
-const LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdTeamcompetitionRoute =
-  LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdTeamcompetitionRouteImport.update(
+const LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdEditRoute =
+  LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdEditRouteImport.update(
     {
-      id: '/teamcompetition',
-      path: '/teamcompetition',
-      getParentRoute: () =>
-        LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdRoute,
-    } as any,
-  )
-const LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdNewSerieRoute =
-  LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdNewSerieRouteImport.update(
-    {
-      id: '/newSerie',
-      path: '/newSerie',
-      getParentRoute: () =>
-        LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdRoute,
-    } as any,
-  )
-const LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdNewCupSerieRoute =
-  LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdNewCupSerieRouteImport.update(
-    {
-      id: '/newCupSerie',
-      path: '/newCupSerie',
-      getParentRoute: () =>
-        LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdRoute,
-    } as any,
-  )
-const LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdGenerateSerieRoute =
-  LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdGenerateSerieRouteImport.update(
-    {
-      id: '/generateSerie',
-      path: '/generateSerie',
+      id: '/edit',
+      path: '/edit',
       getParentRoute: () =>
         LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdRoute,
     } as any,
@@ -554,29 +521,97 @@ const LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdGenerateCupSerieR
         LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdRoute,
     } as any,
   )
-const LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdEditRoute =
-  LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdEditRouteImport.update(
+const LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdGenerateSerieRoute =
+  LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdGenerateSerieRouteImport.update(
     {
-      id: '/edit',
-      path: '/edit',
+      id: '/generateSerie',
+      path: '/generateSerie',
       getParentRoute: () =>
         LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdRoute,
     } as any,
   )
-const LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditTeamseriesRoute =
-  LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditTeamseriesRouteImport.update(
+const LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdNewCupSerieRoute =
+  LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdNewCupSerieRouteImport.update(
     {
-      id: '/teamseries',
-      path: '/teamseries',
+      id: '/newCupSerie',
+      path: '/newCupSerie',
+      getParentRoute: () =>
+        LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdRoute,
+    } as any,
+  )
+const LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdNewSerieRoute =
+  LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdNewSerieRouteImport.update(
+    {
+      id: '/newSerie',
+      path: '/newSerie',
+      getParentRoute: () =>
+        LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdRoute,
+    } as any,
+  )
+const LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdTeamcompetitionRoute =
+  LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdTeamcompetitionRouteImport.update(
+    {
+      id: '/teamcompetition',
+      path: '/teamcompetition',
+      getParentRoute: () =>
+        LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdRoute,
+    } as any,
+  )
+const LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditRoute =
+  LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditRouteImport.update({
+    id: '/edit',
+    path: '/edit',
+    getParentRoute: () => LayoutDashboardSeasonSeasonIdInfoSerieSerieIdRoute,
+  } as any)
+const LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditGameIdRoute =
+  LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditGameIdRouteImport.update({
+    id: '/$gameId',
+    path: '/$gameId',
+    getParentRoute: () =>
+      LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditRoute,
+  } as any)
+const LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditAddGamesRoute =
+  LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditAddGamesRouteImport.update({
+    id: '/addGames',
+    path: '/addGames',
+    getParentRoute: () =>
+      LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditRoute,
+  } as any)
+const LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditAddTableRoute =
+  LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditAddTableRouteImport.update({
+    id: '/addTable',
+    path: '/addTable',
+    getParentRoute: () =>
+      LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditRoute,
+  } as any)
+const LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditEditParentIdRoute =
+  LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditEditParentIdRouteImport.update(
+    {
+      id: '/editParentId',
+      path: '/editParentId',
       getParentRoute: () =>
         LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditRoute,
     } as any,
   )
-const LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditSinglegameRoute =
-  LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditSinglegameRouteImport.update(
+const LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditEditTableRoute =
+  LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditEditTableRouteImport.update({
+    id: '/editTable',
+    path: '/editTable',
+    getParentRoute: () =>
+      LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditRoute,
+  } as any)
+const LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditGamesRoute =
+  LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditGamesRouteImport.update({
+    id: '/games',
+    path: '/games',
+    getParentRoute: () =>
+      LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditRoute,
+  } as any)
+const LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditGeneratescheduleRoute =
+  LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditGeneratescheduleRouteImport.update(
     {
-      id: '/singlegame',
-      path: '/singlegame',
+      id: '/generateschedule',
+      path: '/generateschedule',
       getParentRoute: () =>
         LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditRoute,
     } as any,
@@ -590,59 +625,24 @@ const LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditNewParentIdRoute =
         LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditRoute,
     } as any,
   )
-const LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditGeneratescheduleRoute =
-  LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditGeneratescheduleRouteImport.update(
+const LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditSinglegameRoute =
+  LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditSinglegameRouteImport.update(
     {
-      id: '/generateschedule',
-      path: '/generateschedule',
+      id: '/singlegame',
+      path: '/singlegame',
       getParentRoute: () =>
         LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditRoute,
     } as any,
   )
-const LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditGamesRoute =
-  LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditGamesRouteImport.update({
-    id: '/games',
-    path: '/games',
-    getParentRoute: () =>
-      LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditRoute,
-  } as any)
-const LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditEditTableRoute =
-  LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditEditTableRouteImport.update({
-    id: '/editTable',
-    path: '/editTable',
-    getParentRoute: () =>
-      LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditRoute,
-  } as any)
-const LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditEditParentIdRoute =
-  LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditEditParentIdRouteImport.update(
+const LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditTeamseriesRoute =
+  LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditTeamseriesRouteImport.update(
     {
-      id: '/editParentId',
-      path: '/editParentId',
+      id: '/teamseries',
+      path: '/teamseries',
       getParentRoute: () =>
         LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditRoute,
     } as any,
   )
-const LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditAddTableRoute =
-  LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditAddTableRouteImport.update({
-    id: '/addTable',
-    path: '/addTable',
-    getParentRoute: () =>
-      LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditRoute,
-  } as any)
-const LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditAddGamesRoute =
-  LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditAddGamesRouteImport.update({
-    id: '/addGames',
-    path: '/addGames',
-    getParentRoute: () =>
-      LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditRoute,
-  } as any)
-const LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditGameIdRoute =
-  LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditGameIdRouteImport.update({
-    id: '/$gameId',
-    path: '/$gameId',
-    getParentRoute: () =>
-      LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditRoute,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof LayoutIndexRoute
@@ -1201,18 +1201,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutIndexRouteImport
       parentRoute: typeof LayoutRoute
     }
-    '/_layout/teams': {
-      id: '/_layout/teams'
-      path: '/teams'
-      fullPath: '/teams'
-      preLoaderRoute: typeof LayoutTeamsRouteImport
-      parentRoute: typeof LayoutRoute
-    }
-    '/_layout/seasons': {
-      id: '/_layout/seasons'
-      path: '/seasons'
-      fullPath: '/seasons'
-      preLoaderRoute: typeof LayoutSeasonsRouteImport
+    '/_layout/dashboard': {
+      id: '/_layout/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof LayoutDashboardRouteImport
       parentRoute: typeof LayoutRoute
     }
     '/_layout/search': {
@@ -1222,123 +1215,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutSearchRouteImport
       parentRoute: typeof LayoutRoute
     }
-    '/_layout/dashboard': {
-      id: '/_layout/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof LayoutDashboardRouteImport
+    '/_layout/seasons': {
+      id: '/_layout/seasons'
+      path: '/seasons'
+      fullPath: '/seasons'
+      preLoaderRoute: typeof LayoutSeasonsRouteImport
       parentRoute: typeof LayoutRoute
     }
-    '/_layout/unauthorized/': {
-      id: '/_layout/unauthorized/'
-      path: '/unauthorized'
-      fullPath: '/unauthorized/'
-      preLoaderRoute: typeof LayoutUnauthorizedIndexRouteImport
+    '/_layout/teams': {
+      id: '/_layout/teams'
+      path: '/teams'
+      fullPath: '/teams'
+      preLoaderRoute: typeof LayoutTeamsRouteImport
       parentRoute: typeof LayoutRoute
-    }
-    '/_layout/seasons/': {
-      id: '/_layout/seasons/'
-      path: '/'
-      fullPath: '/seasons/'
-      preLoaderRoute: typeof LayoutSeasonsIndexRouteImport
-      parentRoute: typeof LayoutSeasonsRoute
-    }
-    '/_layout/search/': {
-      id: '/_layout/search/'
-      path: '/'
-      fullPath: '/search/'
-      preLoaderRoute: typeof LayoutSearchIndexRouteImport
-      parentRoute: typeof LayoutSearchRoute
-    }
-    '/_layout/logout/': {
-      id: '/_layout/logout/'
-      path: '/logout'
-      fullPath: '/logout/'
-      preLoaderRoute: typeof LayoutLogoutIndexRouteImport
-      parentRoute: typeof LayoutRoute
-    }
-    '/_layout/login/': {
-      id: '/_layout/login/'
-      path: '/login'
-      fullPath: '/login/'
-      preLoaderRoute: typeof LayoutLoginIndexRouteImport
-      parentRoute: typeof LayoutRoute
-    }
-    '/_layout/dashboard/': {
-      id: '/_layout/dashboard/'
-      path: '/'
-      fullPath: '/dashboard/'
-      preLoaderRoute: typeof LayoutDashboardIndexRouteImport
-      parentRoute: typeof LayoutDashboardRoute
     }
     '/_layout/about/': {
       id: '/_layout/about/'
       path: '/about'
       fullPath: '/about/'
       preLoaderRoute: typeof LayoutAboutIndexRouteImport
-      parentRoute: typeof LayoutRoute
-    }
-    '/api/v1/health': {
-      id: '/api/v1/health'
-      path: '/api/v1/health'
-      fullPath: '/api/v1/health'
-      preLoaderRoute: typeof ApiV1HealthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_layout/teams/map': {
-      id: '/_layout/teams/map'
-      path: '/map'
-      fullPath: '/teams/map'
-      preLoaderRoute: typeof LayoutTeamsMapRouteImport
-      parentRoute: typeof LayoutTeamsRoute
-    }
-    '/_layout/teams/list': {
-      id: '/_layout/teams/list'
-      path: '/list'
-      fullPath: '/teams/list'
-      preLoaderRoute: typeof LayoutTeamsListRouteImport
-      parentRoute: typeof LayoutTeamsRoute
-    }
-    '/_layout/teams/compare': {
-      id: '/_layout/teams/compare'
-      path: '/compare'
-      fullPath: '/teams/compare'
-      preLoaderRoute: typeof LayoutTeamsCompareRouteImport
-      parentRoute: typeof LayoutTeamsRoute
-    }
-    '/_layout/teams/$teamId': {
-      id: '/_layout/teams/$teamId'
-      path: '/$teamId'
-      fullPath: '/teams/$teamId'
-      preLoaderRoute: typeof LayoutTeamsTeamIdRouteImport
-      parentRoute: typeof LayoutTeamsRoute
-    }
-    '/_layout/seasons/$year': {
-      id: '/_layout/seasons/$year'
-      path: '/$year'
-      fullPath: '/seasons/$year'
-      preLoaderRoute: typeof LayoutSeasonsYearRouteImport
-      parentRoute: typeof LayoutSeasonsRoute
-    }
-    '/_layout/search/help': {
-      id: '/_layout/search/help'
-      path: '/help'
-      fullPath: '/search/help'
-      preLoaderRoute: typeof LayoutSearchHelpRouteImport
-      parentRoute: typeof LayoutSearchRoute
-    }
-    '/_layout/maraton/table': {
-      id: '/_layout/maraton/table'
-      path: '/maraton/table'
-      fullPath: '/maraton/table'
-      preLoaderRoute: typeof LayoutMaratonTableRouteImport
-      parentRoute: typeof LayoutRoute
-    }
-    '/_layout/maraton/records': {
-      id: '/_layout/maraton/records'
-      path: '/maraton/records'
-      fullPath: '/maraton/records'
-      preLoaderRoute: typeof LayoutMaratonRecordsRouteImport
       parentRoute: typeof LayoutRoute
     }
     '/_layout/about/changelog': {
@@ -1348,130 +1243,116 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutAboutChangelogRouteImport
       parentRoute: typeof LayoutRoute
     }
-    '/_layout/maraton/help/': {
-      id: '/_layout/maraton/help/'
-      path: '/maraton/help'
-      fullPath: '/maraton/help/'
-      preLoaderRoute: typeof LayoutMaratonHelpIndexRouteImport
+    '/_layout/dashboard/': {
+      id: '/_layout/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof LayoutDashboardIndexRouteImport
+      parentRoute: typeof LayoutDashboardRoute
+    }
+    '/_layout/login/': {
+      id: '/_layout/login/'
+      path: '/login'
+      fullPath: '/login/'
+      preLoaderRoute: typeof LayoutLoginIndexRouteImport
       parentRoute: typeof LayoutRoute
     }
-    '/_layout/dashboard/teams/': {
-      id: '/_layout/dashboard/teams/'
-      path: '/teams'
-      fullPath: '/dashboard/teams/'
-      preLoaderRoute: typeof LayoutDashboardTeamsIndexRouteImport
-      parentRoute: typeof LayoutDashboardRoute
+    '/_layout/logout/': {
+      id: '/_layout/logout/'
+      path: '/logout'
+      fullPath: '/logout/'
+      preLoaderRoute: typeof LayoutLogoutIndexRouteImport
+      parentRoute: typeof LayoutRoute
     }
-    '/_layout/dashboard/seasons/': {
-      id: '/_layout/dashboard/seasons/'
-      path: '/seasons'
-      fullPath: '/dashboard/seasons/'
-      preLoaderRoute: typeof LayoutDashboardSeasonsIndexRouteImport
-      parentRoute: typeof LayoutDashboardRoute
+    '/_layout/maraton/records': {
+      id: '/_layout/maraton/records'
+      path: '/maraton/records'
+      fullPath: '/maraton/records'
+      preLoaderRoute: typeof LayoutMaratonRecordsRouteImport
+      parentRoute: typeof LayoutRoute
     }
-    '/_layout/dashboard/newseason/': {
-      id: '/_layout/dashboard/newseason/'
-      path: '/newseason'
-      fullPath: '/dashboard/newseason/'
-      preLoaderRoute: typeof LayoutDashboardNewseasonIndexRouteImport
-      parentRoute: typeof LayoutDashboardRoute
+    '/_layout/maraton/table': {
+      id: '/_layout/maraton/table'
+      path: '/maraton/table'
+      fullPath: '/maraton/table'
+      preLoaderRoute: typeof LayoutMaratonTableRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/search/': {
+      id: '/_layout/search/'
+      path: '/'
+      fullPath: '/search/'
+      preLoaderRoute: typeof LayoutSearchIndexRouteImport
+      parentRoute: typeof LayoutSearchRoute
+    }
+    '/_layout/search/help': {
+      id: '/_layout/search/help'
+      path: '/help'
+      fullPath: '/search/help'
+      preLoaderRoute: typeof LayoutSearchHelpRouteImport
+      parentRoute: typeof LayoutSearchRoute
+    }
+    '/_layout/seasons/': {
+      id: '/_layout/seasons/'
+      path: '/'
+      fullPath: '/seasons/'
+      preLoaderRoute: typeof LayoutSeasonsIndexRouteImport
+      parentRoute: typeof LayoutSeasonsRoute
+    }
+    '/_layout/seasons/$year': {
+      id: '/_layout/seasons/$year'
+      path: '/$year'
+      fullPath: '/seasons/$year'
+      preLoaderRoute: typeof LayoutSeasonsYearRouteImport
+      parentRoute: typeof LayoutSeasonsRoute
+    }
+    '/_layout/teams/$teamId': {
+      id: '/_layout/teams/$teamId'
+      path: '/$teamId'
+      fullPath: '/teams/$teamId'
+      preLoaderRoute: typeof LayoutTeamsTeamIdRouteImport
+      parentRoute: typeof LayoutTeamsRoute
+    }
+    '/_layout/teams/compare': {
+      id: '/_layout/teams/compare'
+      path: '/compare'
+      fullPath: '/teams/compare'
+      preLoaderRoute: typeof LayoutTeamsCompareRouteImport
+      parentRoute: typeof LayoutTeamsRoute
+    }
+    '/_layout/teams/list': {
+      id: '/_layout/teams/list'
+      path: '/list'
+      fullPath: '/teams/list'
+      preLoaderRoute: typeof LayoutTeamsListRouteImport
+      parentRoute: typeof LayoutTeamsRoute
+    }
+    '/_layout/teams/map': {
+      id: '/_layout/teams/map'
+      path: '/map'
+      fullPath: '/teams/map'
+      preLoaderRoute: typeof LayoutTeamsMapRouteImport
+      parentRoute: typeof LayoutTeamsRoute
+    }
+    '/_layout/unauthorized/': {
+      id: '/_layout/unauthorized/'
+      path: '/unauthorized'
+      fullPath: '/unauthorized/'
+      preLoaderRoute: typeof LayoutUnauthorizedIndexRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/api/v1/health': {
+      id: '/api/v1/health'
+      path: '/api/v1/health'
+      fullPath: '/api/v1/health'
+      preLoaderRoute: typeof ApiV1HealthRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_layout/dashboard/$errorId/': {
       id: '/_layout/dashboard/$errorId/'
       path: '/$errorId'
       fullPath: '/dashboard/$errorId/'
       preLoaderRoute: typeof LayoutDashboardErrorIdIndexRouteImport
-      parentRoute: typeof LayoutDashboardRoute
-    }
-    '/_layout/teams/$teamId/$seasonId': {
-      id: '/_layout/teams/$teamId/$seasonId'
-      path: '/$seasonId'
-      fullPath: '/teams/$teamId/$seasonId'
-      preLoaderRoute: typeof LayoutTeamsTeamIdSeasonIdRouteImport
-      parentRoute: typeof LayoutTeamsTeamIdRoute
-    }
-    '/_layout/seasons/$year/playoff': {
-      id: '/_layout/seasons/$year/playoff'
-      path: '/playoff'
-      fullPath: '/seasons/$year/playoff'
-      preLoaderRoute: typeof LayoutSeasonsYearPlayoffRouteImport
-      parentRoute: typeof LayoutSeasonsYearRoute
-    }
-    '/_layout/seasons/$year/cup': {
-      id: '/_layout/seasons/$year/cup'
-      path: '/cup'
-      fullPath: '/seasons/$year/cup'
-      preLoaderRoute: typeof LayoutSeasonsYearCupRouteImport
-      parentRoute: typeof LayoutSeasonsYearRoute
-    }
-    '/_layout/seasons/$year/$group': {
-      id: '/_layout/seasons/$year/$group'
-      path: '/$group'
-      fullPath: '/seasons/$year/$group'
-      preLoaderRoute: typeof LayoutSeasonsYearGroupRouteImport
-      parentRoute: typeof LayoutSeasonsYearRoute
-    }
-    '/_layout/maraton/table/$maratonTable': {
-      id: '/_layout/maraton/table/$maratonTable'
-      path: '/$maratonTable'
-      fullPath: '/maraton/table/$maratonTable'
-      preLoaderRoute: typeof LayoutMaratonTableMaratonTableRouteImport
-      parentRoute: typeof LayoutMaratonTableRoute
-    }
-    '/_layout/maraton/records/streaks': {
-      id: '/_layout/maraton/records/streaks'
-      path: '/streaks'
-      fullPath: '/maraton/records/streaks'
-      preLoaderRoute: typeof LayoutMaratonRecordsStreaksRouteImport
-      parentRoute: typeof LayoutMaratonRecordsRoute
-    }
-    '/_layout/maraton/records/stats': {
-      id: '/_layout/maraton/records/stats'
-      path: '/stats'
-      fullPath: '/maraton/records/stats'
-      preLoaderRoute: typeof LayoutMaratonRecordsStatsRouteImport
-      parentRoute: typeof LayoutMaratonRecordsRoute
-    }
-    '/_layout/maraton/records/scored': {
-      id: '/_layout/maraton/records/scored'
-      path: '/scored'
-      fullPath: '/maraton/records/scored'
-      preLoaderRoute: typeof LayoutMaratonRecordsScoredRouteImport
-      parentRoute: typeof LayoutMaratonRecordsRoute
-    }
-    '/_layout/maraton/records/points': {
-      id: '/_layout/maraton/records/points'
-      path: '/points'
-      fullPath: '/maraton/records/points'
-      preLoaderRoute: typeof LayoutMaratonRecordsPointsRouteImport
-      parentRoute: typeof LayoutMaratonRecordsRoute
-    }
-    '/_layout/maraton/records/conceded': {
-      id: '/_layout/maraton/records/conceded'
-      path: '/conceded'
-      fullPath: '/maraton/records/conceded'
-      preLoaderRoute: typeof LayoutMaratonRecordsConcededRouteImport
-      parentRoute: typeof LayoutMaratonRecordsRoute
-    }
-    '/_layout/dashboard/teams/add': {
-      id: '/_layout/dashboard/teams/add'
-      path: '/teams/add'
-      fullPath: '/dashboard/teams/add'
-      preLoaderRoute: typeof LayoutDashboardTeamsAddRouteImport
-      parentRoute: typeof LayoutDashboardRoute
-    }
-    '/_layout/dashboard/team/$teamId': {
-      id: '/_layout/dashboard/team/$teamId'
-      path: '/team/$teamId'
-      fullPath: '/dashboard/team/$teamId'
-      preLoaderRoute: typeof LayoutDashboardTeamTeamIdRouteImport
-      parentRoute: typeof LayoutDashboardRoute
-    }
-    '/_layout/dashboard/season/$seasonId': {
-      id: '/_layout/dashboard/season/$seasonId'
-      path: '/season/$seasonId'
-      fullPath: '/dashboard/season/$seasonId'
-      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdRouteImport
       parentRoute: typeof LayoutDashboardRoute
     }
     '/_layout/dashboard/games/$today': {
@@ -1481,40 +1362,124 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutDashboardGamesTodayRouteImport
       parentRoute: typeof LayoutDashboardRoute
     }
-    '/_layout/teams/$teamId/tables/': {
-      id: '/_layout/teams/$teamId/tables/'
-      path: '/tables'
-      fullPath: '/teams/$teamId/tables/'
-      preLoaderRoute: typeof LayoutTeamsTeamIdTablesIndexRouteImport
-      parentRoute: typeof LayoutTeamsTeamIdRoute
+    '/_layout/dashboard/newseason/': {
+      id: '/_layout/dashboard/newseason/'
+      path: '/newseason'
+      fullPath: '/dashboard/newseason/'
+      preLoaderRoute: typeof LayoutDashboardNewseasonIndexRouteImport
+      parentRoute: typeof LayoutDashboardRoute
     }
-    '/_layout/teams/$teamId/stats/': {
-      id: '/_layout/teams/$teamId/stats/'
-      path: '/stats'
-      fullPath: '/teams/$teamId/stats/'
-      preLoaderRoute: typeof LayoutTeamsTeamIdStatsIndexRouteImport
-      parentRoute: typeof LayoutTeamsTeamIdRoute
+    '/_layout/dashboard/season/$seasonId': {
+      id: '/_layout/dashboard/season/$seasonId'
+      path: '/season/$seasonId'
+      fullPath: '/dashboard/season/$seasonId'
+      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdRouteImport
+      parentRoute: typeof LayoutDashboardRoute
     }
-    '/_layout/teams/$teamId/seasons/': {
-      id: '/_layout/teams/$teamId/seasons/'
+    '/_layout/dashboard/seasons/': {
+      id: '/_layout/dashboard/seasons/'
       path: '/seasons'
-      fullPath: '/teams/$teamId/seasons/'
-      preLoaderRoute: typeof LayoutTeamsTeamIdSeasonsIndexRouteImport
-      parentRoute: typeof LayoutTeamsTeamIdRoute
+      fullPath: '/dashboard/seasons/'
+      preLoaderRoute: typeof LayoutDashboardSeasonsIndexRouteImport
+      parentRoute: typeof LayoutDashboardRoute
     }
-    '/_layout/teams/$teamId/latest/': {
-      id: '/_layout/teams/$teamId/latest/'
-      path: '/latest'
-      fullPath: '/teams/$teamId/latest/'
-      preLoaderRoute: typeof LayoutTeamsTeamIdLatestIndexRouteImport
-      parentRoute: typeof LayoutTeamsTeamIdRoute
+    '/_layout/dashboard/team/$teamId': {
+      id: '/_layout/dashboard/team/$teamId'
+      path: '/team/$teamId'
+      fullPath: '/dashboard/team/$teamId'
+      preLoaderRoute: typeof LayoutDashboardTeamTeamIdRouteImport
+      parentRoute: typeof LayoutDashboardRoute
     }
-    '/_layout/seasons/$year/$group/': {
-      id: '/_layout/seasons/$year/$group/'
-      path: '/'
-      fullPath: '/seasons/$year/$group/'
-      preLoaderRoute: typeof LayoutSeasonsYearGroupIndexRouteImport
-      parentRoute: typeof LayoutSeasonsYearGroupRoute
+    '/_layout/dashboard/teams/': {
+      id: '/_layout/dashboard/teams/'
+      path: '/teams'
+      fullPath: '/dashboard/teams/'
+      preLoaderRoute: typeof LayoutDashboardTeamsIndexRouteImport
+      parentRoute: typeof LayoutDashboardRoute
+    }
+    '/_layout/dashboard/teams/add': {
+      id: '/_layout/dashboard/teams/add'
+      path: '/teams/add'
+      fullPath: '/dashboard/teams/add'
+      preLoaderRoute: typeof LayoutDashboardTeamsAddRouteImport
+      parentRoute: typeof LayoutDashboardRoute
+    }
+    '/_layout/maraton/help/': {
+      id: '/_layout/maraton/help/'
+      path: '/maraton/help'
+      fullPath: '/maraton/help/'
+      preLoaderRoute: typeof LayoutMaratonHelpIndexRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/maraton/records/conceded': {
+      id: '/_layout/maraton/records/conceded'
+      path: '/conceded'
+      fullPath: '/maraton/records/conceded'
+      preLoaderRoute: typeof LayoutMaratonRecordsConcededRouteImport
+      parentRoute: typeof LayoutMaratonRecordsRoute
+    }
+    '/_layout/maraton/records/points': {
+      id: '/_layout/maraton/records/points'
+      path: '/points'
+      fullPath: '/maraton/records/points'
+      preLoaderRoute: typeof LayoutMaratonRecordsPointsRouteImport
+      parentRoute: typeof LayoutMaratonRecordsRoute
+    }
+    '/_layout/maraton/records/scored': {
+      id: '/_layout/maraton/records/scored'
+      path: '/scored'
+      fullPath: '/maraton/records/scored'
+      preLoaderRoute: typeof LayoutMaratonRecordsScoredRouteImport
+      parentRoute: typeof LayoutMaratonRecordsRoute
+    }
+    '/_layout/maraton/records/stats': {
+      id: '/_layout/maraton/records/stats'
+      path: '/stats'
+      fullPath: '/maraton/records/stats'
+      preLoaderRoute: typeof LayoutMaratonRecordsStatsRouteImport
+      parentRoute: typeof LayoutMaratonRecordsRoute
+    }
+    '/_layout/maraton/records/streaks': {
+      id: '/_layout/maraton/records/streaks'
+      path: '/streaks'
+      fullPath: '/maraton/records/streaks'
+      preLoaderRoute: typeof LayoutMaratonRecordsStreaksRouteImport
+      parentRoute: typeof LayoutMaratonRecordsRoute
+    }
+    '/_layout/maraton/table/$maratonTable': {
+      id: '/_layout/maraton/table/$maratonTable'
+      path: '/$maratonTable'
+      fullPath: '/maraton/table/$maratonTable'
+      preLoaderRoute: typeof LayoutMaratonTableMaratonTableRouteImport
+      parentRoute: typeof LayoutMaratonTableRoute
+    }
+    '/_layout/seasons/$year/$group': {
+      id: '/_layout/seasons/$year/$group'
+      path: '/$group'
+      fullPath: '/seasons/$year/$group'
+      preLoaderRoute: typeof LayoutSeasonsYearGroupRouteImport
+      parentRoute: typeof LayoutSeasonsYearRoute
+    }
+    '/_layout/seasons/$year/cup': {
+      id: '/_layout/seasons/$year/cup'
+      path: '/cup'
+      fullPath: '/seasons/$year/cup'
+      preLoaderRoute: typeof LayoutSeasonsYearCupRouteImport
+      parentRoute: typeof LayoutSeasonsYearRoute
+    }
+    '/_layout/seasons/$year/playoff': {
+      id: '/_layout/seasons/$year/playoff'
+      path: '/playoff'
+      fullPath: '/seasons/$year/playoff'
+      preLoaderRoute: typeof LayoutSeasonsYearPlayoffRouteImport
+      parentRoute: typeof LayoutSeasonsYearRoute
+    }
+    '/_layout/teams/$teamId/$seasonId': {
+      id: '/_layout/teams/$teamId/$seasonId'
+      path: '/$seasonId'
+      fullPath: '/teams/$teamId/$seasonId'
+      preLoaderRoute: typeof LayoutTeamsTeamIdSeasonIdRouteImport
+      parentRoute: typeof LayoutTeamsTeamIdRoute
     }
     '/_layout/dashboard/season/$seasonId/': {
       id: '/_layout/dashboard/season/$seasonId/'
@@ -1523,74 +1488,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdIndexRouteImport
       parentRoute: typeof LayoutDashboardSeasonSeasonIdRoute
     }
-    '/_layout/seasons/$year/playoff/table': {
-      id: '/_layout/seasons/$year/playoff/table'
-      path: '/table'
-      fullPath: '/seasons/$year/playoff/table'
-      preLoaderRoute: typeof LayoutSeasonsYearPlayoffTableRouteImport
-      parentRoute: typeof LayoutSeasonsYearPlayoffRoute
-    }
-    '/_layout/seasons/$year/playoff/stats': {
-      id: '/_layout/seasons/$year/playoff/stats'
-      path: '/stats'
-      fullPath: '/seasons/$year/playoff/stats'
-      preLoaderRoute: typeof LayoutSeasonsYearPlayoffStatsRouteImport
-      parentRoute: typeof LayoutSeasonsYearPlayoffRoute
-    }
-    '/_layout/seasons/$year/playoff/map': {
-      id: '/_layout/seasons/$year/playoff/map'
-      path: '/map'
-      fullPath: '/seasons/$year/playoff/map'
-      preLoaderRoute: typeof LayoutSeasonsYearPlayoffMapRouteImport
-      parentRoute: typeof LayoutSeasonsYearPlayoffRoute
-    }
-    '/_layout/seasons/$year/playoff/games': {
-      id: '/_layout/seasons/$year/playoff/games'
-      path: '/games'
-      fullPath: '/seasons/$year/playoff/games'
-      preLoaderRoute: typeof LayoutSeasonsYearPlayoffGamesRouteImport
-      parentRoute: typeof LayoutSeasonsYearPlayoffRoute
-    }
-    '/_layout/seasons/$year/cup/$competitionName': {
-      id: '/_layout/seasons/$year/cup/$competitionName'
-      path: '/$competitionName'
-      fullPath: '/seasons/$year/cup/$competitionName'
-      preLoaderRoute: typeof LayoutSeasonsYearCupCompetitionNameRouteImport
-      parentRoute: typeof LayoutSeasonsYearCupRoute
-    }
-    '/_layout/seasons/$year/$group/tables': {
-      id: '/_layout/seasons/$year/$group/tables'
-      path: '/tables'
-      fullPath: '/seasons/$year/$group/tables'
-      preLoaderRoute: typeof LayoutSeasonsYearGroupTablesRouteImport
-      parentRoute: typeof LayoutSeasonsYearGroupRoute
-    }
-    '/_layout/seasons/$year/$group/stats': {
-      id: '/_layout/seasons/$year/$group/stats'
-      path: '/stats'
-      fullPath: '/seasons/$year/$group/stats'
-      preLoaderRoute: typeof LayoutSeasonsYearGroupStatsRouteImport
-      parentRoute: typeof LayoutSeasonsYearGroupRoute
-    }
-    '/_layout/seasons/$year/$group/map': {
-      id: '/_layout/seasons/$year/$group/map'
-      path: '/map'
-      fullPath: '/seasons/$year/$group/map'
-      preLoaderRoute: typeof LayoutSeasonsYearGroupMapRouteImport
-      parentRoute: typeof LayoutSeasonsYearGroupRoute
-    }
-    '/_layout/seasons/$year/$group/interval': {
-      id: '/_layout/seasons/$year/$group/interval'
-      path: '/interval'
-      fullPath: '/seasons/$year/$group/interval'
-      preLoaderRoute: typeof LayoutSeasonsYearGroupIntervalRouteImport
-      parentRoute: typeof LayoutSeasonsYearGroupRoute
-    }
-    '/_layout/seasons/$year/$group/games': {
-      id: '/_layout/seasons/$year/$group/games'
-      path: '/games'
-      fullPath: '/seasons/$year/$group/games'
-      preLoaderRoute: typeof LayoutSeasonsYearGroupGamesRouteImport
+    '/_layout/seasons/$year/$group/': {
+      id: '/_layout/seasons/$year/$group/'
+      path: '/'
+      fullPath: '/seasons/$year/$group/'
+      preLoaderRoute: typeof LayoutSeasonsYearGroupIndexRouteImport
       parentRoute: typeof LayoutSeasonsYearGroupRoute
     }
     '/_layout/seasons/$year/$group/development': {
@@ -1600,18 +1502,109 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutSeasonsYearGroupDevelopmentRouteImport
       parentRoute: typeof LayoutSeasonsYearGroupRoute
     }
-    '/_layout/teams/$teamId/seasons/$seasonId/': {
-      id: '/_layout/teams/$teamId/seasons/$seasonId/'
-      path: '/seasons/$seasonId'
-      fullPath: '/teams/$teamId/seasons/$seasonId/'
-      preLoaderRoute: typeof LayoutTeamsTeamIdSeasonsSeasonIdIndexRouteImport
+    '/_layout/seasons/$year/$group/games': {
+      id: '/_layout/seasons/$year/$group/games'
+      path: '/games'
+      fullPath: '/seasons/$year/$group/games'
+      preLoaderRoute: typeof LayoutSeasonsYearGroupGamesRouteImport
+      parentRoute: typeof LayoutSeasonsYearGroupRoute
+    }
+    '/_layout/seasons/$year/$group/interval': {
+      id: '/_layout/seasons/$year/$group/interval'
+      path: '/interval'
+      fullPath: '/seasons/$year/$group/interval'
+      preLoaderRoute: typeof LayoutSeasonsYearGroupIntervalRouteImport
+      parentRoute: typeof LayoutSeasonsYearGroupRoute
+    }
+    '/_layout/seasons/$year/$group/map': {
+      id: '/_layout/seasons/$year/$group/map'
+      path: '/map'
+      fullPath: '/seasons/$year/$group/map'
+      preLoaderRoute: typeof LayoutSeasonsYearGroupMapRouteImport
+      parentRoute: typeof LayoutSeasonsYearGroupRoute
+    }
+    '/_layout/seasons/$year/$group/stats': {
+      id: '/_layout/seasons/$year/$group/stats'
+      path: '/stats'
+      fullPath: '/seasons/$year/$group/stats'
+      preLoaderRoute: typeof LayoutSeasonsYearGroupStatsRouteImport
+      parentRoute: typeof LayoutSeasonsYearGroupRoute
+    }
+    '/_layout/seasons/$year/$group/tables': {
+      id: '/_layout/seasons/$year/$group/tables'
+      path: '/tables'
+      fullPath: '/seasons/$year/$group/tables'
+      preLoaderRoute: typeof LayoutSeasonsYearGroupTablesRouteImport
+      parentRoute: typeof LayoutSeasonsYearGroupRoute
+    }
+    '/_layout/seasons/$year/cup/$competitionName': {
+      id: '/_layout/seasons/$year/cup/$competitionName'
+      path: '/$competitionName'
+      fullPath: '/seasons/$year/cup/$competitionName'
+      preLoaderRoute: typeof LayoutSeasonsYearCupCompetitionNameRouteImport
+      parentRoute: typeof LayoutSeasonsYearCupRoute
+    }
+    '/_layout/seasons/$year/playoff/games': {
+      id: '/_layout/seasons/$year/playoff/games'
+      path: '/games'
+      fullPath: '/seasons/$year/playoff/games'
+      preLoaderRoute: typeof LayoutSeasonsYearPlayoffGamesRouteImport
+      parentRoute: typeof LayoutSeasonsYearPlayoffRoute
+    }
+    '/_layout/seasons/$year/playoff/map': {
+      id: '/_layout/seasons/$year/playoff/map'
+      path: '/map'
+      fullPath: '/seasons/$year/playoff/map'
+      preLoaderRoute: typeof LayoutSeasonsYearPlayoffMapRouteImport
+      parentRoute: typeof LayoutSeasonsYearPlayoffRoute
+    }
+    '/_layout/seasons/$year/playoff/stats': {
+      id: '/_layout/seasons/$year/playoff/stats'
+      path: '/stats'
+      fullPath: '/seasons/$year/playoff/stats'
+      preLoaderRoute: typeof LayoutSeasonsYearPlayoffStatsRouteImport
+      parentRoute: typeof LayoutSeasonsYearPlayoffRoute
+    }
+    '/_layout/seasons/$year/playoff/table': {
+      id: '/_layout/seasons/$year/playoff/table'
+      path: '/table'
+      fullPath: '/seasons/$year/playoff/table'
+      preLoaderRoute: typeof LayoutSeasonsYearPlayoffTableRouteImport
+      parentRoute: typeof LayoutSeasonsYearPlayoffRoute
+    }
+    '/_layout/teams/$teamId/latest/': {
+      id: '/_layout/teams/$teamId/latest/'
+      path: '/latest'
+      fullPath: '/teams/$teamId/latest/'
+      preLoaderRoute: typeof LayoutTeamsTeamIdLatestIndexRouteImport
       parentRoute: typeof LayoutTeamsTeamIdRoute
     }
-    '/_layout/dashboard/season/$seasonId/teamseason_/': {
-      id: '/_layout/dashboard/season/$seasonId/teamseason_/'
-      path: '/teamseason'
-      fullPath: '/dashboard/season/$seasonId/teamseason/'
-      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdTeamseasonIndexRouteImport
+    '/_layout/teams/$teamId/seasons/': {
+      id: '/_layout/teams/$teamId/seasons/'
+      path: '/seasons'
+      fullPath: '/teams/$teamId/seasons/'
+      preLoaderRoute: typeof LayoutTeamsTeamIdSeasonsIndexRouteImport
+      parentRoute: typeof LayoutTeamsTeamIdRoute
+    }
+    '/_layout/teams/$teamId/stats/': {
+      id: '/_layout/teams/$teamId/stats/'
+      path: '/stats'
+      fullPath: '/teams/$teamId/stats/'
+      preLoaderRoute: typeof LayoutTeamsTeamIdStatsIndexRouteImport
+      parentRoute: typeof LayoutTeamsTeamIdRoute
+    }
+    '/_layout/teams/$teamId/tables/': {
+      id: '/_layout/teams/$teamId/tables/'
+      path: '/tables'
+      fullPath: '/teams/$teamId/tables/'
+      preLoaderRoute: typeof LayoutTeamsTeamIdTablesIndexRouteImport
+      parentRoute: typeof LayoutTeamsTeamIdRoute
+    }
+    '/_layout/dashboard/season/$seasonId/metadata/': {
+      id: '/_layout/dashboard/season/$seasonId/metadata/'
+      path: '/metadata'
+      fullPath: '/dashboard/season/$seasonId/metadata/'
+      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdMetadataIndexRouteImport
       parentRoute: typeof LayoutDashboardSeasonSeasonIdRoute
     }
     '/_layout/dashboard/season/$seasonId/playoffseason/': {
@@ -1621,18 +1614,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdPlayoffseasonIndexRouteImport
       parentRoute: typeof LayoutDashboardSeasonSeasonIdRoute
     }
-    '/_layout/dashboard/season/$seasonId/metadata/': {
-      id: '/_layout/dashboard/season/$seasonId/metadata/'
-      path: '/metadata'
-      fullPath: '/dashboard/season/$seasonId/metadata/'
-      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdMetadataIndexRouteImport
+    '/_layout/dashboard/season/$seasonId/teamseason_/': {
+      id: '/_layout/dashboard/season/$seasonId/teamseason_/'
+      path: '/teamseason'
+      fullPath: '/dashboard/season/$seasonId/teamseason/'
+      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdTeamseasonIndexRouteImport
       parentRoute: typeof LayoutDashboardSeasonSeasonIdRoute
     }
-    '/_layout/seasons/$year/cup/$competitionName/tables': {
-      id: '/_layout/seasons/$year/cup/$competitionName/tables'
-      path: '/tables'
-      fullPath: '/seasons/$year/cup/$competitionName/tables'
-      preLoaderRoute: typeof LayoutSeasonsYearCupCompetitionNameTablesRouteImport
+    '/_layout/seasons/$year/$group/tables/$table': {
+      id: '/_layout/seasons/$year/$group/tables/$table'
+      path: '/$table'
+      fullPath: '/seasons/$year/$group/tables/$table'
+      preLoaderRoute: typeof LayoutSeasonsYearGroupTablesTableRouteImport
+      parentRoute: typeof LayoutSeasonsYearGroupTablesRoute
+    }
+    '/_layout/seasons/$year/cup/$competitionName/games': {
+      id: '/_layout/seasons/$year/cup/$competitionName/games'
+      path: '/games'
+      fullPath: '/seasons/$year/cup/$competitionName/games'
+      preLoaderRoute: typeof LayoutSeasonsYearCupCompetitionNameGamesRouteImport
       parentRoute: typeof LayoutSeasonsYearCupCompetitionNameRoute
     }
     '/_layout/seasons/$year/cup/$competitionName/playoff': {
@@ -1642,32 +1642,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutSeasonsYearCupCompetitionNamePlayoffRouteImport
       parentRoute: typeof LayoutSeasonsYearCupCompetitionNameRoute
     }
-    '/_layout/seasons/$year/cup/$competitionName/games': {
-      id: '/_layout/seasons/$year/cup/$competitionName/games'
-      path: '/games'
-      fullPath: '/seasons/$year/cup/$competitionName/games'
-      preLoaderRoute: typeof LayoutSeasonsYearCupCompetitionNameGamesRouteImport
+    '/_layout/seasons/$year/cup/$competitionName/tables': {
+      id: '/_layout/seasons/$year/cup/$competitionName/tables'
+      path: '/tables'
+      fullPath: '/seasons/$year/cup/$competitionName/tables'
+      preLoaderRoute: typeof LayoutSeasonsYearCupCompetitionNameTablesRouteImport
       parentRoute: typeof LayoutSeasonsYearCupCompetitionNameRoute
     }
-    '/_layout/seasons/$year/$group/tables/$table': {
-      id: '/_layout/seasons/$year/$group/tables/$table'
-      path: '/$table'
-      fullPath: '/seasons/$year/$group/tables/$table'
-      preLoaderRoute: typeof LayoutSeasonsYearGroupTablesTableRouteImport
-      parentRoute: typeof LayoutSeasonsYearGroupTablesRoute
+    '/_layout/teams/$teamId/seasons/$seasonId/': {
+      id: '/_layout/teams/$teamId/seasons/$seasonId/'
+      path: '/seasons/$seasonId'
+      fullPath: '/teams/$teamId/seasons/$seasonId/'
+      preLoaderRoute: typeof LayoutTeamsTeamIdSeasonsSeasonIdIndexRouteImport
+      parentRoute: typeof LayoutTeamsTeamIdRoute
     }
-    '/_layout/dashboard/season/$seasonId/info_/serie/$serieId': {
-      id: '/_layout/dashboard/season/$seasonId/info_/serie/$serieId'
-      path: '/info/serie/$serieId'
-      fullPath: '/dashboard/season/$seasonId/info/serie/$serieId'
-      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdRouteImport
-      parentRoute: typeof LayoutDashboardSeasonSeasonIdRoute
-    }
-    '/_layout/dashboard/season/$seasonId/info_/competition/newCompetition': {
-      id: '/_layout/dashboard/season/$seasonId/info_/competition/newCompetition'
-      path: '/info/competition/newCompetition'
-      fullPath: '/dashboard/season/$seasonId/info/competition/newCompetition'
-      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoCompetitionNewCompetitionRouteImport
+    '/_layout/dashboard/season/$seasonId/games/$serieId/$serieId': {
+      id: '/_layout/dashboard/season/$seasonId/games/$serieId/$serieId'
+      path: '/games/$serieId/$serieId'
+      fullPath: '/dashboard/season/$seasonId/games/$serieId/$serieId'
+      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdGamesSerieIdSerieIdRouteImport
       parentRoute: typeof LayoutDashboardSeasonSeasonIdRoute
     }
     '/_layout/dashboard/season/$seasonId/info_/competition/$competitionId': {
@@ -1677,11 +1670,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdRouteImport
       parentRoute: typeof LayoutDashboardSeasonSeasonIdRoute
     }
-    '/_layout/dashboard/season/$seasonId/games/$serieId/$serieId': {
-      id: '/_layout/dashboard/season/$seasonId/games/$serieId/$serieId'
-      path: '/games/$serieId/$serieId'
-      fullPath: '/dashboard/season/$seasonId/games/$serieId/$serieId'
-      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdGamesSerieIdSerieIdRouteImport
+    '/_layout/dashboard/season/$seasonId/info_/competition/newCompetition': {
+      id: '/_layout/dashboard/season/$seasonId/info_/competition/newCompetition'
+      path: '/info/competition/newCompetition'
+      fullPath: '/dashboard/season/$seasonId/info/competition/newCompetition'
+      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoCompetitionNewCompetitionRouteImport
+      parentRoute: typeof LayoutDashboardSeasonSeasonIdRoute
+    }
+    '/_layout/dashboard/season/$seasonId/info_/serie/$serieId': {
+      id: '/_layout/dashboard/season/$seasonId/info_/serie/$serieId'
+      path: '/info/serie/$serieId'
+      fullPath: '/dashboard/season/$seasonId/info/serie/$serieId'
+      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdRouteImport
       parentRoute: typeof LayoutDashboardSeasonSeasonIdRoute
     }
     '/_layout/dashboard/season/$seasonId/games_/$serieId/edit/': {
@@ -1691,39 +1691,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdGamesSerieIdEditIndexRouteImport
       parentRoute: typeof LayoutDashboardSeasonSeasonIdRoute
     }
-    '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit': {
-      id: '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit'
+    '/_layout/dashboard/season/$seasonId/info_/competition/$competitionId/edit': {
+      id: '/_layout/dashboard/season/$seasonId/info_/competition/$competitionId/edit'
       path: '/edit'
-      fullPath: '/dashboard/season/$seasonId/info/serie/$serieId/edit'
-      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditRouteImport
-      parentRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdRoute
-    }
-    '/_layout/dashboard/season/$seasonId/info_/competition/$competitionId/teamcompetition': {
-      id: '/_layout/dashboard/season/$seasonId/info_/competition/$competitionId/teamcompetition'
-      path: '/teamcompetition'
-      fullPath: '/dashboard/season/$seasonId/info/competition/$competitionId/teamcompetition'
-      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdTeamcompetitionRouteImport
-      parentRoute: typeof LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdRoute
-    }
-    '/_layout/dashboard/season/$seasonId/info_/competition/$competitionId/newSerie': {
-      id: '/_layout/dashboard/season/$seasonId/info_/competition/$competitionId/newSerie'
-      path: '/newSerie'
-      fullPath: '/dashboard/season/$seasonId/info/competition/$competitionId/newSerie'
-      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdNewSerieRouteImport
-      parentRoute: typeof LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdRoute
-    }
-    '/_layout/dashboard/season/$seasonId/info_/competition/$competitionId/newCupSerie': {
-      id: '/_layout/dashboard/season/$seasonId/info_/competition/$competitionId/newCupSerie'
-      path: '/newCupSerie'
-      fullPath: '/dashboard/season/$seasonId/info/competition/$competitionId/newCupSerie'
-      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdNewCupSerieRouteImport
-      parentRoute: typeof LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdRoute
-    }
-    '/_layout/dashboard/season/$seasonId/info_/competition/$competitionId/generateSerie': {
-      id: '/_layout/dashboard/season/$seasonId/info_/competition/$competitionId/generateSerie'
-      path: '/generateSerie'
-      fullPath: '/dashboard/season/$seasonId/info/competition/$competitionId/generateSerie'
-      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdGenerateSerieRouteImport
+      fullPath: '/dashboard/season/$seasonId/info/competition/$competitionId/edit'
+      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdEditRouteImport
       parentRoute: typeof LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdRoute
     }
     '/_layout/dashboard/season/$seasonId/info_/competition/$competitionId/generateCupSerie': {
@@ -1733,67 +1705,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdGenerateCupSerieRouteImport
       parentRoute: typeof LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdRoute
     }
-    '/_layout/dashboard/season/$seasonId/info_/competition/$competitionId/edit': {
-      id: '/_layout/dashboard/season/$seasonId/info_/competition/$competitionId/edit'
-      path: '/edit'
-      fullPath: '/dashboard/season/$seasonId/info/competition/$competitionId/edit'
-      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdEditRouteImport
+    '/_layout/dashboard/season/$seasonId/info_/competition/$competitionId/generateSerie': {
+      id: '/_layout/dashboard/season/$seasonId/info_/competition/$competitionId/generateSerie'
+      path: '/generateSerie'
+      fullPath: '/dashboard/season/$seasonId/info/competition/$competitionId/generateSerie'
+      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdGenerateSerieRouteImport
       parentRoute: typeof LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdRoute
     }
-    '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/teamseries': {
-      id: '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/teamseries'
-      path: '/teamseries'
-      fullPath: '/dashboard/season/$seasonId/info/serie/$serieId/edit/teamseries'
-      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditTeamseriesRouteImport
-      parentRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditRoute
+    '/_layout/dashboard/season/$seasonId/info_/competition/$competitionId/newCupSerie': {
+      id: '/_layout/dashboard/season/$seasonId/info_/competition/$competitionId/newCupSerie'
+      path: '/newCupSerie'
+      fullPath: '/dashboard/season/$seasonId/info/competition/$competitionId/newCupSerie'
+      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdNewCupSerieRouteImport
+      parentRoute: typeof LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdRoute
     }
-    '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/singlegame': {
-      id: '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/singlegame'
-      path: '/singlegame'
-      fullPath: '/dashboard/season/$seasonId/info/serie/$serieId/edit/singlegame'
-      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditSinglegameRouteImport
-      parentRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditRoute
+    '/_layout/dashboard/season/$seasonId/info_/competition/$competitionId/newSerie': {
+      id: '/_layout/dashboard/season/$seasonId/info_/competition/$competitionId/newSerie'
+      path: '/newSerie'
+      fullPath: '/dashboard/season/$seasonId/info/competition/$competitionId/newSerie'
+      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdNewSerieRouteImport
+      parentRoute: typeof LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdRoute
     }
-    '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/newParentId': {
-      id: '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/newParentId'
-      path: '/newParentId'
-      fullPath: '/dashboard/season/$seasonId/info/serie/$serieId/edit/newParentId'
-      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditNewParentIdRouteImport
-      parentRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditRoute
+    '/_layout/dashboard/season/$seasonId/info_/competition/$competitionId/teamcompetition': {
+      id: '/_layout/dashboard/season/$seasonId/info_/competition/$competitionId/teamcompetition'
+      path: '/teamcompetition'
+      fullPath: '/dashboard/season/$seasonId/info/competition/$competitionId/teamcompetition'
+      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdTeamcompetitionRouteImport
+      parentRoute: typeof LayoutDashboardSeasonSeasonIdInfoCompetitionCompetitionIdRoute
     }
-    '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/generateschedule': {
-      id: '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/generateschedule'
-      path: '/generateschedule'
-      fullPath: '/dashboard/season/$seasonId/info/serie/$serieId/edit/generateschedule'
-      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditGeneratescheduleRouteImport
-      parentRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditRoute
+    '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit': {
+      id: '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit'
+      path: '/edit'
+      fullPath: '/dashboard/season/$seasonId/info/serie/$serieId/edit'
+      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditRouteImport
+      parentRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdRoute
     }
-    '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/games': {
-      id: '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/games'
-      path: '/games'
-      fullPath: '/dashboard/season/$seasonId/info/serie/$serieId/edit/games'
-      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditGamesRouteImport
-      parentRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditRoute
-    }
-    '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/editTable': {
-      id: '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/editTable'
-      path: '/editTable'
-      fullPath: '/dashboard/season/$seasonId/info/serie/$serieId/edit/editTable'
-      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditEditTableRouteImport
-      parentRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditRoute
-    }
-    '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/editParentId': {
-      id: '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/editParentId'
-      path: '/editParentId'
-      fullPath: '/dashboard/season/$seasonId/info/serie/$serieId/edit/editParentId'
-      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditEditParentIdRouteImport
-      parentRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditRoute
-    }
-    '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/addTable': {
-      id: '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/addTable'
-      path: '/addTable'
-      fullPath: '/dashboard/season/$seasonId/info/serie/$serieId/edit/addTable'
-      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditAddTableRouteImport
+    '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/$gameId': {
+      id: '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/$gameId'
+      path: '/$gameId'
+      fullPath: '/dashboard/season/$seasonId/info/serie/$serieId/edit/$gameId'
+      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditGameIdRouteImport
       parentRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditRoute
     }
     '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/addGames': {
@@ -1803,11 +1754,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditAddGamesRouteImport
       parentRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditRoute
     }
-    '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/$gameId': {
-      id: '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/$gameId'
-      path: '/$gameId'
-      fullPath: '/dashboard/season/$seasonId/info/serie/$serieId/edit/$gameId'
-      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditGameIdRouteImport
+    '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/addTable': {
+      id: '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/addTable'
+      path: '/addTable'
+      fullPath: '/dashboard/season/$seasonId/info/serie/$serieId/edit/addTable'
+      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditAddTableRouteImport
+      parentRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditRoute
+    }
+    '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/editParentId': {
+      id: '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/editParentId'
+      path: '/editParentId'
+      fullPath: '/dashboard/season/$seasonId/info/serie/$serieId/edit/editParentId'
+      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditEditParentIdRouteImport
+      parentRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditRoute
+    }
+    '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/editTable': {
+      id: '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/editTable'
+      path: '/editTable'
+      fullPath: '/dashboard/season/$seasonId/info/serie/$serieId/edit/editTable'
+      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditEditTableRouteImport
+      parentRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditRoute
+    }
+    '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/games': {
+      id: '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/games'
+      path: '/games'
+      fullPath: '/dashboard/season/$seasonId/info/serie/$serieId/edit/games'
+      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditGamesRouteImport
+      parentRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditRoute
+    }
+    '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/generateschedule': {
+      id: '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/generateschedule'
+      path: '/generateschedule'
+      fullPath: '/dashboard/season/$seasonId/info/serie/$serieId/edit/generateschedule'
+      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditGeneratescheduleRouteImport
+      parentRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditRoute
+    }
+    '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/newParentId': {
+      id: '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/newParentId'
+      path: '/newParentId'
+      fullPath: '/dashboard/season/$seasonId/info/serie/$serieId/edit/newParentId'
+      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditNewParentIdRouteImport
+      parentRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditRoute
+    }
+    '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/singlegame': {
+      id: '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/singlegame'
+      path: '/singlegame'
+      fullPath: '/dashboard/season/$seasonId/info/serie/$serieId/edit/singlegame'
+      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditSinglegameRouteImport
+      parentRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditRoute
+    }
+    '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/teamseries': {
+      id: '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/teamseries'
+      path: '/teamseries'
+      fullPath: '/dashboard/season/$seasonId/info/serie/$serieId/edit/teamseries'
+      preLoaderRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditTeamseriesRouteImport
       parentRoute: typeof LayoutDashboardSeasonSeasonIdInfoSerieSerieIdEditRoute
     }
   }
