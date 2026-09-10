@@ -6,7 +6,7 @@ const StatsCard = ({
   children: ReactNode
 }) => {
   return (
-    <div className="@container/statscard mb-2 flex flex-col gap-1 border shadow-sm">
+    <div className="@container/statscard mb-2 flex flex-col gap-0.5 border shadow-sm">
       {children}
     </div>
   )
@@ -14,7 +14,7 @@ const StatsCard = ({
 
 function Upper({ children }: { children: ReactNode }) {
   return (
-    <div className="flex flex-row justify-between p-0.5 @sm/statscard:p-1 @md/statscard:p-2">
+    <div className="flex flex-row justify-between py-1 px-2">
       {children}
     </div>
   )
@@ -22,7 +22,7 @@ function Upper({ children }: { children: ReactNode }) {
 
 function Lower({ children }: { children: ReactNode }) {
   return (
-    <div className="flex flex-row p-0.5 @sm/statscard:p-1 @md/statscard:p-2">
+    <div className="flex flex-row py-1 px-2">
       {children}
     </div>
   )
@@ -30,7 +30,7 @@ function Lower({ children }: { children: ReactNode }) {
 
 function Content({ children }: { children: ReactNode }) {
   return (
-    <div className="text-[8px] @3xs/statscard:text-xs @xs/statscard:text-sm @sm/statscard:text-sm @xl/statscard:text-base">
+    <div className="text-[8px] @3xs/statscard:text-xs @xs/statscard:text-sm @sm/statscard:text-sm">
       {children}
     </div>
   )
