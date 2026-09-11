@@ -61,17 +61,24 @@ const RangeData = ({
         </span>
       </div>
       {dates.length < 2 ? null : (
-        <Slider
-          value={range}
-          onValueChange={(value) =>
-            valueChange(value as Array<number>)
-          }
-          minStepsBetweenValues={1}
-          min={0}
-          max={dates.length - 1}
-          orientation="horizontal"
-          // Höjden sätts explicit med "h-1" på track i slider.tsx för att synas.
-        />
+        <div className="flex flex-col gap-1">
+          <Slider
+            value={range}
+            onValueChange={(value) =>
+              valueChange(value as Array<number>)
+            }
+            minStepsBetweenValues={1}
+            min={0}
+            max={dates.length - 1}
+            orientation="horizontal"
+            // Höjden sätts explicit med "h-1" på track i slider.tsx för att synas.
+          />
+          <div className="w-full flex flex-row justify-between px-1">
+            {dates.map((d) => (
+              <span key={d}>'</span>
+            ))}
+          </div>
+        </div>
       )}
 
       <IntervalTable

@@ -64,7 +64,9 @@ const DevelopmentClicker = ({
                     key={arrIndex}
                     className="flex flex-row items-center justify-center p-0 text-[10px] sm:text-xs lg:text-lg"
                   >
-                    Matchdag {arrIndex + 1}
+                    {arrIndex === 0
+                      ? 'Seriestart'
+                      : `Matchdag ${arrIndex}`}
                   </CarouselItem>
                 )
               },
@@ -89,6 +91,12 @@ const DevelopmentClicker = ({
         >
           <CarouselContent>
             {dates.map((date, arrIndex) => {
+              const parsedDate = new Date(
+                date,
+              ).toLocaleDateString('sv-Se', {
+                day: 'numeric',
+                month: 'numeric',
+              })
               return (
                 <CarouselItem
                   key={date}
@@ -100,7 +108,7 @@ const DevelopmentClicker = ({
                     api && api.scrollTo(arrIndex, true)
                   }
                 >
-                  {date}
+                  {parsedDate}
                 </CarouselItem>
               )
             })}

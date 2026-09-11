@@ -78,7 +78,7 @@ export const validateGroup = createServerFn({
             status: 404,
             breadCrumb: 'Serie',
             meta,
-            message: `Ingen ${women ? 'dam' : 'herr'}serie med detta namn ${seasonYear}. Välj en ny i listan.`,
+            message: `Ingen ${women ? 'dam' : 'herr'}serie med detta namn ${seasonYear}. Välj en ny i listan. Groupvalidation`,
           }
         return {
           status: 200,

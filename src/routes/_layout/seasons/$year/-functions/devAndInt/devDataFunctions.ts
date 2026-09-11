@@ -399,7 +399,7 @@ export const getDevelopmentData = async ({
 
   const sortedGames = sortGames({ gameArray })
 
-  const dates = gameDates.map((d) => parseDateItem(d))
+  // const dates = gameDates.map((d) => parseDateItem(d))
 
   const firstDate = new Date(gameDates[0])
 
@@ -422,10 +422,10 @@ export const getDevelopmentData = async ({
     games: [],
   })
 
-  const updatedDates = dates.toSpliced(
+  const updatedDates = gameDates.toSpliced(
     0,
     0,
-    parseDateItem(firstDateItem),
+    firstDateItem,
   )
 
   return {
@@ -586,11 +586,11 @@ function sortGames({ gameArray }: SortGamesProps) {
   return sortedGameDates
 }
 
-function parseDateItem(dateItem: string) {
-  const dateArray = dateItem.split('-')
-  dateArray.shift()
-  return dateArray
-    .reverse()
-    .map((n) => parseInt(n))
-    .join('/')
-}
+// function parseDateItem(dateItem: string) {
+//   const dateArray = dateItem.split('-')
+//   dateArray.shift()
+//   return dateArray
+//     .reverse()
+//     .map((n) => parseInt(n))
+//     .join('/')
+// }

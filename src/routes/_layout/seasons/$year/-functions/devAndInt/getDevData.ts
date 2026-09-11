@@ -1,5 +1,5 @@
 import { db } from '@/db'
-import { seasons, series } from '@/db/schema'
+import { games, seasons, series } from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import type { Game } from '@/lib/types/game'
@@ -8,7 +8,7 @@ import type { ReturnDevDataTableItem } from '@/lib/types/table'
 import { seasonIdCheck } from '@/lib/utils/utils'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
-import { and, eq, getTableColumns } from 'drizzle-orm'
+import { and, eq, getTableColumns, sql } from 'drizzle-orm'
 import { getDevelopmentData } from './devDataFunctions'
 
 type DevDataReturn =
@@ -94,13 +94,41 @@ export const getDevData = createServerFn({ method: 'GET' })
         if (!serie)
           return {
             status: 404,
-            message: `Ingen ${women ? 'dam' : 'herr'}serie med detta namn det här året. Välj en ny i listan.`,
+            message: `Ingen sådan ${women ? 'dam' : 'herr'}serie det här året. Välj en ny i listan.`,
           }
 
         if (serie.hasStatic) {
           return {
             status: 404,
             message: 'Serien har enbart sluttabell.',
+          }
+        }
+
+        const hasGames = await db
+          .select({ sel: sql`1` })
+          .from(games)
+          .leftJoin(
+            series,
+            eq(series.serieId, games.serieId),
+          )
+          .where(
+            and(
+              eq(series.serieId, serie.serieId),
+              eq(games.played, true),
+            ),
+          )
+          .then((res) => {
+            if (res.length === 0) {
+              return false
+            }
+            return true
+          })
+
+        if (!hasGames) {
+          return {
+            status: 404,
+            message:
+              'Inga matcher har spelats i den här serien.',
           }
         }
 
