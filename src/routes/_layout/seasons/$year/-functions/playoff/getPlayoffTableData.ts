@@ -5,6 +5,7 @@ import {
   seasons,
   series,
   teamgames,
+  teamnames,
   teams,
   teamseries,
 } from '@/db/schema'
@@ -200,6 +201,8 @@ export const getPlayoffTableData = async ({
 
   const home = alias(teams, 'home')
   const away = alias(teams, 'away')
+  const homeTeamName = alias(teamnames, 'home_teamname')
+  const awayTeamName = alias(teamnames, 'away_team_name')
 
   const finalGames = await db
     .select({
@@ -208,9 +211,9 @@ export const getPlayoffTableData = async ({
       category: series.category as unknown as SQL<string>,
       home: {
         teamId: home.teamId,
-        name: home.name,
-        casualName: home.casualName,
-        shortName: home.shortName,
+        name: homeTeamName.name,
+        casualName: homeTeamName.casualName,
+        shortName: homeTeamName.shortName,
       } as unknown as SQL<{
         teamId: number
         name: string
@@ -219,9 +222,9 @@ export const getPlayoffTableData = async ({
       }>,
       away: {
         teamId: away.teamId,
-        name: away.name,
-        casualName: away.casualName,
-        shortName: away.shortName,
+        name: awayTeamName.name,
+        casualName: awayTeamName.casualName,
+        shortName: awayTeamName.shortName,
       } as unknown as SQL<{
         teamId: number
         name: string
@@ -232,6 +235,14 @@ export const getPlayoffTableData = async ({
     .from(games)
     .leftJoin(home, eq(games.homeTeamId, home.teamId))
     .leftJoin(away, eq(games.awayTeamId, away.teamId))
+    .leftJoin(
+      homeTeamName,
+      eq(homeTeamName.teamnameId, home.teamnameId),
+    )
+    .leftJoin(
+      awayTeamName,
+      eq(awayTeamName.teamnameId, away.teamnameId),
+    )
     .leftJoin(series, eq(series.serieId, games.serieId))
     .where(
       and(
@@ -259,9 +270,9 @@ export const getPlayoffTableData = async ({
       category: series.category as unknown as SQL<string>,
       home: {
         teamId: home.teamId,
-        name: home.name,
-        casualName: home.casualName,
-        shortName: home.shortName,
+        name: homeTeamName.name,
+        casualName: homeTeamName.casualName,
+        shortName: homeTeamName.shortName,
       } as unknown as SQL<{
         teamId: number
         name: string
@@ -270,9 +281,9 @@ export const getPlayoffTableData = async ({
       }>,
       away: {
         teamId: away.teamId,
-        name: away.name,
-        casualName: away.casualName,
-        shortName: away.shortName,
+        name: awayTeamName.name,
+        casualName: awayTeamName.casualName,
+        shortName: awayTeamName.shortName,
       } as unknown as SQL<{
         teamId: number
         name: string
@@ -283,6 +294,14 @@ export const getPlayoffTableData = async ({
     .from(games)
     .leftJoin(home, eq(games.homeTeamId, home.teamId))
     .leftJoin(away, eq(games.awayTeamId, away.teamId))
+    .leftJoin(
+      homeTeamName,
+      eq(homeTeamName.teamnameId, home.teamnameId),
+    )
+    .leftJoin(
+      awayTeamName,
+      eq(awayTeamName.teamnameId, away.teamnameId),
+    )
     .leftJoin(series, eq(games.serieId, series.serieId))
     .where(
       and(
@@ -559,9 +578,9 @@ async function getPlayoffAsSeriesTable({
       awayGoals: playoffCte.awayGoals,
       team: {
         teamId: teams.teamId,
-        name: teams.name,
-        shortName: teams.shortName,
-        casualName: teams.casualName,
+        name: teamnames.name,
+        shortName: teamnames.shortName,
+        casualName: teamnames.casualName,
       } as unknown as SQL<{
         teamId: number
         name: string
@@ -578,6 +597,10 @@ async function getPlayoffAsSeriesTable({
     })
     .from(playoffCte)
     .leftJoin(teams, eq(teams.teamId, playoffCte.teamId))
+    .leftJoin(
+      teamnames,
+      eq(teamnames.teamnameId, teams.teamnameId),
+    )
     .leftJoin(
       series,
       eq(series.serieId, playoffCte.serieId),
