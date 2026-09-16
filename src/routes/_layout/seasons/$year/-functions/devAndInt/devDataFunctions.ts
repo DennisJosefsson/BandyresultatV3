@@ -311,8 +311,8 @@ export const getDevelopmentData = async ({
 
   const home = alias(teams, 'home')
   const away = alias(teams, 'away')
-  const homeTeamName = alias(teamnames, 'home')
-  const awayTeamName = alias(teamnames, 'away')
+  const homeTeamName = alias(teamnames, 'home_teamname')
+  const awayTeamName = alias(teamnames, 'away_team_name')
 
   const mainGameArray = db
     .select({

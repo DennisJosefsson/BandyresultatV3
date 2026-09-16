@@ -27,8 +27,8 @@ import { alias, unionAll } from 'drizzle-orm/pg-core'
 
 const home = alias(teams, 'home')
 const away = alias(teams, 'away')
-const homeTeamName = alias(teamnames, 'home')
-const awayTeamName = alias(teamnames, 'away')
+const homeTeamName = alias(teamnames, 'home_teamname')
+const awayTeamName = alias(teamnames, 'away_teamname')
 
 export async function cupGames({
   competitionId,
