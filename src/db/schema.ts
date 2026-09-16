@@ -13,6 +13,7 @@ import {
   text,
   timestamp,
   unique,
+  uuid,
   varchar,
 } from 'drizzle-orm/pg-core'
 
@@ -21,11 +22,41 @@ export const county = pgTable('county', {
   name: varchar().notNull(),
 })
 
+export const teamlogos = pgTable('teamlogos', {
+  teamlogoId: uuid('teamlogo_id').primaryKey().notNull(),
+  logoId: integer('logo_id').unique(),
+  hasDark: boolean('has_dark'),
+})
+
+export const teamnames = pgTable(
+  'teamnames',
+  {
+    teamnameId: serial('teamname_id')
+      .primaryKey()
+      .notNull(),
+    name: varchar({ length: 30 }).notNull(),
+    casualName: varchar('casual_name', {
+      length: 30,
+    }).notNull(),
+    shortName: varchar('short_name', {
+      length: 6,
+    }).notNull(),
+    logoId: integer('logo_id'),
+  },
+  (table) => [
+    foreignKey({
+      columns: [table.logoId],
+      foreignColumns: [teamlogos.logoId],
+      name: 'teamname_teamlogos_fk',
+    }),
+  ],
+)
+
 export const teams = pgTable(
   'teams',
   {
     teamId: serial('team_id').primaryKey().notNull(),
-    name: varchar().notNull(),
+    // name: varchar().notNull(),
     city: varchar({ length: 255 }).notNull(),
     women: boolean().default(false).notNull(),
     createdAt: timestamp('created_at', {
@@ -36,16 +67,17 @@ export const teams = pgTable(
       withTimezone: true,
       mode: 'string',
     }),
-    casualName: varchar('casual_name', {
-      length: 255,
-    }).notNull(),
-    shortName: varchar('short_name', {
-      length: 255,
-    }).notNull(),
+    // casualName: varchar('casual_name', {
+    //  length: 255,
+    // }).notNull(),
+    // shortName: varchar('short_name', {
+    //   length: 255,
+    // }).notNull(),
     lat: real().notNull(),
     long: real().notNull(),
     countyId: integer('county_id').notNull(),
     municipalityId: integer('municipality_id'),
+    teamnameId: integer('teamname_id').notNull(),
   },
   (table) => [
     foreignKey({
@@ -57,6 +89,11 @@ export const teams = pgTable(
       columns: [table.municipalityId],
       foreignColumns: [municipality.municipalityId],
       name: 'teams_municipality_fk',
+    }),
+    foreignKey({
+      columns: [table.teamnameId],
+      foreignColumns: [teamnames.teamnameId],
+      name: 'teams_teamname_id_fkey',
     }),
   ],
 )
@@ -450,6 +487,7 @@ export const teamseasons = pgTable(
     negQualification: boolean('neg_qualification').default(
       false,
     ),
+    teamnameId: integer('teamname_id'),
   },
   (table) => [
     foreignKey({
@@ -466,6 +504,11 @@ export const teamseasons = pgTable(
       columns: [table.teamId],
       foreignColumns: [teams.teamId],
       name: 'teamseasons_team_id_fkey',
+    }),
+    foreignKey({
+      columns: [table.teamnameId],
+      foreignColumns: [teamnames.teamnameId],
+      name: 'teamseasons_teamname_id_fkey',
     }),
   ],
 )
