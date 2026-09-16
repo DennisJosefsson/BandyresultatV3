@@ -1,5 +1,11 @@
 import { db } from '@/db'
-import { games, seasons, series, teams } from '@/db/schema'
+import {
+  games,
+  seasons,
+  series,
+  teamnames,
+  teams,
+} from '@/db/schema'
 import { getSortPlayedGamesServerFn } from '@/lib/cookieFunctions/sortPlayedGames'
 import { getSortUnplayedGamesServerFn } from '@/lib/cookieFunctions/sortUnplayedGames'
 import { catchError } from '@/lib/middlewares/errors/catchError'
@@ -35,6 +41,8 @@ type GamesReturn =
 
 const home = alias(teams, 'home')
 const away = alias(teams, 'away')
+const homeTeamName = alias(teamnames, 'home_teamname')
+const awayTeamName = alias(teamnames, 'away_teamname')
 
 export const getGames = createServerFn({ method: 'GET' })
   .middleware([errorMiddleware])
@@ -111,9 +119,9 @@ export const getGames = createServerFn({ method: 'GET' })
               series.category as unknown as SQL<string>,
             home: {
               teamId: home.teamId,
-              name: home.name,
-              casualName: home.casualName,
-              shortName: home.shortName,
+              name: homeTeamName.name,
+              casualName: homeTeamName.casualName,
+              shortName: homeTeamName.shortName,
             } as unknown as SQL<{
               teamId: number
               name: string
@@ -122,9 +130,9 @@ export const getGames = createServerFn({ method: 'GET' })
             }>,
             away: {
               teamId: away.teamId,
-              name: away.name,
-              casualName: away.casualName,
-              shortName: away.shortName,
+              name: awayTeamName.name,
+              casualName: awayTeamName.casualName,
+              shortName: awayTeamName.shortName,
             } as unknown as SQL<{
               teamId: number
               name: string
@@ -139,6 +147,14 @@ export const getGames = createServerFn({ method: 'GET' })
           )
           .leftJoin(home, eq(games.homeTeamId, home.teamId))
           .leftJoin(away, eq(games.awayTeamId, away.teamId))
+          .leftJoin(
+            homeTeamName,
+            eq(homeTeamName.teamnameId, home.teamnameId),
+          )
+          .leftJoin(
+            awayTeamName,
+            eq(awayTeamName.teamnameId, away.teamnameId),
+          )
           .leftJoin(
             series,
             eq(series.serieId, games.serieId),
@@ -165,9 +181,9 @@ export const getGames = createServerFn({ method: 'GET' })
               series.category as unknown as SQL<string>,
             home: {
               teamId: home.teamId,
-              name: home.name,
-              casualName: home.casualName,
-              shortName: home.shortName,
+              name: homeTeamName.name,
+              casualName: homeTeamName.casualName,
+              shortName: homeTeamName.shortName,
             } as unknown as SQL<{
               teamId: number
               name: string
@@ -176,9 +192,9 @@ export const getGames = createServerFn({ method: 'GET' })
             }>,
             away: {
               teamId: away.teamId,
-              name: away.name,
-              casualName: away.casualName,
-              shortName: away.shortName,
+              name: awayTeamName.name,
+              casualName: awayTeamName.casualName,
+              shortName: awayTeamName.shortName,
             } as unknown as SQL<{
               teamId: number
               name: string
@@ -193,6 +209,14 @@ export const getGames = createServerFn({ method: 'GET' })
           )
           .leftJoin(home, eq(games.homeTeamId, home.teamId))
           .leftJoin(away, eq(games.awayTeamId, away.teamId))
+          .leftJoin(
+            homeTeamName,
+            eq(homeTeamName.teamnameId, home.teamnameId),
+          )
+          .leftJoin(
+            awayTeamName,
+            eq(awayTeamName.teamnameId, away.teamnameId),
+          )
           .leftJoin(
             series,
             eq(series.serieId, games.serieId),
