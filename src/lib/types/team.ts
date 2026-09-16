@@ -7,6 +7,8 @@ import { zd } from '../utils/zod'
 
 export type TeamName = typeof teamnames.$inferSelect
 
+export type TeamBase = TeamName & {teamId:number}
+
 export type MapTeam = TeamName & {
   county: typeof county.$inferSelect
 } & {
