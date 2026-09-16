@@ -1,5 +1,10 @@
 import { db } from '@/db'
-import { games, teams, teamseries } from '@/db/schema'
+import {
+  games,
+  teamnames,
+  teams,
+  teamseries,
+} from '@/db/schema'
 import { authMiddleware } from '@/lib/middlewares/auth/authMiddleware'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
@@ -42,12 +47,16 @@ export const generateSchedule = createServerFn({
       const teamArray = await db
         .select({
           teamId: teamseries.teamId,
-          name: teams.name as unknown as SQL<string>,
+          name: teamnames.name as unknown as SQL<string>,
         })
         .from(teamseries)
         .leftJoin(
           teams,
           eq(teams.teamId, teamseries.teamId),
+        )
+        .leftJoin(
+          teamnames,
+          eq(teamnames.teamnameId, teams.teamnameId),
         )
         .where(eq(teamseries.serieId, serieId))
 
