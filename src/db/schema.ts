@@ -706,6 +706,20 @@ export const teamsRelations = relations(
       fields: [teams.municipalityId],
       references: [municipality.municipalityId],
     }),
+    teamname: one(teamnames, {
+      fields: [teams.teamnameId],
+      references: [teamnames.teamnameId],
+    }),
+  }),
+)
+
+export const teamnamesRelations = relations(
+  teamnames,
+  ({ one }) => ({
+    logo: one(teamlogos, {
+      fields: [teamnames.logoId],
+      references: [teamlogos.logoId],
+    }),
   }),
 )
 
@@ -770,6 +784,10 @@ export const teamseasonsRelations = relations(
     team: one(teams, {
       fields: [teamseasons.teamId],
       references: [teams.teamId],
+    }),
+    teamname: one(teamnames, {
+      fields: [teamseasons.teamnameId],
+      references: [teamnames.teamnameId],
     }),
   }),
 )
