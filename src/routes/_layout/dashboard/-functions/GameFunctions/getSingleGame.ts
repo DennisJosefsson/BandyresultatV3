@@ -1,15 +1,23 @@
-import type { SQL } from 'drizzle-orm'
-import { alias } from 'drizzle-orm/pg-core'
-import { and, eq, getTableColumns } from 'drizzle-orm'
-import { createServerFn } from '@tanstack/react-start'
+import { db } from '@/db'
+import {
+  games,
+  teamgames,
+  teamnames,
+  teams,
+} from '@/db/schema'
+import { catchError } from '@/lib/middlewares/errors/catchError'
 import type { TeamBaseWithTeamGameId } from '@/lib/types/team'
 import { zd } from '@/lib/utils/zod'
-import { catchError } from '@/lib/middlewares/errors/catchError'
-import { games, teamgames, teams } from '@/db/schema'
-import { db } from '@/db'
+import { createServerFn } from '@tanstack/react-start'
+import type { SQL } from 'drizzle-orm'
+import { and, eq, getTableColumns } from 'drizzle-orm'
+import { alias } from 'drizzle-orm/pg-core'
 
 const home = alias(teams, 'home')
 const away = alias(teams, 'away')
+const homeTeamName = alias(teamnames, 'home_teamname')
+const awayTeamName = alias(teamnames, 'away_teamname')
+
 const homeTeamGame = alias(teamgames, 'home_teamgame')
 const awayTeamGame = alias(teamgames, 'away_teamgame')
 
@@ -23,30 +31,44 @@ export const getSingleGame = createServerFn({
         .select({
           ...getTableColumns(games),
           home: {
-            teamId: home.teamId,
-            name: home.name,
-            shortName: home.shortName,
-            casualName: home.casualName,
+            teamId: games.homeTeamId,
+            name: homeTeamName.name,
+            shortName: homeTeamName.shortName,
+            casualName: homeTeamName.casualName,
             teamGameId: homeTeamGame.teamGameId,
           } as unknown as SQL<TeamBaseWithTeamGameId>,
           away: {
             teamId: away.teamId,
-            name: away.name,
-            shortName: away.shortName,
-            casualName: away.casualName,
+            name: awayTeamName.name,
+            shortName: awayTeamName.shortName,
+            casualName: awayTeamName.casualName,
             teamGameId: awayTeamGame.teamGameId,
           } as unknown as SQL<TeamBaseWithTeamGameId>,
         })
         .from(games)
         .leftJoin(home, eq(home.teamId, games.homeTeamId))
+        .leftJoin(
+          homeTeamName,
+          eq(homeTeamName.teamnameId, home.teamnameId),
+        )
         .leftJoin(away, eq(away.teamId, games.awayTeamId))
         .leftJoin(
+          awayTeamName,
+          eq(awayTeamName.teamnameId, away.teamnameId),
+        )
+        .leftJoin(
           homeTeamGame,
-          and(eq(home.teamId, homeTeamGame.teamId), eq(homeTeamGame.gameId, games.gameId)),
+          and(
+            eq(home.teamId, homeTeamGame.teamId),
+            eq(homeTeamGame.gameId, games.gameId),
+          ),
         )
         .leftJoin(
           awayTeamGame,
-          and(eq(away.teamId, awayTeamGame.teamId), eq(awayTeamGame.gameId, games.gameId)),
+          and(
+            eq(away.teamId, awayTeamGame.teamId),
+            eq(awayTeamGame.gameId, games.gameId),
+          ),
         )
         .where(eq(games.gameId, gameId))
         .then((res) => res[0])
