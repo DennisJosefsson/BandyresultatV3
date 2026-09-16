@@ -7,6 +7,7 @@ import {
   series,
   tables,
   teamgames,
+  teamnames,
   teams,
   teamseries,
 } from '@/db/schema'
@@ -26,6 +27,8 @@ import { alias, unionAll } from 'drizzle-orm/pg-core'
 
 const home = alias(teams, 'home')
 const away = alias(teams, 'away')
+const homeTeamName = alias(teamnames, 'home')
+const awayTeamName = alias(teamnames, 'away')
 
 export async function cupGames({
   competitionId,
@@ -41,9 +44,9 @@ export async function cupGames({
       category: series.category as unknown as SQL<string>,
       home: {
         teamId: home.teamId,
-        name: home.name,
-        casualName: home.casualName,
-        shortName: home.shortName,
+        name: homeTeamName.name,
+        casualName: homeTeamName.casualName,
+        shortName: homeTeamName.shortName,
       } as unknown as SQL<{
         teamId: number
         name: string
@@ -52,9 +55,9 @@ export async function cupGames({
       }>,
       away: {
         teamId: away.teamId,
-        name: away.name,
-        casualName: away.casualName,
-        shortName: away.shortName,
+        name: awayTeamName.name,
+        casualName: awayTeamName.casualName,
+        shortName: awayTeamName.shortName,
       } as unknown as SQL<{
         teamId: number
         name: string
@@ -73,6 +76,14 @@ export async function cupGames({
     .leftJoin(seasons, eq(seasons.seasonId, games.seasonId))
     .leftJoin(home, eq(games.homeTeamId, home.teamId))
     .leftJoin(away, eq(games.awayTeamId, away.teamId))
+    .leftJoin(
+      homeTeamName,
+      eq(homeTeamName.teamnameId, home.teamnameId),
+    )
+    .leftJoin(
+      awayTeamName,
+      eq(awayTeamName.teamnameId, away.teamnameId),
+    )
     .leftJoin(series, eq(games.serieId, series.serieId))
     .where(
       and(
@@ -109,9 +120,9 @@ export async function unplayedCupGames({
       ...getTableColumns(games),
       home: {
         teamId: home.teamId,
-        name: home.name,
-        casualName: home.casualName,
-        shortName: home.shortName,
+        name: homeTeamName.name,
+        casualName: homeTeamName.casualName,
+        shortName: homeTeamName.shortName,
       } as unknown as SQL<{
         teamId: number
         name: string
@@ -120,9 +131,9 @@ export async function unplayedCupGames({
       }>,
       away: {
         teamId: away.teamId,
-        name: away.name,
-        casualName: away.casualName,
-        shortName: away.shortName,
+        name: awayTeamName.name,
+        casualName: awayTeamName.casualName,
+        shortName: awayTeamName.shortName,
       } as unknown as SQL<{
         teamId: number
         name: string
@@ -134,6 +145,14 @@ export async function unplayedCupGames({
     .leftJoin(seasons, eq(seasons.seasonId, games.seasonId))
     .leftJoin(home, eq(games.homeTeamId, home.teamId))
     .leftJoin(away, eq(games.awayTeamId, away.teamId))
+    .leftJoin(
+      homeTeamName,
+      eq(homeTeamName.teamnameId, home.teamnameId),
+    )
+    .leftJoin(
+      awayTeamName,
+      eq(awayTeamName.teamnameId, away.teamnameId),
+    )
     .where(
       and(
         eq(games.played, false),
@@ -169,9 +188,9 @@ export const getUnionedTables = async ({
         totalPoints: tables.points,
         team: {
           teamId: teams.teamId,
-          name: teams.name,
-          shortName: teams.shortName,
-          casualName: teams.casualName,
+          name: teamnames.name,
+          shortName: teamnames.shortName,
+          casualName: teamnames.casualName,
         } as unknown as SQL<{
           teamId: number
           name: string
@@ -181,6 +200,10 @@ export const getUnionedTables = async ({
       })
       .from(tables)
       .leftJoin(teams, eq(tables.teamId, teams.teamId))
+      .leftJoin(
+        teamnames,
+        eq(teamnames.teamnameId, teams.teamnameId),
+      )
       .leftJoin(series, eq(series.serieId, tables.serieId))
       .where(eq(tables.serieId, serie.serieId))
       .orderBy(asc(tables.position))
@@ -432,9 +455,9 @@ export const getUnionedTables = async ({
         .as('total_lost'),
       team: {
         teamId: teams.teamId,
-        name: teams.name,
-        shortName: teams.shortName,
-        casualName: teams.casualName,
+        name: teamnames.name,
+        shortName: teamnames.shortName,
+        casualName: teamnames.casualName,
       } as unknown as SQL<{
         teamId: number
         name: string
@@ -447,9 +470,9 @@ export const getUnionedTables = async ({
     .groupBy(
       unionQuery.teamId,
       teams.teamId,
-      teams.name,
-      teams.shortName,
-      teams.casualName,
+      teamnames.name,
+      teamnames.shortName,
+      teamnames.casualName,
     )
     .orderBy(
       desc(sql`total_points`),
