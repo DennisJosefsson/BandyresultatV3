@@ -1,4 +1,5 @@
 import { useTheme } from '@/lib/contexts/themeContext'
+import { clientEnv } from '@/lib/env/clientEnv'
 import { cn } from '@/lib/utils/utils'
 import type {
   DetailedHTMLProps,
@@ -15,9 +16,11 @@ interface TeamLogoProps extends DetailedHTMLProps<
   teamId: number
 }
 
+const img_cdn = clientEnv.VITE_IMG_CDN
+
 type ImgUrl =
-  | `/logos/teams/${LogoSize}/${number}_${LogoSize}x${LogoSize}.png`
-  | `/logos/teams/${LogoSize}/${number}_dark_${LogoSize}x${LogoSize}.png`
+  | `${string}/${LogoSize}/${number}_${LogoSize}x${LogoSize}.png`
+  | `${string}/${LogoSize}/${number}_dark_${LogoSize}x${LogoSize}.png`
 
 const darkLogoArray: Array<number> = [8, 95, 136]
 
@@ -27,11 +30,12 @@ const TeamLogo = ({
   ...props
 }: TeamLogoProps) => {
   const { theme } = useTheme()
-  const fallbackUrl = `/logos/teams/${size}/default_${size}x${size}.png`
+
+  const fallbackUrl = `${img_cdn}/${size}/default_${size}x${size}.png`
   const imgUrl: ImgUrl =
     theme === 'dark' && darkLogoArray.includes(teamId)
-      ? `/logos/teams/${size}/${teamId}_dark_${size}x${size}.png`
-      : `/logos/teams/${size}/${teamId}_${size}x${size}.png`
+      ? `${img_cdn}/${size}/${teamId}_dark_${size}x${size}.png`
+      : `${img_cdn}/${size}/${teamId}_${size}x${size}.png`
   return (
     <object
       data={imgUrl}
