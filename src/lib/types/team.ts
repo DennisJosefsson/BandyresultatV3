@@ -1,13 +1,18 @@
 import type {
   county,
   municipality,
+  teamlogos,
   teamnames,
 } from '@/db/schema'
 import { zd } from '../utils/zod'
 
 export type TeamName = typeof teamnames.$inferSelect
 
-export type TeamBase = TeamName & {teamId:number}
+export type TeamBase = TeamName & { teamId: number }
+
+export type TeamBaseWithLogo = TeamBase & {
+  logo: typeof teamlogos.$inferSelect
+}
 
 export type MapTeam = TeamName & {
   county: typeof county.$inferSelect
