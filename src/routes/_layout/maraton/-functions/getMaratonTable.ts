@@ -4,11 +4,14 @@ import {
   series,
   tables,
   teamgames,
+  teamlogos,
+  teamnames,
   teams,
 } from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import type { MaratonTable } from '@/lib/types/table'
+import type { TeamBaseWithLogo } from '@/lib/types/team'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
 import type { SQL } from 'drizzle-orm'
@@ -241,18 +244,25 @@ export const getMaratonTables = createServerFn({
             totalPoints: result.totalPoints,
             team: {
               teamId: teams.teamId,
-              name: teams.name,
-              casualName: teams.casualName,
-              shortName: teams.shortName,
-            } as unknown as SQL<{
-              teamId: number
-              name: string
-              casualName: string
-              shortName: string
-            }>,
+              name: teamnames.name,
+              shortName: teamnames.shortName,
+              casualName: teamnames.casualName,
+              logo: {
+                logoId: teamlogos.logoId,
+                hasDark: teamlogos.hasDark,
+              },
+            } as unknown as SQL<TeamBaseWithLogo>,
           })
           .from(result)
           .leftJoin(teams, eq(teams.teamId, result.teamId))
+          .leftJoin(
+            teamnames,
+            eq(teams.teamnameId, teamnames.teamnameId),
+          )
+          .leftJoin(
+            teamlogos,
+            eq(teamlogos.logoId, teamnames.logoId),
+          )
           .orderBy(
             desc(result.totalPoints),
             desc(result.totalGoalDifference),
