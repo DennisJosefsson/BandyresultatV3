@@ -5,6 +5,7 @@ import {
   seasons,
   series,
   teamgames,
+  teamnames,
   teams,
   teamseasons,
   teamseries,
@@ -39,6 +40,8 @@ import {
 
 const home = alias(teams, 'home')
 const away = alias(teams, 'away')
+const homeTeamName = alias(teamnames, 'home_teamname')
+const awayTeamName = alias(teamnames, 'away_team_name')
 
 type SingeTeamSeasonReturn =
   | {
@@ -127,6 +130,7 @@ export const getSingleTeamSeason = createServerFn({
         const team = await db.query.teams.findFirst({
           where: (teamsSchema, { eq: equal }) =>
             equal(teamsSchema.teamId, teamId),
+          with: { teamname: true },
         })
 
         let breadCrumb = 'Säsong'
@@ -170,7 +174,7 @@ export const getSingleTeamSeason = createServerFn({
             status: 404,
             breadCrumb,
             meta: {
-              title: `Bandyresultat - ${team.name}`,
+              title: `Bandyresultat - ${team.teamname.name}`,
               description: `Finns ingen säsong ${seasonYear} för ${team.women ? 'damer' : 'herrar'}.`,
               url,
             },
@@ -193,11 +197,11 @@ export const getSingleTeamSeason = createServerFn({
             status: 404,
             breadCrumb,
             meta: {
-              title: `Bandyresultat - ${team.name}`,
-              description: `${team.casualName} har inte säsongen ${season.year} i databasen än.`,
+              title: `Bandyresultat - ${team.teamname.name}`,
+              description: `${team.teamname.casualName} har inte säsongen ${season.year} i databasen än.`,
               url: `https://www.bandyresultat.se/teams/${team.teamId}`,
             },
-            message: `${team.casualName} har inte säsongen ${season.year} i databasen än.`,
+            message: `${team.teamname.casualName} har inte säsongen ${season.year} i databasen än.`,
           }
         }
 
@@ -308,9 +312,9 @@ export const getSingleTeamSeason = createServerFn({
             competitionId: series.competitionId,
             home: {
               teamId: home.teamId,
-              name: home.name,
-              casualName: home.casualName,
-              shortName: home.shortName,
+              name: homeTeamName.name,
+              casualName: homeTeamName.casualName,
+              shortName: homeTeamName.shortName,
             } as unknown as SQL<{
               teamId: number
               name: string
@@ -319,9 +323,9 @@ export const getSingleTeamSeason = createServerFn({
             }>,
             away: {
               teamId: away.teamId,
-              name: away.name,
-              casualName: away.casualName,
-              shortName: away.shortName,
+              name: awayTeamName.name,
+              casualName: awayTeamName.casualName,
+              shortName: awayTeamName.shortName,
             } as unknown as SQL<{
               teamId: number
               name: string
@@ -339,6 +343,14 @@ export const getSingleTeamSeason = createServerFn({
           .from(games)
           .leftJoin(home, eq(home.teamId, games.homeTeamId))
           .leftJoin(away, eq(away.teamId, games.awayTeamId))
+          .leftJoin(
+            homeTeamName,
+            eq(homeTeamName.teamnameId, home.teamnameId),
+          )
+          .leftJoin(
+            awayTeamName,
+            eq(awayTeamName.teamnameId, away.teamnameId),
+          )
           .leftJoin(
             seasons,
             eq(seasons.seasonId, games.seasonId),
@@ -419,8 +431,8 @@ export const getSingleTeamSeason = createServerFn({
         })
 
         breadCrumb = season.year
-        title = `Bandyresultat - ${team.name} - ${season.year}`
-        description = `Information om ${team.name} ${season.year}`
+        title = `Bandyresultat - ${team.teamname.name} - ${season.year}`
+        description = `Information om ${team.teamname.name} ${season.year}`
         url = `https://bandyresultat.se/teams/${team.teamId}/${seasonYear}?women=${team.women}`
 
         return {
