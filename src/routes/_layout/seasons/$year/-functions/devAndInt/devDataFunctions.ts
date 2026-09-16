@@ -4,6 +4,7 @@ import {
   parentchildseries,
   series,
   teamgames,
+  teamnames,
   teams,
   teamseries,
 } from '@/db/schema'
@@ -249,9 +250,9 @@ export const getDevelopmentData = async ({
       totalPoints: cte.totalPoints,
       team: {
         teamId: teams.teamId,
-        name: teams.name,
-        shortName: teams.shortName,
-        casualName: teams.casualName,
+        name: teamnames.name,
+        shortName: teamnames.shortName,
+        casualName: teamnames.casualName,
       } as unknown as SQL<{
         teamId: number
         name: string
@@ -261,6 +262,10 @@ export const getDevelopmentData = async ({
     })
     .from(cte)
     .leftJoin(teams, eq(teams.teamId, cte.teamId))
+    .leftJoin(
+      teamnames,
+      eq(teamnames.teamnameId, teams.teamnameId),
+    )
     .orderBy(asc(cte.date), asc(cte.teamId))
 
   const start = await db
@@ -279,9 +284,9 @@ export const getDevelopmentData = async ({
       totalPoints: startTable.totalPoints,
       team: {
         teamId: teams.teamId,
-        name: teams.name,
-        shortName: teams.shortName,
-        casualName: teams.casualName,
+        name: teamnames.name,
+        shortName: teamnames.shortName,
+        casualName: teamnames.casualName,
       } as unknown as SQL<{
         teamId: number
         name: string
@@ -291,6 +296,10 @@ export const getDevelopmentData = async ({
     })
     .from(startTable)
     .leftJoin(teams, eq(teams.teamId, startTable.teamId))
+    .leftJoin(
+      teamnames,
+      eq(teamnames.teamnameId, teams.teamnameId),
+    )
   const gameDates = await db
     .with(seriesGames)
     .selectDistinctOn([seriesGames.date], {
@@ -302,6 +311,8 @@ export const getDevelopmentData = async ({
 
   const home = alias(teams, 'home')
   const away = alias(teams, 'away')
+  const homeTeamName = alias(teamnames, 'home')
+  const awayTeamName = alias(teamnames, 'away')
 
   const mainGameArray = db
     .select({
@@ -310,9 +321,9 @@ export const getDevelopmentData = async ({
       category: series.category as unknown as SQL<string>,
       home: {
         teamId: home.teamId,
-        name: home.name,
-        shortName: home.shortName,
-        casualName: home.casualName,
+        name: homeTeamName.name,
+        shortName: homeTeamName.shortName,
+        casualName: homeTeamName.casualName,
       } as unknown as SQL<{
         teamId: number
         name: string
@@ -321,9 +332,9 @@ export const getDevelopmentData = async ({
       }>,
       away: {
         teamId: away.teamId,
-        name: away.name,
-        shortName: away.shortName,
-        casualName: away.casualName,
+        name: awayTeamName.name,
+        shortName: awayTeamName.shortName,
+        casualName: awayTeamName.casualName,
       } as unknown as SQL<{
         teamId: number
         name: string
@@ -334,6 +345,14 @@ export const getDevelopmentData = async ({
     .from(games)
     .leftJoin(home, eq(games.homeTeamId, home.teamId))
     .leftJoin(away, eq(games.awayTeamId, away.teamId))
+    .leftJoin(
+      homeTeamName,
+      eq(homeTeamName.teamnameId, home.teamnameId),
+    )
+    .leftJoin(
+      awayTeamName,
+      eq(awayTeamName.teamnameId, away.teamnameId),
+    )
     .leftJoin(series, eq(series.serieId, games.serieId))
     .where(
       and(
@@ -354,9 +373,9 @@ export const getDevelopmentData = async ({
       category: series.category as unknown as SQL<string>,
       home: {
         teamId: home.teamId,
-        name: home.name,
-        shortName: home.shortName,
-        casualName: home.casualName,
+        name: homeTeamName.name,
+        shortName: homeTeamName.shortName,
+        casualName: homeTeamName.casualName,
       } as unknown as SQL<{
         teamId: number
         name: string
@@ -365,9 +384,9 @@ export const getDevelopmentData = async ({
       }>,
       away: {
         teamId: away.teamId,
-        name: away.name,
-        shortName: away.shortName,
-        casualName: away.casualName,
+        name: awayTeamName.name,
+        shortName: awayTeamName.shortName,
+        casualName: awayTeamName.casualName,
       } as unknown as SQL<{
         teamId: number
         name: string
@@ -378,6 +397,14 @@ export const getDevelopmentData = async ({
     .from(games)
     .leftJoin(home, eq(games.homeTeamId, home.teamId))
     .leftJoin(away, eq(games.awayTeamId, away.teamId))
+    .leftJoin(
+      homeTeamName,
+      eq(homeTeamName.teamnameId, home.teamnameId),
+    )
+    .leftJoin(
+      awayTeamName,
+      eq(awayTeamName.teamnameId, away.teamnameId),
+    )
     .leftJoin(series, eq(series.serieId, games.serieId))
     .where(
       and(
