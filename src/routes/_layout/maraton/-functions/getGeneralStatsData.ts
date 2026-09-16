@@ -4,9 +4,11 @@ import {
   seasons,
   series,
   teamgames,
+  teamlogos,
+  teamnames,
   teams,
 } from '@/db/schema'
-import type { TeamBase } from '@/lib/types/team'
+import type { TeamBaseWithLogo } from '@/lib/types/team'
 import type { SQL } from 'drizzle-orm'
 import {
   and,
@@ -27,13 +29,25 @@ export async function getGeneralStatsData({
       count: countDistinct(teamgames.seasonId),
       team: {
         teamId: teams.teamId,
-        name: teams.name,
-        shortName: teams.shortName,
-        casualName: teams.casualName,
-      } as unknown as SQL<TeamBase>,
+        name: teamnames.name,
+        shortName: teamnames.shortName,
+        casualName: teamnames.casualName,
+        logo: {
+          logoId: teamlogos.logoId,
+          hasDark: teamlogos.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
     })
     .from(teamgames)
     .leftJoin(teams, eq(teamgames.teamId, teams.teamId))
+    .leftJoin(
+      teamnames,
+      eq(teams.teamnameId, teamnames.teamnameId),
+    )
+    .leftJoin(
+      teamlogos,
+      eq(teamlogos.logoId, teamnames.logoId),
+    )
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .where(
       and(
@@ -67,13 +81,25 @@ export async function getGeneralStatsData({
       count: countDistinct(teamgames.seasonId),
       team: {
         teamId: teams.teamId,
-        name: teams.name,
-        shortName: teams.shortName,
-        casualName: teams.casualName,
-      } as unknown as SQL<TeamBase>,
+        name: teamnames.name,
+        shortName: teamnames.shortName,
+        casualName: teamnames.casualName,
+        logo: {
+          logoId: teamlogos.logoId,
+          hasDark: teamlogos.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
     })
     .from(teamgames)
     .leftJoin(teams, eq(teamgames.teamId, teams.teamId))
+    .leftJoin(
+      teamnames,
+      eq(teams.teamnameId, teamnames.teamnameId),
+    )
+    .leftJoin(
+      teamlogos,
+      eq(teamlogos.logoId, teamnames.logoId),
+    )
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .where(
       and(
@@ -106,13 +132,25 @@ export async function getGeneralStatsData({
       count: countDistinct(teamgames.seasonId),
       team: {
         teamId: teams.teamId,
-        name: teams.name,
-        shortName: teams.shortName,
-        casualName: teams.casualName,
-      } as unknown as SQL<TeamBase>,
+        name: teamnames.name,
+        shortName: teamnames.shortName,
+        casualName: teamnames.casualName,
+        logo: {
+          logoId: teamlogos.logoId,
+          hasDark: teamlogos.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
     })
     .from(teamgames)
     .leftJoin(teams, eq(teamgames.teamId, teams.teamId))
+    .leftJoin(
+      teamnames,
+      eq(teams.teamnameId, teamnames.teamnameId),
+    )
+    .leftJoin(
+      teamlogos,
+      eq(teamlogos.logoId, teamnames.logoId),
+    )
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .where(
       and(
@@ -151,13 +189,25 @@ export async function getGeneralStatsData({
       count: countDistinct(teamgames.seasonId),
       team: {
         teamId: teams.teamId,
-        name: teams.name,
-        shortName: teams.shortName,
-        casualName: teams.casualName,
-      } as unknown as SQL<TeamBase>,
+        name: teamnames.name,
+        shortName: teamnames.shortName,
+        casualName: teamnames.casualName,
+        logo: {
+          logoId: teamlogos.logoId,
+          hasDark: teamlogos.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
     })
     .from(teamgames)
     .leftJoin(teams, eq(teamgames.teamId, teams.teamId))
+    .leftJoin(
+      teamnames,
+      eq(teams.teamnameId, teamnames.teamnameId),
+    )
+    .leftJoin(
+      teamlogos,
+      eq(teamlogos.logoId, teamnames.logoId),
+    )
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(
       competitions,
@@ -195,13 +245,25 @@ export async function getGeneralStatsData({
       count: countDistinct(teamgames.seasonId),
       team: {
         teamId: teams.teamId,
-        name: teams.name,
-        shortName: teams.shortName,
-        casualName: teams.casualName,
-      } as unknown as SQL<TeamBase>,
+        name: teamnames.name,
+        shortName: teamnames.shortName,
+        casualName: teamnames.casualName,
+        logo: {
+          logoId: teamlogos.logoId,
+          hasDark: teamlogos.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
     })
     .from(teamgames)
     .leftJoin(teams, eq(teamgames.teamId, teams.teamId))
+    .leftJoin(
+      teamnames,
+      eq(teams.teamnameId, teamnames.teamnameId),
+    )
+    .leftJoin(
+      teamlogos,
+      eq(teamlogos.logoId, teamnames.logoId),
+    )
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(
       competitions,
@@ -244,13 +306,25 @@ export async function getGeneralStatsData({
       count: countDistinct(teamgames.seasonId),
       team: {
         teamId: teams.teamId,
-        name: teams.name,
-        shortName: teams.shortName,
-        casualName: teams.casualName,
-      } as unknown as SQL<TeamBase>,
+        name: teamnames.name,
+        shortName: teamnames.shortName,
+        casualName: teamnames.casualName,
+        logo: {
+          logoId: teamlogos.logoId,
+          hasDark: teamlogos.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
     })
     .from(teamgames)
     .leftJoin(teams, eq(teamgames.teamId, teams.teamId))
+    .leftJoin(
+      teamnames,
+      eq(teams.teamnameId, teamnames.teamnameId),
+    )
+    .leftJoin(
+      teamlogos,
+      eq(teamlogos.logoId, teamnames.logoId),
+    )
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .leftJoin(
       seasons,
