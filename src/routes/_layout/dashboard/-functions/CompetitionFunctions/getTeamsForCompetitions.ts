@@ -9,7 +9,7 @@ import {
 import Error404 from '@/lib/middlewares/errors/404Error'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import type { TeamName } from '@/lib/types/team'
+import type { TeamBase, TeamName } from '@/lib/types/team'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
 import type { SQL } from 'drizzle-orm'
@@ -62,10 +62,11 @@ export const getTeamsForCompetitions = createServerFn({
           .select({
             ...getTableColumns(teamcompetitions),
             team: {
+              teamId: teams.teamId,
               name: teamnames.name,
               shortName: teamnames.shortName,
               casualName: teamnames.casualName,
-            } as unknown as SQL<TeamName>,
+            } as unknown as SQL<TeamBase>,
           })
           .from(teamcompetitions)
           .leftJoin(
@@ -92,10 +93,11 @@ export const getTeamsForCompetitions = createServerFn({
           .select({
             ...getTableColumns(teamseasons),
             team: {
+              teamId: teams.teamId,
               name: teamnames.name,
               shortName: teamnames.shortName,
               casualName: teamnames.casualName,
-            } as unknown as SQL<TeamName>,
+            } as unknown as SQL<TeamBase>,
           })
           .from(teamseasons)
           .leftJoin(
