@@ -6,6 +6,7 @@ export const clientEnv = createEnv({
   client: {
     VITE_CLERK_PUBLISHABLE_KEY: zd.string().min(1),
     VITE_SITE_DEV_HOST: zd.string().min(1),
-    VITE_SITE_PROD_URL:zd.string().min(1)
+    VITE_SITE_PROD_URL: zd.string().min(1),
+    VITE_IMG_CDN: zd.string().min(1),
   },
 })

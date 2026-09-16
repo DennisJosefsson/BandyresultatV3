@@ -7,6 +7,7 @@ interface ImportMetaEnv {
   readonly VITE_SITE_LOCALHOST_URL: string
   readonly VITE_SITE_DEV_URL: string
   readonly VITE_SITE_PROD_URL: string
+  readonly VITE_IMG_CDN: string
   //   readonly VITE_API_URL: string
   //   readonly VITE_AUTH0_DOMAIN: string
   //   readonly VITE_AUTH0_CLIENT_ID: string
@@ -24,7 +25,10 @@ declare global {
     interface ProcessEnv {
       readonly DB_PRODUCTION_URL: string
       readonly DB_DEVELOPMENT_URL: string
-      readonly NODE_ENV: 'development' | 'production' | 'test'
+      readonly NODE_ENV:
+        | 'development'
+        | 'production'
+        | 'test'
       readonly CLERK_SECRET_KEY: string
       readonly PEM: string
       readonly DB_HOST: string
