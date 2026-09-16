@@ -5,6 +5,7 @@ import {
   series,
   tables,
   teamgames,
+  teamnames,
   teams,
   teamseasons,
   teamseries,
@@ -12,6 +13,7 @@ import {
 import type { Game } from '@/lib/types/game'
 import type { Serie } from '@/lib/types/serie'
 import type { TeamTable } from '@/lib/types/table'
+import type { TeamBase } from '@/lib/types/team'
 import {
   gameSortFunction,
   leagueTableParser,
@@ -71,15 +73,10 @@ export const getTeamSeasonStaticTables = async ({
       }>,
       team: {
         teamId: teams.teamId,
-        name: teams.name,
-        shortName: teams.shortName,
-        casualName: teams.casualName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        shortName: string
-        casualName: string
-      }>,
+        name: teamnames.name,
+        shortName: teamnames.shortName,
+        casualName: teamnames.casualName,
+      } as unknown as SQL<TeamBase>,
     })
     .from(tables)
     .leftJoin(
@@ -87,6 +84,10 @@ export const getTeamSeasonStaticTables = async ({
       eq(seasons.seasonId, tables.seasonId),
     )
     .leftJoin(teams, eq(teams.teamId, tables.teamId))
+    .leftJoin(
+      teamnames,
+      eq(teamnames.teamnameId, teams.teamnameId),
+    )
     .leftJoin(series, eq(series.serieId, tables.serieId))
     .where(
       and(
@@ -169,10 +170,10 @@ export const getTeamSeasonTables = async ({
         seasonId: number
       }>,
       team: {
-        name: teams.name,
         teamId: teams.teamId,
-        casualName: teams.casualName,
-        shortName: teams.shortName,
+        name: teamnames.name,
+        casualName: teamnames.casualName,
+        shortName: teamnames.shortName,
       } as unknown as SQL<{
         name: string
         teamId: number
@@ -189,6 +190,10 @@ export const getTeamSeasonTables = async ({
       eq(seasons.seasonId, teamgames.seasonId),
     )
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
+    .leftJoin(
+      teamnames,
+      eq(teamnames.teamnameId, teams.teamnameId),
+    )
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .where(
       and(
@@ -200,10 +205,10 @@ export const getTeamSeasonTables = async ({
       series.group,
       teamgames.teamId,
       series.category,
-      teams.name,
+      teamnames.name,
       teams.teamId,
-      teams.casualName,
-      teams.shortName,
+      teamnames.casualName,
+      teamnames.shortName,
       seasons.seasonId,
       seasons.year,
       teamgames.women,
@@ -238,9 +243,9 @@ export const getTeamSeasonTables = async ({
       women: teamgames.women,
       team: {
         teamId: teams.teamId,
-        name: teams.name,
-        shortName: teams.shortName,
-        casualName: teams.casualName,
+        name: teamnames.name,
+        shortName: teamnames.shortName,
+        casualName: teamnames.casualName,
         bonusPoints: teamseries.bonusPoints,
       } as unknown as SQL<{
         teamId: number
@@ -298,6 +303,10 @@ export const getTeamSeasonTables = async ({
     .leftJoin(series, eq(teamgames.serieId, series.serieId))
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
     .leftJoin(
+      teamnames,
+      eq(teamnames.teamnameId, teams.teamnameId),
+    )
+    .leftJoin(
       seasons,
       eq(teamgames.seasonId, seasons.seasonId),
     )
@@ -318,10 +327,10 @@ export const getTeamSeasonTables = async ({
     .groupBy(
       series.group,
       teamgames.teamId,
-      teams.name,
+      teamnames.name,
       teams.teamId,
-      teams.casualName,
-      teams.shortName,
+      teamnames.casualName,
+      teamnames.shortName,
       teamseries.bonusPoints,
       series.level,
       teamgames.women,
@@ -843,9 +852,9 @@ function getMixQuery({
         .as('total_lost'),
       team: {
         teamId: teams.teamId,
-        name: teams.name,
-        shortName: teams.shortName,
-        casualName: teams.casualName,
+        name: teamnames.name,
+        shortName: teamnames.shortName,
+        casualName: teamnames.casualName,
       } as unknown as SQL<{
         teamId: number
         name: string
@@ -866,6 +875,10 @@ function getMixQuery({
     .from(unionQuery)
     .leftJoin(teams, eq(unionQuery.teamId, teams.teamId))
     .leftJoin(
+      teamnames,
+      eq(teamnames.teamnameId, teams.teamnameId),
+    )
+    .leftJoin(
       seasons,
       eq(unionQuery.seasonId, seasons.seasonId),
     )
@@ -879,9 +892,9 @@ function getMixQuery({
     .groupBy(
       unionQuery.teamId,
       teams.teamId,
-      teams.name,
-      teams.shortName,
-      teams.casualName,
+      teamnames.name,
+      teamnames.shortName,
+      teamnames.casualName,
       seasons.year,
       seasons.seasonId,
       series.level,
@@ -1073,9 +1086,9 @@ function withParentSerie({
         .as('total_lost'),
       team: {
         teamId: teams.teamId,
-        name: teams.name,
-        shortName: teams.shortName,
-        casualName: teams.casualName,
+        name: teamnames.name,
+        shortName: teamnames.shortName,
+        casualName: teamnames.casualName,
       } as unknown as SQL<{
         teamId: number
         name: string
@@ -1096,6 +1109,10 @@ function withParentSerie({
     .from(unionQuery)
     .leftJoin(teams, eq(unionQuery.teamId, teams.teamId))
     .leftJoin(
+      teamnames,
+      eq(teamnames.teamnameId, teams.teamnameId),
+    )
+    .leftJoin(
       seasons,
       eq(unionQuery.seasonId, seasons.seasonId),
     )
@@ -1109,9 +1126,9 @@ function withParentSerie({
     .groupBy(
       unionQuery.teamId,
       teams.teamId,
-      teams.name,
-      teams.shortName,
-      teams.casualName,
+      teamnames.name,
+      teamnames.shortName,
+      teamnames.casualName,
       seasons.year,
       seasons.seasonId,
       series.level,
