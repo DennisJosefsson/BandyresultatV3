@@ -3,15 +3,19 @@ import {
   games,
   seasons,
   series,
+  teamlogos,
   teamnames,
   teams,
+  teamseasons,
 } from '@/db/schema'
 import { getSortPlayedGamesServerFn } from '@/lib/cookieFunctions/sortPlayedGames'
 import { getSortUnplayedGamesServerFn } from '@/lib/cookieFunctions/sortUnplayedGames'
+import { coalesce } from '@/lib/drizzleHelpers/coalesce'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import type { Games } from '@/lib/types/game'
 import type { Serie } from '@/lib/types/serie'
+import type { TeamBaseWithLogo } from '@/lib/types/team'
 import { seasonIdCheck } from '@/lib/utils/utils'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
@@ -41,8 +45,16 @@ type GamesReturn =
 
 const home = alias(teams, 'home')
 const away = alias(teams, 'away')
+const homeTeamSeason = alias(teamseasons, 'home_teamseason')
+const awayTeamSeason = alias(teamseasons, 'away_teamseason')
 const homeTeamName = alias(teamnames, 'home_teamname')
 const awayTeamName = alias(teamnames, 'away_teamname')
+const homeTeamSeasonName = alias(teamnames, 'home_teamname')
+const awayTeamSeasonName = alias(teamnames, 'away_teamname')
+const homeLogo = alias(teamlogos, 'home_logo')
+const awayLogo = alias(teamlogos, 'away_logo')
+const homeTeamSeasonLogo = alias(teamlogos, 'home_logo')
+const awayTeamSeasonLogo = alias(teamlogos, 'away_logo')
 
 export const getGames = createServerFn({ method: 'GET' })
   .middleware([errorMiddleware])
@@ -119,26 +131,54 @@ export const getGames = createServerFn({ method: 'GET' })
               series.category as unknown as SQL<string>,
             home: {
               teamId: home.teamId,
-              name: homeTeamName.name,
-              casualName: homeTeamName.casualName,
-              shortName: homeTeamName.shortName,
-            } as unknown as SQL<{
-              teamId: number
-              name: string
-              casualName: string
-              shortName: string
-            }>,
+              name: coalesce(
+                homeTeamName.name,
+                homeTeamSeasonName.name,
+              ),
+              casualName: coalesce(
+                homeTeamName.casualName,
+                homeTeamSeasonName.casualName,
+              ),
+              shortName: coalesce(
+                homeTeamName.shortName,
+                homeTeamSeasonName.shortName,
+              ),
+              logo: {
+                logoId: coalesce(
+                  homeTeamSeasonLogo.logoId,
+                  homeLogo.logoId,
+                ),
+                hasDark: coalesce(
+                  homeTeamSeasonLogo.hasDark,
+                  homeLogo.hasDark,
+                ),
+              },
+            } as unknown as SQL<TeamBaseWithLogo>,
             away: {
               teamId: away.teamId,
-              name: awayTeamName.name,
-              casualName: awayTeamName.casualName,
-              shortName: awayTeamName.shortName,
-            } as unknown as SQL<{
-              teamId: number
-              name: string
-              casualName: string
-              shortName: string
-            }>,
+              name: coalesce(
+                awayTeamName.name,
+                awayTeamSeasonName.name,
+              ),
+              casualName: coalesce(
+                awayTeamName.casualName,
+                awayTeamSeasonName.casualName,
+              ),
+              shortName: coalesce(
+                awayTeamName.shortName,
+                awayTeamSeasonName.shortName,
+              ),
+              logo: {
+                logoId: coalesce(
+                  awayTeamSeasonLogo.logoId,
+                  awayLogo.logoId,
+                ),
+                hasDark: coalesce(
+                  awayTeamSeasonLogo.hasDark,
+                  awayLogo.hasDark,
+                ),
+              },
+            } as unknown as SQL<TeamBaseWithLogo>,
           })
           .from(games)
           .leftJoin(
@@ -148,12 +188,62 @@ export const getGames = createServerFn({ method: 'GET' })
           .leftJoin(home, eq(games.homeTeamId, home.teamId))
           .leftJoin(away, eq(games.awayTeamId, away.teamId))
           .leftJoin(
+            homeTeamSeason,
+            and(
+              eq(homeTeamSeason.seasonId, games.seasonId),
+              eq(homeTeamSeason.teamId, games.homeTeamId),
+            ),
+          )
+          .leftJoin(
+            awayTeamSeason,
+            and(
+              eq(awayTeamSeason.seasonId, games.seasonId),
+              eq(awayTeamSeason.teamId, games.awayTeamId),
+            ),
+          )
+          .leftJoin(
             homeTeamName,
-            eq(homeTeamName.teamnameId, home.teamnameId),
+            eq(home.teamnameId, homeTeamName.teamnameId),
           )
           .leftJoin(
             awayTeamName,
-            eq(awayTeamName.teamnameId, away.teamnameId),
+            eq(away.teamnameId, awayTeamName.teamnameId),
+          )
+          .leftJoin(
+            homeTeamSeasonName,
+            eq(
+              home.teamnameId,
+              homeTeamSeasonName.teamnameId,
+            ),
+          )
+          .leftJoin(
+            awayTeamSeasonName,
+            eq(
+              away.teamnameId,
+              awayTeamSeasonName.teamnameId,
+            ),
+          )
+          .leftJoin(
+            homeLogo,
+            eq(homeTeamName.logoId, homeLogo.logoId),
+          )
+          .leftJoin(
+            awayLogo,
+            eq(awayTeamName.logoId, awayLogo.logoId),
+          )
+          .leftJoin(
+            homeTeamSeasonLogo,
+            eq(
+              homeTeamName.logoId,
+              homeTeamSeasonLogo.logoId,
+            ),
+          )
+          .leftJoin(
+            awayTeamSeasonLogo,
+            eq(
+              awayTeamName.logoId,
+              awayTeamSeasonLogo.logoId,
+            ),
           )
           .leftJoin(
             series,
@@ -181,26 +271,54 @@ export const getGames = createServerFn({ method: 'GET' })
               series.category as unknown as SQL<string>,
             home: {
               teamId: home.teamId,
-              name: homeTeamName.name,
-              casualName: homeTeamName.casualName,
-              shortName: homeTeamName.shortName,
-            } as unknown as SQL<{
-              teamId: number
-              name: string
-              casualName: string
-              shortName: string
-            }>,
+              name: coalesce(
+                homeTeamName.name,
+                homeTeamSeasonName.name,
+              ),
+              casualName: coalesce(
+                homeTeamName.casualName,
+                homeTeamSeasonName.casualName,
+              ),
+              shortName: coalesce(
+                homeTeamName.shortName,
+                homeTeamSeasonName.shortName,
+              ),
+              logo: {
+                logoId: coalesce(
+                  homeTeamSeasonLogo.logoId,
+                  homeLogo.logoId,
+                ),
+                hasDark: coalesce(
+                  homeTeamSeasonLogo.hasDark,
+                  homeLogo.hasDark,
+                ),
+              },
+            } as unknown as SQL<TeamBaseWithLogo>,
             away: {
               teamId: away.teamId,
-              name: awayTeamName.name,
-              casualName: awayTeamName.casualName,
-              shortName: awayTeamName.shortName,
-            } as unknown as SQL<{
-              teamId: number
-              name: string
-              casualName: string
-              shortName: string
-            }>,
+              name: coalesce(
+                awayTeamName.name,
+                awayTeamSeasonName.name,
+              ),
+              casualName: coalesce(
+                awayTeamName.casualName,
+                awayTeamSeasonName.casualName,
+              ),
+              shortName: coalesce(
+                awayTeamName.shortName,
+                awayTeamSeasonName.shortName,
+              ),
+              logo: {
+                logoId: coalesce(
+                  awayTeamSeasonLogo.logoId,
+                  awayLogo.logoId,
+                ),
+                hasDark: coalesce(
+                  awayTeamSeasonLogo.hasDark,
+                  awayLogo.hasDark,
+                ),
+              },
+            } as unknown as SQL<TeamBaseWithLogo>,
           })
           .from(games)
           .leftJoin(
@@ -210,12 +328,62 @@ export const getGames = createServerFn({ method: 'GET' })
           .leftJoin(home, eq(games.homeTeamId, home.teamId))
           .leftJoin(away, eq(games.awayTeamId, away.teamId))
           .leftJoin(
+            homeTeamSeason,
+            and(
+              eq(homeTeamSeason.seasonId, games.seasonId),
+              eq(homeTeamSeason.teamId, games.homeTeamId),
+            ),
+          )
+          .leftJoin(
+            awayTeamSeason,
+            and(
+              eq(awayTeamSeason.seasonId, games.seasonId),
+              eq(awayTeamSeason.teamId, games.awayTeamId),
+            ),
+          )
+          .leftJoin(
             homeTeamName,
-            eq(homeTeamName.teamnameId, home.teamnameId),
+            eq(home.teamnameId, homeTeamName.teamnameId),
           )
           .leftJoin(
             awayTeamName,
-            eq(awayTeamName.teamnameId, away.teamnameId),
+            eq(away.teamnameId, awayTeamName.teamnameId),
+          )
+          .leftJoin(
+            homeTeamSeasonName,
+            eq(
+              home.teamnameId,
+              homeTeamSeasonName.teamnameId,
+            ),
+          )
+          .leftJoin(
+            awayTeamSeasonName,
+            eq(
+              away.teamnameId,
+              awayTeamSeasonName.teamnameId,
+            ),
+          )
+          .leftJoin(
+            homeLogo,
+            eq(homeTeamName.logoId, homeLogo.logoId),
+          )
+          .leftJoin(
+            awayLogo,
+            eq(awayTeamName.logoId, awayLogo.logoId),
+          )
+          .leftJoin(
+            homeTeamSeasonLogo,
+            eq(
+              homeTeamName.logoId,
+              homeTeamSeasonLogo.logoId,
+            ),
+          )
+          .leftJoin(
+            awayTeamSeasonLogo,
+            eq(
+              awayTeamName.logoId,
+              awayTeamSeasonLogo.logoId,
+            ),
           )
           .leftJoin(
             series,
