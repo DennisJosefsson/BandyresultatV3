@@ -174,12 +174,7 @@ export const getTeamSeasonTables = async ({
         name: teamnames.name,
         casualName: teamnames.casualName,
         shortName: teamnames.shortName,
-      } as unknown as SQL<{
-        name: string
-        teamId: number
-        casualName: string
-        shortName: string
-      }>,
+      } as unknown as SQL<TeamBase>,
       serie: { level: series.level } as unknown as SQL<{
         level: number
       }>,
@@ -246,14 +241,7 @@ export const getTeamSeasonTables = async ({
         name: teamnames.name,
         shortName: teamnames.shortName,
         casualName: teamnames.casualName,
-        bonusPoints: teamseries.bonusPoints,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        shortName: string
-        casualName: string
-        bonusPoints: number | null
-      }>,
+      } as unknown as SQL<TeamBase>,
       totalGames: count(teamgames.teamGameId),
       totalPoints:
         sql<number>`sum(teamgames.points) + (case when teamseries.bonus_points is null then 0 else teamseries.bonus_points end)`
@@ -855,12 +843,7 @@ function getMixQuery({
         name: teamnames.name,
         shortName: teamnames.shortName,
         casualName: teamnames.casualName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        shortName: string
-        casualName: string
-      }>,
+      } as unknown as SQL<TeamBase>,
       season: {
         seasonId: seasons.seasonId,
         year: seasons.year,
@@ -1089,12 +1072,7 @@ function withParentSerie({
         name: teamnames.name,
         shortName: teamnames.shortName,
         casualName: teamnames.casualName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        shortName: string
-        casualName: string
-      }>,
+      } as unknown as SQL<TeamBase>,
       season: {
         seasonId: seasons.seasonId,
         year: seasons.year,
