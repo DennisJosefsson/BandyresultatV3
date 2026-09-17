@@ -31,6 +31,8 @@ const home = alias(teams, 'home')
 const away = alias(teams, 'away')
 const homeTeamName = alias(teamnames, 'home_teamname')
 const awayTeamName = alias(teamnames, 'away_teamname')
+const homeLogo = alias(teamlogos, 'home_logo')
+const awayLogo = alias(teamlogos, 'away_logo')
 
 export async function cupGames({
   competitionId,
@@ -49,23 +51,21 @@ export async function cupGames({
         name: homeTeamName.name,
         casualName: homeTeamName.casualName,
         shortName: homeTeamName.shortName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        casualName: string
-        shortName: string
-      }>,
+        logo: {
+          logoId: homeLogo.logoId,
+          hasDark: homeLogo.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
       away: {
         teamId: away.teamId,
         name: awayTeamName.name,
         casualName: awayTeamName.casualName,
         shortName: awayTeamName.shortName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        casualName: string
-        shortName: string
-      }>,
+        logo: {
+          logoId: awayLogo.logoId,
+          hasDark: awayLogo.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
       serie: {
         serieId: series.serieId,
         serieName: series.serieName,
@@ -85,6 +85,14 @@ export async function cupGames({
     .leftJoin(
       awayTeamName,
       eq(awayTeamName.teamnameId, away.teamnameId),
+    )
+    .leftJoin(
+      homeLogo,
+      eq(homeTeamName.logoId, homeLogo.logoId),
+    )
+    .leftJoin(
+      awayLogo,
+      eq(awayTeamName.logoId, awayLogo.logoId),
     )
     .leftJoin(series, eq(games.serieId, series.serieId))
     .where(
@@ -112,59 +120,49 @@ export async function cupGames({
   return playedGamesArray
 }
 
-export async function unplayedCupGames({
-  serieId,
-}: {
-  serieId: number
-}) {
-  const unplayedGamesArray = await db
-    .select({
-      ...getTableColumns(games),
-      home: {
-        teamId: home.teamId,
-        name: homeTeamName.name,
-        casualName: homeTeamName.casualName,
-        shortName: homeTeamName.shortName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        casualName: string
-        shortName: string
-      }>,
-      away: {
-        teamId: away.teamId,
-        name: awayTeamName.name,
-        casualName: awayTeamName.casualName,
-        shortName: awayTeamName.shortName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        casualName: string
-        shortName: string
-      }>,
-    })
-    .from(games)
-    .leftJoin(seasons, eq(seasons.seasonId, games.seasonId))
-    .leftJoin(home, eq(games.homeTeamId, home.teamId))
-    .leftJoin(away, eq(games.awayTeamId, away.teamId))
-    .leftJoin(
-      homeTeamName,
-      eq(homeTeamName.teamnameId, home.teamnameId),
-    )
-    .leftJoin(
-      awayTeamName,
-      eq(awayTeamName.teamnameId, away.teamnameId),
-    )
-    .where(
-      and(
-        eq(games.played, false),
-        eq(games.serieId, serieId),
-      ),
-    )
-    .orderBy(asc(games.date))
+// export async function unplayedCupGames({
+//   serieId,
+// }: {
+//   serieId: number
+// }) {
+//   const unplayedGamesArray = await db
+//     .select({
+//       ...getTableColumns(games),
+//       home: {
+//         teamId: home.teamId,
+//         name: homeTeamName.name,
+//         casualName: homeTeamName.casualName,
+//         shortName: homeTeamName.shortName,
+//       } as unknown as SQL<TeamBaseWithLogo>,
+//       away: {
+//         teamId: away.teamId,
+//         name: awayTeamName.name,
+//         casualName: awayTeamName.casualName,
+//         shortName: awayTeamName.shortName,
+//       } as unknown as SQL<TeamBaseWithLogo>,
+//     })
+//     .from(games)
+//     .leftJoin(seasons, eq(seasons.seasonId, games.seasonId))
+//     .leftJoin(home, eq(games.homeTeamId, home.teamId))
+//     .leftJoin(away, eq(games.awayTeamId, away.teamId))
+//     .leftJoin(
+//       homeTeamName,
+//       eq(homeTeamName.teamnameId, home.teamnameId),
+//     )
+//     .leftJoin(
+//       awayTeamName,
+//       eq(awayTeamName.teamnameId, away.teamnameId),
+//     )
+//     .where(
+//       and(
+//         eq(games.played, false),
+//         eq(games.serieId, serieId),
+//       ),
+//     )
+//     .orderBy(asc(games.date))
 
-  return unplayedGamesArray
-}
+//   return unplayedGamesArray
+// }
 
 type FunctionProps = {
   serie: typeof series.$inferSelect
