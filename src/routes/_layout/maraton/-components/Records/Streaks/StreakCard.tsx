@@ -16,7 +16,7 @@ const StreakCard = ({ streak, title }: StreakCardProps) => {
           return (
             <div
               className="text-[8px] @xs:text-[10px] @sm:text-xs @2xl:text-sm/6 flex w-full flex-row items-center justify-between p-1 md:p-2 border-b border-accent last:border-none"
-              key={`${s.name}-${s.startDate}`}
+              key={`${s.team.name}-${s.startDate}`}
             >
               <span className="mr-2 @lg:mr-4 w-4 @sm:w-6 @lg:w-8 text-right text-sm @xs:text-base font-bold tabular-nums @md:text-2xl">
                 {s.position}
@@ -24,11 +24,12 @@ const StreakCard = ({ streak, title }: StreakCardProps) => {
               <div className="flex grow flex-col gap-1 @sm:gap-2">
                 <div className="flex flex-row gap-2">
                   <TeamLogo
-                    teamId={s.teamId}
+                    logoId={s.team.logo.logoId}
+                    hasDark={s.team.logo.hasDark}
                     size={32}
                   />
                   <span className="truncate font-semibold">
-                    {s.name}
+                    {s.team.casualName}
                   </span>
                 </div>
                 <div className="flex flex-row items-center justify-between">

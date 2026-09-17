@@ -18,7 +18,7 @@ const TeamsList = () => {
   const navigate = route.useNavigate()
 
   const teams = data.filter((team) =>
-    team.name
+    team.teamname.name
       .toLowerCase()
       .includes(teamFilter.toLowerCase()),
   )

@@ -49,8 +49,8 @@ const CompareTables = ({
         Alla matcher
       </h3>
       <span className="text-[8px] @xs:text-[10px] @sm:text-xs @2xl:text-sm/6">
-        Tabeller för {homeTeam.casualName} med{' '}
-        {awayTeam.casualName} som motståndare.
+        Tabeller för {homeTeam.teamname.casualName} med{' '}
+        {awayTeam.teamname.casualName} som motståndare.
       </span>
       <div className="xs:hidden">
         <Button

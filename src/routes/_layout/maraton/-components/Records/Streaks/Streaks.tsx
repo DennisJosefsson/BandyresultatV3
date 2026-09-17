@@ -54,7 +54,7 @@ const Streaks = () => {
                       return (
                         <div
                           className="text-[8px] @xs:text-[10px] @sm:text-xs @2xl:text-sm/6 flex w-full flex-row items-center justify-between p-1 md:p-2 border-b border-accent last:border-none"
-                          key={`${team.team.name}-${Math.random()}`}
+                          key={`${team.team.name}-${index}-currinoffchamp`}
                         >
                           <span className="mr-2 @lg:mr-4 w-4 @sm:w-6 @lg:w-8 text-right text-sm @xs:text-base font-bold tabular-nums @md:text-2xl">
                             {index + 1}
@@ -63,11 +63,16 @@ const Streaks = () => {
                             <div className="flex flex-row justify-between">
                               <div className="flex flex-row gap-2">
                                 <TeamLogo
-                                  teamId={team.team.teamId}
+                                  logoId={
+                                    team.team.logo.logoId
+                                  }
+                                  hasDark={
+                                    team.team.logo.hasDark
+                                  }
                                   size={32}
                                 />
                                 <span className="truncate font-semibold">
-                                  {team.team.name}
+                                  {team.team.casualName}
                                 </span>
                               </div>
                               <span className="text-right font-semibold mr-2 @3xl:mr-4">
