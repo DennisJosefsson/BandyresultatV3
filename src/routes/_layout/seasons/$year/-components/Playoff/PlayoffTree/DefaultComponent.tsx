@@ -41,7 +41,8 @@ const DefaultComponent = ({
               <PlayoffCard.Team>
                 <TeamLogo
                   size={32}
-                  teamId={team.teamId}
+                  logoId={team.logoId}
+                  hasDark={team.hasDark}
                   className="size-[1lh] object-scale-down"
                   aria-label={team.name}
                   title={team.name}
