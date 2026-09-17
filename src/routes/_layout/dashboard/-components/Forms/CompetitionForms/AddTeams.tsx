@@ -43,7 +43,7 @@ const AddTeams = () => {
   }
 
   const competitionTeams = data.teamsInCompetition.map(
-    (t) => t.team.teamId,
+    (t) => t.teamId,
   )
 
   return (

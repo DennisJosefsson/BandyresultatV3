@@ -114,10 +114,19 @@ const DataTable = <TData, TValue>({
                   <TeamLogoCell className="@xs:table-cell hidden w-8">
                     <TeamLogo
                       size={32}
-                      teamId={original.teamId}
+                      logoId={
+                        original.team.teamname.logo?.logoId
+                      }
+                      hasDark={
+                        original.team.teamname.logo?.hasDark
+                      }
                       className="size-[1lh] object-scale-down"
-                      aria-label={original.team.casualName}
-                      title={original.team.casualName}
+                      aria-label={
+                        original.team.teamname.casualName
+                      }
+                      title={
+                        original.team.teamname.casualName
+                      }
                     />
                   </TeamLogoCell>
                   {row.getVisibleCells().map((cell) => {

@@ -38,7 +38,7 @@ const TeamSeasonAddition = () => {
     .map((team) => {
       return {
         value: team.teamId,
-        label: team.name,
+        label: team.team.name,
       }
     })
 
