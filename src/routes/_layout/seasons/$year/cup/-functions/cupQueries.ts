@@ -7,10 +7,12 @@ import {
   series,
   tables,
   teamgames,
+  teamlogos,
   teamnames,
   teams,
   teamseries,
 } from '@/db/schema'
+import type { TeamBaseWithLogo } from '@/lib/types/team'
 import type { SQL } from 'drizzle-orm'
 import {
   and,
@@ -191,18 +193,21 @@ export const getUnionedTables = async ({
           name: teamnames.name,
           shortName: teamnames.shortName,
           casualName: teamnames.casualName,
-        } as unknown as SQL<{
-          teamId: number
-          name: string
-          shortName: string
-          casualName: string
-        }>,
+          logo: {
+            logoId: teamlogos.logoId,
+            hasDark: teamlogos.logoId,
+          },
+        } as unknown as SQL<TeamBaseWithLogo>,
       })
       .from(tables)
       .leftJoin(teams, eq(tables.teamId, teams.teamId))
       .leftJoin(
         teamnames,
         eq(teamnames.teamnameId, teams.teamnameId),
+      )
+      .leftJoin(
+        teamlogos,
+        eq(teamlogos.logoId, teamnames.logoId),
       )
       .leftJoin(series, eq(series.serieId, tables.serieId))
       .where(eq(tables.serieId, serie.serieId))
@@ -458,15 +463,22 @@ export const getUnionedTables = async ({
         name: teamnames.name,
         shortName: teamnames.shortName,
         casualName: teamnames.casualName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        shortName: string
-        casualName: string
-      }>,
+        logo: {
+          logoId: teamlogos.logoId,
+          hasDark: teamlogos.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
     })
     .from(unionQuery)
     .leftJoin(teams, eq(unionQuery.teamId, teams.teamId))
+    .leftJoin(
+      teamnames,
+      eq(teamnames.teamnameId, teams.teamnameId),
+    )
+    .leftJoin(
+      teamlogos,
+      eq(teamlogos.logoId, teamnames.logoId),
+    )
     .groupBy(
       unionQuery.teamId,
       teams.teamId,
