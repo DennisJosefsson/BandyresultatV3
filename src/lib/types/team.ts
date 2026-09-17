@@ -8,7 +8,9 @@ import type {
 import { zd } from '../utils/zod'
 
 export type Team = typeof teams.$inferSelect & {
-  teamname: TeamName
+  teamname: TeamName & {
+    logo: typeof teamlogos.$inferSelect | null
+  }
 }
 
 export type TeamName = typeof teamnames.$inferSelect
@@ -23,7 +25,7 @@ export type TeamBaseWithLogo = TeamBase & {
   logo: typeof teamlogos.$inferSelect
 }
 
-export type MapTeam = TeamName & {
+export type MapTeam = Team & {
   county: typeof county.$inferSelect
 } & {
   municipality: typeof municipality.$inferSelect | null
