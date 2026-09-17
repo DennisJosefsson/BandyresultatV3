@@ -5,6 +5,7 @@ import {
   seasons,
   series,
   teamgames,
+  teamlogos,
   teamnames,
   teams,
   teamseasons,
@@ -15,7 +16,10 @@ import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import type { Game } from '@/lib/types/game'
 import type { Meta } from '@/lib/types/meta'
 import type { Serie } from '@/lib/types/serie'
-import type { Team } from '@/lib/types/team'
+import type {
+  Team,
+  TeamBaseWithLogo,
+} from '@/lib/types/team'
 import { seasonIdCheck } from '@/lib/utils/utils'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
@@ -42,6 +46,8 @@ const home = alias(teams, 'home')
 const away = alias(teams, 'away')
 const homeTeamName = alias(teamnames, 'home_teamname')
 const awayTeamName = alias(teamnames, 'away_team_name')
+const homeLogo = alias(teamlogos, 'home_logo')
+const awayLogo = alias(teamlogos, 'away_logo')
 
 type SingeTeamSeasonReturn =
   | {
@@ -130,7 +136,7 @@ export const getSingleTeamSeason = createServerFn({
         const team = await db.query.teams.findFirst({
           where: (teamsSchema, { eq: equal }) =>
             equal(teamsSchema.teamId, teamId),
-          with: { teamname: true },
+          with: { teamname: { with: { logo: true } } },
         })
 
         let breadCrumb = 'Säsong'
@@ -315,23 +321,21 @@ export const getSingleTeamSeason = createServerFn({
               name: homeTeamName.name,
               casualName: homeTeamName.casualName,
               shortName: homeTeamName.shortName,
-            } as unknown as SQL<{
-              teamId: number
-              name: string
-              casualName: string
-              shortName: string
-            }>,
+              logo: {
+                logoId: homeLogo.logoId,
+                hasDark: homeLogo.hasDark,
+              },
+            } as unknown as SQL<TeamBaseWithLogo>,
             away: {
               teamId: away.teamId,
               name: awayTeamName.name,
               casualName: awayTeamName.casualName,
               shortName: awayTeamName.shortName,
-            } as unknown as SQL<{
-              teamId: number
-              name: string
-              casualName: string
-              shortName: string
-            }>,
+              logo: {
+                logoId: awayLogo.logoId,
+                hasDark: awayLogo.hasDark,
+              },
+            } as unknown as SQL<TeamBaseWithLogo>,
             season: {
               seasonId: seasons.seasonId,
               year: seasons.year,
@@ -350,6 +354,14 @@ export const getSingleTeamSeason = createServerFn({
           .leftJoin(
             awayTeamName,
             eq(awayTeamName.teamnameId, away.teamnameId),
+          )
+          .leftJoin(
+            homeLogo,
+            eq(homeLogo.logoId, homeTeamName.logoId),
+          )
+          .leftJoin(
+            awayLogo,
+            eq(awayLogo.logoId, awayTeamName.logoId),
           )
           .leftJoin(
             seasons,
