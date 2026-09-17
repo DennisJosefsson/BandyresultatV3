@@ -195,6 +195,8 @@ export type TeamArrayItem = {
   name: string
   casualName: string
   shortName: string
+  logoId: number | null
+  hasDark: boolean | null
   gameCount: number
   winCount: number
   awayGoals: number
