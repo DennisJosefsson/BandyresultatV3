@@ -5,6 +5,7 @@ import {
   series,
   tables,
   teamgames,
+  teamlogos,
   teamnames,
   teams,
   teamseasons,
@@ -13,7 +14,7 @@ import {
 import type { Game } from '@/lib/types/game'
 import type { Serie } from '@/lib/types/serie'
 import type { TeamTable } from '@/lib/types/table'
-import type { TeamBase } from '@/lib/types/team'
+import type { TeamBaseWithLogo } from '@/lib/types/team'
 import {
   gameSortFunction,
   leagueTableParser,
@@ -76,7 +77,11 @@ export const getTeamSeasonStaticTables = async ({
         name: teamnames.name,
         shortName: teamnames.shortName,
         casualName: teamnames.casualName,
-      } as unknown as SQL<TeamBase>,
+        logo: {
+          logoId: teamlogos.logoId,
+          hasDark: teamlogos.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
     })
     .from(tables)
     .leftJoin(
@@ -87,6 +92,10 @@ export const getTeamSeasonStaticTables = async ({
     .leftJoin(
       teamnames,
       eq(teamnames.teamnameId, teams.teamnameId),
+    )
+    .leftJoin(
+      teamlogos,
+      eq(teamlogos.logoId, teamnames.logoId),
     )
     .leftJoin(series, eq(series.serieId, tables.serieId))
     .where(
@@ -174,7 +183,11 @@ export const getTeamSeasonTables = async ({
         name: teamnames.name,
         casualName: teamnames.casualName,
         shortName: teamnames.shortName,
-      } as unknown as SQL<TeamBase>,
+        logo: {
+          logoId: teamlogos.logoId,
+          hasDark: teamlogos.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
       serie: { level: series.level } as unknown as SQL<{
         level: number
       }>,
@@ -188,6 +201,10 @@ export const getTeamSeasonTables = async ({
     .leftJoin(
       teamnames,
       eq(teamnames.teamnameId, teams.teamnameId),
+    )
+    .leftJoin(
+      teamlogos,
+      eq(teamlogos.logoId, teamnames.logoId),
     )
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .where(
@@ -241,7 +258,11 @@ export const getTeamSeasonTables = async ({
         name: teamnames.name,
         shortName: teamnames.shortName,
         casualName: teamnames.casualName,
-      } as unknown as SQL<TeamBase>,
+        logo: {
+          logoId: teamlogos.logoId,
+          hasDark: teamlogos.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
       totalGames: count(teamgames.teamGameId),
       totalPoints:
         sql<number>`sum(teamgames.points) + (case when teamseries.bonus_points is null then 0 else teamseries.bonus_points end)`
@@ -295,6 +316,10 @@ export const getTeamSeasonTables = async ({
       eq(teamnames.teamnameId, teams.teamnameId),
     )
     .leftJoin(
+      teamlogos,
+      eq(teamlogos.logoId, teamnames.logoId),
+    )
+    .leftJoin(
       seasons,
       eq(teamgames.seasonId, seasons.seasonId),
     )
@@ -319,6 +344,8 @@ export const getTeamSeasonTables = async ({
       teams.teamId,
       teamnames.casualName,
       teamnames.shortName,
+      teamlogos.logoId,
+      teamlogos.hasDark,
       teamseries.bonusPoints,
       series.level,
       teamgames.women,
@@ -843,7 +870,11 @@ function getMixQuery({
         name: teamnames.name,
         shortName: teamnames.shortName,
         casualName: teamnames.casualName,
-      } as unknown as SQL<TeamBase>,
+        logo: {
+          logoId: teamlogos.logoId,
+          hasDark: teamlogos.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
       season: {
         seasonId: seasons.seasonId,
         year: seasons.year,
@@ -862,6 +893,10 @@ function getMixQuery({
       eq(teamnames.teamnameId, teams.teamnameId),
     )
     .leftJoin(
+      teamlogos,
+      eq(teamlogos.logoId, teamnames.logoId),
+    )
+    .leftJoin(
       seasons,
       eq(unionQuery.seasonId, seasons.seasonId),
     )
@@ -878,6 +913,8 @@ function getMixQuery({
       teamnames.name,
       teamnames.shortName,
       teamnames.casualName,
+      teamlogos.logoId,
+      teamlogos.hasDark,
       seasons.year,
       seasons.seasonId,
       series.level,
@@ -1072,7 +1109,11 @@ function withParentSerie({
         name: teamnames.name,
         shortName: teamnames.shortName,
         casualName: teamnames.casualName,
-      } as unknown as SQL<TeamBase>,
+        logo: {
+          logoId: teamlogos.logoId,
+          hasDark: teamlogos.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
       season: {
         seasonId: seasons.seasonId,
         year: seasons.year,
@@ -1091,6 +1132,10 @@ function withParentSerie({
       eq(teamnames.teamnameId, teams.teamnameId),
     )
     .leftJoin(
+      teamlogos,
+      eq(teamlogos.logoId, teamnames.logoId),
+    )
+    .leftJoin(
       seasons,
       eq(unionQuery.seasonId, seasons.seasonId),
     )
@@ -1107,6 +1152,8 @@ function withParentSerie({
       teamnames.name,
       teamnames.shortName,
       teamnames.casualName,
+      teamlogos.logoId,
+      teamlogos.hasDark,
       seasons.year,
       seasons.seasonId,
       series.level,
