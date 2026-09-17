@@ -5,6 +5,7 @@ import {
   seasons,
   series,
   teamcompetitions,
+  teamnames,
   teams,
   teamseries,
 } from '@/db/schema'
@@ -107,15 +108,19 @@ export const getSerieForEdit = createServerFn({
           ...getTableColumns(teamseries),
           team: {
             teamId: teams.teamId,
-            name: teams.name,
-            shortName: teams.shortName,
-            casualName: teams.casualName,
+            name: teamnames.name,
+            shortName: teamnames.shortName,
+            casualName: teamnames.casualName,
           } as unknown as SQL<TeamBase>,
         })
         .from(teamseries)
         .leftJoin(
           teams,
           eq(teams.teamId, teamseries.teamId),
+        )
+        .leftJoin(
+          teamnames,
+          eq(teamnames.teamnameId, teams.teamnameId),
         )
         .where(eq(teamseries.serieId, serieId))
         .orderBy(
@@ -127,15 +132,19 @@ export const getSerieForEdit = createServerFn({
           ...getTableColumns(teamcompetitions),
           team: {
             teamId: teams.teamId,
-            name: teams.name,
-            shortName: teams.shortName,
-            casualName: teams.casualName,
+            name: teamnames.name,
+            shortName: teamnames.shortName,
+            casualName: teamnames.casualName,
           } as unknown as SQL<TeamBase>,
         })
         .from(teamcompetitions)
         .leftJoin(
           teams,
           eq(teams.teamId, teamcompetitions.teamId),
+        )
+        .leftJoin(
+          teamnames,
+          eq(teamnames.teamnameId, teams.teamnameId),
         )
         .leftJoin(
           competitions,
