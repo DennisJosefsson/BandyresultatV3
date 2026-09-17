@@ -172,7 +172,8 @@ const MobileDataTable = ({
                     <TeamLogoCell className="@xs:table-cell hidden w-8">
                       <TeamLogo
                         size={32}
-                        teamId={original.team.teamId}
+                        logoId={original.team.logo.logoId}
+                        hasDark={original.team.logo.hasDark}
                         className="size-[1lh] object-scale-down"
                         aria-label={
                           original.team.casualName
