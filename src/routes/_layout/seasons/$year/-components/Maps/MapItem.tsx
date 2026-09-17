@@ -40,21 +40,22 @@ function MapItem({
       <MarkerContent>
         <div className="size-4 rounded-full border-2 border-orange-500 bg-orange-500 opacity-75 shadow-lg" />
       </MarkerContent>
-      <MarkerTooltip>{team.team.name}</MarkerTooltip>
+      <MarkerTooltip>{team.team.teamname.name}</MarkerTooltip>
       <MarkerPopup className="border w-32 @2xs/map:w-40 @md/map:w-62 p-0">
         <div className="relative h-20 @md/map:h-32 overflow-hidden">
           <TeamLogo
-            teamId={team.team.teamId}
+            logoId={team.team.teamname.logo?.logoId}
+            hasDark={team.team.teamname.logo?.hasDark}
             size={256}
-            aria-label={team.team.name}
-            title={team.team.name}
+            aria-label={team.team.teamname.name}
+            title={team.team.teamname.name}
             className="object-cover -translate-y-5 xs:-translate-y-3.5"
           />
         </div>
         <div className="space-y-2 p-3">
           <div>
             <h3 className="text-foreground pb-0.5 text-[8px] @lg/map:text-xs tracking-wide uppercase  font-semibold">
-              {team.team.name}
+              {team.team.teamname.name}
             </h3>
             <h4 className="text-[8px] @lg/map:text-xs text-muted-foreground leading-tight font-medium">
               {`${team.team.city}, ${team.county.name}`}
