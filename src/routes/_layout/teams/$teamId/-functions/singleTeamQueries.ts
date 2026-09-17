@@ -30,6 +30,7 @@ export const getTeam = (teamId: number) =>
     where: (teams, { eq: equal }) =>
       equal(teams.teamId, teamId),
     with: {
+      teamname: { with: { logo: true } },
       county: true,
       municipality: true,
       teamseasons: {

@@ -47,10 +47,10 @@ export const getSingleTeam = createServerFn({
         }
       }
 
-      breadCrumb = `${team.name}`
-      title = `Bandyresultat - ${team.name} - ${team.women === true ? 'Damer' : 'Herrar'}`
+      breadCrumb = `${team.teamname.name}`
+      title = `Bandyresultat - ${team.teamname.name} - ${team.women === true ? 'Damer' : 'Herrar'}`
       url = `https://bandyresultat.se/teams/${team.teamId}?women=${team.women}`
-      description = `Information om ${team.name} ${team.women ? 'damer' : 'herrar'}`
+      description = `Information om ${team.teamname.name} ${team.women ? 'damer' : 'herrar'}`
 
       const meta = {
         title,
