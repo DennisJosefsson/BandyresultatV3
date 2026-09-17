@@ -1,10 +1,17 @@
 import { db } from '@/db'
-import { games, teamgames, teams } from '@/db/schema'
+import {
+  games,
+  teamgames,
+  teamnames,
+  teams,
+} from '@/db/schema'
 import { and, desc, eq, min, sql } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
 
 const home = alias(teams, 'home')
 const away = alias(teams, 'away')
+const homeTeamName = alias(teamnames, 'home_teamname')
+const awayTeamName = alias(teamnames, 'away_teamname')
 
 const minGoalDifferenceQuery = db
   .$with('min_goal_difference_query')
@@ -33,13 +40,21 @@ export const preparedMinGoalDifferenceAway = db
     gameId: teamgames.gameId,
     date: teamgames.date,
     result: games.result,
-    homeTeam: home.casualName,
-    awayTeam: away.casualName,
+    homeTeam: homeTeamName.casualName,
+    awayTeam: awayTeamName.casualName,
   })
   .from(teamgames)
   .leftJoin(games, eq(games.gameId, teamgames.gameId))
   .leftJoin(home, eq(home.teamId, teamgames.opponentId))
   .leftJoin(away, eq(away.teamId, teamgames.teamId))
+  .leftJoin(
+    homeTeamName,
+    eq(homeTeamName.teamnameId, home.teamnameId),
+  )
+  .leftJoin(
+    awayTeamName,
+    eq(awayTeamName.teamnameId, away.teamnameId),
+  )
   .leftJoin(
     minGoalDifferenceQuery,
     eq(minGoalDifferenceQuery.teamId, teamgames.teamId),
