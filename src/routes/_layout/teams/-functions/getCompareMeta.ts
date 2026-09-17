@@ -67,6 +67,9 @@ export const getCompareMeta = createServerFn({
               eq(teams.teamId, array[0]),
               ne(teams.teamId, 176),
             ),
+          with: {
+            teamname: { with: { logo: true } },
+          },
         })
 
       if (!compareHomeTeam) {
@@ -87,6 +90,9 @@ export const getCompareMeta = createServerFn({
               eq(teams.teamId, array[1]),
               ne(teams.teamId, 176),
             ),
+          with: {
+            teamname: { with: { logo: true } },
+          },
         })
 
       if (!compareAwayTeam) {
@@ -100,9 +106,9 @@ export const getCompareMeta = createServerFn({
         })
       }
 
-      const breadCrumb = `H2H:  ${compareHomeTeam.name} - ${compareAwayTeam.name}`
+      const breadCrumb = `H2H:  ${compareHomeTeam.teamname.name} - ${compareAwayTeam.teamname.name}`
       const title = `Bandyresultat - ${breadCrumb}`
-      const description = `Möten mellan $${compareHomeTeam.name} och ${compareAwayTeam.name}`
+      const description = `Möten mellan $${compareHomeTeam.teamname.name} och ${compareAwayTeam.teamname.name}`
       const url = `https://bandyresultat.se/teams/compare?women=${women}&teamArray=[$${compareHomeTeam.teamId},${compareAwayTeam.teamId}]`
 
       return {
