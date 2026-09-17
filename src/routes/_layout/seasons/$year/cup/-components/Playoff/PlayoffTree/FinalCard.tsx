@@ -27,7 +27,8 @@ const FinalCard = ({ game, title }: FinalCardProps) => {
                 <PlayoffCard.Team>
                   <TeamLogo
                     size={32}
-                    teamId={game.home.teamId}
+                    logoId={game.home.logo.logoId}
+                    hasDark={game.home.logo.hasDark}
                     className="size-[1lh] object-scale-down"
                     aria-label={game.home.casualName}
                     title={game.home.casualName}
@@ -54,7 +55,8 @@ const FinalCard = ({ game, title }: FinalCardProps) => {
                 <PlayoffCard.Team>
                   <TeamLogo
                     size={32}
-                    teamId={game.away.teamId}
+                    logoId={game.away.logo.logoId}
+                    hasDark={game.away.logo.hasDark}
                     className="size-[1lh] object-scale-down"
                     aria-label={game.away.casualName}
                     title={game.away.casualName}
