@@ -13,7 +13,8 @@ interface TeamLogoProps extends DetailedHTMLProps<
   HTMLObjectElement
 > {
   size: LogoSize
-  teamId: number
+  logoId: number | null
+  hasDark: boolean | null
 }
 
 const img_cdn = clientEnv.VITE_IMG_CDN
@@ -21,21 +22,22 @@ const img_cdn = clientEnv.VITE_IMG_CDN
 type ImgUrl =
   | `${string}/${LogoSize}/${number}_${LogoSize}x${LogoSize}.png`
   | `${string}/${LogoSize}/${number}_dark_${LogoSize}x${LogoSize}.png`
-
-const darkLogoArray: Array<number> = [8, 95, 136]
+  | `${string}/${number}/default_${number}x${number}.png`
 
 const TeamLogo = ({
-  teamId,
+  logoId,
   size,
+  hasDark,
   ...props
 }: TeamLogoProps) => {
   const { theme } = useTheme()
 
-  const fallbackUrl = `${img_cdn}/${size}/default_${size}x${size}.png`
-  const imgUrl: ImgUrl =
-    theme === 'dark' && darkLogoArray.includes(teamId)
-      ? `${img_cdn}/${size}/${teamId}_dark_${size}x${size}.png`
-      : `${img_cdn}/${size}/${teamId}_${size}x${size}.png`
+  const fallbackUrl: ImgUrl = `${img_cdn}/${size}/default_${size}x${size}.png`
+  const imgUrl: ImgUrl = logoId
+    ? theme === 'dark' && hasDark
+      ? `${img_cdn}/${size}/${logoId}_dark_${size}x${size}.png`
+      : `${img_cdn}/${size}/${logoId}_${size}x${size}.png`
+    : fallbackUrl
   return (
     <object
       data={imgUrl}
