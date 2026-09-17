@@ -85,8 +85,7 @@ export const editTeamObject = zd.object({
 })
 
 export type TeamStreak = {
-  teamId: number
-  name: string
+  team: TeamBaseWithLogo
   women: boolean
   gameCount: number
   startDate: string
