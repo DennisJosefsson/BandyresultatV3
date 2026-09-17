@@ -5,6 +5,7 @@ import {
   seasons,
   series,
   teamgames,
+  teamlogos,
   teamnames,
   teams,
   teamseries,
@@ -15,6 +16,7 @@ import type {
   PlayoffTable,
   TeamArrayItem,
 } from '@/lib/types/table'
+import type { TeamBaseWithLogo } from '@/lib/types/team'
 import { sortOrder } from '@/lib/utils/constants'
 import type { SQL } from 'drizzle-orm'
 import {
@@ -39,161 +41,6 @@ export const getPlayoffTableData = async ({
   year,
   women,
 }: FunctionProps) => {
-  // const playoffGroups = await db
-  //   .select()
-  //   .from(series)
-  //   .where(
-  //     and(
-  //       eq(series.seasonId, playoffSeason.seasonId),
-  //       inArray(series.category, [
-  //         'eight',
-  //         'quarter',
-  //         'semi',
-  //       ]),
-  //     ),
-  //   )
-  //   .then((res) =>
-  //     res.sort((a, b) => {
-  //       if (
-  //         sortOrder.indexOf(a.group) >
-  //         sortOrder.indexOf(b.group)
-  //       ) {
-  //         return 1
-  //       } else if (
-  //         sortOrder.indexOf(a.group) <
-  //         sortOrder.indexOf(b.group)
-  //       ) {
-  //         return -1
-  //       } else {
-  //         return 0
-  //       }
-  //     }),
-  //   )
-
-  // const playoffCte = db.$with('playoff_cte').as(
-  //   db
-  //     .select({
-  //       teamId: teamgames.teamId,
-  //       group: series.group as unknown as SQL<string>,
-  //       category: series.category as unknown as SQL<string>,
-  //       serieId: teamgames.serieId,
-  //       totalGames: count(teamgames.teamGameId).as(
-  //         'total_games',
-  //       ),
-  //       totalPoints: sum(teamgames.points)
-  //         .mapWith(Number)
-  //         .as('total_points'),
-  //       totalGoalsScored: sum(teamgames.goalsScored)
-  //         .mapWith(Number)
-  //         .as(
-  //           'total_goals_scored',
-  //         ) as unknown as SQL<number>,
-  //       totalGoalsConceded: sum(teamgames.goalsConceded)
-  //         .mapWith(Number)
-  //         .as(
-  //           'total_goals_conceded',
-  //         ) as unknown as SQL<number>,
-  //       totalGoalDifference: sum(teamgames.goalDifference)
-  //         .mapWith(Number)
-  //         .as(
-  //           'total_goal_difference',
-  //         ) as unknown as SQL<number>,
-  //       totalWins:
-  //         sql<number>`cast(count(*) filter (where win or ot_win) as int)`.as(
-  //           'totalWins',
-  //         ),
-  //       totalDraws:
-  //         sql<number>`cast(count(*) filter (where draw) as int)`.as(
-  //           'totalDraws',
-  //         ),
-  //       totalLost:
-  //         sql<number>`cast(count(*) filter (where lost or ot_lost) as int)`.as(
-  //           'totalLost',
-  //         ),
-  //       awayGoals:
-  //         sql<number>`sum(case when teamgames.home_game = false then teamgames.goals_scored else null end)`
-  //           .mapWith(Number)
-  //           .as('away_goals'),
-  //     })
-  //     .from(teamgames)
-  //     .leftJoin(
-  //       series,
-  //       eq(teamgames.serieId, series.serieId),
-  //     )
-  //     .where(
-  //       and(
-  //         eq(teamgames.seasonId, playoffSeason.seasonId),
-  //         inArray(series.category, [
-  //           'eight',
-  //           'quarter',
-  //           'semi',
-  //         ]),
-  //       ),
-  //     )
-  //     .groupBy(
-  //       series.group,
-  //       teamgames.teamId,
-  //       series.category,
-  //       teamgames.serieId,
-  //     ),
-  // )
-
-  // const playoffTables = await db
-  //   .with(playoffCte)
-  //   .select({
-  //     teamId: playoffCte.teamId,
-  //     group: playoffCte.group,
-  //     category: playoffCte.category,
-  //     totalGames: playoffCte.totalGames,
-  //     totalWins: playoffCte.totalWins,
-  //     totalDraws: playoffCte.totalDraws,
-  //     totalLost: playoffCte.totalLost,
-  //     totalGoalsScored: playoffCte.totalGoalsScored,
-  //     totalGoalsConceded: playoffCte.totalGoalsConceded,
-  //     totalGoalDifference: playoffCte.totalGoalDifference,
-  //     totalPoints: playoffCte.totalPoints,
-  //     awayGoals: playoffCte.awayGoals,
-  //     team: {
-  //       teamId: teams.teamId,
-  //       name: teams.name,
-  //       shortName: teams.shortName,
-  //       casualName: teams.casualName,
-  //     } as unknown as SQL<{
-  //       teamId: number
-  //       name: string
-  //       shortName: string
-  //       casualName: string
-  //     }>,
-  //   })
-  //   .from(playoffCte)
-  //   .leftJoin(teams, eq(teams.teamId, playoffCte.teamId))
-  //   .leftJoin(
-  //     series,
-  //     eq(series.serieId, playoffCte.serieId),
-  //   )
-  //   .then((res) =>
-  //     sortPlayoffTables({
-  //       tableArray: res,
-  //       uefaSorting: playoffSeason.uefaSorting,
-  //     }),
-  //   )
-  //   .then((res) => {
-  //     const array: Array<PlayoffGroups> = []
-  //     playoffGroups.forEach((group) => {
-  //       const table = res.find(
-  //         (grp) => grp.group === group.group,
-  //       )
-  //       array.push({
-  //         name: group.serieName,
-  //         group: group.group,
-  //         category: group.category,
-  //         table,
-  //       })
-  //     })
-  //     return array
-  //   })
-  //   .then((res) => sortCategories({ sortedTables: res }))
-
   const playoffTables = await getPlayoffTable({
     year,
     women,
@@ -202,7 +49,9 @@ export const getPlayoffTableData = async ({
   const home = alias(teams, 'home')
   const away = alias(teams, 'away')
   const homeTeamName = alias(teamnames, 'home_teamname')
-  const awayTeamName = alias(teamnames, 'away_team_name')
+  const awayTeamName = alias(teamnames, 'away_teamname')
+  const homeLogo = alias(teamlogos, 'home_logo')
+  const awayLogo = alias(teamlogos, 'away_logo')
 
   const finalGames = await db
     .select({
@@ -214,23 +63,21 @@ export const getPlayoffTableData = async ({
         name: homeTeamName.name,
         casualName: homeTeamName.casualName,
         shortName: homeTeamName.shortName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        casualName: string
-        shortName: string
-      }>,
+        logo: {
+          logoId: homeLogo.logoId,
+          hasDark: homeLogo.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
       away: {
         teamId: away.teamId,
         name: awayTeamName.name,
         casualName: awayTeamName.casualName,
         shortName: awayTeamName.shortName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        casualName: string
-        shortName: string
-      }>,
+        logo: {
+          logoId: awayLogo.logoId,
+          hasDark: awayLogo.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
     })
     .from(games)
     .leftJoin(home, eq(games.homeTeamId, home.teamId))
@@ -242,6 +89,14 @@ export const getPlayoffTableData = async ({
     .leftJoin(
       awayTeamName,
       eq(awayTeamName.teamnameId, away.teamnameId),
+    )
+    .leftJoin(
+      homeLogo,
+      eq(homeTeamName.logoId, homeLogo.logoId),
+    )
+    .leftJoin(
+      awayLogo,
+      eq(awayTeamName.logoId, awayLogo.logoId),
     )
     .leftJoin(series, eq(series.serieId, games.serieId))
     .where(
@@ -273,23 +128,21 @@ export const getPlayoffTableData = async ({
         name: homeTeamName.name,
         casualName: homeTeamName.casualName,
         shortName: homeTeamName.shortName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        casualName: string
-        shortName: string
-      }>,
+        logo: {
+          logoId: homeLogo.logoId,
+          hasDark: homeLogo.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
       away: {
         teamId: away.teamId,
         name: awayTeamName.name,
         casualName: awayTeamName.casualName,
         shortName: awayTeamName.shortName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        casualName: string
-        shortName: string
-      }>,
+        logo: {
+          logoId: awayLogo.logoId,
+          hasDark: awayLogo.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
     })
     .from(games)
     .leftJoin(home, eq(games.homeTeamId, home.teamId))
@@ -301,6 +154,14 @@ export const getPlayoffTableData = async ({
     .leftJoin(
       awayTeamName,
       eq(awayTeamName.teamnameId, away.teamnameId),
+    )
+    .leftJoin(
+      homeLogo,
+      eq(homeTeamName.logoId, homeLogo.logoId),
+    )
+    .leftJoin(
+      awayLogo,
+      eq(awayTeamName.logoId, awayLogo.logoId),
     )
     .leftJoin(series, eq(games.serieId, series.serieId))
     .where(
@@ -322,7 +183,7 @@ export const getPlayoffTableData = async ({
     )
     .orderBy(desc(games.date))
 
-  const getPayoffSeriesTables =
+  const getPlayoffSeriesTables =
     await getPlayoffAsSeriesTable({ year, women })
 
   return {
@@ -330,9 +191,9 @@ export const getPlayoffTableData = async ({
     bronzeGames,
     playoffTables,
     playoffSeriesTables:
-      getPayoffSeriesTables.length === 0
+      getPlayoffSeriesTables.length === 0
         ? undefined
-        : getPayoffSeriesTables,
+        : getPlayoffSeriesTables,
   }
 }
 
@@ -581,12 +442,11 @@ async function getPlayoffAsSeriesTable({
         name: teamnames.name,
         shortName: teamnames.shortName,
         casualName: teamnames.casualName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        shortName: string
-        casualName: string
-      }>,
+        logo: {
+          logoId: teamlogos.logoId,
+          hasDark: teamlogos.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
       serie: {
         level: series.level,
         serieName: series.serieName,
@@ -600,6 +460,10 @@ async function getPlayoffAsSeriesTable({
     .leftJoin(
       teamnames,
       eq(teamnames.teamnameId, teams.teamnameId),
+    )
+    .leftJoin(
+      teamlogos,
+      eq(teamlogos.logoId, teamnames.logoId),
     )
     .leftJoin(
       series,
@@ -728,9 +592,11 @@ async function getPlayoffTable({
                       coalesce(json_agg(
                           json_build_object(
                               'teamId',teams.team_id,
-                              'shortName',teams.short_name,
-                              'name',teams."name",
-                              'casualName',teams.casual_name,
+                              'shortName',teamnames.short_name,
+                              'name',teamnames."name",
+                              'casualName',teamnames.casual_name,
+                              'logoId',teamlogos.logo_id,
+                              'hasDark',teamlogos.has_dark,
                               'winCount',series_cte.win_count,
                               'gameCount',series_cte.game_count,
                               'awayGoals',series_cte.away_goals,
@@ -745,6 +611,14 @@ async function getPlayoffTable({
         eq(series.serieId, seriesCte.serieId),
       )
       .leftJoin(teams, eq(teams.teamId, seriesCte.teamId))
+      .leftJoin(
+        teamnames,
+        eq(teamnames.teamnameId, teams.teamnameId),
+      )
+      .leftJoin(
+        teamlogos,
+        eq(teamlogos.logoId, teamnames.logoId),
+      )
       .leftJoin(
         teamseries,
         and(

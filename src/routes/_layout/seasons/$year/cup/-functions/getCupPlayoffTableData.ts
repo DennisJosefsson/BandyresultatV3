@@ -638,9 +638,11 @@ async function getPlayoffTable({
                       coalesce(json_agg(
                           json_build_object(
                               'teamId',teams.team_id,
-                              'shortName',teams.short_name,
-                              'name',teams."name",
-                              'casualName',teams.casual_name,
+                              'shortName',teamnames.short_name,
+                              'name',teamnames."name",
+                              'casualName',teamnames.casual_name,
+                              'logoId',teamlogos.logo_id,
+                              'hasDark',teamlogos.has_dark,
                               'winCount',series_cte.win_count,
                               'gameCount',series_cte.game_count,
                               'awayGoals',series_cte.away_goals,
@@ -655,6 +657,14 @@ async function getPlayoffTable({
         eq(series.serieId, seriesCte.serieId),
       )
       .leftJoin(teams, eq(teams.teamId, seriesCte.teamId))
+      .leftJoin(
+        teamnames,
+        eq(teamnames.teamnameId, teams.teamnameId),
+      )
+      .leftJoin(
+        teamlogos,
+        eq(teamlogos.logoId, teamnames.logoId),
+      )
       .leftJoin(
         teamseries,
         and(
