@@ -1,5 +1,5 @@
 import { zd } from '../utils/zod'
-import type { TeamBaseWithTeamGameId } from './team'
+import type { TeamBaseWithLogo, TeamBaseWithTeamGameId } from './team'
 
 export type Game = {
   gameId: number
@@ -16,18 +16,8 @@ export type Game = {
   played: boolean | null
   penalties: boolean | null
   extraTime: boolean | null
-  home: {
-    teamId: number
-    name: string
-    casualName: string
-    shortName: string
-  }
-  away: {
-    teamId: number
-    name: string
-    casualName: string
-    shortName: string
-  }
+  home: TeamBaseWithLogo
+  away: TeamBaseWithLogo
   season: {
     seasonId: number
     year: string
