@@ -1,9 +1,8 @@
-import type { TeamBase } from './team'
+import type { TeamBase, TeamBaseWithLogo } from './team'
 
 export type RecordStreak = {
   position: number | undefined
-  teamId: number
-  name: string
+  team: TeamBaseWithLogo
   gameCount: number
   startDate: string
   endDate: string
@@ -12,8 +11,8 @@ export type RecordStreak = {
 export type CurrInoffChamp = {
   date: string
   result: string
-  team: TeamBase
-  opponent: TeamBase
+  team: TeamBaseWithLogo
+  opponent: TeamBaseWithLogo
 }
 
 export type RecordStreakData = {
