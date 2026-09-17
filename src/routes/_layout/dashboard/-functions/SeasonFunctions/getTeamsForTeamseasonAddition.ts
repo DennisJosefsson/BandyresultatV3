@@ -18,8 +18,20 @@ export const getTeamsForTeamseasonAddition = createServerFn(
   .handler(async ({ data: { seasonId } }) => {
     try {
       const allTeams = await db
-        .select()
+        .select({
+          ...getTableColumns(teams),
+          team: {
+            teamId: teams.teamId,
+            name: teamnames.name,
+            shortName: teamnames.shortName,
+            casualName: teamnames.casualName,
+          } as unknown as SQL<TeamBase>,
+        })
         .from(teams)
+        .leftJoin(
+          teamnames,
+          eq(teamnames.teamnameId, teams.teamnameId),
+        )
         .orderBy(
           asc(sql`casual_name collate "se-SE-x-icu"`),
         )
