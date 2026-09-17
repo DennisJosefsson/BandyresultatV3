@@ -993,11 +993,8 @@ export async function getScoredData({
     .then((res) => {
       const filteredResult = res.map((item, index) => {
         return {
-          homeTeam: item.team.casualName,
-          homeTeamId: item.team.teamId,
-          awayTeam: item.opponent.casualName,
-          awayTeamId: item.opponent.teamId,
-
+          home: item.team,
+          away: item.opponent,
           result: `${item.goalsScored}-${item.goalsConceded}`,
           goals: item.totalGoals,
           date: item.date,
@@ -1091,11 +1088,8 @@ export async function getScoredData({
     .then((res) => {
       const filteredResult = res.map((item, index) => {
         return {
-          homeTeam: item.team.casualName,
-          homeTeamId: item.team.teamId,
-          awayTeam: item.opponent.casualName,
-          awayTeamId: item.opponent.teamId,
-
+          home: item.team,
+          away: item.opponent,
           result: `${item.goalsScored}-${item.goalsConceded}`,
           goals: item.totalGoals,
           date: item.date,
