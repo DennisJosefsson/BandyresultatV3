@@ -1,5 +1,10 @@
 import { db } from '@/db'
-import { tables, teams, teamseries } from '@/db/schema'
+import {
+  tables,
+  teamnames,
+  teams,
+  teamseries,
+} from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import type { TeamBase } from '@/lib/types/team'
@@ -45,13 +50,17 @@ export const getSeriesTableData = createServerFn({
           ...getTableColumns(tables),
           team: {
             teamId: teams.teamId,
-            name: teams.name,
-            shortName: teams.shortName,
-            casualName: teams.casualName,
+            name: teamnames.name,
+            shortName: teamnames.shortName,
+            casualName: teamnames.casualName,
           } as unknown as SQL<TeamBase>,
         })
         .from(tables)
         .leftJoin(teams, eq(tables.teamId, teams.teamId))
+        .leftJoin(
+          teamnames,
+          eq(teamnames.teamnameId, teams.teamnameId),
+        )
         .where(eq(tables.serieId, serieId))
 
       if (seriesTable.length !== 0) {
@@ -78,15 +87,19 @@ export const getSeriesTableData = createServerFn({
           teamId: teamseries.teamId,
           team: {
             teamId: teams.teamId,
-            name: teams.name,
-            shortName: teams.shortName,
-            casualName: teams.casualName,
+            name: teamnames.name,
+            shortName: teamnames.shortName,
+            casualName: teamnames.casualName,
           } as unknown as SQL<TeamBase>,
         })
         .from(teamseries)
         .leftJoin(
           teams,
           eq(teamseries.teamId, teams.teamId),
+        )
+        .leftJoin(
+          teamnames,
+          eq(teamnames.teamnameId, teams.teamnameId),
         )
         .where(eq(teamseries.serieId, serieId))
 
