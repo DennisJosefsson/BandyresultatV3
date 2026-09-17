@@ -15,6 +15,10 @@ export type TeamName = typeof teamnames.$inferSelect
 
 export type TeamBase = TeamName & { teamId: number }
 
+export type TeamNameWithLogo = TeamName & {
+  logo: typeof teamlogos.$inferSelect
+}
+
 export type TeamBaseWithLogo = TeamBase & {
   logo: typeof teamlogos.$inferSelect
 }
@@ -29,7 +33,7 @@ export type TeamBaseWithTeamGameId = TeamName & {
   teamGameId: number
 }
 
-export type SingleTeam = TeamName & {
+export type SingleTeam = Team & {
   county: typeof county.$inferSelect
 } & {
   municipality: typeof municipality.$inferSelect | null
@@ -41,6 +45,10 @@ export type SingleTeam = TeamName & {
       year: string
     }
   }>
+} & {
+  teamname: TeamName & {
+    logo: typeof teamlogos.$inferSelect | null
+  }
 }
 
 export const newTeam = zd.object({
