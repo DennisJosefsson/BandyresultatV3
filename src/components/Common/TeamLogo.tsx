@@ -13,8 +13,8 @@ interface TeamLogoProps extends DetailedHTMLProps<
   HTMLObjectElement
 > {
   size: LogoSize
-  logoId: number | null
-  hasDark: boolean | null
+  logoId: number | null | undefined
+  hasDark: boolean | null | undefined
 }
 
 const img_cdn = clientEnv.VITE_IMG_CDN
