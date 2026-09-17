@@ -4,6 +4,7 @@ import {
   parentchildseries,
   series,
   teamgames,
+  teamlogos,
   teamnames,
   teams,
   teamseries,
@@ -13,6 +14,10 @@ import type {
   DevDataTableItem,
   ReturnDevDataTableItem,
 } from '@/lib/types/table'
+import type {
+  TeamBase,
+  TeamBaseWithLogo,
+} from '@/lib/types/team'
 import type { SQL } from 'drizzle-orm'
 import {
   and,
@@ -253,12 +258,7 @@ export const getDevelopmentData = async ({
         name: teamnames.name,
         shortName: teamnames.shortName,
         casualName: teamnames.casualName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        shortName: string
-        casualName: string
-      }>,
+      } as unknown as SQL<TeamBase>,
     })
     .from(cte)
     .leftJoin(teams, eq(teams.teamId, cte.teamId))
@@ -287,12 +287,7 @@ export const getDevelopmentData = async ({
         name: teamnames.name,
         shortName: teamnames.shortName,
         casualName: teamnames.casualName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        shortName: string
-        casualName: string
-      }>,
+      } as unknown as SQL<TeamBase>,
     })
     .from(startTable)
     .leftJoin(teams, eq(teams.teamId, startTable.teamId))
@@ -313,6 +308,8 @@ export const getDevelopmentData = async ({
   const away = alias(teams, 'away')
   const homeTeamName = alias(teamnames, 'home_teamname')
   const awayTeamName = alias(teamnames, 'away_team_name')
+  const homeLogo = alias(teamlogos, 'home_logo')
+  const awayLogo = alias(teamlogos, 'away_logo')
 
   const mainGameArray = db
     .select({
@@ -324,23 +321,21 @@ export const getDevelopmentData = async ({
         name: homeTeamName.name,
         shortName: homeTeamName.shortName,
         casualName: homeTeamName.casualName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        shortName: string
-        casualName: string
-      }>,
+        logo: {
+          logoId: homeLogo.logoId,
+          hasDark: homeLogo.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
       away: {
         teamId: away.teamId,
         name: awayTeamName.name,
         shortName: awayTeamName.shortName,
         casualName: awayTeamName.casualName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        shortName: string
-        casualName: string
-      }>,
+        logo: {
+          logoId: awayLogo.logoId,
+          hasDark: awayLogo.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
     })
     .from(games)
     .leftJoin(home, eq(games.homeTeamId, home.teamId))
@@ -352,6 +347,14 @@ export const getDevelopmentData = async ({
     .leftJoin(
       awayTeamName,
       eq(awayTeamName.teamnameId, away.teamnameId),
+    )
+    .leftJoin(
+      homeLogo,
+      eq(homeLogo.logoId, homeTeamName.logoId),
+    )
+    .leftJoin(
+      awayLogo,
+      eq(awayLogo.logoId, awayTeamName.logoId),
     )
     .leftJoin(series, eq(series.serieId, games.serieId))
     .where(
@@ -376,23 +379,21 @@ export const getDevelopmentData = async ({
         name: homeTeamName.name,
         shortName: homeTeamName.shortName,
         casualName: homeTeamName.casualName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        shortName: string
-        casualName: string
-      }>,
+        logo: {
+          logoId: homeLogo.logoId,
+          hasDark: homeLogo.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
       away: {
         teamId: away.teamId,
         name: awayTeamName.name,
         shortName: awayTeamName.shortName,
         casualName: awayTeamName.casualName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        shortName: string
-        casualName: string
-      }>,
+        logo: {
+          logoId: homeLogo.logoId,
+          hasDark: homeLogo.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
     })
     .from(games)
     .leftJoin(home, eq(games.homeTeamId, home.teamId))
