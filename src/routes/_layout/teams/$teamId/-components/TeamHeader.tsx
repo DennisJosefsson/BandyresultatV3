@@ -31,7 +31,7 @@ const TeamHeader = () => {
         <div className="flex flex-col gap-2">
           <div className="flex flex-col gap-1">
             <span className="sm:text-md xs:tracking-widest text-sm tracking-wide md:text-lg xl:text-2xl">
-              {data.team.name}
+              {data.team.teamname.name}
             </span>
             <span className="text-xs md:text-sm xl:text-base">
               {data.team.city}
@@ -61,9 +61,10 @@ const TeamHeader = () => {
           <TeamLogo
             className="xs:w-16 w-8 object-scale-down md:w-24 lg:w-32"
             size={128}
-            teamId={teamId}
-            aria-label={data.team.name}
-            title={data.team.name}
+            logoId={data.team.teamname.logo?.logoId}
+            hasDark={data.team.teamname.logo?.hasDark}
+            aria-label={data.team.teamname.name}
+            title={data.team.teamname.name}
           ></TeamLogo>
         </div>
       </div>
