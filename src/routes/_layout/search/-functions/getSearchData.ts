@@ -5,6 +5,8 @@ import {
   seasons,
   series,
   teamgames,
+  teamlogos,
+  teamnames,
   teams,
 } from '@/db/schema'
 import type {
@@ -12,7 +14,7 @@ import type {
   SearchParamsFields,
   clientSearchParams,
 } from '@/lib/types/search'
-import type { TeamBase } from '@/lib/types/team'
+import type { TeamBaseWithLogo } from '@/lib/types/team'
 import type { zd } from '@/lib/utils/zod'
 import dayjs from 'dayjs'
 import type { SQL } from 'drizzle-orm'
@@ -37,6 +39,10 @@ export async function getSearchData({
 }) {
   const home = alias(teams, 'home')
   const away = alias(teams, 'away')
+  const homeTeamName = alias(teamnames, 'home_teamname')
+  const homeLogo = alias(teamlogos, 'home_logo')
+  const awayTeamName = alias(teamnames, 'away_teamname')
+  const awayLogo = alias(teamlogos, 'away_logo')
   const lastSeason = await db.query.seasons.findFirst({
     columns: { year: true },
     orderBy: (seasonsSchema, { desc: descending }) =>
@@ -168,21 +174,45 @@ export async function getSearchData({
       totalGoals: filteredtCte.totalGoals,
       home: {
         teamId: home.teamId,
-        name: home.name,
-        casualName: home.casualName,
-        shortName: home.shortName,
-      } as unknown as SQL<TeamBase>,
+        name: homeTeamName.name,
+        shortName: homeTeamName.shortName,
+        casualName: homeTeamName.casualName,
+        logo: {
+          logoId: homeLogo.logoId,
+          hasDark: homeLogo.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
       away: {
         teamId: away.teamId,
-        name: away.name,
-        casualName: away.casualName,
-        shortName: away.shortName,
-      } as unknown as SQL<TeamBase>,
+        name: awayTeamName.name,
+        shortName: awayTeamName.shortName,
+        casualName: awayTeamName.casualName,
+        logo: {
+          logoId: awayLogo.logoId,
+          hasDark: awayLogo.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
     })
     .from(filteredtCte)
     .leftJoin(games, eq(games.gameId, filteredtCte.gameId))
     .leftJoin(home, eq(games.homeTeamId, home.teamId))
     .leftJoin(away, eq(games.awayTeamId, away.teamId))
+    .leftJoin(
+      homeTeamName,
+      eq(homeTeamName.teamnameId, home.teamnameId),
+    )
+    .leftJoin(
+      homeLogo,
+      eq(homeLogo.logoId, homeTeamName.logoId),
+    )
+    .leftJoin(
+      awayTeamName,
+      eq(awayTeamName.teamnameId, away.teamnameId),
+    )
+    .leftJoin(
+      awayLogo,
+      eq(awayLogo.logoId, awayTeamName.logoId),
+    )
     .leftJoin(series, eq(series.serieId, games.serieId))
     .leftJoin(
       competitions,
