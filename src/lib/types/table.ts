@@ -1,6 +1,6 @@
 import { zd } from '../utils/zod'
 import type { Serie } from './serie'
-import type { TeamBase } from './team'
+import type { TeamBaseWithLogo } from './team'
 
 export type Base = {
   group: string
@@ -10,7 +10,7 @@ export type Base = {
     year: string
     seasonId: number
   }
-  team: TeamBase
+  team: TeamBaseWithLogo
 }
 
 export type TeamTable = Base & {
