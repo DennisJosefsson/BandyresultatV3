@@ -4,10 +4,8 @@ import type { MaxMinGoalGames } from '@/lib/types/records'
 
 const MaxMinGoalsCard = ({
   position,
-  homeTeam,
-  homeTeamId,
-  awayTeam,
-  awayTeamId,
+  home,
+  away,
   result,
   date,
 }: MaxMinGoalGames) => {
@@ -21,13 +19,14 @@ const MaxMinGoalsCard = ({
           <div className="flex flex-row gap-2">
             <div>
               <TeamLogo
-                teamId={homeTeamId}
+                logoId={home.logo.logoId}
+                hasDark={home.logo.hasDark}
                 size={32}
               />
             </div>
             <div>
               <span className="truncate font-semibold">
-                {homeTeam}
+                {home.casualName}
               </span>
             </div>
           </div>
@@ -35,13 +34,14 @@ const MaxMinGoalsCard = ({
             <div className="flex flex-row gap-2">
               <div>
                 <TeamLogo
-                  teamId={awayTeamId}
+                  logoId={away.logo.logoId}
+                  hasDark={away.logo.hasDark}
                   size={32}
                 />
               </div>
               <div>
                 <span className="truncate font-semibold">
-                  {awayTeam}
+                  {away.casualName}
                 </span>
               </div>
             </div>

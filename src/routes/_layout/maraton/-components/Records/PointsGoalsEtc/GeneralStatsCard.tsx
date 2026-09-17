@@ -15,7 +15,8 @@ const GeneralStatsCard = ({
       <div className="flex grow flex-row items-center justify-between">
         <div className="flex flex-row gap-2">
           <TeamLogo
-            teamId={team.teamId}
+            logoId={team.logo.logoId}
+            hasDark={team.logo.hasDark}
             size={32}
           />
           <span className="truncate font-semibold">
