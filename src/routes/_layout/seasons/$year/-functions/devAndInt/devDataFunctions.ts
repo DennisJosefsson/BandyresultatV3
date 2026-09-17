@@ -14,10 +14,7 @@ import type {
   DevDataTableItem,
   ReturnDevDataTableItem,
 } from '@/lib/types/table'
-import type {
-  TeamBase,
-  TeamBaseWithLogo,
-} from '@/lib/types/team'
+import type { TeamBaseWithLogo } from '@/lib/types/team'
 import type { SQL } from 'drizzle-orm'
 import {
   and,
@@ -258,13 +255,21 @@ export const getDevelopmentData = async ({
         name: teamnames.name,
         shortName: teamnames.shortName,
         casualName: teamnames.casualName,
-      } as unknown as SQL<TeamBase>,
+        logo: {
+          logoId: teamlogos.logoId,
+          hasDark: teamlogos.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
     })
     .from(cte)
     .leftJoin(teams, eq(teams.teamId, cte.teamId))
     .leftJoin(
       teamnames,
       eq(teamnames.teamnameId, teams.teamnameId),
+    )
+    .leftJoin(
+      teamlogos,
+      eq(teamlogos.logoId, teamnames.logoId),
     )
     .orderBy(asc(cte.date), asc(cte.teamId))
 
@@ -287,13 +292,21 @@ export const getDevelopmentData = async ({
         name: teamnames.name,
         shortName: teamnames.shortName,
         casualName: teamnames.casualName,
-      } as unknown as SQL<TeamBase>,
+        logo: {
+          logoId: teamlogos.logoId,
+          hasDark: teamlogos.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
     })
     .from(startTable)
     .leftJoin(teams, eq(teams.teamId, startTable.teamId))
     .leftJoin(
       teamnames,
       eq(teamnames.teamnameId, teams.teamnameId),
+    )
+    .leftJoin(
+      teamlogos,
+      eq(teamlogos.logoId, teamnames.logoId),
     )
   const gameDates = await db
     .with(seriesGames)
