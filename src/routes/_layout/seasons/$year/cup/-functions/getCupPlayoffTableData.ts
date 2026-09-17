@@ -5,6 +5,7 @@ import {
   seasons,
   series,
   teamgames,
+  teamlogos,
   teamnames,
   teams,
   teamseries,
@@ -15,6 +16,7 @@ import type {
   PlayoffTable,
   TeamArrayItem,
 } from '@/lib/types/table'
+import type { TeamBaseWithLogo } from '@/lib/types/team'
 import { sortOrder } from '@/lib/utils/constants'
 import type { SQL } from 'drizzle-orm'
 import {
@@ -47,125 +49,12 @@ export const getCupPlayoffTableData = async ({
     competitionName,
   })
 
-  // const playoffCte = db.$with('playoff_cte').as(
-  //   db
-  //     .select({
-  //       teamId: teamgames.teamId,
-  //       group: series.group as unknown as SQL<string>,
-  //       category: series.category as unknown as SQL<string>,
-  //       serieId: teamgames.serieId,
-  //       totalGames: count(teamgames.teamGameId).as(
-  //         'total_games',
-  //       ),
-  //       totalPoints: sum(teamgames.points)
-  //         .mapWith(Number)
-  //         .as('total_points'),
-  //       totalGoalsScored: sum(teamgames.goalsScored)
-  //         .mapWith(Number)
-  //         .as(
-  //           'total_goals_scored',
-  //         ) as unknown as SQL<number>,
-  //       totalGoalsConceded: sum(teamgames.goalsConceded)
-  //         .mapWith(Number)
-  //         .as(
-  //           'total_goals_conceded',
-  //         ) as unknown as SQL<number>,
-  //       totalGoalDifference: sum(teamgames.goalDifference)
-  //         .mapWith(Number)
-  //         .as(
-  //           'total_goal_difference',
-  //         ) as unknown as SQL<number>,
-  //       totalWins:
-  //         sql<number>`cast(count(*) filter (where win or ot_win) as int)`.as(
-  //           'totalWins',
-  //         ),
-  //       totalDraws:
-  //         sql<number>`cast(count(*) filter (where draw) as int)`.as(
-  //           'totalDraws',
-  //         ),
-  //       totalLost:
-  //         sql<number>`cast(count(*) filter (where lost or ot_lost) as int)`.as(
-  //           'totalLost',
-  //         ),
-  //       awayGoals:
-  //         sql<number>`sum(case when teamgames.home_game = false then teamgames.goals_scored else null end)`
-  //           .mapWith(Number)
-  //           .as('away_goals'),
-  //     })
-  //     .from(teamgames)
-  //     .leftJoin(
-  //       series,
-  //       eq(teamgames.serieId, series.serieId),
-  //     )
-  //     .where(inArray(teamgames.serieId, serieIds))
-  //     .groupBy(
-  //       series.group,
-  //       teamgames.teamId,
-  //       series.category,
-  //       teamgames.serieId,
-  //     ),
-  // )
-
-  // const playoffTables = await db
-  //   .with(playoffCte)
-  //   .select({
-  //     teamId: playoffCte.teamId,
-  //     group: playoffCte.group,
-  //     category: playoffCte.category,
-  //     totalGames: playoffCte.totalGames,
-  //     totalWins: playoffCte.totalWins,
-  //     totalDraws: playoffCte.totalDraws,
-  //     totalLost: playoffCte.totalLost,
-  //     totalGoalsScored: playoffCte.totalGoalsScored,
-  //     totalGoalsConceded: playoffCte.totalGoalsConceded,
-  //     totalGoalDifference: playoffCte.totalGoalDifference,
-  //     totalPoints: playoffCte.totalPoints,
-  //     awayGoals: playoffCte.awayGoals,
-  //     team: {
-  //       teamId: teams.teamId,
-  //       name: teams.name,
-  //       shortName: teams.shortName,
-  //       casualName: teams.casualName,
-  //     } as unknown as SQL<{
-  //       teamId: number
-  //       name: string
-  //       shortName: string
-  //       casualName: string
-  //     }>,
-  //   })
-  //   .from(playoffCte)
-  //   .leftJoin(teams, eq(teams.teamId, playoffCte.teamId))
-  //   .leftJoin(
-  //     series,
-  //     eq(series.serieId, playoffCte.serieId),
-  //   )
-  //   .then((res) =>
-  //     sortPlayoffTables({
-  //       tableArray: res,
-  //       uefaSorting: false,
-  //     }),
-  //   )
-  //   .then((res) => {
-  //     const array: Array<PlayoffGroups> = []
-  //     playoffGroups.forEach((group) => {
-  //       const table = res.find(
-  //         (grp) => grp.group === group.group,
-  //       )
-  //       array.push({
-  //         name: group.serieName,
-  //         group: group.group,
-  //         category: group.category,
-  //         table,
-  //       })
-  //     })
-  //     return array
-  //   })
-  //   .then((res) => sortCategories({ sortedTables: res }))
-
   const home = alias(teams, 'home')
   const away = alias(teams, 'away')
   const homeTeamName = alias(teamnames, 'home_teamname')
-  const awayTeamName = alias(teamnames, 'away_team_name')
+  const awayTeamName = alias(teamnames, 'away_teamname')
+  const homeLogo = alias(teamlogos, 'home_logo')
+  const awayLogo = alias(teamlogos, 'away_logo')
 
   const finalGames = await db
     .select({
@@ -177,23 +66,21 @@ export const getCupPlayoffTableData = async ({
         name: homeTeamName.name,
         casualName: homeTeamName.casualName,
         shortName: homeTeamName.shortName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        casualName: string
-        shortName: string
-      }>,
+        logo: {
+          logoId: homeLogo.logoId,
+          hasDark: homeLogo.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
       away: {
         teamId: away.teamId,
         name: awayTeamName.name,
         casualName: awayTeamName.casualName,
         shortName: awayTeamName.shortName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        casualName: string
-        shortName: string
-      }>,
+        logo: {
+          logoId: awayLogo.logoId,
+          hasDark: awayLogo.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
     })
     .from(games)
     .leftJoin(home, eq(games.homeTeamId, home.teamId))
@@ -205,6 +92,14 @@ export const getCupPlayoffTableData = async ({
     .leftJoin(
       awayTeamName,
       eq(awayTeamName.teamnameId, away.teamnameId),
+    )
+    .leftJoin(
+      homeLogo,
+      eq(homeTeamName.logoId, homeLogo.logoId),
+    )
+    .leftJoin(
+      awayLogo,
+      eq(awayTeamName.logoId, awayLogo.logoId),
     )
     .leftJoin(series, eq(games.serieId, series.serieId))
     .where(
@@ -252,27 +147,41 @@ export const getCupPlayoffTableData = async ({
         name: homeTeamName.name,
         casualName: homeTeamName.casualName,
         shortName: homeTeamName.shortName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        casualName: string
-        shortName: string
-      }>,
+        logo: {
+          logoId: homeLogo.logoId,
+          hasDark: homeLogo.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
       away: {
         teamId: away.teamId,
         name: awayTeamName.name,
         casualName: awayTeamName.casualName,
         shortName: awayTeamName.shortName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        casualName: string
-        shortName: string
-      }>,
+        logo: {
+          logoId: awayLogo.logoId,
+          hasDark: awayLogo.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
     })
     .from(games)
     .leftJoin(home, eq(games.homeTeamId, home.teamId))
     .leftJoin(away, eq(games.awayTeamId, away.teamId))
+    .leftJoin(
+      homeTeamName,
+      eq(homeTeamName.teamnameId, home.teamnameId),
+    )
+    .leftJoin(
+      awayTeamName,
+      eq(awayTeamName.teamnameId, away.teamnameId),
+    )
+    .leftJoin(
+      homeLogo,
+      eq(homeTeamName.logoId, homeLogo.logoId),
+    )
+    .leftJoin(
+      awayLogo,
+      eq(awayTeamName.logoId, awayLogo.logoId),
+    )
     .leftJoin(series, eq(games.serieId, series.serieId))
     .where(
       and(
@@ -428,48 +337,6 @@ function sortPlayoffTables({
   return sortedTables
 }
 
-// const sortCategories = ({
-//   sortedTables,
-// }: {
-//   sortedTables: Array<PlayoffGroups>
-// }) => {
-//   const categoryArray = sortedTables.reduce(
-//     (category, group) => {
-//       if (!category[group.category]) {
-//         category[group.category] = []
-//       }
-//       category[group.category].push(group)
-//       return category
-//     },
-//     {} as SortedCategories,
-//   )
-
-//   const sortedCategories = Object.keys(categoryArray).map(
-//     (c) => {
-//       return {
-//         category: c,
-//         groups: categoryArray[c],
-//       }
-//     },
-//   )
-
-//   return sortedCategories.sort((a, b) => {
-//     if (
-//       sortOrder.indexOf(a.category) >
-//       sortOrder.indexOf(b.category)
-//     ) {
-//       return 1
-//     } else if (
-//       sortOrder.indexOf(a.category) <
-//       sortOrder.indexOf(b.category)
-//     ) {
-//       return -1
-//     } else {
-//       return 0
-//     }
-//   })
-// }
-
 async function getPlayoffAsSeriesTable({
   year,
   women,
@@ -592,12 +459,11 @@ async function getPlayoffAsSeriesTable({
         name: teamnames.name,
         shortName: teamnames.shortName,
         casualName: teamnames.casualName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        shortName: string
-        casualName: string
-      }>,
+        logo: {
+          logoId: teamlogos.logoId,
+          hasDark: teamlogos.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
       serie: {
         level: series.level,
         serieName: series.serieName,
@@ -611,6 +477,10 @@ async function getPlayoffAsSeriesTable({
     .leftJoin(
       teamnames,
       eq(teamnames.teamnameId, teams.teamnameId),
+    )
+    .leftJoin(
+      teamlogos,
+      eq(teamlogos.logoId, teamnames.logoId),
     )
     .leftJoin(
       series,
