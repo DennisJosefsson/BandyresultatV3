@@ -28,7 +28,8 @@ export const columns: Array<
       <Divider>
         <TeamLogo
           size={32}
-          teamId={row.original.homeTeamId}
+          logoId={row.original.home.logo.logoId}
+          hasDark={row.original.home.logo.hasDark}
           className="@sm:block hidden size-[1lh] object-scale-down"
           aria-label={row.original.home.casualName}
           title={row.original.home.casualName}
@@ -36,7 +37,8 @@ export const columns: Array<
         <span className="text-center">-</span>
         <TeamLogo
           size={32}
-          teamId={row.original.awayTeamId}
+          logoId={row.original.away.logo.logoId}
+          hasDark={row.original.away.logo.hasDark}
           className="@sm:block hidden size-[1lh] object-scale-down"
           aria-label={row.original.away.casualName}
           title={row.original.away.casualName}
