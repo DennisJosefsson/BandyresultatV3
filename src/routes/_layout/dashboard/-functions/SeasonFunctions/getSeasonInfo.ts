@@ -84,7 +84,7 @@ export const getSeasonInfo = createServerFn({
         .where(eq(teamseasons.seasonId, seasonId))
         .orderBy(
           asc(
-            sql`teamnames.casual_name collate "se-SE-x-icu"`,
+            sql`coalesce(teamseason_name.casual_name,team_name.casual_name) collate "se-SE-x-icu"`,
           ),
         )
 
