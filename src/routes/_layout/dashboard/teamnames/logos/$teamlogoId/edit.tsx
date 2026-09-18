@@ -2,17 +2,14 @@ import { zd } from '@/lib/utils/zod'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute(
-  '/_layout/dashboard/teamnames/logos/$logoId/edit',
+  '/_layout/dashboard/teamnames/logos/$teamlogoId/edit',
 )({
   params: {
     parse: (params) => ({
-      logoId: zd
-        .number()
-        .int()
-        .parse(Number(params.logoId)),
+      teamlogoId: zd.uuid().parse(params.teamlogoId),
     }),
-    stringify: ({ logoId }) => ({
-      logoId: `${logoId}`,
+    stringify: ({ teamlogoId }) => ({
+      teamlogoId: `${teamlogoId}`,
     }),
   },
   component: RouteComponent,
