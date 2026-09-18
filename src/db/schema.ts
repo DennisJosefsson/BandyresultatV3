@@ -23,7 +23,9 @@ export const county = pgTable('county', {
 })
 
 export const teamlogos = pgTable('teamlogos', {
-  teamlogoId: uuid('teamlogo_id').primaryKey().notNull(),
+  teamlogoId: uuid('teamlogo_id')
+    .primaryKey()
+    .default(sql`uuid_generate_v4()`),
   logoId: integer('logo_id').unique(),
   hasDark: boolean('has_dark'),
 })
