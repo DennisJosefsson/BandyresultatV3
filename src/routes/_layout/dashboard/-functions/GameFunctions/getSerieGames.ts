@@ -24,12 +24,24 @@ const homeTeamSeason = alias(teamseasons, 'home_teamseason')
 const awayTeamSeason = alias(teamseasons, 'away_teamseason')
 const homeTeamName = alias(teamnames, 'home_teamname')
 const awayTeamName = alias(teamnames, 'away_teamname')
-const homeTeamSeasonName = alias(teamnames, 'home_teamname')
-const awayTeamSeasonName = alias(teamnames, 'away_teamname')
+const homeTeamSeasonName = alias(
+  teamnames,
+  'home_teamseasonname',
+)
+const awayTeamSeasonName = alias(
+  teamnames,
+  'away_teamseasonname',
+)
 const homeLogo = alias(teamlogos, 'home_logo')
 const awayLogo = alias(teamlogos, 'away_logo')
-const homeTeamSeasonLogo = alias(teamlogos, 'home_logo')
-const awayTeamSeasonLogo = alias(teamlogos, 'away_logo')
+const homeTeamSeasonLogo = alias(
+  teamlogos,
+  'home_teamseasonlogo',
+)
+const awayTeamSeasonLogo = alias(
+  teamlogos,
+  'away_teamseasonlogo',
+)
 
 export const getSerieGames = createServerFn({
   method: 'GET',
