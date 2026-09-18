@@ -54,14 +54,12 @@ export type SingleTeam = Team & {
 }
 
 export const newTeam = zd.object({
-  name: zd.string(),
   city: zd.string(),
-  casualName: zd.string(),
-  shortName: zd.string(),
   women: zd.boolean().optional(),
   lat: zd.number(),
   long: zd.number(),
   countyId: zd.number(),
+  teamnameId: zd.number(),
   municipalityId: zd.number().transform((val) => {
     if (val === 0) return null
     return val
@@ -70,14 +68,12 @@ export const newTeam = zd.object({
 
 export const editTeamObject = zd.object({
   teamId: zd.number(),
-  name: zd.string(),
   city: zd.string(),
-  casualName: zd.string(),
-  shortName: zd.string(),
   women: zd.boolean().optional(),
   lat: zd.number(),
   long: zd.number(),
   countyId: zd.number(),
+  teamnameId: zd.number(),
   municipalityId: zd.number().transform((val) => {
     if (val === 0) return null
     return val
