@@ -483,6 +483,8 @@ export const getUnionedTables = async ({
       teamnames.name,
       teamnames.shortName,
       teamnames.casualName,
+      teamlogos.logoId,
+      teamlogos.hasDark,
     )
     .orderBy(
       desc(sql`total_points`),
