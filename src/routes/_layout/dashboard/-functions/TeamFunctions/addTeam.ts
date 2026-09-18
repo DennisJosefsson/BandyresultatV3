@@ -14,12 +14,12 @@ export const addTeam = createServerFn({ method: 'POST' })
     try {
       const teamnameId = await db.transaction(
         async (tx) => {
-          const returnTeam = await tx
+          const [returnTeam] = await tx
             .insert(teams)
             .values(data)
             .returning()
 
-          return returnTeam[0].teamnameId
+          return returnTeam.teamnameId
         },
       )
       const teamName = await db

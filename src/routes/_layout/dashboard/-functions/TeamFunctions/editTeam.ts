@@ -14,13 +14,13 @@ export const editTeam = createServerFn({ method: 'POST' })
     try {
       const teamnameId = await db.transaction(
         async (tx) => {
-          const returnTeam = await tx
+          const [returnTeam] = await tx
             .update(teams)
             .set(data)
             .where(eq(teams.teamId, data.teamId))
             .returning()
 
-          return returnTeam[0].teamnameId
+          return returnTeam.teamnameId
         },
       )
 

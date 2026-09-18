@@ -80,6 +80,26 @@ export const editTeamObject = zd.object({
   }),
 })
 
+export const addTeamNameObject = zd.object({
+  name: zd.string().length(30),
+  casualName: zd.string().length(30),
+  shortName: zd.string().length(6),
+  logoId: zd.int().optional(),
+})
+
+export const editTeamNameObject = addTeamNameObject.and(
+  zd.object({ teamnameId: zd.int() }),
+)
+
+export const addTeamLogoObject = zd.object({
+  logoId: zd.int(),
+  hasDark: zd.boolean().default(false),
+})
+
+export const editTeamLogoObject = addTeamLogoObject.and(
+  zd.object({ teamlogoId: zd.uuidv4() }),
+)
+
 export type TeamStreak = {
   team: TeamBaseWithLogo
   women: boolean
