@@ -6,7 +6,7 @@ export const Route = createFileRoute(
 )({
   params: {
     parse: (params) => ({
-      teamlogoId: zd.uuid().parse(params.teamlogoId),
+      teamlogoId: zd.uuidv4().parse(params.teamlogoId),
     }),
     stringify: ({ teamlogoId }) => ({
       teamlogoId: `${teamlogoId}`,
