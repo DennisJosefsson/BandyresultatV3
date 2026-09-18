@@ -34,7 +34,9 @@ import { getRouteApi } from '@tanstack/react-router'
 import { municipalityQueries } from '../../../-hooks/getMunicipalities'
 import { useNewTeamForm } from '../../../-hooks/useNewTeamForm'
 
-const route = getRouteApi('/_layout/dashboard/teams/add')
+const route = getRouteApi(
+  '/_layout/dashboard/teams/add/$teamnameId/',
+)
 
 const AddTeam = () => {
   const women = route.useSearch({ select: (s) => s.women })
@@ -97,102 +99,6 @@ const AddTeam = () => {
         >
           <FieldGroup>
             <div className="grid grid-cols-2 items-center gap-x-4 gap-y-8">
-              <form.Field
-                name="name"
-                children={(field) => {
-                  const isInvalid =
-                    field.state.meta.isTouched &&
-                    !field.state.meta.isValid
-                  return (
-                    <Field data-invalid={isInvalid}>
-                      <FieldLabel htmlFor={field.name}>
-                        Namn
-                      </FieldLabel>
-                      <Input
-                        id={field.name}
-                        name={field.name}
-                        value={field.state.value}
-                        onBlur={field.handleBlur}
-                        onChange={(e) =>
-                          field.handleChange(e.target.value)
-                        }
-                        aria-invalid={isInvalid}
-                        placeholder="T.ex. IFK Oxelösund"
-                        autoComplete="off"
-                      />
-                      {isInvalid && (
-                        <FieldError
-                          errors={field.state.meta.errors}
-                        />
-                      )}
-                    </Field>
-                  )
-                }}
-              />
-              <form.Field
-                name="casualName"
-                children={(field) => {
-                  const isInvalid =
-                    field.state.meta.isTouched &&
-                    !field.state.meta.isValid
-                  return (
-                    <Field data-invalid={isInvalid}>
-                      <FieldLabel htmlFor={field.name}>
-                        Vanligt namn
-                      </FieldLabel>
-                      <Input
-                        id={field.name}
-                        name={field.name}
-                        value={field.state.value}
-                        onBlur={field.handleBlur}
-                        onChange={(e) =>
-                          field.handleChange(e.target.value)
-                        }
-                        aria-invalid={isInvalid}
-                        placeholder="T.ex. Oxelösund"
-                        autoComplete="off"
-                      />
-                      {isInvalid && (
-                        <FieldError
-                          errors={field.state.meta.errors}
-                        />
-                      )}
-                    </Field>
-                  )
-                }}
-              />
-              <form.Field
-                name="shortName"
-                children={(field) => {
-                  const isInvalid =
-                    field.state.meta.isTouched &&
-                    !field.state.meta.isValid
-                  return (
-                    <Field data-invalid={isInvalid}>
-                      <FieldLabel htmlFor={field.name}>
-                        Kort namn
-                      </FieldLabel>
-                      <Input
-                        id={field.name}
-                        name={field.name}
-                        value={field.state.value}
-                        onBlur={field.handleBlur}
-                        onChange={(e) =>
-                          field.handleChange(e.target.value)
-                        }
-                        aria-invalid={isInvalid}
-                        placeholder="T.ex. IFKÖ"
-                        autoComplete="off"
-                      />
-                      {isInvalid && (
-                        <FieldError
-                          errors={field.state.meta.errors}
-                        />
-                      )}
-                    </Field>
-                  )
-                }}
-              />
               <form.Field
                 name="city"
                 children={(field) => {
