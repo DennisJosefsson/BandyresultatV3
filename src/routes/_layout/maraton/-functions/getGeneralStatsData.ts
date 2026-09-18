@@ -56,7 +56,14 @@ export async function getGeneralStatsData({
         eq(teamgames.win, true),
       ),
     )
-    .groupBy(teams.teamId)
+    .groupBy(
+      teams.teamId,
+      teamnames.name,
+      teamnames.shortName,
+      teamnames.casualName,
+      teamlogos.logoId,
+      teamlogos.hasDark,
+    )
     .orderBy(desc(countDistinct(teamgames.seasonId)))
     .then((res) => {
       const filteredResult = res.map((item, index) => {
@@ -107,7 +114,14 @@ export async function getGeneralStatsData({
         eq(series.category, 'final'),
       ),
     )
-    .groupBy(teams.teamId)
+    .groupBy(
+      teams.teamId,
+      teamnames.name,
+      teamnames.shortName,
+      teamnames.casualName,
+      teamlogos.logoId,
+      teamlogos.hasDark,
+    )
     .orderBy(desc(countDistinct(teamgames.seasonId)))
     .then((res) => {
       const filteredResult = res.map((item, index) => {
@@ -163,7 +177,14 @@ export async function getGeneralStatsData({
         ]),
       ),
     )
-    .groupBy(teams.teamId)
+    .groupBy(
+      teams.teamId,
+      teamnames.name,
+      teamnames.shortName,
+      teamnames.casualName,
+      teamlogos.logoId,
+      teamlogos.hasDark,
+    )
     .orderBy(desc(countDistinct(teamgames.seasonId)))
     .limit(10)
     .then((res) => {
@@ -219,7 +240,14 @@ export async function getGeneralStatsData({
         eq(competitions.division, 1),
       ),
     )
-    .groupBy(teams.teamId)
+    .groupBy(
+      teams.teamId,
+      teamnames.name,
+      teamnames.shortName,
+      teamnames.casualName,
+      teamlogos.logoId,
+      teamlogos.hasDark,
+    )
     .orderBy(desc(countDistinct(teamgames.seasonId)))
     .limit(10)
     .then((res) => {
@@ -280,7 +308,14 @@ export async function getGeneralStatsData({
         gte(seasons.intYear, 1931),
       ),
     )
-    .groupBy(teams.teamId)
+    .groupBy(
+      teams.teamId,
+      teamnames.name,
+      teamnames.shortName,
+      teamnames.casualName,
+      teamlogos.logoId,
+      teamlogos.hasDark,
+    )
     .orderBy(desc(countDistinct(teamgames.seasonId)))
     .limit(10)
     .then((res) => {
@@ -342,7 +377,14 @@ export async function getGeneralStatsData({
         gte(seasons.intYear, 1931),
       ),
     )
-    .groupBy(teams.teamId)
+    .groupBy(
+      teams.teamId,
+      teamnames.name,
+      teamnames.shortName,
+      teamnames.casualName,
+      teamlogos.logoId,
+      teamlogos.hasDark,
+    )
     .orderBy(desc(countDistinct(teamgames.seasonId)))
     .limit(10)
     .then((res) => {

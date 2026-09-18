@@ -71,7 +71,15 @@ export async function getPointData({
         eq(competitions.division, 1),
       ),
     )
-    .groupBy(teams.teamId, seasons.year)
+    .groupBy(
+      teams.teamId,
+      seasons.year,
+      teamnames.name,
+      teamnames.shortName,
+      teamnames.casualName,
+      teamlogos.logoId,
+      teamlogos.hasDark,
+    )
     .having(gte(count(teamgames.teamGameId), 10))
     .orderBy(
       desc(
@@ -145,7 +153,15 @@ export async function getPointData({
         eq(teamgames.homeGame, true),
       ),
     )
-    .groupBy(teams.teamId, seasons.year)
+    .groupBy(
+      teams.teamId,
+      seasons.year,
+      teamnames.name,
+      teamnames.shortName,
+      teamnames.casualName,
+      teamlogos.logoId,
+      teamlogos.hasDark,
+    )
     .having(gte(count(teamgames.teamGameId), 5))
     .orderBy(
       desc(
@@ -219,7 +235,15 @@ export async function getPointData({
         eq(teamgames.homeGame, false),
       ),
     )
-    .groupBy(teams.teamId, seasons.year)
+    .groupBy(
+      teams.teamId,
+      seasons.year,
+      teamnames.name,
+      teamnames.shortName,
+      teamnames.casualName,
+      teamlogos.logoId,
+      teamlogos.hasDark,
+    )
     .having(gte(count(teamgames.teamGameId), 5))
     .orderBy(
       desc(
@@ -292,7 +316,15 @@ export async function getPointData({
         eq(competitions.division, 1),
       ),
     )
-    .groupBy(teams.teamId, seasons.year)
+    .groupBy(
+      teams.teamId,
+      seasons.year,
+      teamnames.name,
+      teamnames.shortName,
+      teamnames.casualName,
+      teamlogos.logoId,
+      teamlogos.hasDark,
+    )
     .having(gte(count(teamgames.teamGameId), 10))
     .orderBy(
       asc(
@@ -366,7 +398,15 @@ export async function getPointData({
         eq(teamgames.homeGame, true),
       ),
     )
-    .groupBy(teams.teamId, seasons.year)
+    .groupBy(
+      teams.teamId,
+      seasons.year,
+      teamnames.name,
+      teamnames.shortName,
+      teamnames.casualName,
+      teamlogos.logoId,
+      teamlogos.hasDark,
+    )
     .having(gte(count(teamgames.teamGameId), 5))
     .orderBy(
       asc(
@@ -440,7 +480,15 @@ export async function getPointData({
         eq(teamgames.homeGame, false),
       ),
     )
-    .groupBy(teams.teamId, seasons.year)
+    .groupBy(
+      teams.teamId,
+      seasons.year,
+      teamnames.name,
+      teamnames.shortName,
+      teamnames.casualName,
+      teamlogos.logoId,
+      teamlogos.hasDark,
+    )
     .having(gte(count(teamgames.teamGameId), 5))
     .orderBy(
       asc(
@@ -513,7 +561,15 @@ export async function getPointData({
         eq(competitions.division, 1),
       ),
     )
-    .groupBy(teams.teamId, seasons.year)
+    .groupBy(
+      teams.teamId,
+      seasons.year,
+      teamnames.name,
+      teamnames.shortName,
+      teamnames.casualName,
+      teamlogos.logoId,
+      teamlogos.hasDark,
+    )
     .having(gte(count(teamgames.teamGameId), 10))
     .orderBy(
       desc(
@@ -587,7 +643,15 @@ export async function getPointData({
         eq(teamgames.homeGame, true),
       ),
     )
-    .groupBy(teams.teamId, seasons.year)
+    .groupBy(
+      teams.teamId,
+      seasons.year,
+      teamnames.name,
+      teamnames.shortName,
+      teamnames.casualName,
+      teamlogos.logoId,
+      teamlogos.hasDark,
+    )
     .having(gte(count(teamgames.teamGameId), 5))
     .orderBy(
       desc(
@@ -661,7 +725,15 @@ export async function getPointData({
         eq(teamgames.homeGame, false),
       ),
     )
-    .groupBy(teams.teamId, seasons.year)
+    .groupBy(
+      teams.teamId,
+      seasons.year,
+      teamnames.name,
+      teamnames.shortName,
+      teamnames.casualName,
+      teamlogos.logoId,
+      teamlogos.hasDark,
+    )
     .having(gte(count(teamgames.teamGameId), 5))
     .orderBy(
       desc(
@@ -734,7 +806,15 @@ export async function getPointData({
         eq(competitions.division, 1),
       ),
     )
-    .groupBy(teams.teamId, seasons.year)
+    .groupBy(
+      teams.teamId,
+      seasons.year,
+      teamnames.name,
+      teamnames.shortName,
+      teamnames.casualName,
+      teamlogos.logoId,
+      teamlogos.hasDark,
+    )
     .having(gte(count(teamgames.teamGameId), 10))
     .orderBy(
       asc(
@@ -808,7 +888,15 @@ export async function getPointData({
         eq(teamgames.homeGame, true),
       ),
     )
-    .groupBy(teams.teamId, seasons.year)
+    .groupBy(
+      teams.teamId,
+      seasons.year,
+      teamnames.name,
+      teamnames.shortName,
+      teamnames.casualName,
+      teamlogos.logoId,
+      teamlogos.hasDark,
+    )
     .having(gte(count(teamgames.teamGameId), 5))
     .orderBy(
       asc(
@@ -882,7 +970,15 @@ export async function getPointData({
         eq(teamgames.homeGame, false),
       ),
     )
-    .groupBy(teams.teamId, seasons.year)
+    .groupBy(
+      teams.teamId,
+      seasons.year,
+      teamnames.name,
+      teamnames.shortName,
+      teamnames.casualName,
+      teamlogos.logoId,
+      teamlogos.hasDark,
+    )
     .having(gte(count(teamgames.teamGameId), 5))
     .orderBy(
       asc(
