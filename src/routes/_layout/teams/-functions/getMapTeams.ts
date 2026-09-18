@@ -24,7 +24,9 @@ export const getMapTeams = createServerFn({ method: 'GET' })
           teamname: { with: { logo: true } },
         },
         orderBy: [
-          asc(sql`casual_name collate "se-SE-x-icu"`),
+          asc(
+            sql`teamnames.casual_name collate "se-SE-x-icu"`,
+          ),
         ],
       })
 

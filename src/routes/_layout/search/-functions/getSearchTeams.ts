@@ -72,7 +72,9 @@ export const getSearchTeams = createServerFn({
           ),
         )
         .orderBy(
-          asc(sql`casual_name collate "se-SE-x-icu"`),
+          asc(
+            sql`teamnames.casual_name collate "se-SE-x-icu"`,
+          ),
         )
 
       const allTeams = await db
@@ -118,7 +120,9 @@ export const getSearchTeams = createServerFn({
           ),
         )
         .orderBy(
-          asc(sql`casual_name collate "se-SE-x-icu"`),
+          asc(
+            sql`teamnames.casual_name collate "se-SE-x-icu"`,
+          ),
         )
 
       const teamArray = [...firstDivTeams, ...allTeams]

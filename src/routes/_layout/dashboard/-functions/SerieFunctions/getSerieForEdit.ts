@@ -124,7 +124,9 @@ export const getSerieForEdit = createServerFn({
         )
         .where(eq(teamseries.serieId, serieId))
         .orderBy(
-          asc(sql`teams.casual_name collate "se-SE-x-icu"`),
+          asc(
+            sql`teamnames.casual_name collate "se-SE-x-icu"`,
+          ),
         )
 
       const teamsInCompetition = await db
@@ -160,7 +162,9 @@ export const getSerieForEdit = createServerFn({
           ),
         )
         .orderBy(
-          asc(sql`teams.casual_name collate "se-SE-x-icu"`),
+          asc(
+            sql`teamnames.casual_name collate "se-SE-x-icu"`,
+          ),
         )
 
       const competitionArray = await db

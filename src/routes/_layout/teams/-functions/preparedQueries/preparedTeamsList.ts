@@ -9,6 +9,8 @@ export const preparedTeamsList = db.query.teams
         eq(teams.women, sql.placeholder('women')),
         ne(teams.teamId, 176),
       ),
-    orderBy: [asc(sql`casual_name collate "se-SE-x-icu"`)],
+    orderBy: [
+      asc(sql`teamnames.casual_name collate "se-SE-x-icu"`),
+    ],
   })
   .prepare('teamListQuery')

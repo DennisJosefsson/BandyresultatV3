@@ -83,7 +83,9 @@ export const getSeasonInfo = createServerFn({
         )
         .where(eq(teamseasons.seasonId, seasonId))
         .orderBy(
-          asc(sql`teams.casual_name collate "se-SE-x-icu"`),
+          asc(
+            sql`teamnames.casual_name collate "se-SE-x-icu"`,
+          ),
         )
 
       const competitionArray = await db

@@ -488,7 +488,7 @@ export const getUnionedTables = async ({
       desc(sql`total_points`),
       desc(sql`total_goal_difference`),
       desc(sql`total_goals_scored`),
-      asc(sql`casual_name collate "se-SE-x-icu"`),
+      asc(sql`teamnames.casual_name collate "se-SE-x-icu"`),
     )
 
   return result

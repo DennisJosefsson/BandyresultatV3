@@ -85,7 +85,7 @@ export const getTeamsForCompetitions = createServerFn({
           )
           .orderBy(
             asc(
-              sql`teams.casual_name collate "se-SE-x-icu"`,
+              sql`teamnames.casual_name collate "se-SE-x-icu"`,
             ),
           )
 
@@ -113,7 +113,7 @@ export const getTeamsForCompetitions = createServerFn({
           )
           .orderBy(
             asc(
-              sql`teams.casual_name collate "se-SE-x-icu"`,
+              sql`teamnames.casual_name collate "se-SE-x-icu"`,
             ),
           )
 

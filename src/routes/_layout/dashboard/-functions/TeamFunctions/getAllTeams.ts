@@ -30,7 +30,9 @@ export const getAllTeams = createServerFn({ method: 'GET' })
           eq(teamlogos.logoId, teamnames.logoId),
         )
         .orderBy(
-          asc(sql`teams.casual_name collate "se-SE-x-icu"`),
+          asc(
+            sql`teamnames.casual_name collate "se-SE-x-icu"`,
+          ),
         )
       return { status: 200, teams: allTeams }
     } catch (error) {

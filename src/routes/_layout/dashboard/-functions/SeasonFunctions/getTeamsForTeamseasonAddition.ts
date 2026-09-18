@@ -33,7 +33,9 @@ export const getTeamsForTeamseasonAddition = createServerFn(
           eq(teamnames.teamnameId, teams.teamnameId),
         )
         .orderBy(
-          asc(sql`casual_name collate "se-SE-x-icu"`),
+          asc(
+            sql`teamnames.casual_name collate "se-SE-x-icu"`,
+          ),
         )
 
       const teamSeasons = await db
@@ -57,7 +59,9 @@ export const getTeamsForTeamseasonAddition = createServerFn(
         )
         .where(eq(teamseasons.seasonId, seasonId))
         .orderBy(
-          asc(sql`teams.casual_name collate "se-SE-x-icu"`),
+          asc(
+            sql`teamnames.casual_name collate "se-SE-x-icu"`,
+          ),
         )
 
       return { allTeams, teamSeasons }
