@@ -5,6 +5,8 @@ import {
   seasons,
   series,
   teamgames,
+  teamlogos,
+  teamnames,
   teams,
 } from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
@@ -58,37 +60,21 @@ export const getTeamsForPlayoffMap = createServerFn({
           }
         }
 
-        // const playoffSeasonArr = await db
-        //   .select({ ...getTableColumns(playoffseason) })
-        //   .from(playoffseason)
-        //   .leftJoin(
-        //     seasons,
-        //     eq(seasons.seasonId, playoffseason.seasonId),
-        //   )
-        //   .where(
-        //     and(
-        //       inArray(
-        //         seasons.seasonId,
-        //         db
-        //           .select({ seasonI: seasons.seasonId })
-        //           .from(seasons)
-        //           .where(
-        //             and(
-        //               eq(seasons.intYear, year),
-        //               eq(seasons.women, women),
-        //             ),
-        //           ),
-        //       ),
-        //     ),
-        //   )
-
-        // const playoffSeason = playoffSeasonArr[0]
-
         const teamArray = await db
           .selectDistinctOn([teamgames.teamId], {
-            team: getTableColumns(
-              teams,
-            ) as unknown as SQL<Team>,
+            team: {
+              ...getTableColumns(teams),
+              teamname: {
+                teamId: teamgames.teamId,
+                name: teamnames.name,
+                shortName: teamnames.shortName,
+                casualName: teamnames.casualName,
+                logo: {
+                  logoId: teamlogos.logoId,
+                  hasDark: teamlogos.hasDark,
+                },
+              },
+            } as unknown as SQL<Team>,
             county: getTableColumns(
               county,
             ) as unknown as SQL<County>,
@@ -104,6 +90,14 @@ export const getTeamsForPlayoffMap = createServerFn({
           .leftJoin(
             teams,
             eq(teams.teamId, teamgames.teamId),
+          )
+          .leftJoin(
+            teamnames,
+            eq(teamnames.teamnameId, teams.teamnameId),
+          )
+          .leftJoin(
+            teamlogos,
+            eq(teamlogos.logoId, teamnames.logoId),
           )
           .leftJoin(
             municipality,

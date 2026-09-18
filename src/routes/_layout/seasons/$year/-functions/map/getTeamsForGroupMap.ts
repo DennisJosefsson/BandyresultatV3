@@ -4,6 +4,8 @@ import {
   municipality,
   seasons,
   series,
+  teamlogos,
+  teamnames,
   teams,
   teamseries,
 } from '@/db/schema'
@@ -79,9 +81,20 @@ export const getTeamsForGroupMap = createServerFn({
 
         const teamArray = await db
           .select({
-            team: getTableColumns(
-              teams,
-            ) as unknown as SQL<Team>,
+            team: {
+              ...getTableColumns(teams),
+              teamname: {
+                teamId: teamseries.teamId,
+                name: teamnames.name,
+                shortName: teamnames.shortName,
+                casualName: teamnames.casualName,
+                logo: {
+                  logoId: teamlogos.logoId,
+                  hasDark: teamlogos.hasDark,
+                },
+              },
+            } as unknown as SQL<Team>,
+
             county: getTableColumns(
               county,
             ) as unknown as SQL<County>,
@@ -93,6 +106,14 @@ export const getTeamsForGroupMap = createServerFn({
           .leftJoin(
             teams,
             eq(teams.teamId, teamseries.teamId),
+          )
+          .leftJoin(
+            teamnames,
+            eq(teamnames.teamnameId, teams.teamnameId),
+          )
+          .leftJoin(
+            teamlogos,
+            eq(teamlogos.logoId, teamnames.logoId),
           )
           .leftJoin(
             municipality,

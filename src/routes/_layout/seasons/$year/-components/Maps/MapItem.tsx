@@ -40,7 +40,9 @@ function MapItem({
       <MarkerContent>
         <div className="size-4 rounded-full border-2 border-orange-500 bg-orange-500 opacity-75 shadow-lg" />
       </MarkerContent>
-      <MarkerTooltip>{team.team.teamname.name}</MarkerTooltip>
+      <MarkerTooltip>
+        {team.team.teamname.name}
+      </MarkerTooltip>
       <MarkerPopup className="border w-32 @2xs/map:w-40 @md/map:w-62 p-0">
         <div className="relative h-20 @md/map:h-32 overflow-hidden">
           <TeamLogo
