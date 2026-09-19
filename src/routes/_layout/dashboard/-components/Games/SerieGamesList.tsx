@@ -1,16 +1,19 @@
-import { useRef, useState } from 'react'
-import { Outlet } from '@tanstack/react-router'
-import type { Game } from '@/lib/types/game'
 import ConfirmDialog from '@/components/Common/ConfirmDialog'
+import type { Game } from '@/lib/types/game'
+import { Outlet } from '@tanstack/react-router'
+import { useRef, useState } from 'react'
+import { deleteGameMutation } from '../../-hooks/games/deleteGameMutation'
 import SerieGamesListItem from './SerieGamesListItem'
-import { deleteGameMutation } from '../../-hooks/deleteGameMutation'
 
 type SerieGamesListProps = {
   games: Array<Omit<Game, 'season'>> | undefined
   title: string
 }
 
-const SerieGamesList = ({ games, title }: SerieGamesListProps) => {
+const SerieGamesList = ({
+  games,
+  title,
+}: SerieGamesListProps) => {
   const dialogRef = useRef<HTMLDialogElement>(null)
   const [gameId, setGameId] = useState<number | null>(null)
   const mutation = deleteGameMutation(dialogRef)
@@ -48,7 +51,11 @@ const SerieGamesList = ({ games, title }: SerieGamesListProps) => {
       <span className="text-base">{title}</span>
       {games.map((game) => {
         return (
-          <SerieGamesListItem game={game} key={game.gameId.toString()} openDialog={openDialog} />
+          <SerieGamesListItem
+            game={game}
+            key={game.gameId.toString()}
+            openDialog={openDialog}
+          />
         )
       })}
       <Outlet />

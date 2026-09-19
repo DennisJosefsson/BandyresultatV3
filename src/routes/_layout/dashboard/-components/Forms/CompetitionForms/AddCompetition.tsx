@@ -20,7 +20,7 @@ import {
   RadioGroupItem,
 } from '@/components/base/ui/radio-group'
 import { getRouteApi } from '@tanstack/react-router'
-import { useAddCompetitionForm } from '../../../-hooks/useAddCompetitionForm'
+import { useAddCompetitionForm } from '../../../-hooks/competitions/useAddCompetitionForm'
 
 const route = getRouteApi(
   '/_layout/dashboard/season/$seasonId/info_/competition/newCompetition',

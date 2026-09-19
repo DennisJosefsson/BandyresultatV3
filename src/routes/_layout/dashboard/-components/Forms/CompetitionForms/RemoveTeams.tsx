@@ -9,7 +9,8 @@ import { getRouteApi } from '@tanstack/react-router'
 import { Fragment, useRef, useState } from 'react'
 
 import { Button } from '@/components/base/ui/button'
-import { deleteTeamcompetitionMutation } from '../../../-hooks/deleteTeamcompetitionMutation'
+import { deleteTeamcompetitionMutation } from '../../../-hooks/competitions/deleteTeamcompetitionMutation'
+
 
 const route = getRouteApi(
   '/_layout/dashboard/season/$seasonId/info_/competition/$competitionId/teamcompetition',

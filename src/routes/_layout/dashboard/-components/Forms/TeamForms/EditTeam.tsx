@@ -31,8 +31,8 @@ import { zd } from '@/lib/utils/zod'
 import { useStore } from '@tanstack/react-form'
 import { useQuery } from '@tanstack/react-query'
 import { getRouteApi } from '@tanstack/react-router'
-import { municipalityQueries } from '../../../-hooks/getMunicipalities'
-import { useEditTeamForm } from '../../../-hooks/useEditTeamForm'
+import { municipalityQueries } from '../../../-hooks/municipalities/getMunicipalities'
+import { useEditTeamForm } from '../../../-hooks/teams/useEditTeamForm'
 
 const route = getRouteApi('/_layout/dashboard/team/$teamId')
 

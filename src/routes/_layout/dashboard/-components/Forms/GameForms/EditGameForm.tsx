@@ -15,7 +15,7 @@ import {
   InputGroupInput,
 } from '@/components/base/ui/input-group'
 import { getRouteApi } from '@tanstack/react-router'
-import { useEditGameForm } from '../../../-hooks/useEditGameForm'
+import { useEditGameForm } from '../../../-hooks/games/useEditGameForm'
 
 const route = getRouteApi(
   '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/$gameId',

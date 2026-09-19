@@ -20,7 +20,7 @@ import RadioBadges from '@/components/Common/RadioBadge'
 import type { editSeriesObject } from '@/lib/types/serie'
 import type { zd } from '@/lib/utils/zod'
 import { getRouteApi } from '@tanstack/react-router'
-import { useEditSerieForm } from '../../../-hooks/useEditSerieForm'
+import { useEditSerieForm } from '../../../-hooks/series/useEditSerieForm'
 
 const route = getRouteApi(
   '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit',

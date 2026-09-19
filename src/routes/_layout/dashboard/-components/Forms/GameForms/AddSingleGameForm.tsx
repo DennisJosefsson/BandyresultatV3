@@ -24,7 +24,7 @@ import {
 } from '@/components/base/ui/select'
 import { zd } from '@/lib/utils/zod'
 import { getRouteApi } from '@tanstack/react-router'
-import { useAddSingleGameForm } from '../../../-hooks/useAddSingleGameForm'
+import { useAddSingleGameForm } from '../../../-hooks/games/useAddSingleGameForm'
 
 const route = getRouteApi(
   '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/singlegame',

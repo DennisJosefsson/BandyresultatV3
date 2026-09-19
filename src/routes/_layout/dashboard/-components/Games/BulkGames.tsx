@@ -17,7 +17,7 @@ import {
 import type { BulkGameFileParser } from '@/lib/types/game'
 import { getRouteApi } from '@tanstack/react-router'
 import { XIcon } from 'lucide-react'
-import { useBulkGameForm } from '../../-hooks/useBulkGameForm'
+import { useBulkGameForm } from '../../-hooks/games/useBulkGameForm'
 
 const route = getRouteApi(
   '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit',
