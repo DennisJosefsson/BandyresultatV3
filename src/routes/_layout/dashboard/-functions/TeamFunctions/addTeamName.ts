@@ -28,7 +28,7 @@ export const addTeamName = createServerFn({
 
       return {
         status: 200,
-        message: `Lag med namn ${teamName} lades till.`,
+        message: `Lagnamn ${teamName} lades till.`,
       }
     } catch (error) {
       catchError(error)
