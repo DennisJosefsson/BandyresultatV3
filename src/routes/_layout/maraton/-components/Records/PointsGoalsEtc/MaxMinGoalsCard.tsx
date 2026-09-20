@@ -22,6 +22,7 @@ const MaxMinGoalsCard = ({
                 logoId={home.logo.logoId}
                 hasDark={home.logo.hasDark}
                 size={32}
+                className="size-[1lh] object-scale-down"
               />
             </div>
             <div>
@@ -37,6 +38,7 @@ const MaxMinGoalsCard = ({
                   logoId={away.logo.logoId}
                   hasDark={away.logo.hasDark}
                   size={32}
+                  className="size-[1lh] object-scale-down"
                 />
               </div>
               <div>

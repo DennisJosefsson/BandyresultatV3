@@ -18,6 +18,7 @@ const GeneralStatsCard = ({
             logoId={team.logo.logoId}
             hasDark={team.logo.hasDark}
             size={32}
+            className="size-[1lh] object-scale-down"
           />
           <span className="truncate font-semibold">
             {team.name}

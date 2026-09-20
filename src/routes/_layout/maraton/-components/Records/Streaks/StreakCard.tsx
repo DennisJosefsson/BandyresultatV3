@@ -27,6 +27,7 @@ const StreakCard = ({ streak, title }: StreakCardProps) => {
                     logoId={s.team.logo.logoId}
                     hasDark={s.team.logo.hasDark}
                     size={32}
+                    className="size-[1lh] object-scale-down"
                   />
                   <span className="truncate font-semibold">
                     {s.team.casualName}
