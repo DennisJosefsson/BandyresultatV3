@@ -1,5 +1,11 @@
 import { db } from '@/db'
-import { teamlogos, teamnames, teams } from '@/db/schema'
+import {
+  county,
+  municipality,
+  teamlogos,
+  teamnames,
+  teams,
+} from '@/db/schema'
 import type { TeamBaseWithLogo } from '@/lib/types/team'
 import type { SQL } from 'drizzle-orm'
 import {
@@ -11,9 +17,13 @@ import {
   sql,
 } from 'drizzle-orm'
 
-export const preparedTeamsList = db
+export const preparedMapTeamsList = db
   .select({
     ...getTableColumns(teams),
+    county: {
+      ...getTableColumns(county),
+    } as unknown as SQL<{ countyId: number; name: string }>,
+    municipality: { ...getTableColumns(municipality) },
     teamname: {
       teamid: teams.teamId,
       name: teamnames.name,
@@ -34,6 +44,11 @@ export const preparedTeamsList = db
     teamlogos,
     eq(teamlogos.logoId, teamnames.logoId),
   )
+  .leftJoin(county, eq(teams.countyId, county.countyId))
+  .leftJoin(
+    municipality,
+    eq(teams.municipalityId, municipality.municipalityId),
+  )
   .where(
     and(
       eq(teams.women, sql.placeholder('women')),
@@ -43,4 +58,4 @@ export const preparedTeamsList = db
   .orderBy(
     asc(sql`teamnames.casual_name collate "se-SE-x-icu"`),
   )
-  .prepare('teamListQuery')
+  .prepare('mapTeamListQuery')
