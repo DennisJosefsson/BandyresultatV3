@@ -42,19 +42,13 @@ const TeamLogo = ({
     <object
       data={imgUrl}
       type="image/png"
-      className={cn(
-        'size-[1lh] object-scale-down',
-        props.className,
-      )}
+      className={cn('object-scale-down', props.className)}
       {...props}
     >
       <img
         title={props.title ? props.title : 'Default logo'}
         alt={props.title ? props.title : 'Default logo'}
-        className={cn(
-          'size-[1lh] object-scale-down',
-          props.className,
-        )}
+        className={cn('object-scale-down', props.className)}
         src={fallbackUrl}
       />
     </object>
