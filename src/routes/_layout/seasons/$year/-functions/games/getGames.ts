@@ -130,18 +130,6 @@ export const getGames = createServerFn({ method: 'GET' })
           }
         }
 
-        const teamName = await db
-          .select()
-          .from(teamseasons)
-          .where(
-            and(
-              eq(teamseasons.teamId, 1),
-              eq(teamseasons.seasonId, serie.seasonId),
-            ),
-          )
-
-        console.log(teamName)
-
         const sortPlayedGames =
           await getSortPlayedGamesServerFn()
         const sortUnplayedGames =
