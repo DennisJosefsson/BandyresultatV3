@@ -130,6 +130,18 @@ export const getGames = createServerFn({ method: 'GET' })
           }
         }
 
+        const teamName = await db
+          .select()
+          .from(teamseasons)
+          .where(
+            and(
+              eq(teamseasons.teamId, 1),
+              eq(teamseasons.seasonId, serie.seasonId),
+            ),
+          )
+
+        console.log(teamName)
+
         const sortPlayedGames =
           await getSortPlayedGamesServerFn()
         const sortUnplayedGames =
@@ -144,16 +156,16 @@ export const getGames = createServerFn({ method: 'GET' })
             home: {
               teamId: home.teamId,
               name: coalesce(
-                homeTeamName.name,
                 homeTeamSeasonName.name,
+                homeTeamName.name,
               ),
               casualName: coalesce(
-                homeTeamName.casualName,
                 homeTeamSeasonName.casualName,
+                homeTeamName.casualName,
               ),
               shortName: coalesce(
-                homeTeamName.shortName,
                 homeTeamSeasonName.shortName,
+                homeTeamName.shortName,
               ),
               logo: {
                 logoId: coalesce(
@@ -169,16 +181,16 @@ export const getGames = createServerFn({ method: 'GET' })
             away: {
               teamId: away.teamId,
               name: coalesce(
-                awayTeamName.name,
                 awayTeamSeasonName.name,
+                awayTeamName.name,
               ),
               casualName: coalesce(
-                awayTeamName.casualName,
                 awayTeamSeasonName.casualName,
+                awayTeamName.casualName,
               ),
               shortName: coalesce(
-                awayTeamName.shortName,
                 awayTeamSeasonName.shortName,
+                awayTeamName.shortName,
               ),
               logo: {
                 logoId: coalesce(
@@ -202,14 +214,14 @@ export const getGames = createServerFn({ method: 'GET' })
           .leftJoin(
             homeTeamSeason,
             and(
-              eq(homeTeamSeason.seasonId, games.seasonId),
+              eq(homeTeamSeason.seasonId, seasons.seasonId),
               eq(homeTeamSeason.teamId, games.homeTeamId),
             ),
           )
           .leftJoin(
             awayTeamSeason,
             and(
-              eq(awayTeamSeason.seasonId, games.seasonId),
+              eq(awayTeamSeason.seasonId, seasons.seasonId),
               eq(awayTeamSeason.teamId, games.awayTeamId),
             ),
           )
@@ -224,14 +236,14 @@ export const getGames = createServerFn({ method: 'GET' })
           .leftJoin(
             homeTeamSeasonName,
             eq(
-              home.teamnameId,
+              homeTeamSeason.teamnameId,
               homeTeamSeasonName.teamnameId,
             ),
           )
           .leftJoin(
             awayTeamSeasonName,
             eq(
-              away.teamnameId,
+              awayTeamSeason.teamnameId,
               awayTeamSeasonName.teamnameId,
             ),
           )
@@ -246,14 +258,14 @@ export const getGames = createServerFn({ method: 'GET' })
           .leftJoin(
             homeTeamSeasonLogo,
             eq(
-              homeTeamName.logoId,
+              homeTeamSeasonName.logoId,
               homeTeamSeasonLogo.logoId,
             ),
           )
           .leftJoin(
             awayTeamSeasonLogo,
             eq(
-              awayTeamName.logoId,
+              awayTeamSeasonName.logoId,
               awayTeamSeasonLogo.logoId,
             ),
           )
@@ -284,16 +296,16 @@ export const getGames = createServerFn({ method: 'GET' })
             home: {
               teamId: home.teamId,
               name: coalesce(
-                homeTeamName.name,
                 homeTeamSeasonName.name,
+                homeTeamName.name,
               ),
               casualName: coalesce(
-                homeTeamName.casualName,
                 homeTeamSeasonName.casualName,
+                homeTeamName.casualName,
               ),
               shortName: coalesce(
-                homeTeamName.shortName,
                 homeTeamSeasonName.shortName,
+                homeTeamName.shortName,
               ),
               logo: {
                 logoId: coalesce(
@@ -309,16 +321,16 @@ export const getGames = createServerFn({ method: 'GET' })
             away: {
               teamId: away.teamId,
               name: coalesce(
-                awayTeamName.name,
                 awayTeamSeasonName.name,
+                awayTeamName.name,
               ),
               casualName: coalesce(
-                awayTeamName.casualName,
                 awayTeamSeasonName.casualName,
+                awayTeamName.casualName,
               ),
               shortName: coalesce(
-                awayTeamName.shortName,
                 awayTeamSeasonName.shortName,
+                awayTeamName.shortName,
               ),
               logo: {
                 logoId: coalesce(
@@ -364,14 +376,14 @@ export const getGames = createServerFn({ method: 'GET' })
           .leftJoin(
             homeTeamSeasonName,
             eq(
-              home.teamnameId,
+              homeTeamSeason.teamnameId,
               homeTeamSeasonName.teamnameId,
             ),
           )
           .leftJoin(
             awayTeamSeasonName,
             eq(
-              away.teamnameId,
+              awayTeamSeason.teamnameId,
               awayTeamSeasonName.teamnameId,
             ),
           )
@@ -386,14 +398,14 @@ export const getGames = createServerFn({ method: 'GET' })
           .leftJoin(
             homeTeamSeasonLogo,
             eq(
-              homeTeamName.logoId,
+              homeTeamSeasonName.logoId,
               homeTeamSeasonLogo.logoId,
             ),
           )
           .leftJoin(
             awayTeamSeasonLogo,
             eq(
-              awayTeamName.logoId,
+              awayTeamSeasonName.logoId,
               awayTeamSeasonLogo.logoId,
             ),
           )
