@@ -1,9 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
+import AddTeamName from '../-components/Forms/TeamForms/AddTeamName'
 
-export const Route = createFileRoute('/_layout/dashboard/teamnames/add')({
-  component: RouteComponent,
+export const Route = createFileRoute(
+  '/_layout/dashboard/teamnames/add',
+)({
+  component: AddTeamName,
 })
-
-function RouteComponent() {
-  return <div>Hello "/_layout/dashboard/teamnames/add"!</div>
-}

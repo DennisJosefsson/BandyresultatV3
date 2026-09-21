@@ -17,7 +17,10 @@ export const editTeamName = createServerFn({
       const teamName = await db.transaction(async (tx) => {
         const [returnTeam] = await tx
           .update(teamnames)
-          .set(data)
+          .set({
+            ...data,
+            logoId: data.logoId === 0 ? null : data.logoId,
+          })
           .where(eq(teamnames.teamnameId, data.teamnameId))
           .returning({ name: teamnames.name })
 
