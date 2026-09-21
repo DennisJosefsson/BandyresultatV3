@@ -7,8 +7,10 @@ import {
   teamlogos,
   teamnames,
   teams,
+  teamseasons,
   teamseries,
 } from '@/db/schema'
+import { coalesce } from '@/lib/drizzleHelpers/coalesce'
 import type { TeamBaseWithLogo } from '@/lib/types/team'
 import type { SQL } from 'drizzle-orm'
 import {
@@ -22,6 +24,10 @@ import {
   sum,
 } from 'drizzle-orm'
 import { unionAll } from 'drizzle-orm/pg-core'
+import {
+  teamseasonLogo,
+  teamseasonName,
+} from '../libs/aliases'
 
 type FunctionProps = {
   serie: typeof series.$inferSelect
@@ -47,12 +53,27 @@ export const getUnionedTables = async ({
         totalPoints: tables.points,
         team: {
           teamId: teams.teamId,
-          name: teamnames.name,
-          shortName: teamnames.shortName,
-          casualName: teamnames.casualName,
+          name: coalesce(
+            teamseasonName.name,
+            teamnames.name,
+          ),
+          shortName: coalesce(
+            teamseasonName.shortName,
+            teamnames.shortName,
+          ),
+          casualName: coalesce(
+            teamseasonName.casualName,
+            teamnames.casualName,
+          ),
           logo: {
-            logoId: teamlogos.logoId,
-            hasDark: teamlogos.hasDark,
+            logoId: coalesce(
+              teamseasonLogo.logoId,
+              teamlogos.logoId,
+            ),
+            hasDark: coalesce(
+              teamseasonLogo.hasDark,
+              teamlogos.hasDark,
+            ),
           },
         } as unknown as SQL<TeamBaseWithLogo>,
       })
@@ -65,6 +86,24 @@ export const getUnionedTables = async ({
       .leftJoin(
         teamlogos,
         eq(teamlogos.logoId, teamnames.logoId),
+      )
+      .leftJoin(
+        teamseasons,
+        and(
+          eq(teams.teamId, teamseasons.teamId),
+          eq(tables.seasonId, teamseasons.seasonId),
+        ),
+      )
+      .leftJoin(
+        teamseasonName,
+        eq(
+          teamseasons.teamnameId,
+          teamseasonName.teamnameId,
+        ),
+      )
+      .leftJoin(
+        teamseasonLogo,
+        eq(teamseasonLogo.logoId, teamseasonName.logoId),
       )
       .leftJoin(series, eq(series.serieId, tables.serieId))
       .where(eq(tables.serieId, serie.serieId))
@@ -340,12 +379,24 @@ export const getUnionedTables = async ({
         .as('total_lost'),
       team: {
         teamId: teams.teamId,
-        name: teamnames.name,
-        shortName: teamnames.shortName,
-        casualName: teamnames.casualName,
+        name: coalesce(teamseasonName.name, teamnames.name),
+        shortName: coalesce(
+          teamseasonName.shortName,
+          teamnames.shortName,
+        ),
+        casualName: coalesce(
+          teamseasonName.casualName,
+          teamnames.casualName,
+        ),
         logo: {
-          logoId: teamlogos.logoId,
-          hasDark: teamlogos.hasDark,
+          logoId: coalesce(
+            teamseasonLogo.logoId,
+            teamlogos.logoId,
+          ),
+          hasDark: coalesce(
+            teamseasonLogo.hasDark,
+            teamlogos.hasDark,
+          ),
         },
       } as unknown as SQL<TeamBaseWithLogo>,
     })
@@ -359,6 +410,21 @@ export const getUnionedTables = async ({
       teamlogos,
       eq(teamlogos.logoId, teamnames.logoId),
     )
+    .leftJoin(
+      teamseasons,
+      and(
+        eq(teams.teamId, teamseasons.teamId),
+        eq(teamseasons.seasonId, serie.seasonId),
+      ),
+    )
+    .leftJoin(
+      teamseasonName,
+      eq(teamseasons.teamnameId, teamseasonName.teamnameId),
+    )
+    .leftJoin(
+      teamseasonLogo,
+      eq(teamseasonLogo.logoId, teamseasonName.logoId),
+    )
     .groupBy(
       unionQuery.teamId,
       teams.teamId,
@@ -367,12 +433,19 @@ export const getUnionedTables = async ({
       teamnames.casualName,
       teamlogos.logoId,
       teamlogos.hasDark,
+      teamseasonName.name,
+      teamseasonName.shortName,
+      teamseasonName.casualName,
+      teamseasonLogo.logoId,
+      teamseasonLogo.hasDark,
     )
     .orderBy(
       desc(sql`total_points`),
       desc(sql`total_goal_difference`),
       desc(sql`total_goals_scored`),
-      asc(sql`teamnames.casual_name collate "se-SE-x-icu"`),
+      asc(
+        sql`coalesce(teamseason_name.casual_name,teamnames.casual_name) collate "se-SE-x-icu"`,
+      ),
     )
 
   return result

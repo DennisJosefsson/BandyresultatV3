@@ -33,40 +33,27 @@ import {
   sql,
   sum,
 } from 'drizzle-orm'
-import { alias } from 'drizzle-orm/pg-core'
+import {
+  away,
+  awayLogo,
+  awayTeamName,
+  awayTeamSeason,
+  awayTeamSeasonLogo,
+  awayTeamSeasonName,
+  home,
+  homeLogo,
+  homeTeamName,
+  homeTeamSeason,
+  homeTeamSeasonLogo,
+  homeTeamSeasonName,
+  teamseasonLogo,
+  teamseasonName,
+} from '../libs/aliases'
 
 type FunctionProps = {
   year: number
   women: boolean
 }
-
-const home = alias(teams, 'home')
-const away = alias(teams, 'away')
-const homeTeamSeason = alias(teamseasons, 'home_teamseason')
-const awayTeamSeason = alias(teamseasons, 'away_teamseason')
-const homeTeamName = alias(teamnames, 'home_teamname')
-const awayTeamName = alias(teamnames, 'away_teamname')
-const homeLogo = alias(teamlogos, 'home_logo')
-const awayLogo = alias(teamlogos, 'away_logo')
-const homeTeamSeasonName = alias(
-  teamnames,
-  'home_teamseason_teamname',
-)
-const awayTeamSeasonName = alias(
-  teamnames,
-  'away_teamseason_teamname',
-)
-const homeTeamSeasonLogo = alias(
-  teamlogos,
-  'home_teamseason_logo',
-)
-const awayTeamSeasonLogo = alias(
-  teamlogos,
-  'away_teamseason_logo',
-)
-
-const teamseasonName = alias(teamnames, 'teamseason_name')
-const teamseasonLogo = alias(teamlogos, 'teamseason_logo')
 
 export const getPlayoffTableData = async ({
   year,

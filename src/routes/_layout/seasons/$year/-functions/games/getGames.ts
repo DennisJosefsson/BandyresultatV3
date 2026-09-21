@@ -1,13 +1,5 @@
 import { db } from '@/db'
-import {
-  games,
-  seasons,
-  series,
-  teamlogos,
-  teamnames,
-  teams,
-  teamseasons,
-} from '@/db/schema'
+import { games, seasons, series } from '@/db/schema'
 import { getSortPlayedGamesServerFn } from '@/lib/cookieFunctions/sortPlayedGames'
 import { getSortUnplayedGamesServerFn } from '@/lib/cookieFunctions/sortUnplayedGames'
 import { coalesce } from '@/lib/drizzleHelpers/coalesce'
@@ -28,7 +20,20 @@ import {
   getTableColumns,
   inArray,
 } from 'drizzle-orm'
-import { alias } from 'drizzle-orm/pg-core'
+import {
+  away,
+  awayLogo,
+  awayTeamName,
+  awayTeamSeason,
+  awayTeamSeasonLogo,
+  awayTeamSeasonName,
+  home,
+  homeLogo,
+  homeTeamName,
+  homeTeamSeason,
+  homeTeamSeasonLogo,
+  homeTeamSeasonName,
+} from '../libs/aliases'
 import { sortGames } from './gameSortFunction'
 
 type GamesReturn =
@@ -42,31 +47,6 @@ type GamesReturn =
       message: string
     }
   | undefined
-
-const home = alias(teams, 'home')
-const away = alias(teams, 'away')
-const homeTeamSeason = alias(teamseasons, 'home_teamseason')
-const awayTeamSeason = alias(teamseasons, 'away_teamseason')
-const homeTeamName = alias(teamnames, 'home_teamname')
-const awayTeamName = alias(teamnames, 'away_teamname')
-const homeTeamSeasonName = alias(
-  teamnames,
-  'home_teamseasonname',
-)
-const awayTeamSeasonName = alias(
-  teamnames,
-  'away_teamseasonname',
-)
-const homeLogo = alias(teamlogos, 'home_logo')
-const awayLogo = alias(teamlogos, 'away_logo')
-const homeTeamSeasonLogo = alias(
-  teamlogos,
-  'home_teamseasonlogo',
-)
-const awayTeamSeasonLogo = alias(
-  teamlogos,
-  'away_teamseasonlogo',
-)
 
 export const getGames = createServerFn({ method: 'GET' })
   .middleware([errorMiddleware])
