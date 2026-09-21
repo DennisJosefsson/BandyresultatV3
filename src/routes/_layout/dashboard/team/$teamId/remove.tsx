@@ -1,9 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
-import TeamSeasonTeamNameForm from '../../-components/Forms/TeamForms/TeamSeasonTeamNameForm'
+import RemoveTeamSeasonTeamNameForm from '../../-components/Forms/TeamForms/RemoveTeamSeasonTeamNameForm'
 import { getTeamSeasonsForTeamNameEdit } from '../../-functions/TeamFunctions/getTeamSeasonsForTeamNameEdit'
 
 export const Route = createFileRoute(
-  '/_layout/dashboard/team/$teamId/teamseasons',
+  '/_layout/dashboard/team/$teamId/remove',
 )({
   loader: async ({ params: { teamId } }) => {
     const teamSeasonArray =
@@ -15,5 +15,5 @@ export const Route = createFileRoute(
     }
     return teamSeasonArray
   },
-  component: TeamSeasonTeamNameForm,
+  component: RemoveTeamSeasonTeamNameForm,
 })
