@@ -27,11 +27,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/base/ui/select'
+import CustomNumberInput from '@/components/Common/CustomNumberInput'
 import { zd } from '@/lib/utils/zod'
 import { useStore } from '@tanstack/react-form'
 import { useQuery } from '@tanstack/react-query'
 import { getRouteApi } from '@tanstack/react-router'
 import { municipalityQueries } from '../../../-hooks/municipalities/getMunicipalities'
+import { useTeamName } from '../../../-hooks/teams/useGetTeamName'
 import { useNewTeamForm } from '../../../-hooks/teams/useNewTeamForm'
 
 const route = getRouteApi(
@@ -51,6 +53,13 @@ const AddTeam = () => {
   const { data: municipalities } = useQuery(
     municipalityQueries['teamForm'](countyId),
   )
+
+  const teamnameId = useStore(
+    form.store,
+    (state) => state.values.teamnameId,
+  )
+
+  const { data: teamName } = useTeamName(teamnameId)
 
   const handleDragEnd = (lnglat: {
     lng: number
@@ -98,7 +107,103 @@ const AddTeam = () => {
           }}
         >
           <FieldGroup>
-            <div className="grid grid-cols-2 items-center gap-x-4 gap-y-8">
+            <div className="grid grid-cols-5 gap-6 text-sm items-center">
+              <form.Field
+                name="teamnameId"
+                children={(field) => {
+                  const isInvalid =
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
+                  return (
+                    <Field data-invalid={isInvalid}>
+                      <FieldLabel htmlFor={field.name}>
+                        teamnameId
+                      </FieldLabel>
+                      <div className="flex flex-row justify-between items-center">
+                        <div>
+                          <CustomNumberInput
+                            inputGroupClassName="w-60"
+                            id={field.name}
+                            name={field.name}
+                            value={
+                              field.state.value ?? undefined
+                            }
+                            onBlur={field.handleBlur}
+                            onChange={(e) =>
+                              field.handleChange(
+                                e.target.valueAsNumber,
+                              )
+                            }
+                            aria-invalid={isInvalid}
+                            placeholder="Position"
+                            incrementer={() => {
+                              if (
+                                field.state.value ===
+                                undefined
+                              ) {
+                                return 1
+                              }
+                              field.setValue(
+                                field.state.value + 1,
+                              )
+                            }}
+                            decrementer={() => {
+                              if (
+                                field.state.value ===
+                                undefined
+                              ) {
+                                return
+                              }
+                              field.setValue(
+                                field.state.value - 1,
+                              )
+                            }}
+                            resetter={() =>
+                              field.setValue(0)
+                            }
+                            error={{
+                              hasErrorField: true,
+                              errorBoolean: isInvalid,
+                              errors:
+                                field.state.meta.errors,
+                            }}
+                          />
+                          {isInvalid && (
+                            <FieldError
+                              errors={
+                                field.state.meta.errors
+                              }
+                            />
+                          )}
+                        </div>
+                      </div>
+                    </Field>
+                  )
+                }}
+              />
+              {teamName ? (
+                <>
+                  <span>Namn: {teamName.name}</span>
+                  <span>
+                    casualName: {teamName.casualName}
+                  </span>
+                  <span>
+                    shortName: {teamName.shortName}
+                  </span>
+                  <span>
+                    logoId:{' '}
+                    {teamName.logoId ? (
+                      teamName.logoId
+                    ) : (
+                      <span>
+                        Finns inget sådant lagnamn.
+                      </span>
+                    )}
+                  </span>
+                </>
+              ) : null}
+            </div>
+            <div className="grid grid-cols-3 items-center gap-x-4 gap-y-8">
               <form.Field
                 name="city"
                 children={(field) => {
