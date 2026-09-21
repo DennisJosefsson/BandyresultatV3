@@ -1,0 +1,78 @@
+import { editTeamLogoObject } from '@/lib/types/team'
+import type { zd } from '@/lib/utils/zod'
+import {
+  revalidateLogic,
+  useForm,
+} from '@tanstack/react-form'
+import { useMutation } from '@tanstack/react-query'
+import {
+  getRouteApi,
+  useRouter,
+} from '@tanstack/react-router'
+import { toast } from 'sonner'
+import { editTeamLogo } from '../../-functions/TeamFunctions/editTeamLogo'
+
+type Data = Awaited<ReturnType<typeof editTeamLogo>>
+
+const route = getRouteApi(
+  '/_layout/dashboard/teamnames/logos/$teamlogoId/edit',
+)
+
+type TeamLogo = {
+  teamlogoId: string
+  logoId: number
+  hasDark: boolean | null
+}
+
+export const useEditTeamLogoForm = (teamLogo: TeamLogo) => {
+  const router = useRouter()
+  const navigate = route.useNavigate()
+  const women = route.useSearch({ select: (s) => s.women })
+
+  const mutation = useMutation({
+    mutationFn: editTeamLogo,
+    onSuccess: (data) => onMutationSuccess(data),
+    onError: (error) => onMutationError(error),
+  })
+  const defaultValues: zd.input<typeof editTeamLogoObject> =
+    {
+      teamlogoId: teamLogo.teamlogoId,
+      hasDark: teamLogo.hasDark,
+      logoId: teamLogo.logoId,
+    }
+  const form = useForm({
+    defaultValues,
+    validationLogic: revalidateLogic(),
+    validators: {
+      onDynamic: editTeamLogoObject,
+    },
+    onSubmit: ({ value }) =>
+      mutation.mutateAsync({ data: value }),
+  })
+
+  const onMutationSuccess = (data: Data) => {
+    if (!data) {
+      toast.success('Okänt fel.')
+    } else {
+      toast.success(data.message)
+      router.invalidate({
+        filter: (r) =>
+          r.routeId === '/_layout/dashboard/teamnames/',
+      })
+      navigate({
+        to: '/dashboard/teamnames',
+        search: { women },
+      })
+    }
+  }
+
+  const onMutationError = (error: unknown) => {
+    if (error instanceof Error) {
+      toast.error(error.message)
+    } else {
+      toast.error('Något gick fel')
+    }
+  }
+
+  return form
+}
