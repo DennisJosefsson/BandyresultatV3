@@ -81,9 +81,9 @@ export const editTeamObject = zd.object({
 })
 
 export const addTeamNameObject = zd.object({
-  name: zd.string().length(30),
-  casualName: zd.string().length(30),
-  shortName: zd.string().length(6),
+  name: zd.string().max(30),
+  casualName: zd.string().max(30),
+  shortName: zd.string().max(6),
   logoId: zd.int().optional(),
 })
 
@@ -93,7 +93,7 @@ export const editTeamNameObject = addTeamNameObject.and(
 
 export const addTeamLogoObject = zd.object({
   logoId: zd.int(),
-  hasDark: zd.boolean().default(false),
+  hasDark: zd.boolean().nullable().default(false),
 })
 
 export const editTeamLogoObject = addTeamLogoObject.and(
