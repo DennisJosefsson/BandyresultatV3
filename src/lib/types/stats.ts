@@ -1,4 +1,5 @@
 import type { Serie } from './serie'
+import type { TeamBaseWithLogo } from './team'
 
 export type GoalData = {
   goalsScoredTotal: number
@@ -17,7 +18,7 @@ export type DrawData = {
 
 export type StreakData = {
   teamId: number
-  name: string
+  team: TeamBaseWithLogo
   gameCount: number
   startDate: string
   endDate: string
@@ -27,18 +28,8 @@ export type MaxMinGoals = {
   date: string
   result: string | null
   value: number
-  home: {
-    teamId: number
-    name: string
-    shortName: string
-    casualName: string
-  }
-  away: {
-    teamId: number
-    name: string
-    shortName: string
-    casualName: string
-  }
+  home: TeamBaseWithLogo
+  away: TeamBaseWithLogo
 }
 
 export type MaxMinDiffAndGoals = {
