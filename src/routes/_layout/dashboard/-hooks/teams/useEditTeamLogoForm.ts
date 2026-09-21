@@ -1,3 +1,4 @@
+import type { teamlogos } from '@/db/schema'
 import { editTeamLogoObject } from '@/lib/types/team'
 import type { zd } from '@/lib/utils/zod'
 import {
@@ -18,11 +19,7 @@ const route = getRouteApi(
   '/_layout/dashboard/teamnames/logos/$teamlogoId/edit',
 )
 
-type TeamLogo = {
-  teamlogoId: string
-  logoId: number
-  hasDark: boolean | null
-}
+type TeamLogo = typeof teamlogos.$inferSelect
 
 export const useEditTeamLogoForm = (teamLogo: TeamLogo) => {
   const router = useRouter()

@@ -1,6 +1,6 @@
-import TeamLogo from '@/components/Common/TeamLogo'
 import { zd } from '@/lib/utils/zod'
 import { createFileRoute } from '@tanstack/react-router'
+import EditTeamLogo from '../../../-components/Forms/TeamForms/EditTeamLogo'
 import { getTeamLogoByUUIDV4 } from '../../../-functions/TeamFunctions/getTeamLogoByUUIDV4'
 
 export const Route = createFileRoute(
@@ -34,24 +34,5 @@ function RouteComponent() {
       </div>
     )
   }
-  return (
-    <div className="flex flex-row gap-8">
-      <div className="border border-orange-100">
-        <TeamLogo
-          className="xs:w-16 w-8 object-scale-down md:w-24 lg:w-32"
-          size={128}
-          logoId={teamLogo.logoId}
-          hasDark={false}
-        />
-      </div>
-      <div className="border border-orange-100">
-        <TeamLogo
-          className="xs:w-16 w-8 object-scale-down md:w-24 lg:w-32"
-          size={128}
-          logoId={teamLogo.logoId}
-          hasDark={true}
-        />
-      </div>
-    </div>
-  )
+  return <EditTeamLogo teamLogo={teamLogo} />
 }

@@ -4,7 +4,7 @@ import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
-import { eq } from 'drizzle-orm'
+import { eq, getTableColumns } from 'drizzle-orm'
 
 export const getTeamLogoByUUIDV4 = createServerFn({
   method: 'GET',
@@ -14,7 +14,7 @@ export const getTeamLogoByUUIDV4 = createServerFn({
   .handler(async ({ data: { teamlogoId } }) => {
     try {
       const teamLogoObject = await db
-        .select()
+        .select({ ...getTableColumns(teamlogos) })
         .from(teamlogos)
         .where(eq(teamlogos.teamlogoId, teamlogoId))
         .then((res) => {
