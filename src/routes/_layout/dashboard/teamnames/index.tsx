@@ -1,5 +1,8 @@
 import { Button } from '@/components/base/ui/button'
+import { Input } from '@/components/base/ui/input'
+import { Label } from '@/components/base/ui/label'
 import { createFileRoute } from '@tanstack/react-router'
+import { useState } from 'react'
 import { getNewTeamLogoId } from '../-functions/TeamFunctions/getLastTeamLogoId'
 import { getAllTeamNames } from '../-functions/TeamFunctions/getTeamNames'
 
@@ -18,7 +21,15 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
+  const [filter, setFilter] = useState<string>('')
   const data = Route.useLoaderData()
+
+  const teamsNamesList = data.teamNames.teamName.filter(
+    (t) =>
+      t.casualName
+        .toLowerCase()
+        .includes(filter.toLowerCase()),
+  )
 
   return (
     <div className="flex flex-col mt-2 gap-2">
@@ -49,8 +60,24 @@ function RouteComponent() {
         />
         <span>Högsta logoId: {data.logoId}</span>
       </div>
+      <div className="flex flex-col">
+        <div>
+          <Label
+            htmlFor="filterinput"
+            className="text-sm"
+          >
+            Filter
+          </Label>
+        </div>
+        <Input
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          name="filterinput"
+          id="filterinput"
+        />
+      </div>
       <div className="grid grid-cols-5 gap-x-12 gap-y-4">
-        {data.teamNames.teamName.map((tn) => {
+        {teamsNamesList.map((tn) => {
           return (
             <ul
               key={tn.teamnameId}
