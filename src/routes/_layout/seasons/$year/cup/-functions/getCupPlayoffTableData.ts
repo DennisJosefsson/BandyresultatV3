@@ -29,6 +29,7 @@ import {
   eq,
   getTableColumns,
   inArray,
+  or,
   sql,
   sum,
 } from 'drizzle-orm'
@@ -227,7 +228,10 @@ export const getCupPlayoffTableData = async ({
               ),
             ),
         ),
-        eq(series.group, 'cup-final'),
+        or(
+          eq(series.group, 'cup-final'),
+          eq(series.group, 'cup-bronze'),
+        ),
       ),
     )
     .orderBy(desc(games.date))
