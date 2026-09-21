@@ -26,7 +26,7 @@ export const teamlogos = pgTable('teamlogos', {
   teamlogoId: uuid('teamlogo_id')
     .primaryKey()
     .default(sql`uuid_generate_v4()`),
-  logoId: integer('logo_id').unique(),
+  logoId: integer('logo_id').unique().notNull(),
   hasDark: boolean('has_dark'),
 })
 
