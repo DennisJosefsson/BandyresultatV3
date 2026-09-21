@@ -12,6 +12,7 @@ import {
   teams,
   teamseries,
 } from '@/db/schema'
+import { coalesce } from '@/lib/drizzleHelpers/coalesce'
 import type { TeamBaseWithLogo } from '@/lib/types/team'
 import type { SQL } from 'drizzle-orm'
 import {
@@ -26,6 +27,14 @@ import {
   sum,
 } from 'drizzle-orm'
 import { alias, unionAll } from 'drizzle-orm/pg-core'
+import {
+  awayTeamSeason,
+  awayTeamSeasonLogo,
+  awayTeamSeasonName,
+  homeTeamSeason,
+  homeTeamSeasonLogo,
+  homeTeamSeasonName,
+} from '../../-functions/libs/aliases'
 
 const home = alias(teams, 'home')
 const away = alias(teams, 'away')
@@ -48,22 +57,52 @@ export async function cupGames({
       category: series.category as unknown as SQL<string>,
       home: {
         teamId: home.teamId,
-        name: homeTeamName.name,
-        casualName: homeTeamName.casualName,
-        shortName: homeTeamName.shortName,
+        name: coalesce(
+          homeTeamSeasonName.name,
+          homeTeamName.name,
+        ),
+        casualName: coalesce(
+          homeTeamSeasonName.casualName,
+          homeTeamName.casualName,
+        ),
+        shortName: coalesce(
+          homeTeamSeasonName.shortName,
+          homeTeamName.shortName,
+        ),
         logo: {
-          logoId: homeLogo.logoId,
-          hasDark: homeLogo.hasDark,
+          logoId: coalesce(
+            homeTeamSeasonLogo.logoId,
+            homeLogo.logoId,
+          ),
+          hasDark: coalesce(
+            homeTeamSeasonLogo.hasDark,
+            homeLogo.hasDark,
+          ),
         },
       } as unknown as SQL<TeamBaseWithLogo>,
       away: {
         teamId: away.teamId,
-        name: awayTeamName.name,
-        casualName: awayTeamName.casualName,
-        shortName: awayTeamName.shortName,
+        name: coalesce(
+          awayTeamSeasonName.name,
+          awayTeamName.name,
+        ),
+        casualName: coalesce(
+          awayTeamSeasonName.casualName,
+          awayTeamName.casualName,
+        ),
+        shortName: coalesce(
+          awayTeamSeasonName.shortName,
+          awayTeamName.shortName,
+        ),
         logo: {
-          logoId: awayLogo.logoId,
-          hasDark: awayLogo.hasDark,
+          logoId: coalesce(
+            awayTeamSeasonLogo.logoId,
+            awayLogo.logoId,
+          ),
+          hasDark: coalesce(
+            awayTeamSeasonLogo.hasDark,
+            awayLogo.hasDark,
+          ),
         },
       } as unknown as SQL<TeamBaseWithLogo>,
       serie: {
@@ -79,12 +118,40 @@ export async function cupGames({
     .leftJoin(home, eq(games.homeTeamId, home.teamId))
     .leftJoin(away, eq(games.awayTeamId, away.teamId))
     .leftJoin(
+      homeTeamSeason,
+      and(
+        eq(homeTeamSeason.seasonId, games.seasonId),
+        eq(homeTeamSeason.teamId, games.homeTeamId),
+      ),
+    )
+    .leftJoin(
+      awayTeamSeason,
+      and(
+        eq(awayTeamSeason.seasonId, games.seasonId),
+        eq(awayTeamSeason.teamId, games.awayTeamId),
+      ),
+    )
+    .leftJoin(
       homeTeamName,
-      eq(homeTeamName.teamnameId, home.teamnameId),
+      eq(home.teamnameId, homeTeamName.teamnameId),
     )
     .leftJoin(
       awayTeamName,
-      eq(awayTeamName.teamnameId, away.teamnameId),
+      eq(away.teamnameId, awayTeamName.teamnameId),
+    )
+    .leftJoin(
+      homeTeamSeasonName,
+      eq(
+        homeTeamSeason.teamnameId,
+        homeTeamSeasonName.teamnameId,
+      ),
+    )
+    .leftJoin(
+      awayTeamSeasonName,
+      eq(
+        awayTeamSeason.teamnameId,
+        awayTeamSeasonName.teamnameId,
+      ),
     )
     .leftJoin(
       homeLogo,
@@ -93,6 +160,20 @@ export async function cupGames({
     .leftJoin(
       awayLogo,
       eq(awayTeamName.logoId, awayLogo.logoId),
+    )
+    .leftJoin(
+      homeTeamSeasonLogo,
+      eq(
+        homeTeamSeasonName.logoId,
+        homeTeamSeasonLogo.logoId,
+      ),
+    )
+    .leftJoin(
+      awayTeamSeasonLogo,
+      eq(
+        awayTeamSeasonName.logoId,
+        awayTeamSeasonLogo.logoId,
+      ),
     )
     .leftJoin(series, eq(games.serieId, series.serieId))
     .where(
