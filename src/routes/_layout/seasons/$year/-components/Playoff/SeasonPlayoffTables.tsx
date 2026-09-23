@@ -1,7 +1,7 @@
 import type { playoffseason } from '@/db/schema'
 import type { Game } from '@/lib/types/game'
 import type {
-  PlayoffGroupsV2,
+  PlayoffGroupsV3,
   PlayoffSeriesTable,
 } from '@/lib/types/table'
 import { cn } from '@/lib/utils/utils'
@@ -13,7 +13,7 @@ import NilComponent from './PlayoffTree/NilComponent'
 type PlayoffTable = {
   category: string
   level: number | null
-  groupArray: Array<PlayoffGroupsV2>
+  groupArray: Array<PlayoffGroupsV3>
 }
 
 type PlayoffTableProps = {

@@ -21,7 +21,7 @@ const FinalCard = ({ game, title }: FinalCardProps) => {
           </PlayoffCard.Result>
         </PlayoffCard.Title>
         <PlayoffCard.Content>
-          <div className="flex flex-row justify-between text-xs @2xs/playoff:text-sm @2xl/playoff:text-xs @4xl/playoff:text-base 4xl/playoff:p-1">
+          <div className="flex flex-row justify-between text-xs @2xs/playoff:text-sm @2xl/playoff:text-xs @4xl/playoff:text-base px-1 mr-20 @sm:mr-25 @4xl:mr-0">
             <div className="flex flex-col gap-2 w-full">
               <div className="flex flex-row justify-between items-center w-full">
                 <PlayoffCard.Team>
@@ -79,6 +79,7 @@ const FinalCard = ({ game, title }: FinalCardProps) => {
                   </span>
                 </div>
               </div>
+
               {game.otResult ? (
                 <div>
                   <span className="text-[10px] @2xl:text-xs">

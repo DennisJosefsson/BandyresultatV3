@@ -1,6 +1,6 @@
 import TeamLogo from '@/components/Common/TeamLogo'
 import { useCookies } from '@/lib/contexts/cookieContext'
-import type { PlayoffGroupsV2 } from '@/lib/types/table'
+import type { PlayoffGroupsV3 } from '@/lib/types/table'
 import { StarIcon } from 'lucide-react'
 import type {
   DetailedHTMLProps,
@@ -12,7 +12,7 @@ interface DefaultComponentProps extends DetailedHTMLProps<
   HTMLAttributes<HTMLDivElement>,
   HTMLDivElement
 > {
-  group: PlayoffGroupsV2
+  group: PlayoffGroupsV3
 }
 
 const DefaultComponent = ({
@@ -35,24 +35,24 @@ const DefaultComponent = ({
         {group.teamArray.map((team) => {
           return (
             <div
-              key={`${team.teamId.toString()}-${group.serieName}`}
+              key={`${team.team.teamId.toString()}-${group.serieName}`}
               className="flex flex-row justify-between items-center"
             >
               <PlayoffCard.Team>
                 <TeamLogo
                   size={32}
-                  logoId={team.logoId}
-                  hasDark={team.hasDark}
+                  logoId={team.team.logo.logoId}
+                  hasDark={team.team.logo.hasDark}
                   className="size-[1lh] object-scale-down"
-                  aria-label={team.name}
-                  title={team.name}
+                  aria-label={team.team.name}
+                  title={team.team.name}
                 />
                 <span className="font-semibold">
-                  {team.shortName}
+                  {team.team.shortName}
                 </span>
                 <StarIcon
                   data-favteam={
-                    favTeams.includes(team.teamId)
+                    favTeams.includes(team.team.teamId)
                       ? true
                       : false
                   }
@@ -69,12 +69,12 @@ const DefaultComponent = ({
                 </div>
                 <div
                   data-gamecount={team.gameCount === 1}
-                  className="grid grid-cols-5 data-[gamecount=true]:grid-cols-1 data-[gamecount=true]:font-bold gap-1 w-25"
+                  className="grid grid-cols-5 data-[gamecount=true]:grid-cols-1 data-[gamecount=true]:font-bold gap-1 w-20 @sm:w-25"
                 >
                   {team.goalsArray.map((g, index) => (
                     <div
                       className="text-right lining-nums tabular-nums text-[10px] @2xs/playoff:text-xs @2xl/playoff:text-[10px] @4xl/playoff:text-xs"
-                      key={`goalsArray-${team.teamId}-${group.serieName}-${index}`}
+                      key={`goalsArray-${team.team.teamId}-${group.serieName}-${index}`}
                     >
                       <span>{g.goals}</span>
                     </div>
