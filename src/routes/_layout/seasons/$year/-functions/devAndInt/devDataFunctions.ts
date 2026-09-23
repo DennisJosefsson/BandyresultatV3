@@ -7,8 +7,10 @@ import {
   teamlogos,
   teamnames,
   teams,
+  teamseasons,
   teamseries,
 } from '@/db/schema'
+import { coalesce } from '@/lib/drizzleHelpers/coalesce'
 import type { Game } from '@/lib/types/game'
 import type {
   DevDataTableItem,
@@ -27,7 +29,23 @@ import {
   sql,
   sum,
 } from 'drizzle-orm'
-import { alias, unionAll } from 'drizzle-orm/pg-core'
+import { unionAll } from 'drizzle-orm/pg-core'
+import {
+  away,
+  awayLogo,
+  awayTeamName,
+  awayTeamSeason,
+  awayTeamSeasonLogo,
+  awayTeamSeasonName,
+  home,
+  homeLogo,
+  homeTeamName,
+  homeTeamSeason,
+  homeTeamSeasonLogo,
+  homeTeamSeasonName,
+  teamseasonLogo,
+  teamseasonName,
+} from '../libs/aliases'
 
 type FunctionProps = {
   serie: typeof series.$inferSelect
@@ -252,24 +270,51 @@ export const getDevelopmentData = async ({
       totalPoints: cte.totalPoints,
       team: {
         teamId: teams.teamId,
-        name: teamnames.name,
-        shortName: teamnames.shortName,
-        casualName: teamnames.casualName,
+        name: coalesce(teamseasonName.name, teamnames.name),
+        shortName: coalesce(
+          teamseasonName.shortName,
+          teamnames.shortName,
+        ),
+        casualName: coalesce(
+          teamseasonName.casualName,
+          teamnames.casualName,
+        ),
         logo: {
-          logoId: teamlogos.logoId,
-          hasDark: teamlogos.hasDark,
+          logoId: coalesce(
+            teamseasonLogo.logoId,
+            teamlogos.logoId,
+          ),
+          hasDark: coalesce(
+            teamseasonLogo.hasDark,
+            teamlogos.hasDark,
+          ),
         },
       } as unknown as SQL<TeamBaseWithLogo>,
     })
     .from(cte)
     .leftJoin(teams, eq(teams.teamId, cte.teamId))
     .leftJoin(
+      teamseasons,
+      and(
+        eq(teamseasons.teamId, teams.teamId),
+        eq(teamseasons.seasonId, serie.seasonId),
+      ),
+    )
+    .leftJoin(
       teamnames,
       eq(teamnames.teamnameId, teams.teamnameId),
     )
     .leftJoin(
+      teamseasonName,
+      eq(teamseasonName.teamnameId, teamseasons.teamnameId),
+    )
+    .leftJoin(
       teamlogos,
       eq(teamlogos.logoId, teamnames.logoId),
+    )
+    .leftJoin(
+      teamseasonLogo,
+      eq(teamseasonLogo.logoId, teamseasonName.logoId),
     )
     .orderBy(asc(cte.date), asc(cte.teamId))
 
@@ -289,24 +334,51 @@ export const getDevelopmentData = async ({
       totalPoints: startTable.totalPoints,
       team: {
         teamId: teams.teamId,
-        name: teamnames.name,
-        shortName: teamnames.shortName,
-        casualName: teamnames.casualName,
+        name: coalesce(teamseasonName.name, teamnames.name),
+        shortName: coalesce(
+          teamseasonName.shortName,
+          teamnames.shortName,
+        ),
+        casualName: coalesce(
+          teamseasonName.casualName,
+          teamnames.casualName,
+        ),
         logo: {
-          logoId: teamlogos.logoId,
-          hasDark: teamlogos.hasDark,
+          logoId: coalesce(
+            teamseasonLogo.logoId,
+            teamlogos.logoId,
+          ),
+          hasDark: coalesce(
+            teamseasonLogo.hasDark,
+            teamlogos.hasDark,
+          ),
         },
       } as unknown as SQL<TeamBaseWithLogo>,
     })
     .from(startTable)
     .leftJoin(teams, eq(teams.teamId, startTable.teamId))
     .leftJoin(
+      teamseasons,
+      and(
+        eq(teamseasons.teamId, teams.teamId),
+        eq(teamseasons.seasonId, serie.seasonId),
+      ),
+    )
+    .leftJoin(
       teamnames,
       eq(teamnames.teamnameId, teams.teamnameId),
     )
     .leftJoin(
+      teamseasonName,
+      eq(teamseasonName.teamnameId, teamseasons.teamnameId),
+    )
+    .leftJoin(
       teamlogos,
       eq(teamlogos.logoId, teamnames.logoId),
+    )
+    .leftJoin(
+      teamseasonLogo,
+      eq(teamseasonLogo.logoId, teamseasonName.logoId),
     )
   const gameDates = await db
     .with(seriesGames)
@@ -317,13 +389,6 @@ export const getDevelopmentData = async ({
     .orderBy(asc(seriesGames.date))
     .then((arr) => arr.map((d) => d.date))
 
-  const home = alias(teams, 'home')
-  const away = alias(teams, 'away')
-  const homeTeamName = alias(teamnames, 'home_teamname')
-  const awayTeamName = alias(teamnames, 'away_team_name')
-  const homeLogo = alias(teamlogos, 'home_logo')
-  const awayLogo = alias(teamlogos, 'away_logo')
-
   const mainGameArray = db
     .select({
       ...getTableColumns(games),
@@ -331,22 +396,52 @@ export const getDevelopmentData = async ({
       category: series.category as unknown as SQL<string>,
       home: {
         teamId: home.teamId,
-        name: homeTeamName.name,
-        shortName: homeTeamName.shortName,
-        casualName: homeTeamName.casualName,
+        name: coalesce(
+          homeTeamSeasonName.name,
+          homeTeamName.name,
+        ),
+        shortName: coalesce(
+          homeTeamSeasonName.shortName,
+          homeTeamName.shortName,
+        ),
+        casualName: coalesce(
+          homeTeamSeasonName.casualName,
+          homeTeamName.casualName,
+        ),
         logo: {
-          logoId: homeLogo.logoId,
-          hasDark: homeLogo.hasDark,
+          logoId: coalesce(
+            homeTeamSeasonLogo.logoId,
+            homeLogo.logoId,
+          ),
+          hasDark: coalesce(
+            homeTeamSeasonLogo.hasDark,
+            homeLogo.hasDark,
+          ),
         },
       } as unknown as SQL<TeamBaseWithLogo>,
       away: {
         teamId: away.teamId,
-        name: awayTeamName.name,
-        shortName: awayTeamName.shortName,
-        casualName: awayTeamName.casualName,
+        name: coalesce(
+          awayTeamSeasonName.name,
+          awayTeamName.name,
+        ),
+        shortName: coalesce(
+          awayTeamSeasonName.shortName,
+          awayTeamName.shortName,
+        ),
+        casualName: coalesce(
+          awayTeamSeasonName.casualName,
+          awayTeamName.casualName,
+        ),
         logo: {
-          logoId: awayLogo.logoId,
-          hasDark: awayLogo.hasDark,
+          logoId: coalesce(
+            awayTeamSeasonLogo.logoId,
+            awayLogo.logoId,
+          ),
+          hasDark: coalesce(
+            awayTeamSeasonLogo.hasDark,
+            awayLogo.hasDark,
+          ),
         },
       } as unknown as SQL<TeamBaseWithLogo>,
     })
@@ -354,20 +449,62 @@ export const getDevelopmentData = async ({
     .leftJoin(home, eq(games.homeTeamId, home.teamId))
     .leftJoin(away, eq(games.awayTeamId, away.teamId))
     .leftJoin(
+      homeTeamSeason,
+      and(
+        eq(homeTeamSeason.seasonId, games.seasonId),
+        eq(homeTeamSeason.teamId, games.homeTeamId),
+      ),
+    )
+    .leftJoin(
+      awayTeamSeason,
+      and(
+        eq(awayTeamSeason.seasonId, games.seasonId),
+        eq(awayTeamSeason.teamId, games.awayTeamId),
+      ),
+    )
+    .leftJoin(
       homeTeamName,
-      eq(homeTeamName.teamnameId, home.teamnameId),
+      eq(home.teamnameId, homeTeamName.teamnameId),
     )
     .leftJoin(
       awayTeamName,
-      eq(awayTeamName.teamnameId, away.teamnameId),
+      eq(away.teamnameId, awayTeamName.teamnameId),
+    )
+    .leftJoin(
+      homeTeamSeasonName,
+      eq(
+        homeTeamSeason.teamnameId,
+        homeTeamSeasonName.teamnameId,
+      ),
+    )
+    .leftJoin(
+      awayTeamSeasonName,
+      eq(
+        awayTeamSeason.teamnameId,
+        awayTeamSeasonName.teamnameId,
+      ),
     )
     .leftJoin(
       homeLogo,
-      eq(homeLogo.logoId, homeTeamName.logoId),
+      eq(homeTeamName.logoId, homeLogo.logoId),
     )
     .leftJoin(
       awayLogo,
-      eq(awayLogo.logoId, awayTeamName.logoId),
+      eq(awayTeamName.logoId, awayLogo.logoId),
+    )
+    .leftJoin(
+      homeTeamSeasonLogo,
+      eq(
+        homeTeamSeasonName.logoId,
+        homeTeamSeasonLogo.logoId,
+      ),
+    )
+    .leftJoin(
+      awayTeamSeasonLogo,
+      eq(
+        awayTeamSeasonName.logoId,
+        awayTeamSeasonLogo.logoId,
+      ),
     )
     .leftJoin(series, eq(series.serieId, games.serieId))
     .where(
@@ -389,22 +526,52 @@ export const getDevelopmentData = async ({
       category: series.category as unknown as SQL<string>,
       home: {
         teamId: home.teamId,
-        name: homeTeamName.name,
-        shortName: homeTeamName.shortName,
-        casualName: homeTeamName.casualName,
+        name: coalesce(
+          homeTeamSeasonName.name,
+          homeTeamName.name,
+        ),
+        shortName: coalesce(
+          homeTeamSeasonName.shortName,
+          homeTeamName.shortName,
+        ),
+        casualName: coalesce(
+          homeTeamSeasonName.casualName,
+          homeTeamName.casualName,
+        ),
         logo: {
-          logoId: homeLogo.logoId,
-          hasDark: homeLogo.hasDark,
+          logoId: coalesce(
+            homeTeamSeasonLogo.logoId,
+            homeLogo.logoId,
+          ),
+          hasDark: coalesce(
+            homeTeamSeasonLogo.hasDark,
+            homeLogo.hasDark,
+          ),
         },
       } as unknown as SQL<TeamBaseWithLogo>,
       away: {
         teamId: away.teamId,
-        name: awayTeamName.name,
-        shortName: awayTeamName.shortName,
-        casualName: awayTeamName.casualName,
+        name: coalesce(
+          awayTeamSeasonName.name,
+          awayTeamName.name,
+        ),
+        shortName: coalesce(
+          awayTeamSeasonName.shortName,
+          awayTeamName.shortName,
+        ),
+        casualName: coalesce(
+          awayTeamSeasonName.casualName,
+          awayTeamName.casualName,
+        ),
         logo: {
-          logoId: homeLogo.logoId,
-          hasDark: homeLogo.hasDark,
+          logoId: coalesce(
+            awayTeamSeasonLogo.logoId,
+            awayLogo.logoId,
+          ),
+          hasDark: coalesce(
+            awayTeamSeasonLogo.hasDark,
+            awayLogo.hasDark,
+          ),
         },
       } as unknown as SQL<TeamBaseWithLogo>,
     })
@@ -412,12 +579,62 @@ export const getDevelopmentData = async ({
     .leftJoin(home, eq(games.homeTeamId, home.teamId))
     .leftJoin(away, eq(games.awayTeamId, away.teamId))
     .leftJoin(
+      homeTeamSeason,
+      and(
+        eq(homeTeamSeason.seasonId, games.seasonId),
+        eq(homeTeamSeason.teamId, games.homeTeamId),
+      ),
+    )
+    .leftJoin(
+      awayTeamSeason,
+      and(
+        eq(awayTeamSeason.seasonId, games.seasonId),
+        eq(awayTeamSeason.teamId, games.awayTeamId),
+      ),
+    )
+    .leftJoin(
       homeTeamName,
-      eq(homeTeamName.teamnameId, home.teamnameId),
+      eq(home.teamnameId, homeTeamName.teamnameId),
     )
     .leftJoin(
       awayTeamName,
-      eq(awayTeamName.teamnameId, away.teamnameId),
+      eq(away.teamnameId, awayTeamName.teamnameId),
+    )
+    .leftJoin(
+      homeTeamSeasonName,
+      eq(
+        homeTeamSeason.teamnameId,
+        homeTeamSeasonName.teamnameId,
+      ),
+    )
+    .leftJoin(
+      awayTeamSeasonName,
+      eq(
+        awayTeamSeason.teamnameId,
+        awayTeamSeasonName.teamnameId,
+      ),
+    )
+    .leftJoin(
+      homeLogo,
+      eq(homeTeamName.logoId, homeLogo.logoId),
+    )
+    .leftJoin(
+      awayLogo,
+      eq(awayTeamName.logoId, awayLogo.logoId),
+    )
+    .leftJoin(
+      homeTeamSeasonLogo,
+      eq(
+        homeTeamSeasonName.logoId,
+        homeTeamSeasonLogo.logoId,
+      ),
+    )
+    .leftJoin(
+      awayTeamSeasonLogo,
+      eq(
+        awayTeamSeasonName.logoId,
+        awayTeamSeasonLogo.logoId,
+      ),
     )
     .leftJoin(series, eq(series.serieId, games.serieId))
     .where(
