@@ -63,34 +63,3 @@ export const jsonAggBuildObject = <
 ) => {
   return jsonAgg<R>(jsonBuildObject(shape), options)
 }
-
-// const object = {
-//   teamId: teamgames.teamId,
-//   name: coalesce(teamseasonName.name, teamnames.name),
-//   shortName: coalesce(
-//     teamseasonName.shortName,
-//     teamnames.shortName,
-//   ),
-//   casualName: coalesce(
-//     teamseasonName.casualName,
-//     teamnames.casualName,
-//   ),
-//   logo: jsonBuildObject({
-//     logoId: coalesce(
-//       teamseasonLogo.logoId,
-//       teamlogos.logoId,
-//     ),
-//     hasDark: coalesce(
-//       teamseasonLogo.hasDark,
-//       teamlogos.hasDark,
-//     ),
-//   }),
-// }
-
-// const jsArrObj = jsonAggBuildObject(object, {
-//   orderBy: [
-//     desc(teamgames.teamId),
-//     asc(coalesce(teamseasonName.name, teamnames.name)),
-//   ],
-//   filter: isNotNull(teamgames.teamId),
-// })
