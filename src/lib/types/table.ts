@@ -203,8 +203,22 @@ export type TeamArrayItem = {
   goalsArray: Array<GoalsArrayItem>
 }
 
+export type TeamArrayItemV2 = {
+  team: TeamBaseWithLogo
+  gameCount: number
+  winCount: number
+  awayGoals: number
+  goalsArray: Array<GoalsArrayItem>
+}
+
 export type PlayoffGroupsV2 = {
   group: string
   serieName: string
   teamArray: Array<TeamArrayItem>
+}
+
+export type PlayoffGroupsV3 = {
+  group: string
+  serieName: string
+  teamArray: Array<TeamArrayItemV2>
 }
