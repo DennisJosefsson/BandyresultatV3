@@ -33,6 +33,7 @@ import {
   eq,
   getTableColumns,
   inArray,
+  isNotNull,
   or,
   sql,
   sum,
@@ -897,6 +898,7 @@ async function getPlayoffTable({
               desc(teamseries.sortPriority),
               desc(seriesCteWithHelper.winCount),
             ],
+            filter: isNotNull(teams.teamId),
           },
         ).as('team_array'),
       })
