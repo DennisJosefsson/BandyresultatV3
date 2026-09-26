@@ -1,5 +1,9 @@
+import type { games } from '@/db/schema'
 import { zd } from '../utils/zod'
-import type { TeamBaseWithLogo, TeamBaseWithTeamGameId } from './team'
+import type {
+  TeamBaseWithLogo,
+  TeamBaseWithTeamGameId,
+} from './team'
 
 export type Game = {
   gameId: number
@@ -22,6 +26,29 @@ export type Game = {
     seasonId: number
     year: string
   }
+}
+
+export type TeamSeasonGame = Omit<
+  typeof games.$inferSelect,
+  | 'createdAt'
+  | 'updatedAt'
+  | 'halftimeHomeGoal'
+  | 'halftimeAwayGoal'
+  | 'playoff'
+> & {
+  home: TeamBaseWithLogo
+} & { away: TeamBaseWithLogo }
+
+export type TeamSeasonSerie = {
+  serieName: string
+  comment: string | null
+  played: Array<TeamSeasonGame>
+  unplayed: Array<TeamSeasonGame>
+}
+
+export type TeamSeasonCompetitionGames = {
+  competitionName: string
+  seriesArray: Array<TeamSeasonSerie>
 }
 
 export type InlineEditGame = {

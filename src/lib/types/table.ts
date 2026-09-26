@@ -1,4 +1,5 @@
 import { zd } from '../utils/zod'
+import type { TeamSeasonGame } from './game'
 import type { Serie } from './serie'
 import type { TeamBaseWithLogo } from './team'
 
@@ -13,7 +14,7 @@ export type Base = {
   team: TeamBaseWithLogo
 }
 
-export type TeamTable = Base & {
+export type TableItems = {
   totalGames: number
   totalWins: number
   totalDraws: number
@@ -23,6 +24,8 @@ export type TeamTable = Base & {
   totalGoalDifference: number
   totalPoints: number
 }
+
+export type TeamTable = Base & TableItems
 
 export type GroupTable = {
   group: string
@@ -221,4 +224,24 @@ export type PlayoffGroupsV3 = {
   group: string
   serieName: string
   teamArray: Array<TeamArrayItemV2>
+}
+
+export type TeamSeasonTableV2 = {
+  team: TeamBaseWithLogo
+} & TableItems
+
+export type TeamSeasonTableSerie = {
+  serieName: string
+  comment: string | null
+  serieStructure: Array<number> | null | undefined
+  tableArray: Array<TeamSeasonTableV2>
+  gameObject: {
+    played: Array<TeamSeasonGame>
+    unplayed: Array<TeamSeasonGame>
+  }
+}
+
+export type TeamSeasonCompetitionTables = {
+  competitionName: string
+  seriesArray: Array<TeamSeasonTableSerie>
 }

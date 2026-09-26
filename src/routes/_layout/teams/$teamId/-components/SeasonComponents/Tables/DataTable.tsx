@@ -3,7 +3,10 @@ import {
   PositionHeader,
 } from '@/components/Common/Tables/Number'
 import { useCookies } from '@/lib/contexts/cookieContext'
-import type { TeamTable } from '@/lib/types/table'
+import type {
+  TeamSeasonTableV2,
+  TeamTable,
+} from '@/lib/types/table'
 import { getRouteApi } from '@tanstack/react-router'
 import type { SortingState } from '@tanstack/react-table'
 import {
@@ -30,7 +33,7 @@ import TeamLogo from '@/components/Common/TeamLogo'
 import { columns } from './columns'
 
 interface DataTableProps {
-  data: Array<Omit<TeamTable, 'women' | 'season' | 'group'>>
+  data: Array<TeamSeasonTableV2>
   serieStructure: Array<number> | null | undefined
 }
 

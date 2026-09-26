@@ -17,7 +17,10 @@ import {
   TableRow,
 } from '@/components/base/ui/table'
 import { useCookies } from '@/lib/contexts/cookieContext'
-import type { TeamTable } from '@/lib/types/table'
+import type {
+  TeamSeasonTableV2,
+  TeamTable,
+} from '@/lib/types/table'
 import { getRouteApi } from '@tanstack/react-router'
 import type {
   SortingState,
@@ -37,7 +40,7 @@ import {
 } from './columns'
 
 interface MobileDataTableProps {
-  data: Array<Omit<TeamTable, 'women' | 'season' | 'group'>>
+  data: Array<TeamSeasonTableV2>
   serieStructure: Array<number> | null | undefined
 }
 
