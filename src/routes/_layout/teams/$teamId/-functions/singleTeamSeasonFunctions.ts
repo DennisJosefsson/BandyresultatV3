@@ -1,5 +1,7 @@
 import { db } from '@/db'
 import {
+  competitions,
+  games,
   parentchildseries,
   seasons,
   series,
@@ -11,7 +13,16 @@ import {
   teamseasons,
   teamseries,
 } from '@/db/schema'
-import type { Game } from '@/lib/types/game'
+import { coalesce } from '@/lib/drizzleHelpers/coalesce'
+import {
+  jsonAggBuildObject,
+  jsonBuildObject,
+} from '@/lib/drizzleHelpers/jsonAggjsonBuildObject'
+import type {
+  Game,
+  TeamSeasonGame,
+  TeamSeasonSerie,
+} from '@/lib/types/game'
 import type { Serie } from '@/lib/types/serie'
 import type { TeamTable } from '@/lib/types/table'
 import type { TeamBaseWithLogo } from '@/lib/types/team'
@@ -20,6 +31,20 @@ import {
   leagueTableParser,
   tableSortFunction,
 } from '@/lib/utils/sortFunctions'
+import {
+  away,
+  awayLogo,
+  awayTeamName,
+  awayTeamSeason,
+  awayTeamSeasonLogo,
+  awayTeamSeasonName,
+  home,
+  homeLogo,
+  homeTeamName,
+  homeTeamSeason,
+  homeTeamSeasonLogo,
+  homeTeamSeasonName,
+} from '@/routes/_layout/seasons/$year/-functions/libs/aliases'
 import type { SQL } from 'drizzle-orm'
 import {
   and,
@@ -30,6 +55,7 @@ import {
   gt,
   inArray,
   lt,
+  or,
   sql,
   sum,
 } from 'drizzle-orm'
@@ -388,6 +414,298 @@ type GetSeasonGamesProps = {
 
 const getTime = (date?: Date): number => {
   return date != null ? date.getTime() : 0
+}
+
+type GetSortedGamesProps = {
+  intYear: number
+  teamId: number
+}
+
+export const getSortedGames = async ({
+  intYear,
+  teamId,
+}: GetSortedGamesProps) => {
+  const gamesCte = db.$with('games_cte').as(
+    db
+      .select({
+        serieId: games.serieId,
+        played: jsonAggBuildObject<Array<TeamSeasonGame>>(
+          {
+            gameId: games.gameId,
+            homeTeamId: games.homeTeamId,
+            awayTeamId: games.awayTeamId,
+            date: games.date,
+            serieId: games.serieId,
+            result: games.result,
+            homeGoal: games.homeGoal,
+            awayGoal: games.awayGoal,
+            halftimeResult: games.halftimeResult,
+            played: games.played,
+            otResult: games.otResult,
+            penalties: games.penalties,
+            extraTime: games.extraTime,
+            competitionId: series.competitionId,
+            home: jsonBuildObject<TeamBaseWithLogo>({
+              teamId: home.teamId,
+              name: coalesce(
+                homeTeamSeasonName.name,
+                homeTeamName.name,
+              ),
+              casualName: coalesce(
+                homeTeamSeasonName.casualName,
+                homeTeamName.casualName,
+              ),
+              shortName: coalesce(
+                homeTeamSeasonName.shortName,
+                homeTeamName.shortName,
+              ),
+              logo: jsonBuildObject({
+                logoId: coalesce(
+                  homeTeamSeasonLogo.logoId,
+                  homeLogo.logoId,
+                ),
+                hasDark: coalesce(
+                  homeTeamSeasonLogo.hasDark,
+                  homeLogo.hasDark,
+                ),
+              }),
+            }),
+            away: jsonBuildObject<TeamBaseWithLogo>({
+              teamId: away.teamId,
+              name: coalesce(
+                awayTeamSeasonName.name,
+                awayTeamName.name,
+              ),
+              casualName: coalesce(
+                awayTeamSeasonName.casualName,
+                awayTeamName.casualName,
+              ),
+              shortName: coalesce(
+                awayTeamSeasonName.shortName,
+                awayTeamName.shortName,
+              ),
+              logo: jsonBuildObject({
+                logoId: coalesce(
+                  awayTeamSeasonLogo.logoId,
+                  awayLogo.logoId,
+                ),
+                hasDark: coalesce(
+                  awayTeamSeasonLogo.hasDark,
+                  awayLogo.hasDark,
+                ),
+              }),
+            }),
+          },
+          {
+            orderBy: [desc(games.date)],
+            filter: eq(games.played, true),
+          },
+        ).as('played'),
+        unplayed: jsonAggBuildObject<Array<TeamSeasonGame>>(
+          {
+            gameId: games.gameId,
+            homeTeamId: games.homeTeamId,
+            awayTeamId: games.awayTeamId,
+            date: games.date,
+            serieId: games.serieId,
+            result: games.result,
+            homeGoal: games.homeGoal,
+            awayGoal: games.awayGoal,
+            halftimeResult: games.halftimeResult,
+            played: games.played,
+            otResult: games.otResult,
+            penalties: games.penalties,
+            extraTime: games.extraTime,
+            competitionId: series.competitionId,
+            home: jsonBuildObject<TeamBaseWithLogo>({
+              teamId: home.teamId,
+              name: coalesce(
+                homeTeamSeasonName.name,
+                homeTeamName.name,
+              ),
+              casualName: coalesce(
+                homeTeamSeasonName.casualName,
+                homeTeamName.casualName,
+              ),
+              shortName: coalesce(
+                homeTeamSeasonName.shortName,
+                homeTeamName.shortName,
+              ),
+              logo: jsonBuildObject({
+                logoId: coalesce(
+                  homeTeamSeasonLogo.logoId,
+                  homeLogo.logoId,
+                ),
+                hasDark: coalesce(
+                  homeTeamSeasonLogo.hasDark,
+                  homeLogo.hasDark,
+                ),
+              }),
+            }),
+            away: jsonBuildObject<TeamBaseWithLogo>({
+              teamId: away.teamId,
+              name: coalesce(
+                awayTeamSeasonName.name,
+                awayTeamName.name,
+              ),
+              casualName: coalesce(
+                awayTeamSeasonName.casualName,
+                awayTeamName.casualName,
+              ),
+              shortName: coalesce(
+                awayTeamSeasonName.shortName,
+                awayTeamName.shortName,
+              ),
+              logo: jsonBuildObject({
+                logoId: coalesce(
+                  awayTeamSeasonLogo.logoId,
+                  awayLogo.logoId,
+                ),
+                hasDark: coalesce(
+                  awayTeamSeasonLogo.hasDark,
+                  awayLogo.hasDark,
+                ),
+              }),
+            }),
+          },
+          {
+            orderBy: [asc(games.date)],
+            filter: eq(games.played, false),
+          },
+        ).as('unplayed'),
+      })
+      .from(games)
+      .leftJoin(home, eq(games.homeTeamId, home.teamId))
+      .leftJoin(away, eq(games.awayTeamId, away.teamId))
+      .leftJoin(
+        homeTeamSeason,
+        and(
+          eq(homeTeamSeason.seasonId, games.seasonId),
+          eq(homeTeamSeason.teamId, games.homeTeamId),
+        ),
+      )
+      .leftJoin(
+        awayTeamSeason,
+        and(
+          eq(awayTeamSeason.seasonId, games.seasonId),
+          eq(awayTeamSeason.teamId, games.awayTeamId),
+        ),
+      )
+      .leftJoin(
+        homeTeamName,
+        eq(home.teamnameId, homeTeamName.teamnameId),
+      )
+      .leftJoin(
+        awayTeamName,
+        eq(away.teamnameId, awayTeamName.teamnameId),
+      )
+      .leftJoin(
+        homeTeamSeasonName,
+        eq(
+          homeTeamSeason.teamnameId,
+          homeTeamSeasonName.teamnameId,
+        ),
+      )
+      .leftJoin(
+        awayTeamSeasonName,
+        eq(
+          awayTeamSeason.teamnameId,
+          awayTeamSeasonName.teamnameId,
+        ),
+      )
+      .leftJoin(
+        homeLogo,
+        eq(homeTeamName.logoId, homeLogo.logoId),
+      )
+      .leftJoin(
+        awayLogo,
+        eq(awayTeamName.logoId, awayLogo.logoId),
+      )
+      .leftJoin(
+        homeTeamSeasonLogo,
+        eq(
+          homeTeamSeasonName.logoId,
+          homeTeamSeasonLogo.logoId,
+        ),
+      )
+      .leftJoin(
+        awayTeamSeasonLogo,
+        eq(
+          awayTeamSeasonName.logoId,
+          awayTeamSeasonLogo.logoId,
+        ),
+      )
+      .leftJoin(
+        seasons,
+        eq(seasons.seasonId, games.seasonId),
+      )
+      .leftJoin(series, eq(games.serieId, series.serieId))
+      .where(
+        and(
+          or(
+            eq(games.homeTeamId, teamId),
+            eq(games.awayTeamId, teamId),
+          ),
+          inArray(
+            games.seasonId,
+            db
+              .select({ seasonId: seasons.seasonId })
+              .from(seasons)
+              .where(eq(seasons.intYear, intYear)),
+          ),
+        ),
+      )
+      .groupBy(games.serieId),
+  )
+
+  const seriesCte = db.$with('series_cte').as(
+    db
+      .with(gamesCte)
+      .select({
+        competitionId:
+          series.competitionId as unknown as SQL<number>,
+        seriesArray: jsonAggBuildObject<
+          Array<TeamSeasonSerie>
+        >(
+          {
+            serieName: series.serieName,
+            comment: series.comment,
+            played: gamesCte.played as unknown as SQL<
+              Array<TeamSeasonGame>
+            >,
+            unplayed: gamesCte.unplayed as unknown as SQL<
+              Array<TeamSeasonGame>
+            >,
+          },
+          { orderBy: [asc(series.level)] },
+        ).as('series_array'),
+      })
+      .from(gamesCte)
+      .leftJoin(
+        series,
+        eq(series.serieId, gamesCte.serieId),
+      )
+      .groupBy(series.competitionId),
+  )
+
+  const gamesArray = await db
+    .with(seriesCte)
+    .select({
+      competitionName:
+        competitions.competitionName as unknown as SQL<string>,
+      seriesArray: seriesCte.seriesArray,
+    })
+    .from(seriesCte)
+    .leftJoin(
+      competitions,
+      eq(
+        competitions.competitionId,
+        seriesCte.competitionId,
+      ),
+    )
+    .orderBy(asc(competitions.division))
+
+  return gamesArray
 }
 
 export const getSeasonGames = ({
