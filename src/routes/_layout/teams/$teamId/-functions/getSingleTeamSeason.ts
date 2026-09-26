@@ -1,94 +1,26 @@
 import { db } from '@/db'
-import {
-  competitions,
-  games,
-  seasons,
-  series,
-  teamgames,
-  teamlogos,
-  teamnames,
-  teams,
-  teamseasons,
-  teamseries,
-} from '@/db/schema'
+import { teamseasons } from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import type { Game } from '@/lib/types/game'
 import type { Meta } from '@/lib/types/meta'
-import type { Serie } from '@/lib/types/serie'
-import type {
-  Team,
-  TeamBaseWithLogo,
-} from '@/lib/types/team'
+import type { Team } from '@/lib/types/team'
 import { seasonIdCheck } from '@/lib/utils/utils'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
-import type { SQL } from 'drizzle-orm'
-import {
-  and,
-  asc,
-  desc,
-  eq,
-  getTableColumns,
-  ne,
-  or,
-} from 'drizzle-orm'
-import { alias } from 'drizzle-orm/pg-core'
+import { and, eq } from 'drizzle-orm'
 
-import type { TeamTable } from '@/lib/types/table'
-import { getUnionedTables } from './getSingleTeamSeasonTables'
-import {
-  getSeasonGames,
-  getSeasons,
-} from './singleTeamSeasonFunctions'
-
-const home = alias(teams, 'home')
-const away = alias(teams, 'away')
-const homeTeamName = alias(teamnames, 'home_teamname')
-const awayTeamName = alias(teamnames, 'away_team_name')
-const homeLogo = alias(teamlogos, 'home_logo')
-const awayLogo = alias(teamlogos, 'away_logo')
+import type { TeamSeasonCompetitionTables } from '@/lib/types/table'
+import { preparedSeasonResultArray } from './preparedQueries/teamseason/preparedSeasonGamesAndTables'
+import { getSeasons } from './singleTeamSeasonFunctions'
 
 type SingeTeamSeasonReturn =
   | {
       status: 200
       breadCrumb: string
       meta: Meta
-      data: Array<{
-        competitionName: string
-        tables: Array<{
-          serie: Serie
-          table: Array<
-            Omit<TeamTable, 'women' | 'season' | 'group'>
-          >
-        }>
-        games: {
-          playedGames: Array<{
-            group: string
-            name: string
-            comment: string
-            level: number
-            dates: Array<{
-              date: string
-              games: Array<Game>
-            }>
-          }>
-          unplayedGames: Array<{
-            group: string
-            name: string
-            comment: string
-            level: number
-            dates: Array<{
-              date: string
-              games: Array<Game>
-            }>
-          }>
-        }
-      }>
-      hasGames: boolean
+      seasonResult: Array<TeamSeasonCompetitionTables>
       team: Team
       seasonYear: string
-      series: Array<Serie>
       firstSeason: {
         year: string
         seasonId: number
@@ -210,232 +142,11 @@ export const getSingleTeamSeason = createServerFn({
             message: `${team.teamname.casualName} har inte säsongen ${season.year} i databasen än.`,
           }
         }
-
-        const competitionArray = await db
-          .select()
-          .from(competitions)
-          .leftJoin(
-            series,
-            eq(
-              series.competitionId,
-              competitions.competitionId,
-            ),
-          )
-          .leftJoin(
-            teamseries,
-            eq(series.serieId, teamseries.serieId),
-          )
-          .where(
-            and(
-              eq(competitions.seasonId, season.seasonId),
-              eq(teamseries.teamId, team.teamId),
-            ),
-          )
-          .orderBy(
-            asc(competitions.division),
-            asc(series.level),
-          )
-          .then((res) => {
-            const sortComps = res.reduce<
-              Record<
-                string,
-                {
-                  competition: typeof competitions.$inferSelect
-                  series: Array<Serie>
-                }
-              >
-            >((acc, row) => {
-              const competitionName =
-                row.competitions.competitionName
-              const competition = row.competitions
-              const serie = row.series
-              if (
-                typeof acc[competitionName] === 'undefined'
-              ) {
-                acc[competitionName] = {
-                  competition,
-                  series: [],
-                }
-              }
-              if (serie) {
-                acc[competitionName].series.push(serie)
-              }
-              return acc
-            }, {})
-
-            const sortedComps = Object.keys(sortComps).map(
-              (comp) => {
-                return sortComps[comp]
-              },
-            )
-
-            return sortedComps
+        const seasonResult =
+          await preparedSeasonResultArray.execute({
+            teamId,
+            intYear: seasonId,
           })
-
-        const seriesForTeam = await db
-          .select({
-            ...getTableColumns(series),
-          })
-          .from(series)
-          .leftJoin(
-            seasons,
-            eq(seasons.seasonId, series.seasonId),
-          )
-          .leftJoin(
-            teamseries,
-            eq(teamseries.serieId, series.serieId),
-          )
-          .leftJoin(
-            teams,
-            eq(teamseries.teamId, teams.teamId),
-          )
-          .where(
-            and(
-              eq(teams.teamId, team.teamId),
-              eq(series.seasonId, season.seasonId),
-              ne(series.group, 'mix'),
-            ),
-          )
-          .orderBy(asc(series.level))
-
-        const gamesForTeam = await db
-          .select({
-            gameId: games.gameId,
-            homeTeamId: games.homeTeamId,
-            awayTeamId: games.awayTeamId,
-            date: games.date,
-            group: series.group as unknown as SQL<string>,
-            category:
-              series.category as unknown as SQL<string>,
-            result: games.result,
-            homeGoal: games.homeGoal,
-            awayGoal: games.awayGoal,
-            halftimeResult: games.halftimeResult,
-            played: games.played,
-            otResult: games.otResult,
-            penalties: games.penalties,
-            extraTime: games.extraTime,
-            competitionId: series.competitionId,
-            home: {
-              teamId: home.teamId,
-              name: homeTeamName.name,
-              casualName: homeTeamName.casualName,
-              shortName: homeTeamName.shortName,
-              logo: {
-                logoId: homeLogo.logoId,
-                hasDark: homeLogo.hasDark,
-              },
-            } as unknown as SQL<TeamBaseWithLogo>,
-            away: {
-              teamId: away.teamId,
-              name: awayTeamName.name,
-              casualName: awayTeamName.casualName,
-              shortName: awayTeamName.shortName,
-              logo: {
-                logoId: awayLogo.logoId,
-                hasDark: awayLogo.hasDark,
-              },
-            } as unknown as SQL<TeamBaseWithLogo>,
-            season: {
-              seasonId: seasons.seasonId,
-              year: seasons.year,
-            } as unknown as SQL<{
-              seasonId: number
-              year: string
-            }>,
-          })
-          .from(games)
-          .leftJoin(home, eq(home.teamId, games.homeTeamId))
-          .leftJoin(away, eq(away.teamId, games.awayTeamId))
-          .leftJoin(
-            homeTeamName,
-            eq(homeTeamName.teamnameId, home.teamnameId),
-          )
-          .leftJoin(
-            awayTeamName,
-            eq(awayTeamName.teamnameId, away.teamnameId),
-          )
-          .leftJoin(
-            homeLogo,
-            eq(homeLogo.logoId, homeTeamName.logoId),
-          )
-          .leftJoin(
-            awayLogo,
-            eq(awayLogo.logoId, awayTeamName.logoId),
-          )
-          .leftJoin(
-            seasons,
-            eq(seasons.seasonId, games.seasonId),
-          )
-          .leftJoin(
-            series,
-            eq(games.serieId, series.serieId),
-          )
-          .where(
-            and(
-              or(
-                eq(games.homeTeamId, team.teamId),
-                eq(games.awayTeamId, team.teamId),
-              ),
-              eq(games.seasonId, season.seasonId),
-            ),
-          )
-          .orderBy(desc(games.date))
-
-        const hasGames = gamesForTeam.length !== 0
-
-        const teamArray = await db
-          .selectDistinct({
-            teamId: teamgames.teamId,
-            group: series.group as unknown as SQL<string>,
-          })
-          .from(teamgames)
-          .leftJoin(
-            series,
-            eq(series.serieId, teamgames.serieId),
-          )
-          .where(
-            and(
-              ne(series.group, 'mix'),
-              eq(teamgames.seasonId, season.seasonId),
-            ),
-          )
-          .groupBy(series.group, teamgames.teamId)
-
-        const data = await Promise.all(
-          competitionArray.map(async (comp) => {
-            return {
-              competitionName:
-                comp.competition.competitionName,
-              tables: await Promise.all(
-                comp.series.map(async (s1) => {
-                  const table = await getUnionedTables({
-                    serie: s1,
-                    teamArray: teamArray
-                      .filter((t) => t.group === s1.group)
-                      .map((t) => t.teamId),
-                  })
-                  return {
-                    serie: s1,
-                    table,
-                  }
-                }),
-              ),
-              games: getSeasonGames({
-                gamesArray: gamesForTeam.filter(
-                  (g) =>
-                    g.competitionId ===
-                    comp.competition.competitionId,
-                ),
-                seriesArray: seriesForTeam.filter(
-                  (s) =>
-                    s.competitionId ===
-                    comp.competition.competitionId,
-                ),
-              }),
-            }
-          }),
-        )
 
         const seasonObjects = await getSeasons({
           teamId,
@@ -449,12 +160,9 @@ export const getSingleTeamSeason = createServerFn({
 
         return {
           status: 200,
-          hasGames,
-
-          data,
+          seasonResult,
           team,
           seasonYear,
-          series: seriesForTeam,
           ...seasonObjects,
           breadCrumb,
           meta: { title, description, url },
