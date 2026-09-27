@@ -157,75 +157,78 @@ export const getUnionedTables = async ({
       ),
     )
 
-  const parentSerie = serie.hasParent
-    ? db
-        .select({
-          teamId: teamgames.teamId,
-          totalGames: count(teamgames.teamGameId).as(
-            'total_games',
-          ),
-          totalPoints: sum(teamgames.points)
-            .mapWith(Number)
-            .as('total_points'),
-          totalGoalsScored: sum(teamgames.goalsScored)
-            .mapWith(Number)
-            .as(
-              'total_goals_scored',
-            ) as unknown as SQL<number>,
-          totalGoalsConceded: sum(teamgames.goalsConceded)
-            .mapWith(Number)
-            .as(
-              'total_goals_conceded',
-            ) as unknown as SQL<number>,
-          totalGoalDifference: sum(teamgames.goalDifference)
-            .mapWith(Number)
-            .as(
-              'total_goal_difference',
-            ) as unknown as SQL<number>,
-          totalWins:
-            sql<number>`cast(count(*) filter (where win) as int)`.as(
-              'totalWins',
+  const parentSerie =
+    serie.hasParent && !serie.hasMix
+      ? db
+          .select({
+            teamId: teamgames.teamId,
+            totalGames: count(teamgames.teamGameId).as(
+              'total_games',
             ),
-          totalDraws:
-            sql<number>`cast(count(*) filter (where draw) as int)`.as(
-              'totalDraws',
-            ),
-          totalLost:
-            sql<number>`cast(count(*) filter (where lost) as int)`.as(
-              'totalLost',
-            ),
-        })
-        .from(teamgames)
-        .where(
-          and(
-            inArray(teamgames.teamId, teamArray),
-            serie.allParentGames
-              ? undefined
-              : inArray(teamgames.opponentId, teamArray),
-            inArray(
-              teamgames.serieId,
-              db
-                .select({
-                  parentId: parentchildseries.parentId,
-                })
-                .from(parentchildseries)
-                .where(
-                  eq(
-                    parentchildseries.childId,
-                    serie.serieId,
+            totalPoints: sum(teamgames.points)
+              .mapWith(Number)
+              .as('total_points'),
+            totalGoalsScored: sum(teamgames.goalsScored)
+              .mapWith(Number)
+              .as(
+                'total_goals_scored',
+              ) as unknown as SQL<number>,
+            totalGoalsConceded: sum(teamgames.goalsConceded)
+              .mapWith(Number)
+              .as(
+                'total_goals_conceded',
+              ) as unknown as SQL<number>,
+            totalGoalDifference: sum(
+              teamgames.goalDifference,
+            )
+              .mapWith(Number)
+              .as(
+                'total_goal_difference',
+              ) as unknown as SQL<number>,
+            totalWins:
+              sql<number>`cast(count(*) filter (where win) as int)`.as(
+                'totalWins',
+              ),
+            totalDraws:
+              sql<number>`cast(count(*) filter (where draw) as int)`.as(
+                'totalDraws',
+              ),
+            totalLost:
+              sql<number>`cast(count(*) filter (where lost) as int)`.as(
+                'totalLost',
+              ),
+          })
+          .from(teamgames)
+          .where(
+            and(
+              inArray(teamgames.teamId, teamArray),
+              serie.allParentGames
+                ? undefined
+                : inArray(teamgames.opponentId, teamArray),
+              inArray(
+                teamgames.serieId,
+                db
+                  .select({
+                    parentId: parentchildseries.parentId,
+                  })
+                  .from(parentchildseries)
+                  .where(
+                    eq(
+                      parentchildseries.childId,
+                      serie.serieId,
+                    ),
                   ),
-                ),
+              ),
+              eq(teamgames.played, true),
+              table === 'home'
+                ? eq(teamgames.homeGame, true)
+                : table === 'away'
+                  ? eq(teamgames.homeGame, false)
+                  : undefined,
             ),
-            eq(teamgames.played, true),
-            table === 'home'
-              ? eq(teamgames.homeGame, true)
-              : table === 'away'
-                ? eq(teamgames.homeGame, false)
-                : undefined,
-          ),
-        )
-        .groupBy(teamgames.teamId)
-    : undefined
+          )
+          .groupBy(teamgames.teamId)
+      : undefined
 
   const mainSerie = db
     .select({
