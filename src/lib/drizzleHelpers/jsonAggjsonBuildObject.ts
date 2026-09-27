@@ -25,7 +25,7 @@ export function jsonAgg<T>(
     filterSql = sql` filter (where ${options.filter})`
   }
 
-  return sql<T>`coalesce(json_agg(${expression}${orderBySql})${filterSql}, '[]'::json)`
+  return sql<T>`coalesce(jsonb_agg(${expression}${orderBySql})${filterSql}, '[]'::jsonb)`
 }
 
 /**
@@ -48,7 +48,7 @@ export function jsonBuildObject<
     chunks.push(sql`${value}`)
   })
 
-  return sql<R>`json_build_object(${sql.join(chunks)})`
+  return sql<R>`jsonb_build_object(${sql.join(chunks)})`
 }
 
 export const jsonAggBuildObject = <
