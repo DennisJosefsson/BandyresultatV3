@@ -62,126 +62,136 @@ export const getDevelopmentData = async ({
     .where(eq(teamseries.serieId, serie.serieId))
     .then((res) => res.map((item) => item.teamId))
 
-  const startTable = serie.hasParent
-    ? db.$with('start_table').as(
-        db
-          .select({
-            date: sql`1900-01-01`
-              .mapWith(String)
-              .as('date'),
-            teamId: teamgames.teamId,
-            position: sql`0`.mapWith(Number).as('position'),
-            totalGames: count(teamgames.teamGameId).as(
-              'total_games',
-            ),
-            totalPoints: sum(teamgames.points)
-              .mapWith(Number)
-              .as('total_points'),
-            totalGoalsScored: sum(teamgames.goalsScored)
-              .mapWith(Number)
-              .as(
-                'total_goals_scored',
-              ) as unknown as SQL<number>,
-            totalGoalsConceded: sum(teamgames.goalsConceded)
-              .mapWith(Number)
-              .as(
-                'total_goals_conceded',
-              ) as unknown as SQL<number>,
-            totalGoalDifference: sum(
-              teamgames.goalDifference,
-            )
-              .mapWith(Number)
-              .as(
-                'total_goal_difference',
-              ) as unknown as SQL<number>,
-            totalWins:
-              sql<number>`cast(count(*) filter (where win) as int)`.as(
-                'total_wins',
+  const startTable =
+    serie.hasParent && !serie.hasMix
+      ? db.$with('start_table').as(
+          db
+            .select({
+              date: sql`1900-01-01`
+                .mapWith(String)
+                .as('date'),
+              teamId: teamgames.teamId,
+              position: sql`0`
+                .mapWith(Number)
+                .as('position'),
+              totalGames: count(teamgames.teamGameId).as(
+                'total_games',
               ),
-            totalDraws:
-              sql<number>`cast(count(*) filter (where draw) as int)`.as(
-                'total_draws',
-              ),
-            totalLost:
-              sql<number>`cast(count(*) filter (where lost) as int)`.as(
-                'total_lost',
-              ),
-          })
-          .from(teamgames)
-          .where(
-            and(
-              inArray(teamgames.teamId, teamArray),
-              serie.allParentGames
-                ? undefined
-                : inArray(teamgames.opponentId, teamArray),
-              inArray(
-                teamgames.serieId,
-                db
-                  .select({
-                    parentId: parentchildseries.parentId,
-                  })
-                  .from(parentchildseries)
-                  .where(
-                    eq(
-                      parentchildseries.childId,
-                      serie.serieId,
-                    ),
-                  ),
-              ),
-              eq(teamgames.played, true),
-            ),
-          )
-          .groupBy(teamgames.teamId),
-      )
-    : db.$with('start_table').as(
-        db
-          .selectDistinctOn([teamgames.teamId], {
-            date: sql`1900-01-01`
-              .mapWith(String)
-              .as('date'),
-            teamId: teamgames.teamId,
-            position: sql`0`.mapWith(Number).as('position'),
-            totalGames: sql`0`
-              .mapWith(Number)
-              .as('total_games'),
-            totalPoints:
-              sql<number>`case when teamseries.bonus_points is null then 0 else teamseries.bonus_points end`
+              totalPoints: sum(teamgames.points)
                 .mapWith(Number)
                 .as('total_points'),
-            totalGoalsScored: sql`0`
-              .mapWith(Number)
-              .as('total_goals_scored'),
-            totalGoalsConceded: sql`0`
-              .mapWith(Number)
-              .as('total_goals_conceded'),
-            totalGoalDifference: sql`0`
-              .mapWith(Number)
-              .as('total_goal_difference'),
-            totalWins: sql`0`
-              .mapWith(Number)
-              .as('total_wins'),
-            totalDraws: sql`0`
-              .mapWith(Number)
-              .as('total_draws'),
-            totalLost: sql`0`
-              .mapWith(Number)
-              .as('total_lost'),
-          })
-          .from(teamgames)
-          .leftJoin(
-            teamseries,
-            and(
-              eq(teamgames.teamId, teamseries.teamId),
-              eq(teamgames.serieId, teamseries.serieId),
+              totalGoalsScored: sum(teamgames.goalsScored)
+                .mapWith(Number)
+                .as(
+                  'total_goals_scored',
+                ) as unknown as SQL<number>,
+              totalGoalsConceded: sum(
+                teamgames.goalsConceded,
+              )
+                .mapWith(Number)
+                .as(
+                  'total_goals_conceded',
+                ) as unknown as SQL<number>,
+              totalGoalDifference: sum(
+                teamgames.goalDifference,
+              )
+                .mapWith(Number)
+                .as(
+                  'total_goal_difference',
+                ) as unknown as SQL<number>,
+              totalWins:
+                sql<number>`cast(count(*) filter (where win) as int)`.as(
+                  'total_wins',
+                ),
+              totalDraws:
+                sql<number>`cast(count(*) filter (where draw) as int)`.as(
+                  'total_draws',
+                ),
+              totalLost:
+                sql<number>`cast(count(*) filter (where lost) as int)`.as(
+                  'total_lost',
+                ),
+            })
+            .from(teamgames)
+            .where(
+              and(
+                inArray(teamgames.teamId, teamArray),
+                serie.allParentGames
+                  ? undefined
+                  : inArray(
+                      teamgames.opponentId,
+                      teamArray,
+                    ),
+                inArray(
+                  teamgames.serieId,
+                  db
+                    .select({
+                      parentId: parentchildseries.parentId,
+                    })
+                    .from(parentchildseries)
+                    .where(
+                      eq(
+                        parentchildseries.childId,
+                        serie.serieId,
+                      ),
+                    ),
+                ),
+                eq(teamgames.played, true),
+              ),
+            )
+            .groupBy(teamgames.teamId),
+        )
+      : db.$with('start_table').as(
+          db
+            .selectDistinctOn([teamgames.teamId], {
+              date: sql`1900-01-01`
+                .mapWith(String)
+                .as('date'),
+              teamId: teamgames.teamId,
+              position: sql`0`
+                .mapWith(Number)
+                .as('position'),
+              totalGames: sql`0`
+                .mapWith(Number)
+                .as('total_games'),
+              totalPoints:
+                sql<number>`case when teamseries.bonus_points is null then 0 else teamseries.bonus_points end`
+                  .mapWith(Number)
+                  .as('total_points'),
+              totalGoalsScored: sql`0`
+                .mapWith(Number)
+                .as('total_goals_scored'),
+              totalGoalsConceded: sql`0`
+                .mapWith(Number)
+                .as('total_goals_conceded'),
+              totalGoalDifference: sql`0`
+                .mapWith(Number)
+                .as('total_goal_difference'),
+              totalWins: sql`0`
+                .mapWith(Number)
+                .as('total_wins'),
+              totalDraws: sql`0`
+                .mapWith(Number)
+                .as('total_draws'),
+              totalLost: sql`0`
+                .mapWith(Number)
+                .as('total_lost'),
+            })
+            .from(teamgames)
+            .leftJoin(
+              teamseries,
+              and(
+                eq(teamgames.teamId, teamseries.teamId),
+                eq(teamgames.serieId, teamseries.serieId),
+              ),
+            )
+            .where(
+              and(
+                inArray(teamgames.teamId, teamArray),
+                eq(teamgames.serieId, serie.serieId),
+              ),
             ),
-          )
-          .where(
-            and(
-              inArray(teamgames.teamId, teamArray),
-              eq(teamgames.serieId, serie.serieId),
-            ),
-          ),
-      )
+        )
 
   const seriesGames = db.$with('series_games').as(
     db
