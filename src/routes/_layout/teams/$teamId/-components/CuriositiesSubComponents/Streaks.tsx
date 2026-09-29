@@ -8,67 +8,73 @@ const Streaks = () => {
   if (data.status === 404) return null
   return (
     <div className="grid grid-cols-1 gap-2 md:gap-4 justify-start h-fit">
-      {data.streaks.playoffStreak.length > 0 ? (
+      {data.stats.playoffStreak &&
+      data.stats.playoffStreak.length > 0 ? (
         <StreakComponent>
           <StreakComponent.Title>
             Slutspel i rad
           </StreakComponent.Title>
           <StreakComponent.PlayoffContent
-            streak={data.streaks.playoffStreak}
+            streak={data.stats.playoffStreak}
           ></StreakComponent.PlayoffContent>
         </StreakComponent>
       ) : null}
-      {data.streaks.unbeatenStreak.length > 0 ? (
+      {data.stats.unbeatenStreak &&
+      data.stats.unbeatenStreak.length > 0 ? (
         <StreakComponent>
           <StreakComponent.Title>
             Obesegrade matcher
           </StreakComponent.Title>
           <StreakComponent.Content
-            streak={data.streaks.unbeatenStreak}
+            streak={data.stats.unbeatenStreak}
           ></StreakComponent.Content>
         </StreakComponent>
       ) : null}
 
-      {data.streaks.winStreak.length > 0 ? (
+      {data.stats.winStreak &&
+      data.stats.winStreak.length > 0 ? (
         <StreakComponent>
           <StreakComponent.Title>
             Vinster i rad
           </StreakComponent.Title>
           <StreakComponent.Content
-            streak={data.streaks.winStreak}
+            streak={data.stats.winStreak}
           ></StreakComponent.Content>
         </StreakComponent>
       ) : null}
 
-      {data.streaks.drawStreak.length > 0 ? (
+      {data.stats.drawStreaks &&
+      data.stats.drawStreaks.length > 0 ? (
         <StreakComponent>
           <StreakComponent.Title>
             Oavgjorda matcher i rad
           </StreakComponent.Title>
           <StreakComponent.Content
-            streak={data.streaks.drawStreak}
+            streak={data.stats.drawStreaks}
           ></StreakComponent.Content>
         </StreakComponent>
       ) : null}
 
-      {data.streaks.losingStreak.length > 0 ? (
+      {data.stats.losingStreak &&
+      data.stats.losingStreak.length > 0 ? (
         <StreakComponent>
           <StreakComponent.Title>
             Förlustmatcher i rad
           </StreakComponent.Title>
           <StreakComponent.Content
-            streak={data.streaks.losingStreak}
+            streak={data.stats.losingStreak}
           ></StreakComponent.Content>
         </StreakComponent>
       ) : null}
 
-      {data.streaks.noWinStreak.length > 0 ? (
+      {data.stats.noWinStreaks &&
+      data.stats.noWinStreaks.length > 0 ? (
         <StreakComponent>
           <StreakComponent.Title>
             Matcher i rad utan vinst
           </StreakComponent.Title>
           <StreakComponent.Content
-            streak={data.streaks.noWinStreak}
+            streak={data.stats.noWinStreaks}
           ></StreakComponent.Content>
         </StreakComponent>
       ) : null}

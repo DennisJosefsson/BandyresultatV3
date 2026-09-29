@@ -101,8 +101,6 @@ export const editTeamLogoObject = addTeamLogoObject.and(
 )
 
 export type TeamStreak = {
-  team: TeamBaseWithLogo
-  women: boolean
   gameCount: number
   startDate: string
   endDate: string
@@ -156,4 +154,54 @@ export type Competition = {
 export type FiveSeason = {
   season: string
   competitions: Array<Competition>
+}
+
+export type TeamStatsGameArrayObject = {
+  gameId: number
+  result: string
+  otResult: string | null
+  date: string
+  serieName: string
+  home: TeamBaseWithLogo
+  away: TeamBaseWithLogo
+}
+
+export type TeamSeasonStats = {
+  teamId: number
+  firstDivisionSeasons: { count: number | null }
+  qualificationSeasons: { count: number | null }
+  firstAndLatestFirstDivisionSeason: {
+    first: string | null
+    latest: string | null
+  }
+  finalCount: {
+    count: number | null
+    latest: number | null
+  }
+  finalWinCount: {
+    count: number | null
+    latest: number | null
+  }
+  playoffCount: {
+    count: number | null
+    latest: number | null
+  }
+  losingStreak: Array<TeamStreak> | null
+  drawStreaks: Array<TeamStreak> | null
+  noWinStreaks: Array<TeamStreak> | null
+  playoffStreak: Array<TeamPlayoffStreak> | null
+  unbeatenStreak: Array<TeamStreak> | null
+  winStreak: Array<TeamStreak> | null
+  maxScoredAway: Array<TeamStatsGameArrayObject> | null
+  maxConcededAway: Array<TeamStatsGameArrayObject> | null
+  maxTotalAway: Array<TeamStatsGameArrayObject> | null
+  minTotalAway: Array<TeamStatsGameArrayObject> | null
+  minGoalDifferenceAway: Array<TeamStatsGameArrayObject> | null
+  maxGoalDifferenceAway: Array<TeamStatsGameArrayObject> | null
+  maxScoredHome: Array<TeamStatsGameArrayObject> | null
+  maxConcededHome: Array<TeamStatsGameArrayObject> | null
+  maxTotalHome: Array<TeamStatsGameArrayObject> | null
+  minTotalHome: Array<TeamStatsGameArrayObject> | null
+  minGoalDifferenceHome: Array<TeamStatsGameArrayObject> | null
+  maxGoalDifferenceHome: Array<TeamStatsGameArrayObject> | null
 }

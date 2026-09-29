@@ -5,9 +5,18 @@ import {
   teamnames,
   teams,
 } from '@/db/schema'
+import { jsonAggBuildObject } from '@/lib/drizzleHelpers/jsonAggjsonBuildObject'
 import type { TeamBaseWithLogo } from '@/lib/types/team'
 import type { SQL } from 'drizzle-orm'
-import { and, asc, desc, eq, gt, sql } from 'drizzle-orm'
+import {
+  and,
+  asc,
+  desc,
+  eq,
+  gt,
+  isNotNull,
+  sql,
+} from 'drizzle-orm'
 
 const lost_values = db.$with('lost_values').as(
   db
@@ -131,3 +140,75 @@ export const preparedLosingStreak = db
   .orderBy(desc(sql`game_count`), asc(sql`start_date`))
   .limit(3)
   .prepare('losingStreak')
+
+export const losingStreak = db.$with('losing_streak').as(
+  db
+    .with(group_array)
+    .select({
+      teamId: group_array.teamId,
+      gameCount:
+        sql<number>`array_length(group_array.dates,1)`.as(
+          'losing_streak_game_count',
+        ),
+      startDate: sql<string>`group_array.dates[1]`.as(
+        'losing_streak_start_date',
+      ),
+      endDate:
+        sql<string>`group_array.dates[array_upper(group_array.dates,1)]`.as(
+          'losing_streak_end_date',
+        ),
+    })
+    .from(group_array)
+    .leftJoin(teams, eq(teams.teamId, group_array.teamId))
+    .leftJoin(
+      teamnames,
+      eq(teamnames.teamnameId, teams.teamnameId),
+    )
+    .leftJoin(
+      teamlogos,
+      eq(teamlogos.logoId, teamnames.logoId),
+    )
+    .where(
+      gt(sql<number>`array_length(group_array.dates,1)`, 5),
+    )
+    .orderBy(
+      desc(sql`losing_streak_game_count`),
+      asc(sql`losing_streak_end_date`),
+    )
+    .limit(3),
+)
+
+export const losingStreakArray = db
+  .$with('losing_streak_array')
+  .as(
+    db
+      .with(losingStreak)
+      .select({
+        teamId: losingStreak.teamId,
+        streakArray: jsonAggBuildObject<
+          Array<{
+            gameCount: number
+            startDate: string
+            endDate: string
+          }>
+        >(
+          {
+            gameCount:
+              losingStreak.gameCount as unknown as SQL<number>,
+            startDate:
+              losingStreak.startDate as unknown as SQL<string>,
+            endDate:
+              losingStreak.endDate as unknown as SQL<string>,
+          },
+          {
+            orderBy: [
+              desc(losingStreak.gameCount),
+              desc(losingStreak.startDate),
+            ],
+            filter: isNotNull(losingStreak.gameCount),
+          },
+        ).as('losing_streak_array'),
+      })
+      .from(losingStreak)
+      .groupBy(losingStreak.teamId),
+  )

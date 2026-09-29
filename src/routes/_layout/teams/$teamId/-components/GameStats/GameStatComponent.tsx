@@ -1,5 +1,6 @@
 import { Datum } from '@/components/Common/Date'
-import type { TeamStatItem } from '@/lib/types/team'
+import TeamLogo from '@/components/Common/TeamLogo'
+import type { TeamStatsGameArrayObject } from '@/lib/types/team'
 import type { ReactNode } from 'react'
 
 const GameStatComponent = ({
@@ -21,7 +22,7 @@ function Title({ children }: { children: ReactNode }) {
 function Content({
   statArray,
 }: {
-  statArray: Array<TeamStatItem>
+  statArray: Array<TeamStatsGameArrayObject>
 }) {
   if (!statArray || statArray.length === 0) return null
 
@@ -31,16 +32,44 @@ function Content({
         return (
           <div
             key={`${stat.gameId}-${index}`}
-            className="bg-muted-foreground/20 px-1 @sm:px-3 py-1 mb-1"
+            className="bg-muted-foreground/20 px-1 @sm:px-3 py-2 mb-1 flex flex-col gap-2"
           >
-            <div className="flex flex-row justify-between">
+            <div className="flex flex-row gap-2 justify-between">
+              <span>{stat.serieName}</span>
               <span>
-                {stat.homeTeam}-{stat.awayTeam}
+                <Datum>{stat.date}</Datum>
               </span>
-              <span>{stat.result}</span>
             </div>
-            <div>
-              <Datum>{stat.date}</Datum>
+            <div className="flex flex-row justify-between">
+              <div className="flex flex-col gap-2">
+                <div className="flex flex-row gap-2">
+                  <TeamLogo
+                    size={32}
+                    logoId={stat.home.logo.logoId}
+                    hasDark={stat.home.logo.hasDark}
+                    className="@sm:block size-[1lh] object-scale-down"
+                    aria-label={stat.home.casualName}
+                    title={stat.home.casualName}
+                  />
+                  <span>{stat.home.name}</span>
+                </div>
+                <div className="flex flex-row gap-2">
+                  <TeamLogo
+                    size={32}
+                    logoId={stat.away.logo.logoId}
+                    hasDark={stat.away.logo.hasDark}
+                    className="@sm:block size-[1lh] object-scale-down"
+                    aria-label={stat.away.casualName}
+                    title={stat.away.casualName}
+                  />
+                  <span>{stat.away.name}</span>
+                </div>
+              </div>
+              <div className="flex flex-col gap-2">
+                <span className="text-right">
+                  {stat.result}
+                </span>
+              </div>
             </div>
           </div>
         )

@@ -5,9 +5,18 @@ import {
   teamnames,
   teams,
 } from '@/db/schema'
+import { jsonAggBuildObject } from '@/lib/drizzleHelpers/jsonAggjsonBuildObject'
 import type { TeamBaseWithLogo } from '@/lib/types/team'
 import type { SQL } from 'drizzle-orm'
-import { and, asc, desc, eq, gt, sql } from 'drizzle-orm'
+import {
+  and,
+  asc,
+  desc,
+  eq,
+  gt,
+  isNotNull,
+  sql,
+} from 'drizzle-orm'
 
 const draw_values = db.$with('draw_values').as(
   db
@@ -131,3 +140,75 @@ export const preparedDrawStreaks = db
   .orderBy(desc(sql`game_count`), asc(sql`start_date`))
   .limit(3)
   .prepare('drawStreaks')
+
+export const drawStreaks = db.$with('draw_streaks').as(
+  db
+    .with(group_array)
+    .select({
+      teamId: group_array.teamId,
+      gameCount:
+        sql<number>`array_length(group_array.dates,1)`.as(
+          'draw_streak_game_count',
+        ),
+      startDate: sql<string>`group_array.dates[1]`.as(
+        'draw_streak_start_date',
+      ),
+      endDate:
+        sql<string>`group_array.dates[array_upper(group_array.dates,1)]`.as(
+          'draw_streak_end_date',
+        ),
+    })
+    .from(group_array)
+    .leftJoin(teams, eq(teams.teamId, group_array.teamId))
+    .leftJoin(
+      teamnames,
+      eq(teamnames.teamnameId, teams.teamnameId),
+    )
+    .leftJoin(
+      teamlogos,
+      eq(teamlogos.logoId, teamnames.logoId),
+    )
+    .where(
+      gt(sql<number>`array_length(group_array.dates,1)`, 2),
+    )
+    .orderBy(
+      desc(sql`draw_streak_game_count`),
+      asc(sql`draw_streak_end_date`),
+    )
+    .limit(3),
+)
+
+export const drawStreakArray = db
+  .$with('draw_streak_array')
+  .as(
+    db
+      .with(drawStreaks)
+      .select({
+        teamId: drawStreaks.teamId,
+        streakArray: jsonAggBuildObject<
+          Array<{
+            gameCount: number
+            startDate: string
+            endDate: string
+          }>
+        >(
+          {
+            gameCount:
+              drawStreaks.gameCount as unknown as SQL<number>,
+            startDate:
+              drawStreaks.startDate as unknown as SQL<string>,
+            endDate:
+              drawStreaks.endDate as unknown as SQL<string>,
+          },
+          {
+            orderBy: [
+              desc(drawStreaks.gameCount),
+              desc(drawStreaks.startDate),
+            ],
+            filter: isNotNull(drawStreaks.gameCount),
+          },
+        ).as('draw_streak_array'),
+      })
+      .from(drawStreaks)
+      .groupBy(drawStreaks.teamId),
+  )

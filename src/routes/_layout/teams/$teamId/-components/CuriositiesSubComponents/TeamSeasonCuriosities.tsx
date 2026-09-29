@@ -13,33 +13,36 @@ const TeamSeasonCuriosities = () => {
         <div className="flex flex-col border p-1 @xs:p-2 shadow-xs w-full @2xl:max-w-lg @4xl:max-w-xl h-fit justify-self-start">
           <DataCard
             label="Säsonger i högsta serien"
-            data={data.statCounts.firstDivSeasonsCount}
+            count={data.stats.firstDivisionSeasons.count}
           />
 
-          {data.statCounts.firstDivSeasonsCount > 1 ? (
+          {data.stats.firstDivisionSeasons.count &&
+          data.stats.firstDivisionSeasons.count > 1 ? (
             <DataCard
               label="Första"
-              data={
-                data.statCounts.firstFirstDivisionSeason
-                  ?.year
+              count={
+                data.stats.firstAndLatestFirstDivisionSeason
+                  ?.first
               }
             />
           ) : null}
-          {data.statCounts.firstDivSeasonsCount > 1 ? (
+          {data.stats.firstDivisionSeasons.count &&
+          data.stats.firstDivisionSeasons.count > 1 ? (
             <DataCard
               label="Senaste"
-              data={
-                data.statCounts.latestFirstDivisionSeason
-                  ?.year
+              count={
+                data.stats.firstAndLatestFirstDivisionSeason
+                  ?.latest
               }
             />
           ) : null}
-          {data.statCounts.firstDivSeasonsCount === 1 ? (
+          {data.stats.firstDivisionSeasons.count &&
+          data.stats.firstDivisionSeasons.count === 1 ? (
             <DataCard
               label="Säsong"
-              data={
-                data.statCounts.firstFirstDivisionSeason
-                  ?.year
+              count={
+                data.stats.firstAndLatestFirstDivisionSeason
+                  ?.first
               }
             />
           ) : null}
@@ -47,26 +50,35 @@ const TeamSeasonCuriosities = () => {
         <div className="flex flex-col border p-1 @xs:p-2 shadow-xs w-full @2xl:max-w-lg @4xl:max-w-xl h-fit justify-self-start">
           <DataCard
             label="Antal slutspel"
-            data={data.statCounts.playoffCount}
+            count={data.stats.playoffCount.count}
           />
-          <DataCard
-            label="Antal finaler"
-            data={data.statCounts.finalCount}
-          />
-          {data.statCounts.finalCount > 0 ? (
+          {data.stats.playoffCount.count &&
+          data.stats.playoffCount.count > 0 ? (
             <DataCard
               label="Senaste"
-              data={data.statCounts.latestFinal}
+              count={data.stats.playoffCount.latest}
+            />
+          ) : null}
+          <DataCard
+            label="Antal finaler"
+            count={data.stats.finalCount.count}
+          />
+          {data.stats.finalCount.count &&
+          data.stats.finalCount.count > 0 ? (
+            <DataCard
+              label="Senaste"
+              count={data.stats.finalCount.latest}
             />
           ) : null}
           <DataCard
             label="Antal finalvinster"
-            data={data.statCounts.finalWinCount}
+            count={data.stats.finalWinCount.count}
           />
-          {data.statCounts.finalWinCount > 0 ? (
+          {data.stats.finalWinCount.count &&
+          data.stats.finalWinCount.count > 0 ? (
             <DataCard
               label="Senaste"
-              data={data.statCounts.finalWins.at(-1)}
+              count={data.stats.finalWinCount.latest}
             />
           ) : null}
         </div>

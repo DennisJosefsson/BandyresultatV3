@@ -36,9 +36,14 @@ function Content({
             key={`${s.startDate}-${index}`}
             className="bg-muted-foreground/20 px-1 @sm:px-3  py-1 mb-1 flex flex-row justify-between"
           >
-            <div>
-              <Datum>{s.startDate}</Datum> -{' '}
-              <Datum>{s.endDate}</Datum>
+            <div className="w-44 @xs:w-54 @sm:w-66 flex flex-row justify-between gap-2">
+              <span className="w-20 @xs:w-25 @sm:w-32">
+                <Datum>{s.startDate}</Datum>
+              </span>
+              <span className="w-2">-</span>
+              <span className="w-20 @xs:w-25 @sm:w-32">
+                <Datum>{s.endDate}</Datum>
+              </span>
             </div>
             <div>{s.gameCount}</div>
           </div>

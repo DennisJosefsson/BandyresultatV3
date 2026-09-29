@@ -5,20 +5,23 @@ import {
   teamnames,
   teams,
 } from '@/db/schema'
+import { jsonAggBuildObject } from '@/lib/drizzleHelpers/jsonAggjsonBuildObject'
 import type { TeamBaseWithLogo } from '@/lib/types/team'
 import type { SQL } from 'drizzle-orm'
 import { and, asc, desc, eq, gt, sql } from 'drizzle-orm'
 
-const lost_values = db.$with('lost_values').as(
+const unbeaten_values = db.$with('unbeaten_values').as(
   db
     .select({
       teamId: teamgames.teamId,
+      win: teamgames.win,
+      draw: teamgames.draw,
       lost: teamgames.lost,
       date: teamgames.date,
       women: teamgames.women,
-      lostValue:
+      unbeatenValue:
         sql<number>`case when lost = false then 1 else 0 end`.as(
-          'lost_value',
+          'unbeaten_value',
         ),
     })
     .from(teamgames)
@@ -30,62 +33,66 @@ const lost_values = db.$with('lost_values').as(
     ),
 )
 
-const summed_lost_values = db
-  .$with('summed_lost_values')
+const summed_unbeaten_values = db
+  .$with('summed_unbeaten_values')
   .as(
     db
-      .with(lost_values)
+      .with(unbeaten_values)
       .select({
-        teamId: lost_values.teamId,
-        lost: lost_values.lost,
-        date: lost_values.date,
-        women: lost_values.women,
-        sumLosts:
-          sql<number>`sum(lost_values.lost_value) over(partition by team order by date)`.as(
-            'sum_losts',
+        teamId: unbeaten_values.teamId,
+        win: unbeaten_values.win,
+        draw: unbeaten_values.draw,
+        lost: unbeaten_values.lost,
+        date: unbeaten_values.date,
+        women: unbeaten_values.women,
+        sumUnbeaten:
+          sql<number>`sum(unbeaten_values.unbeaten_value) over(partition by team order by date)`.as(
+            'sum_unbeaten',
           ),
         round:
           sql<number>`row_number() over (partition by team order by date)`.as(
             'round',
           ),
       })
-      .from(lost_values),
+      .from(unbeaten_values),
   )
 
-const grouped_losts = db.$with('grouped_losts').as(
+const grouped_unbeaten = db.$with('grouped_unbeaten').as(
   db
-    .with(summed_lost_values)
+    .with(summed_unbeaten_values)
     .select({
-      teamId: summed_lost_values.teamId,
-      lost: summed_lost_values.lost,
-      date: summed_lost_values.date,
-      women: summed_lost_values.women,
-      sumLosts: summed_lost_values.sumLosts,
-      grouped: sql<number>`round - sum_losts`.as('grouped'),
+      teamId: summed_unbeaten_values.teamId,
+      lost: summed_unbeaten_values.lost,
+      date: summed_unbeaten_values.date,
+      women: summed_unbeaten_values.women,
+      sumUnbeaten: summed_unbeaten_values.sumUnbeaten,
+      grouped: sql<number>`round - sum_unbeaten`.as(
+        'grouped',
+      ),
     })
-    .from(summed_lost_values)
-    .where(eq(summed_lost_values.lost, true)),
+    .from(summed_unbeaten_values)
+    .where(eq(summed_unbeaten_values.lost, false)),
 )
 
 const group_array = db.$with('group_array').as(
   db
-    .with(grouped_losts)
+    .with(grouped_unbeaten)
     .select({
-      teamId: grouped_losts.teamId,
-      women: grouped_losts.women,
+      teamId: grouped_unbeaten.teamId,
+      women: grouped_unbeaten.women,
       maxCount:
-        sql<number>`mode() within group (order by grouped_losts.grouped)`.as(
+        sql<number>`mode() within group (order by grouped_unbeaten.grouped)`.as(
           'max_count',
         ),
       dates: sql<
         Array<string>
       >`array_agg(date order by date)`.as('dates'),
     })
-    .from(grouped_losts)
+    .from(grouped_unbeaten)
     .groupBy(
-      grouped_losts.grouped,
-      grouped_losts.teamId,
-      grouped_losts.women,
+      grouped_unbeaten.grouped,
+      grouped_unbeaten.teamId,
+      grouped_unbeaten.women,
     ),
 )
 
@@ -131,3 +138,79 @@ export const preparedUnbeatenStreaks = db
   .orderBy(desc(sql`game_count`), asc(sql`start_date`))
   .limit(3)
   .prepare('unbeatenStreak')
+
+export const unbeatenStreaks = db
+  .$with('unbeaten_streak')
+  .as(
+    db
+      .with(group_array)
+      .select({
+        teamId: group_array.teamId,
+        gameCount:
+          sql<number>`array_length(group_array.dates,1)`.as(
+            'unbeaten_streak_game_count',
+          ),
+        startDate: sql<string>`group_array.dates[1]`.as(
+          'unbeaten_streak_start_date',
+        ),
+        endDate:
+          sql<string>`group_array.dates[array_upper(group_array.dates,1)]`.as(
+            'unbeaten_streak_end_date',
+          ),
+      })
+      .from(group_array)
+      .leftJoin(teams, eq(teams.teamId, group_array.teamId))
+      .leftJoin(
+        teamnames,
+        eq(teamnames.teamnameId, teams.teamnameId),
+      )
+      .leftJoin(
+        teamlogos,
+        eq(teamlogos.logoId, teamnames.logoId),
+      )
+      .where(
+        gt(
+          sql<number>`array_length(group_array.dates,1)`,
+          5,
+        ),
+      )
+      .orderBy(
+        desc(sql`unbeaten_streak_game_count`),
+        asc(sql`unbeaten_streak_end_date`),
+      )
+      .limit(3),
+  )
+
+export const unbeatenStreakArray = db
+  .$with('unbeaten_streak_array')
+  .as(
+    db
+      .with(unbeatenStreaks)
+      .select({
+        teamId: unbeatenStreaks.teamId,
+        streakArray: jsonAggBuildObject<
+          Array<{
+            gameCount: number
+            startDate: string
+            endDate: string
+          }>
+        >(
+          {
+            gameCount:
+              unbeatenStreaks.gameCount as unknown as SQL<number>,
+            startDate:
+              unbeatenStreaks.startDate as unknown as SQL<string>,
+            endDate:
+              unbeatenStreaks.endDate as unknown as SQL<string>,
+          },
+          {
+            orderBy: [
+              desc(unbeatenStreaks.gameCount),
+              desc(unbeatenStreaks.startDate),
+            ],
+          },
+        ).as('unbeaten_streak_array'),
+      })
+      .from(unbeatenStreaks)
+      .groupBy(unbeatenStreaks.teamId),
+  )
