@@ -6,19 +6,15 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/base/ui/popover'
-import type { Serie } from '@/lib/types/serie'
-import type { TeamTable } from '@/lib/types/table'
+import type { SeriesTableV2 } from '@/lib/types/table'
 import { columns } from './columns'
 
 type TablesListProps = {
-  tables: Array<
-    Omit<TeamTable, 'women' | 'group' | 'season'>
-  >
-  serie: Serie
+  serie: SeriesTableV2
 }
 
-const TableList = ({ tables, serie }: TablesListProps) => {
-  if (tables.length === 0) {
+const TableList = ({ serie }: TablesListProps) => {
+  if (serie.tableArray.length === 0) {
     return (
       <div className="grid py-5 mx-auto mt-4 text-sm font-bold font-inter text-foreground place-items-center md:text-base">
         <p className="mx-10 text-center">
@@ -53,7 +49,7 @@ const TableList = ({ tables, serie }: TablesListProps) => {
       <div>
         <DataTable
           columns={columns}
-          data={tables}
+          data={serie.tableArray}
           serieStructure={serie.serieStructure}
         />
       </div>

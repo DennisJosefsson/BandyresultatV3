@@ -1,12 +1,12 @@
 import { Button } from '@/components/base/ui/button'
-import type { Serie } from '@/lib/types/serie'
+import type { SeriesTableV2 } from '@/lib/types/table'
 import { Link, getRouteApi } from '@tanstack/react-router'
 
 const route = getRouteApi(
   '/_layout/seasons/$year/$group/tables/$table',
 )
 
-type ButtonsListProps = { serie: Serie }
+type ButtonsListProps = { serie: SeriesTableV2 }
 
 const SeasonTablesButtonList = ({
   serie,

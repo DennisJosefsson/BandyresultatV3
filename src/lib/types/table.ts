@@ -245,3 +245,12 @@ export type TeamSeasonCompetitionTables = {
   competitionName: string
   seriesArray: Array<TeamSeasonTableSerie>
 }
+
+export type SeriesTableV2 = {
+  serieId: number
+  serieName: string
+  comment: string | null
+  serieStructure: Array<number> | null | undefined
+  hasStatic: boolean | null
+  tableArray: Array<TeamSeasonTableV2>
+}
