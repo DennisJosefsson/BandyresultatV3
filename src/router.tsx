@@ -61,7 +61,12 @@ export const getRouter = () => {
   return router
 }
 
+const thisRouter = getRouter()
+
 declare module '@tanstack/react-router' {
+  interface Register {
+    router: typeof thisRouter
+  }
   interface StaticDataRouteOption {
     breadcrumb?: BreadcrumbValue
   }
