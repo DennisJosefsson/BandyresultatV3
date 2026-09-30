@@ -7,7 +7,6 @@ import type {
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
 import { preparedTeamSeasonStats } from './preparedQueries/teamseason/preparedTeamSeasonStats'
-import { preparedTeamSeasonStatsTEST } from './preparedQueries/teamseason/preparedTeamSeasonStatsTEST'
 import { getTeam } from './singleTeamQueries'
 
 type TablesResponse =
@@ -52,22 +51,6 @@ export const getSingleTeamStats = createServerFn({
           .then((res) => res[0])
 
         const end = performance.now()
-
-        const startTEST = performance.now()
-
-        const statsTEST = await preparedTeamSeasonStatsTEST
-          .execute({ teamId })
-          .then((res) => res[0])
-
-        const endTEST = performance.now()
-        console.log(statsTEST.losingStreak)
-        console.dir(
-          {
-            executionTime: end - start,
-            executionTimeTEST: endTEST - startTEST,
-          },
-          { color: true, depth: 99 },
-        )
 
         return {
           status: 200,
