@@ -8,6 +8,7 @@ import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
 import { and, eq, getTableColumns } from 'drizzle-orm'
 import { getUnionedTables } from './getTableFunctions'
+import { getSortedSeriesTables } from './getTableFunctionsV2'
 
 type TablesReturn =
   | {
@@ -80,11 +81,34 @@ export const getTables = createServerFn({ method: 'GET' })
             status: 404,
             message: `Ingen ${women ? 'dam' : 'herr'}serie med detta namn det här året. Välj en ny i listan.`,
           }
-
+        const startOld = performance.now()
         const results = await getUnionedTables({
           serie,
           table,
         })
+
+        const endOld = performance.now()
+        const startNew = performance.now()
+
+        const seriesTables = await getSortedSeriesTables({
+          intYear: year,
+          women,
+          group,
+          table,
+        })
+        const endNew = performance.now()
+
+        console.dir(
+          {
+            length: seriesTables.length,
+            oldPerf: endOld - startOld,
+            newPerf: endNew - startNew,
+          },
+          {
+            color: true,
+            depth: 99,
+          },
+        )
 
         return {
           status: 200,
