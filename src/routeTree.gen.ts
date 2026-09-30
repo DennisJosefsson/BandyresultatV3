@@ -31,7 +31,6 @@ import { Route as LayoutTeamsCompareRouteImport } from './routes/_layout/teams/c
 import { Route as LayoutTeamsListRouteImport } from './routes/_layout/teams/list'
 import { Route as LayoutTeamsMapRouteImport } from './routes/_layout/teams/map'
 import { Route as LayoutUnauthorizedIndexRouteImport } from './routes/_layout/unauthorized/index'
-import { Route as ApiV1HealthRouteImport } from './routes/api/v1/health'
 import { Route as LayoutDashboardErrorIdIndexRouteImport } from './routes/_layout/dashboard/$errorId/index'
 import { Route as LayoutDashboardGamesTodayRouteImport } from './routes/_layout/dashboard/games/$today'
 import { Route as LayoutDashboardNewseasonIndexRouteImport } from './routes/_layout/dashboard/newseason/index'
@@ -215,11 +214,6 @@ const LayoutUnauthorizedIndexRoute = LayoutUnauthorizedIndexRouteImport.update({
   id: '/unauthorized/',
   path: '/unauthorized/',
   getParentRoute: () => LayoutRoute,
-} as any)
-const ApiV1HealthRoute = ApiV1HealthRouteImport.update({
-  id: '/api/v1/health',
-  path: '/api/v1/health',
-  getParentRoute: () => rootRouteImport,
 } as any)
 const LayoutDashboardErrorIdIndexRoute =
   LayoutDashboardErrorIdIndexRouteImport.update({
@@ -715,7 +709,6 @@ export interface FileRoutesByFullPath {
   '/teams/compare': typeof LayoutTeamsCompareRoute
   '/teams/list': typeof LayoutTeamsListRoute
   '/teams/map': typeof LayoutTeamsMapRoute
-  '/api/v1/health': typeof ApiV1HealthRoute
   '/about/': typeof LayoutAboutIndexRoute
   '/dashboard/': typeof LayoutDashboardIndexRoute
   '/login/': typeof LayoutLoginIndexRoute
@@ -810,7 +803,6 @@ export interface FileRoutesByTo {
   '/teams/compare': typeof LayoutTeamsCompareRoute
   '/teams/list': typeof LayoutTeamsListRoute
   '/teams/map': typeof LayoutTeamsMapRoute
-  '/api/v1/health': typeof ApiV1HealthRoute
   '/about': typeof LayoutAboutIndexRoute
   '/dashboard': typeof LayoutDashboardIndexRoute
   '/login': typeof LayoutLoginIndexRoute
@@ -908,7 +900,6 @@ export interface FileRoutesById {
   '/_layout/teams/compare': typeof LayoutTeamsCompareRoute
   '/_layout/teams/list': typeof LayoutTeamsListRoute
   '/_layout/teams/map': typeof LayoutTeamsMapRoute
-  '/api/v1/health': typeof ApiV1HealthRoute
   '/_layout/about/': typeof LayoutAboutIndexRoute
   '/_layout/dashboard/': typeof LayoutDashboardIndexRoute
   '/_layout/login/': typeof LayoutLoginIndexRoute
@@ -1008,7 +999,6 @@ export interface FileRouteTypes {
     | '/teams/compare'
     | '/teams/list'
     | '/teams/map'
-    | '/api/v1/health'
     | '/about/'
     | '/dashboard/'
     | '/login/'
@@ -1103,7 +1093,6 @@ export interface FileRouteTypes {
     | '/teams/compare'
     | '/teams/list'
     | '/teams/map'
-    | '/api/v1/health'
     | '/about'
     | '/dashboard'
     | '/login'
@@ -1200,7 +1189,6 @@ export interface FileRouteTypes {
     | '/_layout/teams/compare'
     | '/_layout/teams/list'
     | '/_layout/teams/map'
-    | '/api/v1/health'
     | '/_layout/about/'
     | '/_layout/dashboard/'
     | '/_layout/login/'
@@ -1286,7 +1274,6 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   LayoutRoute: typeof LayoutRouteWithChildren
-  ApiV1HealthRoute: typeof ApiV1HealthRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1444,13 +1431,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/unauthorized/'
       preLoaderRoute: typeof LayoutUnauthorizedIndexRouteImport
       parentRoute: typeof LayoutRoute
-    }
-    '/api/v1/health': {
-      id: '/api/v1/health'
-      path: '/api/v1/health'
-      fullPath: '/api/v1/health'
-      preLoaderRoute: typeof ApiV1HealthRouteImport
-      parentRoute: typeof rootRouteImport
     }
     '/_layout/dashboard/$errorId/': {
       id: '/_layout/dashboard/$errorId/'
@@ -2418,7 +2398,6 @@ const LayoutRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   LayoutRoute: LayoutRouteWithChildren,
-  ApiV1HealthRoute: ApiV1HealthRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
