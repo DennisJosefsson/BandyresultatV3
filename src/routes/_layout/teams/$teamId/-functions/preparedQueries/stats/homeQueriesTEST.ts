@@ -1,6 +1,6 @@
 import { db } from '@/db'
 import { games, series, teamgames } from '@/db/schema'
-import { homeTeamRecordData } from '@/db/views'
+import { homeTeamRecordData } from '@/db/views/teamRecordsViews'
 import { coalesce } from '@/lib/drizzleHelpers/coalesce'
 import {
   jsonAggBuildObject,

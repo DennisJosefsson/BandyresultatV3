@@ -1,6 +1,7 @@
 import { db } from '@/db'
 
 import {
+  competitions,
   games,
   parentchildseries,
   seasons,
@@ -13,7 +14,13 @@ import {
   teamseasons,
   teamseries,
 } from '@/db/schema'
+import { groupedSeriesTablesView } from '@/db/views/seriesTablesViews'
 import { coalesce } from '@/lib/drizzleHelpers/coalesce'
+import {
+  jsonAggBuildObject,
+  jsonBuildObject,
+} from '@/lib/drizzleHelpers/jsonAggjsonBuildObject'
+import type { TeamSeasonTableV2 } from '@/lib/types/table'
 import type { TeamBaseWithLogo } from '@/lib/types/team'
 import type { SQL } from 'drizzle-orm'
 import {
@@ -645,4 +652,164 @@ export const getUnionedTables = async ({
     )
 
   return result
+}
+
+type GetSortedTablesProps = {
+  competitionName: string
+  seasonYear: number
+  women: boolean
+}
+
+export const getSortedCupSeriesTables = async ({
+  competitionName,
+  seasonYear,
+  women,
+}: GetSortedTablesProps) => {
+  const tableJson = await db
+    .select({
+      level: series.level,
+      serieId: series.serieId as unknown as SQL<number>,
+      serieName: series.serieName as unknown as SQL<string>,
+      comment: series.comment as unknown as SQL<
+        string | null
+      >,
+      serieStructure:
+        series.serieStructure as unknown as SQL<
+          Array<number> | null | undefined
+        >,
+      hasStatic: series.hasStatic as unknown as SQL<
+        boolean | null
+      >,
+      tableArray: jsonAggBuildObject<
+        Array<TeamSeasonTableV2>
+      >(
+        {
+          team: jsonBuildObject<TeamBaseWithLogo>({
+            teamId: groupedSeriesTablesView.teamId,
+            name: coalesce(
+              teamseasonName.name,
+              teamnames.name,
+            ),
+            casualName: coalesce(
+              teamseasonName.casualName,
+              teamnames.casualName,
+            ),
+            shortName: coalesce(
+              teamseasonName.shortName,
+              teamnames.shortName,
+            ),
+            logo: jsonBuildObject({
+              logoId: coalesce(
+                teamseasonLogo.logoId,
+                teamlogos.logoId,
+              ),
+              hasDark: coalesce(
+                teamseasonLogo.hasDark,
+                teamlogos.hasDark,
+              ),
+            }),
+          }),
+          totalGames:
+            groupedSeriesTablesView.totalGames as unknown as SQL<number>,
+          totalWins:
+            groupedSeriesTablesView.totalWins as unknown as SQL<number>,
+          totalDraws:
+            groupedSeriesTablesView.totalDraws as unknown as SQL<number>,
+          totalLost:
+            groupedSeriesTablesView.totalLost as unknown as SQL<number>,
+          totalGoalsScored:
+            groupedSeriesTablesView.totalGoalsScored as unknown as SQL<number>,
+          totalGoalsConceded:
+            groupedSeriesTablesView.totalGoalsConceded as unknown as SQL<number>,
+          totalGoalDifference:
+            groupedSeriesTablesView.totalGoalDifference as unknown as SQL<number>,
+          totalPoints:
+            groupedSeriesTablesView.totalPoints as unknown as SQL<number>,
+        },
+        {
+          orderBy: [
+            desc(groupedSeriesTablesView.totalPoints),
+            desc(
+              groupedSeriesTablesView.totalGoalDifference,
+            ),
+            desc(groupedSeriesTablesView.totalGoalsScored),
+            asc(
+              coalesce(
+                teamseasonName.casualName,
+                teamnames.casualName,
+              ),
+            ),
+          ],
+        },
+      ).as('table_array'),
+    })
+    .from(groupedSeriesTablesView)
+    .leftJoin(
+      teams,
+      eq(groupedSeriesTablesView.teamId, teams.teamId),
+    )
+    .leftJoin(
+      series,
+      eq(series.serieId, groupedSeriesTablesView.serieId),
+    )
+    .leftJoin(
+      competitions,
+      eq(series.competitionId, competitions.competitionId),
+    )
+    .leftJoin(
+      teamnames,
+      eq(teams.teamnameId, teamnames.teamnameId),
+    )
+    .leftJoin(
+      teamseasons,
+      and(
+        eq(teamseasons.teamId, teams.teamId),
+        eq(teamseasons.seasonId, series.seasonId),
+      ),
+    )
+    .leftJoin(
+      teamseasonName,
+      eq(teamseasonName.teamnameId, teamseasons.teamnameId),
+    )
+    .leftJoin(
+      teamlogos,
+      eq(teamnames.logoId, teamlogos.logoId),
+    )
+    .leftJoin(
+      teamseasonLogo,
+      eq(teamseasonName.logoId, teamseasonLogo.logoId),
+    )
+    .where(
+      and(
+        eq(competitions.competitionName, competitionName),
+        eq(competitions.isCup, true),
+        inArray(series.category, [
+          'cup-regular',
+          'cup-qualification',
+        ]),
+        eq(
+          series.seasonId,
+          db
+            .select({ seasonId: seasons.seasonId })
+            .from(seasons)
+            .where(
+              and(
+                eq(seasons.intYear, seasonYear),
+                eq(seasons.women, women),
+              ),
+            ),
+        ),
+      ),
+    )
+    .groupBy(
+      series.competitionId,
+      series.serieId,
+      series.serieName,
+      series.comment,
+      series.serieStructure,
+      series.hasStatic,
+    )
+    .orderBy(asc(series.level), asc(series.serieName))
+
+  return tableJson
 }

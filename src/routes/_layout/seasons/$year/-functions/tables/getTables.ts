@@ -2,21 +2,16 @@ import { db } from '@/db'
 import { seasons, series } from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import type { Serie } from '@/lib/types/serie'
-import type { TeamTable } from '@/lib/types/table'
+import type { SeriesTableV2 } from '@/lib/types/table'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
 import { and, eq, getTableColumns } from 'drizzle-orm'
-import { getUnionedTables } from './getTableFunctions'
 import { getSortedSeriesTables } from './getTableFunctionsV2'
 
 type TablesReturn =
   | {
       status: 200
-      tables: Array<
-        Omit<TeamTable, 'women' | 'group' | 'season'>
-      >
-      serie: Serie
+      serie: SeriesTableV2
     }
   | {
       status: 404
@@ -81,39 +76,17 @@ export const getTables = createServerFn({ method: 'GET' })
             status: 404,
             message: `Ingen ${women ? 'dam' : 'herr'}serie med detta namn det här året. Välj en ny i listan.`,
           }
-        const startOld = performance.now()
-        const results = await getUnionedTables({
-          serie,
-          table,
-        })
-
-        const endOld = performance.now()
-        const startNew = performance.now()
 
         const seriesTables = await getSortedSeriesTables({
           intYear: year,
           women,
           group,
           table,
-        })
-        const endNew = performance.now()
-
-        console.dir(
-          {
-            length: seriesTables.length,
-            oldPerf: endOld - startOld,
-            newPerf: endNew - startNew,
-          },
-          {
-            color: true,
-            depth: 99,
-          },
-        )
+        }).then((res) => res[0])
 
         return {
           status: 200,
-          tables: results,
-          serie,
+          serie: seriesTables,
         }
       } catch (error) {
         catchError(error)

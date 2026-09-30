@@ -42,13 +42,13 @@ const SeasonTables = () => {
             <SeasonTablesButtonList serie={data.serie} />
             <div className="hidden @md/tables:block">
               <TableList
-                tables={data.tables}
+                
                 serie={data.serie}
               />
             </div>
             <div className="@md/tables:hidden">
               <MobileTableList
-                tables={data.tables}
+                
                 serie={data.serie}
               />
             </div>
