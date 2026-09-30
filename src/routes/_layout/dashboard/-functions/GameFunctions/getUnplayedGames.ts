@@ -65,6 +65,7 @@ export const getUnplayedGames = createServerFn({
         })
         .from(games)
         .leftJoin(series, eq(games.serieId, series.serieId))
+        .leftJoin(home, eq(home.teamId, games.homeTeamId))
         .leftJoin(
           homeTeamName,
           eq(homeTeamName.teamnameId, home.teamnameId),
