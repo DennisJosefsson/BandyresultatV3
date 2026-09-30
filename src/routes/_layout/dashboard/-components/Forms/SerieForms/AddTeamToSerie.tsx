@@ -8,7 +8,8 @@ import {
 import { Input } from '@/components/base/ui/input'
 import { getRouteApi } from '@tanstack/react-router'
 import { useState } from 'react'
-import { addTeamToSerieMutation } from '../../../-hooks/addTeamToSerieMutation'
+import { addTeamToSerieMutation } from '../../../-hooks/series/addTeamToSerieMutation'
+
 
 const route = getRouteApi(
   '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit',

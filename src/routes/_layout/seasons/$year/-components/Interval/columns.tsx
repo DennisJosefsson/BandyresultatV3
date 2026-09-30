@@ -21,7 +21,8 @@ export const columns: Array<
       <div className="flex flex-row gap-0.5 @sm:gap-1 @md:gap-2 items-center">
         <TeamLogo
           size={32}
-          teamId={row.original.teamId}
+          logoId={row.original.team.logo.logoId}
+          hasDark={row.original.team.logo.hasDark}
           className="hidden @xs:block size-[1lh] object-scale-down"
           aria-label={row.original.team.casualName}
           title={row.original.team.casualName}

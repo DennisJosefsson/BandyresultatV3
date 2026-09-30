@@ -5,17 +5,26 @@ import {
   seasons,
   series,
   teamgames,
+  teamlogos,
+  teamnames,
   teams,
+  teamseasons,
   teamseries,
 } from '@/db/schema'
+import { coalesce } from '@/lib/drizzleHelpers/coalesce'
+import {
+  jsonAggBuildObject,
+  jsonBuildObject,
+} from '@/lib/drizzleHelpers/jsonAggjsonBuildObject'
 import type {
   GoalsArrayItem,
-  PlayoffGroupsV2,
+  PlayoffGroupsV3,
   PlayoffTable,
-  TeamArrayItem,
+  TeamArrayItemV2,
 } from '@/lib/types/table'
+import type { TeamBaseWithLogo } from '@/lib/types/team'
 import { sortOrder } from '@/lib/utils/constants'
-import type { SQL } from 'drizzle-orm'
+import type { Column, SQL } from 'drizzle-orm'
 import {
   and,
   asc,
@@ -24,6 +33,8 @@ import {
   eq,
   getTableColumns,
   inArray,
+  isNotNull,
+  or,
   sql,
   sum,
 } from 'drizzle-orm'
@@ -34,6 +45,34 @@ type FunctionProps = {
   women: boolean
   competitionName: string
 }
+
+const home = alias(teams, 'home')
+const away = alias(teams, 'away')
+const homeTeamSeason = alias(teamseasons, 'home_teamseason')
+const awayTeamSeason = alias(teamseasons, 'away_teamseason')
+const homeTeamName = alias(teamnames, 'home_teamname')
+const awayTeamName = alias(teamnames, 'away_teamname')
+const homeLogo = alias(teamlogos, 'home_logo')
+const awayLogo = alias(teamlogos, 'away_logo')
+const homeTeamSeasonName = alias(
+  teamnames,
+  'home_teamseason_teamname',
+)
+const awayTeamSeasonName = alias(
+  teamnames,
+  'away_teamseason_teamname',
+)
+const homeTeamSeasonLogo = alias(
+  teamlogos,
+  'home_teamseason_logo',
+)
+const awayTeamSeasonLogo = alias(
+  teamlogos,
+  'away_teamseason_logo',
+)
+
+const teamseasonName = alias(teamnames, 'teamseason_name')
+const teamseasonLogo = alias(teamlogos, 'teamseason_logo')
 
 export const getCupPlayoffTableData = async ({
   year,
@@ -46,257 +85,242 @@ export const getCupPlayoffTableData = async ({
     competitionName,
   })
 
-  // const playoffCte = db.$with('playoff_cte').as(
-  //   db
-  //     .select({
-  //       teamId: teamgames.teamId,
-  //       group: series.group as unknown as SQL<string>,
-  //       category: series.category as unknown as SQL<string>,
-  //       serieId: teamgames.serieId,
-  //       totalGames: count(teamgames.teamGameId).as(
-  //         'total_games',
-  //       ),
-  //       totalPoints: sum(teamgames.points)
-  //         .mapWith(Number)
-  //         .as('total_points'),
-  //       totalGoalsScored: sum(teamgames.goalsScored)
-  //         .mapWith(Number)
-  //         .as(
-  //           'total_goals_scored',
-  //         ) as unknown as SQL<number>,
-  //       totalGoalsConceded: sum(teamgames.goalsConceded)
-  //         .mapWith(Number)
-  //         .as(
-  //           'total_goals_conceded',
-  //         ) as unknown as SQL<number>,
-  //       totalGoalDifference: sum(teamgames.goalDifference)
-  //         .mapWith(Number)
-  //         .as(
-  //           'total_goal_difference',
-  //         ) as unknown as SQL<number>,
-  //       totalWins:
-  //         sql<number>`cast(count(*) filter (where win or ot_win) as int)`.as(
-  //           'totalWins',
-  //         ),
-  //       totalDraws:
-  //         sql<number>`cast(count(*) filter (where draw) as int)`.as(
-  //           'totalDraws',
-  //         ),
-  //       totalLost:
-  //         sql<number>`cast(count(*) filter (where lost or ot_lost) as int)`.as(
-  //           'totalLost',
-  //         ),
-  //       awayGoals:
-  //         sql<number>`sum(case when teamgames.home_game = false then teamgames.goals_scored else null end)`
-  //           .mapWith(Number)
-  //           .as('away_goals'),
-  //     })
-  //     .from(teamgames)
-  //     .leftJoin(
-  //       series,
-  //       eq(teamgames.serieId, series.serieId),
-  //     )
-  //     .where(inArray(teamgames.serieId, serieIds))
-  //     .groupBy(
-  //       series.group,
-  //       teamgames.teamId,
-  //       series.category,
-  //       teamgames.serieId,
-  //     ),
-  // )
+  const finalAndBronzeGames = await db
+    .select({
+      ...getTableColumns(games),
+      group: series.group as unknown as SQL<string>,
+      category: series.category as unknown as SQL<string>,
+      home: {
+        teamId: home.teamId,
+        name: coalesce(
+          homeTeamSeasonName.name,
+          homeTeamName.name,
+        ),
+        casualName: coalesce(
+          homeTeamSeasonName.casualName,
+          homeTeamName.casualName,
+        ),
+        shortName: coalesce(
+          homeTeamSeasonName.shortName,
+          homeTeamName.shortName,
+        ),
+        logo: {
+          logoId: coalesce(
+            homeTeamSeasonLogo.logoId,
+            homeLogo.logoId,
+          ),
+          hasDark: coalesce(
+            homeTeamSeasonLogo.hasDark,
+            homeLogo.hasDark,
+          ),
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
+      away: {
+        teamId: away.teamId,
+        name: coalesce(
+          awayTeamSeasonName.name,
+          awayTeamName.name,
+        ),
+        casualName: coalesce(
+          awayTeamSeasonName.casualName,
+          awayTeamName.casualName,
+        ),
+        shortName: coalesce(
+          awayTeamSeasonName.shortName,
+          awayTeamName.shortName,
+        ),
+        logo: {
+          logoId: coalesce(
+            awayTeamSeasonLogo.logoId,
+            awayLogo.logoId,
+          ),
+          hasDark: coalesce(
+            awayTeamSeasonLogo.hasDark,
+            awayLogo.hasDark,
+          ),
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
+    })
+    .from(games)
+    .leftJoin(home, eq(games.homeTeamId, home.teamId))
+    .leftJoin(away, eq(games.awayTeamId, away.teamId))
+    .leftJoin(
+      homeTeamSeason,
+      and(
+        eq(homeTeamSeason.seasonId, games.seasonId),
+        eq(homeTeamSeason.teamId, games.homeTeamId),
+      ),
+    )
+    .leftJoin(
+      awayTeamSeason,
+      and(
+        eq(awayTeamSeason.seasonId, games.seasonId),
+        eq(awayTeamSeason.teamId, games.awayTeamId),
+      ),
+    )
+    .leftJoin(
+      homeTeamName,
+      eq(home.teamnameId, homeTeamName.teamnameId),
+    )
+    .leftJoin(
+      awayTeamName,
+      eq(away.teamnameId, awayTeamName.teamnameId),
+    )
+    .leftJoin(
+      homeTeamSeasonName,
+      eq(
+        homeTeamSeason.teamnameId,
+        homeTeamSeasonName.teamnameId,
+      ),
+    )
+    .leftJoin(
+      awayTeamSeasonName,
+      eq(
+        awayTeamSeason.teamnameId,
+        awayTeamSeasonName.teamnameId,
+      ),
+    )
+    .leftJoin(
+      homeLogo,
+      eq(homeTeamName.logoId, homeLogo.logoId),
+    )
+    .leftJoin(
+      awayLogo,
+      eq(awayTeamName.logoId, awayLogo.logoId),
+    )
+    .leftJoin(
+      homeTeamSeasonLogo,
+      eq(
+        homeTeamSeasonName.logoId,
+        homeTeamSeasonLogo.logoId,
+      ),
+    )
+    .leftJoin(
+      awayTeamSeasonLogo,
+      eq(
+        awayTeamSeasonName.logoId,
+        awayTeamSeasonLogo.logoId,
+      ),
+    )
+    .leftJoin(series, eq(games.serieId, series.serieId))
+    .where(
+      and(
+        inArray(
+          series.competitionId,
+          db
+            .select({
+              competitionId: competitions.competitionId,
+            })
+            .from(competitions)
+            .where(
+              and(
+                eq(
+                  competitions.competitionName,
+                  competitionName,
+                ),
+                inArray(
+                  competitions.seasonId,
+                  db
+                    .select({ seasonId: seasons.seasonId })
+                    .from(seasons)
+                    .where(
+                      and(
+                        eq(seasons.intYear, year),
+                        eq(seasons.women, women),
+                      ),
+                    ),
+                ),
+              ),
+            ),
+        ),
+        or(
+          eq(series.group, 'cup-final'),
+          eq(series.group, 'cup-bronze'),
+        ),
+      ),
+    )
+    .orderBy(desc(games.date))
 
-  // const playoffTables = await db
-  //   .with(playoffCte)
+  // const bronzeGames = await db
   //   .select({
-  //     teamId: playoffCte.teamId,
-  //     group: playoffCte.group,
-  //     category: playoffCte.category,
-  //     totalGames: playoffCte.totalGames,
-  //     totalWins: playoffCte.totalWins,
-  //     totalDraws: playoffCte.totalDraws,
-  //     totalLost: playoffCte.totalLost,
-  //     totalGoalsScored: playoffCte.totalGoalsScored,
-  //     totalGoalsConceded: playoffCte.totalGoalsConceded,
-  //     totalGoalDifference: playoffCte.totalGoalDifference,
-  //     totalPoints: playoffCte.totalPoints,
-  //     awayGoals: playoffCte.awayGoals,
-  //     team: {
-  //       teamId: teams.teamId,
-  //       name: teams.name,
-  //       shortName: teams.shortName,
-  //       casualName: teams.casualName,
-  //     } as unknown as SQL<{
-  //       teamId: number
-  //       name: string
-  //       shortName: string
-  //       casualName: string
-  //     }>,
+  //     ...getTableColumns(games),
+  //     group: series.group as unknown as SQL<string>,
+  //     category: series.category as unknown as SQL<string>,
+  //     home: {
+  //       teamId: home.teamId,
+  //       name: homeTeamName.name,
+  //       casualName: homeTeamName.casualName,
+  //       shortName: homeTeamName.shortName,
+  //       logo: {
+  //         logoId: homeLogo.logoId,
+  //         hasDark: homeLogo.hasDark,
+  //       },
+  //     } as unknown as SQL<TeamBaseWithLogo>,
+  //     away: {
+  //       teamId: away.teamId,
+  //       name: awayTeamName.name,
+  //       casualName: awayTeamName.casualName,
+  //       shortName: awayTeamName.shortName,
+  //       logo: {
+  //         logoId: awayLogo.logoId,
+  //         hasDark: awayLogo.hasDark,
+  //       },
+  //     } as unknown as SQL<TeamBaseWithLogo>,
   //   })
-  //   .from(playoffCte)
-  //   .leftJoin(teams, eq(teams.teamId, playoffCte.teamId))
+  //   .from(games)
+  //   .leftJoin(home, eq(games.homeTeamId, home.teamId))
+  //   .leftJoin(away, eq(games.awayTeamId, away.teamId))
   //   .leftJoin(
-  //     series,
-  //     eq(series.serieId, playoffCte.serieId),
+  //     homeTeamName,
+  //     eq(homeTeamName.teamnameId, home.teamnameId),
   //   )
-  //   .then((res) =>
-  //     sortPlayoffTables({
-  //       tableArray: res,
-  //       uefaSorting: false,
-  //     }),
+  //   .leftJoin(
+  //     awayTeamName,
+  //     eq(awayTeamName.teamnameId, away.teamnameId),
   //   )
-  //   .then((res) => {
-  //     const array: Array<PlayoffGroups> = []
-  //     playoffGroups.forEach((group) => {
-  //       const table = res.find(
-  //         (grp) => grp.group === group.group,
-  //       )
-  //       array.push({
-  //         name: group.serieName,
-  //         group: group.group,
-  //         category: group.category,
-  //         table,
-  //       })
-  //     })
-  //     return array
-  //   })
-  //   .then((res) => sortCategories({ sortedTables: res }))
-
-  const home = alias(teams, 'home')
-  const away = alias(teams, 'away')
-
-  const finalGames = await db
-    .select({
-      ...getTableColumns(games),
-      group: series.group as unknown as SQL<string>,
-      category: series.category as unknown as SQL<string>,
-      home: {
-        teamId: home.teamId,
-        name: home.name,
-        casualName: home.casualName,
-        shortName: home.shortName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        casualName: string
-        shortName: string
-      }>,
-      away: {
-        teamId: away.teamId,
-        name: away.name,
-        casualName: away.casualName,
-        shortName: away.shortName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        casualName: string
-        shortName: string
-      }>,
-    })
-    .from(games)
-    .leftJoin(home, eq(games.homeTeamId, home.teamId))
-    .leftJoin(away, eq(games.awayTeamId, away.teamId))
-    .leftJoin(series, eq(games.serieId, series.serieId))
-    .where(
-      and(
-        inArray(
-          series.competitionId,
-          db
-            .select({
-              competitionId: competitions.competitionId,
-            })
-            .from(competitions)
-            .where(
-              and(
-                eq(
-                  competitions.competitionName,
-                  competitionName,
-                ),
-                inArray(
-                  competitions.seasonId,
-                  db
-                    .select({ seasonId: seasons.seasonId })
-                    .from(seasons)
-                    .where(
-                      and(
-                        eq(seasons.intYear, year),
-                        eq(seasons.women, women),
-                      ),
-                    ),
-                ),
-              ),
-            ),
-        ),
-        eq(series.group, 'cup-final'),
-      ),
-    )
-    .orderBy(desc(games.date))
-
-  const bronzeGames = await db
-    .select({
-      ...getTableColumns(games),
-      group: series.group as unknown as SQL<string>,
-      category: series.category as unknown as SQL<string>,
-      home: {
-        teamId: home.teamId,
-        name: home.name,
-        casualName: home.casualName,
-        shortName: home.shortName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        casualName: string
-        shortName: string
-      }>,
-      away: {
-        teamId: away.teamId,
-        name: away.name,
-        casualName: away.casualName,
-        shortName: away.shortName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        casualName: string
-        shortName: string
-      }>,
-    })
-    .from(games)
-    .leftJoin(home, eq(games.homeTeamId, home.teamId))
-    .leftJoin(away, eq(games.awayTeamId, away.teamId))
-    .leftJoin(series, eq(games.serieId, series.serieId))
-    .where(
-      and(
-        inArray(
-          series.competitionId,
-          db
-            .select({
-              competitionId: competitions.competitionId,
-            })
-            .from(competitions)
-            .where(
-              and(
-                eq(
-                  competitions.competitionName,
-                  competitionName,
-                ),
-                inArray(
-                  competitions.seasonId,
-                  db
-                    .select({ seasonId: seasons.seasonId })
-                    .from(seasons)
-                    .where(
-                      and(
-                        eq(seasons.intYear, year),
-                        eq(seasons.women, women),
-                      ),
-                    ),
-                ),
-              ),
-            ),
-        ),
-        eq(series.group, 'cup-bronze'),
-      ),
-    )
-    .orderBy(desc(games.date))
+  //   .leftJoin(
+  //     homeLogo,
+  //     eq(homeTeamName.logoId, homeLogo.logoId),
+  //   )
+  //   .leftJoin(
+  //     awayLogo,
+  //     eq(awayTeamName.logoId, awayLogo.logoId),
+  //   )
+  //   .leftJoin(series, eq(games.serieId, series.serieId))
+  //   .where(
+  //     and(
+  //       inArray(
+  //         series.competitionId,
+  //         db
+  //           .select({
+  //             competitionId: competitions.competitionId,
+  //           })
+  //           .from(competitions)
+  //           .where(
+  //             and(
+  //               eq(
+  //                 competitions.competitionName,
+  //                 competitionName,
+  //               ),
+  //               inArray(
+  //                 competitions.seasonId,
+  //                 db
+  //                   .select({ seasonId: seasons.seasonId })
+  //                   .from(seasons)
+  //                   .where(
+  //                     and(
+  //                       eq(seasons.intYear, year),
+  //                       eq(seasons.women, women),
+  //                     ),
+  //                   ),
+  //               ),
+  //             ),
+  //           ),
+  //       ),
+  //       eq(series.group, 'cup-bronze'),
+  //     ),
+  //   )
+  //   .orderBy(desc(games.date))
 
   const getPlayoffSeriesTables =
     await getPlayoffAsSeriesTable({
@@ -306,8 +330,12 @@ export const getCupPlayoffTableData = async ({
     })
 
   return {
-    finalGames,
-    bronzeGames,
+    finalGames: finalAndBronzeGames.filter(
+      (g) => g.group === 'cup-final',
+    ),
+    bronzeGames: finalAndBronzeGames.filter(
+      (g) => g.group === 'cup-bronze',
+    ),
     playoffTables,
     playoffSeriesTables:
       getPlayoffSeriesTables.length === 0
@@ -417,48 +445,6 @@ function sortPlayoffTables({
   return sortedTables
 }
 
-// const sortCategories = ({
-//   sortedTables,
-// }: {
-//   sortedTables: Array<PlayoffGroups>
-// }) => {
-//   const categoryArray = sortedTables.reduce(
-//     (category, group) => {
-//       if (!category[group.category]) {
-//         category[group.category] = []
-//       }
-//       category[group.category].push(group)
-//       return category
-//     },
-//     {} as SortedCategories,
-//   )
-
-//   const sortedCategories = Object.keys(categoryArray).map(
-//     (c) => {
-//       return {
-//         category: c,
-//         groups: categoryArray[c],
-//       }
-//     },
-//   )
-
-//   return sortedCategories.sort((a, b) => {
-//     if (
-//       sortOrder.indexOf(a.category) >
-//       sortOrder.indexOf(b.category)
-//     ) {
-//       return 1
-//     } else if (
-//       sortOrder.indexOf(a.category) <
-//       sortOrder.indexOf(b.category)
-//     ) {
-//       return -1
-//     } else {
-//       return 0
-//     }
-//   })
-// }
-
 async function getPlayoffAsSeriesTable({
   year,
   women,
@@ -471,6 +457,7 @@ async function getPlayoffAsSeriesTable({
   const playoffCte = db.$with('playoff_cte').as(
     db
       .select({
+        seasonId: teamgames.seasonId,
         teamId: teamgames.teamId,
         group: series.group as unknown as SQL<string>,
         category: series.category as unknown as SQL<string>,
@@ -554,6 +541,7 @@ async function getPlayoffAsSeriesTable({
         ),
       )
       .groupBy(
+        teamgames.seasonId,
         series.group,
         teamgames.teamId,
         series.category,
@@ -578,15 +566,26 @@ async function getPlayoffAsSeriesTable({
       awayGoals: playoffCte.awayGoals,
       team: {
         teamId: teams.teamId,
-        name: teams.name,
-        shortName: teams.shortName,
-        casualName: teams.casualName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        shortName: string
-        casualName: string
-      }>,
+        name: coalesce(teamseasonName.name, teamnames.name),
+        shortName: coalesce(
+          teamseasonName.shortName,
+          teamnames.shortName,
+        ),
+        casualName: coalesce(
+          teamseasonName.casualName,
+          teamnames.casualName,
+        ),
+        logo: {
+          logoId: coalesce(
+            teamseasonLogo.logoId,
+            teamlogos.logoId,
+          ),
+          hasDark: coalesce(
+            teamseasonLogo.hasDark,
+            teamlogos.hasDark,
+          ),
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
       serie: {
         level: series.level,
         serieName: series.serieName,
@@ -597,6 +596,29 @@ async function getPlayoffAsSeriesTable({
     })
     .from(playoffCte)
     .leftJoin(teams, eq(teams.teamId, playoffCte.teamId))
+    .leftJoin(
+      teamseasons,
+      and(
+        eq(teamseasons.teamId, teams.teamId),
+        eq(teamseasons.seasonId, playoffCte.seasonId),
+      ),
+    )
+    .leftJoin(
+      teamnames,
+      eq(teamnames.teamnameId, teams.teamnameId),
+    )
+    .leftJoin(
+      teamseasonName,
+      eq(teamseasons.teamnameId, teamseasonName.teamnameId),
+    )
+    .leftJoin(
+      teamlogos,
+      eq(teamlogos.logoId, teamnames.logoId),
+    )
+    .leftJoin(
+      teamseasonLogo,
+      eq(teamseasonLogo.logoId, teamseasonName.logoId),
+    )
     .leftJoin(
       series,
       eq(series.serieId, playoffCte.serieId),
@@ -670,7 +692,7 @@ async function getPlayoffTable({
   women: boolean
   competitionName: string
 }) {
-  const seriesCte = db.$with('series_cte').as(
+  const seriesCteWithHelper = db.$with('series_cte').as(
     db
       .select({
         serieId: series.serieId,
@@ -678,19 +700,24 @@ async function getPlayoffTable({
         gameCount: count(teamgames.teamGameId).as(
           'game_count',
         ),
-        goalsArray: sql<Array<GoalsArrayItem>>`
-                  coalesce(
-                      json_agg(
-                          json_build_object(
-                          'otWin',teamgames.ot_win,
-                          'penalties',games.penalties,
-                          'extraTime',games.extra_time,
-                          'goals',coalesce(teamgames.ot_goals_scored, teamgames.goals_scored, 0)
-                          )
-                      order by teamgames."date" asc
-                      ) filter (where teamgames.played is true), '[]'::json
-                  ) 
-                  `.as('goals_array'),
+        goalsArray: jsonAggBuildObject<
+          Array<GoalsArrayItem>
+        >(
+          {
+            otWin: teamgames.otWin,
+            penalties: games.penalties,
+            extraTime: games.extraTime,
+            goals: coalesce(
+              teamgames.otGoalsConceded,
+              teamgames.goalsScored,
+              sql<number>`0`,
+            ),
+          },
+          {
+            orderBy: [asc(teamgames.date)],
+            filter: eq(teamgames.played, true),
+          },
+        ).as('goals_array'),
         awayGoals:
           sql`coalesce(sum(case when teamgames.home_game is false then teamgames.goals_scored else 0 end),0)`
             .mapWith(Number)
@@ -742,68 +769,307 @@ async function getPlayoffTable({
       .groupBy(series.serieId, teamgames.teamId),
   )
 
-  const groupsAgg = db.$with('groups_agg').as(
+  // const seriesCte = db.$with('series_cte').as(
+  //   db
+  //     .select({
+  //       serieId: series.serieId,
+  //       teamId: teamgames.teamId,
+  //       gameCount: count(teamgames.teamGameId).as(
+  //         'game_count',
+  //       ),
+  //       goalsArray: sql<Array<GoalsArrayItem>>`
+  //                 coalesce(
+  //                     json_agg(
+  //                         json_build_object(
+  //                         'otWin',teamgames.ot_win,
+  //                         'penalties',games.penalties,
+  //                         'extraTime',games.extra_time,
+  //                         'goals',coalesce(teamgames.ot_goals_scored, teamgames.goals_scored, 0)
+  //                         )
+  //                     order by teamgames."date" asc
+  //                     ) filter (where teamgames.played is true), '[]'::json
+  //                 )
+  //                 `.as('goals_array'),
+  //       awayGoals:
+  //         sql`coalesce(sum(case when teamgames.home_game is false then teamgames.goals_scored else 0 end),0)`
+  //           .mapWith(Number)
+  //           .as('away_goals'),
+  //       winCount:
+  //         sql`coalesce(sum(case when coalesce(teamgames.ot_win,teamgames.win) is true then 1 else 0 end),0)`
+  //           .mapWith(Number)
+  //           .as('win_count'),
+  //     })
+  //     .from(series)
+  //     .leftJoin(
+  //       seasons,
+  //       eq(seasons.seasonId, series.seasonId),
+  //     )
+  //     .leftJoin(
+  //       teamgames,
+  //       eq(teamgames.serieId, series.serieId),
+  //     )
+  //     .leftJoin(games, eq(games.gameId, teamgames.gameId))
+  //     .leftJoin(
+  //       competitions,
+  //       eq(
+  //         competitions.competitionId,
+  //         series.competitionId,
+  //       ),
+  //     )
+  //     .where(
+  //       and(
+  //         eq(competitions.competitionName, competitionName),
+  //         inArray(
+  //           competitions.seasonId,
+  //           db
+  //             .select({ seasonId: seasons.seasonId })
+  //             .from(seasons)
+  //             .where(
+  //               and(
+  //                 eq(seasons.intYear, year),
+  //                 eq(seasons.women, women),
+  //               ),
+  //             ),
+  //         ),
+  //         inArray(series.category, [
+  //           'cup-semi',
+  //           'cup-quarter',
+  //           'cup-eight',
+  //         ]),
+  //       ),
+  //     )
+  //     .groupBy(series.serieId, teamgames.teamId),
+  // )
+
+  const groupsAggWithHelper = db.$with('groups_agg').as(
     db
-      .with(seriesCte)
+      .with(seriesCteWithHelper)
       .select({
-        serieId: seriesCte.serieId,
+        serieId: seriesCteWithHelper.serieId,
         serieName: series.serieName,
         level: series.level,
-        teamArray: sql<Array<TeamArrayItem>>`
-                      coalesce(json_agg(
-                          json_build_object(
-                              'teamId',teams.team_id,
-                              'shortName',teams.short_name,
-                              'name',teams."name",
-                              'casualName',teams.casual_name,
-                              'winCount',series_cte.win_count,
-                              'gameCount',series_cte.game_count,
-                              'awayGoals',series_cte.away_goals,
-                              'goalsArray',series_cte.goals_array
-                          ) order by teamseries.sort_priority desc, series_cte.win_count desc) 
-                      filter (where teams.team_id is not null), '[]'::json )
-                  `.as('team_array'),
+        teamArray: jsonAggBuildObject<
+          Array<TeamArrayItemV2>
+        >(
+          {
+            winCount:
+              seriesCteWithHelper.winCount as unknown as SQL<number>,
+            gameCount:
+              seriesCteWithHelper.gameCount as unknown as SQL<number>,
+            awayGoals:
+              seriesCteWithHelper.awayGoals as unknown as SQL<number>,
+            goalsArray:
+              seriesCteWithHelper.goalsArray as unknown as SQL<
+                Array<GoalsArrayItem>
+              >,
+            team: jsonBuildObject<
+              TeamBaseWithLogo,
+              Record<string, Column | SQL>
+            >({
+              teamId: teams.teamId,
+              name: coalesce(
+                teamseasonName.name,
+                teamnames.name,
+              ),
+              casualName: coalesce(
+                teamseasonName.casualName,
+                teamnames.casualName,
+              ),
+              shortName: coalesce(
+                teamseasonName.shortName,
+                teamnames.shortName,
+              ),
+              logo: jsonBuildObject({
+                logoId: coalesce(
+                  teamseasonLogo.logoId,
+                  teamlogos.logoId,
+                ),
+                hasDark: coalesce(
+                  teamseasonLogo.hasDark,
+                  teamlogos.hasDark,
+                ),
+              }),
+            }),
+          },
+          {
+            orderBy: [
+              desc(teamseries.sortPriority),
+              desc(seriesCteWithHelper.winCount),
+            ],
+            filter: isNotNull(teams.teamId),
+          },
+        ).as('team_array'),
       })
-      .from(seriesCte)
+      .from(seriesCteWithHelper)
       .leftJoin(
         series,
-        eq(series.serieId, seriesCte.serieId),
+        eq(series.serieId, seriesCteWithHelper.serieId),
       )
-      .leftJoin(teams, eq(teams.teamId, seriesCte.teamId))
+      .leftJoin(
+        teams,
+        eq(teams.teamId, seriesCteWithHelper.teamId),
+      )
+      .leftJoin(
+        teamseasons,
+        and(
+          eq(teamseasons.teamId, teams.teamId),
+          eq(teamseasons.seasonId, series.seasonId),
+        ),
+      )
+      .leftJoin(
+        teamnames,
+        eq(teamnames.teamnameId, teams.teamnameId),
+      )
+      .leftJoin(
+        teamseasonName,
+        eq(
+          teamseasons.teamnameId,
+          teamseasonName.teamnameId,
+        ),
+      )
+      .leftJoin(
+        teamlogos,
+        eq(teamlogos.logoId, teamnames.logoId),
+      )
+      .leftJoin(
+        teamseasonLogo,
+        eq(teamseasonLogo.logoId, teamseasonName.logoId),
+      )
       .leftJoin(
         teamseries,
         and(
-          eq(teamseries.serieId, seriesCte.serieId),
-          eq(teamseries.teamId, seriesCte.teamId),
+          eq(
+            teamseries.serieId,
+            seriesCteWithHelper.serieId,
+          ),
+          eq(teamseries.teamId, seriesCteWithHelper.teamId),
         ),
       )
       .groupBy(
-        seriesCte.serieId,
+        seriesCteWithHelper.serieId,
         series.serieName,
         series.level,
       )
       .orderBy(asc(series.level), series.serieName),
   )
 
-  const array = await db
-    .with(groupsAgg)
+  // const groupsAgg = db.$with('groups_agg').as(
+  //   db
+  //     .with(seriesCte)
+  //     .select({
+  //       serieId: seriesCte.serieId,
+  //       serieName: series.serieName,
+  //       level: series.level,
+  //       teamArray: sql<Array<TeamArrayItem>>`
+  //                     coalesce(json_agg(
+  //                         json_build_object(
+  //                             'teamId',teams.team_id,
+  //                            'shortName',coalesce(teamseason_name.short_name,teamnames.short_name),
+  //                             'name',coalesce(teamseason_name."name",teamnames."name"),
+  //                             'casualName',coalesce(teamseason_name.casual_name,teamnames.casual_name),
+  //                             'logoId',coalesce(teamseason_logo.logo_id,teamlogos.logo_id),
+  //                             'hasDark',coalesce(teamseason_logo.has_dark,teamlogos.has_dark),
+  //                             'winCount',series_cte.win_count,
+  //                             'gameCount',series_cte.game_count,
+  //                             'awayGoals',series_cte.away_goals,
+  //                             'goalsArray',series_cte.goals_array
+  //                         ) order by teamseries.sort_priority desc, series_cte.win_count desc)
+  //                     filter (where teams.team_id is not null), '[]'::json )
+  //                 `.as('team_array'),
+  //     })
+  //     .from(seriesCte)
+  //     .leftJoin(
+  //       series,
+  //       eq(series.serieId, seriesCte.serieId),
+  //     )
+  //     .leftJoin(teams, eq(teams.teamId, seriesCte.teamId))
+  //     .leftJoin(
+  //       teamseasons,
+  //       and(
+  //         eq(teamseasons.teamId, teams.teamId),
+  //         eq(teamseasons.seasonId, series.seasonId),
+  //       ),
+  //     )
+  //     .leftJoin(
+  //       teamnames,
+  //       eq(teamnames.teamnameId, teams.teamnameId),
+  //     )
+  //     .leftJoin(
+  //       teamseasonName,
+  //       eq(
+  //         teamseasons.teamnameId,
+  //         teamseasonName.teamnameId,
+  //       ),
+  //     )
+  //     .leftJoin(
+  //       teamlogos,
+  //       eq(teamlogos.logoId, teamnames.logoId),
+  //     )
+  //     .leftJoin(
+  //       teamseasonLogo,
+  //       eq(teamseasonLogo.logoId, teamseasonName.logoId),
+  //     )
+  //     .leftJoin(
+  //       teamseries,
+  //       and(
+  //         eq(teamseries.serieId, seriesCte.serieId),
+  //         eq(teamseries.teamId, seriesCte.teamId),
+  //       ),
+  //     )
+  //     .groupBy(
+  //       seriesCte.serieId,
+  //       series.serieName,
+  //       series.level,
+  //     )
+  //     .orderBy(asc(series.level), series.serieName),
+  // )
+
+  const arrayWithHelper = await db
+    .with(groupsAggWithHelper)
     .select({
       category: series.category as unknown as SQL<string>,
-      level: groupsAgg.level,
-      groupArray: sql<Array<PlayoffGroupsV2>>`
-                  json_agg(
-                      json_build_object(
-                          'group',series.serie_group_code,
-                          'serieName',groups_agg.serie_name,
-                          'teamArray',groups_agg.team_array
-                      ) order by groups_agg.serie_name
-                  )
-                `.as('group_array'),
+      level: groupsAggWithHelper.level,
+      groupArray: jsonAggBuildObject<
+        Array<PlayoffGroupsV3>
+      >(
+        {
+          group: series.group,
+          serieName: groupsAggWithHelper.serieName,
+          teamArray:
+            groupsAggWithHelper.teamArray as unknown as SQL<
+              Array<TeamArrayItemV2>
+            >,
+        },
+        { orderBy: [asc(groupsAggWithHelper.serieName)] },
+      ).as('group_array'),
     })
-    .from(groupsAgg)
-    .leftJoin(series, eq(series.serieId, groupsAgg.serieId))
-    .groupBy(series.category, groupsAgg.level)
-    .orderBy(asc(groupsAgg.level))
+    .from(groupsAggWithHelper)
+    .leftJoin(
+      series,
+      eq(series.serieId, groupsAggWithHelper.serieId),
+    )
+    .groupBy(series.category, groupsAggWithHelper.level)
+    .orderBy(asc(groupsAggWithHelper.level))
 
-  return array
+  // const array = await db
+  //   .with(groupsAgg)
+  //   .select({
+  //     category: series.category as unknown as SQL<string>,
+  //     level: groupsAgg.level,
+  //     groupArray: sql<Array<PlayoffGroupsV2>>`
+  //                 json_agg(
+  //                     json_build_object(
+  //                         'group',series.serie_group_code,
+  //                         'serieName',groups_agg.serie_name,
+  //                         'teamArray',groups_agg.team_array
+  //                     ) order by groups_agg.serie_name
+  //                 )
+  //               `.as('group_array'),
+  //   })
+  //   .from(groupsAgg)
+  //   .leftJoin(series, eq(series.serieId, groupsAgg.serieId))
+  //   .groupBy(series.category, groupsAgg.level)
+  //   .orderBy(asc(groupsAgg.level))
+
+  return arrayWithHelper
 }

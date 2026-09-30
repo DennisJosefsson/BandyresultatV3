@@ -4,9 +4,11 @@ import {
   seasons,
   series,
   teamgames,
+  teamlogos,
+  teamnames,
   teams,
 } from '@/db/schema'
-import type { TeamBase } from '@/lib/types/team'
+import type { TeamBaseWithLogo } from '@/lib/types/team'
 import type { SQL } from 'drizzle-orm'
 import {
   and,
@@ -32,10 +34,14 @@ export async function getPointData({
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
-        name: teams.name,
-        shortName: teams.shortName,
-        casualName: teams.casualName,
-      } as unknown as SQL<TeamBase>,
+        name: teamnames.name,
+        shortName: teamnames.shortName,
+        casualName: teamnames.casualName,
+        logo: {
+          logoId: teamlogos.logoId,
+          hasDark: teamlogos.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
     })
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
@@ -44,6 +50,14 @@ export async function getPointData({
       eq(competitions.competitionId, series.competitionId),
     )
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
+    .leftJoin(
+      teamnames,
+      eq(teams.teamnameId, teamnames.teamnameId),
+    )
+    .leftJoin(
+      teamlogos,
+      eq(teamlogos.logoId, teamnames.logoId),
+    )
     .leftJoin(
       seasons,
       eq(teamgames.seasonId, seasons.seasonId),
@@ -57,7 +71,15 @@ export async function getPointData({
         eq(competitions.division, 1),
       ),
     )
-    .groupBy(teams.teamId, seasons.year)
+    .groupBy(
+      teams.teamId,
+      seasons.year,
+      teamnames.name,
+      teamnames.shortName,
+      teamnames.casualName,
+      teamlogos.logoId,
+      teamlogos.hasDark,
+    )
     .having(gte(count(teamgames.teamGameId), 10))
     .orderBy(
       desc(
@@ -93,10 +115,14 @@ export async function getPointData({
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
-        name: teams.name,
-        shortName: teams.shortName,
-        casualName: teams.casualName,
-      } as unknown as SQL<TeamBase>,
+        name: teamnames.name,
+        shortName: teamnames.shortName,
+        casualName: teamnames.casualName,
+        logo: {
+          logoId: teamlogos.logoId,
+          hasDark: teamlogos.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
     })
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
@@ -105,6 +131,14 @@ export async function getPointData({
       eq(competitions.competitionId, series.competitionId),
     )
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
+    .leftJoin(
+      teamnames,
+      eq(teams.teamnameId, teamnames.teamnameId),
+    )
+    .leftJoin(
+      teamlogos,
+      eq(teamlogos.logoId, teamnames.logoId),
+    )
     .leftJoin(
       seasons,
       eq(teamgames.seasonId, seasons.seasonId),
@@ -119,7 +153,15 @@ export async function getPointData({
         eq(teamgames.homeGame, true),
       ),
     )
-    .groupBy(teams.teamId, seasons.year)
+    .groupBy(
+      teams.teamId,
+      seasons.year,
+      teamnames.name,
+      teamnames.shortName,
+      teamnames.casualName,
+      teamlogos.logoId,
+      teamlogos.hasDark,
+    )
     .having(gte(count(teamgames.teamGameId), 5))
     .orderBy(
       desc(
@@ -155,10 +197,14 @@ export async function getPointData({
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
-        name: teams.name,
-        shortName: teams.shortName,
-        casualName: teams.casualName,
-      } as unknown as SQL<TeamBase>,
+        name: teamnames.name,
+        shortName: teamnames.shortName,
+        casualName: teamnames.casualName,
+        logo: {
+          logoId: teamlogos.logoId,
+          hasDark: teamlogos.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
     })
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
@@ -167,6 +213,14 @@ export async function getPointData({
       eq(competitions.competitionId, series.competitionId),
     )
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
+    .leftJoin(
+      teamnames,
+      eq(teams.teamnameId, teamnames.teamnameId),
+    )
+    .leftJoin(
+      teamlogos,
+      eq(teamlogos.logoId, teamnames.logoId),
+    )
     .leftJoin(
       seasons,
       eq(teamgames.seasonId, seasons.seasonId),
@@ -181,7 +235,15 @@ export async function getPointData({
         eq(teamgames.homeGame, false),
       ),
     )
-    .groupBy(teams.teamId, seasons.year)
+    .groupBy(
+      teams.teamId,
+      seasons.year,
+      teamnames.name,
+      teamnames.shortName,
+      teamnames.casualName,
+      teamlogos.logoId,
+      teamlogos.hasDark,
+    )
     .having(gte(count(teamgames.teamGameId), 5))
     .orderBy(
       desc(
@@ -217,10 +279,14 @@ export async function getPointData({
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
-        name: teams.name,
-        shortName: teams.shortName,
-        casualName: teams.casualName,
-      } as unknown as SQL<TeamBase>,
+        name: teamnames.name,
+        shortName: teamnames.shortName,
+        casualName: teamnames.casualName,
+        logo: {
+          logoId: teamlogos.logoId,
+          hasDark: teamlogos.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
     })
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
@@ -229,6 +295,14 @@ export async function getPointData({
       eq(competitions.competitionId, series.competitionId),
     )
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
+    .leftJoin(
+      teamnames,
+      eq(teams.teamnameId, teamnames.teamnameId),
+    )
+    .leftJoin(
+      teamlogos,
+      eq(teamlogos.logoId, teamnames.logoId),
+    )
     .leftJoin(
       seasons,
       eq(teamgames.seasonId, seasons.seasonId),
@@ -242,7 +316,15 @@ export async function getPointData({
         eq(competitions.division, 1),
       ),
     )
-    .groupBy(teams.teamId, seasons.year)
+    .groupBy(
+      teams.teamId,
+      seasons.year,
+      teamnames.name,
+      teamnames.shortName,
+      teamnames.casualName,
+      teamlogos.logoId,
+      teamlogos.hasDark,
+    )
     .having(gte(count(teamgames.teamGameId), 10))
     .orderBy(
       asc(
@@ -278,10 +360,14 @@ export async function getPointData({
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
-        name: teams.name,
-        shortName: teams.shortName,
-        casualName: teams.casualName,
-      } as unknown as SQL<TeamBase>,
+        name: teamnames.name,
+        shortName: teamnames.shortName,
+        casualName: teamnames.casualName,
+        logo: {
+          logoId: teamlogos.logoId,
+          hasDark: teamlogos.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
     })
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
@@ -290,6 +376,14 @@ export async function getPointData({
       eq(competitions.competitionId, series.competitionId),
     )
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
+    .leftJoin(
+      teamnames,
+      eq(teams.teamnameId, teamnames.teamnameId),
+    )
+    .leftJoin(
+      teamlogos,
+      eq(teamlogos.logoId, teamnames.logoId),
+    )
     .leftJoin(
       seasons,
       eq(teamgames.seasonId, seasons.seasonId),
@@ -304,7 +398,15 @@ export async function getPointData({
         eq(teamgames.homeGame, true),
       ),
     )
-    .groupBy(teams.teamId, seasons.year)
+    .groupBy(
+      teams.teamId,
+      seasons.year,
+      teamnames.name,
+      teamnames.shortName,
+      teamnames.casualName,
+      teamlogos.logoId,
+      teamlogos.hasDark,
+    )
     .having(gte(count(teamgames.teamGameId), 5))
     .orderBy(
       asc(
@@ -340,10 +442,14 @@ export async function getPointData({
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
-        name: teams.name,
-        shortName: teams.shortName,
-        casualName: teams.casualName,
-      } as unknown as SQL<TeamBase>,
+        name: teamnames.name,
+        shortName: teamnames.shortName,
+        casualName: teamnames.casualName,
+        logo: {
+          logoId: teamlogos.logoId,
+          hasDark: teamlogos.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
     })
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
@@ -352,6 +458,14 @@ export async function getPointData({
       eq(competitions.competitionId, series.competitionId),
     )
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
+    .leftJoin(
+      teamnames,
+      eq(teams.teamnameId, teamnames.teamnameId),
+    )
+    .leftJoin(
+      teamlogos,
+      eq(teamlogos.logoId, teamnames.logoId),
+    )
     .leftJoin(
       seasons,
       eq(teamgames.seasonId, seasons.seasonId),
@@ -366,7 +480,15 @@ export async function getPointData({
         eq(teamgames.homeGame, false),
       ),
     )
-    .groupBy(teams.teamId, seasons.year)
+    .groupBy(
+      teams.teamId,
+      seasons.year,
+      teamnames.name,
+      teamnames.shortName,
+      teamnames.casualName,
+      teamlogos.logoId,
+      teamlogos.hasDark,
+    )
     .having(gte(count(teamgames.teamGameId), 5))
     .orderBy(
       asc(
@@ -402,10 +524,14 @@ export async function getPointData({
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
-        name: teams.name,
-        shortName: teams.shortName,
-        casualName: teams.casualName,
-      } as unknown as SQL<TeamBase>,
+        name: teamnames.name,
+        shortName: teamnames.shortName,
+        casualName: teamnames.casualName,
+        logo: {
+          logoId: teamlogos.logoId,
+          hasDark: teamlogos.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
     })
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
@@ -414,6 +540,14 @@ export async function getPointData({
       eq(competitions.competitionId, series.competitionId),
     )
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
+    .leftJoin(
+      teamnames,
+      eq(teams.teamnameId, teamnames.teamnameId),
+    )
+    .leftJoin(
+      teamlogos,
+      eq(teamlogos.logoId, teamnames.logoId),
+    )
     .leftJoin(
       seasons,
       eq(teamgames.seasonId, seasons.seasonId),
@@ -427,7 +561,15 @@ export async function getPointData({
         eq(competitions.division, 1),
       ),
     )
-    .groupBy(teams.teamId, seasons.year)
+    .groupBy(
+      teams.teamId,
+      seasons.year,
+      teamnames.name,
+      teamnames.shortName,
+      teamnames.casualName,
+      teamlogos.logoId,
+      teamlogos.hasDark,
+    )
     .having(gte(count(teamgames.teamGameId), 10))
     .orderBy(
       desc(
@@ -463,10 +605,14 @@ export async function getPointData({
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
-        name: teams.name,
-        shortName: teams.shortName,
-        casualName: teams.casualName,
-      } as unknown as SQL<TeamBase>,
+        name: teamnames.name,
+        shortName: teamnames.shortName,
+        casualName: teamnames.casualName,
+        logo: {
+          logoId: teamlogos.logoId,
+          hasDark: teamlogos.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
     })
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
@@ -475,6 +621,14 @@ export async function getPointData({
       eq(competitions.competitionId, series.competitionId),
     )
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
+    .leftJoin(
+      teamnames,
+      eq(teams.teamnameId, teamnames.teamnameId),
+    )
+    .leftJoin(
+      teamlogos,
+      eq(teamlogos.logoId, teamnames.logoId),
+    )
     .leftJoin(
       seasons,
       eq(teamgames.seasonId, seasons.seasonId),
@@ -489,7 +643,15 @@ export async function getPointData({
         eq(teamgames.homeGame, true),
       ),
     )
-    .groupBy(teams.teamId, seasons.year)
+    .groupBy(
+      teams.teamId,
+      seasons.year,
+      teamnames.name,
+      teamnames.shortName,
+      teamnames.casualName,
+      teamlogos.logoId,
+      teamlogos.hasDark,
+    )
     .having(gte(count(teamgames.teamGameId), 5))
     .orderBy(
       desc(
@@ -525,10 +687,14 @@ export async function getPointData({
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
-        name: teams.name,
-        shortName: teams.shortName,
-        casualName: teams.casualName,
-      } as unknown as SQL<TeamBase>,
+        name: teamnames.name,
+        shortName: teamnames.shortName,
+        casualName: teamnames.casualName,
+        logo: {
+          logoId: teamlogos.logoId,
+          hasDark: teamlogos.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
     })
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
@@ -537,6 +703,14 @@ export async function getPointData({
       eq(competitions.competitionId, series.competitionId),
     )
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
+    .leftJoin(
+      teamnames,
+      eq(teams.teamnameId, teamnames.teamnameId),
+    )
+    .leftJoin(
+      teamlogos,
+      eq(teamlogos.logoId, teamnames.logoId),
+    )
     .leftJoin(
       seasons,
       eq(teamgames.seasonId, seasons.seasonId),
@@ -551,7 +725,15 @@ export async function getPointData({
         eq(teamgames.homeGame, false),
       ),
     )
-    .groupBy(teams.teamId, seasons.year)
+    .groupBy(
+      teams.teamId,
+      seasons.year,
+      teamnames.name,
+      teamnames.shortName,
+      teamnames.casualName,
+      teamlogos.logoId,
+      teamlogos.hasDark,
+    )
     .having(gte(count(teamgames.teamGameId), 5))
     .orderBy(
       desc(
@@ -587,10 +769,14 @@ export async function getPointData({
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
-        name: teams.name,
-        shortName: teams.shortName,
-        casualName: teams.casualName,
-      } as unknown as SQL<TeamBase>,
+        name: teamnames.name,
+        shortName: teamnames.shortName,
+        casualName: teamnames.casualName,
+        logo: {
+          logoId: teamlogos.logoId,
+          hasDark: teamlogos.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
     })
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
@@ -599,6 +785,14 @@ export async function getPointData({
       eq(competitions.competitionId, series.competitionId),
     )
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
+    .leftJoin(
+      teamnames,
+      eq(teams.teamnameId, teamnames.teamnameId),
+    )
+    .leftJoin(
+      teamlogos,
+      eq(teamlogos.logoId, teamnames.logoId),
+    )
     .leftJoin(
       seasons,
       eq(teamgames.seasonId, seasons.seasonId),
@@ -612,7 +806,15 @@ export async function getPointData({
         eq(competitions.division, 1),
       ),
     )
-    .groupBy(teams.teamId, seasons.year)
+    .groupBy(
+      teams.teamId,
+      seasons.year,
+      teamnames.name,
+      teamnames.shortName,
+      teamnames.casualName,
+      teamlogos.logoId,
+      teamlogos.hasDark,
+    )
     .having(gte(count(teamgames.teamGameId), 10))
     .orderBy(
       asc(
@@ -648,10 +850,14 @@ export async function getPointData({
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
-        name: teams.name,
-        shortName: teams.shortName,
-        casualName: teams.casualName,
-      } as unknown as SQL<TeamBase>,
+        name: teamnames.name,
+        shortName: teamnames.shortName,
+        casualName: teamnames.casualName,
+        logo: {
+          logoId: teamlogos.logoId,
+          hasDark: teamlogos.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
     })
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
@@ -660,6 +866,14 @@ export async function getPointData({
       eq(competitions.competitionId, series.competitionId),
     )
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
+    .leftJoin(
+      teamnames,
+      eq(teams.teamnameId, teamnames.teamnameId),
+    )
+    .leftJoin(
+      teamlogos,
+      eq(teamlogos.logoId, teamnames.logoId),
+    )
     .leftJoin(
       seasons,
       eq(teamgames.seasonId, seasons.seasonId),
@@ -674,7 +888,15 @@ export async function getPointData({
         eq(teamgames.homeGame, true),
       ),
     )
-    .groupBy(teams.teamId, seasons.year)
+    .groupBy(
+      teams.teamId,
+      seasons.year,
+      teamnames.name,
+      teamnames.shortName,
+      teamnames.casualName,
+      teamlogos.logoId,
+      teamlogos.hasDark,
+    )
     .having(gte(count(teamgames.teamGameId), 5))
     .orderBy(
       asc(
@@ -710,10 +932,14 @@ export async function getPointData({
       year: seasons.year as unknown as SQL<string>,
       team: {
         teamId: teams.teamId,
-        name: teams.name,
-        shortName: teams.shortName,
-        casualName: teams.casualName,
-      } as unknown as SQL<TeamBase>,
+        name: teamnames.name,
+        shortName: teamnames.shortName,
+        casualName: teamnames.casualName,
+        logo: {
+          logoId: teamlogos.logoId,
+          hasDark: teamlogos.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
     })
     .from(teamgames)
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
@@ -722,6 +948,14 @@ export async function getPointData({
       eq(competitions.competitionId, series.competitionId),
     )
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
+    .leftJoin(
+      teamnames,
+      eq(teams.teamnameId, teamnames.teamnameId),
+    )
+    .leftJoin(
+      teamlogos,
+      eq(teamlogos.logoId, teamnames.logoId),
+    )
     .leftJoin(
       seasons,
       eq(teamgames.seasonId, seasons.seasonId),
@@ -736,7 +970,15 @@ export async function getPointData({
         eq(teamgames.homeGame, false),
       ),
     )
-    .groupBy(teams.teamId, seasons.year)
+    .groupBy(
+      teams.teamId,
+      seasons.year,
+      teamnames.name,
+      teamnames.shortName,
+      teamnames.casualName,
+      teamlogos.logoId,
+      teamlogos.hasDark,
+    )
     .having(gte(count(teamgames.teamGameId), 5))
     .orderBy(
       asc(

@@ -4,9 +4,14 @@ import {
   series,
   tables,
   teamgames,
+  teamlogos,
+  teamnames,
   teams,
+  teamseasons,
   teamseries,
 } from '@/db/schema'
+import { coalesce } from '@/lib/drizzleHelpers/coalesce'
+import type { TeamBaseWithLogo } from '@/lib/types/team'
 import type { SQL } from 'drizzle-orm'
 import {
   and,
@@ -19,6 +24,10 @@ import {
   sum,
 } from 'drizzle-orm'
 import { unionAll } from 'drizzle-orm/pg-core'
+import {
+  teamseasonLogo,
+  teamseasonName,
+} from '../libs/aliases'
 
 type FunctionProps = {
   serie: typeof series.$inferSelect
@@ -44,18 +53,58 @@ export const getUnionedTables = async ({
         totalPoints: tables.points,
         team: {
           teamId: teams.teamId,
-          name: teams.name,
-          shortName: teams.shortName,
-          casualName: teams.casualName,
-        } as unknown as SQL<{
-          teamId: number
-          name: string
-          shortName: string
-          casualName: string
-        }>,
+          name: coalesce(
+            teamseasonName.name,
+            teamnames.name,
+          ),
+          shortName: coalesce(
+            teamseasonName.shortName,
+            teamnames.shortName,
+          ),
+          casualName: coalesce(
+            teamseasonName.casualName,
+            teamnames.casualName,
+          ),
+          logo: {
+            logoId: coalesce(
+              teamseasonLogo.logoId,
+              teamlogos.logoId,
+            ),
+            hasDark: coalesce(
+              teamseasonLogo.hasDark,
+              teamlogos.hasDark,
+            ),
+          },
+        } as unknown as SQL<TeamBaseWithLogo>,
       })
       .from(tables)
       .leftJoin(teams, eq(tables.teamId, teams.teamId))
+      .leftJoin(
+        teamnames,
+        eq(teamnames.teamnameId, teams.teamnameId),
+      )
+      .leftJoin(
+        teamlogos,
+        eq(teamlogos.logoId, teamnames.logoId),
+      )
+      .leftJoin(
+        teamseasons,
+        and(
+          eq(teams.teamId, teamseasons.teamId),
+          eq(tables.seasonId, teamseasons.seasonId),
+        ),
+      )
+      .leftJoin(
+        teamseasonName,
+        eq(
+          teamseasons.teamnameId,
+          teamseasonName.teamnameId,
+        ),
+      )
+      .leftJoin(
+        teamseasonLogo,
+        eq(teamseasonLogo.logoId, teamseasonName.logoId),
+      )
       .leftJoin(series, eq(series.serieId, tables.serieId))
       .where(eq(tables.serieId, serie.serieId))
       .orderBy(asc(tables.position))
@@ -108,75 +157,78 @@ export const getUnionedTables = async ({
       ),
     )
 
-  const parentSerie = serie.hasParent
-    ? db
-        .select({
-          teamId: teamgames.teamId,
-          totalGames: count(teamgames.teamGameId).as(
-            'total_games',
-          ),
-          totalPoints: sum(teamgames.points)
-            .mapWith(Number)
-            .as('total_points'),
-          totalGoalsScored: sum(teamgames.goalsScored)
-            .mapWith(Number)
-            .as(
-              'total_goals_scored',
-            ) as unknown as SQL<number>,
-          totalGoalsConceded: sum(teamgames.goalsConceded)
-            .mapWith(Number)
-            .as(
-              'total_goals_conceded',
-            ) as unknown as SQL<number>,
-          totalGoalDifference: sum(teamgames.goalDifference)
-            .mapWith(Number)
-            .as(
-              'total_goal_difference',
-            ) as unknown as SQL<number>,
-          totalWins:
-            sql<number>`cast(count(*) filter (where win) as int)`.as(
-              'totalWins',
+  const parentSerie =
+    serie.hasParent && !serie.hasMix
+      ? db
+          .select({
+            teamId: teamgames.teamId,
+            totalGames: count(teamgames.teamGameId).as(
+              'total_games',
             ),
-          totalDraws:
-            sql<number>`cast(count(*) filter (where draw) as int)`.as(
-              'totalDraws',
-            ),
-          totalLost:
-            sql<number>`cast(count(*) filter (where lost) as int)`.as(
-              'totalLost',
-            ),
-        })
-        .from(teamgames)
-        .where(
-          and(
-            inArray(teamgames.teamId, teamArray),
-            serie.allParentGames
-              ? undefined
-              : inArray(teamgames.opponentId, teamArray),
-            inArray(
-              teamgames.serieId,
-              db
-                .select({
-                  parentId: parentchildseries.parentId,
-                })
-                .from(parentchildseries)
-                .where(
-                  eq(
-                    parentchildseries.childId,
-                    serie.serieId,
+            totalPoints: sum(teamgames.points)
+              .mapWith(Number)
+              .as('total_points'),
+            totalGoalsScored: sum(teamgames.goalsScored)
+              .mapWith(Number)
+              .as(
+                'total_goals_scored',
+              ) as unknown as SQL<number>,
+            totalGoalsConceded: sum(teamgames.goalsConceded)
+              .mapWith(Number)
+              .as(
+                'total_goals_conceded',
+              ) as unknown as SQL<number>,
+            totalGoalDifference: sum(
+              teamgames.goalDifference,
+            )
+              .mapWith(Number)
+              .as(
+                'total_goal_difference',
+              ) as unknown as SQL<number>,
+            totalWins:
+              sql<number>`cast(count(*) filter (where win) as int)`.as(
+                'totalWins',
+              ),
+            totalDraws:
+              sql<number>`cast(count(*) filter (where draw) as int)`.as(
+                'totalDraws',
+              ),
+            totalLost:
+              sql<number>`cast(count(*) filter (where lost) as int)`.as(
+                'totalLost',
+              ),
+          })
+          .from(teamgames)
+          .where(
+            and(
+              inArray(teamgames.teamId, teamArray),
+              serie.allParentGames
+                ? undefined
+                : inArray(teamgames.opponentId, teamArray),
+              inArray(
+                teamgames.serieId,
+                db
+                  .select({
+                    parentId: parentchildseries.parentId,
+                  })
+                  .from(parentchildseries)
+                  .where(
+                    eq(
+                      parentchildseries.childId,
+                      serie.serieId,
+                    ),
                   ),
-                ),
+              ),
+              eq(teamgames.played, true),
+              table === 'home'
+                ? eq(teamgames.homeGame, true)
+                : table === 'away'
+                  ? eq(teamgames.homeGame, false)
+                  : undefined,
             ),
-            eq(teamgames.played, true),
-            table === 'home'
-              ? eq(teamgames.homeGame, true)
-              : table === 'away'
-                ? eq(teamgames.homeGame, false)
-                : undefined,
-          ),
-        )
-        .groupBy(teamgames.teamId)
-    : undefined
+          )
+          .groupBy(teamgames.teamId)
+      : undefined
 
   const mainSerie = db
     .select({
@@ -330,30 +382,73 @@ export const getUnionedTables = async ({
         .as('total_lost'),
       team: {
         teamId: teams.teamId,
-        name: teams.name,
-        shortName: teams.shortName,
-        casualName: teams.casualName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        shortName: string
-        casualName: string
-      }>,
+        name: coalesce(teamseasonName.name, teamnames.name),
+        shortName: coalesce(
+          teamseasonName.shortName,
+          teamnames.shortName,
+        ),
+        casualName: coalesce(
+          teamseasonName.casualName,
+          teamnames.casualName,
+        ),
+        logo: {
+          logoId: coalesce(
+            teamseasonLogo.logoId,
+            teamlogos.logoId,
+          ),
+          hasDark: coalesce(
+            teamseasonLogo.hasDark,
+            teamlogos.hasDark,
+          ),
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
     })
     .from(unionQuery)
     .leftJoin(teams, eq(unionQuery.teamId, teams.teamId))
+    .leftJoin(
+      teamnames,
+      eq(teamnames.teamnameId, teams.teamnameId),
+    )
+    .leftJoin(
+      teamlogos,
+      eq(teamlogos.logoId, teamnames.logoId),
+    )
+    .leftJoin(
+      teamseasons,
+      and(
+        eq(teams.teamId, teamseasons.teamId),
+        eq(teamseasons.seasonId, serie.seasonId),
+      ),
+    )
+    .leftJoin(
+      teamseasonName,
+      eq(teamseasons.teamnameId, teamseasonName.teamnameId),
+    )
+    .leftJoin(
+      teamseasonLogo,
+      eq(teamseasonLogo.logoId, teamseasonName.logoId),
+    )
     .groupBy(
       unionQuery.teamId,
       teams.teamId,
-      teams.name,
-      teams.shortName,
-      teams.casualName,
+      teamnames.name,
+      teamnames.shortName,
+      teamnames.casualName,
+      teamlogos.logoId,
+      teamlogos.hasDark,
+      teamseasonName.name,
+      teamseasonName.shortName,
+      teamseasonName.casualName,
+      teamseasonLogo.logoId,
+      teamseasonLogo.hasDark,
     )
     .orderBy(
       desc(sql`total_points`),
       desc(sql`total_goal_difference`),
       desc(sql`total_goals_scored`),
-      asc(sql`casual_name collate "se-SE-x-icu"`),
+      asc(
+        sql`coalesce(teamseason_name.casual_name,teamnames.casual_name) collate "se-SE-x-icu"`,
+      ),
     )
 
   return result

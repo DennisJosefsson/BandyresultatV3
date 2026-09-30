@@ -2,13 +2,14 @@ import { db } from '@/db'
 import type { competitions } from '@/db/schema'
 import {
   teamcompetitions,
+  teamnames,
   teams,
   teamseasons,
 } from '@/db/schema'
 import Error404 from '@/lib/middlewares/errors/404Error'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import type { TeamBase } from '@/lib/types/team'
+import type { TeamBase, TeamName } from '@/lib/types/team'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
 import type { SQL } from 'drizzle-orm'
@@ -18,11 +19,11 @@ type ReturnType =
   | {
       status: 200
       teamsInSeason: Array<
-        typeof teamseasons.$inferSelect & { team: TeamBase }
+        typeof teamseasons.$inferSelect & { team: TeamName }
       >
       teamsInCompetition: Array<
         typeof teamcompetitions.$inferSelect & {
-          team: TeamBase
+          team: TeamName
         }
       >
       competition: typeof competitions.$inferSelect
@@ -62,15 +63,19 @@ export const getTeamsForCompetitions = createServerFn({
             ...getTableColumns(teamcompetitions),
             team: {
               teamId: teams.teamId,
-              name: teams.name,
-              shortName: teams.shortName,
-              casualName: teams.casualName,
+              name: teamnames.name,
+              shortName: teamnames.shortName,
+              casualName: teamnames.casualName,
             } as unknown as SQL<TeamBase>,
           })
           .from(teamcompetitions)
           .leftJoin(
             teams,
             eq(teams.teamId, teamcompetitions.teamId),
+          )
+          .leftJoin(
+            teamnames,
+            eq(teamnames.teamnameId, teams.teamnameId),
           )
           .where(
             eq(
@@ -80,7 +85,7 @@ export const getTeamsForCompetitions = createServerFn({
           )
           .orderBy(
             asc(
-              sql`teams.casual_name collate "se-SE-x-icu"`,
+              sql`teamnames.casual_name collate "se-SE-x-icu"`,
             ),
           )
 
@@ -89,9 +94,9 @@ export const getTeamsForCompetitions = createServerFn({
             ...getTableColumns(teamseasons),
             team: {
               teamId: teams.teamId,
-              name: teams.name,
-              shortName: teams.shortName,
-              casualName: teams.casualName,
+              name: teamnames.name,
+              shortName: teamnames.shortName,
+              casualName: teamnames.casualName,
             } as unknown as SQL<TeamBase>,
           })
           .from(teamseasons)
@@ -99,12 +104,16 @@ export const getTeamsForCompetitions = createServerFn({
             teams,
             eq(teams.teamId, teamseasons.teamId),
           )
+          .leftJoin(
+            teamnames,
+            eq(teamnames.teamnameId, teams.teamnameId),
+          )
           .where(
             eq(teamseasons.seasonId, competition.seasonId),
           )
           .orderBy(
             asc(
-              sql`teams.casual_name collate "se-SE-x-icu"`,
+              sql`teamnames.casual_name collate "se-SE-x-icu"`,
             ),
           )
 

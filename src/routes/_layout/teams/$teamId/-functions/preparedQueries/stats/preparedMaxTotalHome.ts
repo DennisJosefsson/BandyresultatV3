@@ -1,10 +1,17 @@
 import { db } from '@/db'
-import { games, teamgames, teams } from '@/db/schema'
+import {
+  games,
+  teamgames,
+  teamnames,
+  teams,
+} from '@/db/schema'
 import { and, desc, eq, max, sql } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
 
 const home = alias(teams, 'home')
 const away = alias(teams, 'away')
+const homeTeamName = alias(teamnames, 'home_teamname')
+const awayTeamName = alias(teamnames, 'away_teamname')
 
 const maxTotalQuery = db.$with('max_total_query').as(
   db
@@ -29,13 +36,21 @@ export const preparedMaxTotalHome = db
     gameId: teamgames.gameId,
     date: teamgames.date,
     result: games.result,
-    homeTeam: home.casualName,
-    awayTeam: away.casualName,
+    homeTeam: homeTeamName.casualName,
+    awayTeam: awayTeamName.casualName,
   })
   .from(teamgames)
   .leftJoin(games, eq(games.gameId, teamgames.gameId))
   .leftJoin(home, eq(home.teamId, teamgames.teamId))
   .leftJoin(away, eq(away.teamId, teamgames.opponentId))
+  .leftJoin(
+    homeTeamName,
+    eq(homeTeamName.teamnameId, home.teamnameId),
+  )
+  .leftJoin(
+    awayTeamName,
+    eq(awayTeamName.teamnameId, away.teamnameId),
+  )
   .leftJoin(
     maxTotalQuery,
     eq(maxTotalQuery.teamId, teamgames.teamId),

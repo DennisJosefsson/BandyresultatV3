@@ -56,7 +56,8 @@ export function GamesCard({
             <div className="flex flex-row gap-0.5 @sm:gap-1 @lg:gap-2 items-center w-15 @xs:w-20 @sm:w-25 @md:w-40 @xl:w-full justify-start">
               <TeamLogo
                 size={32}
-                teamId={game.homeTeamId}
+                logoId={game.home.logo.logoId}
+                hasDark={game.home.logo.hasDark}
                 className="@sm:block hidden size-[1lh] object-scale-down"
                 aria-label={game.home.casualName}
                 title={game.home.casualName}
@@ -140,7 +141,8 @@ export function GamesCard({
               </span>
               <TeamLogo
                 size={32}
-                teamId={game.awayTeamId}
+                logoId={game.away.logo.logoId}
+                hasDark={game.away.logo.hasDark}
                 className="@sm:block hidden size-[1lh] object-scale-down"
                 aria-label={game.away.casualName}
                 title={game.away.casualName}

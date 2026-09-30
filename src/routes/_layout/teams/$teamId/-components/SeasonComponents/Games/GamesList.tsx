@@ -1,40 +1,34 @@
 import { GameCard } from '@/components/Common/Games/GameCard'
-import type { GroupGames } from '@/lib/types/game'
+import type { TeamSeasonGame } from '@/lib/types/game'
 
 type GameListProps = {
-  gamesArray: Array<GroupGames>
+  gamesArray: Array<TeamSeasonGame>
+  serieName: string
 }
 
-const GamesList = ({ gamesArray }: GameListProps) => {
+const GamesList = ({
+  gamesArray,
+  serieName,
+}: GameListProps) => {
   if (gamesArray.length === 0) {
     return null
   }
   return (
     <div className="font-inter mt-2 mb-6 lg:mt-3 2xl:mt-4">
       <div>
-        {gamesArray.map((group) => {
+        {gamesArray.map((game) => {
           return (
             <div
-              key={group.group}
-              className="mb-4 w-full @container/teamseasongames"
+              key={game.gameId.toString()}
+              className="w-full @container/teamseasongames"
             >
               <div className="w-full">
-                {group.dates.map((date) => {
-                  return (
-                    <div key={date.date}>
-                      {date.games.map((game) => {
-                        return (
-                          <GameCard
-                            key={game.gameId}
-                            game={game}
-                            serieName={group.name}
-                            routePath="/teams/$teamId/seasons/$seasonId/"
-                          />
-                        )
-                      })}
-                    </div>
-                  )
-                })}
+                <GameCard
+                  key={game.gameId}
+                  game={game}
+                  serieName={serieName}
+                  routePath="/teams/$teamId/seasons/$seasonId/"
+                />
               </div>
             </div>
           )

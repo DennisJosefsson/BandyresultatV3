@@ -9,7 +9,7 @@ import {
   FieldLegend,
   FieldSet,
 } from '@/components/base/ui/field'
-import { editStaticTableForm } from '../../../-hooks/editStaticTableForm'
+import { editStaticTableForm } from '../../../-hooks/staticTables/editStaticTableForm'
 
 const EditStaticTableForm = () => {
   const form = editStaticTableForm()

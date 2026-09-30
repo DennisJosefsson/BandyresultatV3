@@ -1,14 +1,9 @@
 import TeamLogo from '@/components/Common/TeamLogo'
 import type { CheckedState } from '@/components/base/ui/checkbox'
 import { Checkbox } from '@/components/base/ui/checkbox'
+import type { Team } from '@/lib/types/team'
 import { cn } from '@/lib/utils/utils'
 import { Link } from '@tanstack/react-router'
-
-type Team = {
-  teamId: number
-  casualName: string
-  name: string
-}
 
 type TeamsListItemProps = {
   team: Team
@@ -37,9 +32,10 @@ const TeamsListItem = ({
         <TeamLogo
           className="size-[1lh] object-scale-down"
           size={32}
-          aria-label={team.casualName}
-          title={team.name}
-          teamId={team.teamId}
+          aria-label={team.teamname.name}
+          title={team.teamname.name}
+          logoId={team.teamname.logo?.logoId}
+          hasDark={team.teamname.logo?.hasDark}
         />
         <span
           className={cn(
@@ -52,7 +48,7 @@ const TeamsListItem = ({
             params={{ teamId: team.teamId }}
             search={(prev) => ({ ...prev })}
           >
-            {team.name}
+            {team.teamname.name}
           </Link>
         </span>
       </div>

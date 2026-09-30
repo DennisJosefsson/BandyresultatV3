@@ -1,8 +1,15 @@
 import { db } from '@/db'
-import { games, seasons, series, teams } from '@/db/schema'
+import {
+  games,
+  seasons,
+  series,
+  teamnames,
+  teams,
+} from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import { createServerFn } from '@tanstack/react-start'
+import type { SQL } from 'drizzle-orm'
 import {
   and,
   asc,
@@ -24,11 +31,16 @@ export const getSearchTeams = createServerFn({
       const firstDivTeams = await db
         .select({
           teamId: teams.teamId,
-          name: teams.name,
-          casualName: teams.casualName,
+          name: teamnames.name as unknown as SQL<string>,
+          casualName:
+            teamnames.casualName as unknown as SQL<string>,
           women: teams.women,
         })
         .from(teams)
+        .leftJoin(
+          teamnames,
+          eq(teams.teamnameId, teamnames.teamnameId),
+        )
         .where(
           inArray(
             teams.teamId,
@@ -60,17 +72,24 @@ export const getSearchTeams = createServerFn({
           ),
         )
         .orderBy(
-          asc(sql`casual_name collate "se-SE-x-icu"`),
+          asc(
+            sql`teamnames.casual_name collate "se-SE-x-icu"`,
+          ),
         )
 
       const allTeams = await db
         .select({
           teamId: teams.teamId,
-          name: teams.name,
-          casualName: teams.casualName,
+          name: teamnames.name as unknown as SQL<string>,
+          casualName:
+            teamnames.casualName as unknown as SQL<string>,
           women: teams.women,
         })
         .from(teams)
+        .leftJoin(
+          teamnames,
+          eq(teams.teamnameId, teamnames.teamnameId),
+        )
         .where(
           notInArray(
             teams.teamId,
@@ -101,7 +120,9 @@ export const getSearchTeams = createServerFn({
           ),
         )
         .orderBy(
-          asc(sql`casual_name collate "se-SE-x-icu"`),
+          asc(
+            sql`teamnames.casual_name collate "se-SE-x-icu"`,
+          ),
         )
 
       const teamArray = [...firstDivTeams, ...allTeams]

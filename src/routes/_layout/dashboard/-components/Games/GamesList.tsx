@@ -17,7 +17,7 @@ import {
   InputGroupInput,
 } from '@/components/base/ui/input-group'
 import { getRouteApi } from '@tanstack/react-router'
-import { useInlineEditGameArrayForm } from '../../-hooks/useInlineEditGameArrayForm'
+import { useInlineEditGameArrayForm } from '../../-hooks/games/useInlineEditGameArrayForm'
 
 const route = getRouteApi('/_layout/dashboard/games/$today')
 

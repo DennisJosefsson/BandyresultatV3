@@ -4,14 +4,19 @@ import {
   parentchildseries,
   series,
   teamgames,
+  teamlogos,
+  teamnames,
   teams,
+  teamseasons,
   teamseries,
 } from '@/db/schema'
+import { coalesce } from '@/lib/drizzleHelpers/coalesce'
 import type { Game } from '@/lib/types/game'
 import type {
   DevDataTableItem,
   ReturnDevDataTableItem,
 } from '@/lib/types/table'
+import type { TeamBaseWithLogo } from '@/lib/types/team'
 import type { SQL } from 'drizzle-orm'
 import {
   and,
@@ -24,7 +29,23 @@ import {
   sql,
   sum,
 } from 'drizzle-orm'
-import { alias, unionAll } from 'drizzle-orm/pg-core'
+import { unionAll } from 'drizzle-orm/pg-core'
+import {
+  away,
+  awayLogo,
+  awayTeamName,
+  awayTeamSeason,
+  awayTeamSeasonLogo,
+  awayTeamSeasonName,
+  home,
+  homeLogo,
+  homeTeamName,
+  homeTeamSeason,
+  homeTeamSeasonLogo,
+  homeTeamSeasonName,
+  teamseasonLogo,
+  teamseasonName,
+} from '../libs/aliases'
 
 type FunctionProps = {
   serie: typeof series.$inferSelect
@@ -41,126 +62,136 @@ export const getDevelopmentData = async ({
     .where(eq(teamseries.serieId, serie.serieId))
     .then((res) => res.map((item) => item.teamId))
 
-  const startTable = serie.hasParent
-    ? db.$with('start_table').as(
-        db
-          .select({
-            date: sql`1900-01-01`
-              .mapWith(String)
-              .as('date'),
-            teamId: teamgames.teamId,
-            position: sql`0`.mapWith(Number).as('position'),
-            totalGames: count(teamgames.teamGameId).as(
-              'total_games',
-            ),
-            totalPoints: sum(teamgames.points)
-              .mapWith(Number)
-              .as('total_points'),
-            totalGoalsScored: sum(teamgames.goalsScored)
-              .mapWith(Number)
-              .as(
-                'total_goals_scored',
-              ) as unknown as SQL<number>,
-            totalGoalsConceded: sum(teamgames.goalsConceded)
-              .mapWith(Number)
-              .as(
-                'total_goals_conceded',
-              ) as unknown as SQL<number>,
-            totalGoalDifference: sum(
-              teamgames.goalDifference,
-            )
-              .mapWith(Number)
-              .as(
-                'total_goal_difference',
-              ) as unknown as SQL<number>,
-            totalWins:
-              sql<number>`cast(count(*) filter (where win) as int)`.as(
-                'total_wins',
+  const startTable =
+    serie.hasParent && !serie.hasMix
+      ? db.$with('start_table').as(
+          db
+            .select({
+              date: sql`1900-01-01`
+                .mapWith(String)
+                .as('date'),
+              teamId: teamgames.teamId,
+              position: sql`0`
+                .mapWith(Number)
+                .as('position'),
+              totalGames: count(teamgames.teamGameId).as(
+                'total_games',
               ),
-            totalDraws:
-              sql<number>`cast(count(*) filter (where draw) as int)`.as(
-                'total_draws',
-              ),
-            totalLost:
-              sql<number>`cast(count(*) filter (where lost) as int)`.as(
-                'total_lost',
-              ),
-          })
-          .from(teamgames)
-          .where(
-            and(
-              inArray(teamgames.teamId, teamArray),
-              serie.allParentGames
-                ? undefined
-                : inArray(teamgames.opponentId, teamArray),
-              inArray(
-                teamgames.serieId,
-                db
-                  .select({
-                    parentId: parentchildseries.parentId,
-                  })
-                  .from(parentchildseries)
-                  .where(
-                    eq(
-                      parentchildseries.childId,
-                      serie.serieId,
-                    ),
-                  ),
-              ),
-              eq(teamgames.played, true),
-            ),
-          )
-          .groupBy(teamgames.teamId),
-      )
-    : db.$with('start_table').as(
-        db
-          .selectDistinctOn([teamgames.teamId], {
-            date: sql`1900-01-01`
-              .mapWith(String)
-              .as('date'),
-            teamId: teamgames.teamId,
-            position: sql`0`.mapWith(Number).as('position'),
-            totalGames: sql`0`
-              .mapWith(Number)
-              .as('total_games'),
-            totalPoints:
-              sql<number>`case when teamseries.bonus_points is null then 0 else teamseries.bonus_points end`
+              totalPoints: sum(teamgames.points)
                 .mapWith(Number)
                 .as('total_points'),
-            totalGoalsScored: sql`0`
-              .mapWith(Number)
-              .as('total_goals_scored'),
-            totalGoalsConceded: sql`0`
-              .mapWith(Number)
-              .as('total_goals_conceded'),
-            totalGoalDifference: sql`0`
-              .mapWith(Number)
-              .as('total_goal_difference'),
-            totalWins: sql`0`
-              .mapWith(Number)
-              .as('total_wins'),
-            totalDraws: sql`0`
-              .mapWith(Number)
-              .as('total_draws'),
-            totalLost: sql`0`
-              .mapWith(Number)
-              .as('total_lost'),
-          })
-          .from(teamgames)
-          .leftJoin(
-            teamseries,
-            and(
-              eq(teamgames.teamId, teamseries.teamId),
-              eq(teamgames.serieId, teamseries.serieId),
+              totalGoalsScored: sum(teamgames.goalsScored)
+                .mapWith(Number)
+                .as(
+                  'total_goals_scored',
+                ) as unknown as SQL<number>,
+              totalGoalsConceded: sum(
+                teamgames.goalsConceded,
+              )
+                .mapWith(Number)
+                .as(
+                  'total_goals_conceded',
+                ) as unknown as SQL<number>,
+              totalGoalDifference: sum(
+                teamgames.goalDifference,
+              )
+                .mapWith(Number)
+                .as(
+                  'total_goal_difference',
+                ) as unknown as SQL<number>,
+              totalWins:
+                sql<number>`cast(count(*) filter (where win) as int)`.as(
+                  'total_wins',
+                ),
+              totalDraws:
+                sql<number>`cast(count(*) filter (where draw) as int)`.as(
+                  'total_draws',
+                ),
+              totalLost:
+                sql<number>`cast(count(*) filter (where lost) as int)`.as(
+                  'total_lost',
+                ),
+            })
+            .from(teamgames)
+            .where(
+              and(
+                inArray(teamgames.teamId, teamArray),
+                serie.allParentGames
+                  ? undefined
+                  : inArray(
+                      teamgames.opponentId,
+                      teamArray,
+                    ),
+                inArray(
+                  teamgames.serieId,
+                  db
+                    .select({
+                      parentId: parentchildseries.parentId,
+                    })
+                    .from(parentchildseries)
+                    .where(
+                      eq(
+                        parentchildseries.childId,
+                        serie.serieId,
+                      ),
+                    ),
+                ),
+                eq(teamgames.played, true),
+              ),
+            )
+            .groupBy(teamgames.teamId),
+        )
+      : db.$with('start_table').as(
+          db
+            .selectDistinctOn([teamgames.teamId], {
+              date: sql`1900-01-01`
+                .mapWith(String)
+                .as('date'),
+              teamId: teamgames.teamId,
+              position: sql`0`
+                .mapWith(Number)
+                .as('position'),
+              totalGames: sql`0`
+                .mapWith(Number)
+                .as('total_games'),
+              totalPoints:
+                sql<number>`case when teamseries.bonus_points is null then 0 else teamseries.bonus_points end`
+                  .mapWith(Number)
+                  .as('total_points'),
+              totalGoalsScored: sql`0`
+                .mapWith(Number)
+                .as('total_goals_scored'),
+              totalGoalsConceded: sql`0`
+                .mapWith(Number)
+                .as('total_goals_conceded'),
+              totalGoalDifference: sql`0`
+                .mapWith(Number)
+                .as('total_goal_difference'),
+              totalWins: sql`0`
+                .mapWith(Number)
+                .as('total_wins'),
+              totalDraws: sql`0`
+                .mapWith(Number)
+                .as('total_draws'),
+              totalLost: sql`0`
+                .mapWith(Number)
+                .as('total_lost'),
+            })
+            .from(teamgames)
+            .leftJoin(
+              teamseries,
+              and(
+                eq(teamgames.teamId, teamseries.teamId),
+                eq(teamgames.serieId, teamseries.serieId),
+              ),
+            )
+            .where(
+              and(
+                inArray(teamgames.teamId, teamArray),
+                eq(teamgames.serieId, serie.serieId),
+              ),
             ),
-          )
-          .where(
-            and(
-              inArray(teamgames.teamId, teamArray),
-              eq(teamgames.serieId, serie.serieId),
-            ),
-          ),
-      )
+        )
 
   const seriesGames = db.$with('series_games').as(
     db
@@ -249,18 +280,52 @@ export const getDevelopmentData = async ({
       totalPoints: cte.totalPoints,
       team: {
         teamId: teams.teamId,
-        name: teams.name,
-        shortName: teams.shortName,
-        casualName: teams.casualName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        shortName: string
-        casualName: string
-      }>,
+        name: coalesce(teamseasonName.name, teamnames.name),
+        shortName: coalesce(
+          teamseasonName.shortName,
+          teamnames.shortName,
+        ),
+        casualName: coalesce(
+          teamseasonName.casualName,
+          teamnames.casualName,
+        ),
+        logo: {
+          logoId: coalesce(
+            teamseasonLogo.logoId,
+            teamlogos.logoId,
+          ),
+          hasDark: coalesce(
+            teamseasonLogo.hasDark,
+            teamlogos.hasDark,
+          ),
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
     })
     .from(cte)
     .leftJoin(teams, eq(teams.teamId, cte.teamId))
+    .leftJoin(
+      teamseasons,
+      and(
+        eq(teamseasons.teamId, teams.teamId),
+        eq(teamseasons.seasonId, serie.seasonId),
+      ),
+    )
+    .leftJoin(
+      teamnames,
+      eq(teamnames.teamnameId, teams.teamnameId),
+    )
+    .leftJoin(
+      teamseasonName,
+      eq(teamseasonName.teamnameId, teamseasons.teamnameId),
+    )
+    .leftJoin(
+      teamlogos,
+      eq(teamlogos.logoId, teamnames.logoId),
+    )
+    .leftJoin(
+      teamseasonLogo,
+      eq(teamseasonLogo.logoId, teamseasonName.logoId),
+    )
     .orderBy(asc(cte.date), asc(cte.teamId))
 
   const start = await db
@@ -279,18 +344,52 @@ export const getDevelopmentData = async ({
       totalPoints: startTable.totalPoints,
       team: {
         teamId: teams.teamId,
-        name: teams.name,
-        shortName: teams.shortName,
-        casualName: teams.casualName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        shortName: string
-        casualName: string
-      }>,
+        name: coalesce(teamseasonName.name, teamnames.name),
+        shortName: coalesce(
+          teamseasonName.shortName,
+          teamnames.shortName,
+        ),
+        casualName: coalesce(
+          teamseasonName.casualName,
+          teamnames.casualName,
+        ),
+        logo: {
+          logoId: coalesce(
+            teamseasonLogo.logoId,
+            teamlogos.logoId,
+          ),
+          hasDark: coalesce(
+            teamseasonLogo.hasDark,
+            teamlogos.hasDark,
+          ),
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
     })
     .from(startTable)
     .leftJoin(teams, eq(teams.teamId, startTable.teamId))
+    .leftJoin(
+      teamseasons,
+      and(
+        eq(teamseasons.teamId, teams.teamId),
+        eq(teamseasons.seasonId, serie.seasonId),
+      ),
+    )
+    .leftJoin(
+      teamnames,
+      eq(teamnames.teamnameId, teams.teamnameId),
+    )
+    .leftJoin(
+      teamseasonName,
+      eq(teamseasonName.teamnameId, teamseasons.teamnameId),
+    )
+    .leftJoin(
+      teamlogos,
+      eq(teamlogos.logoId, teamnames.logoId),
+    )
+    .leftJoin(
+      teamseasonLogo,
+      eq(teamseasonLogo.logoId, teamseasonName.logoId),
+    )
   const gameDates = await db
     .with(seriesGames)
     .selectDistinctOn([seriesGames.date], {
@@ -300,9 +399,6 @@ export const getDevelopmentData = async ({
     .orderBy(asc(seriesGames.date))
     .then((arr) => arr.map((d) => d.date))
 
-  const home = alias(teams, 'home')
-  const away = alias(teams, 'away')
-
   const mainGameArray = db
     .select({
       ...getTableColumns(games),
@@ -310,30 +406,116 @@ export const getDevelopmentData = async ({
       category: series.category as unknown as SQL<string>,
       home: {
         teamId: home.teamId,
-        name: home.name,
-        shortName: home.shortName,
-        casualName: home.casualName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        shortName: string
-        casualName: string
-      }>,
+        name: coalesce(
+          homeTeamSeasonName.name,
+          homeTeamName.name,
+        ),
+        shortName: coalesce(
+          homeTeamSeasonName.shortName,
+          homeTeamName.shortName,
+        ),
+        casualName: coalesce(
+          homeTeamSeasonName.casualName,
+          homeTeamName.casualName,
+        ),
+        logo: {
+          logoId: coalesce(
+            homeTeamSeasonLogo.logoId,
+            homeLogo.logoId,
+          ),
+          hasDark: coalesce(
+            homeTeamSeasonLogo.hasDark,
+            homeLogo.hasDark,
+          ),
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
       away: {
         teamId: away.teamId,
-        name: away.name,
-        shortName: away.shortName,
-        casualName: away.casualName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        shortName: string
-        casualName: string
-      }>,
+        name: coalesce(
+          awayTeamSeasonName.name,
+          awayTeamName.name,
+        ),
+        shortName: coalesce(
+          awayTeamSeasonName.shortName,
+          awayTeamName.shortName,
+        ),
+        casualName: coalesce(
+          awayTeamSeasonName.casualName,
+          awayTeamName.casualName,
+        ),
+        logo: {
+          logoId: coalesce(
+            awayTeamSeasonLogo.logoId,
+            awayLogo.logoId,
+          ),
+          hasDark: coalesce(
+            awayTeamSeasonLogo.hasDark,
+            awayLogo.hasDark,
+          ),
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
     })
     .from(games)
     .leftJoin(home, eq(games.homeTeamId, home.teamId))
     .leftJoin(away, eq(games.awayTeamId, away.teamId))
+    .leftJoin(
+      homeTeamSeason,
+      and(
+        eq(homeTeamSeason.seasonId, games.seasonId),
+        eq(homeTeamSeason.teamId, games.homeTeamId),
+      ),
+    )
+    .leftJoin(
+      awayTeamSeason,
+      and(
+        eq(awayTeamSeason.seasonId, games.seasonId),
+        eq(awayTeamSeason.teamId, games.awayTeamId),
+      ),
+    )
+    .leftJoin(
+      homeTeamName,
+      eq(home.teamnameId, homeTeamName.teamnameId),
+    )
+    .leftJoin(
+      awayTeamName,
+      eq(away.teamnameId, awayTeamName.teamnameId),
+    )
+    .leftJoin(
+      homeTeamSeasonName,
+      eq(
+        homeTeamSeason.teamnameId,
+        homeTeamSeasonName.teamnameId,
+      ),
+    )
+    .leftJoin(
+      awayTeamSeasonName,
+      eq(
+        awayTeamSeason.teamnameId,
+        awayTeamSeasonName.teamnameId,
+      ),
+    )
+    .leftJoin(
+      homeLogo,
+      eq(homeTeamName.logoId, homeLogo.logoId),
+    )
+    .leftJoin(
+      awayLogo,
+      eq(awayTeamName.logoId, awayLogo.logoId),
+    )
+    .leftJoin(
+      homeTeamSeasonLogo,
+      eq(
+        homeTeamSeasonName.logoId,
+        homeTeamSeasonLogo.logoId,
+      ),
+    )
+    .leftJoin(
+      awayTeamSeasonLogo,
+      eq(
+        awayTeamSeasonName.logoId,
+        awayTeamSeasonLogo.logoId,
+      ),
+    )
     .leftJoin(series, eq(series.serieId, games.serieId))
     .where(
       and(
@@ -354,30 +536,116 @@ export const getDevelopmentData = async ({
       category: series.category as unknown as SQL<string>,
       home: {
         teamId: home.teamId,
-        name: home.name,
-        shortName: home.shortName,
-        casualName: home.casualName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        shortName: string
-        casualName: string
-      }>,
+        name: coalesce(
+          homeTeamSeasonName.name,
+          homeTeamName.name,
+        ),
+        shortName: coalesce(
+          homeTeamSeasonName.shortName,
+          homeTeamName.shortName,
+        ),
+        casualName: coalesce(
+          homeTeamSeasonName.casualName,
+          homeTeamName.casualName,
+        ),
+        logo: {
+          logoId: coalesce(
+            homeTeamSeasonLogo.logoId,
+            homeLogo.logoId,
+          ),
+          hasDark: coalesce(
+            homeTeamSeasonLogo.hasDark,
+            homeLogo.hasDark,
+          ),
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
       away: {
         teamId: away.teamId,
-        name: away.name,
-        shortName: away.shortName,
-        casualName: away.casualName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        shortName: string
-        casualName: string
-      }>,
+        name: coalesce(
+          awayTeamSeasonName.name,
+          awayTeamName.name,
+        ),
+        shortName: coalesce(
+          awayTeamSeasonName.shortName,
+          awayTeamName.shortName,
+        ),
+        casualName: coalesce(
+          awayTeamSeasonName.casualName,
+          awayTeamName.casualName,
+        ),
+        logo: {
+          logoId: coalesce(
+            awayTeamSeasonLogo.logoId,
+            awayLogo.logoId,
+          ),
+          hasDark: coalesce(
+            awayTeamSeasonLogo.hasDark,
+            awayLogo.hasDark,
+          ),
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
     })
     .from(games)
     .leftJoin(home, eq(games.homeTeamId, home.teamId))
     .leftJoin(away, eq(games.awayTeamId, away.teamId))
+    .leftJoin(
+      homeTeamSeason,
+      and(
+        eq(homeTeamSeason.seasonId, games.seasonId),
+        eq(homeTeamSeason.teamId, games.homeTeamId),
+      ),
+    )
+    .leftJoin(
+      awayTeamSeason,
+      and(
+        eq(awayTeamSeason.seasonId, games.seasonId),
+        eq(awayTeamSeason.teamId, games.awayTeamId),
+      ),
+    )
+    .leftJoin(
+      homeTeamName,
+      eq(home.teamnameId, homeTeamName.teamnameId),
+    )
+    .leftJoin(
+      awayTeamName,
+      eq(away.teamnameId, awayTeamName.teamnameId),
+    )
+    .leftJoin(
+      homeTeamSeasonName,
+      eq(
+        homeTeamSeason.teamnameId,
+        homeTeamSeasonName.teamnameId,
+      ),
+    )
+    .leftJoin(
+      awayTeamSeasonName,
+      eq(
+        awayTeamSeason.teamnameId,
+        awayTeamSeasonName.teamnameId,
+      ),
+    )
+    .leftJoin(
+      homeLogo,
+      eq(homeTeamName.logoId, homeLogo.logoId),
+    )
+    .leftJoin(
+      awayLogo,
+      eq(awayTeamName.logoId, awayLogo.logoId),
+    )
+    .leftJoin(
+      homeTeamSeasonLogo,
+      eq(
+        homeTeamSeasonName.logoId,
+        homeTeamSeasonLogo.logoId,
+      ),
+    )
+    .leftJoin(
+      awayTeamSeasonLogo,
+      eq(
+        awayTeamSeasonName.logoId,
+        awayTeamSeasonLogo.logoId,
+      ),
+    )
     .leftJoin(series, eq(series.serieId, games.serieId))
     .where(
       and(

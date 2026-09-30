@@ -2,18 +2,13 @@ import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import type {
   SingleTeam,
-  TeamPlayoffStreak,
-  TeamStatItem,
-  TeamStreak,
+  TeamSeasonStats,
 } from '@/lib/types/team'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
-import { getStats } from './getStats'
-import { getStreaks } from './getStreaks'
-import {
-  getStatsCounts,
-  getTeam,
-} from './singleTeamQueries'
+import { preparedTeamSeasonStats } from './preparedQueries/teamseason/preparedTeamSeasonStats'
+import { preparedTeamSeasonStatsTEST } from './preparedQueries/teamseason/preparedTeamSeasonStatsTEST'
+import { getTeam } from './singleTeamQueries'
 
 type TablesResponse =
   | {
@@ -23,47 +18,7 @@ type TablesResponse =
   | {
       status: 200
       team: SingleTeam
-      statCounts: {
-        firstDivSeasonsCount: number
-        qualificationSeasonsCount: number
-        firstFirstDivisionSeason: {
-          seasonId: number
-          year: string
-        } | null
-        latestFirstDivisionSeason: {
-          seasonId: number
-          year: string
-        } | null
-        finalCount: number
-        finalWinCount: number
-        finalWins: Array<string>
-        latestFinal: string | null
-        latestFinalWin: string | null
-        playoffCount: number
-      }
-      streaks: {
-        losingStreak: Array<TeamStreak>
-        drawStreak: Array<TeamStreak>
-        winStreak: Array<TeamStreak>
-        noWinStreak: Array<TeamStreak>
-        unbeatenStreak: Array<TeamStreak>
-        streakObjectsLength: number
-        playoffStreak: Array<TeamPlayoffStreak>
-      }
-      stats: {
-        maxScoredHomeGames: Array<TeamStatItem>
-        maxScoredAwayGames: Array<TeamStatItem>
-        maxGoalDifferenceHomeGames: Array<TeamStatItem>
-        maxGoalDifferenceAwayGames: Array<TeamStatItem>
-        minGoalDifferenceHomeGames: Array<TeamStatItem>
-        minGoalDifferenceAwayGames: Array<TeamStatItem>
-        maxConcededHomeGames: Array<TeamStatItem>
-        maxConcededAwayGames: Array<TeamStatItem>
-        maxTotalHomeGames: Array<TeamStatItem>
-        maxTotalAwayGames: Array<TeamStatItem>
-        minTotalHomeGames: Array<TeamStatItem>
-        minTotalAwayGames: Array<TeamStatItem>
-      }
+      stats: TeamSeasonStats
       executionTime: number
     }
   | undefined
@@ -83,7 +38,6 @@ export const getSingleTeamStats = createServerFn({
   .handler(
     async ({ data: teamId }): Promise<TablesResponse> => {
       try {
-        const start = performance.now()
         const team = await getTeam(teamId)
         if (!team) {
           return {
@@ -91,21 +45,34 @@ export const getSingleTeamStats = createServerFn({
             message: 'Laget finns inte.',
           }
         }
+        const start = performance.now()
 
-        const statCounts = await getStatsCounts({ team })
+        const stats = await preparedTeamSeasonStats
+          .execute({ teamId })
+          .then((res) => res[0])
 
-        const streaks = await getStreaks({
-          teamId,
-        })
-
-        const stats = await getStats({ teamId })
         const end = performance.now()
+
+        const startTEST = performance.now()
+
+        const statsTEST = await preparedTeamSeasonStatsTEST
+          .execute({ teamId })
+          .then((res) => res[0])
+
+        const endTEST = performance.now()
+        console.log(statsTEST.losingStreak)
+        console.dir(
+          {
+            executionTime: end - start,
+            executionTimeTEST: endTEST - startTEST,
+          },
+          { color: true, depth: 99 },
+        )
 
         return {
           status: 200,
-          statCounts,
           stats,
-          streaks,
+
           team,
           executionTime: end - start,
         }

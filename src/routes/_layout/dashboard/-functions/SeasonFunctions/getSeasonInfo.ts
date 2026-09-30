@@ -2,9 +2,11 @@ import { db } from '@/db'
 import {
   competitions,
   seasons,
+  teamnames,
   teams,
   teamseasons,
 } from '@/db/schema'
+import { coalesce } from '@/lib/drizzleHelpers/coalesce'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import type { TeamBase } from '@/lib/types/team'
@@ -21,6 +23,7 @@ import {
   lt,
   sql,
 } from 'drizzle-orm'
+import { alias } from 'drizzle-orm/pg-core'
 import { getCompetitionSeries } from './seasonQueries'
 
 export const getSeasonInfo = createServerFn({
@@ -37,14 +40,29 @@ export const getSeasonInfo = createServerFn({
           equal(metadataSchema.seasonId, seasonId),
       })
 
+      const teamNameAlias = alias(teamnames, 'team_name')
+      const teamSeasonNameAlias = alias(
+        teamnames,
+        'teamseason_name',
+      )
+
       const teamSeasons = await db
         .select({
           ...getTableColumns(teamseasons),
           team: {
             teamId: teams.teamId,
-            name: teams.name,
-            shortName: teams.shortName,
-            casualName: teams.casualName,
+            name: coalesce(
+              teamSeasonNameAlias.name,
+              teamNameAlias.name,
+            ),
+            shortName: coalesce(
+              teamSeasonNameAlias.shortName,
+              teamNameAlias.shortName,
+            ),
+            casualName: coalesce(
+              teamSeasonNameAlias.casualName,
+              teamNameAlias.casualName,
+            ),
           } as unknown as SQL<TeamBase>,
         })
         .from(teamseasons)
@@ -52,9 +70,22 @@ export const getSeasonInfo = createServerFn({
           teams,
           eq(teams.teamId, teamseasons.teamId),
         )
+        .leftJoin(
+          teamNameAlias,
+          eq(teams.teamnameId, teamNameAlias.teamnameId),
+        )
+        .leftJoin(
+          teamSeasonNameAlias,
+          eq(
+            teamseasons.teamnameId,
+            teamSeasonNameAlias.teamnameId,
+          ),
+        )
         .where(eq(teamseasons.seasonId, seasonId))
         .orderBy(
-          asc(sql`teams.casual_name collate "se-SE-x-icu"`),
+          asc(
+            sql`coalesce(teamseason_name.casual_name,team_name.casual_name) collate "se-SE-x-icu"`,
+          ),
         )
 
       const competitionArray = await db

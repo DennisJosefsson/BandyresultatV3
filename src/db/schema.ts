@@ -9,7 +9,6 @@ import {
   pgTable,
   real,
   serial,
-  smallint,
   text,
   timestamp,
   unique,
@@ -23,8 +22,10 @@ export const county = pgTable('county', {
 })
 
 export const teamlogos = pgTable('teamlogos', {
-  teamlogoId: uuid('teamlogo_id').primaryKey().notNull(),
-  logoId: integer('logo_id').unique(),
+  teamlogoId: uuid('teamlogo_id')
+    .primaryKey()
+    .default(sql`uuid_generate_v4()`),
+  logoId: integer('logo_id').unique().notNull(),
   hasDark: boolean('has_dark'),
 })
 
@@ -474,16 +475,16 @@ export const teamseasons = pgTable(
     tableId: integer('table_id'),
     qualification: boolean(),
     women: boolean().default(false),
-    promoted: boolean().default(false),
-    relegated: boolean().default(false),
-    position: smallint(),
-    points: smallint(),
-    playoff: boolean().default(false),
-    eight: boolean().default(false),
-    quarter: boolean().default(false),
-    semi: boolean().default(false),
-    final: boolean().default(false),
-    gold: boolean().default(false),
+    // promoted: boolean().default(false),
+    // relegated: boolean().default(false),
+    // position: smallint(),
+    // points: smallint(),
+    // playoff: boolean().default(false),
+    // eight: boolean().default(false),
+    // quarter: boolean().default(false),
+    // semi: boolean().default(false),
+    // final: boolean().default(false),
+    // gold: boolean().default(false),
     negQualification: boolean('neg_qualification').default(
       false,
     ),
@@ -706,6 +707,20 @@ export const teamsRelations = relations(
       fields: [teams.municipalityId],
       references: [municipality.municipalityId],
     }),
+    teamname: one(teamnames, {
+      fields: [teams.teamnameId],
+      references: [teamnames.teamnameId],
+    }),
+  }),
+)
+
+export const teamnamesRelations = relations(
+  teamnames,
+  ({ one }) => ({
+    logo: one(teamlogos, {
+      fields: [teamnames.logoId],
+      references: [teamlogos.logoId],
+    }),
   }),
 )
 
@@ -770,6 +785,10 @@ export const teamseasonsRelations = relations(
     team: one(teams, {
       fields: [teamseasons.teamId],
       references: [teams.teamId],
+    }),
+    teamname: one(teamnames, {
+      fields: [teamseasons.teamnameId],
+      references: [teamnames.teamnameId],
     }),
   }),
 )

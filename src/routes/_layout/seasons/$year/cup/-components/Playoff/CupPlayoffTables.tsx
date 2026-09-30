@@ -23,7 +23,7 @@ const CupPlayoffTables = () => {
 
   if (data.status === 404) return null
   return (
-    <div className="@container/playoff m-0 w-full @2xl/playoff:justify-self-center">
+    <div className="@container/playoff m-0 w-full @4xl/playoff:justify-self-center">
       <div className="grid gap-2 @5xl/playoff:gap-4">
         <Final
           finalGames={data.finalGames}
@@ -45,11 +45,11 @@ const CupPlayoffTables = () => {
               }
               className={cn(
                 'grid grid-cols-1 gap-2',
-                'data-[category=cup-semi]:@2xl/playoff:grid-cols-7',
-                'data-[category=cup-quarter]:@5xl/playoff:gap-4 data-[category=cup-quarter]:data-[twogroups=true]:@5xl/playoff:gap-4 @2xl/playoff:grid-cols-7',
-                'data-[category=cup-quarter]:data-[twogroups=false]:@2xl/playoff:grid-cols-4',
-                'data-[category=cup-eight]:@5xl/playoff:gap-4 data-[category=cup-eight]:data-[twogroups=true]:@5xl/playoff:gap-4 @2xl/playoff:grid-cols-7',
-                'data-[category=cup-eight]:data-[twogroups=false]:@2xl/playoff:grid-cols-4',
+                'data-[category=cup-semi]:@4xl/playoff:grid-cols-7',
+                'data-[category=cup-quarter]:@5xl/playoff:gap-4 data-[category=quarter]:data-[twogroups=true]:@5xl/playoff:gap-4 @4xl/playoff:grid-cols-7',
+                'data-[category=cup-quarter]:data-[twogroups=false]:@4xl/playoff:grid-cols-4',
+                'data-[category=cup-eight]:@5xl/playoff:gap-4 data-[category=eight]:data-[twogroups=true]:@5xl/playoff:gap-4 @4xl/playoff:grid-cols-7',
+                'data-[category=cup-eight]:data-[twogroups=false]:@4xl/playoff:grid-cols-4',
               )}
             >
               {cat.groupArray.map((group, _, arr) => {

@@ -16,8 +16,10 @@ const PointsGoalsCard = ({
         <div className="flex grow flex-col gap-1 @sm:gap-2">
           <div className="flex flex-row gap-2">
             <TeamLogo
-              teamId={team.teamId}
+              logoId={team.logo.logoId}
+              hasDark={team.logo.hasDark}
               size={32}
+              className="size-[1lh] object-scale-down"
             />
             <span className="truncate font-semibold">
               {team.name}

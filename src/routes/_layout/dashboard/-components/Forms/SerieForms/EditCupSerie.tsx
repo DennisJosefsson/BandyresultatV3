@@ -20,7 +20,7 @@ import RadioBadges from '@/components/Common/RadioBadge'
 import type { newCupSeriesObject } from '@/lib/types/serie'
 import type { zd } from '@/lib/utils/zod'
 import { getRouteApi } from '@tanstack/react-router'
-import { useEditCupSerieForm } from '../../../-hooks/useEditCupSerie'
+import { useEditCupSerieForm } from '../../../-hooks/series/useEditCupSerie'
 
 const route = getRouteApi(
   '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit',

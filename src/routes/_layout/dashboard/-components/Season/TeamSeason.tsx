@@ -8,7 +8,7 @@ import {
 } from '@/components/base/ui/card'
 import { getRouteApi } from '@tanstack/react-router'
 import { useRef, useState } from 'react'
-import { deleteTeamseasonMutation } from '../../-hooks/deleteTeamseasonMutation'
+import { deleteTeamseasonMutation } from '../../-hooks/teamseason/deleteTeamseasonMutation'
 
 const route = getRouteApi(
   '/_layout/dashboard/season/$seasonId/',

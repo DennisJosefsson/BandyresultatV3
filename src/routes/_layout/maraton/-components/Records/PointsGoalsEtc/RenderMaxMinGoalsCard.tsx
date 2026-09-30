@@ -15,7 +15,7 @@ const RenderMaxMinGoalsCard = ({
       {array.map((item) => {
         return (
           <MaxMinGoalsCard
-            key={`${item.homeTeam}-${item.awayTeam}-${item.result}-${stat}`}
+            key={`${item.home.casualName}-${item.away.casualName}-${item.result}-${stat}`}
             {...item}
           />
         )

@@ -5,8 +5,12 @@ import {
   seasons,
   series,
   teamgames,
+  teamlogos,
+  teamnames,
   teams,
+  teamseasons,
 } from '@/db/schema'
+import { coalesce } from '@/lib/drizzleHelpers/coalesce'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import type { County } from '@/lib/types/county'
@@ -22,6 +26,10 @@ import {
   inArray,
   ne,
 } from 'drizzle-orm'
+import {
+  teamseasonLogo,
+  teamseasonName,
+} from '../libs/aliases'
 
 type TeamsForPlayoffMapReturn =
   | {
@@ -58,37 +66,36 @@ export const getTeamsForPlayoffMap = createServerFn({
           }
         }
 
-        // const playoffSeasonArr = await db
-        //   .select({ ...getTableColumns(playoffseason) })
-        //   .from(playoffseason)
-        //   .leftJoin(
-        //     seasons,
-        //     eq(seasons.seasonId, playoffseason.seasonId),
-        //   )
-        //   .where(
-        //     and(
-        //       inArray(
-        //         seasons.seasonId,
-        //         db
-        //           .select({ seasonI: seasons.seasonId })
-        //           .from(seasons)
-        //           .where(
-        //             and(
-        //               eq(seasons.intYear, year),
-        //               eq(seasons.women, women),
-        //             ),
-        //           ),
-        //       ),
-        //     ),
-        //   )
-
-        // const playoffSeason = playoffSeasonArr[0]
-
         const teamArray = await db
           .selectDistinctOn([teamgames.teamId], {
-            team: getTableColumns(
-              teams,
-            ) as unknown as SQL<Team>,
+            team: {
+              ...getTableColumns(teams),
+              teamname: {
+                teamId: teamgames.teamId,
+                name: coalesce(
+                  teamseasonName.name,
+                  teamnames.name,
+                ),
+                shortName: coalesce(
+                  teamseasonName.shortName,
+                  teamnames.shortName,
+                ),
+                casualName: coalesce(
+                  teamseasonName.casualName,
+                  teamnames.casualName,
+                ),
+                logo: {
+                  logoId: coalesce(
+                    teamseasonLogo.logoId,
+                    teamlogos.logoId,
+                  ),
+                  hasDark: coalesce(
+                    teamseasonLogo.hasDark,
+                    teamlogos.hasDark,
+                  ),
+                },
+              },
+            } as unknown as SQL<Team>,
             county: getTableColumns(
               county,
             ) as unknown as SQL<County>,
@@ -104,6 +111,35 @@ export const getTeamsForPlayoffMap = createServerFn({
           .leftJoin(
             teams,
             eq(teams.teamId, teamgames.teamId),
+          )
+          .leftJoin(
+            teamseasons,
+            and(
+              eq(teamseasons.seasonId, teamgames.seasonId),
+              eq(teamseasons.teamId, teamgames.teamId),
+            ),
+          )
+          .leftJoin(
+            teamnames,
+            eq(teamnames.teamnameId, teams.teamnameId),
+          )
+          .leftJoin(
+            teamseasonName,
+            eq(
+              teamseasons.teamnameId,
+              teamseasonName.teamnameId,
+            ),
+          )
+          .leftJoin(
+            teamlogos,
+            eq(teamlogos.logoId, teamnames.logoId),
+          )
+          .leftJoin(
+            teamseasonLogo,
+            eq(
+              teamseasonLogo.logoId,
+              teamseasonName.logoId,
+            ),
           )
           .leftJoin(
             municipality,

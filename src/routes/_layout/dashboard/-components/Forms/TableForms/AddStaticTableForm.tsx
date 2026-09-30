@@ -9,7 +9,7 @@ import {
   FieldLegend,
   FieldSet,
 } from '@/components/base/ui/field'
-import { addStaticTableForm } from '../../../-hooks/addStaticTableForm'
+import { addStaticTableForm } from '../../../-hooks/staticTables/addStaticTableForm'
 
 const AddStaticTableForm = () => {
   const form = addStaticTableForm()

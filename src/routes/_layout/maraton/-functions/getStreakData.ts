@@ -3,14 +3,24 @@ import {
   competitions,
   series,
   teamgames,
+  teamlogos,
+  teamnames,
   teams,
 } from '@/db/schema'
+import type { TeamBaseWithLogo } from '@/lib/types/team'
 import type { SQL } from 'drizzle-orm'
 import { and, asc, desc, eq, sql } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
 
 const team = alias(teams, 'team')
 const opponent = alias(teams, 'opponent')
+const teamTeamName = alias(teamnames, 'team_teamname')
+const opponentTeamName = alias(
+  teamnames,
+  'opponent_teamname',
+)
+const teamLogo = alias(teamlogos, 'team_logo')
+const opponentLogo = alias(teamlogos, 'opponent_logo')
 
 export async function getStreakData({
   women,
@@ -24,32 +34,46 @@ export async function getStreakData({
       goalsConceded: teamgames.goalsConceded,
       team: {
         teamId: team.teamId,
-        name: team.name,
-        shortName: team.shortName,
-        casualName: team.casualName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        shortName: string
-        casualName: string
-      }>,
+        name: teamTeamName.name,
+        shortName: teamTeamName.shortName,
+        casualName: teamTeamName.casualName,
+        logo: {
+          logoId: teamLogo.logoId,
+          hasDark: teamLogo.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
       opponent: {
         teamId: opponent.teamId,
-        name: opponent.name,
-        shortName: opponent.shortName,
-        casualName: opponent.casualName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        shortName: string
-        casualName: string
-      }>,
+        name: opponentTeamName.name,
+        shortName: opponentTeamName.shortName,
+        casualName: opponentTeamName.casualName,
+        logo: {
+          logoId: opponentLogo.logoId,
+          hasDark: opponentLogo.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
     })
     .from(teamgames)
     .leftJoin(team, eq(team.teamId, teamgames.teamId))
     .leftJoin(
       opponent,
       eq(opponent.teamId, teamgames.opponentId),
+    )
+    .leftJoin(
+      teamTeamName,
+      eq(teamTeamName.teamnameId, team.teamnameId),
+    )
+    .leftJoin(
+      teamLogo,
+      eq(teamLogo.logoId, teamTeamName.logoId),
+    )
+    .leftJoin(
+      opponentTeamName,
+      eq(opponentTeamName.teamnameId, opponent.teamnameId),
+    )
+    .leftJoin(
+      opponentLogo,
+      eq(opponentLogo.logoId, opponentTeamName.logoId),
     )
     .where(
       and(
@@ -393,8 +417,16 @@ async function getStreak({
   const streaks = await db
     .with(group_array)
     .select({
-      teamId: group_array.teamId,
-      name: teams.name as unknown as SQL<string>,
+      team: {
+        teamid: group_array.teamId,
+        name: teamnames.name,
+        shortName: teamnames.shortName,
+        casualName: teamnames.casualName,
+        logo: {
+          logoId: teamlogos.logoId,
+          hasDark: teamlogos.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
       gameCount:
         sql<number>`array_length(group_array.dates,1)`.as(
           'game_count',
@@ -409,6 +441,14 @@ async function getStreak({
     })
     .from(group_array)
     .leftJoin(teams, eq(teams.teamId, group_array.teamId))
+    .leftJoin(
+      teamnames,
+      eq(teamnames.teamnameId, teams.teamnameId),
+    )
+    .leftJoin(
+      teamlogos,
+      eq(teamlogos.logoId, teamnames.logoId),
+    )
     .orderBy(desc(sql`game_count`), asc(sql`start_date`))
     .limit(20)
     .then((res) => {

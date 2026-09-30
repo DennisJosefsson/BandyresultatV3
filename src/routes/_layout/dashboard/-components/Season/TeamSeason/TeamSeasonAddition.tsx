@@ -3,8 +3,8 @@ import { Input } from '@/components/base/ui/input'
 import ConfirmDialog from '@/components/Common/ConfirmDialog'
 import { getRouteApi } from '@tanstack/react-router'
 import { useRef, useState } from 'react'
-import { useAddTeamSeasonMutation } from '../../../-hooks/addTeamSeasonMutation'
-import { deleteTeamseasonMutation } from '../../../-hooks/deleteTeamseasonMutation'
+import { useAddTeamSeasonMutation } from '../../../-hooks/teamseason/addTeamSeasonMutation'
+import { deleteTeamseasonMutation } from '../../../-hooks/teamseason/deleteTeamseasonMutation'
 
 const route = getRouteApi(
   '/_layout/dashboard/season/$seasonId/teamseason_/',
@@ -38,7 +38,7 @@ const TeamSeasonAddition = () => {
     .map((team) => {
       return {
         value: team.teamId,
-        label: team.name,
+        label: team.team.name,
       }
     })
 

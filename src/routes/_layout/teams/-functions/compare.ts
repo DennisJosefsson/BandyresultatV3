@@ -92,6 +92,9 @@ export const getCompareTeams = createServerFn({
               eq(teams.teamId, array[0]),
               ne(teams.teamId, 176),
             ),
+          with: {
+            teamname: { with: { logo: true } },
+          },
         })
 
       if (!compareHomeTeam) {
@@ -112,6 +115,9 @@ export const getCompareTeams = createServerFn({
               eq(teams.teamId, array[1]),
               ne(teams.teamId, 176),
             ),
+          with: {
+            teamname: { with: { logo: true } },
+          },
         })
 
       if (!compareAwayTeam) {
@@ -131,8 +137,8 @@ export const getCompareTeams = createServerFn({
       })
 
       if (catTables.length === 0) {
-        const teamStrings = `${compareHomeTeam.name} och ${compareAwayTeam.name}`
-        const breadCrumb = `H2H: ${compareHomeTeam.name} - ${compareAwayTeam.name}`
+        const teamStrings = `${compareHomeTeam.teamname.name} och ${compareAwayTeam.teamname.name}`
+        const breadCrumb = `H2H: ${compareHomeTeam.teamname.name} - ${compareAwayTeam.teamname.name}`
 
         const message = `${teamStrings} har inga spelade matcher mot varandra i databasen.`
         const url = `https://bandyresultat.se/teams/compare?women=${women}&teamArray=[$${compareHomeTeam.teamId},${compareAwayTeam.teamId}]`

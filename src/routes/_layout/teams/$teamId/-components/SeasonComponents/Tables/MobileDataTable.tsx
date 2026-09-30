@@ -17,7 +17,10 @@ import {
   TableRow,
 } from '@/components/base/ui/table'
 import { useCookies } from '@/lib/contexts/cookieContext'
-import type { TeamTable } from '@/lib/types/table'
+import type {
+  TeamSeasonTableV2,
+  TeamTable,
+} from '@/lib/types/table'
 import { getRouteApi } from '@tanstack/react-router'
 import type {
   SortingState,
@@ -37,7 +40,7 @@ import {
 } from './columns'
 
 interface MobileDataTableProps {
-  data: Array<Omit<TeamTable, 'women' | 'season' | 'group'>>
+  data: Array<TeamSeasonTableV2>
   serieStructure: Array<number> | null | undefined
 }
 
@@ -172,7 +175,8 @@ const MobileDataTable = ({
                     <TeamLogoCell className="@xs:table-cell hidden w-8">
                       <TeamLogo
                         size={32}
-                        teamId={original.team.teamId}
+                        logoId={original.team.logo.logoId}
+                        hasDark={original.team.logo.hasDark}
                         className="size-[1lh] object-scale-down"
                         aria-label={
                           original.team.casualName

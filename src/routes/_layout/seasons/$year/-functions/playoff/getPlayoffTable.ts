@@ -4,7 +4,7 @@ import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import type { Game } from '@/lib/types/game'
 import type {
-  PlayoffGroupsV2,
+  PlayoffGroupsV3,
   PlayoffSeriesTable,
 } from '@/lib/types/table'
 import { zd } from '@/lib/utils/zod'
@@ -20,7 +20,7 @@ import { getPlayoffTableData } from './getPlayoffTableData'
 type PlayoffTable = {
   category: string
   level: number | null
-  groupArray: Array<PlayoffGroupsV2>
+  groupArray: Array<PlayoffGroupsV3>
 }
 type PlayoffTableReturn =
   | {

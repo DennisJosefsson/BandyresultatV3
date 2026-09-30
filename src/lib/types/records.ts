@@ -1,9 +1,8 @@
-import type { TeamBase } from './team'
+import type { TeamBaseWithLogo } from './team'
 
 export type RecordStreak = {
   position: number | undefined
-  teamId: number
-  name: string
+  team: TeamBaseWithLogo
   gameCount: number
   startDate: string
   endDate: string
@@ -12,8 +11,8 @@ export type RecordStreak = {
 export type CurrInoffChamp = {
   date: string
   result: string
-  team: TeamBase
-  opponent: TeamBase
+  team: TeamBaseWithLogo
+  opponent: TeamBaseWithLogo
 }
 
 export type RecordStreakData = {
@@ -32,15 +31,13 @@ export type RecordData = {
   position: number | undefined
   data: number
   year: string
-  team: TeamBase
+  team: TeamBaseWithLogo
 }
 
 export type MaxMinGoalGames = {
   position: number | undefined
-  homeTeam: string
-  homeTeamId: number
-  awayTeam: string
-  awayTeamId: number
+  home: TeamBaseWithLogo
+  away: TeamBaseWithLogo
   result: string
   goals: number | null
   date: string
@@ -77,10 +74,10 @@ export type GoalRecordDataArrays = RecordDataArrays & {
 export type GeneralStatItem = {
   position: number | undefined
   count: number
-  team: TeamBase
+  team: TeamBaseWithLogo
 }
 
-export type GeneratStats = {
+export type GeneralStats = {
   golds: Array<GeneralStatItem>
   finals: Array<GeneralStatItem>
   playoffs: Array<GeneralStatItem>

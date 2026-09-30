@@ -1,17 +1,23 @@
-import type { Dispatch, SetStateAction } from 'react'
-import type { InlineEditGame } from '@/lib/types/game'
+import { Button } from '@/components/base/ui/button'
+import { Checkbox } from '@/components/base/ui/checkbox'
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldSet,
+} from '@/components/base/ui/field'
+import { Input } from '@/components/base/ui/input'
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupInput,
 } from '@/components/base/ui/input-group'
-import { Input } from '@/components/base/ui/input'
-import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from '@/components/base/ui/field'
-import { Checkbox } from '@/components/base/ui/checkbox'
-import { Button } from '@/components/base/ui/button'
-import { useInlineEditGameForm } from '../../-hooks/useInlineEditGameForm'
-import { useInledDateEditForm } from '../../-hooks/useInlineDateEditForm'
+import type { InlineEditGame } from '@/lib/types/game'
+import type { Dispatch, SetStateAction } from 'react'
+import { useInledDateEditForm } from '../../-hooks/games/useInlineDateEditForm'
+import { useInlineEditGameForm } from '../../-hooks/games/useInlineEditGameForm'
 
 type GameEdit =
   | { editGame: null }
@@ -30,7 +36,11 @@ const currDate = new Date().toLocaleDateString('se-SV', {
   day: '2-digit',
 })
 
-const GamesListItem = ({ game, edit, setEdit }: GamesListItemProps) => {
+const GamesListItem = ({
+  game,
+  edit,
+  setEdit,
+}: GamesListItemProps) => {
   const resultForm = useInlineEditGameForm({ game })
 
   const dateForm = useInledDateEditForm({ game })
@@ -49,7 +59,10 @@ const GamesListItem = ({ game, edit, setEdit }: GamesListItemProps) => {
 
   const mdMatchup = `${game.home.casualName} - ${game.away.casualName}`
 
-  if (edit.editGame === 'result' && edit.gameId === game.gameId) {
+  if (
+    edit.editGame === 'result' &&
+    edit.gameId === game.gameId
+  ) {
     return (
       <div className="mb-4">
         <form
@@ -61,25 +74,40 @@ const GamesListItem = ({ game, edit, setEdit }: GamesListItemProps) => {
         >
           <FieldGroup>
             <div className="flex flex-row items-center gap-4">
-              <span className="h-8 text-base md:hidden">{matchup}</span>
-              <span className="hidden h-8 text-base md:inline-block">{mdMatchup}</span>
+              <span className="h-8 text-base md:hidden">
+                {matchup}
+              </span>
+              <span className="hidden h-8 text-base md:inline-block">
+                {mdMatchup}
+              </span>
               <resultForm.Field
                 name="result"
                 children={(field) => {
-                  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+                  const isInvalid =
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
                   return (
-                    <Field data-invalid={isInvalid} className="h-9 max-w-48">
+                    <Field
+                      data-invalid={isInvalid}
+                      className="h-9 max-w-48"
+                    >
                       <Input
                         id={field.name}
                         name={field.name}
                         value={field.state.value}
                         onBlur={field.handleBlur}
-                        onChange={(e) => field.handleChange(e.target.value)}
+                        onChange={(e) =>
+                          field.handleChange(e.target.value)
+                        }
                         aria-invalid={isInvalid}
                         placeholder="Slutresultat"
                         autoComplete="off"
                       />
-                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                      {isInvalid && (
+                        <FieldError
+                          errors={field.state.meta.errors}
+                        />
+                      )}
                     </Field>
                   )
                 }}
@@ -87,20 +115,31 @@ const GamesListItem = ({ game, edit, setEdit }: GamesListItemProps) => {
               <resultForm.Field
                 name="halftimeResult"
                 children={(field) => {
-                  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+                  const isInvalid =
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
                   return (
-                    <Field data-invalid={isInvalid} className="h-9 max-w-48">
+                    <Field
+                      data-invalid={isInvalid}
+                      className="h-9 max-w-48"
+                    >
                       <Input
                         id={field.name}
                         name={field.name}
                         value={field.state.value}
                         onBlur={field.handleBlur}
-                        onChange={(e) => field.handleChange(e.target.value)}
+                        onChange={(e) =>
+                          field.handleChange(e.target.value)
+                        }
                         placeholder="Halvtidsresultat"
                         aria-invalid={isInvalid}
                       />
 
-                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                      {isInvalid && (
+                        <FieldError
+                          errors={field.state.meta.errors}
+                        />
+                      )}
                     </Field>
                   )
                 }}
@@ -108,26 +147,42 @@ const GamesListItem = ({ game, edit, setEdit }: GamesListItemProps) => {
               <resultForm.Field
                 name="date"
                 children={(field) => {
-                  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+                  const isInvalid =
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
                   return (
-                    <Field data-invalid={isInvalid} className="h-9 max-w-48">
+                    <Field
+                      data-invalid={isInvalid}
+                      className="h-9 max-w-48"
+                    >
                       <InputGroup>
                         <InputGroupInput
                           id={field.name}
                           name={field.name}
                           value={field.state.value}
                           onBlur={field.handleBlur}
-                          onChange={(e) => field.handleChange(e.target.value)}
+                          onChange={(e) =>
+                            field.handleChange(
+                              e.target.value,
+                            )
+                          }
                           placeholder="Datum"
                           aria-invalid={isInvalid}
                         />
                         <InputGroupAddon align="inline-end">
-                          <InputGroupButton variant="secondary" onClick={buttonClick}>
+                          <InputGroupButton
+                            variant="secondary"
+                            onClick={buttonClick}
+                          >
                             Idag
                           </InputGroupButton>
                         </InputGroupAddon>
                       </InputGroup>
-                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                      {isInvalid && (
+                        <FieldError
+                          errors={field.state.meta.errors}
+                        />
+                      )}
                     </Field>
                   )
                 }}
@@ -135,20 +190,31 @@ const GamesListItem = ({ game, edit, setEdit }: GamesListItemProps) => {
               <resultForm.Field
                 name="otResult"
                 children={(field) => {
-                  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+                  const isInvalid =
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
                   return (
-                    <Field data-invalid={isInvalid} className="h-9 max-w-48">
+                    <Field
+                      data-invalid={isInvalid}
+                      className="h-9 max-w-48"
+                    >
                       <Input
                         id={field.name}
                         name={field.name}
                         value={field.state.value}
                         onBlur={field.handleBlur}
-                        onChange={(e) => field.handleChange(e.target.value)}
+                        onChange={(e) =>
+                          field.handleChange(e.target.value)
+                        }
                         placeholder="Resultat efter SD/Straffar"
                         aria-invalid={isInvalid}
                       />
 
-                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                      {isInvalid && (
+                        <FieldError
+                          errors={field.state.meta.errors}
+                        />
+                      )}
                     </Field>
                   )
                 }}
@@ -158,23 +224,39 @@ const GamesListItem = ({ game, edit, setEdit }: GamesListItemProps) => {
               <resultForm.Field
                 name="extraTime"
                 children={(field) => {
-                  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+                  const isInvalid =
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
                   return (
                     <FieldSet>
                       <FieldGroup data-slot="checkbox-group">
-                        <Field orientation="horizontal" data-invalid={isInvalid}>
+                        <Field
+                          orientation="horizontal"
+                          data-invalid={isInvalid}
+                        >
                           <Checkbox
                             id="extraTime"
                             name={field.name}
                             checked={field.state.value}
-                            onCheckedChange={(checked) => field.handleChange(checked === true)}
+                            onCheckedChange={(checked) =>
+                              field.handleChange(
+                                checked === true,
+                              )
+                            }
                           />
-                          <FieldLabel htmlFor="extraTime" className="font-normal">
+                          <FieldLabel
+                            htmlFor="extraTime"
+                            className="font-normal"
+                          >
                             Övertid
                           </FieldLabel>
                         </Field>
                       </FieldGroup>
-                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                      {isInvalid && (
+                        <FieldError
+                          errors={field.state.meta.errors}
+                        />
+                      )}
                     </FieldSet>
                   )
                 }}
@@ -183,35 +265,62 @@ const GamesListItem = ({ game, edit, setEdit }: GamesListItemProps) => {
               <resultForm.Field
                 name="penalties"
                 children={(field) => {
-                  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+                  const isInvalid =
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
                   return (
                     <FieldSet>
                       <FieldGroup data-slot="checkbox-group">
-                        <Field orientation="horizontal" data-invalid={isInvalid}>
+                        <Field
+                          orientation="horizontal"
+                          data-invalid={isInvalid}
+                        >
                           <Checkbox
                             id="penalties"
                             name={field.name}
                             checked={field.state.value}
-                            onCheckedChange={(checked) => field.handleChange(checked === true)}
+                            onCheckedChange={(checked) =>
+                              field.handleChange(
+                                checked === true,
+                              )
+                            }
                           />
-                          <FieldLabel htmlFor="penalties" className="font-normal">
+                          <FieldLabel
+                            htmlFor="penalties"
+                            className="font-normal"
+                          >
                             Straffar
                           </FieldLabel>
                         </Field>
                       </FieldGroup>
-                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                      {isInvalid && (
+                        <FieldError
+                          errors={field.state.meta.errors}
+                        />
+                      )}
                     </FieldSet>
                   )
                 }}
               />
 
-              <Button type="button" variant="outline" onClick={() => setEdit({ editGame: null })}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setEdit({ editGame: null })}
+              >
                 Stäng
               </Button>
-              <Button type="button" variant="outline" onClick={() => resultForm.reset()}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => resultForm.reset()}
+              >
                 Reset
               </Button>
-              <Button type="submit" form="edit-game-result">
+              <Button
+                type="submit"
+                form="edit-game-result"
+              >
                 Skicka
               </Button>
             </div>
@@ -219,7 +328,10 @@ const GamesListItem = ({ game, edit, setEdit }: GamesListItemProps) => {
         </form>
       </div>
     )
-  } else if (edit.editGame === 'date' && edit.gameId === game.gameId) {
+  } else if (
+    edit.editGame === 'date' &&
+    edit.gameId === game.gameId
+  ) {
     return (
       <div className="mb-4">
         <form
@@ -230,52 +342,86 @@ const GamesListItem = ({ game, edit, setEdit }: GamesListItemProps) => {
           }}
         >
           <div className="flex flex-row items-center gap-10">
-            <span className="h-8 text-base md:hidden">{matchup}</span>
-            <span className="hidden h-8 text-base md:inline-block">{mdMatchup}</span>
+            <span className="h-8 text-base md:hidden">
+              {matchup}
+            </span>
+            <span className="hidden h-8 text-base md:inline-block">
+              {mdMatchup}
+            </span>
             <FieldGroup className="h-9 max-w-48">
               <dateForm.Field
                 name="date"
                 children={(field) => {
-                  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+                  const isInvalid =
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid
                   return (
-                    <Field data-invalid={isInvalid} className="h-9 max-w-48">
+                    <Field
+                      data-invalid={isInvalid}
+                      className="h-9 max-w-48"
+                    >
                       <InputGroup>
                         <InputGroupInput
                           id={field.name}
                           name={field.name}
                           value={field.state.value}
                           onBlur={field.handleBlur}
-                          onChange={(e) => field.handleChange(e.target.value)}
+                          onChange={(e) =>
+                            field.handleChange(
+                              e.target.value,
+                            )
+                          }
                           placeholder="Datum"
                           aria-invalid={isInvalid}
                           autoFocus
                         />
                         <InputGroupAddon align="inline-end">
-                          <InputGroupButton variant="secondary" onClick={dateFormButtonClick}>
+                          <InputGroupButton
+                            variant="secondary"
+                            onClick={dateFormButtonClick}
+                          >
                             Idag
                           </InputGroupButton>
                         </InputGroupAddon>
                       </InputGroup>
-                      {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                      {isInvalid && (
+                        <FieldError
+                          errors={field.state.meta.errors}
+                        />
+                      )}
                     </Field>
                   )
                 }}
               />
             </FieldGroup>
-            <Button type="button" variant="outline" onClick={() => setEdit({ editGame: null })}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setEdit({ editGame: null })}
+            >
               Stäng
             </Button>
-            <Button type="button" variant="outline" onClick={() => dateForm.reset()}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => dateForm.reset()}
+            >
               Reset
             </Button>
-            <Button type="submit" form="edit-game-date">
+            <Button
+              type="submit"
+              form="edit-game-date"
+            >
               Skicka
             </Button>
           </div>
         </form>
       </div>
     )
-  } else if (!edit.editGame || (edit.editGame && edit.gameId !== game.gameId)) {
+  } else if (
+    !edit.editGame ||
+    (edit.editGame && edit.gameId !== game.gameId)
+  ) {
     return (
       <div className="w-full">
         <div
@@ -283,16 +429,26 @@ const GamesListItem = ({ game, edit, setEdit }: GamesListItemProps) => {
           className="mb-1 flex flex-row justify-start gap-1 px-1 py-0.5 text-[10px] transition-colors md:max-w-240 md:gap-4 md:px-2 md:text-sm"
         >
           <span className="w-20">{game.date}</span>
-          <span className="h-8 w-50 text-base md:hidden">{matchup}</span>
-          <span className="hidden h-8 w-50 text-base md:inline-block">{mdMatchup}</span>
-
-          <span className="w-10 text-right tabular-nums">{game.result}</span>
+          <span className="h-8 w-50 text-base md:hidden">
+            {matchup}
+          </span>
+          <span className="hidden h-8 w-50 text-base md:inline-block">
+            {mdMatchup}
+          </span>
 
           <span className="w-10 text-right tabular-nums">
-            {game.halftimeResult ? `(${game.halftimeResult})` : null}
+            {game.result}
+          </span>
+
+          <span className="w-10 text-right tabular-nums">
+            {game.halftimeResult
+              ? `(${game.halftimeResult})`
+              : null}
           </span>
           <span className="text-right tabular-nums md:w-16">
-            {game.otResult ? `otResult: (${game.otResult})` : null}
+            {game.otResult
+              ? `otResult: (${game.otResult})`
+              : null}
           </span>
           <span>
             <Button

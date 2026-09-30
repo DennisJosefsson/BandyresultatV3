@@ -1,6 +1,6 @@
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import type { GeneratStats } from '@/lib/types/records'
+import type { GeneralStats } from '@/lib/types/records'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
 import { getGeneralStatsData } from './getGeneralStatsData'
@@ -8,7 +8,7 @@ import { getGeneralStatsData } from './getGeneralStatsData'
 type RecordStreakReturn =
   | {
       status: 200
-      generalStats: GeneratStats
+      generalStats: GeneralStats
     }
   | undefined
 

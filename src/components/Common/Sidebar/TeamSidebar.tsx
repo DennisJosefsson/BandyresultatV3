@@ -90,7 +90,7 @@ function SingleTeamSidebar() {
   return (
     <SidebarGroup>
       <SidebarGroupLabel className="truncate">
-        {data.team.casualName}
+        {data.team.teamname.casualName}
       </SidebarGroupLabel>
       <SidebarGroupContent>
         <SidebarMenuSub>

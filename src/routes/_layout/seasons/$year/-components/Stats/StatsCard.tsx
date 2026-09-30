@@ -22,7 +22,7 @@ function Upper({ children }: { children: ReactNode }) {
 
 function Lower({ children }: { children: ReactNode }) {
   return (
-    <div className="flex flex-row py-1 px-2">
+    <div className="flex flex-row justify-between py-1 px-2">
       {children}
     </div>
   )
@@ -30,7 +30,7 @@ function Lower({ children }: { children: ReactNode }) {
 
 function Content({ children }: { children: ReactNode }) {
   return (
-    <div className="text-[8px] @3xs/statscard:text-xs @xs/statscard:text-sm @sm/statscard:text-sm">
+    <div className="text-[8px] @3xs/statscard:text-xs @xs/statscard:text-sm/5 @sm/statscard:text-sm/5">
       {children}
     </div>
   )

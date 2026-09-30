@@ -9,7 +9,7 @@ import {
 import { Datum } from '@/components/Common/Date'
 import TeamLogo from '@/components/Common/TeamLogo'
 import { useCookies } from '@/lib/contexts/cookieContext'
-import type { Game } from '@/lib/types/game'
+import type { Game, TeamSeasonGame } from '@/lib/types/game'
 import { Link } from '@tanstack/react-router'
 import { StarIcon } from 'lucide-react'
 
@@ -23,7 +23,7 @@ type RoutePaths =
 
 type GamesCardProps = {
   serieName: string
-  game: Omit<Game, 'season'>
+  game: Omit<Game, 'season'> | TeamSeasonGame
   routePath: RoutePaths
 }
 
@@ -52,17 +52,21 @@ export function GameCard({
           </span>
         </CardDescription>
         <CardContent className="group-data-[size=sm]/card:px-0.5 group-data-[size=sm]/card:py-1 @lg:group-data-[size=sm]/card:p-2">
-          <div className="flex flex-row justify-between font-semibold text-[10px]/4 @xs:text-xs/5 @md:text-sm/7">
+          <div className="flex flex-row justify-between font-semibold text-xs/5 @md:text-sm/7">
             <div className="flex flex-row gap-0.5 @sm:gap-1 @lg:gap-2 items-center w-15 @xs:w-20 @sm:w-25 @md:w-40 @xl:w-full justify-start">
               <TeamLogo
                 size={32}
-                teamId={game.homeTeamId}
-                className="@sm:block hidden size-[1lh] object-scale-down"
+                logoId={game.home.logo.logoId}
+                hasDark={game.home.logo.hasDark}
+                className="size-[1lh] object-scale-down"
                 aria-label={game.home.casualName}
                 title={game.home.casualName}
               />
-              <span className="truncate @xs:tracking-wide">
+              <span className="@md:block hidden truncate @xs:tracking-wide">
                 {game.home.name}
+              </span>
+              <span className="block @md:hidden">
+                {game.home.shortName}
               </span>
               <StarIcon
                 data-favteam={
@@ -136,13 +140,17 @@ export function GameCard({
                 }
                 className="size-2.5 @xs:size-3 data-[favteam=false]:hidden"
               />
-              <span className="truncate @xs:tracking-wide">
+              <span className="@md:block hidden truncate @xs:tracking-wide">
                 {game.away.name}
+              </span>
+              <span className="block @md:hidden">
+                {game.away.shortName}
               </span>
               <TeamLogo
                 size={32}
-                teamId={game.awayTeamId}
-                className="@sm:block hidden size-[1lh] object-scale-down"
+                logoId={game.away.logo.logoId}
+                hasDark={game.away.logo.hasDark}
+                className="size-[1lh] object-scale-down"
                 aria-label={game.away.casualName}
                 title={game.away.casualName}
               />

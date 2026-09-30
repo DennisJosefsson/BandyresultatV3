@@ -154,8 +154,9 @@ const MobileDataTable = <TData, TValue>({
                     <TeamLogoCell className="@xs:table-cell hidden">
                       <TeamLogo
                         size={32}
-                        teamId={original.teamId}
-                        className="size-[1lh] object-scale-down rounded-full"
+                        logoId={original.team.logo.logoId}
+                        hasDark={original.team.logo.hasDark}
+                        className="size-[1lh] object-scale-down"
                         aria-label={
                           original.team.casualName
                         }

@@ -3,13 +3,15 @@ import {
   competitions,
   games,
   series,
+  teamlogos,
+  teamnames,
   teams,
 } from '@/db/schema'
 import Error404 from '@/lib/middlewares/errors/404Error'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import type { Game } from '@/lib/types/game'
-import type { TeamBase } from '@/lib/types/team'
+import type { TeamBaseWithLogo } from '@/lib/types/team'
 import { createServerFn } from '@tanstack/react-start'
 import type { SQL } from 'drizzle-orm'
 import {
@@ -23,6 +25,10 @@ import { alias } from 'drizzle-orm/pg-core'
 
 const home = alias(teams, 'home')
 const away = alias(teams, 'away')
+const homeTeamName = alias(teamnames, 'home_teamname')
+const awayTeamName = alias(teamnames, 'away_teamname')
+const homeTeamLogo = alias(teamlogos, 'home_teamlogo')
+const awayTeamLogo = alias(teamlogos, 'away_teamlogo')
 
 type ReturnType =
   | {
@@ -58,20 +64,44 @@ export const getIndexGames = createServerFn({
           },
           home: {
             teamId: home.teamId,
-            name: home.name,
-            shortName: home.shortName,
-            casualName: home.casualName,
-          } as unknown as SQL<TeamBase>,
+            name: homeTeamName.name,
+            shortName: homeTeamName.shortName,
+            casualName: homeTeamName.casualName,
+            logo: {
+              logoId: homeTeamLogo.logoId,
+              hasDark: homeTeamLogo.hasDark,
+            },
+          } as unknown as SQL<TeamBaseWithLogo>,
           away: {
             teamId: away.teamId,
-            name: away.name,
-            shortName: away.shortName,
-            casualName: away.casualName,
-          } as unknown as SQL<TeamBase>,
+            name: awayTeamName.name,
+            shortName: awayTeamName.shortName,
+            casualName: awayTeamName.casualName,
+            logo: {
+              logoId: awayTeamLogo.logoId,
+              hasDark: awayTeamLogo.hasDark,
+            },
+          } as unknown as SQL<TeamBaseWithLogo>,
         })
         .from(games)
         .leftJoin(home, eq(home.teamId, games.homeTeamId))
         .leftJoin(away, eq(away.teamId, games.awayTeamId))
+        .leftJoin(
+          homeTeamName,
+          eq(homeTeamName.teamnameId, home.teamnameId),
+        )
+        .leftJoin(
+          homeTeamLogo,
+          eq(homeTeamLogo.logoId, homeTeamName.logoId),
+        )
+        .leftJoin(
+          awayTeamName,
+          eq(awayTeamName.teamnameId, away.teamnameId),
+        )
+        .leftJoin(
+          awayTeamLogo,
+          eq(awayTeamLogo.logoId, awayTeamName.logoId),
+        )
         .leftJoin(series, eq(series.serieId, games.serieId))
         .leftJoin(
           competitions,

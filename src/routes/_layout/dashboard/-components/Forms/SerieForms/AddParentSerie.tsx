@@ -8,8 +8,8 @@ import {
 import ConfirmDialog from '@/components/Common/ConfirmDialog'
 import { getRouteApi } from '@tanstack/react-router'
 import { useRef, useState } from 'react'
-import { useNewParentSerieMutation } from '../../../-hooks/addParentSerieMutation'
-import { deleteParentSerieMutation } from '../../../-hooks/useDeleteParentSerieMutation'
+import { useNewParentSerieMutation } from '../../../-hooks/series/addParentSerieMutation'
+import { deleteParentSerieMutation } from '../../../-hooks/series/useDeleteParentSerieMutation'
 
 const route = getRouteApi(
   '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit',

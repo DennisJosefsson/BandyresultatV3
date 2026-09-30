@@ -12,7 +12,7 @@ import CustomNumberInput from '@/components/Common/CustomNumberInput'
 import type { cupCategoryEnum } from '@/lib/types/serie'
 import type { zd } from '@/lib/utils/zod'
 import { getCompetition } from '@/routes/_layout/dashboard/-functions/CompetitionFunctions/getCompetition'
-import { generateCupSeriesForm } from '@/routes/_layout/dashboard/-hooks/generateCupSeriesForm'
+import { generateCupSeriesForm } from '@/routes/_layout/dashboard/-hooks/series/generateCupSeriesForm'
 
 import { createFileRoute } from '@tanstack/react-router'
 

@@ -5,6 +5,7 @@ import {
   seasons,
   series,
   teamcompetitions,
+  teamnames,
   teams,
   teamseries,
 } from '@/db/schema'
@@ -107,9 +108,9 @@ export const getSerieForEdit = createServerFn({
           ...getTableColumns(teamseries),
           team: {
             teamId: teams.teamId,
-            name: teams.name,
-            shortName: teams.shortName,
-            casualName: teams.casualName,
+            name: teamnames.name,
+            shortName: teamnames.shortName,
+            casualName: teamnames.casualName,
           } as unknown as SQL<TeamBase>,
         })
         .from(teamseries)
@@ -117,9 +118,15 @@ export const getSerieForEdit = createServerFn({
           teams,
           eq(teams.teamId, teamseries.teamId),
         )
+        .leftJoin(
+          teamnames,
+          eq(teamnames.teamnameId, teams.teamnameId),
+        )
         .where(eq(teamseries.serieId, serieId))
         .orderBy(
-          asc(sql`teams.casual_name collate "se-SE-x-icu"`),
+          asc(
+            sql`teamnames.casual_name collate "se-SE-x-icu"`,
+          ),
         )
 
       const teamsInCompetition = await db
@@ -127,15 +134,19 @@ export const getSerieForEdit = createServerFn({
           ...getTableColumns(teamcompetitions),
           team: {
             teamId: teams.teamId,
-            name: teams.name,
-            shortName: teams.shortName,
-            casualName: teams.casualName,
+            name: teamnames.name,
+            shortName: teamnames.shortName,
+            casualName: teamnames.casualName,
           } as unknown as SQL<TeamBase>,
         })
         .from(teamcompetitions)
         .leftJoin(
           teams,
           eq(teams.teamId, teamcompetitions.teamId),
+        )
+        .leftJoin(
+          teamnames,
+          eq(teamnames.teamnameId, teams.teamnameId),
         )
         .leftJoin(
           competitions,
@@ -151,7 +162,9 @@ export const getSerieForEdit = createServerFn({
           ),
         )
         .orderBy(
-          asc(sql`teams.casual_name collate "se-SE-x-icu"`),
+          asc(
+            sql`teamnames.casual_name collate "se-SE-x-icu"`,
+          ),
         )
 
       const competitionArray = await db

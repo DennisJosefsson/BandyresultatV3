@@ -17,9 +17,8 @@ import {
 } from '@/components/base/ui/field'
 import { getRouteApi } from '@tanstack/react-router'
 import { useRef, useState } from 'react'
-
-import { deleteTeamserieMutation } from '../../../-hooks/deleteTeamserieMutation'
-import { useEditTeamSeriesForm } from '../../../-hooks/useEditTeamSeriesForm'
+import { deleteTeamserieMutation } from '../../../-hooks/series/deleteTeamserieMutation'
+import { useEditTeamSeriesForm } from '../../../-hooks/series/useEditTeamSeriesForm'
 
 const route = getRouteApi(
   '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit',

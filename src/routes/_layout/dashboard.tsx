@@ -273,11 +273,11 @@ function RouteComponent() {
           <MenubarTrigger
             className="sm:text-sm"
             nativeButton={false}
-            value="newTeam"
+            value="teamnames"
             render={
               <Link
                 from={Route.fullPath}
-                to="/dashboard/teams/add"
+                to="/dashboard/teamnames"
                 search={(prev) => ({
                   women: prev.women,
                 })}
@@ -289,7 +289,7 @@ function RouteComponent() {
                   exact: true,
                 }}
               >
-                Lägg till lag
+                Lagnamn
               </Link>
             }
           />

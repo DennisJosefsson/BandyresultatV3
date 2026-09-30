@@ -1,22 +1,50 @@
 import { db } from '@/db'
 import {
+  competitions,
+  games,
   parentchildseries,
   seasons,
   series,
   tables,
   teamgames,
+  teamlogos,
+  teamnames,
   teams,
   teamseasons,
   teamseries,
 } from '@/db/schema'
-import type { Game } from '@/lib/types/game'
+import { coalesce } from '@/lib/drizzleHelpers/coalesce'
+import {
+  jsonAggBuildObject,
+  jsonBuildObject,
+} from '@/lib/drizzleHelpers/jsonAggjsonBuildObject'
+import type {
+  Game,
+  TeamSeasonGame,
+  TeamSeasonSerie,
+} from '@/lib/types/game'
 import type { Serie } from '@/lib/types/serie'
 import type { TeamTable } from '@/lib/types/table'
+import type { TeamBaseWithLogo } from '@/lib/types/team'
 import {
   gameSortFunction,
   leagueTableParser,
   tableSortFunction,
 } from '@/lib/utils/sortFunctions'
+import {
+  away,
+  awayLogo,
+  awayTeamName,
+  awayTeamSeason,
+  awayTeamSeasonLogo,
+  awayTeamSeasonName,
+  home,
+  homeLogo,
+  homeTeamName,
+  homeTeamSeason,
+  homeTeamSeasonLogo,
+  homeTeamSeasonName,
+} from '@/routes/_layout/seasons/$year/-functions/libs/aliases'
 import type { SQL } from 'drizzle-orm'
 import {
   and,
@@ -27,6 +55,7 @@ import {
   gt,
   inArray,
   lt,
+  or,
   sql,
   sum,
 } from 'drizzle-orm'
@@ -71,15 +100,14 @@ export const getTeamSeasonStaticTables = async ({
       }>,
       team: {
         teamId: teams.teamId,
-        name: teams.name,
-        shortName: teams.shortName,
-        casualName: teams.casualName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        shortName: string
-        casualName: string
-      }>,
+        name: teamnames.name,
+        shortName: teamnames.shortName,
+        casualName: teamnames.casualName,
+        logo: {
+          logoId: teamlogos.logoId,
+          hasDark: teamlogos.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
     })
     .from(tables)
     .leftJoin(
@@ -87,6 +115,14 @@ export const getTeamSeasonStaticTables = async ({
       eq(seasons.seasonId, tables.seasonId),
     )
     .leftJoin(teams, eq(teams.teamId, tables.teamId))
+    .leftJoin(
+      teamnames,
+      eq(teamnames.teamnameId, teams.teamnameId),
+    )
+    .leftJoin(
+      teamlogos,
+      eq(teamlogos.logoId, teamnames.logoId),
+    )
     .leftJoin(series, eq(series.serieId, tables.serieId))
     .where(
       and(
@@ -169,16 +205,15 @@ export const getTeamSeasonTables = async ({
         seasonId: number
       }>,
       team: {
-        name: teams.name,
         teamId: teams.teamId,
-        casualName: teams.casualName,
-        shortName: teams.shortName,
-      } as unknown as SQL<{
-        name: string
-        teamId: number
-        casualName: string
-        shortName: string
-      }>,
+        name: teamnames.name,
+        casualName: teamnames.casualName,
+        shortName: teamnames.shortName,
+        logo: {
+          logoId: teamlogos.logoId,
+          hasDark: teamlogos.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
       serie: { level: series.level } as unknown as SQL<{
         level: number
       }>,
@@ -189,6 +224,14 @@ export const getTeamSeasonTables = async ({
       eq(seasons.seasonId, teamgames.seasonId),
     )
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
+    .leftJoin(
+      teamnames,
+      eq(teamnames.teamnameId, teams.teamnameId),
+    )
+    .leftJoin(
+      teamlogos,
+      eq(teamlogos.logoId, teamnames.logoId),
+    )
     .leftJoin(series, eq(series.serieId, teamgames.serieId))
     .where(
       and(
@@ -200,10 +243,10 @@ export const getTeamSeasonTables = async ({
       series.group,
       teamgames.teamId,
       series.category,
-      teams.name,
+      teamnames.name,
       teams.teamId,
-      teams.casualName,
-      teams.shortName,
+      teamnames.casualName,
+      teamnames.shortName,
       seasons.seasonId,
       seasons.year,
       teamgames.women,
@@ -238,17 +281,14 @@ export const getTeamSeasonTables = async ({
       women: teamgames.women,
       team: {
         teamId: teams.teamId,
-        name: teams.name,
-        shortName: teams.shortName,
-        casualName: teams.casualName,
-        bonusPoints: teamseries.bonusPoints,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        shortName: string
-        casualName: string
-        bonusPoints: number | null
-      }>,
+        name: teamnames.name,
+        shortName: teamnames.shortName,
+        casualName: teamnames.casualName,
+        logo: {
+          logoId: teamlogos.logoId,
+          hasDark: teamlogos.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
       totalGames: count(teamgames.teamGameId),
       totalPoints:
         sql<number>`sum(teamgames.points) + (case when teamseries.bonus_points is null then 0 else teamseries.bonus_points end)`
@@ -298,6 +338,14 @@ export const getTeamSeasonTables = async ({
     .leftJoin(series, eq(teamgames.serieId, series.serieId))
     .leftJoin(teams, eq(teams.teamId, teamgames.teamId))
     .leftJoin(
+      teamnames,
+      eq(teamnames.teamnameId, teams.teamnameId),
+    )
+    .leftJoin(
+      teamlogos,
+      eq(teamlogos.logoId, teamnames.logoId),
+    )
+    .leftJoin(
       seasons,
       eq(teamgames.seasonId, seasons.seasonId),
     )
@@ -318,10 +366,12 @@ export const getTeamSeasonTables = async ({
     .groupBy(
       series.group,
       teamgames.teamId,
-      teams.name,
+      teamnames.name,
       teams.teamId,
-      teams.casualName,
-      teams.shortName,
+      teamnames.casualName,
+      teamnames.shortName,
+      teamlogos.logoId,
+      teamlogos.hasDark,
       teamseries.bonusPoints,
       series.level,
       teamgames.women,
@@ -364,6 +414,298 @@ type GetSeasonGamesProps = {
 
 const getTime = (date?: Date): number => {
   return date != null ? date.getTime() : 0
+}
+
+type GetSortedGamesProps = {
+  intYear: number
+  teamId: number
+}
+
+export const getSortedGames = async ({
+  intYear,
+  teamId,
+}: GetSortedGamesProps) => {
+  const gamesCte = db.$with('games_cte').as(
+    db
+      .select({
+        serieId: games.serieId,
+        played: jsonAggBuildObject<Array<TeamSeasonGame>>(
+          {
+            gameId: games.gameId,
+            homeTeamId: games.homeTeamId,
+            awayTeamId: games.awayTeamId,
+            date: games.date,
+            serieId: games.serieId,
+            result: games.result,
+            homeGoal: games.homeGoal,
+            awayGoal: games.awayGoal,
+            halftimeResult: games.halftimeResult,
+            played: games.played,
+            otResult: games.otResult,
+            penalties: games.penalties,
+            extraTime: games.extraTime,
+            competitionId: series.competitionId,
+            home: jsonBuildObject<TeamBaseWithLogo>({
+              teamId: home.teamId,
+              name: coalesce(
+                homeTeamSeasonName.name,
+                homeTeamName.name,
+              ),
+              casualName: coalesce(
+                homeTeamSeasonName.casualName,
+                homeTeamName.casualName,
+              ),
+              shortName: coalesce(
+                homeTeamSeasonName.shortName,
+                homeTeamName.shortName,
+              ),
+              logo: jsonBuildObject({
+                logoId: coalesce(
+                  homeTeamSeasonLogo.logoId,
+                  homeLogo.logoId,
+                ),
+                hasDark: coalesce(
+                  homeTeamSeasonLogo.hasDark,
+                  homeLogo.hasDark,
+                ),
+              }),
+            }),
+            away: jsonBuildObject<TeamBaseWithLogo>({
+              teamId: away.teamId,
+              name: coalesce(
+                awayTeamSeasonName.name,
+                awayTeamName.name,
+              ),
+              casualName: coalesce(
+                awayTeamSeasonName.casualName,
+                awayTeamName.casualName,
+              ),
+              shortName: coalesce(
+                awayTeamSeasonName.shortName,
+                awayTeamName.shortName,
+              ),
+              logo: jsonBuildObject({
+                logoId: coalesce(
+                  awayTeamSeasonLogo.logoId,
+                  awayLogo.logoId,
+                ),
+                hasDark: coalesce(
+                  awayTeamSeasonLogo.hasDark,
+                  awayLogo.hasDark,
+                ),
+              }),
+            }),
+          },
+          {
+            orderBy: [desc(games.date)],
+            filter: eq(games.played, true),
+          },
+        ).as('played'),
+        unplayed: jsonAggBuildObject<Array<TeamSeasonGame>>(
+          {
+            gameId: games.gameId,
+            homeTeamId: games.homeTeamId,
+            awayTeamId: games.awayTeamId,
+            date: games.date,
+            serieId: games.serieId,
+            result: games.result,
+            homeGoal: games.homeGoal,
+            awayGoal: games.awayGoal,
+            halftimeResult: games.halftimeResult,
+            played: games.played,
+            otResult: games.otResult,
+            penalties: games.penalties,
+            extraTime: games.extraTime,
+            competitionId: series.competitionId,
+            home: jsonBuildObject<TeamBaseWithLogo>({
+              teamId: home.teamId,
+              name: coalesce(
+                homeTeamSeasonName.name,
+                homeTeamName.name,
+              ),
+              casualName: coalesce(
+                homeTeamSeasonName.casualName,
+                homeTeamName.casualName,
+              ),
+              shortName: coalesce(
+                homeTeamSeasonName.shortName,
+                homeTeamName.shortName,
+              ),
+              logo: jsonBuildObject({
+                logoId: coalesce(
+                  homeTeamSeasonLogo.logoId,
+                  homeLogo.logoId,
+                ),
+                hasDark: coalesce(
+                  homeTeamSeasonLogo.hasDark,
+                  homeLogo.hasDark,
+                ),
+              }),
+            }),
+            away: jsonBuildObject<TeamBaseWithLogo>({
+              teamId: away.teamId,
+              name: coalesce(
+                awayTeamSeasonName.name,
+                awayTeamName.name,
+              ),
+              casualName: coalesce(
+                awayTeamSeasonName.casualName,
+                awayTeamName.casualName,
+              ),
+              shortName: coalesce(
+                awayTeamSeasonName.shortName,
+                awayTeamName.shortName,
+              ),
+              logo: jsonBuildObject({
+                logoId: coalesce(
+                  awayTeamSeasonLogo.logoId,
+                  awayLogo.logoId,
+                ),
+                hasDark: coalesce(
+                  awayTeamSeasonLogo.hasDark,
+                  awayLogo.hasDark,
+                ),
+              }),
+            }),
+          },
+          {
+            orderBy: [asc(games.date)],
+            filter: eq(games.played, false),
+          },
+        ).as('unplayed'),
+      })
+      .from(games)
+      .leftJoin(home, eq(games.homeTeamId, home.teamId))
+      .leftJoin(away, eq(games.awayTeamId, away.teamId))
+      .leftJoin(
+        homeTeamSeason,
+        and(
+          eq(homeTeamSeason.seasonId, games.seasonId),
+          eq(homeTeamSeason.teamId, games.homeTeamId),
+        ),
+      )
+      .leftJoin(
+        awayTeamSeason,
+        and(
+          eq(awayTeamSeason.seasonId, games.seasonId),
+          eq(awayTeamSeason.teamId, games.awayTeamId),
+        ),
+      )
+      .leftJoin(
+        homeTeamName,
+        eq(home.teamnameId, homeTeamName.teamnameId),
+      )
+      .leftJoin(
+        awayTeamName,
+        eq(away.teamnameId, awayTeamName.teamnameId),
+      )
+      .leftJoin(
+        homeTeamSeasonName,
+        eq(
+          homeTeamSeason.teamnameId,
+          homeTeamSeasonName.teamnameId,
+        ),
+      )
+      .leftJoin(
+        awayTeamSeasonName,
+        eq(
+          awayTeamSeason.teamnameId,
+          awayTeamSeasonName.teamnameId,
+        ),
+      )
+      .leftJoin(
+        homeLogo,
+        eq(homeTeamName.logoId, homeLogo.logoId),
+      )
+      .leftJoin(
+        awayLogo,
+        eq(awayTeamName.logoId, awayLogo.logoId),
+      )
+      .leftJoin(
+        homeTeamSeasonLogo,
+        eq(
+          homeTeamSeasonName.logoId,
+          homeTeamSeasonLogo.logoId,
+        ),
+      )
+      .leftJoin(
+        awayTeamSeasonLogo,
+        eq(
+          awayTeamSeasonName.logoId,
+          awayTeamSeasonLogo.logoId,
+        ),
+      )
+      .leftJoin(
+        seasons,
+        eq(seasons.seasonId, games.seasonId),
+      )
+      .leftJoin(series, eq(games.serieId, series.serieId))
+      .where(
+        and(
+          or(
+            eq(games.homeTeamId, teamId),
+            eq(games.awayTeamId, teamId),
+          ),
+          inArray(
+            games.seasonId,
+            db
+              .select({ seasonId: seasons.seasonId })
+              .from(seasons)
+              .where(eq(seasons.intYear, intYear)),
+          ),
+        ),
+      )
+      .groupBy(games.serieId),
+  )
+
+  const seriesCte = db.$with('series_cte').as(
+    db
+      .with(gamesCte)
+      .select({
+        competitionId:
+          series.competitionId as unknown as SQL<number>,
+        seriesArray: jsonAggBuildObject<
+          Array<TeamSeasonSerie>
+        >(
+          {
+            serieName: series.serieName,
+            comment: series.comment,
+            played: gamesCte.played as unknown as SQL<
+              Array<TeamSeasonGame>
+            >,
+            unplayed: gamesCte.unplayed as unknown as SQL<
+              Array<TeamSeasonGame>
+            >,
+          },
+          { orderBy: [asc(series.level)] },
+        ).as('series_array'),
+      })
+      .from(gamesCte)
+      .leftJoin(
+        series,
+        eq(series.serieId, gamesCte.serieId),
+      )
+      .groupBy(series.competitionId),
+  )
+
+  const gamesArray = await db
+    .with(seriesCte)
+    .select({
+      competitionName:
+        competitions.competitionName as unknown as SQL<string>,
+      seriesArray: seriesCte.seriesArray,
+    })
+    .from(seriesCte)
+    .leftJoin(
+      competitions,
+      eq(
+        competitions.competitionId,
+        seriesCte.competitionId,
+      ),
+    )
+    .orderBy(asc(competitions.division))
+
+  return gamesArray
 }
 
 export const getSeasonGames = ({
@@ -843,15 +1185,14 @@ function getMixQuery({
         .as('total_lost'),
       team: {
         teamId: teams.teamId,
-        name: teams.name,
-        shortName: teams.shortName,
-        casualName: teams.casualName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        shortName: string
-        casualName: string
-      }>,
+        name: teamnames.name,
+        shortName: teamnames.shortName,
+        casualName: teamnames.casualName,
+        logo: {
+          logoId: teamlogos.logoId,
+          hasDark: teamlogos.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
       season: {
         seasonId: seasons.seasonId,
         year: seasons.year,
@@ -866,6 +1207,14 @@ function getMixQuery({
     .from(unionQuery)
     .leftJoin(teams, eq(unionQuery.teamId, teams.teamId))
     .leftJoin(
+      teamnames,
+      eq(teamnames.teamnameId, teams.teamnameId),
+    )
+    .leftJoin(
+      teamlogos,
+      eq(teamlogos.logoId, teamnames.logoId),
+    )
+    .leftJoin(
       seasons,
       eq(unionQuery.seasonId, seasons.seasonId),
     )
@@ -879,9 +1228,11 @@ function getMixQuery({
     .groupBy(
       unionQuery.teamId,
       teams.teamId,
-      teams.name,
-      teams.shortName,
-      teams.casualName,
+      teamnames.name,
+      teamnames.shortName,
+      teamnames.casualName,
+      teamlogos.logoId,
+      teamlogos.hasDark,
       seasons.year,
       seasons.seasonId,
       series.level,
@@ -890,7 +1241,7 @@ function getMixQuery({
       desc(sql`total_points`),
       desc(sql`total_goal_difference`),
       desc(sql`total_goals_scored`),
-      asc(sql`casual_name collate "se-SE-x-icu"`),
+      asc(sql`teamnames.casual_name collate "se-SE-x-icu"`),
     )
 
   return mixQuery
@@ -1073,15 +1424,14 @@ function withParentSerie({
         .as('total_lost'),
       team: {
         teamId: teams.teamId,
-        name: teams.name,
-        shortName: teams.shortName,
-        casualName: teams.casualName,
-      } as unknown as SQL<{
-        teamId: number
-        name: string
-        shortName: string
-        casualName: string
-      }>,
+        name: teamnames.name,
+        shortName: teamnames.shortName,
+        casualName: teamnames.casualName,
+        logo: {
+          logoId: teamlogos.logoId,
+          hasDark: teamlogos.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
       season: {
         seasonId: seasons.seasonId,
         year: seasons.year,
@@ -1096,6 +1446,14 @@ function withParentSerie({
     .from(unionQuery)
     .leftJoin(teams, eq(unionQuery.teamId, teams.teamId))
     .leftJoin(
+      teamnames,
+      eq(teamnames.teamnameId, teams.teamnameId),
+    )
+    .leftJoin(
+      teamlogos,
+      eq(teamlogos.logoId, teamnames.logoId),
+    )
+    .leftJoin(
       seasons,
       eq(unionQuery.seasonId, seasons.seasonId),
     )
@@ -1109,9 +1467,11 @@ function withParentSerie({
     .groupBy(
       unionQuery.teamId,
       teams.teamId,
-      teams.name,
-      teams.shortName,
-      teams.casualName,
+      teamnames.name,
+      teamnames.shortName,
+      teamnames.casualName,
+      teamlogos.logoId,
+      teamlogos.hasDark,
       seasons.year,
       seasons.seasonId,
       series.level,
@@ -1120,7 +1480,7 @@ function withParentSerie({
       desc(sql`total_points`),
       desc(sql`total_goal_difference`),
       desc(sql`total_goals_scored`),
-      asc(sql`casual_name collate "se-SE-x-icu"`),
+      asc(sql`teamnames.casual_name collate "se-SE-x-icu"`),
     )
 
   return query

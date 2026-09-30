@@ -25,8 +25,8 @@ import {
 import { zd } from '@/lib/utils/zod'
 import { getRouteApi } from '@tanstack/react-router'
 import { useRef, useState } from 'react'
-import { deleteParentSerieMutation } from '../../../-hooks/useDeleteParentSerieMutation'
-import { useEditParentSerieForm } from '../../../-hooks/useEditParentSerieForm'
+import { deleteParentSerieMutation } from '../../../-hooks/series/useDeleteParentSerieMutation'
+import { useEditParentSerieForm } from '../../../-hooks/series/useEditParentSerieForm'
 
 const route = getRouteApi(
   '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit',

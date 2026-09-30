@@ -1,7 +1,12 @@
 import { Button } from '@/components/base/ui/button'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/base/ui/popover'
 import { getRouteApi } from '@tanstack/react-router'
 import { ArrowLeftIcon, ArrowRightIcon } from 'lucide-react'
-import GamesList from './Games/GamesList'
+import Games from './Games/Games'
 import TableList from './Tables/TableList'
 
 const route = getRouteApi(
@@ -57,24 +62,55 @@ const SingleTeamSeason = () => {
         </route.Link>
       </div>
       <div className="flex flex-col gap-2 md:gap-4">
-        {data.data.map((c) => {
+        {data.seasonResult.map((comp) => {
           return (
             <div
-              key={c.competitionName}
-              className="flex flex-col"
+              key={comp.competitionName}
+              className="mb-6 @container/teamseason"
             >
-              <h3 className="text-primary text-xs font-semibold tracking-wider @md:text-sm">
-                {c.competitionName}
-              </h3>
-              <TableList tableArray={c.tables} />
-              <div className="grid grid-cols-1 gap-2 @3xl:grid-cols-2 @3xl:gap-4">
-                <GamesList
-                  gamesArray={c.games.playedGames}
-                />
-                <GamesList
-                  gamesArray={c.games.unplayedGames}
-                />
+              <div>
+                <h3 className="text-primary text-xs font-semibold tracking-wider @md:text-sm">
+                  {comp.competitionName}
+                </h3>
               </div>
+              {comp.seriesArray.map((serie) => {
+                return (
+                  <div
+                    key={`${comp.competitionName}-${serie.serieName}`}
+                    className="mt-1 flex flex-col gap-2"
+                  >
+                    <div className="flex flex-row gap-x-12 items-center mb-2">
+                      <h3 className="text-primary text-xs font-semibold tracking-wider @md:text-sm">
+                        {serie.serieName}
+                      </h3>
+                      {serie.comment ? (
+                        <Popover>
+                          <PopoverTrigger
+                            render={
+                              <Button variant="outline">
+                                Kommentar
+                              </Button>
+                            }
+                          />
+                          <PopoverContent>
+                            <span className="p-2 text-xs @sm:text-sm font-semibold">
+                              {serie.comment}
+                            </span>
+                          </PopoverContent>
+                        </Popover>
+                      ) : null}
+                    </div>
+                    <TableList
+                      tableArray={serie.tableArray}
+                      serieStructure={serie.serieStructure}
+                    />
+                    <Games
+                      gameObject={serie.gameObject}
+                      serieName={serie.serieName}
+                    />
+                  </div>
+                )
+              })}
             </div>
           )
         })}
