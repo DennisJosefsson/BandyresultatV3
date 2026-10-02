@@ -112,6 +112,24 @@ export type TeamPlayoffStreak = {
   endYear: string
 }
 
+export type TeamStreakV2 = {
+  count: number
+  startDate: string
+  endDate: string
+}
+
+export type TeamPlayoffStreakV2 = {
+  count: number
+  startYear: string
+  endYear: string
+}
+
+export type TeamStatCount = {
+  count: number | null
+  first: string | null
+  latest: string | null
+}
+
 export type TeamStatItem = {
   gameId: number
   date: string
@@ -156,7 +174,7 @@ export type FiveSeason = {
   competitions: Array<Competition>
 }
 
-export type TeamStatsGameArrayObject = {
+export type TeamRecord = {
   gameId: number
   result: string
   otResult: string | null
@@ -166,42 +184,31 @@ export type TeamStatsGameArrayObject = {
   away: TeamBaseWithLogo
 }
 
+export type HomeAndAwayTeamRecords = {
+  maxScored: Array<TeamRecord> | null
+  maxConceded: Array<TeamRecord> | null
+  maxTotalGoals: Array<TeamRecord> | null
+  minTotalGoals: Array<TeamRecord> | null
+  minGoalDifference: Array<TeamRecord> | null
+  maxGoalDifference: Array<TeamRecord> | null
+}
+
 export type TeamSeasonStats = {
   teamId: number
-  firstDivisionSeasons: { count: number | null }
-  qualificationSeasons: { count: number | null }
-  firstAndLatestFirstDivisionSeason: {
-    first: string | null
-    latest: string | null
-  }
-  finalCount: {
-    count: number | null
-    latest: number | null
-  }
-  finalWinCount: {
-    count: number | null
-    latest: number | null
-  }
-  playoffCount: {
-    count: number | null
-    latest: number | null
-  }
-  losingStreak: Array<TeamStreak> | null
-  drawStreaks: Array<TeamStreak> | null
-  noWinStreaks: Array<TeamStreak> | null
-  playoffStreak: Array<TeamPlayoffStreak> | null
-  unbeatenStreak: Array<TeamStreak> | null
-  winStreak: Array<TeamStreak> | null
-  maxScoredAway: Array<TeamStatsGameArrayObject> | null
-  maxConcededAway: Array<TeamStatsGameArrayObject> | null
-  maxTotalAway: Array<TeamStatsGameArrayObject> | null
-  minTotalAway: Array<TeamStatsGameArrayObject> | null
-  minGoalDifferenceAway: Array<TeamStatsGameArrayObject> | null
-  maxGoalDifferenceAway: Array<TeamStatsGameArrayObject> | null
-  maxScoredHome: Array<TeamStatsGameArrayObject> | null
-  maxConcededHome: Array<TeamStatsGameArrayObject> | null
-  maxTotalHome: Array<TeamStatsGameArrayObject> | null
-  minTotalHome: Array<TeamStatsGameArrayObject> | null
-  minGoalDifferenceHome: Array<TeamStatsGameArrayObject> | null
-  maxGoalDifferenceHome: Array<TeamStatsGameArrayObject> | null
+  firstDivisionSeasons: number | null
+  qualificationSeasons: number | null
+  firstAndLatestSeason: Omit<TeamStatCount, 'count'>
+  finalCount: Omit<TeamStatCount, 'first'>
+  finalWinCount: Omit<TeamStatCount, 'first'>
+  playoffCount: Omit<TeamStatCount, 'first'>
+  losingStreaks: Array<TeamStreakV2>
+  drawStreaks: Array<TeamStreakV2>
+  noWinStreaks: Array<TeamStreakV2>
+  unbeatenStreaks: Array<TeamStreakV2>
+  winStreaks: Array<TeamStreakV2>
+  playoffStreaks: Array<TeamPlayoffStreakV2>
+  finalStreaks: Array<TeamPlayoffStreakV2>
+  finalWinStreaks: Array<TeamPlayoffStreakV2>
+  homeRecords: HomeAndAwayTeamRecords | undefined
+  awayRecords: HomeAndAwayTeamRecords | undefined
 }

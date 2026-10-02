@@ -13,37 +13,30 @@ const TeamSeasonCuriosities = () => {
         <div className="flex flex-col border p-1 @xs:p-2 shadow-xs w-full @2xl:max-w-lg @4xl:max-w-xl h-fit justify-self-start">
           <DataCard
             label="Säsonger i högsta serien"
-            count={data.stats.firstDivisionSeasons.count}
+            count={data.stats.firstDivisionSeasons}
           />
 
-          {data.stats.firstDivisionSeasons.count &&
-          data.stats.firstDivisionSeasons.count > 1 ? (
+          {data.stats.firstDivisionSeasons &&
+          data.stats.firstDivisionSeasons > 1 ? (
             <DataCard
               label="Första"
-              count={
-                data.stats.firstAndLatestFirstDivisionSeason
-                  ?.first
-              }
+              count={data.stats.firstAndLatestSeason?.first}
             />
           ) : null}
-          {data.stats.firstDivisionSeasons.count &&
-          data.stats.firstDivisionSeasons.count > 1 ? (
+          {data.stats.firstDivisionSeasons &&
+          data.stats.firstDivisionSeasons > 1 ? (
             <DataCard
               label="Senaste"
               count={
-                data.stats.firstAndLatestFirstDivisionSeason
-                  ?.latest
+                data.stats.firstAndLatestSeason?.latest
               }
             />
           ) : null}
-          {data.stats.firstDivisionSeasons.count &&
-          data.stats.firstDivisionSeasons.count === 1 ? (
+          {data.stats.firstDivisionSeasons &&
+          data.stats.firstDivisionSeasons === 1 ? (
             <DataCard
               label="Säsong"
-              count={
-                data.stats.firstAndLatestFirstDivisionSeason
-                  ?.first
-              }
+              count={data.stats.firstAndLatestSeason?.first}
             />
           ) : null}
         </div>

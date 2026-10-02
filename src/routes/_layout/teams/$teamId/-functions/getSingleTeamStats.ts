@@ -6,7 +6,12 @@ import type {
 } from '@/lib/types/team'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
-import { preparedTeamSeasonStats } from './preparedQueries/teamseason/preparedTeamSeasonStats'
+import {
+  preparedTeamRecordsAway,
+  preparedTeamRecordsHome,
+  preparedTeamStats,
+  preparedTeamStreaks,
+} from './preparedQueries/teamseason/preparedTeamSeasonStats'
 import { getTeam } from './singleTeamQueries'
 
 type TablesResponse =
@@ -46,15 +51,34 @@ export const getSingleTeamStats = createServerFn({
         }
         const start = performance.now()
 
-        const stats = await preparedTeamSeasonStats
+        const homeStats = await preparedTeamRecordsHome
           .execute({ teamId })
+          .then((res) => res[0])
+        const awayStats = await preparedTeamRecordsAway
+          .execute({ teamId })
+          .then((res) => res[0])
+
+        const teamStreaks = await preparedTeamStreaks
+          .execute({
+            teamId,
+          })
+          .then((res) => res[0])
+        const teamStats = await preparedTeamStats
+          .execute({
+            teamId,
+          })
           .then((res) => res[0])
 
         const end = performance.now()
 
         return {
           status: 200,
-          stats,
+          stats: {
+            homeRecords: homeStats,
+            awayRecords: awayStats,
+            ...teamStreaks,
+            ...teamStats,
+          },
 
           team,
           executionTime: end - start,

@@ -1,7 +1,7 @@
 import { Datum } from '@/components/Common/Date'
 import type {
-  TeamPlayoffStreak,
-  TeamStreak,
+  TeamPlayoffStreakV2,
+  TeamStreakV2,
 } from '@/lib/types/team'
 import type { ReactNode } from 'react'
 
@@ -24,28 +24,28 @@ function Title({ children }: { children: ReactNode }) {
 function Content({
   streak,
 }: {
-  streak: Array<TeamStreak>
+  streak: Array<TeamStreakV2>
 }) {
   if (!streak || streak.length === 0) return null
 
   return (
     <div>
-      {streak.map((s, index) => {
+      {streak.slice(0, 5).map((s, index) => {
         return (
           <div
             key={`${s.startDate}-${index}`}
             className="bg-muted-foreground/20 px-1 @sm:px-3  py-1 mb-1 flex flex-row justify-between"
           >
             <div className="w-44 @xs:w-54 @sm:w-66 flex flex-row justify-between gap-2">
-              <span className="w-20 @xs:w-25 @sm:w-32">
+              <span className="w-20 @xs:w-25 @sm:w-36">
                 <Datum>{s.startDate}</Datum>
               </span>
               <span className="w-2">-</span>
-              <span className="w-20 @xs:w-25 @sm:w-32">
+              <span className="w-20 @xs:w-25 @sm:w-36">
                 <Datum>{s.endDate}</Datum>
               </span>
             </div>
-            <div>{s.gameCount}</div>
+            <div>{s.count}</div>
           </div>
         )
       })}
@@ -56,13 +56,13 @@ function Content({
 function PlayoffContent({
   streak,
 }: {
-  streak: Array<TeamPlayoffStreak>
+  streak: Array<TeamPlayoffStreakV2>
 }) {
   if (!streak || streak.length === 0) return null
 
   return (
     <div>
-      {streak.map((s, index) => {
+      {streak.slice(0, 5).map((s, index) => {
         return (
           <div
             key={`${s.startYear}-${index}`}
@@ -74,7 +74,7 @@ function PlayoffContent({
               </p>
             </div>
             <div>
-              <p>{s.streakLength} år</p>
+              <p>{s.count} år</p>
             </div>
           </div>
         )

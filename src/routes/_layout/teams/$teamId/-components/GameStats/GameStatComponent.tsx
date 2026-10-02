@@ -1,6 +1,6 @@
 import { Datum } from '@/components/Common/Date'
 import TeamLogo from '@/components/Common/TeamLogo'
-import type { TeamStatsGameArrayObject } from '@/lib/types/team'
+import type { TeamRecord } from '@/lib/types/team'
 import type { ReactNode } from 'react'
 
 const GameStatComponent = ({
@@ -22,7 +22,7 @@ function Title({ children }: { children: ReactNode }) {
 function Content({
   statArray,
 }: {
-  statArray: Array<TeamStatsGameArrayObject>
+  statArray: Array<TeamRecord> | null
 }) {
   if (!statArray || statArray.length === 0) return null
 

@@ -1,145 +1,142 @@
+import type { TeamRecord } from '@/lib/types/team'
 import { getRouteApi } from '@tanstack/react-router'
 import GameStatComponent from './GameStatComponent'
 
 const route = getRouteApi('/_layout/teams/$teamId/stats/')
 
+const RenderGameStats = ({
+  array,
+  title,
+}: {
+  array: Array<TeamRecord>
+  title: string
+}) => {
+  return (
+    <GameStatComponent>
+      <GameStatComponent.Title>
+        {title}
+      </GameStatComponent.Title>
+      <GameStatComponent.Content statArray={array} />
+    </GameStatComponent>
+  )
+}
+
 const GameStats = () => {
   const data = route.useLoaderData()
   if (data.status === 404) return null
   console.log({ executionTime: data.executionTime })
+  if (!data.stats.homeRecords && !data.stats.awayRecords)
+    return null
+
   return (
     <div className="grid grid-cols-1 gap-2 md:gap-4 justify-start">
-      {data.stats.maxScoredHome &&
-      data.stats.maxScoredHome.length > 0 ? (
-        <GameStatComponent>
-          <GameStatComponent.Title>
-            Gjorda mål, hemma
-          </GameStatComponent.Title>
-          <GameStatComponent.Content
-            statArray={data.stats.maxScoredHome}
-          />
-        </GameStatComponent>
+      {data.stats.homeRecords?.maxScored &&
+      data.stats.homeRecords.maxScored.length > 0 ? (
+        <RenderGameStats
+          title="Gjorda mål, hemma"
+          array={data.stats.homeRecords?.maxScored}
+        />
       ) : null}
-      {data.stats.maxScoredAway &&
-      data.stats.maxScoredAway.length > 0 ? (
-        <GameStatComponent>
-          <GameStatComponent.Title>
-            Gjorda mål, borta
-          </GameStatComponent.Title>
-          <GameStatComponent.Content
-            statArray={data.stats.maxScoredAway}
-          />
-        </GameStatComponent>
+      {data.stats.awayRecords?.maxScored &&
+      data.stats.awayRecords.maxScored.length > 0 ? (
+        <RenderGameStats
+          title="Gjorda mål, borta"
+          array={data.stats.awayRecords?.maxScored}
+        />
       ) : null}
-      {data.stats.maxConcededHome &&
-      data.stats.maxConcededHome.length > 0 ? (
-        <GameStatComponent>
-          <GameStatComponent.Title>
-            Insläppta mål, hemma
-          </GameStatComponent.Title>
-          <GameStatComponent.Content
-            statArray={data.stats.maxConcededHome}
+      {data.stats.homeRecords?.maxConceded &&
+      data.stats.homeRecords.maxConceded.length > 0 ? (
+        <div>
+          <RenderGameStats
+            title="Insläppta mål, hemma"
+            array={data.stats.homeRecords?.maxConceded}
           />
-        </GameStatComponent>
+        </div>
       ) : null}
-      {data.stats.maxConcededAway &&
-      data.stats.maxConcededAway.length > 0 ? (
-        <GameStatComponent>
-          <GameStatComponent.Title>
-            Insläppta mål, borta
-          </GameStatComponent.Title>
-          <GameStatComponent.Content
-            statArray={data.stats.maxConcededAway}
+      {data.stats.awayRecords?.maxConceded &&
+      data.stats.awayRecords.maxConceded.length > 0 ? (
+        <div>
+          <RenderGameStats
+            title="Insläppta mål, borta"
+            array={data.stats.awayRecords?.maxConceded}
           />
-        </GameStatComponent>
+        </div>
       ) : null}
-      {data.stats.maxGoalDifferenceHome &&
-      data.stats.maxGoalDifferenceHome.length > 0 ? (
-        <GameStatComponent>
-          <GameStatComponent.Title>
-            Störst vinst, hemma
-          </GameStatComponent.Title>
-          <GameStatComponent.Content
-            statArray={data.stats.maxGoalDifferenceHome}
+      {data.stats.homeRecords?.maxGoalDifference &&
+      data.stats.homeRecords.maxGoalDifference.length >
+        0 ? (
+        <div>
+          <RenderGameStats
+            title="Störst vinst, hemma"
+            array={data.stats.homeRecords.maxGoalDifference}
           />
-        </GameStatComponent>
+        </div>
       ) : null}
-      {data.stats.maxGoalDifferenceAway &&
-      data.stats.maxGoalDifferenceAway.length > 0 ? (
-        <GameStatComponent>
-          <GameStatComponent.Title>
-            Störst vinst, borta
-          </GameStatComponent.Title>
-          <GameStatComponent.Content
-            statArray={data.stats.maxGoalDifferenceAway}
+      {data.stats.awayRecords?.maxGoalDifference &&
+      data.stats.awayRecords.maxGoalDifference.length >
+        0 ? (
+        <div>
+          <RenderGameStats
+            title="Störst vinst, borta"
+            array={data.stats.awayRecords.maxGoalDifference}
           />
-        </GameStatComponent>
+        </div>
       ) : null}
-      {data.stats.minGoalDifferenceHome &&
-      data.stats.minGoalDifferenceHome.length > 0 ? (
-        <GameStatComponent>
-          <GameStatComponent.Title>
-            Störst förlust, hemma
-          </GameStatComponent.Title>
-          <GameStatComponent.Content
-            statArray={data.stats.minGoalDifferenceHome}
+      {data.stats.homeRecords?.minGoalDifference &&
+      data.stats.homeRecords.minGoalDifference.length >
+        0 ? (
+        <div>
+          <RenderGameStats
+            title="Störst förlust, hemma"
+            array={data.stats.homeRecords.minGoalDifference}
           />
-        </GameStatComponent>
+        </div>
       ) : null}
-      {data.stats.minGoalDifferenceAway &&
-      data.stats.minGoalDifferenceAway.length > 0 ? (
-        <GameStatComponent>
-          <GameStatComponent.Title>
-            Störst förlust, borta
-          </GameStatComponent.Title>
-          <GameStatComponent.Content
-            statArray={data.stats.minGoalDifferenceAway}
+      {data.stats.awayRecords?.minGoalDifference &&
+      data.stats.awayRecords.minGoalDifference.length >
+        0 ? (
+        <div>
+          <RenderGameStats
+            title="Störst förlust, borta"
+            array={data.stats.awayRecords.minGoalDifference}
           />
-        </GameStatComponent>
+        </div>
       ) : null}
-      {data.stats.maxTotalHome &&
-      data.stats.maxTotalHome.length > 0 ? (
-        <GameStatComponent>
-          <GameStatComponent.Title>
-            Flest antal mål, hemma
-          </GameStatComponent.Title>
-          <GameStatComponent.Content
-            statArray={data.stats.maxTotalHome}
+      {data.stats.homeRecords?.maxTotalGoals &&
+      data.stats.homeRecords.maxTotalGoals.length > 0 ? (
+        <div>
+          <RenderGameStats
+            title="Flest antal mål, hemma"
+            array={data.stats.homeRecords?.maxTotalGoals}
           />
-        </GameStatComponent>
+        </div>
       ) : null}
-      {data.stats.maxTotalAway &&
-      data.stats.maxTotalAway.length > 0 ? (
-        <GameStatComponent>
-          <GameStatComponent.Title>
-            Flest antal mål, borta
-          </GameStatComponent.Title>
-          <GameStatComponent.Content
-            statArray={data.stats.maxTotalAway}
+      {data.stats.awayRecords?.maxTotalGoals &&
+      data.stats.awayRecords.maxTotalGoals.length > 0 ? (
+        <div>
+          <RenderGameStats
+            title="Flest antal mål, borta"
+            array={data.stats.awayRecords?.maxTotalGoals}
           />
-        </GameStatComponent>
+        </div>
       ) : null}
-      {data.stats.minTotalHome &&
-      data.stats.minTotalHome.length > 0 ? (
-        <GameStatComponent>
-          <GameStatComponent.Title>
-            Minst antal mål, hemma
-          </GameStatComponent.Title>
-          <GameStatComponent.Content
-            statArray={data.stats.minTotalHome}
+      {data.stats.homeRecords?.minTotalGoals &&
+      data.stats.homeRecords.minTotalGoals.length > 0 ? (
+        <div>
+          <RenderGameStats
+            title="Minst antal mål, hemma"
+            array={data.stats.homeRecords?.minTotalGoals}
           />
-        </GameStatComponent>
+        </div>
       ) : null}
-      {data.stats.minTotalAway &&
-      data.stats.minTotalAway.length > 0 ? (
-        <GameStatComponent>
-          <GameStatComponent.Title>
-            Minst antal mål, borta
-          </GameStatComponent.Title>
-          <GameStatComponent.Content
-            statArray={data.stats.minTotalAway}
+      {data.stats.awayRecords?.minTotalGoals &&
+      data.stats.awayRecords.minTotalGoals.length > 0 ? (
+        <div>
+          <RenderGameStats
+            title="Minst antal mål, borta"
+            array={data.stats.awayRecords?.minTotalGoals}
           />
-        </GameStatComponent>
+        </div>
       ) : null}
     </div>
   )

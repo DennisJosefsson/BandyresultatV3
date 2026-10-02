@@ -8,37 +8,59 @@ const Streaks = () => {
   if (data.status === 404) return null
   return (
     <div className="grid grid-cols-1 gap-2 md:gap-4 justify-start h-fit">
-      {data.stats.playoffStreak &&
-      data.stats.playoffStreak.length > 0 ? (
+      {data.stats.playoffStreaks &&
+      data.stats.playoffStreaks.length > 0 ? (
         <StreakComponent>
           <StreakComponent.Title>
             Slutspel i rad
           </StreakComponent.Title>
           <StreakComponent.PlayoffContent
-            streak={data.stats.playoffStreak}
+            streak={data.stats.playoffStreaks}
           ></StreakComponent.PlayoffContent>
         </StreakComponent>
       ) : null}
-      {data.stats.unbeatenStreak &&
-      data.stats.unbeatenStreak.length > 0 ? (
+      {data.stats.finalStreaks &&
+      data.stats.finalStreaks.length > 0 ? (
+        <StreakComponent>
+          <StreakComponent.Title>
+            Finaler i rad
+          </StreakComponent.Title>
+          <StreakComponent.PlayoffContent
+            streak={data.stats.finalStreaks}
+          ></StreakComponent.PlayoffContent>
+        </StreakComponent>
+      ) : null}
+      {data.stats.finalWinStreaks &&
+      data.stats.finalWinStreaks.length > 0 ? (
+        <StreakComponent>
+          <StreakComponent.Title>
+            Finalvinster i rad
+          </StreakComponent.Title>
+          <StreakComponent.PlayoffContent
+            streak={data.stats.finalWinStreaks}
+          ></StreakComponent.PlayoffContent>
+        </StreakComponent>
+      ) : null}
+      {data.stats.unbeatenStreaks &&
+      data.stats.unbeatenStreaks.length > 0 ? (
         <StreakComponent>
           <StreakComponent.Title>
             Obesegrade matcher
           </StreakComponent.Title>
           <StreakComponent.Content
-            streak={data.stats.unbeatenStreak}
+            streak={data.stats.unbeatenStreaks}
           ></StreakComponent.Content>
         </StreakComponent>
       ) : null}
 
-      {data.stats.winStreak &&
-      data.stats.winStreak.length > 0 ? (
+      {data.stats.winStreaks &&
+      data.stats.winStreaks.length > 0 ? (
         <StreakComponent>
           <StreakComponent.Title>
             Vinster i rad
           </StreakComponent.Title>
           <StreakComponent.Content
-            streak={data.stats.winStreak}
+            streak={data.stats.winStreaks}
           ></StreakComponent.Content>
         </StreakComponent>
       ) : null}
@@ -55,14 +77,14 @@ const Streaks = () => {
         </StreakComponent>
       ) : null}
 
-      {data.stats.losingStreak &&
-      data.stats.losingStreak.length > 0 ? (
+      {data.stats.losingStreaks &&
+      data.stats.losingStreaks.length > 0 ? (
         <StreakComponent>
           <StreakComponent.Title>
             Förlustmatcher i rad
           </StreakComponent.Title>
           <StreakComponent.Content
-            streak={data.stats.losingStreak}
+            streak={data.stats.losingStreaks}
           ></StreakComponent.Content>
         </StreakComponent>
       ) : null}
