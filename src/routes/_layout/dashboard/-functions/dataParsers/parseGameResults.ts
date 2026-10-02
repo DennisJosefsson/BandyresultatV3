@@ -76,7 +76,16 @@ export const parseNewGameWithResult = zd
     message: 'Lag-id kan inte vara samma.',
     path: ['awayTeamId'],
   })
-  .transform((obj) => parseObject(obj))
+  .transform((obj) => {
+    const returnObject = parseObject(obj)
+    return {
+      ...returnObject,
+      seasonId: obj.seasonId,
+      serieId: obj.serieId,
+      homeTeamId: obj.homeTeamId,
+      awayTeamId: obj.awayTeamId,
+    }
+  })
 
 type GameObject = {
   result: string
