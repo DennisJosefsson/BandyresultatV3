@@ -46,7 +46,7 @@ export const Route = createFileRoute(
     breadcrumb: (match) =>
       match.loaderData.breadCrumb ?? 'Lag',
   },
-  head: ({ loaderData, params }) => ({
+  head: ({ loaderData }) => ({
     meta: [
       {
         title:
@@ -82,9 +82,7 @@ export const Route = createFileRoute(
       {
         property: 'og:image',
         content:
-          loaderData?.status === 200
-            ? `/logos/teams/128/${params.teamId}_128x128.png`
-            : 'https://github.com/DennisJosefsson/WebsiteImages/blob/main/bandyresultat.jpg?raw=true',
+          'https://github.com/DennisJosefsson/WebsiteImages/blob/main/bandyresultat.jpg?raw=true',
       },
     ],
   }),
