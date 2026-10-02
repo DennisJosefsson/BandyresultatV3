@@ -1,5 +1,6 @@
 import { db } from '@/db'
 import { games, series, teamgames } from '@/db/schema'
+import { awayTeamRecordData } from '@/db/views/teamRecordsViews'
 import { coalesce } from '@/lib/drizzleHelpers/coalesce'
 import {
   jsonAggBuildObject,
@@ -7,7 +8,7 @@ import {
 } from '@/lib/drizzleHelpers/jsonAggjsonBuildObject'
 import type {
   TeamBaseWithLogo,
-  TeamStatsGameArrayObject,
+  TeamRecord,
 } from '@/lib/types/team'
 import {
   away,
@@ -24,40 +25,28 @@ import {
   homeTeamSeasonName,
 } from '@/routes/_layout/seasons/$year/-functions/libs/aliases'
 import type { SQL } from 'drizzle-orm'
-import { and, desc, eq, max, min, sql } from 'drizzle-orm'
+import { and, desc, eq, sql } from 'drizzle-orm'
 
 const awayData = db.$with('away_data').as(
   db
     .select({
-      teamId: teamgames.teamId,
-      maxScored: max(teamgames.goalsScored).as(
-        'max_scored_away',
-      ),
-      maxConceded: max(teamgames.goalsConceded).as(
-        'max_conceded_away',
-      ),
-      maxGoalDifference: max(teamgames.goalDifference).as(
-        'max_goal_difference_away',
-      ),
-      minGoalDifference: min(teamgames.goalDifference).as(
-        'min_goal_difference_away',
-      ),
-      maxTotal: max(teamgames.totalGoals).as(
-        'max_total_away',
-      ),
-      minTotal: min(teamgames.totalGoals).as(
-        'min_total_away',
-      ),
+      teamId: awayTeamRecordData.teamId,
+      maxScored: awayTeamRecordData.maxScored,
+      maxConceded: awayTeamRecordData.maxConceded,
+      maxGoalDifference:
+        awayTeamRecordData.maxGoalDifference,
+      minGoalDifference:
+        awayTeamRecordData.minGoalDifference,
+      maxTotal: awayTeamRecordData.maxTotalGoals,
+      minTotal: awayTeamRecordData.minTotalGoals,
     })
-    .from(teamgames)
+    .from(awayTeamRecordData)
     .where(
-      and(
-        eq(teamgames.teamId, sql.placeholder('teamId')),
-        eq(teamgames.homeGame, false),
-        eq(teamgames.played, true),
+      eq(
+        awayTeamRecordData.teamId,
+        sql.placeholder('teamId'),
       ),
-    )
-    .groupBy(teamgames.teamId),
+    ),
 )
 
 export const maxScoredAwayArray = db
@@ -67,9 +56,7 @@ export const maxScoredAwayArray = db
       .with(awayData)
       .select({
         teamId: teamgames.teamId,
-        gamesArray: jsonAggBuildObject<
-          Array<TeamStatsGameArrayObject>
-        >(
+        gamesArray: jsonAggBuildObject<Array<TeamRecord>>(
           {
             gameId: games.gameId,
             result: games.result,
@@ -203,9 +190,7 @@ export const maxConcededAwayArray = db
       .with(awayData)
       .select({
         teamId: teamgames.teamId,
-        gamesArray: jsonAggBuildObject<
-          Array<TeamStatsGameArrayObject>
-        >(
+        gamesArray: jsonAggBuildObject<Array<TeamRecord>>(
           {
             gameId: games.gameId,
             result: games.result,
@@ -339,9 +324,7 @@ export const maxTotalAwayArray = db
       .with(awayData)
       .select({
         teamId: teamgames.teamId,
-        gamesArray: jsonAggBuildObject<
-          Array<TeamStatsGameArrayObject>
-        >(
+        gamesArray: jsonAggBuildObject<Array<TeamRecord>>(
           {
             gameId: games.gameId,
             result: games.result,
@@ -475,9 +458,7 @@ export const minTotalAwayArray = db
       .with(awayData)
       .select({
         teamId: teamgames.teamId,
-        gamesArray: jsonAggBuildObject<
-          Array<TeamStatsGameArrayObject>
-        >(
+        gamesArray: jsonAggBuildObject<Array<TeamRecord>>(
           {
             gameId: games.gameId,
             result: games.result,
@@ -611,9 +592,7 @@ export const minGoalDifferenceAwayArray = db
       .with(awayData)
       .select({
         teamId: teamgames.teamId,
-        gamesArray: jsonAggBuildObject<
-          Array<TeamStatsGameArrayObject>
-        >(
+        gamesArray: jsonAggBuildObject<Array<TeamRecord>>(
           {
             gameId: games.gameId,
             result: games.result,
@@ -750,9 +729,7 @@ export const maxGoalDifferenceAwayArray = db
       .with(awayData)
       .select({
         teamId: teamgames.teamId,
-        gamesArray: jsonAggBuildObject<
-          Array<TeamStatsGameArrayObject>
-        >(
+        gamesArray: jsonAggBuildObject<Array<TeamRecord>>(
           {
             gameId: games.gameId,
             result: games.result,
