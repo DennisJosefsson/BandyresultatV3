@@ -330,7 +330,7 @@ const AddSingleGameForm = () => {
                 )
               }}
             />
-            <div className="grid grid-cols-2 items-center">
+            <div className="grid grid-cols-3 items-center">
               <div>
                 <form.Field
                   name="extraTime"
@@ -402,6 +402,48 @@ const AddSingleGameForm = () => {
                               className="font-normal"
                             >
                               Straffar
+                            </FieldLabel>
+                          </Field>
+                        </FieldGroup>
+                        {isInvalid && (
+                          <FieldError
+                            errors={field.state.meta.errors}
+                          />
+                        )}
+                      </FieldSet>
+                    )
+                  }}
+                />
+              </div>
+              <div>
+                <form.Field
+                  name="neutral"
+                  children={(field) => {
+                    const isInvalid =
+                      field.state.meta.isTouched &&
+                      !field.state.meta.isValid
+                    return (
+                      <FieldSet>
+                        <FieldGroup data-slot="checkbox-group">
+                          <Field
+                            orientation="horizontal"
+                            data-invalid={isInvalid}
+                          >
+                            <Checkbox
+                              id="neutral"
+                              name={field.name}
+                              checked={field.state.value}
+                              onCheckedChange={(checked) =>
+                                field.handleChange(
+                                  checked === true,
+                                )
+                              }
+                            />
+                            <FieldLabel
+                              htmlFor="neutral"
+                              className="font-normal"
+                            >
+                              Neutral plan
                             </FieldLabel>
                           </Field>
                         </FieldGroup>

@@ -26,6 +26,7 @@ export const parseGameResult = zd
       .or(zd.literal('')),
     homeTeamGameId: zd.number().int().positive(),
     awayTeamGameId: zd.number().int().positive(),
+    neutral: zd.boolean().default(false),
   })
   .refine((val) => val.homeTeamId !== val.awayTeamId, {
     message: 'Lag-id kan inte vara samma.',
@@ -65,6 +66,7 @@ export const parseNewGameWithResult = zd
     extraTime: zd.boolean(),
     playoff: zd.boolean(),
     played: zd.boolean(),
+    neutral: zd.boolean().default(false),
     otResult: zd
       .string()
       .regex(/^\d{1,2}-\d{1,2}$/, {
@@ -95,6 +97,7 @@ type GameObject = {
   penalties: boolean
   extraTime: boolean
   otResult: string
+  neutral: boolean
 }
 
 const parseObject = (obj: GameObject) => {
@@ -302,6 +305,8 @@ const parseObject = (obj: GameObject) => {
       secondHalfLost: secondHalfAwayWin,
       firstHalfDraw: firstHalfDraw,
       secondHalfDraw: secondHalfDraw,
+      homeGame: obj.neutral ? false : true,
+      neutral: obj.neutral,
     }
 
     const awayTeamTeamGame = {
@@ -337,6 +342,8 @@ const parseObject = (obj: GameObject) => {
       secondHalfLost: secondHalfHomeWin,
       firstHalfDraw: firstHalfDraw,
       secondHalfDraw: secondHalfDraw,
+      homeGame: false,
+      neutral: obj.neutral,
     }
 
     return {
@@ -351,6 +358,7 @@ const parseObject = (obj: GameObject) => {
       halftimeAwayGoal,
       penalties: obj.penalties,
       extraTime: obj.extraTime,
+      neutral: obj.neutral,
       homeTeamTeamGame,
       awayTeamTeamGame,
     }

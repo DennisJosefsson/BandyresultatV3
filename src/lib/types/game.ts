@@ -51,30 +51,9 @@ export type TeamSeasonCompetitionGames = {
   seriesArray: Array<TeamSeasonSerie>
 }
 
-export type InlineEditGame = {
+export type InlineEditGame = typeof games.$inferSelect & {
   home: TeamBaseWithTeamGameId
   away: TeamBaseWithTeamGameId
-  gameId: number
-  date: string
-  seasonId: number
-  homeTeamId: number
-  awayTeamId: number
-  women: boolean
-  result: string | null
-  otResult: string | null
-  homeGoal: number | null
-  awayGoal: number | null
-  createdAt: string | null
-  updatedAt: string | null
-  halftimeResult: string | null
-  halftimeHomeGoal: number | null
-  halftimeAwayGoal: number | null
-  playoff: boolean | null
-  extraTime: boolean | null
-  penalties: boolean | null
-  mix: boolean | null
-  serieId: number
-  played: boolean | null
 }
 
 export type GameGroupBase<T> = {
@@ -158,6 +137,7 @@ export const submitGameResult = zd.object({
   date: zd.iso.date({ message: 'Fel datumformat.' }),
   extraTime: zd.boolean(),
   penalties: zd.boolean(),
+  neutral: zd.boolean().default(false),
   women: zd.boolean(),
   homeTeamGameId: zd.number().int().positive(),
   awayTeamGameId: zd.number().int().positive(),

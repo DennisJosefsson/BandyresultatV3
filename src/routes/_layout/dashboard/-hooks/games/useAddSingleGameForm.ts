@@ -38,6 +38,7 @@ export const useAddSingleGameForm = () => {
     playoff: ['eight', 'quarter', 'semi', 'final'].includes(
       serie.category,
     ),
+    neutral: false,
   }
 
   const mutation = useMutation({

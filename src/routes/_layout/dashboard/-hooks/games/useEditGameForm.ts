@@ -41,6 +41,7 @@ export const useEditGameForm = () => {
     penalties: game.penalties ?? false,
     extraTime: game.extraTime ?? false,
     otResult: game.otResult ?? '',
+    neutral: game.neutral ?? false,
     homeTeamGameId: game.home.teamGameId,
     awayTeamGameId: game.away.teamGameId,
   }

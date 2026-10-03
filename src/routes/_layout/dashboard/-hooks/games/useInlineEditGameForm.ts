@@ -37,6 +37,7 @@ export const useInlineEditGameForm = ({
     awayTeamId: game.awayTeamId,
     penalties: game.penalties ?? false,
     extraTime: game.extraTime ?? false,
+    neutral:game.neutral ?? false,
     otResult: game.otResult ?? '',
     homeTeamGameId: game.home.teamGameId,
     awayTeamGameId: game.away.teamGameId,

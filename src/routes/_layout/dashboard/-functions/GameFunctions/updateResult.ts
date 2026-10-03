@@ -45,6 +45,7 @@ export const updateResult = createServerFn({
           played: true,
           penalties: data.penalties,
           extraTime: data.extraTime,
+          neutral: data.neutral,
         })
         .where(eq(games.gameId, data.gameId))
         .returning({ gameId: games.gameId })

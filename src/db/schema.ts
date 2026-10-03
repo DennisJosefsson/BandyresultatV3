@@ -146,6 +146,7 @@ export const games = pgTable(
     mix: boolean().default(false),
     serieId: integer('serie_id').notNull(),
     played: boolean(),
+    neutral: boolean().default(false),
   },
   (table) => [
     foreignKey({
@@ -418,6 +419,7 @@ export const teamgames = pgTable(
     mix: boolean().default(false),
     seasonId: integer('season_id').notNull(),
     homeGame: boolean('home_game').default(false),
+    neutral: boolean().default(false),
     serieId: integer('serie_id').notNull(),
     totalGoals: integer('total_goals').generatedAlwaysAs(
       sql`(goals_scored + goals_conceded)`,

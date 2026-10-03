@@ -64,13 +64,16 @@ const GamesList = () => {
                       variant="label"
                       className="w-full"
                     >
-                      <div className="grid grid-cols-8 gap-6 items-center w-full">
+                      <div className="grid grid-cols-7 gap-6 items-center w-full">
                         <span className="w-70">Match</span>
                         <span>Resultat</span>
                         <span>Halvtidsresultat</span>
                         <span>Datum</span>
-                        <span>Övertid</span>
-                        <span>Straffar</span>
+                        <div className="grid grid-cols-3">
+                          <span>Övertid</span>
+                          <span>Straffar</span>
+                          <span>Neutral</span>
+                        </div>
                         <span>Övertidsresultat</span>
                         <span className="invisible">
                           Fält
@@ -86,7 +89,7 @@ const GamesList = () => {
                           return (
                             <div
                               key={`div-${index}`}
-                              className="grid grid-cols-8 gap-6 items-center"
+                              className="grid grid-cols-7 gap-6 items-center"
                             >
                               <span className="text-xs w-70">
                                 {`${game.date}: ${gameObject?.home.casualName} - ${gameObject?.away.casualName}`}
@@ -268,146 +271,221 @@ const GamesList = () => {
                                   )
                                 }}
                               />
-                              <form.Field
-                                name={`gameArray[${index}].extraTime`}
-                                children={(subField) => {
-                                  const isSubFieldInvalid =
-                                    subField.state.meta
-                                      .isTouched &&
-                                    !subField.state.meta
-                                      .isValid
-                                  return (
-                                    <Field
-                                      orientation="horizontal"
-                                      data-invalid={
-                                        isSubFieldInvalid
-                                      }
-                                      className="flex flex-col"
-                                    >
-                                      <FieldContent>
-                                        <FieldSet>
-                                          <FieldGroup data-slot="checkbox-group">
-                                            <Field
-                                              orientation="horizontal"
-                                              data-invalid={
-                                                isSubFieldInvalid
-                                              }
-                                            >
-                                              <FieldLabel
-                                                htmlFor={
-                                                  subField.name
+                              <div className="grid grid-cols-3 gap-2">
+                                <form.Field
+                                  name={`gameArray[${index}].extraTime`}
+                                  children={(subField) => {
+                                    const isSubFieldInvalid =
+                                      subField.state.meta
+                                        .isTouched &&
+                                      !subField.state.meta
+                                        .isValid
+                                    return (
+                                      <Field
+                                        orientation="horizontal"
+                                        data-invalid={
+                                          isSubFieldInvalid
+                                        }
+                                        className="flex flex-col"
+                                      >
+                                        <FieldContent>
+                                          <FieldSet>
+                                            <FieldGroup data-slot="checkbox-group">
+                                              <Field
+                                                orientation="horizontal"
+                                                data-invalid={
+                                                  isSubFieldInvalid
                                                 }
-                                                className="font-normal"
+                                                className="justify-between"
                                               >
-                                                Övertid
-                                              </FieldLabel>
-                                              <Checkbox
-                                                id={
-                                                  subField.name
+                                                <FieldLabel
+                                                  htmlFor={
+                                                    subField.name
+                                                  }
+                                                  className="font-normal"
+                                                >
+                                                  ÖT
+                                                </FieldLabel>
+                                                <Checkbox
+                                                  id={
+                                                    subField.name
+                                                  }
+                                                  name={
+                                                    subField.name
+                                                  }
+                                                  checked={
+                                                    subField
+                                                      .state
+                                                      .value
+                                                  }
+                                                  onCheckedChange={(
+                                                    checked,
+                                                  ) =>
+                                                    subField.handleChange(
+                                                      checked ===
+                                                        true,
+                                                    )
+                                                  }
+                                                />
+                                              </Field>
+                                            </FieldGroup>
+                                          </FieldSet>
+                                        </FieldContent>
+                                        {isSubFieldInvalid && (
+                                          <FieldError
+                                            errors={
+                                              subField.state
+                                                .meta.errors
+                                            }
+                                          />
+                                        )}
+                                      </Field>
+                                    )
+                                  }}
+                                />
+                                <form.Field
+                                  name={`gameArray[${index}].penalties`}
+                                  children={(subField) => {
+                                    const isSubFieldInvalid =
+                                      subField.state.meta
+                                        .isTouched &&
+                                      !subField.state.meta
+                                        .isValid
+                                    return (
+                                      <Field
+                                        orientation="horizontal"
+                                        data-invalid={
+                                          isSubFieldInvalid
+                                        }
+                                        className="flex flex-col"
+                                      >
+                                        <FieldContent>
+                                          <FieldSet>
+                                            <FieldGroup data-slot="checkbox-group">
+                                              <Field
+                                                orientation="horizontal"
+                                                data-invalid={
+                                                  isSubFieldInvalid
                                                 }
-                                                name={
-                                                  subField.name
-                                                }
-                                                checked={
-                                                  subField
-                                                    .state
-                                                    .value
-                                                }
-                                                onCheckedChange={(
-                                                  checked,
-                                                ) =>
-                                                  subField.handleChange(
-                                                    checked ===
-                                                      true,
-                                                  )
-                                                }
-                                              />
-                                            </Field>
-                                          </FieldGroup>
-                                        </FieldSet>
-                                      </FieldContent>
-                                      {isSubFieldInvalid && (
-                                        <FieldError
-                                          errors={
-                                            subField.state
-                                              .meta.errors
-                                          }
-                                        />
-                                      )}
-                                    </Field>
-                                  )
-                                }}
-                              />
-                              <form.Field
-                                name={`gameArray[${index}].penalties`}
-                                children={(subField) => {
-                                  const isSubFieldInvalid =
-                                    subField.state.meta
-                                      .isTouched &&
-                                    !subField.state.meta
-                                      .isValid
-                                  return (
-                                    <Field
-                                      orientation="horizontal"
-                                      data-invalid={
-                                        isSubFieldInvalid
-                                      }
-                                      className="flex flex-col"
-                                    >
-                                      <FieldContent>
-                                        <FieldSet>
-                                          <FieldGroup data-slot="checkbox-group">
-                                            <Field
-                                              orientation="horizontal"
-                                              data-invalid={
-                                                isSubFieldInvalid
-                                              }
-                                            >
-                                              <FieldLabel
-                                                htmlFor={
-                                                  subField.name
-                                                }
-                                                className="font-normal"
+                                                className="justify-between"
                                               >
-                                                Straffar
-                                              </FieldLabel>
-                                              <Checkbox
-                                                id={
-                                                  subField.name
+                                                <FieldLabel
+                                                  htmlFor={
+                                                    subField.name
+                                                  }
+                                                  className="font-normal"
+                                                >
+                                                  S
+                                                </FieldLabel>
+                                                <Checkbox
+                                                  id={
+                                                    subField.name
+                                                  }
+                                                  name={
+                                                    subField.name
+                                                  }
+                                                  checked={
+                                                    subField
+                                                      .state
+                                                      .value
+                                                  }
+                                                  onCheckedChange={(
+                                                    checked,
+                                                  ) =>
+                                                    subField.handleChange(
+                                                      checked ===
+                                                        true,
+                                                    )
+                                                  }
+                                                />
+                                              </Field>
+                                            </FieldGroup>
+                                          </FieldSet>
+                                        </FieldContent>
+                                        {isSubFieldInvalid && (
+                                          <FieldError
+                                            errors={
+                                              subField.state
+                                                .meta.errors
+                                            }
+                                          />
+                                        )}
+                                      </Field>
+                                    )
+                                  }}
+                                />
+                                <form.Field
+                                  name={`gameArray[${index}].neutral`}
+                                  children={(subField) => {
+                                    const isSubFieldInvalid =
+                                      subField.state.meta
+                                        .isTouched &&
+                                      !subField.state.meta
+                                        .isValid
+                                    return (
+                                      <Field
+                                        orientation="horizontal"
+                                        data-invalid={
+                                          isSubFieldInvalid
+                                        }
+                                        className="flex flex-col"
+                                      >
+                                        <FieldContent>
+                                          <FieldSet>
+                                            <FieldGroup data-slot="checkbox-group">
+                                              <Field
+                                                orientation="horizontal"
+                                                data-invalid={
+                                                  isSubFieldInvalid
                                                 }
-                                                name={
-                                                  subField.name
-                                                }
-                                                checked={
-                                                  subField
-                                                    .state
-                                                    .value
-                                                }
-                                                onCheckedChange={(
-                                                  checked,
-                                                ) =>
-                                                  subField.handleChange(
-                                                    checked ===
-                                                      true,
-                                                  )
-                                                }
-                                              />
-                                            </Field>
-                                          </FieldGroup>
-                                        </FieldSet>
-                                      </FieldContent>
-                                      {isSubFieldInvalid && (
-                                        <FieldError
-                                          errors={
-                                            subField.state
-                                              .meta.errors
-                                          }
-                                        />
-                                      )}
-                                    </Field>
-                                  )
-                                }}
-                              />
+                                                className="justify-between"
+                                              >
+                                                <FieldLabel
+                                                  htmlFor={
+                                                    subField.name
+                                                  }
+                                                  className="font-normal"
+                                                >
+                                                  NP
+                                                </FieldLabel>
+                                                <Checkbox
+                                                  id={
+                                                    subField.name
+                                                  }
+                                                  name={
+                                                    subField.name
+                                                  }
+                                                  checked={
+                                                    subField
+                                                      .state
+                                                      .value
+                                                  }
+                                                  onCheckedChange={(
+                                                    checked,
+                                                  ) =>
+                                                    subField.handleChange(
+                                                      checked ===
+                                                        true,
+                                                    )
+                                                  }
+                                                />
+                                              </Field>
+                                            </FieldGroup>
+                                          </FieldSet>
+                                        </FieldContent>
+                                        {isSubFieldInvalid && (
+                                          <FieldError
+                                            errors={
+                                              subField.state
+                                                .meta.errors
+                                            }
+                                          />
+                                        )}
+                                      </Field>
+                                    )
+                                  }}
+                                />
+                              </div>
                               <form.Field
                                 name={`gameArray[${index}].otResult`}
                                 children={(subField) => {

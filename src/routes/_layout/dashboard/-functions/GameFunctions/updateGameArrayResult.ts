@@ -183,6 +183,7 @@ async function updateGames({
       played: true,
       penalties: gameObject.penalties,
       extraTime: gameObject.extraTime,
+      neutral: gameObject.neutral,
     })
     .where(eq(games.gameId, gameObject.gameId))
     .returning({ gameId: games.gameId })
