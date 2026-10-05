@@ -8,7 +8,7 @@ type Options = {
 }
 
 export function jsonAgg<T>(
-  expression: SQL,
+  expression: SQL | Column,
   options?: Options,
 ) {
   let orderBySql
