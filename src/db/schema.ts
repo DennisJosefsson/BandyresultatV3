@@ -899,3 +899,37 @@ export const competitionsRelations = relations(
     series: many(series),
   }),
 )
+
+// const DB_PORT = serverEnv.DB_PORT
+// const DB_USERNAME = serverEnv.DB_USERNAME
+// const DB_NAME = serverEnv.DB_NAME
+
+// export const cronSchema = pgSchema('cron')
+
+// export const cronJob = cronSchema.table('job', {
+//   jobId: serial('jobid').primaryKey().notNull(),
+//   schedule: text('schedule').notNull(),
+//   command: text('command').notNull(),
+//   nodeName: text('nodename').notNull().default('localhost'),
+//   nodePort: integer('nodeport').notNull().default(DB_PORT),
+//   database: text('database').notNull().default(DB_NAME),
+//   userName: text('username').notNull().default(DB_USERNAME),
+//   active: boolean().notNull().default(true),
+//   jobName: text('jobname').unique(),
+// })
+
+// export const cronJobRunDetails = cronSchema.table(
+//   'job_run_details',
+//   {
+//     jobId: integer('jobid'),
+//     runId: serial('runid').primaryKey().notNull(),
+//     jobPid: integer('job_pid'),
+//     command: text('command'),
+//     database: text('database'),
+//     userName: text('username'),
+//     status: text('jobname'),
+//     returnMessage: text('return_message'),
+//     startTime: timestamp('start_time'),
+//     endTime: timestamp('end_time'),
+//   },
+// )
