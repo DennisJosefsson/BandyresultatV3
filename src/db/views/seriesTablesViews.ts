@@ -1,6 +1,8 @@
+import type { TeamSeasonTableV2 } from '@/lib/types/table'
 import {
   boolean,
   integer,
+  jsonb,
   pgMaterializedView,
   pgView,
 } from 'drizzle-orm/pg-core'
@@ -33,5 +35,24 @@ export const groupedSeriesTablesView = pgView(
     totalGoalsConceded: integer('total_goals_conceded'),
     totalGoalDifference: integer('total_goal_difference'),
     totalPoints: integer('total_points'),
+  },
+).existing()
+
+export const mvSeriesTablesV2 = pgMaterializedView(
+  'mv_series_tables_v2',
+  {
+    serieId: integer('serie_id').notNull(),
+    allTables: jsonb('all_tables')
+      .array()
+      .$type<Array<TeamSeasonTableV2>>(),
+    homeTables: jsonb('home_tables')
+      .array()
+      .$type<Array<TeamSeasonTableV2>>(),
+    awayTables: jsonb('away_tables')
+      .array()
+      .$type<Array<TeamSeasonTableV2>>(),
+    neutralTables: jsonb('neutral_tables')
+      .array()
+      .$type<Array<TeamSeasonTableV2>>(),
   },
 ).existing()
