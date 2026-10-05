@@ -1,45 +1,22 @@
 import { db } from '@/db'
-import { games, seasons, series } from '@/db/schema'
-import { getSortPlayedGamesServerFn } from '@/lib/cookieFunctions/sortPlayedGames'
-import { getSortUnplayedGamesServerFn } from '@/lib/cookieFunctions/sortUnplayedGames'
-import { coalesce } from '@/lib/drizzleHelpers/coalesce'
+import { seasons, series } from '@/db/schema'
+import { mvSeriesGames } from '@/db/views/seriesGamesViews'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import type { Games } from '@/lib/types/game'
+import type { SeriesGamesV2 } from '@/lib/types/game'
 import type { Serie } from '@/lib/types/serie'
-import type { TeamBaseWithLogo } from '@/lib/types/team'
 import { seasonIdCheck } from '@/lib/utils/utils'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
-import type { SQL } from 'drizzle-orm'
-import {
-  and,
-  asc,
-  desc,
-  eq,
-  getTableColumns,
-  inArray,
-} from 'drizzle-orm'
-import {
-  away,
-  awayLogo,
-  awayTeamName,
-  awayTeamSeason,
-  awayTeamSeasonLogo,
-  awayTeamSeasonName,
-  home,
-  homeLogo,
-  homeTeamName,
-  homeTeamSeason,
-  homeTeamSeasonLogo,
-  homeTeamSeasonName,
-} from '../libs/aliases'
-import { sortGames } from './gameSortFunction'
+import { and, eq, getTableColumns } from 'drizzle-orm'
 
 type GamesReturn =
   | {
       status: 200
-      games: Games
+      games: {
+        played: Array<SeriesGamesV2>
+        unplayed: Array<SeriesGamesV2>
+      }
       serie: Serie
     }
   | {
@@ -103,301 +80,56 @@ export const getGames = createServerFn({ method: 'GET' })
             message: `Ingen ${women ? 'dam' : 'herr'}serie med detta namn det här året. Välj en ny i listan.`,
           }
 
-        if (serie.hasStatic) {
+        const newStart = performance.now()
+
+        const seriesGamesV2 = await db
+          .select()
+          .from(mvSeriesGames)
+          .where(
+            eq(
+              mvSeriesGames.serieId,
+              db
+                .select({ serieId: series.serieId })
+                .from(series)
+                .innerJoin(
+                  seasons,
+                  eq(series.seasonId, seasons.seasonId),
+                )
+                .where(
+                  and(
+                    eq(series.group, group),
+                    eq(seasons.women, women),
+                    eq(seasons.intYear, year),
+                  ),
+                ),
+            ),
+          )
+          .then((res) => res[0])
+
+        if (seriesGamesV2 === undefined) {
           return {
             status: 404,
-            message: `Inga matcher inlagda för den här serien det här året, enbart sluttabell.`,
+            message:
+              'Serien har inga matcher än denna säsong.',
           }
         }
 
-        const sortPlayedGames =
-          await getSortPlayedGamesServerFn()
-        const sortUnplayedGames =
-          await getSortUnplayedGamesServerFn()
+        const newEnd = performance.now()
 
-        const playedGamesArray = await db
-          .select({
-            ...getTableColumns(games),
-            group: series.group as unknown as SQL<string>,
-            category:
-              series.category as unknown as SQL<string>,
-            home: {
-              teamId: home.teamId,
-              name: coalesce(
-                homeTeamSeasonName.name,
-                homeTeamName.name,
-              ),
-              casualName: coalesce(
-                homeTeamSeasonName.casualName,
-                homeTeamName.casualName,
-              ),
-              shortName: coalesce(
-                homeTeamSeasonName.shortName,
-                homeTeamName.shortName,
-              ),
-              logo: {
-                logoId: coalesce(
-                  homeTeamSeasonLogo.logoId,
-                  homeLogo.logoId,
-                ),
-                hasDark: coalesce(
-                  homeTeamSeasonLogo.hasDark,
-                  homeLogo.hasDark,
-                ),
-              },
-            } as unknown as SQL<TeamBaseWithLogo>,
-            away: {
-              teamId: away.teamId,
-              name: coalesce(
-                awayTeamSeasonName.name,
-                awayTeamName.name,
-              ),
-              casualName: coalesce(
-                awayTeamSeasonName.casualName,
-                awayTeamName.casualName,
-              ),
-              shortName: coalesce(
-                awayTeamSeasonName.shortName,
-                awayTeamName.shortName,
-              ),
-              logo: {
-                logoId: coalesce(
-                  awayTeamSeasonLogo.logoId,
-                  awayLogo.logoId,
-                ),
-                hasDark: coalesce(
-                  awayTeamSeasonLogo.hasDark,
-                  awayLogo.hasDark,
-                ),
-              },
-            } as unknown as SQL<TeamBaseWithLogo>,
-          })
-          .from(games)
-          .leftJoin(
-            seasons,
-            eq(seasons.seasonId, games.seasonId),
-          )
-          .leftJoin(home, eq(games.homeTeamId, home.teamId))
-          .leftJoin(away, eq(games.awayTeamId, away.teamId))
-          .leftJoin(
-            homeTeamSeason,
-            and(
-              eq(homeTeamSeason.seasonId, seasons.seasonId),
-              eq(homeTeamSeason.teamId, games.homeTeamId),
-            ),
-          )
-          .leftJoin(
-            awayTeamSeason,
-            and(
-              eq(awayTeamSeason.seasonId, seasons.seasonId),
-              eq(awayTeamSeason.teamId, games.awayTeamId),
-            ),
-          )
-          .leftJoin(
-            homeTeamName,
-            eq(home.teamnameId, homeTeamName.teamnameId),
-          )
-          .leftJoin(
-            awayTeamName,
-            eq(away.teamnameId, awayTeamName.teamnameId),
-          )
-          .leftJoin(
-            homeTeamSeasonName,
-            eq(
-              homeTeamSeason.teamnameId,
-              homeTeamSeasonName.teamnameId,
-            ),
-          )
-          .leftJoin(
-            awayTeamSeasonName,
-            eq(
-              awayTeamSeason.teamnameId,
-              awayTeamSeasonName.teamnameId,
-            ),
-          )
-          .leftJoin(
-            homeLogo,
-            eq(homeTeamName.logoId, homeLogo.logoId),
-          )
-          .leftJoin(
-            awayLogo,
-            eq(awayTeamName.logoId, awayLogo.logoId),
-          )
-          .leftJoin(
-            homeTeamSeasonLogo,
-            eq(
-              homeTeamSeasonName.logoId,
-              homeTeamSeasonLogo.logoId,
-            ),
-          )
-          .leftJoin(
-            awayTeamSeasonLogo,
-            eq(
-              awayTeamSeasonName.logoId,
-              awayTeamSeasonLogo.logoId,
-            ),
-          )
-          .leftJoin(
-            series,
-            eq(series.serieId, games.serieId),
-          )
-          .where(
-            and(
-              eq(games.played, true),
-              eq(seasons.intYear, year),
-              eq(games.women, women),
-              inArray(series.group, [group, 'mix']),
-            ),
-          )
-          .orderBy(
-            sortPlayedGames === 'asc'
-              ? asc(games.date)
-              : desc(games.date),
-          )
-
-        const unplayedGamesArray = await db
-          .select({
-            ...getTableColumns(games),
-            group: series.group as unknown as SQL<string>,
-            category:
-              series.category as unknown as SQL<string>,
-            home: {
-              teamId: home.teamId,
-              name: coalesce(
-                homeTeamSeasonName.name,
-                homeTeamName.name,
-              ),
-              casualName: coalesce(
-                homeTeamSeasonName.casualName,
-                homeTeamName.casualName,
-              ),
-              shortName: coalesce(
-                homeTeamSeasonName.shortName,
-                homeTeamName.shortName,
-              ),
-              logo: {
-                logoId: coalesce(
-                  homeTeamSeasonLogo.logoId,
-                  homeLogo.logoId,
-                ),
-                hasDark: coalesce(
-                  homeTeamSeasonLogo.hasDark,
-                  homeLogo.hasDark,
-                ),
-              },
-            } as unknown as SQL<TeamBaseWithLogo>,
-            away: {
-              teamId: away.teamId,
-              name: coalesce(
-                awayTeamSeasonName.name,
-                awayTeamName.name,
-              ),
-              casualName: coalesce(
-                awayTeamSeasonName.casualName,
-                awayTeamName.casualName,
-              ),
-              shortName: coalesce(
-                awayTeamSeasonName.shortName,
-                awayTeamName.shortName,
-              ),
-              logo: {
-                logoId: coalesce(
-                  awayTeamSeasonLogo.logoId,
-                  awayLogo.logoId,
-                ),
-                hasDark: coalesce(
-                  awayTeamSeasonLogo.hasDark,
-                  awayLogo.hasDark,
-                ),
-              },
-            } as unknown as SQL<TeamBaseWithLogo>,
-          })
-          .from(games)
-          .leftJoin(
-            seasons,
-            eq(seasons.seasonId, games.seasonId),
-          )
-          .leftJoin(home, eq(games.homeTeamId, home.teamId))
-          .leftJoin(away, eq(games.awayTeamId, away.teamId))
-          .leftJoin(
-            homeTeamSeason,
-            and(
-              eq(homeTeamSeason.seasonId, games.seasonId),
-              eq(homeTeamSeason.teamId, games.homeTeamId),
-            ),
-          )
-          .leftJoin(
-            awayTeamSeason,
-            and(
-              eq(awayTeamSeason.seasonId, games.seasonId),
-              eq(awayTeamSeason.teamId, games.awayTeamId),
-            ),
-          )
-          .leftJoin(
-            homeTeamName,
-            eq(home.teamnameId, homeTeamName.teamnameId),
-          )
-          .leftJoin(
-            awayTeamName,
-            eq(away.teamnameId, awayTeamName.teamnameId),
-          )
-          .leftJoin(
-            homeTeamSeasonName,
-            eq(
-              homeTeamSeason.teamnameId,
-              homeTeamSeasonName.teamnameId,
-            ),
-          )
-          .leftJoin(
-            awayTeamSeasonName,
-            eq(
-              awayTeamSeason.teamnameId,
-              awayTeamSeasonName.teamnameId,
-            ),
-          )
-          .leftJoin(
-            homeLogo,
-            eq(homeTeamName.logoId, homeLogo.logoId),
-          )
-          .leftJoin(
-            awayLogo,
-            eq(awayTeamName.logoId, awayLogo.logoId),
-          )
-          .leftJoin(
-            homeTeamSeasonLogo,
-            eq(
-              homeTeamSeasonName.logoId,
-              homeTeamSeasonLogo.logoId,
-            ),
-          )
-          .leftJoin(
-            awayTeamSeasonLogo,
-            eq(
-              awayTeamSeasonName.logoId,
-              awayTeamSeasonLogo.logoId,
-            ),
-          )
-          .leftJoin(
-            series,
-            eq(series.serieId, games.serieId),
-          )
-          .where(
-            and(
-              eq(games.played, false),
-              eq(seasons.intYear, year),
-              eq(games.women, women),
-              inArray(series.group, [group, 'mix']),
-            ),
-          )
-          .orderBy(
-            sortUnplayedGames === 'asc'
-              ? asc(games.date)
-              : desc(games.date),
-          )
+        console.dir(
+          {
+            seriesGamesV2,
+            perfNew: newEnd - newStart,
+          },
+          {
+            colors: true,
+            depth: 99,
+          },
+        )
 
         if (
-          playedGamesArray.length +
-            unplayedGamesArray.length ===
+          seriesGamesV2.played.length +
+            seriesGamesV2.unplayed.length ===
           0
         ) {
           return {
@@ -406,15 +138,9 @@ export const getGames = createServerFn({ method: 'GET' })
           }
         }
 
-        const sortedGames = sortGames({
-          playedGamesArray,
-          unplayedGamesArray,
-          serie,
-        })
-
         return {
           status: 200,
-          games: sortedGames,
+          games: seriesGamesV2,
 
           serie,
         }

@@ -1,20 +1,26 @@
 import { GameCard } from '@/components/Common/Games/GameCard'
-import type { Game, GameGroupBase } from '@/lib/types/game'
+import type { SeriesGamesV2 } from '@/lib/types/game'
+import type { Serie } from '@/lib/types/serie'
 import { getRouteApi } from '@tanstack/react-router'
 import { useGetFirstAndLastSeason } from '../../-hooks/useGetFirstAndLastSeason'
 type GameListProps = {
-  group: GameGroupBase<Array<Omit<Game, 'season'>>>
+  games: Array<SeriesGamesV2>
   title: string
+  serie: Serie
 }
 
 const route = getRouteApi(
   '/_layout/seasons/$year/$group/games',
 )
 
-const GamesList = ({ group, title }: GameListProps) => {
+const GamesList = ({
+  games,
+  title,
+  serie,
+}: GameListProps) => {
   const { lastSeason } = useGetFirstAndLastSeason()
   const year = route.useParams({ select: (p) => p.year })
-  if (group.dates.length === 0 && year === lastSeason) {
+  if (games.length === 0 && year === lastSeason) {
     if (title === 'Kommande') {
       return (
         <div className="font-inter mb-6 w-full">
@@ -47,20 +53,14 @@ const GamesList = ({ group, title }: GameListProps) => {
       ) : null}
 
       <div>
-        {group.dates.map((date) => {
-          const games = date.games
-
+        {games.map((game) => {
           return (
-            <div key={date.date}>
-              {games.map((game) => (
-                <GameCard
-                  key={`${game.homeTeamId}-${game.awayTeamId}-${date.date}`}
-                  game={game}
-                  serieName={group.name}
-                  routePath="/seasons/$year/$group/games"
-                />
-              ))}
-            </div>
+            <GameCard
+              key={`${game.homeTeamId}-${game.awayTeamId}-${game.date}`}
+              game={game}
+              serieName={serie.serieName}
+              routePath="/seasons/$year/$group/games"
+            />
           )
         })}
       </div>
