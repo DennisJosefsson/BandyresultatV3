@@ -28,6 +28,23 @@ export type Game = {
   }
 }
 
+export type SeriesGamesV2 = {
+  gameId: number
+  date: string
+  result: string | null
+  otResult: string | null
+  halftimeResult: string | null
+  homeGoal: number | null
+  awayGoal: number | null
+  extraTime: boolean | null
+  penalties: boolean | null
+  played: boolean | null
+  homeTeamId: number
+  awayTeamId: number
+  home: TeamBaseWithLogo
+  away: TeamBaseWithLogo
+}
+
 export type TeamSeasonGame = Omit<
   typeof games.$inferSelect,
   | 'createdAt'
