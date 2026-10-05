@@ -16,6 +16,7 @@ const route = getRouteApi(
 const SingleTeamSeason = () => {
   const data = route.useLoaderData()
   if (data.status === 404) return null
+
   return (
     <div className="@container flex flex-col gap-2 mt-2 sm:mt-4">
       <div className="flex flex-row items-center justify-center gap-10">
@@ -63,6 +64,15 @@ const SingleTeamSeason = () => {
       </div>
       <div className="flex flex-col gap-2 md:gap-4">
         {data.seasonResult.map((comp) => {
+          if (comp.seriesArray === null) {
+            return (
+              <div className="flex flex-row justify-center">
+                <span>
+                  Laget har inga matcher i tävlingen än.
+                </span>
+              </div>
+            )
+          }
           return (
             <div
               key={comp.competitionName}
@@ -73,7 +83,7 @@ const SingleTeamSeason = () => {
                   {comp.competitionName}
                 </h3>
               </div>
-              {comp.seriesArray.map((serie) => {
+              {comp.seriesArray.flatMap((serie) => {
                 return (
                   <div
                     key={`${comp.competitionName}-${serie.serieName}`}
@@ -105,7 +115,7 @@ const SingleTeamSeason = () => {
                       serieStructure={serie.serieStructure}
                     />
                     <Games
-                      gameObject={serie.gameObject}
+                      gameObject={serie.games}
                       serieName={serie.serieName}
                     />
                   </div>

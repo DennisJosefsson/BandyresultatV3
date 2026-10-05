@@ -9,8 +9,8 @@ import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
 import { and, eq } from 'drizzle-orm'
 
-import type { TeamSeasonCompetitionTables } from '@/lib/types/table'
-import { preparedSeasonResultArray } from './preparedQueries/teamseason/preparedSeasonGamesAndTables'
+import type { TeamSeasonCompetitionTablesV2 } from '@/lib/types/table'
+import { preparedSeasonResultArrayV2 } from './preparedQueries/teamseason/preparedSeasonGamesAndTables'
 import { getSeasons } from './singleTeamSeasonFunctions'
 
 type SingeTeamSeasonReturn =
@@ -18,7 +18,7 @@ type SingeTeamSeasonReturn =
       status: 200
       breadCrumb: string
       meta: Meta
-      seasonResult: Array<TeamSeasonCompetitionTables>
+      seasonResult: Array<TeamSeasonCompetitionTablesV2>
       team: Team
       seasonYear: string
       firstSeason: {
@@ -142,10 +142,12 @@ export const getSingleTeamSeason = createServerFn({
             message: `${team.teamname.casualName} har inte säsongen ${season.year} i databasen än.`,
           }
         }
-        const seasonResult =
-          await preparedSeasonResultArray.execute({
+
+        const seasonResultV2 =
+          await preparedSeasonResultArrayV2.execute({
             teamId,
             intYear: seasonId,
+            women: team.women,
           })
 
         const seasonObjects = await getSeasons({
@@ -160,7 +162,7 @@ export const getSingleTeamSeason = createServerFn({
 
         return {
           status: 200,
-          seasonResult,
+          seasonResult: seasonResultV2,
           team,
           seasonYear,
           ...seasonObjects,

@@ -80,8 +80,6 @@ export const getGames = createServerFn({ method: 'GET' })
             message: `Ingen ${women ? 'dam' : 'herr'}serie med detta namn det här året. Välj en ny i listan.`,
           }
 
-        const newStart = performance.now()
-
         const seriesGamesV2 = await db
           .select()
           .from(mvSeriesGames)
@@ -113,19 +111,6 @@ export const getGames = createServerFn({ method: 'GET' })
               'Serien har inga matcher än denna säsong.',
           }
         }
-
-        const newEnd = performance.now()
-
-        console.dir(
-          {
-            seriesGamesV2,
-            perfNew: newEnd - newStart,
-          },
-          {
-            colors: true,
-            depth: 99,
-          },
-        )
 
         if (
           seriesGamesV2.played.length +

@@ -1,10 +1,10 @@
-import type { TeamSeasonGame } from '@/lib/types/game'
+import type { SeriesGamesV2 } from '@/lib/types/game'
 import GamesList from './GamesList'
 
 type GamesProps = {
   gameObject: {
-    played: Array<TeamSeasonGame>
-    unplayed: Array<TeamSeasonGame>
+    played: Array<SeriesGamesV2>
+    unplayed: Array<SeriesGamesV2>
   }
   serieName: string
 }

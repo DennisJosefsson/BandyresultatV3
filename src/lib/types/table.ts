@@ -1,5 +1,5 @@
 import { zd } from '../utils/zod'
-import type { TeamSeasonGame } from './game'
+import type { SeriesGamesV2, TeamSeasonGame } from './game'
 import type { Serie } from './serie'
 import type { TeamBaseWithLogo } from './team'
 
@@ -260,9 +260,14 @@ export type TeamSeasonTableSerieV2 = {
   comment: string | null
   serieStructure: Array<number> | null | undefined
   hasStatic: boolean | null
-  tableArray: Array<TeamSeasonTableV2>
-  gameObject: {
-    played: Array<TeamSeasonGame>
-    unplayed: Array<TeamSeasonGame>
+  tableArray: Array<TeamSeasonTableV2> | null
+  games: {
+    played: Array<SeriesGamesV2>
+    unplayed: Array<SeriesGamesV2>
   }
+}
+
+export type TeamSeasonCompetitionTablesV2 = {
+  competitionName: string
+  seriesArray: Array<TeamSeasonTableSerieV2> | null
 }

@@ -1,8 +1,8 @@
 import { GameCard } from '@/components/Common/Games/GameCard'
-import type { TeamSeasonGame } from '@/lib/types/game'
+import type { SeriesGamesV2 } from '@/lib/types/game'
 
 type GameListProps = {
-  gamesArray: Array<TeamSeasonGame>
+  gamesArray: Array<SeriesGamesV2>
   serieName: string
 }
 

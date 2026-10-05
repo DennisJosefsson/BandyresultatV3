@@ -13,15 +13,18 @@ import {
   teamseasons,
   teamseries,
 } from '@/db/schema'
+import { mvSeriesData } from '@/db/views/seriesViews'
 import { aliasedColumn } from '@/lib/drizzleHelpers/aliasedColumn'
 import { coalesce } from '@/lib/drizzleHelpers/coalesce'
 import {
+  jsonAgg,
   jsonAggBuildObject,
   jsonBuildObject,
 } from '@/lib/drizzleHelpers/jsonAggjsonBuildObject'
 import type { TeamSeasonGame } from '@/lib/types/game'
 import type {
   TeamSeasonTableSerie,
+  TeamSeasonTableSerieV2,
   TeamSeasonTableV2,
 } from '@/lib/types/table'
 import type { TeamBaseWithLogo } from '@/lib/types/team'
@@ -973,3 +976,52 @@ export const preparedSeasonResultArray = db
   )
   .orderBy(asc(competitions.division))
   .prepare('preparedSeasonResultArray')
+
+export const preparedSeasonResultArrayV2 = db
+  .select({
+    competitionName: competitions.competitionName,
+    seriesArray:
+      jsonAgg<Array<TeamSeasonTableSerieV2> | null>(
+        mvSeriesData.serieObject,
+        { orderBy: [asc(series.level)] },
+      ),
+  })
+  .from(mvSeriesData)
+  .innerJoin(
+    teamseries,
+    eq(mvSeriesData.serieId, teamseries.serieId),
+  )
+  .innerJoin(
+    series,
+    eq(series.serieId, mvSeriesData.serieId),
+  )
+  .innerJoin(
+    competitions,
+    eq(competitions.competitionId, series.competitionId),
+  )
+  .where(
+    and(
+      eq(teamseries.teamId, sql.placeholder('teamId')),
+      eq(
+        series.seasonId,
+        db
+          .select({ seasonId: seasons.seasonId })
+          .from(seasons)
+          .where(
+            and(
+              eq(
+                seasons.intYear,
+                sql.placeholder('intYear'),
+              ),
+              eq(seasons.women, sql.placeholder('women')),
+            ),
+          ),
+      ),
+    ),
+  )
+  .groupBy(
+    competitions.competitionName,
+    competitions.division,
+  )
+  .orderBy(asc(competitions.division))
+  .prepare('preparedSeasonResultArrayV2')

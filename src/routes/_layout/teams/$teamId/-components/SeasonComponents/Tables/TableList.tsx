@@ -3,7 +3,7 @@ import DataTable from './DataTable'
 import MobileDataTable from './MobileDataTable'
 
 type TableListProps = {
-  tableArray: Array<TeamSeasonTableV2>
+  tableArray: Array<TeamSeasonTableV2> | null
   serieStructure: Array<number> | null | undefined
 }
 
@@ -11,11 +11,11 @@ const TableList = ({
   tableArray,
   serieStructure,
 }: TableListProps) => {
-  if (tableArray.length === 0) {
+  if (!tableArray || tableArray.length === 0) {
     return (
       <div className="font-inter text-foreground mx-auto mt-4 grid place-items-center py-5 text-sm font-bold md:text-base">
         <p className="mx-10 text-center">
-          Inga tabeller för denna serie.
+          Inga tabeller genererade för denna serie.
         </p>
       </div>
     )
