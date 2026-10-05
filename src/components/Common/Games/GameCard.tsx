@@ -9,7 +9,11 @@ import {
 import { Datum } from '@/components/Common/Date'
 import TeamLogo from '@/components/Common/TeamLogo'
 import { useCookies } from '@/lib/contexts/cookieContext'
-import type { Game, TeamSeasonGame } from '@/lib/types/game'
+import type {
+  Game,
+  SeriesGamesV2,
+  TeamSeasonGame,
+} from '@/lib/types/game'
 import { Link } from '@tanstack/react-router'
 import { StarIcon } from 'lucide-react'
 
@@ -23,7 +27,10 @@ type RoutePaths =
 
 type GamesCardProps = {
   serieName: string
-  game: Omit<Game, 'season'> | TeamSeasonGame
+  game:
+    | Omit<Game, 'season'>
+    | TeamSeasonGame
+    | SeriesGamesV2
   routePath: RoutePaths
 }
 
