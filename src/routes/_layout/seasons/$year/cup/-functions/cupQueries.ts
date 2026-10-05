@@ -14,7 +14,10 @@ import {
   teamseasons,
   teamseries,
 } from '@/db/schema'
-import { groupedSeriesTablesView } from '@/db/views/seriesTablesViews'
+import {
+  groupedSeriesTablesView,
+  mvSeriesTablesV2,
+} from '@/db/views/seriesTablesViews'
 import { coalesce } from '@/lib/drizzleHelpers/coalesce'
 import {
   jsonAggBuildObject,
@@ -658,6 +661,62 @@ type GetSortedTablesProps = {
   competitionName: string
   seasonYear: number
   women: boolean
+}
+
+export const getSortedCupSeriesTablesV2 = async ({
+  competitionName,
+  seasonYear,
+  women,
+}: GetSortedTablesProps) => {
+  const seriesTables = await db
+    .select({
+      serieId: series.serieId as unknown as SQL<number>,
+      serieName: series.serieName as unknown as SQL<string>,
+      comment: series.comment as unknown as SQL<
+        string | null
+      >,
+      serieStructure:
+        series.serieStructure as unknown as SQL<
+          Array<number> | null | undefined
+        >,
+      hasStatic: series.hasStatic as unknown as SQL<
+        boolean | null
+      >,
+      tableArray: mvSeriesTablesV2.allTables,
+    })
+    .from(mvSeriesTablesV2)
+    .innerJoin(
+      series,
+      eq(mvSeriesTablesV2.serieId, series.serieId),
+    )
+    .innerJoin(
+      competitions,
+      eq(series.competitionId, competitions.competitionId),
+    )
+    .where(
+      and(
+        eq(competitions.competitionName, competitionName),
+        eq(competitions.isCup, true),
+        inArray(series.category, [
+          'cup-regular',
+          'cup-qualification',
+        ]),
+        eq(
+          series.seasonId,
+          db
+            .select({ seasonId: seasons.seasonId })
+            .from(seasons)
+            .where(
+              and(
+                eq(seasons.intYear, seasonYear),
+                eq(seasons.women, women),
+              ),
+            ),
+        ),
+      ),
+    )
+
+  return seriesTables
 }
 
 export const getSortedCupSeriesTables = async ({

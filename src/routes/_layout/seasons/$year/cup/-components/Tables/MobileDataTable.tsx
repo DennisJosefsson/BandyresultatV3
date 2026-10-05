@@ -17,7 +17,7 @@ import {
   TableRow,
 } from '@/components/base/ui/table'
 import { useCookies } from '@/lib/contexts/cookieContext'
-import type { TeamTable } from '@/lib/types/table'
+import type { TeamSeasonTableV2 } from '@/lib/types/table'
 import type {
   SortingState,
   VisibilityState,
@@ -36,7 +36,7 @@ import {
 } from './columns'
 
 interface MobileDataTableProps {
-  data: Array<Omit<TeamTable, 'women' | 'season' | 'group'>>
+  data: Array<TeamSeasonTableV2>
   serieStructure: Array<number> | null | undefined
 }
 
@@ -127,7 +127,8 @@ const MobileDataTable = ({
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row, index) => {
-                const original = row.original as TeamTable
+                const original =
+                  row.original as TeamSeasonTableV2
                 return (
                   <TableRow
                     key={row.id}
@@ -140,7 +141,9 @@ const MobileDataTable = ({
                         : false
                     }
                     data-favteam={
-                      favTeams.includes(original.teamId)
+                      favTeams.includes(
+                        original.team.teamId,
+                      )
                         ? true
                         : false
                     }

@@ -6,7 +6,7 @@ import type { SeriesTableV2 } from '@/lib/types/table'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
 import { and, eq, getTableColumns } from 'drizzle-orm'
-import { getSortedSeriesTables } from './getTableFunctionsV2'
+import { getSortedSeriesTablesV2 } from './getTableFunctionsV2'
 
 type TablesReturn =
   | {
@@ -77,16 +77,26 @@ export const getTables = createServerFn({ method: 'GET' })
             message: `Ingen ${women ? 'dam' : 'herr'}serie med detta namn det här året. Välj en ny i listan.`,
           }
 
-        const seriesTables = await getSortedSeriesTables({
-          intYear: year,
-          women,
-          group,
-          table,
-        }).then((res) => res[0])
+        const seriesTablesV2 =
+          await getSortedSeriesTablesV2({
+            intYear: year,
+            women,
+            group,
+            table,
+          }).then((res) => res[0])
+
+        if (
+          seriesTablesV2 === undefined ||
+          seriesTablesV2.tableArray === null
+        )
+          return {
+            status: 404,
+            message: `Serien har inga genererade tabeller än.`,
+          }
 
         return {
           status: 200,
-          serie: seriesTables,
+          serie: seriesTablesV2,
         }
       } catch (error) {
         catchError(error)

@@ -7,7 +7,7 @@ import {
   TeamnameLabel,
 } from '@/components/Common/Tables/Teamname'
 import { Button } from '@/components/base/ui/button'
-import type { TeamTable } from '@/lib/types/table'
+import type { TeamSeasonTableV2 } from '@/lib/types/table'
 import { createColumnHelper } from '@tanstack/react-table'
 
 export const showColumns = {
@@ -46,10 +46,7 @@ export const goalsColumns = {
   totalPoints: true,
 }
 
-const columnHelper =
-  createColumnHelper<
-    Omit<TeamTable, 'women' | 'season' | 'group'>
-  >()
+const columnHelper = createColumnHelper<TeamSeasonTableV2>()
 
 export const columns = [
   columnHelper.accessor('team.casualName' as const, {

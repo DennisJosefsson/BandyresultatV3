@@ -4,12 +4,12 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/base/ui/popover'
-import type { TeamSeasonTable } from '@/lib/types/table'
+import type { SeriesTableV2 } from '@/lib/types/table'
 import DataTable from './DataTable'
 import MobileDataTable from './MobileDataTable'
 
 type TableListProps = {
-  tableArray: Array<TeamSeasonTable>
+  tableArray: Array<SeriesTableV2>
 }
 
 const TableList = ({ tableArray }: TableListProps) => {
@@ -27,15 +27,15 @@ const TableList = ({ tableArray }: TableListProps) => {
       {tableArray.map((serie) => {
         return (
           <div
-            key={serie.serie.group}
+            key={serie.serieName}
             className="mb-6 @container/cuptable"
           >
             <div className="flex flex-row gap-x-12 items-center mb-2">
               <h3 className="text-primary text-xs font-semibold tracking-wider @md:text-sm">
-                {serie.serie.serieName}
+                {serie.serieName}
               </h3>
 
-              {serie.serie.comment ? (
+              {serie.comment ? (
                 <Popover>
                   <PopoverTrigger
                     render={
@@ -46,7 +46,7 @@ const TableList = ({ tableArray }: TableListProps) => {
                   />
                   <PopoverContent>
                     <span className="p-2 text-xs @sm:text-sm font-semibold">
-                      {serie.serie.comment}
+                      {serie.comment}
                     </span>
                   </PopoverContent>
                 </Popover>
@@ -54,16 +54,28 @@ const TableList = ({ tableArray }: TableListProps) => {
             </div>
 
             <div className="hidden flex-col gap-2 @lg:flex">
-              <DataTable
-                data={serie.table}
-                serieStructure={serie.serie.serieStructure}
-              />
+              {serie.tableArray === null ? (
+                <span>
+                  Finns ingen tabell för denna grupp än.
+                </span>
+              ) : (
+                <DataTable
+                  data={serie.tableArray}
+                  serieStructure={serie.serieStructure}
+                />
+              )}
             </div>
             <div className="flex flex-col gap-2 @lg:hidden">
-              <MobileDataTable
-                data={serie.table}
-                serieStructure={serie.serie.serieStructure}
-              />
+              {serie.tableArray === null ? (
+                <span>
+                  Finns ingen tabell för denna grupp än.
+                </span>
+              ) : (
+                <MobileDataTable
+                  data={serie.tableArray}
+                  serieStructure={serie.serieStructure}
+                />
+              )}
             </div>
           </div>
         )

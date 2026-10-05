@@ -14,7 +14,7 @@ type TablesListProps = {
 }
 
 const TableList = ({ serie }: TablesListProps) => {
-  if (serie.tableArray.length === 0) {
+  if (!serie.tableArray || serie.tableArray.length === 0) {
     return (
       <div className="grid py-5 mx-auto mt-4 text-sm font-bold font-inter text-foreground place-items-center md:text-base">
         <p className="mx-10 text-center">

@@ -1,31 +1,22 @@
 import { db } from '@/db'
-import {
-  competitions,
-  seasons,
-  series,
-  teamgames,
-} from '@/db/schema'
+import { competitions, seasons } from '@/db/schema'
 import Error404 from '@/lib/middlewares/errors/404Error'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import type { TeamSeasonTable } from '@/lib/types/table'
+import type { SeriesTableV2 } from '@/lib/types/table'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
-import type { SQL } from 'drizzle-orm'
+import { and, eq, getTableColumns } from 'drizzle-orm'
 import {
-  and,
-  asc,
-  eq,
-  getTableColumns,
-  inArray,
-} from 'drizzle-orm'
-import { getUnionedTables } from './cupQueries'
+  getSortedCupSeriesTables,
+  getSortedCupSeriesTablesV2,
+} from './cupQueries'
 
 type CupTablesReturn =
   | {
       status: 200
       competition: typeof competitions.$inferSelect
-      tables: Array<TeamSeasonTable>
+      tables: Array<SeriesTableV2>
       tableLength: number
     }
   | { status: 404; message: string }
@@ -93,87 +84,27 @@ export const getCupSeriesTables = createServerFn({
           })
         }
 
-        const competitionSeries = await db
-          .select({ ...getTableColumns(series) })
-          .from(series)
-          .where(
-            and(
-              eq(
-                series.competitionId,
-                competition.competitionId,
-              ),
-              inArray(series.category, [
-                'cup-regular',
-                'cup-qualification',
-              ]),
-            ),
-          )
-          .orderBy(asc(series.level), asc(series.group))
-          .then((res) => {
-            if (res.length === 0) return undefined
-            else return res
-          })
+        const tables = await getSortedCupSeriesTables({
+          competitionName,
+          seasonYear: season.intYear,
+          women,
+        })
 
-        if (!competitionSeries) {
-          throw new Error404({
-            message: 'Turneringen har inga serier än.',
-          })
-        }
-
-        const teamArray = await db
-          .selectDistinct({
-            teamId: teamgames.teamId,
-            group: series.group as unknown as SQL<string>,
-          })
-          .from(teamgames)
-          .leftJoin(
-            series,
-            eq(series.serieId, teamgames.serieId),
-          )
-          .leftJoin(
-            competitions,
-            eq(
-              series.competitionId,
-              competitions.competitionId,
-            ),
-          )
-          .where(
-            and(
-              inArray(series.category, [
-                'cup-regular',
-                'cup-qualification',
-              ]),
-              eq(
-                competitions.competitionId,
-                competition.competitionId,
-              ),
-            ),
-          )
-          .groupBy(series.group, teamgames.teamId)
-
-        const tables = await Promise.all(
-          competitionSeries.map(async (serie) => {
-            return {
-              serie: serie,
-              table: await getUnionedTables({
-                serie,
-                teamArray: teamArray
-                  .filter((t) => t.group === serie.group)
-                  .map((t) => t.teamId),
-              }),
-            }
-          }),
-        )
+        const tablesV2 = await getSortedCupSeriesTablesV2({
+          competitionName,
+          seasonYear: season.intYear,
+          women,
+        })
 
         const tableLength = tables.reduce(
-          (acc, curr) => acc + curr.table.length,
+          (acc, curr) => acc + curr.tableArray.length,
           0,
         )
 
         return {
           status: 200,
           competition,
-          tables,
+          tables: tablesV2,
           tableLength,
         }
       } catch (error) {

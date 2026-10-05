@@ -252,5 +252,17 @@ export type SeriesTableV2 = {
   comment: string | null
   serieStructure: Array<number> | null | undefined
   hasStatic: boolean | null
+  tableArray: Array<TeamSeasonTableV2> | null
+}
+
+export type TeamSeasonTableSerieV2 = {
+  serieName: string
+  comment: string | null
+  serieStructure: Array<number> | null | undefined
+  hasStatic: boolean | null
   tableArray: Array<TeamSeasonTableV2>
+  gameObject: {
+    played: Array<TeamSeasonGame>
+    unplayed: Array<TeamSeasonGame>
+  }
 }

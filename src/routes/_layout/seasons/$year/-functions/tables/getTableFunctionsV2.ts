@@ -10,6 +10,7 @@ import {
 import {
   groupedSeriesTablesView,
   homeAndAwaySeriesTablesMaterializedView,
+  mvSeriesTablesV2,
 } from '@/db/views/seriesTablesViews'
 import { coalesce } from '@/lib/drizzleHelpers/coalesce'
 import {
@@ -30,6 +31,169 @@ type GetSortedTablesProps = {
   group: string
   women: boolean
   table: 'all' | 'home' | 'away'
+}
+
+export const getSortedSeriesTablesV2 = async ({
+  intYear,
+  group,
+  women,
+  table,
+}: GetSortedTablesProps) => {
+  const seriesTables =
+    table === 'all'
+      ? await db
+          .select({
+            serieId:
+              series.serieId as unknown as SQL<number>,
+            serieName:
+              series.serieName as unknown as SQL<string>,
+            comment: series.comment as unknown as SQL<
+              string | null
+            >,
+            serieStructure:
+              series.serieStructure as unknown as SQL<
+                Array<number> | null | undefined
+              >,
+            hasStatic: series.hasStatic as unknown as SQL<
+              boolean | null
+            >,
+            tableArray: mvSeriesTablesV2.allTables,
+          })
+          .from(mvSeriesTablesV2)
+          .innerJoin(
+            series,
+            eq(mvSeriesTablesV2.serieId, series.serieId),
+          )
+          .where(
+            eq(
+              mvSeriesTablesV2.serieId,
+              db
+                .select({ serieId: series.serieId })
+                .from(series)
+                .where(
+                  and(
+                    eq(series.group, group),
+                    eq(
+                      series.seasonId,
+                      db
+                        .select({
+                          seasonId: seasons.seasonId,
+                        })
+                        .from(seasons)
+                        .where(
+                          and(
+                            eq(seasons.intYear, intYear),
+                            eq(seasons.women, women),
+                          ),
+                        ),
+                    ),
+                  ),
+                ),
+            ),
+          )
+      : table === 'home'
+        ? await db
+            .select({
+              serieId:
+                series.serieId as unknown as SQL<number>,
+              serieName:
+                series.serieName as unknown as SQL<string>,
+              comment: series.comment as unknown as SQL<
+                string | null
+              >,
+              serieStructure:
+                series.serieStructure as unknown as SQL<
+                  Array<number> | null | undefined
+                >,
+              hasStatic: series.hasStatic as unknown as SQL<
+                boolean | null
+              >,
+              tableArray: mvSeriesTablesV2.homeTables,
+            })
+            .from(mvSeriesTablesV2)
+            .innerJoin(
+              series,
+              eq(mvSeriesTablesV2.serieId, series.serieId),
+            )
+            .where(
+              eq(
+                mvSeriesTablesV2.serieId,
+                db
+                  .select({ serieId: series.serieId })
+                  .from(series)
+                  .where(
+                    and(
+                      eq(series.group, group),
+                      eq(
+                        series.seasonId,
+                        db
+                          .select({
+                            seasonId: seasons.seasonId,
+                          })
+                          .from(seasons)
+                          .where(
+                            and(
+                              eq(seasons.intYear, intYear),
+                              eq(seasons.women, women),
+                            ),
+                          ),
+                      ),
+                    ),
+                  ),
+              ),
+            )
+        : await db
+            .select({
+              serieId:
+                series.serieId as unknown as SQL<number>,
+              serieName:
+                series.serieName as unknown as SQL<string>,
+              comment: series.comment as unknown as SQL<
+                string | null
+              >,
+              serieStructure:
+                series.serieStructure as unknown as SQL<
+                  Array<number> | null | undefined
+                >,
+              hasStatic: series.hasStatic as unknown as SQL<
+                boolean | null
+              >,
+              tableArray: mvSeriesTablesV2.awayTables,
+            })
+            .from(mvSeriesTablesV2)
+            .innerJoin(
+              series,
+              eq(mvSeriesTablesV2.serieId, series.serieId),
+            )
+            .where(
+              eq(
+                mvSeriesTablesV2.serieId,
+                db
+                  .select({ serieId: series.serieId })
+                  .from(series)
+                  .where(
+                    and(
+                      eq(series.group, group),
+                      eq(
+                        series.seasonId,
+                        db
+                          .select({
+                            seasonId: seasons.seasonId,
+                          })
+                          .from(seasons)
+                          .where(
+                            and(
+                              eq(seasons.intYear, intYear),
+                              eq(seasons.women, women),
+                            ),
+                          ),
+                      ),
+                    ),
+                  ),
+              ),
+            )
+
+  return seriesTables
 }
 
 export const getSortedSeriesTables = async ({
