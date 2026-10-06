@@ -738,11 +738,32 @@ function tableSorting({
   })
 
   const firstTable = Array.from(currTable.values())
-    .sort((teamA, teamB) =>
-      teamA.team.casualName.localeCompare(
-        teamB.team.casualName,
-      ),
-    )
+    .sort((teamA, teamB) => {
+      if (teamA.totalPoints === teamB.totalPoints) {
+        if (
+          teamB.totalGoalDifference ===
+          teamA.totalGoalDifference
+        ) {
+          if (
+            teamA.totalGoalsScored ===
+            teamB.totalGoalsScored
+          ) {
+            return teamA.team.casualName.localeCompare(
+              teamB.team.casualName,
+            )
+          }
+
+          return (
+            teamB.totalGoalsScored - teamA.totalGoalsScored
+          )
+        }
+        return (
+          teamB.totalGoalDifference -
+          teamA.totalGoalDifference
+        )
+      }
+      return teamB.totalPoints - teamA.totalPoints
+    })
     .map((team, index) => {
       return {
         ...team,
@@ -769,6 +790,15 @@ function tableSorting({
             teamB.totalGoalDifference ===
             teamA.totalGoalDifference
           ) {
+            if (
+              teamA.totalGoalsScored ===
+              teamB.totalGoalsScored
+            ) {
+              return teamA.team.casualName.localeCompare(
+                teamB.team.casualName,
+              )
+            }
+
             return (
               teamB.totalGoalsScored -
               teamA.totalGoalsScored
