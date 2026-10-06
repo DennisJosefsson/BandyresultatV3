@@ -40,15 +40,15 @@ const searchWomen = z.object({
   women: z.boolean().catch(false),
 })
 
-if (typeof window !== 'undefined') {
-  window.addEventListener('vite:preloadError', (event) => {
-    event.preventDefault()
-    console.error({
-      ...event.payload,
-    })
-    window.location.reload()
-  })
-}
+// if (typeof window !== 'undefined') {
+//   window.addEventListener('vite:preloadError', (event) => {
+//     event.preventDefault()
+//     console.error({
+//       ...event.payload,
+//     })
+//     window.location.reload()
+//   })
+// }
 
 export const Route =
   createRootRouteWithContext<MyRouterContext>()({
