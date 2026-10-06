@@ -2,7 +2,7 @@ import { GameCard } from '@/components/Common/Games/GameCard'
 import type { SeriesGamesV2 } from '@/lib/types/game'
 
 type GameListProps = {
-  gamesArray: Array<SeriesGamesV2>
+  gamesArray: Array<SeriesGamesV2> | null
   serieName: string
 }
 
@@ -10,7 +10,7 @@ const GamesList = ({
   gamesArray,
   serieName,
 }: GameListProps) => {
-  if (gamesArray.length === 0) {
+  if (!gamesArray || gamesArray.length === 0) {
     return null
   }
   return (

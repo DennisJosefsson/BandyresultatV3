@@ -10,7 +10,7 @@ import { createServerFn } from '@tanstack/react-start'
 import { and, eq } from 'drizzle-orm'
 
 import type { TeamSeasonCompetitionTablesV2 } from '@/lib/types/table'
-import { preparedSeasonResultArrayV2 } from './preparedQueries/teamseason/preparedSeasonGamesAndTables'
+import { preparedSeasonResultArrayV3 } from './preparedQueries/teamseason/preparedSeasonGamesAndTables'
 import { getSeasons } from './singleTeamSeasonFunctions'
 
 type SingeTeamSeasonReturn =
@@ -143,17 +143,29 @@ export const getSingleTeamSeason = createServerFn({
           }
         }
 
-        const seasonResultV2 =
-          await preparedSeasonResultArrayV2.execute({
+        // const seasonResultV2 =
+        //   await preparedSeasonResultArrayV2.execute({
+        //     teamId,
+        //     intYear: seasonId,
+        //     women: team.women,
+        //   })
+        const perfStart = performance.now()
+        const seasonResultV3 =
+          await preparedSeasonResultArrayV3.execute({
             teamId,
             intYear: seasonId,
             women: team.women,
           })
-
+        const perfEnd = performance.now()
         const seasonObjects = await getSeasons({
           teamId,
           seasonId: season.seasonId,
         })
+
+        console.dir(
+          { perf: perfEnd - perfStart },
+          { colors: true, depth: 10 },
+        )
 
         breadCrumb = season.year
         title = `Bandyresultat - ${team.teamname.name} - ${season.year}`
@@ -162,7 +174,7 @@ export const getSingleTeamSeason = createServerFn({
 
         return {
           status: 200,
-          seasonResult: seasonResultV2,
+          seasonResult: seasonResultV3,
           team,
           seasonYear,
           ...seasonObjects,
