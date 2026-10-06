@@ -143,29 +143,16 @@ export const getSingleTeamSeason = createServerFn({
           }
         }
 
-        // const seasonResultV2 =
-        //   await preparedSeasonResultArrayV2.execute({
-        //     teamId,
-        //     intYear: seasonId,
-        //     women: team.women,
-        //   })
-        const perfStart = performance.now()
         const seasonResultV3 =
           await preparedSeasonResultArrayV3.execute({
             teamId,
             intYear: seasonId,
             women: team.women,
           })
-        const perfEnd = performance.now()
         const seasonObjects = await getSeasons({
           teamId,
           seasonId: season.seasonId,
         })
-
-        console.dir(
-          { perf: perfEnd - perfStart },
-          { colors: true, depth: 10 },
-        )
 
         breadCrumb = season.year
         title = `Bandyresultat - ${team.teamname.name} - ${season.year}`
