@@ -23,6 +23,7 @@ type ImgUrl =
   | `${string}/${LogoSize}/${number}_${LogoSize}x${LogoSize}.png`
   | `${string}/${LogoSize}/${number}_dark_${LogoSize}x${LogoSize}.png`
   | `${string}/${number}/default_${number}x${number}.png`
+  | `/logos/teams/${number}/default_${number}x${number}.png`
 
 const TeamLogo = ({
   logoId,
@@ -32,7 +33,7 @@ const TeamLogo = ({
 }: TeamLogoProps) => {
   const { theme } = useTheme()
 
-  const fallbackUrl: ImgUrl = `${img_cdn}/${size}/default_${size}x${size}.png`
+  const fallbackUrl: ImgUrl = `/logos/teams/${size}/default_${size}x${size}.png`
   const imgUrl: ImgUrl = logoId
     ? theme === 'dark' && hasDark
       ? `${img_cdn}/${size}/${logoId}_dark_${size}x${size}.png`
