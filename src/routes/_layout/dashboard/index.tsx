@@ -10,54 +10,107 @@ import { Datum } from '@/components/Common/Date'
 import type { errors } from '@/db/schema'
 import { createFileRoute } from '@tanstack/react-router'
 
+import { getCronJobDetails } from './-functions/cronJobs'
 import { getErrors } from './-functions/ErrorFunctions/getErrors'
 
 export const Route = createFileRoute('/_layout/dashboard/')(
   {
     loader: async () => {
       const errors = await getErrors()
-      if (!errors) throw new Error('Missing errors data')
+      const cronJobs = await getCronJobDetails()
+      if (!errors || !cronJobs)
+        throw new Error('Missing errors data')
 
-      return errors
+      return { errors, cronJobs }
     },
     component: RouteComponent,
   },
 )
 
 function RouteComponent() {
-  const data = Route.useLoaderData()
+  const errors = Route.useLoaderData({
+    select: (s) => s.errors,
+  })
 
-  if (data.status === 404) return null
   return (
-    <div className="grid grid-cols-2 gap-4">
+    <div className="flex flex-col gap-4">
       <div>
-        <ErrorsComponent
-          title="Frontend Production"
-          errors={data.production.frontend.errors}
-          count={data.production.frontend.count}
-        />
+        <CronJobs />
       </div>
-      <div>
-        <ErrorsComponent
-          title="Backend Production"
-          errors={data.production.backend.errors}
-          count={data.production.backend.count}
-        />
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <ErrorsComponent
+            title="Frontend Production"
+            errors={errors.production.frontend.errors}
+            count={errors.production.frontend.count}
+          />
+        </div>
+        <div>
+          <ErrorsComponent
+            title="Backend Production"
+            errors={errors.production.backend.errors}
+            count={errors.production.backend.count}
+          />
+        </div>
+        <div>
+          <ErrorsComponent
+            title="Frontend Development"
+            errors={errors.development.frontend.errors}
+            count={errors.development.frontend.count}
+          />
+        </div>
+        <div>
+          <ErrorsComponent
+            title="Backend Development"
+            errors={errors.development.backend.errors}
+            count={errors.development.backend.count}
+          />
+        </div>
       </div>
-      <div>
-        <ErrorsComponent
-          title="Frontend Development"
-          errors={data.development.frontend.errors}
-          count={data.development.frontend.count}
-        />
+    </div>
+  )
+}
+
+function CronJobs() {
+  const cronJobs = Route.useLoaderData({
+    select: (s) => s.cronJobs,
+  })
+
+  if (cronJobs.length === 0) {
+    return (
+      <div className="flex flex-row justify-center">
+        <span>Inga cronjobs har körts.</span>
       </div>
-      <div>
-        <ErrorsComponent
-          title="Backend Development"
-          errors={data.development.backend.errors}
-          count={data.development.backend.count}
-        />
+    )
+  }
+
+  return (
+    <div className="border p-2 text-sm">
+      <div className="grid grid-cols-5 gap-4 font-semibold">
+        <span>jobId</span>
+        <span>command</span>
+        <span>status</span>
+        <span>startTime</span>
+        <span>duration</span>
       </div>
+      {cronJobs.map((cj) => {
+        return (
+          <div
+            className="grid grid-cols-5 gap-4"
+            key={cj.jobPid}
+          >
+            <span>{cj.jobId}</span>
+            <span>{cj.command}</span>
+            <span>{cj.status}</span>
+            <span>
+              {cj.startTime
+                ? `${cj.startTime.toLocaleDateString()} ${cj.startTime.toLocaleTimeString()}`
+                : 'Ingen starttid'}
+            </span>
+            <span>{cj.duration}</span>
+          </div>
+        )
+      })}
     </div>
   )
 }

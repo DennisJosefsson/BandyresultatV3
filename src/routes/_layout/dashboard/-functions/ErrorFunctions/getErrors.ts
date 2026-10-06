@@ -1,6 +1,5 @@
 import { db } from '@/db'
 import { errors } from '@/db/schema'
-import Error404 from '@/lib/middlewares/errors/404Error'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import { createServerFn } from '@tanstack/react-start'
@@ -10,7 +9,6 @@ type BandyError = typeof errors.$inferSelect
 
 type ErrorReturn =
   | {
-      status: 200
       production: {
         backend: {
           errors: Array<BandyError>
@@ -32,7 +30,6 @@ type ErrorReturn =
         }
       }
     }
-  | { status: 404; message: string }
   | undefined
 
 export const getErrors = createServerFn({
@@ -117,20 +114,7 @@ export const getErrors = createServerFn({
         ),
       )
 
-      if (
-        backendProductionCount +
-          frontendProductionCount +
-          backendDevelopmentCount +
-          frontendDevelopmentCount ===
-        0
-      ) {
-        throw new Error404({
-          message: 'Inga errors i databasen.',
-        })
-      }
-
       return {
-        status: 200,
         production: {
           backend: {
             errors: backendProduction,
@@ -153,9 +137,6 @@ export const getErrors = createServerFn({
         },
       }
     } catch (error) {
-      if (error instanceof Error404) {
-        return { status: 404, message: error.message }
-      }
       catchError(error)
     }
   })
