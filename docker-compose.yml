@@ -1,9 +1,9 @@
 services:
   devDatabase:
-    container_name: devDatabase20261005
+    container_name: devDatabase20261006
     image: postgres17/pg-cron
     volumes:
-      - /home/dennis/projekt/database/bandyresultat/init/dev-init20261005.sql:/docker-entrypoint-initdb.d/init.sql
+      - /home/dennis/projekt/database/bandyresultat/init/dev-init20261006.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - '55555:5432'
     env_file:
