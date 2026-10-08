@@ -1,9 +1,9 @@
-import type { PlayoffSeriesTable } from '@/lib/types/table'
+import type { PlayoffSeries } from '@/lib/types/table'
 import MobileTableList from './SeriesTables/MobileTableList'
 import TableList from './SeriesTables/TableList'
 
 type PlayoffAsSeriesTablesProps = {
-  playoffSeriesTables: Array<PlayoffSeriesTable> | undefined
+  playoffSeriesTables: Array<PlayoffSeries>
 }
 
 const PlayoffAsSeriesTables = ({
@@ -13,24 +13,10 @@ const PlayoffAsSeriesTables = ({
   return (
     <div className="@container/playoffseries">
       <div className="hidden @md:block">
-        {playoffSeriesTables.map((group) => {
-          return (
-            <TableList
-              key={group.group}
-              data={group}
-            />
-          )
-        })}
+        <TableList data={playoffSeriesTables} />
       </div>
       <div className="@md:hidden">
-        {playoffSeriesTables.map((group) => {
-          return (
-            <MobileTableList
-              key={group.group}
-              data={group}
-            />
-          )
-        })}
+        <MobileTableList data={playoffSeriesTables} />
       </div>
     </div>
   )

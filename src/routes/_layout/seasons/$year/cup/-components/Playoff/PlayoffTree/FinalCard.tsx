@@ -1,11 +1,11 @@
 import { Datum } from '@/components/Common/Date'
 import TeamLogo from '@/components/Common/TeamLogo'
 import { useCookies } from '@/lib/contexts/cookieContext'
-import type { Game } from '@/lib/types/game'
+import type { SeriesGamesV2 } from '@/lib/types/game'
 import { StarIcon } from 'lucide-react'
 import PlayoffCard from './PlayoffCard'
 type FinalCardProps = {
-  game: Omit<Game, 'season'>
+  game: SeriesGamesV2
   title: string
 }
 
@@ -13,7 +13,7 @@ const FinalCard = ({ game, title }: FinalCardProps) => {
   const { favTeams } = useCookies()
   return (
     <div className="grid w-auto min-w-[33%] grid-cols-1 justify-center @2xl/playoff:mx-auto">
-      <PlayoffCard group={game.group}>
+      <PlayoffCard group="cup-final">
         <PlayoffCard.Title>
           <PlayoffCard.Group>{title}</PlayoffCard.Group>
           <PlayoffCard.Result>

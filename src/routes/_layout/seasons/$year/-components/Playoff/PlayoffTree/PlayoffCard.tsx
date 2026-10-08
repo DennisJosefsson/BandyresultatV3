@@ -60,7 +60,7 @@ function Title({ children }: { children: ReactNode }) {
 }
 
 function Group({ children }: { children: ReactNode }) {
-  return <span className="mb-2">{children}</span>
+  return <div className="mb-2">{children}</div>
 }
 
 function Result({ children }: { children: ReactNode }) {

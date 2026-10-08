@@ -1,6 +1,6 @@
 import TeamLogo from '@/components/Common/TeamLogo'
 import { useCookies } from '@/lib/contexts/cookieContext'
-import type { PlayoffGroupsV3 } from '@/lib/types/table'
+import type { PlayoffGroup } from '@/lib/types/table'
 import { StarIcon } from 'lucide-react'
 import type {
   DetailedHTMLProps,
@@ -12,7 +12,7 @@ interface DefaultComponentProps extends DetailedHTMLProps<
   HTMLAttributes<HTMLDivElement>,
   HTMLDivElement
 > {
-  group: PlayoffGroupsV3
+  group: PlayoffGroup
 }
 
 const DefaultComponent = ({
@@ -20,7 +20,7 @@ const DefaultComponent = ({
   className,
 }: DefaultComponentProps) => {
   const { favTeams } = useCookies()
-  if (group.teamArray.length === 0) return null
+  if (group.groupArray.length === 0) return null
   return (
     <PlayoffCard
       className={className}
@@ -32,7 +32,7 @@ const DefaultComponent = ({
         </PlayoffCard.Group>
       </PlayoffCard.Title>
       <PlayoffCard.Content>
-        {group.teamArray.map((team) => {
+        {group.groupArray.map((team) => {
           return (
             <div
               key={`${team.team.teamId.toString()}-${group.serieName}`}
@@ -60,13 +60,6 @@ const DefaultComponent = ({
                 />
               </PlayoffCard.Team>
               <div className="flex flex-row gap-1 items-center justify-between">
-                <div>
-                  <span className="font-semibold">
-                    {team.gameCount > 1
-                      ? team.winCount
-                      : null}
-                  </span>
-                </div>
                 <div
                   data-gamecount={team.gameCount === 1}
                   className="grid grid-cols-5 data-[gamecount=true]:grid-cols-1 data-[gamecount=true]:font-bold gap-1 w-25"
@@ -76,7 +69,9 @@ const DefaultComponent = ({
                       className="text-right lining-nums tabular-nums text-[10px] @2xs/playoff:text-xs @2xl/playoff:text-[10px] @4xl/playoff:text-xs"
                       key={`goalsArray-${team.team.teamId}-${group.serieName}-${index}`}
                     >
-                      <span>{g.goals}</span>
+                      <span className="font-semibold">
+                        {g.goals}
+                      </span>
                     </div>
                   ))}
                 </div>

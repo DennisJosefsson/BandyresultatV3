@@ -1,11 +1,16 @@
 import { db } from '@/db'
-import { playoffseason, seasons } from '@/db/schema'
+import {
+  competitions,
+  playoffseason,
+  seasons,
+} from '@/db/schema'
+import { mvPlayoff } from '@/db/views/playoffViews'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import type { Game } from '@/lib/types/game'
 import type {
-  PlayoffGroupsV3,
-  PlayoffSeriesTable,
+  FinalAndBronze,
+  PlayoffSeries,
+  PlayoffTree,
 } from '@/lib/types/table'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
@@ -15,22 +20,14 @@ import {
   getTableColumns,
   inArray,
 } from 'drizzle-orm'
-import { getPlayoffTableData } from './getPlayoffTableData'
 
-type PlayoffTable = {
-  category: string
-  level: number | null
-  groupArray: Array<PlayoffGroupsV3>
-}
 type PlayoffTableReturn =
   | {
       status: 200
-      finalGames: Array<Omit<Game, 'season'>>
-      bronzeGames: Array<Omit<Game, 'season'>>
-      playoffTables: Array<PlayoffTable>
-      playoffSeriesTables:
-        | Array<PlayoffSeriesTable>
-        | undefined
+      finalGames: FinalAndBronze | null
+      bronzeGames: FinalAndBronze | null
+      playoffTree: Array<PlayoffTree> | null
+      playoffSeries: Array<PlayoffSeries> | null
       playoffSeason: typeof playoffseason.$inferSelect
     }
   | {
@@ -91,14 +88,45 @@ export const getPlayoffTable = createServerFn({
         }
 
         const playoffSeason = playoffSeasonArr[0]
-        const playoffData = await getPlayoffTableData({
-          year,
-          women,
-        })
+
+        const playoffDataV2 = await db
+          .select()
+          .from(mvPlayoff)
+          .where(
+            eq(
+              mvPlayoff.competitionId,
+              db
+                .select({
+                  competitionId: competitions.competitionId,
+                })
+                .from(competitions)
+                .where(
+                  and(
+                    eq(competitions.division, 1),
+                    eq(competitions.women, women),
+                    eq(
+                      competitions.seasonId,
+                      db
+                        .select({
+                          seasonId: seasons.seasonId,
+                        })
+                        .from(seasons)
+                        .where(
+                          and(
+                            eq(seasons.women, women),
+                            eq(seasons.intYear, year),
+                          ),
+                        ),
+                    ),
+                  ),
+                ),
+            ),
+          )
+          .then((res) => res[0])
 
         return {
           status: 200,
-          ...playoffData,
+          ...playoffDataV2,
           playoffSeason,
         }
       } catch (error) {

@@ -6,7 +6,10 @@ type NilComponentProps = {
 
 const NilComponent = ({ group }: NilComponentProps) => {
   return (
-    <PlayoffCard group={group}>
+    <PlayoffCard
+      group={group}
+      className="h-16"
+    >
       <PlayoffCard.Title>
         <PlayoffCard.Group>{group}</PlayoffCard.Group>
       </PlayoffCard.Title>

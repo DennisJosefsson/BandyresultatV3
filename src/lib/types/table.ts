@@ -226,6 +226,37 @@ export type PlayoffGroupsV3 = {
   teamArray: Array<TeamArrayItemV2>
 }
 
+export type FinalAndBronze = {
+  serieId: number
+  group: string
+  serieName: string
+  category: string
+  games: Array<SeriesGamesV2>
+}
+
+export type PlayoffGroup = {
+  serieId: number
+  group: string
+  serieName: string
+  category: string
+  games: Array<SeriesGamesV2>
+  groupArray: Array<TeamArrayItemV2>
+}
+
+export type PlayoffTree = {
+  category: string
+  groupArray: Array<PlayoffGroup>
+}
+
+export type PlayoffSeries = {
+  serieId: number
+  group: string
+  serieName: string
+  comment: string | null
+  serieStructure: Array<number> | null
+  groupArray: Array<TeamSeasonTableV2>
+}
+
 export type TeamSeasonTableV2 = {
   team: TeamBaseWithLogo
 } & TableItems

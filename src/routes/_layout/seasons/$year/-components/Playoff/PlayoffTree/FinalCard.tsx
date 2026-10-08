@@ -1,18 +1,18 @@
 import { Datum } from '@/components/Common/Date'
 import TeamLogo from '@/components/Common/TeamLogo'
 import { useCookies } from '@/lib/contexts/cookieContext'
-import type { Game } from '@/lib/types/game'
+import type { SeriesGamesV2 } from '@/lib/types/game'
 import { StarIcon } from 'lucide-react'
 import PlayoffCard from './PlayoffCard'
 type FinalCardProps = {
-  game: Omit<Game, 'season'>
+  game: SeriesGamesV2
   title: string
 }
 
 const FinalCard = ({ game, title }: FinalCardProps) => {
   const { favTeams } = useCookies()
   return (
-    <div className="grid w-auto min-w-[33%] grid-cols-1 justify-center @4xl/playoff:mx-auto">
+    <div className="grid w-auto min-w-[33%] grid-cols-1 justify-center @4xl:mx-auto">
       <PlayoffCard group="final">
         <PlayoffCard.Title>
           <PlayoffCard.Group>{title}</PlayoffCard.Group>
@@ -21,7 +21,7 @@ const FinalCard = ({ game, title }: FinalCardProps) => {
           </PlayoffCard.Result>
         </PlayoffCard.Title>
         <PlayoffCard.Content>
-          <div className="flex flex-row justify-between text-xs @2xs/playoff:text-sm @2xl/playoff:text-xs @4xl/playoff:text-base px-1 mr-20 @sm:mr-25 @4xl:mr-0">
+          <div className="flex flex-row justify-between text-xs @2xs/playoff:text-sm @2xl/playoff:text-xs @4xl/playoff:text-base px-1 mr-1.5 @4xl:mr-0">
             <div className="flex flex-col gap-2 w-full">
               <div className="flex flex-row justify-between items-center w-full">
                 <PlayoffCard.Team>

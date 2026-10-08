@@ -1,12 +1,13 @@
 import { db } from '@/db'
 import { competitions, seasons, series } from '@/db/schema'
+import { mvPlayoff } from '@/db/views/playoffViews'
 import Error404 from '@/lib/middlewares/errors/404Error'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import type { Game } from '@/lib/types/game'
 import type {
-  PlayoffGroupsV3,
-  PlayoffSeriesTable,
+  FinalAndBronze,
+  PlayoffSeries,
+  PlayoffTree,
 } from '@/lib/types/table'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
@@ -17,24 +18,15 @@ import {
   getTableColumns,
   inArray,
 } from 'drizzle-orm'
-import { getCupPlayoffTableData } from './getCupPlayoffTableData'
-
-type PlayoffTable = {
-  category: string
-  level: number | null
-  groupArray: Array<PlayoffGroupsV3>
-}
 
 type CupPlayoffReturn =
   | {
       status: 200
       competition: typeof competitions.$inferSelect
-      finalGames: Array<Omit<Game, 'season'>>
-      bronzeGames: Array<Omit<Game, 'season'>>
-      playoffTables: Array<PlayoffTable>
-      playoffSeriesTables:
-        | Array<PlayoffSeriesTable>
-        | undefined
+      finalGames: FinalAndBronze | null
+      bronzeGames: FinalAndBronze | null
+      playoffTree: Array<PlayoffTree> | null
+      playoffSeries: Array<PlayoffSeries> | null
     }
   | { status: 404; message: string }
   | undefined
@@ -140,16 +132,21 @@ export const getCupPlayoffTables = createServerFn({
           })
         }
 
-        const playoffData = await getCupPlayoffTableData({
-          year,
-          women,
-          competitionName,
-        })
+        const playoffDataV2 = await db
+          .select()
+          .from(mvPlayoff)
+          .where(
+            eq(
+              mvPlayoff.competitionId,
+              competition.competitionId,
+            ),
+          )
+          .then((res) => res[0])
 
         return {
           status: 200,
           competition: competition,
-          ...playoffData,
+          ...playoffDataV2,
         }
       } catch (error) {
         if (error instanceof Error404) {
