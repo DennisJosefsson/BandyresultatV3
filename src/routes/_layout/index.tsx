@@ -174,7 +174,7 @@ function IndexGames() {
       </div>
       <div className="mx-1 @xs:mx-2 @3xl:mx-4 @7xl:mx-10 grid grid-cols-1 gap-y-4 @5xl:grid-cols-2 @5xl:gap-x-20">
         {data.games.map((game) => {
-          const serieName = `${game.group.includes('cup-') ? game.competition.competitionName + ' ' : null}${game.serie.serieName}`
+          const serieName = `${game.group.includes('cup-') ? game.competition.competitionName + ' ' : ''}${game.serie.serieName} ${game.women ? 'Damer' : 'Herrar'}`
           return (
             <GameCard
               key={game.gameId.toString()}

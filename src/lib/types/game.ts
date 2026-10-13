@@ -20,6 +20,7 @@ export type Game = {
   played: boolean | null
   penalties: boolean | null
   extraTime: boolean | null
+  women: boolean
   home: TeamBaseWithLogo
   away: TeamBaseWithLogo
   season: {
