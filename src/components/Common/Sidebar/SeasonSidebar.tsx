@@ -493,6 +493,33 @@ export function DefaultSeasonSidebar({
       </SidebarGroup>
 
       <PlayoffSidebar />
+      <SidebarGroup>
+        <SidebarGroupLabel>Övrigt</SidebarGroupLabel>
+        <SidebarGroupContent>
+          <SidebarMenuSub>
+            <SidebarMenuSubItem>
+              <SidebarMenuSubButton
+                onClick={toggleOnMobile}
+                render={
+                  <Link
+                    to="/seasons/$year/stats"
+                    params={{ year }}
+                    search={{ women }}
+                    activeOptions={{ includeSearch: false }}
+                    activeProps={{
+                      className: `underline underline-offset-auto`,
+                    }}
+                  >
+                    <span className="md:text-sm">
+                      Säsongsstatistik
+                    </span>
+                  </Link>
+                }
+              />
+            </SidebarMenuSubItem>
+          </SidebarMenuSub>
+        </SidebarGroupContent>
+      </SidebarGroup>
     </>
   )
 }
