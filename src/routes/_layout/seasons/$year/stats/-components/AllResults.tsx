@@ -54,7 +54,7 @@ const AllResults = ({ data }: AllResultsProps) => {
         <CardTitle>Resultat</CardTitle>
         <CardDescription>
           Alla divisioner - hemma-/bortavinst och oavgjort,
-          i procent
+          antal matcher
         </CardDescription>
       </CardHeader>
       <CardContent>

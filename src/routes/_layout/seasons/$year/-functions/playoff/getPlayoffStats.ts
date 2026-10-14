@@ -1,31 +1,19 @@
 import { db } from '@/db'
-import {
-  games,
-  playoffseason,
-  seasons,
-  series,
-} from '@/db/schema'
+import { mvPlayoffStats } from '@/db/views/seasonStatsViews'
+import Error404 from '@/lib/middlewares/errors/404Error'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import type { Stats } from '@/lib/types/stats'
+import type { MvPlayoffStats } from '@/lib/types/stats'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
-import {
-  and,
-  count,
-  eq,
-  exists,
-  getTableColumns,
-  inArray,
-} from 'drizzle-orm'
-import { getPlayoffStatsData } from './getPlayoffStatsData'
+import { and, eq } from 'drizzle-orm'
 
 type GroupStatsReturn =
   | {
       status: 404
       message: string
     }
-  | Stats
+  | { status: 200; stats: MvPlayoffStats }
   | undefined
 
 export const getPlayoffStats = createServerFn({
@@ -51,105 +39,35 @@ export const getPlayoffStats = createServerFn({
           }
         }
 
-        const playoffSeasonArr = await db
-          .select({ ...getTableColumns(playoffseason) })
-          .from(playoffseason)
-          .leftJoin(
-            seasons,
-            eq(seasons.seasonId, playoffseason.seasonId),
-          )
+        const playoffStats = await db
+          .select()
+          .from(mvPlayoffStats)
           .where(
             and(
-              inArray(
-                seasons.seasonId,
-                db
-                  .select({ seasonI: seasons.seasonId })
-                  .from(seasons)
-                  .where(
-                    and(
-                      eq(seasons.intYear, year),
-                      eq(seasons.women, women),
-                    ),
-                  ),
-              ),
-              exists(
-                db
-                  .select()
-                  .from(games)
-                  .leftJoin(
-                    series,
-                    eq(series.serieId, games.serieId),
-                  )
-                  .leftJoin(
-                    seasons,
-                    eq(seasons.seasonId, games.seasonId),
-                  )
-                  .where(
-                    and(
-                      eq(seasons.intYear, year),
-                      eq(seasons.women, women),
-                      eq(games.played, true),
-                      inArray(series.category, [
-                        'playoffseries',
-                        'eight',
-                        'quarter',
-                        'semi',
-                        'final',
-                      ]),
-                    ),
-                  ),
-              ),
+              eq(mvPlayoffStats.intYear, year),
+              eq(mvPlayoffStats.women, women),
             ),
           )
+          .then((res) => res[0])
 
-        if (playoffSeasonArr.length === 0) {
-          return {
-            status: 404,
-            message: 'Ingen slutspelsdata.',
-          }
+        const everyNull = Object.values(
+          playoffStats.allStats,
+        ).every((val) => val === null)
+
+        if (everyNull) {
+          throw new Error404({
+            message: 'Ingen statistik för slutspelet.',
+          })
         }
-
-        const playoffSeason = playoffSeasonArr[0]
-
-        const gameCount = await db
-          .select({ count: count() })
-          .from(games)
-          .leftJoin(
-            series,
-            eq(series.serieId, games.serieId),
-          )
-          .where(
-            and(
-              eq(games.seasonId, playoffSeason.seasonId),
-              eq(games.played, true),
-              inArray(series.category, [
-                'playoffseries',
-                'eight',
-                'quarter',
-                'semi',
-                'final',
-              ]),
-            ),
-          )
-          .then((res) => res[0].count)
-
-        if (gameCount === 0) {
-          return {
-            status: 404,
-            message: 'Serien har inga spelade matcher.',
-          }
-        }
-
-        const data = await getPlayoffStatsData({
-          playoffSeason,
-        })
 
         return {
           status: 200,
-          gameCount,
-          ...data,
+          stats: playoffStats,
         }
       } catch (error) {
+        if (error instanceof Error404) {
+          return { status: 404, message: error.message }
+        }
         catchError(error)
       }
     },

@@ -1,4 +1,8 @@
-import type { mvSeasonStats } from '@/db/views/seasonStatsViews'
+import type {
+  mvPlayoffStats,
+  mvSeasonStats,
+  mvSeriesStats,
+} from '@/db/views/seasonStatsViews'
 import type { SeriesGamesV2 } from './game'
 import type { Serie } from './serie'
 import type { TeamBaseWithLogo } from './team'
@@ -89,3 +93,9 @@ export type MaxMinGames = {
 
 export type MvSeasonStats =
   typeof mvSeasonStats.$inferSelect
+
+export type MvSeriesStats =
+  typeof mvSeriesStats.$inferSelect
+
+export type MvPlayoffStats =
+  typeof mvPlayoffStats.$inferSelect

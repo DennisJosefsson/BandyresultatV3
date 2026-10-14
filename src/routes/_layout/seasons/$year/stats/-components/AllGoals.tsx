@@ -49,8 +49,7 @@ const AllGoals = ({ data }: AllGoalsProps) => {
       <CardHeader>
         <CardTitle>Målstatistik</CardTitle>
         <CardDescription>
-          Alla divisioner, genomsnitt antal mål
-          hemma-/bortalag och totalt
+          Alla divisioner, antal mål hemma-/bortalag
         </CardDescription>
       </CardHeader>
       <CardContent>
