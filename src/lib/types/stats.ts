@@ -80,9 +80,11 @@ export type DivisionScoreStats = ScoreStats & {
 }
 
 export type MaxMinGames = {
-  maxGames: Array<SeriesGamesV2>
-  minGames: Array<SeriesGamesV2>
-  maxGoalDifferenceGames: Array<SeriesGamesV2>
+  maxGoalGames: Array<SeriesGamesV2 & { serieName: string }>
+  minGoalGames: Array<SeriesGamesV2 & { serieName: string }>
+  maxGoalDifferenceGames: Array<
+    SeriesGamesV2 & { serieName: string }
+  >
 }
 
 export type MvSeasonStats =

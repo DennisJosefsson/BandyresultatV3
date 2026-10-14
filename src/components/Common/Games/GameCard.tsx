@@ -24,6 +24,7 @@ type RoutePaths =
   | '/seasons/$year/cup/$competitionName/games'
   | '/'
   | '/search'
+  | '/seasons/$year/stats/'
 
 type GamesCardProps = {
   serieName: string

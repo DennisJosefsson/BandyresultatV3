@@ -4,7 +4,7 @@ import {
   colorLegendItems,
   defineChart,
   group,
-  stack,
+  whenFocused,
 } from '@tanstack/charts'
 import { scaleBand } from '@tanstack/charts/scales/band'
 import { scaleLinear } from '@tanstack/charts/scales/linear'
@@ -41,27 +41,100 @@ const colors = [
 ]
 
 export function createResultBarChart(
-  stats: ReadonlyArray<ResultBarStatValue>,
+  stats: ReadonlyArray<GoalBarStatValue>,
 ) {
   return defineChart(
     {
       chart: ({ width }) => ({
         marks: [
           barX(stats, {
-            x: 'count',
+            x1: 0,
+            x2: 'homeAvg',
             y: (row) => divLabel(width, row),
-            z: 'domain',
-            color: 'domain',
+            z: () => 'stack',
+            color: 'divisionName',
             key: (row) =>
-              `${row.divisionName}-${row.domain}`,
-            layout: stack({
-              order: ['Hemma', 'Borta', 'Oavgjort'],
-            }),
-            radius: [0, 2, 2, 0],
+              `${row.divisionName}-${row.homeAvg}-homeAvg-result`,
+            fill: '#2563eb',
+            fillOpacity: 0.75,
           }),
+          barX(stats, {
+            x1: 'homeAvg',
+            x2: (row) =>
+              (row.homeAvg ? row.homeAvg : 0) +
+              (row.awayAvg ? row.awayAvg : 0),
+            y: (row) => divLabel(width, row),
+            z: () => 'stack',
+            color: 'divisionName',
+            key: (row) =>
+              `${row.divisionName}-${row.awayAvg}-awayAvg-result`,
+            fill: '#f97316',
+            fillOpacity: 0.75,
+          }),
+          barX(stats, {
+            x1: (row) =>
+              (row.homeAvg ? row.homeAvg : 0) +
+              (row.awayAvg ? row.awayAvg : 0),
+            x2: (row) =>
+              (row.homeAvg ? row.homeAvg : 0) +
+              (row.awayAvg ? row.awayAvg : 0) +
+              (row.totalAvg ? row.totalAvg : 0),
+            y: (row) => divLabel(width, row),
+            z: () => 'stack',
+            color: 'divisionName',
+            key: (row) =>
+              `${row.divisionName}-${row.totalAvg}-allAvg-result`,
+            radius: [0, 2, 2, 0],
+            fill: '#10b981',
+            fillOpacity: 0.75,
+          }),
+          whenFocused(
+            barX(stats, {
+              x1: 0,
+              x2: 'homeAvg',
+              y: (row) => divLabel(width, row),
+              z: () => 'stack',
+              color: 'divisionName',
+              key: (row) =>
+                `${row.divisionName}-${row.homeAvg}-homeAvg-result`,
+              fill: '#2563eb',
+            }),
+          ),
+          whenFocused(
+            barX(stats, {
+              x1: 'homeAvg',
+              x2: (row) =>
+                (row.homeAvg ? row.homeAvg : 0) +
+                (row.awayAvg ? row.awayAvg : 0),
+              y: (row) => divLabel(width, row),
+              z: () => 'stack',
+              color: 'divisionName',
+              key: (row) =>
+                `${row.divisionName}-${row.awayAvg}-awayAvg-result`,
+              fill: '#f97316',
+            }),
+          ),
+          whenFocused(
+            barX(stats, {
+              x1: (row) =>
+                (row.homeAvg ? row.homeAvg : 0) +
+                (row.awayAvg ? row.awayAvg : 0),
+              x2: (row) =>
+                (row.homeAvg ? row.homeAvg : 0) +
+                (row.awayAvg ? row.awayAvg : 0) +
+                (row.totalAvg ? row.totalAvg : 0),
+              y: (row) => divLabel(width, row),
+              z: () => 'stack',
+              color: 'divisionName',
+              key: (row) =>
+                `${row.divisionName}-${row.totalAvg}-allAvg-result`,
+              radius: [0, 2, 2, 0],
+              fill: '#10b981',
+            }),
+          ),
         ],
         scales: {
-          x: { scale: scaleLinear, axis: false },
+          x: { scale: scaleLinear, axis: undefined },
           y: {
             scale: () =>
               scaleBand<string>()
@@ -105,7 +178,8 @@ export function createResultBarChart(
     },
     {
       svgAnimation: true,
-      focus: 'group-x',
+      focus: 'nearest-y',
+      focusRing: false,
       tooltip: {
         use: tooltip,
         className: 'sc-chart-tooltip',
@@ -145,6 +219,7 @@ export function createGoalBarChart(
             layout: group({ scale: groupScale }),
             radius: 0,
             fill: '#2563eb',
+            fillOpacity: 0.75,
           }),
           barX(stats, {
             x1: 'homeAvg',
@@ -158,7 +233,8 @@ export function createGoalBarChart(
               `${row.divisionName}-${row.awayAvg}-awayAvg`,
             layout: group({ scale: groupScale }),
             radius: [0, 2, 2, 0],
-            fill: '#10b981',
+            fill: '#f97316',
+            fillOpacity: 0.75,
           }),
           barX(stats, {
             x: 'totalAvg',
@@ -169,8 +245,52 @@ export function createGoalBarChart(
               `${row.divisionName}-${row.totalAvg}-allAvg`,
             layout: group({ scale: groupScale }),
             radius: [0, 2, 2, 0],
-            fill: '#f97316',
+            fill: '#10b981',
+            fillOpacity: 0.75,
           }),
+          whenFocused(
+            barX(stats, {
+              x1: 0,
+              x2: 'homeAvg',
+              y: (row) => divLabel(width, row),
+              z: () => 'stack',
+              color: 'divisionName',
+              key: (row) =>
+                `${row.divisionName}-${row.homeAvg}-homeAvg-focus`,
+              layout: group({ scale: groupScale }),
+              radius: 0,
+              fill: '#2563eb',
+            }),
+          ),
+          whenFocused(
+            barX(stats, {
+              x1: 'homeAvg',
+              x2: (row) =>
+                (row.homeAvg ? row.homeAvg : 0) +
+                (row.awayAvg ? row.awayAvg : 0),
+              y: (row) => divLabel(width, row),
+              z: () => 'stack',
+              color: 'divisionName',
+              key: (row) =>
+                `${row.divisionName}-${row.awayAvg}-awayAvg-focus`,
+              layout: group({ scale: groupScale }),
+              radius: [0, 2, 2, 0],
+              fill: '#f97316',
+            }),
+          ),
+          whenFocused(
+            barX(stats, {
+              x: 'totalAvg',
+              y: (row) => divLabel(width, row),
+              z: () => 'independent',
+              color: 'divisionName',
+              key: (row) =>
+                `${row.divisionName}-${row.totalAvg}-allAvg-focus`,
+              layout: group({ scale: groupScale }),
+              radius: [0, 2, 2, 0],
+              fill: '#10b981',
+            }),
+          ),
         ],
         scales: {
           x: { scale: scaleLinear, axis: undefined },
@@ -218,9 +338,11 @@ export function createGoalBarChart(
     {
       svgAnimation: true,
       focus: 'nearest-y',
+      focusRing: false,
       tooltip: {
         use: tooltip,
-        className: 'sc-chart-tooltip',
+        className:
+          'sc-chart-tooltip data-active:ring-2 data-active:ring-blue-500',
         anchor: (_points, context) => ({
           x: context.surface.width * 0.271,
           y: context.surface.height * 0.554,
