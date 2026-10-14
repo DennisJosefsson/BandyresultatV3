@@ -123,8 +123,8 @@ export const generatedGameObjectArray = zd.object({
 export const bulkGameFileParser = zd.array(
   zd.object({
     date: zd.string(),
-    homeTeamId: zd.number().positive().int(),
-    awayTeamId: zd.number().positive().int(),
+    homeTeamId: zd.coerce.number().positive().int(),
+    awayTeamId: zd.coerce.number().positive().int(),
   }),
 )
 
