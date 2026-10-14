@@ -9,7 +9,7 @@ export function Tooltip({
   points: ReadonlyArray<ChartPoint<GoalBarStatValue>>
 }) {
   return (
-    <div className="sc-chart-tooltip w-48 h-24 bg-foreground text-background p-2 rounded-sm">
+    <div className="sc-chart-tooltip w-54 h-24 bg-foreground text-background p-2 rounded-sm">
       {points.map((point, index) => (
         <div
           className="sc-shadcn-tooltip-row flex flex-col"

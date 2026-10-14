@@ -184,7 +184,7 @@ export function createResultBarChart(
         use: tooltip,
         className: 'sc-chart-tooltip',
         anchor: (_points, context) => ({
-          x: context.surface.width * 0.271,
+          x: context.surface.width * 0.221,
           y: context.surface.height * 0.554,
         }),
         placement: 'bottom-right',
@@ -344,7 +344,7 @@ export function createGoalBarChart(
         className:
           'sc-chart-tooltip data-active:ring-2 data-active:ring-blue-500',
         anchor: (_points, context) => ({
-          x: context.surface.width * 0.271,
+          x: context.surface.width * 0.221,
           y: context.surface.height * 0.554,
         }),
         placement: 'bottom-right',
