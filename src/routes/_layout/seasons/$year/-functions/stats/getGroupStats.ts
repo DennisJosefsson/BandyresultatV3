@@ -83,6 +83,12 @@ export const getGroupStats = createServerFn({
           .where(eq(mvSeriesStats.serieId, serie.serieId))
           .then((res) => res[0])
 
+        if (!seriesStats) {
+          throw new Error404({
+            message: 'Ingen statistik för serien.',
+          })
+        }
+
         const everyNull = Object.values(
           seriesStats.allStats,
         ).every((val) => val === null)
