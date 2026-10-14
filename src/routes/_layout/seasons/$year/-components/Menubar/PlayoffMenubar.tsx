@@ -274,6 +274,69 @@ const PlayoffMenubar = () => {
                               Matcher
                             </route.Link>
                           </MenubarItem>
+                          <MenubarItem>
+                            <route.Link
+                              to="/seasons/$year/$group/development"
+                              search={(prev) => ({
+                                ...prev,
+                                index: 0,
+                              })}
+                              params={(prev) => ({
+                                year: prev.year,
+                                group: group.group,
+                              })}
+                              className="sm:text-sm"
+                            >
+                              Utveckling
+                            </route.Link>
+                          </MenubarItem>
+                          <MenubarItem>
+                            <route.Link
+                              to="/seasons/$year/$group/interval"
+                              search={(prev) => ({
+                                ...prev,
+                                start: 0,
+                                end: undefined,
+                              })}
+                              params={(prev) => ({
+                                year: prev.year,
+                                group: group.group,
+                              })}
+                              className="sm:text-sm"
+                            >
+                              Intervall
+                            </route.Link>
+                          </MenubarItem>
+                          <MenubarItem>
+                            <route.Link
+                              to="/seasons/$year/$group/stats"
+                              search={(prev) => ({
+                                women: prev.women,
+                              })}
+                              params={(prev) => ({
+                                year: prev.year,
+                                group: group.group,
+                              })}
+                              className="sm:text-sm"
+                            >
+                              Statistik
+                            </route.Link>
+                          </MenubarItem>
+                          <MenubarItem>
+                            <route.Link
+                              to="/seasons/$year/$group/map"
+                              search={(prev) => ({
+                                women: prev.women,
+                              })}
+                              params={(prev) => ({
+                                year: prev.year,
+                                group: group.group,
+                              })}
+                              className="sm:text-sm"
+                            >
+                              Karta
+                            </route.Link>
+                          </MenubarItem>
                         </MenubarSubContent>
                       </MenubarSub>
                     )
