@@ -1,19 +1,21 @@
 import { db } from '@/db'
-import { games, seasons, series } from '@/db/schema'
+import { seasons, series } from '@/db/schema'
+import { mvSeriesStats } from '@/db/views/seasonStatsViews'
+import Error404 from '@/lib/middlewares/errors/404Error'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import type { Stats } from '@/lib/types/stats'
+import type { Serie } from '@/lib/types/serie'
+import type { MvSeriesStats } from '@/lib/types/stats'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
 import { and, eq, getTableColumns } from 'drizzle-orm'
-import { getGroupStatsData } from './getGroupStatsData'
 
 type GroupStatsReturn =
   | {
       status: 404
       message: string
     }
-  | Stats
+  | { status: 200; stats: MvSeriesStats; serie: Serie }
   | undefined
 
 export const getGroupStats = createServerFn({
@@ -75,38 +77,61 @@ export const getGroupStats = createServerFn({
             message: `Ingen ${women ? 'dam' : 'herr'}serie med detta namn det här året. Välj en ny i listan.`,
           }
 
-        const gameCount = await db.$count(
-          games,
-          and(
-            eq(games.serieId, serie.serieId),
-            eq(games.played, true),
-          ),
-        )
+        const seriesStats = await db
+          .select()
+          .from(mvSeriesStats)
+          .where(eq(mvSeriesStats.serieId, serie.serieId))
+          .then((res) => res[0])
 
-        if (serie.hasStatic && gameCount === 0) {
-          return {
-            status: 404,
-            message:
-              'Serien har enbart sluttabell, ingen matchdata.',
-          }
+        const everyNull = Object.values(
+          seriesStats.allStats,
+        ).every((val) => val === null)
+
+        if (everyNull) {
+          throw new Error404({
+            message: 'Ingen statistik för serien.',
+          })
         }
 
-        if (gameCount === 0) {
-          return {
-            status: 404,
-            message: 'Serien har inga spelade matcher.',
-          }
-        }
+        // console.dir(seriesStats, {
+        //   colors: true,
+        //   depth: 99,
+        // })
 
-        const data = await getGroupStatsData({ serie })
+        // const gameCount = await db.$count(
+        //   games,
+        //   and(
+        //     eq(games.serieId, serie.serieId),
+        //     eq(games.played, true),
+        //   ),
+        // )
+
+        // if (serie.hasStatic && gameCount === 0) {
+        //   return {
+        //     status: 404,
+        //     message:
+        //       'Serien har enbart sluttabell, ingen matchdata.',
+        //   }
+        // }
+
+        // if (gameCount === 0) {
+        //   return {
+        //     status: 404,
+        //     message: 'Serien har inga spelade matcher.',
+        //   }
+        // }
+
+        // const data = await getGroupStatsData({ serie })
 
         return {
           status: 200,
           serie,
-          gameCount,
-          ...data,
+          stats: seriesStats,
         }
       } catch (error) {
+        if (error instanceof Error404) {
+          return { status: 404, message: error.message }
+        }
         catchError(error)
       }
     },

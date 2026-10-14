@@ -1,3 +1,9 @@
+import type {
+  mvPlayoffStats,
+  mvSeasonStats,
+  mvSeriesStats,
+} from '@/db/views/seasonStatsViews'
+import type { SeriesGamesV2 } from './game'
 import type { Serie } from './serie'
 import type { TeamBaseWithLogo } from './team'
 
@@ -56,3 +62,40 @@ export type Stats = {
   minGoals: MaxMinDiffAndGoals
   maxDiff: MaxMinDiffAndGoals
 }
+
+export type ScoreStats = {
+  drawAvg: number | null
+  drawCount: number | null
+  gameCount: number | null
+  awayWinAvg: number | null
+  homeWinAvg: number | null
+  goalsScored: number | null
+  awayWinCount: number | null
+  homeWinCount: number | null
+  avgGoalsScored: number | null
+  awayGoalsScored: number | null
+  homeGoalsScored: number | null
+  awayAvgGoalsScored: number | null
+  homeAvgGoalsScored: number | null
+}
+
+export type DivisionScoreStats = ScoreStats & {
+  divisionName: string
+}
+
+export type MaxMinGames = {
+  maxGoalGames: Array<SeriesGamesV2 & { serieName: string }>
+  minGoalGames: Array<SeriesGamesV2 & { serieName: string }>
+  maxGoalDifferenceGames: Array<
+    SeriesGamesV2 & { serieName: string }
+  >
+}
+
+export type MvSeasonStats =
+  typeof mvSeasonStats.$inferSelect
+
+export type MvSeriesStats =
+  typeof mvSeriesStats.$inferSelect
+
+export type MvPlayoffStats =
+  typeof mvPlayoffStats.$inferSelect

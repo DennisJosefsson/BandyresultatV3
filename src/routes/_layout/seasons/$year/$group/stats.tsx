@@ -110,7 +110,10 @@ function RouteComponent() {
         }
         return (
           <CustomCatchBoundary id="stats">
-            <StatsComponent stats={data} />
+            <StatsComponent
+              stats={data.stats}
+              serie={data.serie}
+            />
           </CustomCatchBoundary>
         )
       }}

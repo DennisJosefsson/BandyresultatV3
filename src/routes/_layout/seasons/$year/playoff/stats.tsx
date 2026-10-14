@@ -4,7 +4,7 @@ import {
   Await,
   createFileRoute,
 } from '@tanstack/react-router'
-import StatsComponent from '../-components/Stats/Stats'
+import PlayoffStatsComponent from '../-components/Stats/PlayoffStats'
 import { getPlayoffStats } from '../-functions/playoff/getPlayoffStats'
 import { getPlayoffStatsMeta } from '../-functions/playoff/getPlayoffStatsMeta'
 
@@ -92,7 +92,7 @@ function RouteComponent() {
         }
         return (
           <CustomCatchBoundary id="playoffstats">
-            <StatsComponent stats={data} />
+            <PlayoffStatsComponent stats={data.stats} />
           </CustomCatchBoundary>
         )
       }}
