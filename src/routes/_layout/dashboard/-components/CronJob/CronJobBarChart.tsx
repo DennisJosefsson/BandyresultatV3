@@ -95,15 +95,15 @@ function Tooltip({
             </span>
           </div>
           <div className="flex flex-row justify-between">
-            <span>Genomsnitt</span>
-            <span>
-              {point.datum.averageDuration?.toLocaleString()}
-            </span>
-          </div>
-          <div className="flex flex-row justify-between">
             <span>Senaste</span>
             <span>
               {point.datum.latestDuration?.toLocaleString()}
+            </span>
+          </div>
+          <div className="flex flex-row justify-between">
+            <span>Genomsnitt</span>
+            <span>
+              {point.datum.averageDuration?.toLocaleString()}
             </span>
           </div>
         </div>

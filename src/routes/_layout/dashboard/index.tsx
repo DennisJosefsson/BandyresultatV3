@@ -81,6 +81,10 @@ function CronJobs() {
     select: (s) => s.cronJobs.cronJobStats,
   })
 
+  const cronJobNames = Route.useLoaderData({
+    select: (s) => s.cronJobs.cronJobNames,
+  })
+
   if (cronJobs.length === 0) {
     return (
       <div className="flex flex-row justify-center">
@@ -91,8 +95,27 @@ function CronJobs() {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="w-5xl">
-        <CronJobBarChart data={cronJobStats} />
+      <div className="flex flex-row gap-6">
+        <div className="w-5xl">
+          <CronJobBarChart data={cronJobStats} />
+        </div>
+        <div className="ml-8 mt-18">
+          <ul className="text-sm">
+            {cronJobNames.map((cjn) => {
+              return (
+                <li
+                  key={cjn.jobId}
+                  className="flex flex-row gap-8"
+                >
+                  <span className="text-right w-8">
+                    {cjn.jobId}
+                  </span>
+                  <span>{cjn.jobName}</span>
+                </li>
+              )
+            })}
+          </ul>
+        </div>
       </div>
       <div className="border p-2 text-sm">
         <div className="grid grid-cols-5 gap-4 font-semibold">

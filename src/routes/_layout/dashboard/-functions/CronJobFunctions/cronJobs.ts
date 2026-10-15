@@ -35,7 +35,19 @@ export const getCronJobDetails = createServerFn({
 
       const getCronJobStats = await cronJobStats()
 
-      return { cronJobs, cronJobStats: getCronJobStats }
+      const cronJobNames = await db
+        .select({
+          jobName: cronJob.jobName,
+          jobId: cronJob.jobId,
+        })
+        .from(cronJob)
+        .orderBy(cronJob.jobId)
+
+      return {
+        cronJobs,
+        cronJobStats: getCronJobStats,
+        cronJobNames,
+      }
     } catch (error) {
       catchError(error)
     }

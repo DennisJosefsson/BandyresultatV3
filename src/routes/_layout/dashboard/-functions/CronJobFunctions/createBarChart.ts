@@ -134,15 +134,15 @@ export function createCronJobBarChart(
     },
     {
       svgAnimation: true,
-      focus: 'nearest-y',
+      focus: 'nearest-x',
       focusRing: false,
       tooltip: {
         use: tooltip,
         className:
           'sc-chart-tooltip data-active:ring-2 data-active:ring-blue-500',
         anchor: (_points, context) => ({
-          x: context.surface.width * 0.171,
-          y: context.surface.height * 0.754,
+          x: context.surface.width * 0.2,
+          y: context.surface.height * 0.05,
         }),
         placement: 'bottom-right',
         offset: 0,
