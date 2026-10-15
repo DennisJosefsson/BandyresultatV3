@@ -6,7 +6,7 @@
     "": {
       "name": "bandyresultatv3",
       "dependencies": {
-        "@base-ui/react": "^1.8.0",
+        "@base-ui/react": "^1.9.0",
         "@clerk/localizations": "^4.16.0",
         "@clerk/react": "^6.15.1",
         "@clerk/tanstack-react-start": "^1.5.12",
@@ -14,6 +14,7 @@
         "@rolldown/plugin-babel": "^0.2.2",
         "@t3-oss/env-core": "^0.13.11",
         "@tailwindcss/vite": "^4.2.2",
+        "@tanstack/charts": "^1.1.0",
         "@tanstack/match-sorter-utils": "^8.19.4",
         "@tanstack/react-devtools": "^0.9.6",
         "@tanstack/react-form": "^1.33.0",
@@ -30,6 +31,7 @@
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
         "cookie": "^1.1.1",
+        "csv-parse": "^7.0.3",
         "dayjs": "^1.11.19",
         "drizzle-kit": "^0.31.6",
         "drizzle-orm": "^0.44.7",
@@ -45,7 +47,6 @@
         "react-dom": "^19.2.3",
         "react-markdown": "^10.1.0",
         "react-window": "^2.2.3",
-        "recharts": "3.8.0",
         "sonner": "^2.0.7",
         "srvx": "0.11.16",
         "tailwind-merge": "^3.0.2",
@@ -54,7 +55,6 @@
         "usehooks-ts": "^3.1.1",
         "utf-8-validate": "5.0.2",
         "vaul": "^1.1.2",
-        "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
         "zod": "^4.6.1"
       },
       "devDependencies": {
@@ -3343,9 +3343,12 @@
       "resolved": "node_modules/.pnpm/react-native@0.86.0_@babel+core@7.29.7_@types+react@19.2.17_bufferutil@4.1.0_react@19.2.7_utf-8-validate@5.0.2/node_modules/react-native",
       "link": true
     },
-    "node_modules/.pnpm/@reduxjs+toolkit@2.12.0_react-redux@9.3.0_@types+react@19.2.17_react@19.2.7_redux@5.0.1__react@19.2.7": {},
+    "node_modules/.pnpm/@reduxjs+toolkit@2.12.0_react-redux@9.3.0_@types+react@19.2.17_react@19.2.7_redux@5.0.1__react@19.2.7": {
+      "dev": true
+    },
     "node_modules/.pnpm/@reduxjs+toolkit@2.12.0_react-redux@9.3.0_@types+react@19.2.17_react@19.2.7_redux@5.0.1__react@19.2.7/node_modules/@reduxjs/toolkit": {
       "version": "2.12.0",
+      "dev": true,
       "license": "MIT",
       "dependencies": {
         "@standard-schema/spec": "^1.0.0",
@@ -6259,6 +6262,7 @@
     },
     "node_modules/.pnpm/@standard-schema+spec@1.1.0/node_modules/@standard-schema/spec": {
       "version": "1.1.0",
+      "dev": true,
       "license": "MIT",
       "devDependencies": {
         "tsup": "^8.3.0",
@@ -6267,6 +6271,7 @@
     },
     "node_modules/.pnpm/@standard-schema+utils@0.3.0/node_modules/@standard-schema/utils": {
       "version": "0.3.0",
+      "dev": true,
       "license": "MIT",
       "devDependencies": {
         "@standard-schema/spec": "npm:@jsr/standard-schema__spec@1.0.0-beta.4",
@@ -8335,23 +8340,29 @@
     },
     "node_modules/.pnpm/@types+d3-array@3.2.2/node_modules/@types/d3-array": {
       "version": "3.2.2",
+      "extraneous": true,
       "license": "MIT"
     },
     "node_modules/.pnpm/@types+d3-color@3.1.3/node_modules/@types/d3-color": {
       "version": "3.1.3",
+      "extraneous": true,
       "license": "MIT"
     },
     "node_modules/.pnpm/@types+d3-ease@3.0.2/node_modules/@types/d3-ease": {
       "version": "3.0.2",
+      "extraneous": true,
       "license": "MIT"
     },
-    "node_modules/.pnpm/@types+d3-interpolate@3.0.4": {},
+    "node_modules/.pnpm/@types+d3-interpolate@3.0.4": {
+      "extraneous": true
+    },
     "node_modules/.pnpm/@types+d3-interpolate@3.0.4/node_modules/@types/d3-color": {
       "resolved": "node_modules/.pnpm/@types+d3-color@3.1.3/node_modules/@types/d3-color",
       "link": true
     },
     "node_modules/.pnpm/@types+d3-interpolate@3.0.4/node_modules/@types/d3-interpolate": {
       "version": "3.0.4",
+      "extraneous": true,
       "license": "MIT",
       "dependencies": {
         "@types/d3-color": "*"
@@ -8359,11 +8370,15 @@
     },
     "node_modules/.pnpm/@types+d3-path@3.1.1/node_modules/@types/d3-path": {
       "version": "3.1.1",
+      "extraneous": true,
       "license": "MIT"
     },
-    "node_modules/.pnpm/@types+d3-scale@4.0.9": {},
+    "node_modules/.pnpm/@types+d3-scale@4.0.9": {
+      "extraneous": true
+    },
     "node_modules/.pnpm/@types+d3-scale@4.0.9/node_modules/@types/d3-scale": {
       "version": "4.0.9",
+      "extraneous": true,
       "license": "MIT",
       "dependencies": {
         "@types/d3-time": "*"
@@ -8373,13 +8388,16 @@
       "resolved": "node_modules/.pnpm/@types+d3-time@3.0.4/node_modules/@types/d3-time",
       "link": true
     },
-    "node_modules/.pnpm/@types+d3-shape@3.1.8": {},
+    "node_modules/.pnpm/@types+d3-shape@3.1.8": {
+      "extraneous": true
+    },
     "node_modules/.pnpm/@types+d3-shape@3.1.8/node_modules/@types/d3-path": {
       "resolved": "node_modules/.pnpm/@types+d3-path@3.1.1/node_modules/@types/d3-path",
       "link": true
     },
     "node_modules/.pnpm/@types+d3-shape@3.1.8/node_modules/@types/d3-shape": {
       "version": "3.1.8",
+      "extraneous": true,
       "license": "MIT",
       "dependencies": {
         "@types/d3-path": "*"
@@ -8387,10 +8405,12 @@
     },
     "node_modules/.pnpm/@types+d3-time@3.0.4/node_modules/@types/d3-time": {
       "version": "3.0.4",
+      "extraneous": true,
       "license": "MIT"
     },
     "node_modules/.pnpm/@types+d3-timer@3.0.2/node_modules/@types/d3-timer": {
       "version": "3.0.2",
+      "extraneous": true,
       "license": "MIT"
     },
     "node_modules/.pnpm/@types+debug@4.1.13": {},
@@ -8588,6 +8608,7 @@
     },
     "node_modules/.pnpm/@types+use-sync-external-store@0.0.6/node_modules/@types/use-sync-external-store": {
       "version": "0.0.6",
+      "dev": true,
       "license": "MIT"
     },
     "node_modules/.pnpm/@types+uuid@10.0.0/node_modules/@types/uuid": {
@@ -10733,9 +10754,12 @@
         "typescript-eslint": "^8.46.4"
       }
     },
-    "node_modules/.pnpm/d3-array@3.2.4": {},
+    "node_modules/.pnpm/d3-array@3.2.4": {
+      "extraneous": true
+    },
     "node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array": {
       "version": "3.2.4",
+      "extraneous": true,
       "license": "ISC",
       "dependencies": {
         "internmap": "1 - 2"
@@ -10750,6 +10774,7 @@
     },
     "node_modules/.pnpm/d3-color@3.1.0/node_modules/d3-color": {
       "version": "3.1.0",
+      "extraneous": true,
       "license": "ISC",
       "devDependencies": {
         "eslint": "8",
@@ -10763,6 +10788,7 @@
     },
     "node_modules/.pnpm/d3-ease@3.0.1/node_modules/d3-ease": {
       "version": "3.0.1",
+      "extraneous": true,
       "license": "BSD-3-Clause",
       "devDependencies": {
         "eslint": "7",
@@ -10776,6 +10802,7 @@
     },
     "node_modules/.pnpm/d3-format@3.1.2/node_modules/d3-format": {
       "version": "3.1.2",
+      "extraneous": true,
       "license": "ISC",
       "devDependencies": {
         "@rollup/plugin-terser": "^0.4.4",
@@ -10788,13 +10815,16 @@
         "node": ">=12"
       }
     },
-    "node_modules/.pnpm/d3-interpolate@3.0.1": {},
+    "node_modules/.pnpm/d3-interpolate@3.0.1": {
+      "extraneous": true
+    },
     "node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-color": {
       "resolved": "node_modules/.pnpm/d3-color@3.1.0/node_modules/d3-color",
       "link": true
     },
     "node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate": {
       "version": "3.0.1",
+      "extraneous": true,
       "license": "ISC",
       "dependencies": {
         "d3-color": "1 - 3"
@@ -10805,6 +10835,7 @@
     },
     "node_modules/.pnpm/d3-path@3.1.0/node_modules/d3-path": {
       "version": "3.1.0",
+      "extraneous": true,
       "license": "ISC",
       "devDependencies": {
         "eslint": "8",
@@ -10816,7 +10847,9 @@
         "node": ">=12"
       }
     },
-    "node_modules/.pnpm/d3-scale@4.0.2": {},
+    "node_modules/.pnpm/d3-scale@4.0.2": {
+      "extraneous": true
+    },
     "node_modules/.pnpm/d3-scale@4.0.2/node_modules/d3-array": {
       "resolved": "node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array",
       "link": true
@@ -10831,6 +10864,7 @@
     },
     "node_modules/.pnpm/d3-scale@4.0.2/node_modules/d3-scale": {
       "version": "4.0.2",
+      "extraneous": true,
       "license": "ISC",
       "dependencies": {
         "d3-array": "2.10.0 - 3",
@@ -10851,13 +10885,16 @@
       "resolved": "node_modules/.pnpm/d3-time-format@4.1.0/node_modules/d3-time-format",
       "link": true
     },
-    "node_modules/.pnpm/d3-shape@3.2.0": {},
+    "node_modules/.pnpm/d3-shape@3.2.0": {
+      "extraneous": true
+    },
     "node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-path": {
       "resolved": "node_modules/.pnpm/d3-path@3.1.0/node_modules/d3-path",
       "link": true
     },
     "node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape": {
       "version": "3.2.0",
+      "extraneous": true,
       "license": "ISC",
       "dependencies": {
         "d3-path": "^3.1.0"
@@ -10866,13 +10903,16 @@
         "node": ">=12"
       }
     },
-    "node_modules/.pnpm/d3-time-format@4.1.0": {},
+    "node_modules/.pnpm/d3-time-format@4.1.0": {
+      "extraneous": true
+    },
     "node_modules/.pnpm/d3-time-format@4.1.0/node_modules/d3-time": {
       "resolved": "node_modules/.pnpm/d3-time@3.1.0/node_modules/d3-time",
       "link": true
     },
     "node_modules/.pnpm/d3-time-format@4.1.0/node_modules/d3-time-format": {
       "version": "4.1.0",
+      "extraneous": true,
       "license": "ISC",
       "dependencies": {
         "d3-time": "1 - 3"
@@ -10881,13 +10921,16 @@
         "node": ">=12"
       }
     },
-    "node_modules/.pnpm/d3-time@3.1.0": {},
+    "node_modules/.pnpm/d3-time@3.1.0": {
+      "extraneous": true
+    },
     "node_modules/.pnpm/d3-time@3.1.0/node_modules/d3-array": {
       "resolved": "node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array",
       "link": true
     },
     "node_modules/.pnpm/d3-time@3.1.0/node_modules/d3-time": {
       "version": "3.1.0",
+      "extraneous": true,
       "license": "ISC",
       "dependencies": {
         "d3-array": "2 - 3"
@@ -10898,6 +10941,7 @@
     },
     "node_modules/.pnpm/d3-timer@3.0.1/node_modules/d3-timer": {
       "version": "3.0.1",
+      "extraneous": true,
       "license": "ISC",
       "devDependencies": {
         "eslint": "7",
@@ -11052,6 +11096,7 @@
     },
     "node_modules/.pnpm/decimal.js-light@2.5.1/node_modules/decimal.js-light": {
       "version": "2.5.1",
+      "extraneous": true,
       "license": "MIT"
     },
     "node_modules/.pnpm/decimal.js@10.6.0/node_modules/decimal.js": {
@@ -11805,6 +11850,7 @@
     },
     "node_modules/.pnpm/es-toolkit@1.49.0/node_modules/es-toolkit": {
       "version": "1.49.0",
+      "extraneous": true,
       "license": "MIT",
       "workspaces": [
         "docs",
@@ -13663,6 +13709,7 @@
     },
     "node_modules/.pnpm/immer@10.2.0/node_modules/immer": {
       "version": "10.2.0",
+      "extraneous": true,
       "license": "MIT",
       "devDependencies": {
         "@babel/core": "^7.21.3",
@@ -13695,6 +13742,7 @@
     },
     "node_modules/.pnpm/immer@11.1.8/node_modules/immer": {
       "version": "11.1.8",
+      "dev": true,
       "license": "MIT",
       "devDependencies": {
         "@babel/core": "^7.21.3",
@@ -13811,6 +13859,7 @@
     },
     "node_modules/.pnpm/internmap@2.0.3/node_modules/internmap": {
       "version": "2.0.3",
+      "extraneous": true,
       "license": "ISC",
       "devDependencies": {
         "eslint": "^7.32.0",
@@ -15513,8 +15562,8 @@
     },
     "node_modules/.pnpm/memoize-one@5.2.1/node_modules/memoize-one": {
       "version": "5.2.1",
+      "dev": true,
       "license": "MIT",
-      "peer": true,
       "devDependencies": {
         "@size-limit/preset-small-lib": "^4.10.2",
         "@types/jest": "^26.0.22",
@@ -19739,7 +19788,9 @@
       "resolved": "node_modules/.pnpm/yargs@17.7.3/node_modules/yargs",
       "link": true
     },
-    "node_modules/.pnpm/react-redux@9.3.0_@types+react@19.2.17_react@19.2.7_redux@5.0.1": {},
+    "node_modules/.pnpm/react-redux@9.3.0_@types+react@19.2.17_react@19.2.7_redux@5.0.1": {
+      "dev": true
+    },
     "node_modules/.pnpm/react-redux@9.3.0_@types+react@19.2.17_react@19.2.7_redux@5.0.1/node_modules/@types/react": {
       "resolved": "node_modules/.pnpm/@types+react@19.2.17/node_modules/@types/react",
       "link": true
@@ -19754,7 +19805,10 @@
     },
     "node_modules/.pnpm/react-redux@9.3.0_@types+react@19.2.17_react@19.2.7_redux@5.0.1/node_modules/react-redux": {
       "version": "9.3.0",
+      "dev": true,
       "license": "MIT",
+      "optional": true,
+      "peer": true,
       "dependencies": {
         "@types/use-sync-external-store": "^0.0.6",
         "use-sync-external-store": "^1.4.0"
@@ -19965,7 +20019,9 @@
         "url": "https://paulmillr.com/funding/"
       }
     },
-    "node_modules/.pnpm/recharts@3.8.0_@types+react@19.2.17_react-dom@19.2.7_react@19.2.7__react-is@18.3.1_react@19.2.7_redux@5.0.1": {},
+    "node_modules/.pnpm/recharts@3.8.0_@types+react@19.2.17_react-dom@19.2.7_react@19.2.7__react-is@18.3.1_react@19.2.7_redux@5.0.1": {
+      "extraneous": true
+    },
     "node_modules/.pnpm/recharts@3.8.0_@types+react@19.2.17_react-dom@19.2.7_react@19.2.7__react-is@18.3.1_react@19.2.7_redux@5.0.1/node_modules/@reduxjs/toolkit": {
       "resolved": "node_modules/.pnpm/@reduxjs+toolkit@2.12.0_react-redux@9.3.0_@types+react@19.2.17_react@19.2.7_redux@5.0.1__react@19.2.7/node_modules/@reduxjs/toolkit",
       "link": true
@@ -20008,6 +20064,7 @@
     },
     "node_modules/.pnpm/recharts@3.8.0_@types+react@19.2.17_react-dom@19.2.7_react@19.2.7__react-is@18.3.1_react@19.2.7_redux@5.0.1/node_modules/recharts": {
       "version": "3.8.0",
+      "extraneous": true,
       "license": "MIT",
       "workspaces": [
         "www"
@@ -20050,13 +20107,16 @@
       "resolved": "node_modules/.pnpm/victory-vendor@37.3.6/node_modules/victory-vendor",
       "link": true
     },
-    "node_modules/.pnpm/redux-thunk@3.1.0_redux@5.0.1": {},
+    "node_modules/.pnpm/redux-thunk@3.1.0_redux@5.0.1": {
+      "dev": true
+    },
     "node_modules/.pnpm/redux-thunk@3.1.0_redux@5.0.1/node_modules/redux": {
       "resolved": "node_modules/.pnpm/redux@5.0.1/node_modules/redux",
       "link": true
     },
     "node_modules/.pnpm/redux-thunk@3.1.0_redux@5.0.1/node_modules/redux-thunk": {
       "version": "3.1.0",
+      "dev": true,
       "license": "MIT",
       "peerDependencies": {
         "redux": "^5.0.0"
@@ -20064,7 +20124,7 @@
     },
     "node_modules/.pnpm/redux@5.0.1/node_modules/redux": {
       "version": "5.0.1",
-      "devOptional": true,
+      "dev": true,
       "license": "MIT",
       "devDependencies": {
         "@babel/core": "^7.19.0",
@@ -20202,6 +20262,7 @@
     },
     "node_modules/.pnpm/reselect@5.1.1/node_modules/reselect": {
       "version": "5.1.1",
+      "extraneous": true,
       "license": "MIT",
       "devDependencies": {
         "@reduxjs/toolkit": "^2.0.1",
@@ -20236,6 +20297,7 @@
     },
     "node_modules/.pnpm/reselect@5.2.0/node_modules/reselect": {
       "version": "5.2.0",
+      "dev": true,
       "license": "MIT",
       "devDependencies": {
         "@reduxjs/toolkit": "^2.0.1",
@@ -21506,6 +21568,7 @@
     },
     "node_modules/.pnpm/tiny-invariant@1.3.3/node_modules/tiny-invariant": {
       "version": "1.3.3",
+      "extraneous": true,
       "license": "MIT",
       "devDependencies": {
         "@rollup/plugin-replace": "^5.0.5",
@@ -22382,6 +22445,7 @@
     },
     "node_modules/.pnpm/use-sync-external-store@1.6.0_react@19.2.7/node_modules/use-sync-external-store": {
       "version": "1.6.0",
+      "dev": true,
       "license": "MIT",
       "peerDependencies": {
         "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
@@ -22595,7 +22659,9 @@
       "resolved": "node_modules/.pnpm/vfile-message@4.0.3/node_modules/vfile-message",
       "link": true
     },
-    "node_modules/.pnpm/victory-vendor@37.3.6": {},
+    "node_modules/.pnpm/victory-vendor@37.3.6": {
+      "extraneous": true
+    },
     "node_modules/.pnpm/victory-vendor@37.3.6/node_modules/@types/d3-array": {
       "resolved": "node_modules/.pnpm/@types+d3-array@3.2.2/node_modules/@types/d3-array",
       "link": true
@@ -22654,6 +22720,7 @@
     },
     "node_modules/.pnpm/victory-vendor@37.3.6/node_modules/victory-vendor": {
       "version": "37.3.6",
+      "extraneous": true,
       "license": "MIT AND ISC",
       "dependencies": {
         "@types/d3-array": "^3.0.3",
@@ -23415,6 +23482,7 @@
     },
     "node_modules/.pnpm/xlsx@https+++cdn.sheetjs.com+xlsx-0.20.3+xlsx-0.20.3.tgz/node_modules/xlsx": {
       "version": "0.20.3",
+      "extraneous": true,
       "license": "Apache-2.0",
       "bin": {
         "xlsx": "bin/xlsx.njs"
