@@ -10,7 +10,8 @@ import { Datum } from '@/components/Common/Date'
 import type { errors } from '@/db/schema'
 import { createFileRoute } from '@tanstack/react-router'
 
-import { getCronJobDetails } from './-functions/cronJobs'
+import CronJobBarChart from './-components/CronJob/CronJobBarChart'
+import { getCronJobDetails } from './-functions/CronJobFunctions/cronJobs'
 import { getErrors } from './-functions/ErrorFunctions/getErrors'
 
 export const Route = createFileRoute('/_layout/dashboard/')(
@@ -73,7 +74,11 @@ function RouteComponent() {
 
 function CronJobs() {
   const cronJobs = Route.useLoaderData({
-    select: (s) => s.cronJobs,
+    select: (s) => s.cronJobs.cronJobs,
+  })
+
+  const cronJobStats = Route.useLoaderData({
+    select: (s) => s.cronJobs.cronJobStats,
   })
 
   if (cronJobs.length === 0) {
@@ -85,32 +90,37 @@ function CronJobs() {
   }
 
   return (
-    <div className="border p-2 text-sm">
-      <div className="grid grid-cols-5 gap-4 font-semibold">
-        <span>jobId</span>
-        <span>command</span>
-        <span>status</span>
-        <span>startTime</span>
-        <span>duration</span>
+    <div className="flex flex-col gap-4">
+      <div className="w-5xl">
+        <CronJobBarChart data={cronJobStats} />
       </div>
-      {cronJobs.map((cj) => {
-        return (
-          <div
-            className="grid grid-cols-5 gap-4"
-            key={cj.jobPid}
-          >
-            <span>{cj.jobId}</span>
-            <span>{cj.command}</span>
-            <span>{cj.status}</span>
-            <span>
-              {cj.startTime
-                ? `${cj.startTime.toLocaleDateString()} ${cj.startTime.toLocaleTimeString()}`
-                : 'Ingen starttid'}
-            </span>
-            <span>{cj.duration}</span>
-          </div>
-        )
-      })}
+      <div className="border p-2 text-sm">
+        <div className="grid grid-cols-5 gap-4 font-semibold">
+          <span>jobId</span>
+          <span>Jobbnamn</span>
+          <span>Status</span>
+          <span>Tid</span>
+          <span>Längd</span>
+        </div>
+        {cronJobs.map((cj) => {
+          return (
+            <div
+              className="grid grid-cols-5 gap-4"
+              key={cj.jobPid}
+            >
+              <span>{cj.jobId}</span>
+              <span>{cj.jobName}</span>
+              <span>{cj.status}</span>
+              <span>
+                {cj.startTime
+                  ? `${cj.startTime.toLocaleDateString()} ${cj.startTime.toLocaleTimeString()}`
+                  : 'Ingen starttid'}
+              </span>
+              <span>{cj.duration}</span>
+            </div>
+          )
+        })}
+      </div>
     </div>
   )
 }
