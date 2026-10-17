@@ -21,7 +21,7 @@ const Points = () => {
         return (
           <div className="flex flex-col gap-2">
             <div>
-              <H1>Insläppta mål</H1>
+              <H1>Poäng</H1>
             </div>
             <PointsGoals
               data={points}

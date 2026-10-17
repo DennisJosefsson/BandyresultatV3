@@ -30,7 +30,6 @@ export const Route = createFileRoute(
     const data = getMaratonTables({
       data: {
         women: deps.women,
-        table: params.maratonTable,
       },
     })
     if (!data || !maratonMeta)

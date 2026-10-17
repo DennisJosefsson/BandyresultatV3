@@ -1,3 +1,4 @@
+import type { mvMaratonTable } from '@/db/views/maratonAndRecordViews'
 import { zd } from '../utils/zod'
 import type { SeriesGamesV2, TeamSeasonGame } from './game'
 import type { Serie } from './serie'
@@ -24,6 +25,10 @@ export type TableItems = {
   totalGoalDifference: number
   totalPoints: number
 }
+
+export type MaratonTableV2 = TableItems & {
+  totalSeasons: number
+} & { team: TeamBaseWithLogo }
 
 export type TeamTable = Base & TableItems
 
@@ -302,3 +307,6 @@ export type TeamSeasonCompetitionTablesV2 = {
   competitionName: string
   seriesArray: Array<TeamSeasonTableSerieV2> | null
 }
+
+export type MvMaratonTables =
+  typeof mvMaratonTable.$inferSelect

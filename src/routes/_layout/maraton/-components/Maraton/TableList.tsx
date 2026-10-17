@@ -13,6 +13,10 @@ const TableList = () => {
     select: (s) => s.data,
   })
 
+  const table = route.useParams({
+    select: (p) => p.maratonTable,
+  })
+
   return (
     <Await
       promise={promiseData}
@@ -27,13 +31,13 @@ const TableList = () => {
             <div className="hidden md:block">
               <DataTable
                 columns={columns}
-                data={tables}
+                data={table === 'all' ? tables.allTables : table === 'home' ? tables.homeTables : tables.awayTables}
               />
             </div>
             <div className="md:hidden">
               <MobileDataTable
                 columns={columns}
-                data={tables}
+                data={table === 'all' ? tables.allTables : table === 'home' ? tables.homeTables : tables.awayTables}
               />
             </div>
           </div>

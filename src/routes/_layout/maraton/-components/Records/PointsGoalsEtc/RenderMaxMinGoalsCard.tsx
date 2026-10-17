@@ -1,8 +1,8 @@
-import type { MaxMinGoalGames } from '@/lib/types/records'
+import type { MaxMinGoalGamesV2 } from '@/lib/types/records'
 import MaxMinGoalsCard from './MaxMinGoalsCard'
 
 type RenderMaxMinGoalsCardProps = {
-  array: Array<MaxMinGoalGames>
+  array: Array<MaxMinGoalGamesV2>
   stat: string
 }
 

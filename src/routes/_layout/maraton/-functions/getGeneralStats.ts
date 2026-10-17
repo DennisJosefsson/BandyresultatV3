@@ -1,14 +1,16 @@
+import { db } from '@/db'
+import { mvGeneralStats } from '@/db/views/maratonAndRecordViews'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import type { GeneralStats } from '@/lib/types/records'
+import type { MvGeneralStats } from '@/lib/types/records'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
-import { getGeneralStatsData } from './getGeneralStatsData'
+import { eq } from 'drizzle-orm'
 
 type RecordStreakReturn =
   | {
       status: 200
-      generalStats: GeneralStats
+      generalStats: MvGeneralStats
     }
   | undefined
 
@@ -26,13 +28,15 @@ export const getGeneralStats = createServerFn({
       data: { women },
     }): Promise<RecordStreakReturn> => {
       try {
-        const generalStatsData = await getGeneralStatsData({
-          women,
-        })
+        const mvData = await db
+          .select()
+          .from(mvGeneralStats)
+          .where(eq(mvGeneralStats.women, women))
+          .then((res) => res[0])
 
         return {
           status: 200,
-          generalStats: { ...generalStatsData },
+          generalStats: mvData,
         }
       } catch (error) {
         catchError(error)

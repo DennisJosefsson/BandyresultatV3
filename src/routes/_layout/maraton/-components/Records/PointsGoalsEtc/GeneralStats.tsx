@@ -31,7 +31,7 @@ const GeneralStats = () => {
                     <div>
                       <RenderGeneralStatsCard
                         stat="1931seasons"
-                        array={stats.seasons}
+                        array={stats.firstDivSeasons}
                       />
                     </div>
                   </div>
@@ -58,7 +58,7 @@ const GeneralStats = () => {
                     <div>
                       <RenderGeneralStatsCard
                         stat="1931playoffs"
-                        array={stats.playoffs}
+                        array={stats.firstDivPlayoffs}
                       />
                     </div>
                   </div>

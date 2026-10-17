@@ -1,14 +1,16 @@
+import { db } from '@/db'
+import { mvTeamStreakRecords } from '@/db/views/maratonAndRecordViews'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import type { RecordStreakData } from '@/lib/types/records'
+import type { MvTeamStreakRecords } from '@/lib/types/records'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
-import { getStreakData } from './getStreakData'
+import { eq } from 'drizzle-orm'
 
 type RecordStreakReturn =
   | {
       status: 200
-      streaks: RecordStreakData
+      streaks: MvTeamStreakRecords
     }
   | undefined
 
@@ -26,11 +28,15 @@ export const getStreakRecords = createServerFn({
       data: { women },
     }): Promise<RecordStreakReturn> => {
       try {
-        const streakData = await getStreakData({ women })
+        const mvData = await db
+          .select()
+          .from(mvTeamStreakRecords)
+          .where(eq(mvTeamStreakRecords.women, women))
+          .then((res) => res[0])
 
         return {
           status: 200,
-          streaks: { ...streakData },
+          streaks: mvData,
         }
       } catch (error) {
         catchError(error)

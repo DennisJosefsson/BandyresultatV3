@@ -1,14 +1,16 @@
+import { db } from '@/db'
+import { mvScoredRecords } from '@/db/views/maratonAndRecordViews'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
-import type { GoalRecordDataArrays } from '@/lib/types/records'
+import type { MvScoredRecords } from '@/lib/types/records'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
-import { getScoredData } from './getScoredData'
+import { eq } from 'drizzle-orm'
 
 type ScoredReturn =
   | {
       status: 200
-      scored: GoalRecordDataArrays
+      scored: MvScoredRecords
     }
   | undefined
 
@@ -24,11 +26,15 @@ export const getScoredRecords = createServerFn({
   .handler(
     async ({ data: { women } }): Promise<ScoredReturn> => {
       try {
-        const scoredData = await getScoredData({ women })
+        const mvData = await db
+          .select()
+          .from(mvScoredRecords)
+          .where(eq(mvScoredRecords.women, women))
+          .then((res) => res[0])
 
         return {
           status: 200,
-          scored: { ...scoredData },
+          scored: mvData,
         }
       } catch (error) {
         catchError(error)

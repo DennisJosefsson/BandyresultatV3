@@ -1,8 +1,8 @@
-import type { GeneralStatItem } from '@/lib/types/records'
+import type { GeneralStatItemV2 } from '@/lib/types/records'
 import GeneralStatsCard from './GeneralStatsCard'
 
 type RenderGeneralStatsCardProps = {
-  array: Array<GeneralStatItem>
+  array: Array<GeneralStatItemV2>
   stat: string
 }
 
@@ -15,7 +15,7 @@ const RenderGeneralStatsCard = ({
       {array.map((item) => {
         return (
           <GeneralStatsCard
-            key={`${item.team.name}-${item.count}-${stat}`}
+            key={`${item.team.name}-${item.data}-${stat}`}
             {...item}
           />
         )

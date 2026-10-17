@@ -26,30 +26,65 @@ const Streaks = () => {
             <H1>Rekordsviter</H1>
             <div className="grid grid-cols-1 gap-y-4 @3xl:grid-cols-2 @3xl:gap-4 @7xl:grid-cols-3 @7xl:gap-10">
               <StreakCard
-                streak={streaks.unbeatenStreak}
+                streak={{
+                  streak: streaks.unbeatenStreak,
+                  variant: 'game',
+                }}
                 title="Matcher i rad utan förlust"
               />
               <StreakCard
-                streak={streaks.winStreak}
+                streak={{
+                  streak: streaks.winStreak,
+                  variant: 'game',
+                }}
                 title="Matcher i rad med vinst"
               />
               <StreakCard
-                streak={streaks.drawStreak}
+                streak={{
+                  streak: streaks.drawStreak,
+                  variant: 'game',
+                }}
                 title="Matcher i rad med oavgjort"
               />
               <StreakCard
-                streak={streaks.losingStreak}
+                streak={{
+                  streak: streaks.losingStreak,
+                  variant: 'game',
+                }}
                 title="Matcher i rad med förlust"
               />
               <StreakCard
-                streak={streaks.noWinStreak}
+                streak={{
+                  streak: streaks.noWinStreak,
+                  variant: 'game',
+                }}
                 title="Matcher i rad utan seger"
               />
-
+              <StreakCard
+                streak={{
+                  streak: streaks.finalStreak,
+                  variant: 'season',
+                }}
+                title="Finaler i rad"
+              />
+              <StreakCard
+                streak={{
+                  streak: streaks.finalWinStreak,
+                  variant: 'season',
+                }}
+                title="SM-guld i rad"
+              />
+              <StreakCard
+                streak={{
+                  streak: streaks.playoffStreak,
+                  variant: 'season',
+                }}
+                title="Slutspel i rad"
+              />
               <div className="mt-2">
                 <H3>Inofficiella Svenska Mästare</H3>
                 <div className="mb-2 @3xl:mb-4 border shadow-xs md:shadow-sm">
-                  {streaks.currInoffChamps.games.map(
+                  {streaks.currInoffChamp.gameArray.map(
                     (team, index) => {
                       return (
                         <div
@@ -88,7 +123,7 @@ const Streaks = () => {
                               </div>
 
                               <span className="text-right mr-2 @3xl:mr-4">
-                                {team.opponent.shortName}
+                                {team.opp.shortName}
                               </span>
                             </div>
                           </div>
@@ -99,7 +134,7 @@ const Streaks = () => {
                 </div>
                 <div>
                   <p className="p-1 text-[8px] @xs:text-[10px] @sm:text-xs @2xl:text-sm/6">
-                    Totalt {streaks.currInoffChamps.count}{' '}
+                    Totalt {streaks.currInoffChamp.count}{' '}
                     <a
                       href="https://sv.wikipedia.org/wiki/Inofficiella_v%C3%A4rldsm%C3%A4sterskapet_i_fotboll"
                       target="_blank"

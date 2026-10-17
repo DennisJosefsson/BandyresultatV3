@@ -17,7 +17,7 @@ import {
   TableRow,
 } from '@/components/base/ui/table'
 import { useCookies } from '@/lib/contexts/cookieContext'
-import type { MaratonTable } from '@/lib/types/table'
+import type { MaratonTableV2 } from '@/lib/types/table'
 import type {
   ColumnDef,
   SortingState,
@@ -131,7 +131,7 @@ const MobileDataTable = <TData, TValue>({
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row, index) => {
                 const original =
-                  row.original as MaratonTable
+                  row.original as MaratonTableV2
                 return (
                   <TableRow
                     key={row.id}
@@ -139,7 +139,9 @@ const MobileDataTable = <TData, TValue>({
                       row.getIsSelected() && 'selected'
                     }
                     data-favteam={
-                      favTeams.includes(original.teamId)
+                      favTeams.includes(
+                        original.team.teamId,
+                      )
                         ? true
                         : false
                     }

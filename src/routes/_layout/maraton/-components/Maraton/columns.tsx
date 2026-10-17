@@ -7,7 +7,7 @@ import {
   TeamnameLabel,
 } from '@/components/Common/Tables/Teamname'
 import { Button } from '@/components/base/ui/button'
-import type { MaratonTable } from '@/lib/types/table'
+import type { MaratonTableV2 } from '@/lib/types/table'
 import type { ColumnDef } from '@tanstack/react-table'
 
 export const showColumns = {
@@ -24,7 +24,7 @@ export const hideColumns = {
 
 export const gameColumns = {
   'team.casualName': true,
-  seasons: true,
+  totalSeasons: true,
   totalGames: true,
   totalWins: true,
   totalDraws: true,
@@ -48,7 +48,7 @@ export const goalsColumns = {
   totalPoints: true,
 }
 
-export const columns: Array<ColumnDef<MaratonTable>> = [
+export const columns: Array<ColumnDef<MaratonTableV2>> = [
   {
     accessorKey: 'team.name',
     header: () => <TeamnameHeader></TeamnameHeader>,
@@ -59,7 +59,7 @@ export const columns: Array<ColumnDef<MaratonTable>> = [
     ),
   },
   {
-    accessorKey: 'seasons',
+    accessorKey: 'totalSeasons',
     header: ({ column }) => (
       <NumberHeader>
         <Button
@@ -77,7 +77,9 @@ export const columns: Array<ColumnDef<MaratonTable>> = [
       </NumberHeader>
     ),
     cell: ({ row }) => (
-      <NumberCell>{row.getValue('seasons')}</NumberCell>
+      <NumberCell>
+        {row.getValue('totalSeasons')}
+      </NumberCell>
     ),
   },
   {
