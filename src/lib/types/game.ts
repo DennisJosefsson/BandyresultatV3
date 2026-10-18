@@ -103,18 +103,23 @@ export type PlayoffGames = {
   unplayedLength: number
 }
 
-export const generatedGameObject = zd.object({
-  homeName: zd.string().optional(),
-  awayName: zd.string().optional(),
-  homeTeamId: zd.number().positive().int(),
-  awayTeamId: zd.number().positive().int(),
-  date: zd.iso.date(),
-  played: zd.boolean(),
-  playoff: zd.boolean(),
-  women: zd.boolean(),
-  serieId: zd.number().positive().int(),
-  seasonId: zd.number().positive().int(),
-})
+export const generatedGameObject = zd
+  .object({
+    homeName: zd.string().optional(),
+    awayName: zd.string().optional(),
+    homeTeamId: zd.number().positive().int(),
+    awayTeamId: zd.number().positive().int(),
+    date: zd.iso.date(),
+    played: zd.boolean(),
+    playoff: zd.boolean(),
+    women: zd.boolean(),
+    serieId: zd.number().positive().int(),
+    seasonId: zd.number().positive().int(),
+  })
+  .refine((val) => val.homeTeamId !== val.awayTeamId, {
+    message: 'Lag-id kan inte vara samma.',
+    path: ['awayTeamId'],
+  })
 
 export const generatedGameObjectArray = zd.object({
   gameArray: zd.array(generatedGameObject),

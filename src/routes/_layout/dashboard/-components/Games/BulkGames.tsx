@@ -8,6 +8,7 @@ import {
   FieldLegend,
   FieldSet,
 } from '@/components/base/ui/field'
+import { Input } from '@/components/base/ui/input'
 import {
   InputGroup,
   InputGroupAddon,
@@ -119,6 +120,11 @@ const BulkGames = ({
                                     {homeTeamName ??
                                       'Hemmnamn saknas'}
                                   </FieldLabel>
+                                  <Input
+                                    className="hidden"
+                                    id={`gameArray[${index}].homeTeamId`}
+                                    name={subField.name}
+                                  />
                                 </Field>
                               )
                             }}
@@ -165,6 +171,11 @@ const BulkGames = ({
                                     {awayTeamName ??
                                       'Bortanamn saknas'}
                                   </FieldLabel>
+                                  <Input
+                                    className="hidden"
+                                    id={`gameArray[${index}].awayTeamId`}
+                                    name={subField.name}
+                                  />
                                 </Field>
                               )
                             }}

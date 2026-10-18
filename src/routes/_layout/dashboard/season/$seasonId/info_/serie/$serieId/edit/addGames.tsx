@@ -26,7 +26,7 @@ function RouteComponent() {
   const [dataError, setDataError] = useState<DataError>({
     error: false,
   })
-  console.log(dataError)
+
   const teamsInSerie = useLoaderData({
     from: '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit',
     select: (s) => s.teamsInSerie,
