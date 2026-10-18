@@ -38,6 +38,8 @@ const BulkGames = ({
     select: (s) => s.teamsInSerie,
   })
 
+  const teamIds = teams.map((t) => t.teamId)
+
   const form = useBulkGameForm({ gameData })
 
   return (
@@ -71,109 +73,184 @@ const BulkGames = ({
                   <FieldLegend variant="label">
                     Matcher
                   </FieldLegend>
-                  <FieldGroup className="gap-4">
+                  <FieldGroup className="gap-4 w-150">
                     {field.state.value.map(
                       (game, index) => (
-                        <form.Field
-                          key={index}
-                          name={`gameArray[${index}].date`}
-                          children={(subField) => {
-                            const isSubFieldInvalid =
-                              subField.state.meta
-                                .isTouched &&
-                              !subField.state.meta.isValid
-
-                            const homeTeamName = teams.find(
-                              (team) =>
-                                team.teamId ===
-                                game.homeTeamId,
-                            )?.team.name
-                            const awayTeamName = teams.find(
-                              (team) =>
-                                team.teamId ===
-                                game.awayTeamId,
-                            )?.team.name
-                            return (
-                              <Field
-                                orientation="horizontal"
-                                data-invalid={
-                                  isSubFieldInvalid
+                        <div className="grid grid-cols-3 gap-4 items-center">
+                          <form.Field
+                            key={`gameArray[${index}].homeTeamId`}
+                            name={`gameArray[${index}].homeTeamId`}
+                            validators={{
+                              onDynamic: ({ value }) => {
+                                if (
+                                  !teamIds.includes(value)
+                                ) {
+                                  return 'Hemmalaget finns inte i serien.'
                                 }
-                                className="flex flex-row items-center justify-start"
-                              >
-                                <FieldLabel
-                                  htmlFor={`gamearray-date-${index}`}
-                                  className="w-20"
-                                >
-                                  {homeTeamName ??
-                                    'Namn saknas'}{' '}
-                                  -{' '}
-                                  {awayTeamName ??
-                                    'Namn saknas'}
-                                </FieldLabel>
-                                <FieldContent>
-                                  <InputGroup className="w-60">
-                                    <InputGroupInput
-                                      id={`gamearray-date-${index}`}
-                                      name={subField.name}
-                                      value={
-                                        subField.state.value
-                                      }
-                                      onBlur={
-                                        subField.handleBlur
-                                      }
-                                      onChange={(e) =>
-                                        subField.handleChange(
-                                          e.target.value,
-                                        )
-                                      }
-                                      aria-invalid={
-                                        isSubFieldInvalid
-                                      }
-                                      placeholder="T.ex. 2025-12-26"
-                                      type="text"
-                                    />
 
-                                    <InputGroupAddon align="inline-end">
-                                      <InputGroupButton
-                                        type="button"
-                                        variant="ghost"
-                                        onClick={() =>
-                                          subField.setValue(
-                                            currDate,
+                                return undefined
+                              },
+                            }}
+                            children={(subField) => {
+                              const isSubFieldInvalid =
+                                subField.state.meta
+                                  .isTouched &&
+                                !subField.state.meta.isValid
+
+                              const homeTeamName =
+                                teams.find(
+                                  (team) =>
+                                    team.teamId ===
+                                    game.homeTeamId,
+                                )?.team.name
+
+                              return (
+                                <Field
+                                  orientation="horizontal"
+                                  data-invalid={
+                                    isSubFieldInvalid
+                                  }
+                                  className="flex flex-row items-center justify-start"
+                                >
+                                  <FieldLabel
+                                    htmlFor={`gamearray-date-${index}`}
+                                    className="w-20"
+                                  >
+                                    {homeTeamName ??
+                                      'Hemmnamn saknas'}
+                                  </FieldLabel>
+                                </Field>
+                              )
+                            }}
+                          />
+                          <form.Field
+                            key={`gameArray[${index}].awayTeamId`}
+                            name={`gameArray[${index}].awayTeamId`}
+                            validators={{
+                              onDynamic: ({ value }) => {
+                                if (
+                                  !teamIds.includes(value)
+                                ) {
+                                  return 'Bortalaget finns inte i serien.'
+                                }
+
+                                return undefined
+                              },
+                            }}
+                            children={(subField) => {
+                              const isSubFieldInvalid =
+                                subField.state.meta
+                                  .isTouched &&
+                                !subField.state.meta.isValid
+
+                              const awayTeamName =
+                                teams.find(
+                                  (team) =>
+                                    team.teamId ===
+                                    game.awayTeamId,
+                                )?.team.name
+
+                              return (
+                                <Field
+                                  orientation="horizontal"
+                                  data-invalid={
+                                    isSubFieldInvalid
+                                  }
+                                  className="flex flex-row items-center justify-start"
+                                >
+                                  <FieldLabel
+                                    htmlFor={`gamearray-date-${index}`}
+                                    className="w-20"
+                                  >
+                                    {awayTeamName ??
+                                      'Bortanamn saknas'}
+                                  </FieldLabel>
+                                </Field>
+                              )
+                            }}
+                          />
+                          <form.Field
+                            key={`gameArray[${index}].date`}
+                            name={`gameArray[${index}].date`}
+                            children={(subField) => {
+                              const isSubFieldInvalid =
+                                subField.state.meta
+                                  .isTouched &&
+                                !subField.state.meta.isValid
+
+                              return (
+                                <Field
+                                  orientation="horizontal"
+                                  data-invalid={
+                                    isSubFieldInvalid
+                                  }
+                                  className="flex flex-row items-center justify-start"
+                                >
+                                  <FieldContent>
+                                    <InputGroup className="w-60">
+                                      <InputGroupInput
+                                        id={`gamearray-date-${index}`}
+                                        name={subField.name}
+                                        value={
+                                          subField.state
+                                            .value
+                                        }
+                                        onBlur={
+                                          subField.handleBlur
+                                        }
+                                        onChange={(e) =>
+                                          subField.handleChange(
+                                            e.target.value,
                                           )
                                         }
-                                        aria-label="Lägg till dagens datum"
-                                      >
-                                        Idag
-                                      </InputGroupButton>
-                                      <InputGroupButton
-                                        type="button"
-                                        variant="ghost"
-                                        onClick={() =>
-                                          field.removeValue(
-                                            index,
-                                          )
+                                        aria-invalid={
+                                          isSubFieldInvalid
                                         }
-                                        aria-label={`Ta bort ${index}`}
-                                      >
-                                        <XIcon />
-                                      </InputGroupButton>
-                                    </InputGroupAddon>
-                                  </InputGroup>
-                                  {isSubFieldInvalid && (
-                                    <FieldError
-                                      errors={
-                                        subField.state.meta
-                                          .errors
-                                      }
-                                    />
-                                  )}
-                                </FieldContent>
-                              </Field>
-                            )
-                          }}
-                        />
+                                        placeholder="T.ex. 2025-12-26"
+                                        type="text"
+                                      />
+
+                                      <InputGroupAddon align="inline-end">
+                                        <InputGroupButton
+                                          type="button"
+                                          variant="ghost"
+                                          onClick={() =>
+                                            subField.setValue(
+                                              currDate,
+                                            )
+                                          }
+                                          aria-label="Lägg till dagens datum"
+                                        >
+                                          Idag
+                                        </InputGroupButton>
+                                        <InputGroupButton
+                                          type="button"
+                                          variant="ghost"
+                                          onClick={() =>
+                                            field.removeValue(
+                                              index,
+                                            )
+                                          }
+                                          aria-label={`Ta bort ${index}`}
+                                        >
+                                          <XIcon />
+                                        </InputGroupButton>
+                                      </InputGroupAddon>
+                                    </InputGroup>
+                                    {isSubFieldInvalid && (
+                                      <FieldError
+                                        errors={
+                                          subField.state
+                                            .meta.errors
+                                        }
+                                      />
+                                    )}
+                                  </FieldContent>
+                                </Field>
+                              )
+                            }}
+                          />
+                        </div>
                       ),
                     )}
                   </FieldGroup>
