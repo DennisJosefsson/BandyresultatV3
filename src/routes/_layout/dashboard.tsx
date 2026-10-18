@@ -131,9 +131,7 @@ function RouteComponent() {
                   params={{
                     seasonId: womenSeason.seasonId,
                   }}
-                  search={(prev) => ({
-                    women: prev.women,
-                  })}
+                  search={{ women: true }}
                 >
                   {({ isActive }) => {
                     return (
@@ -168,9 +166,7 @@ function RouteComponent() {
                   params={{
                     seasonId: menSeason.seasonId,
                   }}
-                  search={(prev) => ({
-                    women: prev.women,
-                  })}
+                  search={{ women: false }}
                 >
                   {({ isActive }) => {
                     return (

@@ -13,9 +13,12 @@ export const getTeamsForTeamseasonAddition = createServerFn(
 )
   .middleware([errorMiddleware])
   .validator(
-    zd.object({ seasonId: zd.number().int().positive() }),
+    zd.object({
+      seasonId: zd.number().int().positive(),
+      women: zd.boolean(),
+    }),
   )
-  .handler(async ({ data: { seasonId } }) => {
+  .handler(async ({ data: { seasonId, women } }) => {
     try {
       const allTeams = await db
         .select({
@@ -32,6 +35,7 @@ export const getTeamsForTeamseasonAddition = createServerFn(
           teamnames,
           eq(teamnames.teamnameId, teams.teamnameId),
         )
+        .where(eq(teams.women, women))
         .orderBy(
           asc(
             sql`teamnames.casual_name collate "se-SE-x-icu"`,
