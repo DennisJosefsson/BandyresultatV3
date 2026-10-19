@@ -11,7 +11,7 @@ type DataError =
     }
   | { error: false }
 
-type FileInputProps = {
+type BulkGameFileInputProps = {
   setGameData: Dispatch<
     SetStateAction<BulkGameFileParser | null>
   >
@@ -38,11 +38,11 @@ const process = (fileText: string) => {
 
 //
 
-const FileInput = ({
+const BulkGameFileInput = ({
   setGameData,
   setDataError,
   teamsInSerie,
-}: FileInputProps) => {
+}: BulkGameFileInputProps) => {
   const onChange = async (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -88,4 +88,4 @@ const FileInput = ({
   )
 }
 
-export default FileInput
+export default BulkGameFileInput
