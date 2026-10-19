@@ -1,4 +1,3 @@
-import type { BulkResultFileParser } from '@/lib/types/game'
 import { bulkResultsArray } from '@/lib/types/game'
 import type { zd } from '@/lib/utils/zod'
 import {
@@ -9,6 +8,7 @@ import { useMutation } from '@tanstack/react-query'
 import { getRouteApi } from '@tanstack/react-router'
 import { toast } from 'sonner'
 import { bulkResults } from '../../-functions/GameFunctions/bulkResults'
+import type { GameObject } from '../../-functions/GameFunctions/generateSchedule'
 
 const route = getRouteApi(
   '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit',
@@ -17,7 +17,7 @@ const route = getRouteApi(
 type Data = Awaited<ReturnType<typeof bulkResults>>
 
 type UseBulkResultFormProps = {
-  gameData: BulkResultFileParser
+  gameData: Array<GameObject>
 }
 
 export const useBulkResultForm = ({
@@ -31,10 +31,10 @@ export const useBulkResultForm = ({
       return {
         homeTeamId: game.homeTeamId,
         awayTeamId: game.awayTeamId,
-        result: game.result,
-        otResult: game.otResult,
-        halftimeResult: game.halftimeResult,
-        date: game.date,
+        result: '',
+        otResult: '',
+        halftimeResult: '',
+        date: '',
         ...serie,
         played: true,
         playoff: [
@@ -74,8 +74,8 @@ export const useBulkResultForm = ({
       toast.success(data.message)
     }
     navigate({
-      to: '..',
-      search: (prev) => ({ women: prev.women }),
+      to: '/dashboard/season/$seasonId/info/serie/$serieId/edit',
+      search: (prev) => ({ ...prev }),
     })
   }
 

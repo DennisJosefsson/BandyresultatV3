@@ -9,29 +9,31 @@ import {
   FieldSet,
 } from '@/components/base/ui/field'
 import { Input } from '@/components/base/ui/input'
-import type { BulkResultFileParser } from '@/lib/types/game'
 import { getRouteApi } from '@tanstack/react-router'
 import { useBulkResultForm } from '../../-hooks/games/useBulkResultForm'
 
 const route = getRouteApi(
   '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit',
 )
+const addResultsRoute = getRouteApi(
+  '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/addResults',
+)
 
-const BulkResults = ({
-  gameData,
-}: {
-  gameData: BulkResultFileParser
-}) => {
+const BulkResults = () => {
+  const games = addResultsRoute.useLoaderData()
   const teams = route.useLoaderData({
     select: (s) => s.teamsInSerie,
   })
 
   const teamIds = teams.map((t) => t.teamId)
 
-  const form = useBulkResultForm({ gameData })
+  const form = useBulkResultForm({ gameData: games })
 
   return (
-    <div className="flex min-h-100 flex-col gap-2 px-20 py-2">
+    <div
+      className="flex min-h-100 flex-col gap-2 px-20 py-2"
+      id="section"
+    >
       <div className="flex flex-row justify-end gap-2">
         <Button
           type="submit"
@@ -57,22 +59,26 @@ const BulkResults = ({
                 field.state.meta.isTouched &&
                 !field.state.meta.isValid
               return (
-                <FieldSet className="w-240 gap-4">
-                  <FieldLegend variant="label">
-                    <div className="grid grid-cols-6 gap-4 w-240 font-semibold">
+                <FieldSet className="w-full gap-4">
+                  <FieldLegend
+                    variant="label"
+                    className="w-full"
+                  >
+                    <div className="grid grid-cols-7 gap-4 w-full font-semibold">
                       <span>Hemma</span>
                       <span>Borta</span>
                       <span>Datum</span>
                       <span>Resultat</span>
                       <span>Halvtid</span>
                       <span>Övertid</span>
+                      <span>Ta bort</span>
                     </div>
                   </FieldLegend>
-                  <FieldGroup className="gap-4 w-240">
+                  <FieldGroup className="gap-4 w-full">
                     {field.state.value.map(
                       (game, index) => (
                         <div
-                          className="grid grid-cols-6 gap-4 items-center"
+                          className="grid grid-cols-7 gap-4 items-center"
                           key={`gamobjectsArray-fields-${index}`}
                         >
                           <form.Field
@@ -385,6 +391,14 @@ const BulkResults = ({
                               )
                             }}
                           />
+                          <Button
+                            variant="outline"
+                            onClick={() =>
+                              field.removeValue(index)
+                            }
+                          >
+                            Ta bort
+                          </Button>
                         </div>
                       ),
                     )}

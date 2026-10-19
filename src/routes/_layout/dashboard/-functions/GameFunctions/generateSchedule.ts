@@ -14,7 +14,7 @@ import { createServerFn } from '@tanstack/react-start'
 import type { SQL } from 'drizzle-orm'
 import { eq } from 'drizzle-orm'
 
-type GameObject = zd.infer<typeof generatedGameObject>
+export type GameObject = zd.infer<typeof generatedGameObject>
 
 export const generateSchedule = createServerFn({
   method: 'GET',
