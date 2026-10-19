@@ -18,7 +18,7 @@ export const updateResult = createServerFn({
         where: (teamgamesSchema, { and, eq: equal }) =>
           and(
             equal(teamgamesSchema.currInoffChamp, true),
-            equal(teamgamesSchema.women, data.women),
+            equal(teamgamesSchema.women, data.game.women),
           ),
         orderBy: (teamgamesSchema, { desc }) =>
           desc(teamgamesSchema.date),
@@ -34,18 +34,18 @@ export const updateResult = createServerFn({
       const updatedGame = await db
         .update(games)
         .set({
-          result: data.result,
-          otResult: data.otResult,
-          halftimeResult: data.halftimeResult,
-          homeGoal: data.homeGoal,
-          awayGoal: data.awayGoal,
-          halftimeHomeGoal: data.halftimeHomeGoal,
-          halftimeAwayGoal: data.halftimeAwayGoal,
-          date: data.date,
+          result: data.game.result,
+          otResult: data.game.otResult,
+          halftimeResult: data.game.halftimeResult,
+          homeGoal: data.game.homeGoal,
+          awayGoal: data.game.awayGoal,
+          halftimeHomeGoal: data.game.halftimeHomeGoal,
+          halftimeAwayGoal: data.game.halftimeAwayGoal,
+          date: data.game.date,
           played: true,
-          penalties: data.penalties,
-          extraTime: data.extraTime,
-          neutral: data.neutral,
+          penalties: data.game.penalties,
+          extraTime: data.game.extraTime,
+          neutral: data.game.neutral,
         })
         .where(eq(games.gameId, data.gameId))
         .returning({ gameId: games.gameId })
@@ -93,7 +93,7 @@ export const updateResult = createServerFn({
 
       return {
         status: 200,
-        message: `Resultat ändrat till ${data.result}.`,
+        message: `Resultat ändrat till ${data.game.result}.`,
       }
     } catch (error) {
       catchError(error)

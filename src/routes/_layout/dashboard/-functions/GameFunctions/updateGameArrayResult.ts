@@ -162,28 +162,28 @@ async function updateGames({
   womenCurrInoffChamp,
   womenCurrChampObject,
 }: FunctionProps) {
-  const thisChamp = gameObject.women
+  const thisChamp = gameObject.game.women
     ? womenCurrInoffChamp
     : menCurrInoffChamp
-  const thisInoffChampObject = gameObject.women
+  const thisInoffChampObject = gameObject.game.women
     ? womenCurrChampObject
     : menCurrChampObject
 
   const updatedGame = await db
     .update(games)
     .set({
-      result: gameObject.result,
-      otResult: gameObject.otResult,
-      halftimeResult: gameObject.halftimeResult,
-      homeGoal: gameObject.homeGoal,
-      awayGoal: gameObject.awayGoal,
-      halftimeHomeGoal: gameObject.halftimeHomeGoal,
-      halftimeAwayGoal: gameObject.halftimeAwayGoal,
-      date: gameObject.date,
+      result: gameObject.game.result,
+      otResult: gameObject.game.otResult,
+      halftimeResult: gameObject.game.halftimeResult,
+      homeGoal: gameObject.game.homeGoal,
+      awayGoal: gameObject.game.awayGoal,
+      halftimeHomeGoal: gameObject.game.halftimeHomeGoal,
+      halftimeAwayGoal: gameObject.game.halftimeAwayGoal,
+      date: gameObject.game.date,
       played: true,
-      penalties: gameObject.penalties,
-      extraTime: gameObject.extraTime,
-      neutral: gameObject.neutral,
+      penalties: gameObject.game.penalties,
+      extraTime: gameObject.game.extraTime,
+      neutral: gameObject.game.neutral,
     })
     .where(eq(games.gameId, gameObject.gameId))
     .returning({ gameId: games.gameId })
@@ -194,7 +194,7 @@ async function updateGames({
 
   const correctDate =
     thisInoffChampObject &&
-    new Date(gameObject.date) >
+    new Date(gameObject.game.date) >
       new Date(thisInoffChampObject.date)
 
   const updatedHomeTeamGame = await db
