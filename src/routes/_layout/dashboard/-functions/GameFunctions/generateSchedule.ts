@@ -96,13 +96,34 @@ export const generateSchedule = createServerFn({
         })
       })
 
+      const csvString = generateCSVString(
+        playoff
+          ? [...gameArray, ...gameArray, ...gameArray]
+          : gameArray,
+      )
+
       return {
         status: 200,
         games: playoff
           ? [...gameArray, ...gameArray, ...gameArray]
           : gameArray,
+        csvString,
       }
     } catch (error) {
       catchError(error)
     }
   })
+
+function generateCSVString(array: Array<GameObject>) {
+  const header =
+    'date;homeTeamName;awayTeamName;homeTeamId;awayTeamId;result;halftimeResult;otResult\n'
+
+  const lines = array
+    .map(
+      (g) =>
+        `date;${g.homeName?.replace(/\s+/g, '')};${g.awayName?.replace(/\s+/g, '')};${g.homeTeamId};${g.awayTeamId};result;;\n`,
+    )
+    .join('')
+
+  return header + lines
+}

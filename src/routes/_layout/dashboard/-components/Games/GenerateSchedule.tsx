@@ -13,9 +13,12 @@ import {
   InputGroupAddon,
   InputGroupButton,
   InputGroupInput,
+  InputGroupText,
+  InputGroupTextarea,
 } from '@/components/base/ui/input-group'
 import { getRouteApi } from '@tanstack/react-router'
-import { XIcon } from 'lucide-react'
+import { CopyIcon, XIcon } from 'lucide-react'
+import { useCopyToClipboard } from 'usehooks-ts'
 import { useGeneratedScheduleForm } from '../../-hooks/games/useGeneratedScheduleForm'
 
 const route = getRouteApi(
@@ -29,8 +32,13 @@ const currDate = new Date().toLocaleDateString('se-SV', {
 })
 
 const GenerateSchedule = () => {
+  const [copiedText, copy] = useCopyToClipboard()
   const games = route.useLoaderData({
     select: (s) => s.games,
+  })
+
+  const csvString = route.useLoaderData({
+    select: (s) => s.csvString,
   })
 
   const form = useGeneratedScheduleForm()
@@ -52,130 +60,166 @@ const GenerateSchedule = () => {
           Skicka
         </Button>
       </div>
-      <form
-        id="generatedScheduleForm"
-        onSubmit={(e) => {
-          e.preventDefault()
-          form.handleSubmit()
-        }}
-      >
-        <FieldGroup>
-          <form.Field
-            name="gameArray"
-            mode="array"
-          >
-            {(field) => {
-              const isInvalid =
-                field.state.meta.isTouched &&
-                !field.state.meta.isValid
-              return (
-                <FieldSet className="w-240 gap-4">
-                  <FieldLegend variant="label">
-                    Matcher
-                  </FieldLegend>
-                  <FieldGroup className="gap-4">
-                    {field.state.value.map(
-                      (game, index) => (
-                        <form.Field
-                          key={index}
-                          name={`gameArray[${index}].date`}
-                          children={(subField) => {
-                            const isSubFieldInvalid =
-                              subField.state.meta
-                                .isTouched &&
-                              !subField.state.meta.isValid
-                            return (
-                              <Field
-                                orientation="horizontal"
-                                data-invalid={
-                                  isSubFieldInvalid
-                                }
-                                className="flex flex-row items-center justify-start"
-                              >
-                                <FieldLabel
-                                  htmlFor={`gamearray-date-${index}`}
-                                  className="w-20"
+      <div className="grid grid-cols-2 gap-4">
+        <form
+          id="generatedScheduleForm"
+          onSubmit={(e) => {
+            e.preventDefault()
+            form.handleSubmit()
+          }}
+        >
+          <FieldGroup>
+            <form.Field
+              name="gameArray"
+              mode="array"
+            >
+              {(field) => {
+                const isInvalid =
+                  field.state.meta.isTouched &&
+                  !field.state.meta.isValid
+                return (
+                  <FieldSet className="w-140 gap-4">
+                    <FieldLegend variant="label">
+                      Matcher
+                    </FieldLegend>
+                    <FieldGroup className="gap-4">
+                      {field.state.value.map(
+                        (game, index) => (
+                          <form.Field
+                            key={index}
+                            name={`gameArray[${index}].date`}
+                            children={(subField) => {
+                              const isSubFieldInvalid =
+                                subField.state.meta
+                                  .isTouched &&
+                                !subField.state.meta.isValid
+                              return (
+                                <Field
+                                  orientation="horizontal"
+                                  data-invalid={
+                                    isSubFieldInvalid
+                                  }
+                                  className="flex flex-row items-center justify-start"
                                 >
-                                  {game.homeName} -{' '}
-                                  {game.awayName}
-                                </FieldLabel>
-                                <FieldContent>
-                                  <InputGroup className="w-60">
-                                    <InputGroupInput
-                                      id={`gamearray-date-${index}`}
-                                      name={subField.name}
-                                      value={
-                                        subField.state.value
-                                      }
-                                      onBlur={
-                                        subField.handleBlur
-                                      }
-                                      onChange={(e) =>
-                                        subField.handleChange(
-                                          e.target.value,
-                                        )
-                                      }
-                                      aria-invalid={
-                                        isSubFieldInvalid
-                                      }
-                                      placeholder="T.ex. 2025-12-26"
-                                      type="text"
-                                    />
+                                  <FieldLabel
+                                    htmlFor={`gamearray-date-${index}`}
+                                    className="w-20"
+                                  >
+                                    {game.homeName} -{' '}
+                                    {game.awayName}
+                                  </FieldLabel>
+                                  <FieldContent>
+                                    <InputGroup className="w-60">
+                                      <InputGroupInput
+                                        id={`gamearray-date-${index}`}
+                                        name={subField.name}
+                                        value={
+                                          subField.state
+                                            .value
+                                        }
+                                        onBlur={
+                                          subField.handleBlur
+                                        }
+                                        onChange={(e) =>
+                                          subField.handleChange(
+                                            e.target.value,
+                                          )
+                                        }
+                                        aria-invalid={
+                                          isSubFieldInvalid
+                                        }
+                                        placeholder="T.ex. 2025-12-26"
+                                        type="text"
+                                      />
 
-                                    <InputGroupAddon align="inline-end">
-                                      <InputGroupButton
-                                        type="button"
-                                        variant="ghost"
-                                        onClick={() =>
-                                          subField.setValue(
-                                            currDate,
-                                          )
+                                      <InputGroupAddon align="inline-end">
+                                        <InputGroupButton
+                                          type="button"
+                                          variant="ghost"
+                                          onClick={() =>
+                                            subField.setValue(
+                                              currDate,
+                                            )
+                                          }
+                                          aria-label="Lägg till dagens datum"
+                                        >
+                                          Idag
+                                        </InputGroupButton>
+                                        <InputGroupButton
+                                          type="button"
+                                          variant="ghost"
+                                          onClick={() =>
+                                            field.removeValue(
+                                              index,
+                                            )
+                                          }
+                                          aria-label={`Ta bort ${index}`}
+                                        >
+                                          <XIcon />
+                                        </InputGroupButton>
+                                      </InputGroupAddon>
+                                    </InputGroup>
+                                    {isSubFieldInvalid && (
+                                      <FieldError
+                                        errors={
+                                          subField.state
+                                            .meta.errors
                                         }
-                                        aria-label="Lägg till dagens datum"
-                                      >
-                                        Idag
-                                      </InputGroupButton>
-                                      <InputGroupButton
-                                        type="button"
-                                        variant="ghost"
-                                        onClick={() =>
-                                          field.removeValue(
-                                            index,
-                                          )
-                                        }
-                                        aria-label={`Ta bort ${index}`}
-                                      >
-                                        <XIcon />
-                                      </InputGroupButton>
-                                    </InputGroupAddon>
-                                  </InputGroup>
-                                  {isSubFieldInvalid && (
-                                    <FieldError
-                                      errors={
-                                        subField.state.meta
-                                          .errors
-                                      }
-                                    />
-                                  )}
-                                </FieldContent>
-                              </Field>
-                            )
-                          }}
-                        />
-                      ),
+                                      />
+                                    )}
+                                  </FieldContent>
+                                </Field>
+                              )
+                            }}
+                          />
+                        ),
+                      )}
+                    </FieldGroup>
+                    {isInvalid && (
+                      <FieldError
+                        errors={field.state.meta.errors}
+                      />
                     )}
-                  </FieldGroup>
-                  {isInvalid && (
-                    <FieldError
-                      errors={field.state.meta.errors}
-                    />
-                  )}
-                </FieldSet>
-              )
-            }}
-          </form.Field>
-        </FieldGroup>
-      </form>
+                  </FieldSet>
+                )
+              }}
+            </form.Field>
+          </FieldGroup>
+        </form>
+        <div>
+          <div className="grid w-full max-w-xl gap-4">
+            <InputGroup>
+              <InputGroupTextarea
+                id="textarea-code-32"
+                placeholder="CSV"
+                className="min-h-50"
+                value={csvString}
+                readOnly
+              />
+
+              <InputGroupAddon
+                align="block-start"
+                className="border-b"
+              >
+                <InputGroupText className="font-mono font-medium">
+                  csvString
+                </InputGroupText>
+
+                <InputGroupButton
+                  variant="ghost"
+                  size="icon-xs"
+                  onClick={() => copy(csvString)}
+                >
+                  <CopyIcon />
+                </InputGroupButton>
+                <InputGroupText className="font-mono font-medium">
+                  {copiedText ? 'Kopierad!' : ''}
+                </InputGroupText>
+              </InputGroupAddon>
+            </InputGroup>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
