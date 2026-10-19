@@ -71,7 +71,10 @@ const BulkResults = ({
                   <FieldGroup className="gap-4 w-240">
                     {field.state.value.map(
                       (game, index) => (
-                        <div className="grid grid-cols-6 gap-4 items-center">
+                        <div
+                          className="grid grid-cols-6 gap-4 items-center"
+                          key={`gamobjectsArray-fields-${index}`}
+                        >
                           <form.Field
                             key={`gameObjectsArray[${index}].homeTeamId`}
                             name={`gameObjectsArray[${index}].homeTeamId`}
@@ -107,18 +110,20 @@ const BulkResults = ({
                                   }
                                   className="flex flex-row items-center justify-start"
                                 >
-                                  <FieldLabel
-                                    htmlFor={`gameObjectsArray-date-${index}`}
-                                    className="w-20"
-                                  >
-                                    {homeTeamName ??
-                                      'Hemmnamn saknas'}
-                                  </FieldLabel>
-                                  <Input
-                                    className="hidden"
-                                    id={`gameObjectsArray[${index}].homeTeamId`}
-                                    name={subField.name}
-                                  />
+                                  <FieldContent>
+                                    <FieldLabel
+                                      htmlFor={`gameObjectsArray-date-${index}`}
+                                      className="w-20"
+                                    >
+                                      {homeTeamName ??
+                                        'Hemmnamn saknas'}
+                                    </FieldLabel>
+                                    <Input
+                                      className="hidden"
+                                      id={`gameObjectsArray[${index}].homeTeamId`}
+                                      name={subField.name}
+                                    />
+                                  </FieldContent>
                                 </Field>
                               )
                             }}
@@ -158,18 +163,20 @@ const BulkResults = ({
                                   }
                                   className="flex flex-row items-center justify-start"
                                 >
-                                  <FieldLabel
-                                    htmlFor={`gameObjectsArray-date-${index}`}
-                                    className="w-20"
-                                  >
-                                    {awayTeamName ??
-                                      'Bortanamn saknas'}
-                                  </FieldLabel>
-                                  <Input
-                                    className="hidden"
-                                    id={`gameObjectsArray[${index}].awayTeamId`}
-                                    name={subField.name}
-                                  />
+                                  <FieldContent>
+                                    <FieldLabel
+                                      htmlFor={`gameObjectsArray-date-${index}`}
+                                      className="w-20"
+                                    >
+                                      {awayTeamName ??
+                                        'Bortanamn saknas'}
+                                    </FieldLabel>
+                                    <Input
+                                      className="hidden"
+                                      id={`gameObjectsArray[${index}].awayTeamId`}
+                                      name={subField.name}
+                                    />
+                                  </FieldContent>
                                 </Field>
                               )
                             }}
