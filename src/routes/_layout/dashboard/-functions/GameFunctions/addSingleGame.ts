@@ -16,11 +16,12 @@ export const addSingleGame = createServerFn({
       const {
         homeTeamTeamGame,
         awayTeamTeamGame,
+        game,
         ...rest
       } = data
       const newGame = await db
         .insert(games)
-        .values(rest)
+        .values({ ...game, ...rest })
         .returning({ gameId: games.gameId })
         .then((res) => res[0])
 
@@ -28,7 +29,7 @@ export const addSingleGame = createServerFn({
         where: (teamgamesSchema, { and, eq }) =>
           and(
             eq(teamgamesSchema.currInoffChamp, true),
-            eq(teamgamesSchema.women, data.women),
+            eq(teamgamesSchema.women, game.women),
           ),
         orderBy: (teamgamesSchema, { desc }) =>
           desc(teamgamesSchema.date),
@@ -52,9 +53,7 @@ export const addSingleGame = createServerFn({
         currInoffChamp: homeTeamNewCurrChamp,
         serieId: data.serieId,
         seasonId: data.seasonId,
-        women: data.women,
-        teamId: data.homeTeamId,
-        opponentId: data.awayTeamId,
+        women: game.women,
         ...data.homeTeamTeamGame,
       }
       await db.insert(teamgames).values([homeTeamGame])
@@ -70,9 +69,7 @@ export const addSingleGame = createServerFn({
         currInoffChamp: awayTeamNewCurrChamp,
         serieId: data.serieId,
         seasonId: data.seasonId,
-        women: data.women,
-        teamId: data.awayTeamId,
-        opponentId: data.homeTeamId,
+        women: game.women,
         ...data.awayTeamTeamGame,
       }
       await db.insert(teamgames).values([awayTeamGame])

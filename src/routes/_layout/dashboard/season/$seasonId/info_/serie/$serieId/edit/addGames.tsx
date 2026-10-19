@@ -1,6 +1,6 @@
 import type { BulkGameFileParser } from '@/lib/types/game'
 import BulkGames from '@/routes/_layout/dashboard/-components/Games/BulkGames'
-import FileInput from '@/routes/_layout/dashboard/-components/Utils/XLSXFileInput'
+import FileInput from '@/routes/_layout/dashboard/-components/Utils/BulkGameFileInput'
 import {
   createFileRoute,
   useLoaderData,

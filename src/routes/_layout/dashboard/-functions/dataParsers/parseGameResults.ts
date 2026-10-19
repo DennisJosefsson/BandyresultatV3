@@ -65,7 +65,7 @@ export const parseNewGameWithResult = zd
     penalties: zd.boolean(),
     extraTime: zd.boolean(),
     playoff: zd.boolean(),
-    played: zd.boolean(),
+    played: zd.boolean().default(true),
     neutral: zd.boolean().default(false),
     otResult: zd
       .string()
@@ -90,16 +90,17 @@ export const parseNewGameWithResult = zd
   })
 
 type GameObject = {
+  homeTeamId: number
+  awayTeamId: number
   result: string
   halftimeResult: string
   date: string
   women: boolean
   penalties: boolean
   extraTime: boolean
-  otResult: string
   neutral: boolean
+  otResult: string
 }
-
 const parseObject = (obj: GameObject) => {
   {
     const resultArray = obj.result
@@ -273,6 +274,8 @@ const parseObject = (obj: GameObject) => {
           : null
 
     const homeTeamTeamGame = {
+      teamId: obj.homeTeamId,
+      opponentId: obj.awayTeamId,
       date: obj.date,
       played: true,
       goalsScored: goalsScoredByHomeTeam,
@@ -310,6 +313,8 @@ const parseObject = (obj: GameObject) => {
     }
 
     const awayTeamTeamGame = {
+      teamId: obj.awayTeamId,
+      opponentId: obj.homeTeamId,
       date: obj.date,
       played: true,
       goalsScored: goalsScoredByAwayTeam,
@@ -347,18 +352,21 @@ const parseObject = (obj: GameObject) => {
     }
 
     return {
-      result: obj.result,
-      otResult: obj.otResult,
-      halftimeResult: obj.halftimeResult,
-      date: obj.date,
-      women: obj.women,
-      homeGoal: otHomeGoal ?? homeGoal,
-      awayGoal: otAwayGoal ?? awayGoal,
-      halftimeHomeGoal,
-      halftimeAwayGoal,
-      penalties: obj.penalties,
-      extraTime: obj.extraTime,
-      neutral: obj.neutral,
+      game: {
+        result: obj.result,
+        otResult: obj.otResult,
+        halftimeResult: obj.halftimeResult,
+        date: obj.date,
+        women: obj.women,
+        homeGoal: otHomeGoal ?? homeGoal,
+        awayGoal: otAwayGoal ?? awayGoal,
+        halftimeHomeGoal,
+        halftimeAwayGoal,
+        penalties: obj.penalties,
+        extraTime: obj.extraTime,
+        neutral: obj.neutral,
+        played: true,
+      },
       homeTeamTeamGame,
       awayTeamTeamGame,
     }

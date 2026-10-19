@@ -115,6 +115,18 @@ const EditSerieForms = () => {
             }
             nativeButton={false}
           />
+          <Button
+            render={
+              <route.Link
+                to="/dashboard/season/$seasonId/info/serie/$serieId/edit/addResults"
+                search={(prev) => ({ ...prev })}
+                resetScroll={false}
+              >
+                Lägg till resultat
+              </route.Link>
+            }
+            nativeButton={false}
+          />
 
           <Button
             render={

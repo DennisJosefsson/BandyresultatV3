@@ -1,4 +1,5 @@
 import type { games } from '@/db/schema'
+import { parseNewGameWithResult } from '@/routes/_layout/dashboard/-functions/dataParsers/parseGameResults'
 import { zd } from '../utils/zod'
 import type {
   TeamBaseWithLogo,
@@ -125,6 +126,14 @@ export const generatedGameObjectArray = zd.object({
   gameArray: zd.array(generatedGameObject),
 })
 
+export const bulkResultsArray = zd.object({
+  gameObjectsArray: zd.array(parseNewGameWithResult),
+})
+
+export type ParseNewGameWithResult = zd.infer<
+  typeof parseNewGameWithResult
+>
+
 export const bulkGameFileParser = zd.array(
   zd.strictObject({
     date: zd.string(),
@@ -135,6 +144,34 @@ export const bulkGameFileParser = zd.array(
 
 export type BulkGameFileParser = zd.infer<
   typeof bulkGameFileParser
+>
+
+export const bulkResultFileParser = zd.array(
+  zd.object({
+    homeTeamId: zd.number().int().positive(),
+    awayTeamId: zd.number().int().positive(),
+    result: zd.string().regex(/^\d{1,2}-\d{1,2}$/, {
+      message: 'Fel resultatformat.',
+    }),
+    halftimeResult: zd
+      .string()
+      .regex(/^\d{1,2}-\d{1,2}$/, {
+        message: 'Fel resultatformat, halvtid.',
+      })
+      .or(zd.literal('')),
+    otResult: zd
+      .string()
+      .regex(/^\d{1,2}-\d{1,2}$/, {
+        message:
+          'Fel resultatformat, övertid eller straffar.',
+      })
+      .or(zd.literal('')),
+    date: zd.iso.date({ message: 'Fel datumformat.' }),
+  }),
+)
+
+export type BulkResultFileParser = zd.infer<
+  typeof bulkResultFileParser
 >
 
 export const submitGameResult = zd.object({
