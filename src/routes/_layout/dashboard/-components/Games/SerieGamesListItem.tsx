@@ -56,6 +56,7 @@ const GamesListItem = ({
                 to="/dashboard/season/$seasonId/info/serie/$serieId/edit/$gameId"
                 params={{ gameId: game.gameId }}
                 search={(prev) => ({ ...prev })}
+                hash="gameedit"
               >
                 Ändra
               </route.Link>

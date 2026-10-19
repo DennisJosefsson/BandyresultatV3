@@ -15,7 +15,10 @@ const EditStaticTableForm = () => {
   const form = editStaticTableForm()
 
   return (
-    <div className="flex min-h-100 flex-col gap-2 p-2">
+    <div
+      className="flex min-h-100 flex-col gap-2 p-2"
+      id="section"
+    >
       <div className="flex flex-row justify-end gap-2">
         <Button
           type="submit"

@@ -33,7 +33,7 @@ function RouteComponent() {
   }).map((t) => t.teamId)
 
   return (
-    <div className="mt-6 flex flex-col gap-4">
+    <div className="mt-6 flex flex-col gap-4 min-h-100">
       <div className="flex flex-row justify-center">
         <FileInput
           setGameData={setGameData}

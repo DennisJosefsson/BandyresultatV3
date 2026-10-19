@@ -94,7 +94,10 @@ const BulkResultFileInput = ({
   }
 
   return (
-    <div className="flex flex-row items-center gap-1.5">
+    <div
+      className="flex flex-row items-center gap-1.5"
+      id="section"
+    >
       <Input
         id="csv-file"
         type="file"

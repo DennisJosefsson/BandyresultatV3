@@ -45,7 +45,10 @@ const GenerateSchedule = () => {
 
   if (games.length === 0)
     return (
-      <div className="mb-4 flex flex-row justify-center gap-6">
+      <div
+        className="mb-4 flex flex-row justify-center gap-6 min-h-120"
+        id="section"
+      >
         Inga matcher genererade, kanske finns alla matcher
         redan inlagda?
       </div>

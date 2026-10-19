@@ -55,7 +55,10 @@ const AddParentSerie = () => {
   }
 
   return (
-    <>
+    <div
+      className="min-h-120"
+      id="section"
+    >
       <ConfirmDialog
         dialogRef={dialogRef}
         confirmTitle={`Vill du ta bort ${parentName} som ParentSerie?`}
@@ -127,7 +130,7 @@ const AddParentSerie = () => {
           </div>
         </CardContent>
       </Card>
-    </>
+    </div>
   )
 }
 

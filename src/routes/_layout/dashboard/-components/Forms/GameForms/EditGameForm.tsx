@@ -47,7 +47,10 @@ const EditGameForm = () => {
   }
 
   return (
-    <div className="mt-4 flex w-full flex-col gap-4 px-8">
+    <div
+      className="mt-4 flex w-full flex-col gap-4 px-8 min-h-120"
+      id="gameedit"
+    >
       <div className="flex flex-row justify-between">
         <div>
           <h3 className="mb-4 text-base">

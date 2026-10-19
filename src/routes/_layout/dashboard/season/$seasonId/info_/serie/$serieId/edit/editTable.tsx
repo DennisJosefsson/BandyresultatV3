@@ -1,6 +1,6 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { getSeriesTableDataForEdit } from '@/routes/_layout/dashboard/-functions/SerieFunctions/getSeriesTableDataForEdit'
 import EditStaticTableForm from '@/routes/_layout/dashboard/-components/Forms/TableForms/EditStaticTableForm'
+import { getSeriesTableDataForEdit } from '@/routes/_layout/dashboard/-functions/SerieFunctions/getSeriesTableDataForEdit'
+import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute(
   '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit/editTable',
@@ -21,8 +21,13 @@ function RouteComponent() {
 
   if (data.status === 404) {
     return (
-      <div className="mt-4 flex flex-row justify-center">
-        <span className="text-base font-semibold">{data.message}</span>
+      <div
+        className="mt-4 flex flex-row justify-center min-h-120"
+        id="section"
+      >
+        <span className="text-base font-semibold">
+          {data.message}
+        </span>
       </div>
     )
   }

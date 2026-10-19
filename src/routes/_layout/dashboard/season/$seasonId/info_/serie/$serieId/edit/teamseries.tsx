@@ -10,7 +10,10 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
   return (
-    <div className="grid grid-cols-2 gap-8">
+    <div
+      className="grid grid-cols-2 gap-8 min-h-120"
+      id="section"
+    >
       <AddTeamToSerie />
       <EditTeamSerie />
     </div>

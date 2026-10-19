@@ -45,6 +45,7 @@ const EditSerieForms = () => {
                 to="/dashboard/season/$seasonId/info/serie/$serieId/edit/teamseries"
                 search={(prev) => ({ ...prev })}
                 resetScroll={false}
+                hash="section"
               >
                 Ändra lag
               </route.Link>
@@ -57,6 +58,7 @@ const EditSerieForms = () => {
                 to="/dashboard/season/$seasonId/info/serie/$serieId/edit/newParentId"
                 search={(prev) => ({ ...prev })}
                 resetScroll={false}
+                hash="section"
               >
                 Redigera ParentId
               </route.Link>
@@ -70,6 +72,7 @@ const EditSerieForms = () => {
                 to="/dashboard/season/$seasonId/info/serie/$serieId/edit/games"
                 search={(prev) => ({ ...prev })}
                 resetScroll={false}
+                hash="section"
               >
                 Matcher
               </route.Link>
@@ -83,6 +86,7 @@ const EditSerieForms = () => {
                 to="/dashboard/season/$seasonId/info/serie/$serieId/edit/generateschedule"
                 search={(prev) => ({ ...prev })}
                 resetScroll={false}
+                hash="section"
               >
                 Generera spelschema
               </route.Link>
@@ -96,6 +100,7 @@ const EditSerieForms = () => {
                 to="/dashboard/season/$seasonId/info/serie/$serieId/edit/singlegame"
                 search={(prev) => ({ ...prev })}
                 resetScroll={false}
+                hash="section"
               >
                 Lägg till match
               </route.Link>
@@ -109,6 +114,7 @@ const EditSerieForms = () => {
                 to="/dashboard/season/$seasonId/info/serie/$serieId/edit/addGames"
                 search={(prev) => ({ ...prev })}
                 resetScroll={false}
+                hash="section"
               >
                 Lägg till matcher
               </route.Link>
@@ -121,6 +127,7 @@ const EditSerieForms = () => {
                 to="/dashboard/season/$seasonId/info/serie/$serieId/edit/addResults"
                 search={(prev) => ({ ...prev })}
                 resetScroll={false}
+                hash="section"
               >
                 Lägg till resultat
               </route.Link>
@@ -134,6 +141,7 @@ const EditSerieForms = () => {
                 to="/dashboard/season/$seasonId/info/serie/$serieId/edit/addTable"
                 search={(prev) => ({ ...prev })}
                 resetScroll={false}
+                hash="section"
               >
                 Lägg till tabell
               </route.Link>
@@ -147,6 +155,7 @@ const EditSerieForms = () => {
                 to="/dashboard/season/$seasonId/info/serie/$serieId/edit/editTable"
                 search={(prev) => ({ ...prev })}
                 resetScroll={false}
+                hash="section"
               >
                 Ändra tabell
               </route.Link>
