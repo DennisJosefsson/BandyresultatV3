@@ -1,6 +1,5 @@
 import { Button } from '@/components/base/ui/button'
 import { getRouteApi } from '@tanstack/react-router'
-import { updateMaterializedGroupViewMutation } from '../../-hooks/games/updateMaterializedViewMutation'
 import Metadata from './Metadata'
 import PlayoffSeason from './PlayoffSeason'
 import Series from './Series'
@@ -24,7 +23,6 @@ const Season = () => {
     select: (data) => data.currentOtherGenderSeason,
   })
 
-  const mutation = updateMaterializedGroupViewMutation()
   if (!season) return null
   return (
     <div className="mt-4">
@@ -118,9 +116,6 @@ const Season = () => {
         <TeamSeason />
         <Series />
         <div className="flex flex-col gap-2">
-          <Button onClick={() => mutation.mutateAsync()}>
-            Uppdatera säsongsdata
-          </Button>
           <Metadata />
           <PlayoffSeason />
         </div>

@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
+import { useServerFn } from '@tanstack/react-start'
 import { toast } from 'sonner'
 import { refreshMaterializedGroupViews } from '../../-functions/GameFunctions/refreshMaterializedViews'
 
@@ -7,8 +8,9 @@ type Data = Awaited<
 >
 
 export const updateMaterializedGroupViewMutation = () => {
+  const refresh = useServerFn(refreshMaterializedGroupViews)
   const mutation = useMutation({
-    mutationFn: refreshMaterializedGroupViews,
+    mutationFn: () => refresh(),
     onSuccess: (data) => onSuccessDeleteMutation(data),
     onError: (error) => onErrorFunction(error),
   })
