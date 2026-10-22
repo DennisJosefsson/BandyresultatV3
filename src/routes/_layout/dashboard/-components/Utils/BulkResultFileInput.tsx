@@ -24,8 +24,6 @@ const process = (fileText: string) => {
     const jsonData = parse(fileText, {
       columns: [
         'date',
-        'homeTeamName',
-        'awayTeamName',
         'homeTeamId',
         'awayTeamId',
         'result',
