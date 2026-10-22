@@ -195,9 +195,7 @@ const AddTeam = () => {
                     {teamName.logoId ? (
                       teamName.logoId
                     ) : (
-                      <span>
-                        Finns inget sådant lagnamn.
-                      </span>
+                      <span>Logga saknas.</span>
                     )}
                   </span>
                 </>

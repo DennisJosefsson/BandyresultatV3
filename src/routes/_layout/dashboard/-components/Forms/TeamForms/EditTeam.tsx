@@ -94,7 +94,7 @@ const EditTeam = () => {
                     </span>
                   </>
                 ) : (
-                  <span>Finns inget sådant lagnamn.</span>
+                  <span>Logga saknas.</span>
                 )}
               </CardTitle>
             </div>

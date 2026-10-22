@@ -16,7 +16,10 @@ export const addTeamName = createServerFn({
       const teamName = await db.transaction(async (tx) => {
         const [returnTeam] = await tx
           .insert(teamnames)
-          .values(data)
+          .values({
+            ...data,
+            logoId: data.logoId === 0 ? null : data.logoId,
+          })
           .returning({ name: teamnames.name })
 
         return returnTeam.name
