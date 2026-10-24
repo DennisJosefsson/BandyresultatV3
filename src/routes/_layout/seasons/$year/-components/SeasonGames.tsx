@@ -4,11 +4,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/base/ui/popover'
-import { useCookies } from '@/lib/contexts/cookieContext'
 import type { SeriesGamesV2 } from '@/lib/types/game'
 import type { Serie } from '@/lib/types/serie'
 import GamesList from './Games/GamesList'
-import GamePreference from './shared/games/GamePreference'
 
 type SeasonGamesProps = {
   games: {
@@ -22,12 +20,6 @@ export const SeasonGames = ({
   games,
   serie,
 }: SeasonGamesProps) => {
-  const {
-    sortGames: sortPreference,
-    sortPlayedGames,
-    sortUnplayedGames,
-  } = useCookies()
-
   if (games.played.length + games.unplayed.length === 0) {
     return (
       <div className="mt-2 flex flex-row justify-center font-semibold">
@@ -36,33 +28,13 @@ export const SeasonGames = ({
     )
   }
 
-  const playedGames =
-    sortPlayedGames === 'asc'
-      ? games.played
-      : games.played.toReversed()
-  const unplayedGames =
-    sortUnplayedGames === 'desc'
-      ? games.unplayed
-      : games.unplayed.toReversed()
-
   return (
     <div className="@container mx-1 flex flex-col gap-2 @sm:gap-4">
       <div className="flex flex-row gap-x-12 items-center">
         <h3 className="text-primary text-xs font-semibold tracking-wider @md:text-sm">
           {serie.serieName}
         </h3>
-        <Popover>
-          <PopoverTrigger
-            render={
-              <Button variant="outline">
-                Sidinställningar
-              </Button>
-            }
-          />
-          <PopoverContent>
-            <GamePreference />
-          </PopoverContent>
-        </Popover>
+
         {serie.comment ? (
           <Popover>
             <PopoverTrigger
@@ -79,17 +51,14 @@ export const SeasonGames = ({
         ) : null}
       </div>
 
-      <div
-        data-sort={sortPreference}
-        className="flex gap-4 @5xl:grid @5xl:grid-cols-2 mt-2 data-[sort=played]:flex-col data-[sort=unplayed]:flex-col-reverse"
-      >
+      <div className="flex gap-4 @5xl:grid @5xl:grid-cols-2 mt-2">
         <GamesList
-          games={playedGames}
+          games={games.played}
           title="Spelade"
           serie={serie}
         />
         <GamesList
-          games={unplayedGames}
+          games={games.unplayed}
           title="Kommande"
           serie={serie}
         />
