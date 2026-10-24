@@ -237,7 +237,7 @@ export const getFirstAndLastGames = async (
 function formatAge(ageString: string) {
   ageString =
     ageString.replace(
-      /\b(?:year|years|month|mons|day|days)\b/gi,
+      /\b(?:year|years|mon|mons|day|days)\b/gi,
       (matched) => mapObj.get(matched),
     ) + ' sedan'
 
