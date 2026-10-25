@@ -209,19 +209,47 @@ export const getCompareTeams = createServerFn({
         compareAwayTeam.teamId,
       ])
 
-      const statsObject = statsData.stats.map((s) => {
-        const team =
-          compareHomeTeam.teamId === s.teamId
-            ? {
-                ...compareHomeTeam.team,
-                teamId: s.teamId,
-              }
-            : {
-                ...compareAwayTeam.team,
-                teamId: s.teamId,
-              }
-        return { ...s, team }
-      })
+      const statsObject = statsData.stats
+        .map((s) => {
+          const team =
+            compareHomeTeam.teamId === s.teamId
+              ? {
+                  ...compareHomeTeam.team,
+                  teamId: s.teamId,
+                }
+              : {
+                  ...compareAwayTeam.team,
+                  teamId: s.teamId,
+                }
+          return { ...s, team }
+        })
+        .sort((a, b) => {
+          if (
+            [
+              compareHomeTeam.teamId,
+              compareAwayTeam.teamId,
+            ].indexOf(a.teamId) >
+            [
+              compareHomeTeam.teamId,
+              compareAwayTeam.teamId,
+            ].indexOf(b.teamId)
+          ) {
+            return 1
+          } else if (
+            [
+              compareHomeTeam.teamId,
+              compareAwayTeam.teamId,
+            ].indexOf(a.teamId) <
+            [
+              compareHomeTeam.teamId,
+              compareAwayTeam.teamId,
+            ].indexOf(b.teamId)
+          ) {
+            return -1
+          } else {
+            return 0
+          }
+        })
 
       const compareHeaderText = getCompareHeaderText({
         homeTeam: compareHomeTeam,
