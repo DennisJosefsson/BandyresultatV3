@@ -1,10 +1,15 @@
+import { Button } from '@/components/base/ui/button'
 import { CustomCatchBoundary } from '@/components/ErrorComponents/CustomCatchBoundary'
 import Loading from '@/components/Loading/Loading'
+import { clientEnv } from '@/lib/env/clientEnv'
 import {
   Await,
-  Navigate,
   createFileRoute,
+  useCanGoBack,
+  useLocation,
+  useRouter,
 } from '@tanstack/react-router'
+import { useCopyToClipboard } from 'usehooks-ts'
 import Compare from './-components/Compare/Compare'
 import { getCompareTeams } from './-functions/compare'
 import { getCompareMeta } from './-functions/getCompareMeta'
@@ -77,6 +82,16 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
+  const [copiedText, copy] = useCopyToClipboard()
+
+  const href = useLocation({
+    select: (location) => location.href,
+  })
+
+  const router = useRouter()
+  const canGoBack = useCanGoBack()
+
+  const copyLink = clientEnv.VITE_SITE_PROD_URL + href
   const promiseData = Route.useLoaderData({
     select: (s) => s.data,
   })
@@ -87,15 +102,34 @@ function RouteComponent() {
         if (!data) return null
         if (data.status === 400 || data.status === 404) {
           return (
-            <Navigate
-              from="/teams/compare"
-              to="/teams/list"
-              search={(prev) => ({
-                women: prev.women,
-                teamArray: data.teamArray,
-                error: data.message,
-              })}
-            />
+            <div className="@container w-full mt-12">
+              <div className="flex flex-row items-center justify-between">
+                <span className="mb-2 text-xs font-semibold text-[8px] @xs:text-[10px] @sm:text-xs @2xl:text-sm/6">
+                  Inbördes möten
+                </span>
+                <div className="mb-2 flex flex-row justify-end gap-2 xl:mb-6">
+                  <Button
+                    onClick={() => copy(copyLink)}
+                    // size="sm"
+                  >
+                    {copiedText ? 'Kopierad!' : `Länk`}
+                  </Button>
+
+                  {canGoBack ? (
+                    <Button
+                      // size="sm"
+                      onClick={() => router.history.back()}
+                    >
+                      Tillbaka
+                    </Button>
+                  ) : null}
+                </div>
+              </div>
+
+              <span className="text-foreground text-[8px] @xs:text-[10px] @sm:text-xs @2xl:text-sm/6">
+                {data.message}
+              </span>
+            </div>
           )
         }
         return (

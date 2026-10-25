@@ -11,8 +11,6 @@ const TeamsList = () => {
   const [teamFilter, setTeamFilter] = useState<string>('')
   const { teamArray } = route.useSearch()
 
-  const error = route.useSearch({ select: (s) => s.error })
-
   const data = route.useLoaderData()
 
   const navigate = route.useNavigate()
@@ -35,13 +33,11 @@ const TeamsList = () => {
             return {
               ...prev,
               teamArray: [...prev.teamArray, teamId],
-              error: undefined,
             }
           } else {
             return {
               ...prev,
               teamArray: [teamId],
-              error: undefined,
             }
           }
         },
@@ -57,12 +53,12 @@ const TeamsList = () => {
             if (prev.teamArray.length === 1)
               return {
                 ...prev,
-                error: undefined,
+
                 teamArray: undefined,
               }
             return {
               ...prev,
-              error: undefined,
+
               teamArray: [
                 ...prev.teamArray.filter(
                   (team) => team !== teamId,
@@ -72,7 +68,7 @@ const TeamsList = () => {
           } else {
             return {
               ...prev,
-              error: undefined,
+
               teamArray: undefined,
             }
           }
@@ -87,21 +83,12 @@ const TeamsList = () => {
       search: (prev) => ({
         ...prev,
         teamArray: undefined,
-        error: undefined,
       }),
     })
   }
 
   return (
     <div className="flex flex-col gap-2 mt-2">
-      {error ? (
-        <div className="flex flex-row justify-center">
-          <span className="w-full px-2 py-1 font-semibold text-center text-red-600 bg-accent-foreground sm:text-sm">
-            {error}
-          </span>
-        </div>
-      ) : null}
-
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-evenly">
         <div className="grow">
           <FilterComponent
@@ -128,7 +115,6 @@ const TeamsList = () => {
                 to="/teams/compare"
                 search={(prev) => ({
                   ...prev,
-                  error: undefined,
                 })}
                 disabled={
                   teamArray?.length !== 2 ? true : false

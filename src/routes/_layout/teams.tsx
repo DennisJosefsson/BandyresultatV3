@@ -10,7 +10,6 @@ import { getTeams } from './teams/-functions/getTeams'
 const searchParams = z.object({
   women: zd.boolean(),
   teamArray: zd.array(z.number()).optional(),
-  error: zd.string().optional(),
 })
 
 export const Route = createFileRoute('/_layout/teams')({
