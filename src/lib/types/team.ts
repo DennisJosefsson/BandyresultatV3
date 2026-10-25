@@ -13,6 +13,10 @@ export type Team = typeof teams.$inferSelect & {
   }
 }
 
+export type CompareTeam = typeof teams.$inferSelect & {
+  team: TeamBaseWithLogo
+}
+
 export type TeamName = typeof teamnames.$inferSelect
 
 export type TeamBase = TeamName & { teamId: number }

@@ -3,7 +3,7 @@ import type {
   CompareBaseTable,
   CompareCategoryData,
 } from '@/lib/types/compare'
-import type { Team } from '@/lib/types/team'
+import type { CompareTeam } from '@/lib/types/team'
 import type { VisibilityState } from '@tanstack/react-table'
 import { useState } from 'react'
 import DataTable from './DataTable'
@@ -15,8 +15,8 @@ import {
 } from './columns'
 
 type CompareTableProps = {
-  homeTeam: Team
-  awayTeam: Team
+  homeTeam: CompareTeam
+  awayTeam: CompareTeam
   categoryData: CompareCategoryData
   allData: Array<CompareBaseTable>
 }
@@ -49,8 +49,8 @@ const CompareTables = ({
         Alla matcher
       </h3>
       <span className="text-[8px] @xs:text-[10px] @sm:text-xs @2xl:text-sm/6">
-        Tabeller för {homeTeam.teamname.casualName} med{' '}
-        {awayTeam.teamname.casualName} som motståndare.
+        Tabeller för {homeTeam.team.casualName} med{' '}
+        {awayTeam.team.casualName} som motståndare.
       </span>
       <div className="xs:hidden">
         <Button

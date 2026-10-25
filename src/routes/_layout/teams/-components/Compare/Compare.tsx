@@ -1,34 +1,28 @@
 import type {
   CompareBaseTable,
   CompareCategoryData,
-  CompareSeasonStat,
+  CompareStatsV2,
 } from '@/lib/types/compare'
 import type {
   CompareGamesBase,
   CompareGamesWithAge,
 } from '@/lib/types/game'
-import type { Team } from '@/lib/types/team'
+import type { CompareTeam } from '@/lib/types/team'
 import CompareHeader from './CompareHeader'
 import FirstGames from './CompareStatsSubComponents/FirstGames'
-import Golds from './CompareStatsSubComponents/Golds'
 import LatestGames from './CompareStatsSubComponents/LatestGames'
 import LatestWins from './CompareStatsSubComponents/LatestWins'
-import Playoffs from './CompareStatsSubComponents/Playoffs'
-import Seasons from './CompareStatsSubComponents/Seasons'
+import Stats from './CompareStatsSubComponents/Stats'
 import CompareTables from './Tables/Table'
 
 type CompareProps = {
   status: 200
-  homeTeam: Team
-  awayTeam: Team
+  homeTeam: CompareTeam
+  awayTeam: CompareTeam
   categoryData: CompareCategoryData
   allData: Array<CompareBaseTable>
   gameCount: number
-  golds: Array<CompareSeasonStat>
-  playoffs: Array<CompareSeasonStat>
-  allPlayoffs: Array<CompareSeasonStat>
-  firstDivisionSeasonsSince1931: Array<CompareSeasonStat>
-  firstDivisionSeasons: Array<CompareSeasonStat>
+  stats: Array<CompareStatsV2>
   firstGames: Array<CompareGamesBase>
   latestGames: Array<CompareGamesBase>
   latestHomeWin: Array<CompareGamesWithAge>
@@ -41,11 +35,7 @@ const Compare = ({
   awayTeam,
   categoryData,
   allData,
-  golds,
-  playoffs,
-  allPlayoffs,
-  firstDivisionSeasonsSince1931,
-  firstDivisionSeasons,
+  stats,
   firstGames,
   latestGames,
   latestHomeWin,
@@ -65,21 +55,18 @@ const Compare = ({
           awayTeam={awayTeam}
           categoryData={categoryData}
         />
-        <div className="flex flex-col gap-4 @5xl:mt-16">
-          <Seasons
-            firstDivisionSeasons={firstDivisionSeasons}
-            firstDivisionSeasonsSince1931={
-              firstDivisionSeasonsSince1931
-            }
-          />
-          <Playoffs
-            allPlayoffs={allPlayoffs}
-            playoffs={playoffs}
-          />
-          <Golds golds={golds} />
+        <div className="flex flex-col gap-4 @5xl:mt-18">
+          {stats.map((stat) => {
+            return (
+              <Stats
+                stats={stat}
+                key={stat.teamId.toString()}
+              />
+            )
+          })}
         </div>
       </div>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 mt-4 @5xl:mt-0">
         <LatestWins
           latestWins={latestHomeWin}
           title="Senaste hemmavinsten"

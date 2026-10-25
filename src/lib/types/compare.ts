@@ -1,4 +1,8 @@
-import type { TeamBase } from './team'
+import type {
+  TeamBase,
+  TeamBaseWithLogo,
+  TeamStatCount,
+} from './team'
 
 export type CompareBaseTable = {
   totalGames: number
@@ -59,4 +63,16 @@ export type CompareLatestWinStats = {
   awayName: string | null
   date: string
   age: string
+}
+
+export type CompareStatsV2 = {
+  team: TeamBaseWithLogo
+  teamId: number
+  firstDivisionSeasons: number | null
+  qualificationSeasons: number | null
+  firstAndLatestSeason: Omit<TeamStatCount, 'count'>
+  finalCount: Omit<TeamStatCount, 'first'>
+  finalWinCount: Omit<TeamStatCount, 'first'>
+  playoffCount: Omit<TeamStatCount, 'first'>
+  swedishCupWinCount: Omit<TeamStatCount, 'first'>
 }

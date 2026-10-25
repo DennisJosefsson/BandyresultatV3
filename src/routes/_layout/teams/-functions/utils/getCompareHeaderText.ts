@@ -1,16 +1,12 @@
-import type { teamlogos, teams } from '@/db/schema'
-import type { TeamName } from '@/lib/types/team'
+import type { teams } from '@/db/schema'
+import type { TeamBaseWithLogo } from '@/lib/types/team'
 
 type GetCompareHeaderText = {
   homeTeam: typeof teams.$inferSelect & {
-    teamname: TeamName & {
-      logo: typeof teamlogos.$inferSelect | null
-    }
+    team: TeamBaseWithLogo
   }
   awayTeam: typeof teams.$inferSelect & {
-    teamname: TeamName & {
-      logo: typeof teamlogos.$inferSelect | null
-    }
+    team: TeamBaseWithLogo
   }
   gameCount: number
 }
@@ -20,9 +16,9 @@ const getCompareHeaderText = ({
   awayTeam,
   gameCount,
 }: GetCompareHeaderText): string => {
-  const teamString = `${homeTeam.teamname.casualName} och ${awayTeam.teamname.casualName}`
+  const teamString = `${homeTeam.team.casualName} och ${awayTeam.team.casualName}`
 
-  const matchup = `${homeTeam.teamname.name} - ${awayTeam.teamname.name}`
+  const matchup = `${homeTeam.team.name} - ${awayTeam.team.name}`
 
   let compareHeaderText = ''
 

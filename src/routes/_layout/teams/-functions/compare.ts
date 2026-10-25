@@ -1,19 +1,25 @@
 import { db } from '@/db'
+import { teamlogos, teamnames, teams } from '@/db/schema'
 import { catchError } from '@/lib/middlewares/errors/catchError'
 import CompareRequestError from '@/lib/middlewares/errors/CompareRequestError'
 import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import type {
   CompareBaseTable,
   CompareCategoryData,
-  CompareSeasonStat,
+  CompareStatsV2,
 } from '@/lib/types/compare'
 import type {
   CompareGamesBase,
   CompareGamesWithAge,
 } from '@/lib/types/game'
-import type { Team } from '@/lib/types/team'
+import type {
+  CompareTeam,
+  TeamBaseWithLogo,
+} from '@/lib/types/team'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
+import type { SQL } from 'drizzle-orm'
+import { and, eq, getTableColumns, ne } from 'drizzle-orm'
 import { ZodError } from 'zod'
 import {
   getAllGamesTables,
@@ -36,16 +42,12 @@ type CompareReturn =
     }
   | {
       status: 200
-      homeTeam: Team
-      awayTeam: Team
+      homeTeam: CompareTeam
+      awayTeam: CompareTeam
       categoryData: CompareCategoryData
       allData: Array<CompareBaseTable>
       gameCount: number
-      golds: Array<CompareSeasonStat>
-      playoffs: Array<CompareSeasonStat>
-      allPlayoffs: Array<CompareSeasonStat>
-      firstDivisionSeasonsSince1931: Array<CompareSeasonStat>
-      firstDivisionSeasons: Array<CompareSeasonStat>
+      stats: Array<CompareStatsV2>
       firstGames: Array<CompareGamesBase>
       latestGames: Array<CompareGamesBase>
       latestHomeWin: Array<CompareGamesWithAge>
@@ -87,17 +89,36 @@ export const getCompareTeams = createServerFn({
         )
         .parse(teamArray)
 
-      const compareHomeTeam =
-        await db.query.teams.findFirst({
-          where: (teams, { and, eq, ne }) =>
-            and(
-              eq(teams.teamId, array[0]),
-              ne(teams.teamId, 176),
-            ),
-          with: {
-            teamname: { with: { logo: true } },
-          },
+      const compareHomeTeam = await db
+        .select({
+          ...getTableColumns(teams),
+          team: {
+            teamId: teams.teamId,
+            name: teamnames.name,
+            shortName: teamnames.shortName,
+            casualName: teamnames.casualName,
+            logo: {
+              logoId: teamlogos.logoId,
+              hasDark: teamlogos.hasDark,
+            },
+          } as unknown as SQL<TeamBaseWithLogo>,
         })
+        .from(teams)
+        .leftJoin(
+          teamnames,
+          eq(teamnames.teamnameId, teams.teamnameId),
+        )
+        .leftJoin(
+          teamlogos,
+          eq(teamnames.logoId, teamlogos.logoId),
+        )
+        .where(
+          and(
+            eq(teams.teamId, array[0]),
+            ne(teams.teamId, 176),
+          ),
+        )
+        .then((res) => res[0])
 
       if (!compareHomeTeam) {
         const item = array.at(-1)
@@ -110,17 +131,36 @@ export const getCompareTeams = createServerFn({
         })
       }
 
-      const compareAwayTeam =
-        await db.query.teams.findFirst({
-          where: (teams, { and, eq, ne }) =>
-            and(
-              eq(teams.teamId, array[1]),
-              ne(teams.teamId, 176),
-            ),
-          with: {
-            teamname: { with: { logo: true } },
-          },
+      const compareAwayTeam = await db
+        .select({
+          ...getTableColumns(teams),
+          team: {
+            teamId: teams.teamId,
+            name: teamnames.name,
+            shortName: teamnames.shortName,
+            casualName: teamnames.casualName,
+            logo: {
+              logoId: teamlogos.logoId,
+              hasDark: teamlogos.hasDark,
+            },
+          } as unknown as SQL<TeamBaseWithLogo>,
         })
+        .from(teams)
+        .leftJoin(
+          teamnames,
+          eq(teamnames.teamnameId, teams.teamnameId),
+        )
+        .leftJoin(
+          teamlogos,
+          eq(teamnames.logoId, teamlogos.logoId),
+        )
+        .where(
+          and(
+            eq(teams.teamId, array[1]),
+            ne(teams.teamId, 176),
+          ),
+        )
+        .then((res) => res[0])
 
       if (!compareAwayTeam) {
         const item = array.at(0)
@@ -139,8 +179,8 @@ export const getCompareTeams = createServerFn({
       })
 
       if (catTables.length === 0) {
-        const teamStrings = `${compareHomeTeam.teamname.name} och ${compareAwayTeam.teamname.name}`
-        const breadCrumb = `H2H: ${compareHomeTeam.teamname.name} - ${compareAwayTeam.teamname.name}`
+        const teamStrings = `${compareHomeTeam.team.name} och ${compareAwayTeam.team.name}`
+        const breadCrumb = `H2H: ${compareHomeTeam.team.name} - ${compareAwayTeam.team.name}`
 
         const message = `${teamStrings} har inga spelade matcher mot varandra i databasen.`
         const url = `https://bandyresultat.se/teams/compare?women=${women}&teamArray=[$${compareHomeTeam.teamId},${compareAwayTeam.teamId}]`
@@ -164,10 +204,24 @@ export const getCompareTeams = createServerFn({
 
       const gameCount = allData.length
 
-      const stats = await getCompareStats([
+      const statsData = await getCompareStats([
         compareHomeTeam.teamId,
         compareAwayTeam.teamId,
       ])
+
+      const statsObject = statsData.stats.map((s) => {
+        const team =
+          compareHomeTeam.teamId === s.teamId
+            ? {
+                ...compareHomeTeam.team,
+                teamId: s.teamId,
+              }
+            : {
+                ...compareAwayTeam.team,
+                teamId: s.teamId,
+              }
+        return { ...s, team }
+      })
 
       const compareHeaderText = getCompareHeaderText({
         homeTeam: compareHomeTeam,
@@ -181,7 +235,11 @@ export const getCompareTeams = createServerFn({
         categoryData,
         allData,
         gameCount,
-        ...stats,
+        stats: statsObject,
+        latestGames: statsData.latestGames,
+        firstGames: statsData.firstGames,
+        latestHomeWin: statsData.latestHomeWin,
+        latestAwayWin: statsData.latestAwayWin,
         compareHeaderText,
         status: 200,
       }
