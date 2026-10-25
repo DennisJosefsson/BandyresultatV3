@@ -9,6 +9,7 @@ import {
   teamnames,
   teams,
 } from '@/db/schema'
+import { mvTeamStats } from '@/db/views/teamRecordsViews'
 import type { TeamBaseWithLogo } from '@/lib/types/team'
 import {
   away,
@@ -823,30 +824,19 @@ export const getAllFirstDivisionSeasonsV2 = (
 export const getCompareStats = async (
   teamArray: Array<number>,
 ) => {
-  const golds = await getGolds(teamArray)
-
-  const playoffs = await getPlayoffs(teamArray)
-
-  const allPlayoffs = await getAllPlayoffs(teamArray)
-
-  const firstDivisionSeasonsSince1931 =
-    await getFirstDivisionSeasonsSince1931V2(teamArray)
-
-  const firstDivisionSeasons =
-    await getAllFirstDivisionSeasonsV2(teamArray)
-
   const { firstGames, latestGames } =
     await getFirstAndLastGames(teamArray)
 
   const latestHomeWin = await getLatestHomeWin(teamArray)
   const latestAwayWin = await getLatestAwayWin(teamArray)
 
+  const stats = await db
+    .select()
+    .from(mvTeamStats)
+    .where(inArray(mvTeamStats.teamId, teamArray))
+
   return {
-    golds,
-    playoffs,
-    allPlayoffs,
-    firstDivisionSeasonsSince1931,
-    firstDivisionSeasons,
+    stats,
     firstGames,
     latestGames,
     latestHomeWin,
