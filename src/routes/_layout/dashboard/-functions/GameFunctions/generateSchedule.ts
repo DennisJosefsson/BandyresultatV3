@@ -14,7 +14,9 @@ import { createServerFn } from '@tanstack/react-start'
 import type { SQL } from 'drizzle-orm'
 import { eq } from 'drizzle-orm'
 
-export type GameObject = zd.infer<typeof generatedGameObject>
+export type GameObject = zd.infer<
+  typeof generatedGameObject
+>
 
 export const generateSchedule = createServerFn({
   method: 'GET',
@@ -47,7 +49,8 @@ export const generateSchedule = createServerFn({
       const teamArray = await db
         .select({
           teamId: teamseries.teamId,
-          name: teamnames.name as unknown as SQL<string>,
+          casualName:
+            teamnames.casualName as unknown as SQL<string>,
         })
         .from(teamseries)
         .leftJoin(
@@ -59,6 +62,7 @@ export const generateSchedule = createServerFn({
           eq(teamnames.teamnameId, teams.teamnameId),
         )
         .where(eq(teamseries.serieId, serieId))
+        .orderBy(teamnames.casualName)
 
       const currentGames = await db
         .select()
@@ -81,8 +85,8 @@ export const generateSchedule = createServerFn({
             return
 
           const gameItem: GameObject = {
-            homeName: home.name,
-            awayName: away.name,
+            homeName: home.casualName,
+            awayName: away.casualName,
             homeTeamId: home.teamId,
             awayTeamId: away.teamId,
             serieId: serie.serieId,
