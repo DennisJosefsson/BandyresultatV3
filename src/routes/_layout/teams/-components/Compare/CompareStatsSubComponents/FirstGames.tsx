@@ -1,9 +1,9 @@
-import type { CompareGameStat } from '@/lib/types/compare'
-import CompareWinsCard from './CompareWinsCard'
+import type { CompareGamesBase } from '@/lib/types/game'
+import { CompareGameCard } from '../Games/CompareGameCard'
 import StatsCard from './StatsCard'
 
 type CompareFirstGamesProps = {
-  firstGames: Array<CompareGameStat>
+  firstGames: Array<CompareGamesBase>
 }
 
 const FirstGames = ({
@@ -16,12 +16,14 @@ const FirstGames = ({
       <StatsCard.Title>Första matcherna</StatsCard.Title>
 
       <StatsCard.Content>
-        {firstGames.map((stat) => (
-          <CompareWinsCard
-            stat={stat}
-            key={stat.gameId}
-          />
-        ))}
+        <div className="grid grid-cols-1 @5xl:grid-cols-2 gap-4 mt-2 sm:mt-4">
+          {firstGames.map((game) => (
+            <CompareGameCard
+              game={{ type: 'regular', game: game }}
+              key={game.gameId}
+            />
+          ))}
+        </div>
       </StatsCard.Content>
     </StatsCard>
   )

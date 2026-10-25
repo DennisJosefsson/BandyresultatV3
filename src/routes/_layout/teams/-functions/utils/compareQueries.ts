@@ -9,6 +9,15 @@ import {
   teamnames,
   teams,
 } from '@/db/schema'
+import type { TeamBaseWithLogo } from '@/lib/types/team'
+import {
+  away,
+  awayLogo,
+  awayTeamName,
+  home,
+  homeLogo,
+  homeTeamName,
+} from '@/routes/_layout/seasons/$year/-functions/libs/aliases'
 import type { SQL } from 'drizzle-orm'
 import {
   and,
@@ -17,6 +26,7 @@ import {
   countDistinct,
   desc,
   eq,
+  getTableColumns,
   gte,
   inArray,
   lt,
@@ -25,18 +35,12 @@ import {
   sql,
   sum,
 } from 'drizzle-orm'
-import { alias } from 'drizzle-orm/pg-core'
 import { mapObj } from './ageFormatMap'
 
 type GetCatTables = {
   homeTeamId: number
   awayTeamId: number
 }
-
-const home = alias(teams, 'home')
-const away = alias(teams, 'away')
-const homeTeamName = alias(teamnames, 'home_teamname')
-const awayTeamName = alias(teamnames, 'away_teamname')
 
 export const getCatTables = ({
   homeTeamId,
@@ -156,10 +160,6 @@ export const getFirstAndLastGames = async (
     db
       .select({
         gameId: games.gameId,
-        homeTeamId: games.homeTeamId,
-        awayTeamId: games.awayTeamId,
-        date: games.date,
-        result: games.result,
         rankedFirstGames:
           sql<number>`cast(rank() over (partition by home_team_id, away_team_id order by "date" asc) as int)`.as(
             'ranked_first_games',
@@ -182,24 +182,67 @@ export const getFirstAndLastGames = async (
   const firstAndLastGames = await db
     .with(first_games)
     .select({
-      gameId: first_games.gameId,
-      result: first_games.result,
-      homeName: homeTeamName.casualName,
-      awayName: awayTeamName.casualName,
-      date: first_games.date,
+      ...getTableColumns(games),
+      group: series.group as unknown as SQL<string>,
+      category: series.category as unknown as SQL<string>,
+      serie: {
+        serieName:
+          series.serieName as unknown as SQL<string>,
+      },
+      competition: {
+        competitionName:
+          competitions.competitionName as unknown as SQL<string>,
+      },
+      home: {
+        teamId: home.teamId,
+        name: homeTeamName.name,
+        shortName: homeTeamName.shortName,
+        casualName: homeTeamName.casualName,
+        logo: {
+          logoId: homeLogo.logoId,
+          hasDark: homeLogo.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
+      away: {
+        teamId: away.teamId,
+        name: awayTeamName.name,
+        shortName: awayTeamName.shortName,
+        casualName: awayTeamName.casualName,
+        logo: {
+          logoId: awayLogo.logoId,
+          hasDark: awayLogo.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
       rankedFirstGames: first_games.rankedFirstGames,
       rankedLastGames: first_games.rankedLastGames,
     })
-    .from(first_games)
-    .leftJoin(home, eq(first_games.homeTeamId, home.teamId))
-    .leftJoin(away, eq(first_games.awayTeamId, away.teamId))
+    .from(games)
+    .innerJoin(
+      first_games,
+      eq(games.gameId, first_games.gameId),
+    )
+    .leftJoin(home, eq(home.teamId, games.homeTeamId))
+    .leftJoin(away, eq(away.teamId, games.awayTeamId))
     .leftJoin(
       homeTeamName,
       eq(homeTeamName.teamnameId, home.teamnameId),
     )
     .leftJoin(
+      homeLogo,
+      eq(homeLogo.logoId, homeTeamName.logoId),
+    )
+    .leftJoin(
       awayTeamName,
       eq(awayTeamName.teamnameId, away.teamnameId),
+    )
+    .leftJoin(
+      awayLogo,
+      eq(awayLogo.logoId, awayTeamName.logoId),
+    )
+    .leftJoin(series, eq(series.serieId, games.serieId))
+    .leftJoin(
+      competitions,
+      eq(series.competitionId, competitions.competitionId),
     )
     .where(
       or(
@@ -207,7 +250,7 @@ export const getFirstAndLastGames = async (
         lt(first_games.rankedLastGames, 11),
       ),
     )
-    .orderBy(asc(first_games.date))
+    .orderBy(asc(games.date))
 
   const firstGames = firstAndLastGames.filter(
     (game) => game.rankedFirstGames === 1,
@@ -285,11 +328,37 @@ export const getLatestHomeWin = async (
   const latestHomeWin = await db
     .with(selected_id)
     .select({
-      gameId: games.gameId,
-      result: games.result,
-      homeName: homeTeamName.casualName,
-      awayName: awayTeamName.casualName,
-      date: games.date,
+      ...getTableColumns(games),
+      group: series.group as unknown as SQL<string>,
+      category: series.category as unknown as SQL<string>,
+      serie: {
+        serieName:
+          series.serieName as unknown as SQL<string>,
+      },
+      competition: {
+        competitionName:
+          competitions.competitionName as unknown as SQL<string>,
+      },
+      home: {
+        teamId: home.teamId,
+        name: homeTeamName.name,
+        shortName: homeTeamName.shortName,
+        casualName: homeTeamName.casualName,
+        logo: {
+          logoId: homeLogo.logoId,
+          hasDark: homeLogo.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
+      away: {
+        teamId: away.teamId,
+        name: awayTeamName.name,
+        shortName: awayTeamName.shortName,
+        casualName: awayTeamName.casualName,
+        logo: {
+          logoId: awayLogo.logoId,
+          hasDark: awayLogo.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
       age: sql`age(games."date") as time_since`.mapWith(
         String,
       ),
@@ -299,15 +368,28 @@ export const getLatestHomeWin = async (
       selected_id,
       eq(selected_id.gameId, games.gameId),
     )
-    .leftJoin(home, eq(games.homeTeamId, home.teamId))
-    .leftJoin(away, eq(games.awayTeamId, away.teamId))
+    .leftJoin(home, eq(home.teamId, games.homeTeamId))
+    .leftJoin(away, eq(away.teamId, games.awayTeamId))
     .leftJoin(
       homeTeamName,
       eq(homeTeamName.teamnameId, home.teamnameId),
     )
     .leftJoin(
+      homeLogo,
+      eq(homeLogo.logoId, homeTeamName.logoId),
+    )
+    .leftJoin(
       awayTeamName,
       eq(awayTeamName.teamnameId, away.teamnameId),
+    )
+    .leftJoin(
+      awayLogo,
+      eq(awayLogo.logoId, awayTeamName.logoId),
+    )
+    .leftJoin(series, eq(series.serieId, games.serieId))
+    .leftJoin(
+      competitions,
+      eq(series.competitionId, competitions.competitionId),
     )
     .where(eq(selected_id.gameId, games.gameId))
     .orderBy(asc(games.date))
@@ -358,11 +440,37 @@ export const getLatestAwayWin = async (
   const latestAwayWin = await db
     .with(selected_id)
     .select({
-      gameId: games.gameId,
-      result: games.result,
-      homeName: homeTeamName.casualName,
-      awayName: awayTeamName.casualName,
-      date: games.date,
+      ...getTableColumns(games),
+      group: series.group as unknown as SQL<string>,
+      category: series.category as unknown as SQL<string>,
+      serie: {
+        serieName:
+          series.serieName as unknown as SQL<string>,
+      },
+      competition: {
+        competitionName:
+          competitions.competitionName as unknown as SQL<string>,
+      },
+      home: {
+        teamId: home.teamId,
+        name: homeTeamName.name,
+        shortName: homeTeamName.shortName,
+        casualName: homeTeamName.casualName,
+        logo: {
+          logoId: homeLogo.logoId,
+          hasDark: homeLogo.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
+      away: {
+        teamId: away.teamId,
+        name: awayTeamName.name,
+        shortName: awayTeamName.shortName,
+        casualName: awayTeamName.casualName,
+        logo: {
+          logoId: awayLogo.logoId,
+          hasDark: awayLogo.hasDark,
+        },
+      } as unknown as SQL<TeamBaseWithLogo>,
       age: sql`age(games."date") as time_since`.mapWith(
         String,
       ),
@@ -372,15 +480,28 @@ export const getLatestAwayWin = async (
       selected_id,
       eq(selected_id.gameId, games.gameId),
     )
-    .leftJoin(home, eq(games.homeTeamId, home.teamId))
-    .leftJoin(away, eq(games.awayTeamId, away.teamId))
+    .leftJoin(home, eq(home.teamId, games.homeTeamId))
+    .leftJoin(away, eq(away.teamId, games.awayTeamId))
     .leftJoin(
       homeTeamName,
       eq(homeTeamName.teamnameId, home.teamnameId),
     )
     .leftJoin(
+      homeLogo,
+      eq(homeLogo.logoId, homeTeamName.logoId),
+    )
+    .leftJoin(
       awayTeamName,
       eq(awayTeamName.teamnameId, away.teamnameId),
+    )
+    .leftJoin(
+      awayLogo,
+      eq(awayLogo.logoId, awayTeamName.logoId),
+    )
+    .leftJoin(series, eq(series.serieId, games.serieId))
+    .leftJoin(
+      competitions,
+      eq(series.competitionId, competitions.competitionId),
     )
     .where(eq(selected_id.gameId, games.gameId))
     .orderBy(asc(games.date))

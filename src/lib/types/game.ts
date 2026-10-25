@@ -202,3 +202,16 @@ export const submitGameResult = zd.object({
   homeTeamGameId: zd.number().int().positive(),
   awayTeamGameId: zd.number().int().positive(),
 })
+
+export type CompareGamesBase = typeof games.$inferSelect & {
+  group: string
+  category: string
+  serie: { serieName: string }
+  competition: { competitionName: string }
+  home: TeamBaseWithLogo
+  away: TeamBaseWithLogo
+}
+
+export type CompareGamesWithAge = CompareGamesBase & {
+  age: string
+}

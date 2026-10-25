@@ -5,10 +5,12 @@ import { errorMiddleware } from '@/lib/middlewares/errors/errorMiddleware'
 import type {
   CompareBaseTable,
   CompareCategoryData,
-  CompareGameStat,
-  CompareLatestWinStats,
   CompareSeasonStat,
 } from '@/lib/types/compare'
+import type {
+  CompareGamesBase,
+  CompareGamesWithAge,
+} from '@/lib/types/game'
 import type { Team } from '@/lib/types/team'
 import { zd } from '@/lib/utils/zod'
 import { createServerFn } from '@tanstack/react-start'
@@ -44,10 +46,10 @@ type CompareReturn =
       allPlayoffs: Array<CompareSeasonStat>
       firstDivisionSeasonsSince1931: Array<CompareSeasonStat>
       firstDivisionSeasons: Array<CompareSeasonStat>
-      firstGames: Array<CompareGameStat>
-      latestGames: Array<CompareGameStat>
-      latestHomeWin: Array<CompareLatestWinStats>
-      latestAwayWin: Array<CompareLatestWinStats>
+      firstGames: Array<CompareGamesBase>
+      latestGames: Array<CompareGamesBase>
+      latestHomeWin: Array<CompareGamesWithAge>
+      latestAwayWin: Array<CompareGamesWithAge>
       compareHeaderText: string
     }
   | undefined

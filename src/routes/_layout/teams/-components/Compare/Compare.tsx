@@ -1,10 +1,12 @@
 import type {
   CompareBaseTable,
   CompareCategoryData,
-  CompareGameStat,
-  CompareLatestWinStats,
   CompareSeasonStat,
 } from '@/lib/types/compare'
+import type {
+  CompareGamesBase,
+  CompareGamesWithAge,
+} from '@/lib/types/game'
 import type { Team } from '@/lib/types/team'
 import CompareHeader from './CompareHeader'
 import FirstGames from './CompareStatsSubComponents/FirstGames'
@@ -27,10 +29,10 @@ type CompareProps = {
   allPlayoffs: Array<CompareSeasonStat>
   firstDivisionSeasonsSince1931: Array<CompareSeasonStat>
   firstDivisionSeasons: Array<CompareSeasonStat>
-  firstGames: Array<CompareGameStat>
-  latestGames: Array<CompareGameStat>
-  latestHomeWin: Array<CompareLatestWinStats>
-  latestAwayWin: Array<CompareLatestWinStats>
+  firstGames: Array<CompareGamesBase>
+  latestGames: Array<CompareGamesBase>
+  latestHomeWin: Array<CompareGamesWithAge>
+  latestAwayWin: Array<CompareGamesWithAge>
   compareHeaderText: string
 }
 
@@ -76,20 +78,19 @@ const Compare = ({
           />
           <Golds golds={golds} />
         </div>
-        <div className="flex flex-col gap-4">
-          <LatestWins
-            latestWins={latestHomeWin}
-            title="Senaste hemmavinsten"
-          />
-          <LatestWins
-            latestWins={latestAwayWin}
-            title="Senaste bortavinsten"
-          />
-        </div>
-        <div className="flex flex-col gap-4">
-          <FirstGames firstGames={firstGames} />
-          <LatestGames latestGames={latestGames} />
-        </div>
+      </div>
+      <div className="flex flex-col gap-4">
+        <LatestWins
+          latestWins={latestHomeWin}
+          title="Senaste hemmavinsten"
+        />
+        <LatestWins
+          latestWins={latestAwayWin}
+          title="Senaste bortavinsten"
+        />
+
+        <FirstGames firstGames={firstGames} />
+        <LatestGames latestGames={latestGames} />
       </div>
     </div>
   )
