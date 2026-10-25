@@ -10,7 +10,6 @@ import { getRouteApi } from '@tanstack/react-router'
 import { useState } from 'react'
 import { addTeamToCompetitionMutation } from '../../../-hooks/competitions/addTeamToCompetitionMutation'
 
-
 const route = getRouteApi(
   '/_layout/dashboard/season/$seasonId/info_/competition/$competitionId/teamcompetition',
 )
@@ -71,7 +70,9 @@ const AddTeams = () => {
       <CardContent className="grid grid-cols-3 gap-8 place-self-start px-10">
         {data.teamsInSeason
           .filter((team) =>
-            team.team.casualName.includes(teamFilter),
+            team.team.casualName
+              .toLowerCase()
+              .includes(teamFilter.toLowerCase()),
           )
           .filter(
             (team) =>

@@ -113,7 +113,9 @@ const TeamSeasonAddition = () => {
         <div className="grid grid-cols-3 gap-8 place-self-start px-10">
           {teamSelection
             .filter((team) =>
-              team.label.includes(teamFilter),
+              team.label
+                .toLowerCase()
+                .includes(teamFilter.toLowerCase()),
             )
             .map((team) => {
               return (

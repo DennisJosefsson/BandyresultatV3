@@ -10,7 +10,6 @@ import { getRouteApi } from '@tanstack/react-router'
 import { useState } from 'react'
 import { addTeamToSerieMutation } from '../../../-hooks/series/addTeamToSerieMutation'
 
-
 const route = getRouteApi(
   '/_layout/dashboard/season/$seasonId/info_/serie/$serieId/edit',
 )
@@ -56,7 +55,9 @@ const AddTeamToSerie = () => {
       <CardContent className="grid grid-cols-3 gap-8 place-self-start px-10">
         {teams
           .filter((team) =>
-            team.team.casualName.includes(teamFilter),
+            team.team.casualName
+              .toLowerCase()
+              .includes(teamFilter.toLowerCase()),
           )
           .filter(
             (team) => !teamInSerie.includes(team.teamId),

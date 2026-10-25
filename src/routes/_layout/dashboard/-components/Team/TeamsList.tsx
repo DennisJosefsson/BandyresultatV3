@@ -17,10 +17,18 @@ const TeamsList = () => {
 
   const mensTeam = teams
     .filter((t) => t.women === false)
-    .filter((t) => t.teamname.casualName.includes(filter))
+    .filter((t) =>
+      t.teamname.casualName
+        .toLowerCase()
+        .includes(filter.toLowerCase()),
+    )
   const womensTeam = teams
     .filter((t) => t.women === true)
-    .filter((t) => t.teamname.casualName.includes(filter))
+    .filter((t) =>
+      t.teamname.casualName
+        .toLowerCase()
+        .includes(filter.toLowerCase()),
+    )
 
   return (
     <Card>
