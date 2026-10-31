@@ -21,5 +21,8 @@
     "drizzle-orm/mysql-core",
     "drizzle-orm/sqlite-core",
     "drizzle-orm/singlestore-core"
-  ]
+  ],
+  "js/ts.experimental.useTsgo": true,
+  "js/ts.tsdk.path": "./node_modules/tsrs/tsdk",
+  "js/ts.trace.server": "verbose"
 }
