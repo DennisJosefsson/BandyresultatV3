@@ -23,21 +23,19 @@ const GamesListItem = ({
     <div className="w-full">
       <div
         id={game.gameId?.toString()}
-        className="mb-1 flex flex-row gap-1 px-1 py-0.5 text-[10px] transition-colors md:gap-4 md:px-2 md:text-sm"
+        className="mb-1 flex flex-row gap-1 px-1 py-0.5 text-xs"
       >
-        <span className="w-20">{game.date}</span>
-        <span className="h-8 w-50 text-base md:hidden">
-          {matchup}
-        </span>
-        <span className="hidden h-8 w-50 text-base md:inline-block">
+        <span className="w-24">{game.date}</span>
+        <span className="w-50 md:hidden">{matchup}</span>
+        <span className="hidden w-45 md:inline-block">
           {mdMatchup}
         </span>
 
-        <span className="w-10 text-right tabular-nums">
+        <span className="w-8 text-right tabular-nums">
           {game.result}
         </span>
 
-        <span className="w-10 text-right tabular-nums">
+        <span className="w-8 text-right tabular-nums">
           {game.halftimeResult
             ? `(${game.halftimeResult})`
             : null}
@@ -50,7 +48,7 @@ const GamesListItem = ({
 
         <span>
           <Button
-            size="responsive"
+            size="sm"
             render={
               <route.Link
                 to="/dashboard/season/$seasonId/info/serie/$serieId/edit/$gameId"
@@ -66,7 +64,23 @@ const GamesListItem = ({
         </span>
         <span>
           <Button
-            size="responsive"
+            size="sm"
+            render={
+              <route.Link
+                to="/dashboard/season/$seasonId/info/serie/$serieId/edit/date/$gameId"
+                params={{ gameId: game.gameId }}
+                search={(prev) => ({ ...prev })}
+                hash="gameedit"
+              >
+                Datum
+              </route.Link>
+            }
+            nativeButton={false}
+          />
+        </span>
+        <span>
+          <Button
+            size="sm"
             variant="destructive"
             onClick={() => openDialog(game.gameId)}
           >

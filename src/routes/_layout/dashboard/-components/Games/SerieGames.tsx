@@ -18,7 +18,7 @@ const SerieGames = () => {
       className="flex flex-col min-h-120"
       id="section"
     >
-      <div className="grid grid-cols-2 gap-x-20">
+      <div className="grid grid-cols-2 gap-x-8">
         <div>
           <SerieGamesList
             games={playedGames}
