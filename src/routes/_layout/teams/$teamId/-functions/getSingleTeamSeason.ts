@@ -149,6 +149,7 @@ export const getSingleTeamSeason = createServerFn({
             intYear: seasonId,
             women: team.women,
           })
+
         const seasonObjects = await getSeasons({
           teamId,
           seasonId: season.seasonId,

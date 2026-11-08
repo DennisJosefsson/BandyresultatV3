@@ -16,7 +16,7 @@ import {
   jsonBuildObject,
 } from '@/lib/drizzleHelpers/jsonAggjsonBuildObject'
 import type { TeamSeasonTableSerieV2 } from '@/lib/types/table'
-import { and, asc, eq, sql } from 'drizzle-orm'
+import { and, asc, eq, ne, sql } from 'drizzle-orm'
 
 export const preparedSeasonResultArrayV2 = db
   .select({
@@ -118,6 +118,7 @@ export const preparedSeasonResultArrayV3 = db
   )
   .where(
     and(
+      ne(series.group, 'mix'),
       eq(
         mvTeamSeasonTables.teamId,
         sql.placeholder('teamId'),
