@@ -674,9 +674,9 @@ export const getDevelopmentData = async ({
   const startDate = new Date(firstDate)
   startDate.setDate(startDate.getDate() - 1)
 
-  const firstDateItem = new Intl.DateTimeFormat().format(
-    startDate,
-  )
+  const firstDateItem = new Intl.DateTimeFormat(
+    'sv-SE',
+  ).format(startDate)
 
   const sortedTables = tableSorting({
     startTable: start,
