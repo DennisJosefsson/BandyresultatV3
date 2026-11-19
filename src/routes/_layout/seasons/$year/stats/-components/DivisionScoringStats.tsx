@@ -17,8 +17,6 @@ const DivisionScoringStats = () => {
       s.drawCount !== null,
   )
 
-  console.log(divisionStats)
-
   const isMoreThanOneDivision = divisionStats.length > 1
 
   return (

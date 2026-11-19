@@ -311,8 +311,6 @@ const maxScoredHomeArrayQuery = await db
   .groupBy(teamgames.teamId)
   .toSQL()
 
-console.log(maxScoredHomeArrayQuery)
-
 export const maxConcededHomeArray = db
   .$with('max_conceded_home_array')
   .as(

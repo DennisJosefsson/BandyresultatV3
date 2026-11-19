@@ -12,15 +12,14 @@ const Games = ({ games, variant }: GamesProps) => {
       ? '/seasons/$year/$group/stats'
       : '/seasons/$year/playoff/stats'
 
-  console.log(games)
+  
 
   const allNull =
     games.maxGoalDifferenceGames === null &&
     games.maxGoalGames === null &&
     games.minGoalGames === null
 
-  console.log(allNull)
-
+  
   if (allNull) {
     return (
       <div className="flex flex-row justify-center mt-2">
