@@ -10,8 +10,16 @@ const DivisionScoringStats = () => {
   const data = route.useLoaderData()
   if (data.status === 404) return null
 
-  const isMoreThanOneDivision =
-    data.stats.divisionStats.length > 1
+  const divisionStats = data.stats.divisionStats.filter(
+    (s) =>
+      s.awayWinCount !== null &&
+      s.homeWinCount !== null &&
+      s.drawCount !== null,
+  )
+
+  console.log(divisionStats)
+
+  const isMoreThanOneDivision = divisionStats.length > 1
 
   return (
     <div className="@container flex flex-col gap-2">
@@ -25,12 +33,8 @@ const DivisionScoringStats = () => {
         <AllGoals data={data.stats.allStats} />
         {isMoreThanOneDivision ? (
           <>
-            <DivisionResults
-              data={data.stats.divisionStats}
-            />
-            <DivisionGoals
-              data={data.stats.divisionStats}
-            />
+            <DivisionResults data={divisionStats} />
+            <DivisionGoals data={divisionStats} />
           </>
         ) : null}
       </div>

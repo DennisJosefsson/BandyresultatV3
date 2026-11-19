@@ -1,10 +1,36 @@
 import { GameCard } from '@/components/Common/Games/GameCard'
 import type { MaxMinGames } from '@/lib/types/stats'
 
-type GamesProps = { games: MaxMinGames, variant: 'playoff' | 'group' }
+type GamesProps = {
+  games: MaxMinGames
+  variant: 'playoff' | 'group'
+}
 
 const Games = ({ games, variant }: GamesProps) => {
-  const routePath = variant === 'group' ? "/seasons/$year/$group/stats" : "/seasons/$year/playoff/stats"
+  const routePath =
+    variant === 'group'
+      ? '/seasons/$year/$group/stats'
+      : '/seasons/$year/playoff/stats'
+
+  console.log(games)
+
+  const allNull =
+    games.maxGoalDifferenceGames === null &&
+    games.maxGoalGames === null &&
+    games.minGoalGames === null
+
+  console.log(allNull)
+
+  if (allNull) {
+    return (
+      <div className="flex flex-row justify-center mt-2">
+        <span className="font-semibold text-sm">
+          Matchdata saknas för serien.
+        </span>
+      </div>
+    )
+  }
+
   return (
     <div className="flex flex-col gap-2 mt-2">
       <div className="flex flex-col gap-1">

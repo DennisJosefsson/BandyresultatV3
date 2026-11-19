@@ -77,6 +77,13 @@ export const getGroupStats = createServerFn({
             message: `Ingen ${women ? 'dam' : 'herr'}serie med detta namn det här året. Välj en ny i listan.`,
           }
 
+        if (serie.hasStatic) {
+          return {
+            status: 404,
+            message: `Serien har bara sluttabell och/eller enstaka matcher inlagda.`,
+          }
+        }
+
         const seriesStats = await db
           .select()
           .from(mvSeriesStats)
@@ -98,36 +105,6 @@ export const getGroupStats = createServerFn({
             message: 'Ingen statistik för serien.',
           })
         }
-
-        // console.dir(seriesStats, {
-        //   colors: true,
-        //   depth: 99,
-        // })
-
-        // const gameCount = await db.$count(
-        //   games,
-        //   and(
-        //     eq(games.serieId, serie.serieId),
-        //     eq(games.played, true),
-        //   ),
-        // )
-
-        // if (serie.hasStatic && gameCount === 0) {
-        //   return {
-        //     status: 404,
-        //     message:
-        //       'Serien har enbart sluttabell, ingen matchdata.',
-        //   }
-        // }
-
-        // if (gameCount === 0) {
-        //   return {
-        //     status: 404,
-        //     message: 'Serien har inga spelade matcher.',
-        //   }
-        // }
-
-        // const data = await getGroupStatsData({ serie })
 
         return {
           status: 200,
